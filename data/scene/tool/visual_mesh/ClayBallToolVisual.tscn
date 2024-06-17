@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://clgs43ei0vdx"]
+
+[ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="1_48w05"]
+[ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="2_rtpnb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqnc1"]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.419608, 0.584314, 0.521569, 1)
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_rtpnb")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("1_48w05")
+
+[sub_resource type="SphereMesh" id="SphereMesh_wlefb"]
+material = SubResource("StandardMaterial3D_vqnc1")
+radius = 0.15
+height = 0.3
+
+[node name="ClayBallToolVisual" type="Node3D"]
+transform = Transform3D(0.999999, 1.16415e-09, 3.43425e-09, 1.16415e-09, 0.999999, 1.49012e-08, -2.32805e-07, 1.30385e-08, 1, 0.0558512, 0.0951465, -0.140799)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_wlefb")

@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://e8kwi0qjjolt"]
+
+[ext_resource type="Texture2D" uid="uid://cgw3kuukpl65l" path="res://data/textures/asteroid_stylized.png" id="1_v20c5"]
+[ext_resource type="Texture2D" uid="uid://cylomsqkqstuj" path="res://data/textures/asteroid_stylized_normal.png" id="2_gtyte"]
+
+[resource]
+albedo_texture = ExtResource("1_v20c5")
+metallic_specular = 0.1
+roughness_texture = ExtResource("1_v20c5")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.1
+normal_texture = ExtResource("2_gtyte")
+rim_enabled = true
+uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 1.46409

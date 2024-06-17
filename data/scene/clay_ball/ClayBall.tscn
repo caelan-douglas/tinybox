@@ -1,0 +1,84 @@
+[gd_scene load_steps=13 format=3 uid="uid://ky2h7r63y8gy"]
+
+[ext_resource type="Script" path="res://src/ClayBall.gd" id="1_6whcq"]
+[ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_0dw7p"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_5txvd"]
+[ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="3_t2in4"]
+[ext_resource type="AudioStream" uid="uid://cjvylwe7kkani" path="res://data/audio/spring.ogg" id="5_200ox"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
+friction = 0.2
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_45sso"]
+radius = 0.6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bvw4g"]
+radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqnc1"]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.419608, 0.584314, 0.521569, 1)
+metallic_texture_channel = 2
+roughness_texture = ExtResource("3_t2in4")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("2_0dw7p")
+
+[sub_resource type="SphereMesh" id="SphereMesh_hof2s"]
+material = SubResource("StandardMaterial3D_vqnc1")
+radius = 0.3
+height = 0.6
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_jf210"]
+playback_mode = 2
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("5_200ox")
+stream_0/weight = 1.0
+
+[node name="ClayBall" type="RigidBody3D"]
+collision_layer = 128
+collision_mask = 11
+physics_material_override = SubResource("PhysicsMaterial_kcslu")
+continuous_cd = true
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_6whcq")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_45sso")
+
+[node name="collider" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bvw4g")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("2_5txvd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Smoothing"]
+mesh = SubResource("SphereMesh_hof2s")
+skeleton = NodePath("../..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.04
+delta_interval = 0.04
+replication_config = SubResource("SceneReplicationConfig_28iu0")
+
+[node name="SpringAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_jf210")
+max_distance = 60.0
+max_polyphony = 4
+bus = &"SFX"

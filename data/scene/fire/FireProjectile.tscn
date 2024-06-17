@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://bjkvftq5sd13"]
+
+[ext_resource type="Script" path="res://src/FireProjectile.gd" id="1_sp1hs"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_3qv8n"]
+[ext_resource type="PlaneMesh" uid="uid://b13qst208r6f6" path="res://data/materials/fire/fire_material.tres" id="3_hku55"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
+friction = 0.2
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vv8et"]
+radius = 0.6
+
+[sub_resource type="Gradient" id="Gradient_er082"]
+offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 0.854066, 0.417514, 0, 1, 0.313726, 0.313726, 0.313726, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_a6m0y"]
+gradient = SubResource("Gradient_er082")
+width = 128
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wirjr"]
+emission_shape_scale = Vector3(0.3, 0.3, 0.3)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+angular_velocity_min = 61.28
+angular_velocity_max = 61.28
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_a6m0y")
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[node name="FireProjectile" type="RigidBody3D"]
+collision_mask = 11
+physics_material_override = SubResource("PhysicsMaterial_kcslu")
+gravity_scale = 0.0
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_sp1hs")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_vv8et")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("2_3qv8n")
+
+[node name="Node3D" type="Node3D" parent="Smoothing"]
+
+[node name="splash_particles" type="GPUParticles3D" parent="Smoothing/Node3D"]
+amount = 16
+speed_scale = 3.0
+fixed_fps = 24
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_wirjr")
+draw_pass_1 = ExtResource("3_hku55")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.04
+delta_interval = 0.04
+replication_config = SubResource("SceneReplicationConfig_28iu0")

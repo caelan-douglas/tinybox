@@ -1,0 +1,9 @@
+Licenses for /addons
+
+	LANServerBroadcast:
+	by Adam Brown, licensed under the MIT License
+	https://github.com/Wavesonics/LANServerBroadcast
+	
+	smoothing:
+	by lawnjelly, licensed under the MIT License
+	https://github.com/lawnjelly/smoothing-addon

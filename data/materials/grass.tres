@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dp5ttmwn36mku"]
+
+[ext_resource type="Texture2D" uid="uid://cb7x4m2nwaqgu" path="res://data/textures/grass.png" id="1_vnepo"]
+
+[resource]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.843137, 0.803922, 0.643137, 1)
+albedo_texture = ExtResource("1_vnepo")
+metallic_texture_channel = 2
+roughness = 0.72
+roughness_texture_channel = 4
+rim_enabled = true
+rim = 0.16
+uv1_scale = Vector3(5, 5, 5)

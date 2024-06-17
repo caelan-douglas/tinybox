@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://brro43168s8jp"]
+
+[node name="ChatEntry" type="MarginContainer"]
+custom_minimum_size = Vector2(0, 27)
+offset_right = 300.0
+offset_bottom = 78.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="PlayerLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Playername"
+
+[node name="ChatLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.415686)
+text = "here is a whole bunch of chat text that most likely will not fit inside the chat box so its good for testing"
+autowrap_mode = 3

@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://dqxeue22qwmrn"]
+
+[ext_resource type="Texture2D" uid="uid://jpb788n8uj3i" path="res://data/textures/ui/crown.png" id="1_vbkcx"]
+[ext_resource type="Texture2D" uid="uid://bejiqw1x2idqs" path="res://data/textures/ui/you.png" id="2_il5sq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gynkv"]
+bg_color = Color(1, 1, 1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+
+[node name="PlayerListEntry" type="Panel"]
+self_modulate = Color(0.470588, 0.45098, 1, 1)
+custom_minimum_size = Vector2(0, 27)
+offset_right = 210.0
+offset_bottom = 27.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gynkv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crown" type="TextureRect" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_vbkcx")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="You" type="TextureRect" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_il5sq")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playername"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Team" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.415686)
+text = "Purple"
+horizontal_alignment = 2
+
+[node name="KingsScore" type="Label" parent="HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.744444, 0.00111067, 0.845934, 1)
+theme_override_constants/outline_size = 3
+text = "0"
+horizontal_alignment = 2
+
+[node name="K" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65098, 0.564706, 0.321569, 1)
+theme_override_constants/outline_size = 3
+text = "0"
+horizontal_alignment = 2
+
+[node name="D" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.658824, 0.239216, 0.372549, 1)
+theme_override_constants/outline_size = 3
+text = "0"
+horizontal_alignment = 2

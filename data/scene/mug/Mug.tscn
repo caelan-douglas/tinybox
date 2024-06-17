@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqsd8rt5norqj"]
+
+[ext_resource type="PackedScene" uid="uid://cpg5j58v26geb" path="res://data/models/mug/mug.blend" id="1_wd6kf"]
+[ext_resource type="Texture2D" uid="uid://btvbc36o37put" path="res://data/textures/coffee_tex.png" id="2_vjxen"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jlm6w"]
+albedo_texture = ExtResource("2_vjxen")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k611e"]
+radius = 2.676
+height = 8.89039
+
+[node name="Mug" type="Node3D"]
+
+[node name="mug2" parent="." instance=ExtResource("1_wd6kf")]
+transform = Transform3D(50, 0, -7.4506e-07, 0, 50, 0, 7.4506e-07, 0, 50, 0, 0, 0)
+
+[node name="mug" parent="mug2" index="0"]
+surface_material_override/1 = SubResource("StandardMaterial3D_jlm6w")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.33762, 0)
+shape = SubResource("CapsuleShape3D_k611e")
+
+[editable path="mug2"]

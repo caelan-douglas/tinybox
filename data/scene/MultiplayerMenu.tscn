@@ -1,0 +1,956 @@
+[gd_scene load_steps=10 format=3 uid="uid://c5aeyr5rirpm4"]
+
+[ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_o48rt"]
+[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="2_x7twp"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_yuqno"]
+[ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="5_6abn7"]
+[ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="6_m42ur"]
+
+[sub_resource type="Animation" id="Animation_8ng8c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainMenu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attributions:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_l2p2j"]
+resource_name = "load_in"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainMenu:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Attributions:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s1exg"]
+_data = {
+"RESET": SubResource("Animation_8ng8c"),
+"load_in": SubResource("Animation_l2p2j")
+}
+
+[node name="MultiplayerMenu" type="CanvasLayer"]
+script = ExtResource("1_fgila")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_s1exg")
+}
+autoplay = "load_in"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="HBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -332.0
+offset_top = -191.0
+offset_right = 332.0
+offset_bottom = 191.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 48
+
+[node name="LeftColumn" type="VBoxContainer" parent="MainMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MainMenu/LeftColumn"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_x7twp")
+theme_override_font_sizes/font_size = 48
+text = "Tinybox"
+
+[node name="Control5" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="MainMenu/LeftColumn"]
+layout_mode = 2
+text = "beta"
+script = ExtResource("3_yuqno")
+json_text = "%version%"
+raw_format = true
+
+[node name="Control6" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Settings" type="Button" parent="MainMenu/LeftColumn"]
+layout_mode = 2
+text = "Settings"
+script = ExtResource("2_o48rt")
+json_text = "ui/settings"
+
+[node name="Editor" type="Button" parent="MainMenu/LeftColumn"]
+self_modulate = Color(0, 1.2, 0.592, 1)
+layout_mode = 2
+text = "World editor"
+script = ExtResource("2_o48rt")
+json_text = "ui/world_editor"
+
+[node name="Control3" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="MultiplayerSettings" type="Panel" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="MultiplayerSettingsContainer" type="VBoxContainer" parent="MainMenu/LeftColumn/MultiplayerSettings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Multiplayer Preferences"
+script = ExtResource("3_yuqno")
+json_text = "ui/multiplayer_prefs"
+
+[node name="DisplayName" type="LineEdit" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
+layout_mode = 2
+placeholder_text = "display name"
+max_length = 35
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="Appearance" type="Button" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Player Appearance..."
+script = ExtResource("2_o48rt")
+json_text = "ui/appearance_button"
+
+[node name="Control4" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="Control7" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="Quit" type="Button" parent="MainMenu/LeftColumn"]
+self_modulate = Color(7.101, 0, 0.057, 1)
+layout_mode = 2
+text = "Quit to desktop"
+script = ExtResource("2_o48rt")
+json_text = "ui/quit"
+
+[node name="RightColumn" type="VBoxContainer" parent="MainMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 71)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="MainMenu/RightColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 0.513726)
+theme_override_constants/outline_size = 6
+text = "Host or Join"
+script = ExtResource("3_yuqno")
+json_text = "ui/host_or_join"
+
+[node name="Control6" type="Control" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="HostPanel" type="Panel" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="HostPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/HostPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -15.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Host a Server"
+script = ExtResource("3_yuqno")
+json_text = "ui/host_panel"
+
+[node name="MapSelection" type="OptionButton" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 8
+selected = 0
+popup/item_0/text = "Frozen Field"
+popup/item_0/id = 1
+popup/item_1/text = "Calm Creek"
+popup/item_1/id = 4
+popup/item_2/text = "Caffeina"
+popup/item_2/id = 0
+popup/item_3/text = "Floaty"
+popup/item_3/id = 5
+popup/item_4/text = "Warp"
+popup/item_4/id = 6
+popup/item_5/text = "BaseWorld"
+popup/item_5/id = 7
+popup/item_6/text = "Testing Maps"
+popup/item_6/id = 3
+popup/item_6/disabled = true
+popup/item_6/separator = true
+popup/item_7/text = "Grasslands"
+popup/item_7/id = 2
+
+[node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "UPNP setting"
+script = ExtResource("2_o48rt")
+json_text = "ui/host_public_settings/off"
+
+[node name="Host" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+layout_mode = 2
+text = "Host Server"
+script = ExtResource("2_o48rt")
+json_text = "ui/host"
+grab_initial_focus = true
+
+[node name="Spacer2" type="Control" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="JoinPanel" type="Panel" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="JoinPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/JoinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Join a server via IP"
+script = ExtResource("3_yuqno")
+json_text = "ui/join_panel"
+
+[node name="Address" type="LineEdit" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+layout_mode = 2
+placeholder_text = "address"
+caret_blink = true
+caret_blink_interval = 0.5
+
+[node name="Join" type="Button" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+layout_mode = 2
+text = "Join Server"
+script = ExtResource("2_o48rt")
+json_text = "ui/join"
+
+[node name="Spacer3" type="Control" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="LANPanel" type="Panel" parent="MainMenu/RightColumn"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="LANPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/LANPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MainMenu/RightColumn/LANPanel/LANPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Searching for LAN servers..."
+script = ExtResource("3_yuqno")
+
+[node name="AppearanceMenu" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 119.0
+offset_top = -198.0
+offset_right = 427.0
+offset_bottom = 199.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AppearanceMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="AppearanceMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<<< Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back_save"
+grab_initial_focus = true
+
+[node name="DynamicLabel" type="Label" parent="AppearanceMenu/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+text = "Player Appearance"
+horizontal_alignment = 2
+script = ExtResource("3_yuqno")
+json_text = "ui/appearance"
+
+[node name="Spacer" type="Control" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="HairPanel" type="Panel" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="HairPanelContainer" type="VBoxContainer" parent="AppearanceMenu/HairPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Hair"
+script = ExtResource("3_yuqno")
+
+[node name="Picker" type="OptionButton" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Short"
+popup/item_0/id = 0
+popup/item_1/text = "Ponytail"
+popup/item_1/id = 1
+popup/item_2/text = "Bald"
+popup/item_2/id = 2
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+layout_mode = 2
+text = "..."
+edit_alpha = false
+
+[node name="Spacer2" type="Control" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="ShirtPanel" type="Panel" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="ShirtPanelContainer" type="VBoxContainer" parent="AppearanceMenu/ShirtPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Shirt"
+script = ExtResource("3_yuqno")
+
+[node name="TypeBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.5
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Type"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+selected = 0
+popup/item_0/text = "Short sleeve"
+popup/item_0/id = 0
+popup/item_1/text = "Jacket"
+popup/item_1/id = 1
+
+[node name="TextureBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.5
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Design"
+script = ExtResource("3_yuqno")
+
+[node name="TexturePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 5
+selected = 0
+popup/item_0/text = "Fabric"
+popup/item_0/id = 0
+popup/item_1/text = "Knitty"
+popup/item_1/id = 1
+popup/item_2/text = "Emergency"
+popup/item_2/id = 2
+popup/item_3/text = "Art"
+popup/item_3/id = 3
+popup/item_4/text = "Stripes"
+popup/item_4/id = 4
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+layout_mode = 2
+text = "..."
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="Spacer3" type="Control" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="PantsPanel" type="Panel" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="PantsPanelContainer" type="VBoxContainer" parent="AppearanceMenu/PantsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="AppearanceMenu/PantsPanel/PantsPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Pants"
+script = ExtResource("3_yuqno")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/PantsPanel/PantsPanelContainer"]
+layout_mode = 2
+text = "..."
+edit_alpha = false
+
+[node name="Spacer4" type="Control" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="SkinPanel" type="Panel" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="SkinPanelContainer" type="VBoxContainer" parent="AppearanceMenu/SkinPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="AppearanceMenu/SkinPanel/SkinPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Skin"
+script = ExtResource("3_yuqno")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/SkinPanel/SkinPanelContainer"]
+layout_mode = 2
+text = "..."
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+
+[node name="SettingsMenu" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -198.5
+offset_right = 154.0
+offset_bottom = 198.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="SettingsMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<<< Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back_save"
+grab_initial_focus = true
+
+[node name="DynamicLabel" type="Label" parent="SettingsMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+text = "Settings"
+horizontal_alignment = 2
+script = ExtResource("3_yuqno")
+json_text = "ui/settings"
+
+[node name="Spacer" type="Control" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Graphics" type="Button" parent="SettingsMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Graffix: COOL"
+
+[node name="Keybinds" type="Button" parent="SettingsMenu"]
+layout_mode = 2
+text = "Keybinds"
+script = ExtResource("2_o48rt")
+json_text = "ui/keybinds"
+
+[node name="Spacer2" type="Control" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="SettingsMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Master Volume"
+script = ExtResource("3_yuqno")
+json_text = "ui/master_volume"
+
+[node name="MasterVol" type="HSlider" parent="SettingsMenu"]
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+script = ExtResource("5_6abn7")
+
+[node name="Spacer3" type="Control" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="SettingsMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Music Volume"
+script = ExtResource("3_yuqno")
+json_text = "ui/music_volume"
+
+[node name="MusicVol" type="HSlider" parent="SettingsMenu"]
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+script = ExtResource("5_6abn7")
+bus = 1
+
+[node name="Spacer4" type="Control" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="SettingsMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "SFX Volume"
+script = ExtResource("3_yuqno")
+json_text = "ui/sfx_volume"
+
+[node name="SFXVol" type="HSlider" parent="SettingsMenu"]
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+script = ExtResource("5_6abn7")
+bus = 2
+
+[node name="Spacer5" type="Control" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="KeybindsMenu" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -291.0
+offset_right = 154.0
+offset_bottom = 291.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="KeybindsMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<<< Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back_save"
+grab_initial_focus = true
+
+[node name="DynamicLabel" type="Label" parent="KeybindsMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+text = "Keybinds"
+horizontal_alignment = 2
+script = ExtResource("3_yuqno")
+json_text = "ui/keybinds"
+
+[node name="Spacer" type="Control" parent="KeybindsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="KeybindsMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Auto keybinds will assign a
+number to a tool depending on
+its order of pickup.
+
+Custom keybinds allow you to
+set a key that always applies
+to a given tool."
+script = ExtResource("3_yuqno")
+
+[node name="Spacer2" type="Control" parent="KeybindsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="DefaultsButton" type="Button" parent="KeybindsMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Enable Custom Keybinds"
+script = ExtResource("2_o48rt")
+
+[node name="Spacer4" type="Control" parent="KeybindsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="KeybindContainerBuildTool" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBuildTool"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Build Tool"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBuildTool"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+
+[node name="KeybindContainerBouncyball" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBouncyball"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Bouncyball"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBouncyball"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 50
+keybind_for_what = "BouncyballTool"
+
+[node name="KeybindContainerBat" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBat"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Bat"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 51
+keybind_for_what = "BatTool"
+
+[node name="KeybindContainerExtinguisher" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerExtinguisher"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Extinguisher"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerExtinguisher"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 52
+keybind_for_what = "ExtinguisherTool"
+
+[node name="KeybindContainerRocket" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerRocket"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Rocket"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerRocket"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 53
+keybind_for_what = "RocketTool"
+
+[node name="KeybindContainerBomb" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBomb"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Bomb"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBomb"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 54
+keybind_for_what = "BombTool"
+
+[node name="KeybindContainerFlamethrower" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerFlamethrower"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Flamethrower"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerFlamethrower"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 55
+keybind_for_what = "FlamethrowerTool"
+
+[node name="KeybindContainerMissile" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerMissile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Missiles"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerMissile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 56
+keybind_for_what = "MissileTool"
+
+[node name="KeybindContainerPaintbrush" type="HBoxContainer" parent="KeybindsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerPaintbrush"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Paintbrush"
+script = ExtResource("3_yuqno")
+
+[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerPaintbrush"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("6_m42ur")
+default_key = 57
+keybind_for_what = "PaintbrushTool"
+
+[node name="Spacer3" type="Control" parent="KeybindsMenu"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Attributions" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -32.0
+offset_right = 390.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
+theme_override_constants/line_spacing = -1
+text = "..."
+horizontal_alignment = 1
+script = ExtResource("3_yuqno")
+json_text = "attributions"

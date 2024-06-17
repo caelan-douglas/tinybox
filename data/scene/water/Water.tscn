@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://cssrmhcqbdgav"]
+
+[ext_resource type="Script" path="res://src/Water.gd" id="1_5er2h"]
+[ext_resource type="Material" uid="uid://d30b1sj22govo" path="res://data/materials/water.tres" id="2_dyxol"]
+[ext_resource type="PackedScene" uid="uid://jwlfeuxe10n5" path="res://data/scene/water/Splash.tscn" id="3_msd2d"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gsv0s"]
+material = ExtResource("2_dyxol")
+size = Vector2(15, 15)
+subdivide_width = 32
+subdivide_depth = 32
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nyyu3"]
+size = Vector3(15, 15.2, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dvj2t"]
+size = Vector3(15, 14.4, 15)
+
+[node name="Water" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+script = ExtResource("1_5er2h")
+
+[node name="mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+mesh = SubResource("PlaneMesh_gsv0s")
+skeleton = NodePath("../..")
+
+[node name="WaterArea" type="Area3D" parent="."]
+collision_mask = 15
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0999999, 0)
+shape = SubResource("BoxShape3D_nyyu3")
+
+[node name="DeepWaterArea" type="Area3D" parent="."]
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeepWaterArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_dvj2t")
+
+[node name="Splash" parent="." instance=ExtResource("3_msd2d")]

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dis6ly67m7a2"]
+
+[ext_resource type="Script" path="res://src/PaintbrushTool.gd" id="1_ai13n"]
+
+[node name="PaintbrushTool" type="Node3D"]
+script = ExtResource("1_ai13n")
+visual_mesh_name = "PaintbrushToolVisualMesh"
+lock_camera_to_aim = true

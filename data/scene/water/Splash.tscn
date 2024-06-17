@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://jwlfeuxe10n5"]
+
+[ext_resource type="AudioStream" uid="uid://dcmvb5tcht2ji" path="res://data/audio/water/splash_0.ogg" id="1_xvldr"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_l57nt"]
+random_pitch = 1.6
+streams_count = 1
+stream_0/stream = ExtResource("1_xvldr")
+stream_0/weight = 1.0
+
+[node name="Splash" type="AudioStreamPlayer3D"]
+stream = SubResource("AudioStreamRandomizer_l57nt")
+volume_db = -6.0
+max_db = -6.0
+autoplay = true
+max_distance = 45.0
+bus = &"SFX"

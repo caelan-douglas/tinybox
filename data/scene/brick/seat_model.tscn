@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfdard88ejdsw"]
+
+[ext_resource type="PackedScene" uid="uid://ccd46fjn2mddy" path="res://data/models/brick/seat.blend" id="1_aelbu"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="1_prft2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
+size = Vector3(0.9, 0.9, 0.9)
+
+[node name="mesh" type="CollisionShape3D"]
+shape = SubResource("BoxShape3D_b80at")
+
+[node name="IntersectDetector" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+shape = SubResource("BoxShape3D_d6iny")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("1_prft2")
+
+[node name="model" parent="Smoothing" instance=ExtResource("1_aelbu")]
+
+[node name="VehicleOwnerLabel" type="Label3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
+billboard = 1
+modulate = Color(1, 0.843137, 0.4, 1)

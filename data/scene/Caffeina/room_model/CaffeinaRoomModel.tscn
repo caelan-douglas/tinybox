@@ -1,0 +1,111 @@
+[gd_scene load_steps=20 format=3 uid="uid://1sqf4570yn2c"]
+
+[ext_resource type="PackedScene" uid="uid://c5gyfesce8gyc" path="res://data/scene/Caffeina/room_model/caffeina.blend" id="1_o6j45"]
+[ext_resource type="Material" uid="uid://6bsit8841els" path="res://data/scene/Caffeina/room_model/wall_tex.tres" id="2_7n5j1"]
+[ext_resource type="Material" uid="uid://dkqaubff2035b" path="res://data/scene/Caffeina/room_model/roof_tex.tres" id="3_38yjx"]
+[ext_resource type="Material" uid="uid://d62bt716hrkr" path="res://data/scene/Caffeina/room_model/floor_tex.tres" id="4_d3crb"]
+[ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="6_f6yk4"]
+[ext_resource type="Texture2D" uid="uid://dcvo4y6ejsxgr" path="res://data/textures/wood_tex.jpg" id="7_bdbl6"]
+[ext_resource type="Material" uid="uid://b252pk1gd47mm" path="res://data/materials/glass.tres" id="7_ivvvd"]
+[ext_resource type="Texture2D" uid="uid://ctgjf8684lvi4" path="res://data/textures/wood_tex_normal.jpg" id="8_ftk40"]
+[ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="9_my5kl"]
+[ext_resource type="Texture2D" uid="uid://dnck2psfkx1p5" path="res://data/textures/PLACEHOLDER_tank.jpg" id="10_rehrl"]
+[ext_resource type="Texture2D" uid="uid://cuu41jofph3tf" path="res://data/textures/PLACEHOLDER_thing.PNG" id="11_85ljd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_el1hx"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.568627, 0.611765, 0.737255, 1)
+albedo_texture = ExtResource("7_bdbl6")
+metallic_specular = 0.1
+roughness = 0.45
+roughness_texture = ExtResource("9_my5kl")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_texture = ExtResource("8_ftk40")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cltku"]
+albedo_color = Color(0.658824, 0.27451, 0.27451, 1)
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hnogh"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.533333, 0.615686, 0.776471, 1)
+albedo_texture = ExtResource("7_bdbl6")
+metallic_specular = 0.1
+roughness = 0.45
+roughness_texture = ExtResource("9_my5kl")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_texture = ExtResource("8_ftk40")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15ype"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xbhte"]
+albedo_texture = ExtResource("10_rehrl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xthua"]
+albedo_texture = ExtResource("11_85ljd")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1p4dv"]
+albedo_color = Color(0.211765, 0.211765, 0.211765, 1)
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ks11q"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 6.28
+
+[node name="CaffeinaRoomModel" type="Node3D"]
+
+[node name="caffeina" parent="." instance=ExtResource("1_o6j45")]
+
+[node name="Room" parent="caffeina" index="0"]
+surface_material_override/0 = ExtResource("2_7n5j1")
+
+[node name="Ceiling" parent="caffeina/Room" index="1"]
+surface_material_override/0 = ExtResource("3_38yjx")
+
+[node name="Floor" parent="caffeina/Room" index="2"]
+surface_material_override/0 = ExtResource("4_d3crb")
+
+[node name="Door" parent="caffeina/Door_Group/DoorFrame" index="0"]
+material_override = SubResource("StandardMaterial3D_el1hx")
+
+[node name="Handle_Back" parent="caffeina/Door_Group/DoorFrame/Door" index="0"]
+material_override = ExtResource("6_f6yk4")
+
+[node name="Window_L" parent="caffeina/Window_Group/WindowFrame" index="0"]
+surface_material_override/1 = ExtResource("7_ivvvd")
+
+[node name="Window_R" parent="caffeina/Window_Group/WindowFrame" index="1"]
+surface_material_override/1 = ExtResource("7_ivvvd")
+
+[node name="Lamp_base" parent="caffeina" index="3"]
+surface_material_override/0 = SubResource("StandardMaterial3D_cltku")
+
+[node name="Window_L_001" parent="caffeina/Window_Group_001/WindowFrame_001" index="0"]
+surface_material_override/1 = ExtResource("7_ivvvd")
+
+[node name="Window_R_001" parent="caffeina/Window_Group_001/WindowFrame_001" index="1"]
+surface_material_override/1 = ExtResource("7_ivvvd")
+
+[node name="stylish_bookshelf" parent="caffeina" index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_hnogh")
+
+[node name="wallart_002" parent="caffeina" index="6"]
+surface_material_override/0 = SubResource("StandardMaterial3D_15ype")
+surface_material_override/2 = SubResource("StandardMaterial3D_xbhte")
+
+[node name="wallart_003" parent="caffeina" index="7"]
+surface_material_override/0 = SubResource("StandardMaterial3D_15ype")
+surface_material_override/2 = SubResource("StandardMaterial3D_xthua")
+
+[node name="Cube" parent="caffeina" index="8"]
+surface_material_override/0 = SubResource("StandardMaterial3D_1p4dv")
+surface_material_override/1 = SubResource("StandardMaterial3D_ks11q")
+
+[editable path="caffeina"]

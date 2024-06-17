@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dp2d68ixposb0"]
+
+[ext_resource type="PackedScene" uid="uid://bx7a5xreho2sn" path="res://data/models/visual_mesh/missile_launcher/missile_launcher.blend" id="1_r7umc"]
+[ext_resource type="Texture2D" uid="uid://c6h5nejo6jnys" path="res://data/textures/metal_tex.png" id="2_emg6q"]
+[ext_resource type="Material" uid="uid://icymbbpv386g" path="res://data/materials/rubber.tres" id="3_5n21m"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1rwo"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.384314, 0.368627, 1)
+albedo_texture = ExtResource("2_emg6q")
+metallic = 0.5
+metallic_specular = 1.0
+roughness_texture = ExtResource("2_emg6q")
+roughness_texture_channel = 4
+rim_enabled = true
+rim = 0.3
+rim_tint = 0.8
+uv1_scale = Vector3(2, 2, 1)
+uv1_offset = Vector3(0, -1, 0)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="missile_launcher" parent="." instance=ExtResource("1_r7umc")]
+transform = Transform3D(0.391658, 0.92009, 0.00624801, -0.0477137, 0.0270909, -0.998494, -0.918873, 0.39077, 0.0545112, 0.0668613, 0.0452328, -0.0399068)
+
+[node name="Cube" parent="missile_launcher" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_f1rwo")
+surface_material_override/1 = ExtResource("3_5n21m")
+
+[editable path="missile_launcher"]

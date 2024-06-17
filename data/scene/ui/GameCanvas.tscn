@@ -1,0 +1,1210 @@
+[gd_scene load_steps=30 format=3 uid="uid://bot4om7nsyg2l"]
+
+[ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
+[ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
+[ext_resource type="Texture2D" uid="uid://bjtup1e1hqx7a" path="res://data/textures/ui/respawn_overlay.png" id="2_im5qw"]
+[ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="3_5o4ik"]
+[ext_resource type="Script" path="res://src/ui/DebugMenu.gd" id="3_igmde"]
+[ext_resource type="PackedScene" uid="uid://govhpsie1w5w" path="res://data/scene/ui/PlayerList.tscn" id="4_yb62t"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="5_6v07r"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
+[ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
+[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="7_svln6"]
+[ext_resource type="Texture2D" uid="uid://cupojq83o6gc3" path="res://data/textures/ui/question.png" id="9_8oa63"]
+[ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
+[ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
+[ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
+[ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
+[ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
+
+[sub_resource type="Animation" id="Animation_plri5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ljbh7"]
+resource_name = "respawn"
+length = 3.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.8, 1.4, 2, 2.5, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0.615686), Color(1, 1, 1, 1), Color(1, 1, 1, 0.615686), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ie8a5"]
+_data = {
+"RESET": SubResource("Animation_plri5"),
+"respawn": SubResource("Animation_ljbh7")
+}
+
+[sub_resource type="Animation" id="Animation_vnqrf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ikspb"]
+resource_name = "flash_health"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(5, 0.35, 0.29, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(3, 3), Vector2(3, 3), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7ywci"]
+_data = {
+"RESET": SubResource("Animation_vnqrf"),
+"flash_health": SubResource("Animation_ikspb")
+}
+
+[sub_resource type="Animation" id="Animation_wsom5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_815sr"]
+resource_name = "flash_controls"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5, 0.7, 1, 1.2, 1.5, 1.7, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dd8xq"]
+_data = {
+"RESET": SubResource("Animation_wsom5"),
+"flash_controls": SubResource("Animation_815sr")
+}
+
+[sub_resource type="Animation" id="Animation_220ys"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TitleText:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ToolList:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../PlayerList:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../HealthBar:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Tip:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_7ofof"]
+resource_name = "intro"
+length = 11.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 8, 9.7, 10.2, 11),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TitleText:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.9, 8, 9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 11),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../HealthBar:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../PlayerList:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../ToolList:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Tip:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.9, 7.5, 7.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_h5oyg"]
+resource_name = "outro"
+length = 11.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 8, 9.7, 10.2, 11),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TitleText:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.9, 8, 9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 11),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../HealthBar:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../PlayerList:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../ToolList:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 10.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Tip:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ogfxc"]
+_data = {
+"RESET": SubResource("Animation_220ys"),
+"intro": SubResource("Animation_7ofof"),
+"outro": SubResource("Animation_h5oyg")
+}
+
+[node name="GameCanvas" type="CanvasLayer"]
+script = ExtResource("1_5vqc6")
+
+[node name="RespawnOverlay" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_im5qw")
+expand_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnOverlay"]
+libraries = {
+"": SubResource("AnimationLibrary_ie8a5")
+}
+
+[node name="ToolOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BuildTool" type="VBoxContainer" parent="ToolOverlay"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -466.5
+offset_top = -92.0
+offset_right = -235.5
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Controls" type="Label" parent="ToolOverlay/BuildTool"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
+theme_override_constants/outline_size = 6
+text = "..."
+vertical_alignment = 1
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/build_tool"
+
+[node name="Spacer2" type="Control" parent="ToolOverlay/BuildTool"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="ModeLabel" type="Label" parent="ToolOverlay/BuildTool"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
+theme_override_constants/outline_size = 6
+text = "MODE: BUILD
+"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="ToolOverlay/BuildTool"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="LoadModeBg" type="ColorRect" parent="ToolOverlay/BuildTool"]
+visible = false
+custom_minimum_size = Vector2(0, 231)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="LoadModeImg" type="TextureRect" parent="ToolOverlay/BuildTool/LoadModeBg"]
+custom_minimum_size = Vector2(224, 224)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.5
+offset_top = -112.5
+offset_right = 112.5
+offset_bottom = 112.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_8oa63")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="LoadModeName" type="Label" parent="ToolOverlay/BuildTool/LoadModeBg"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -115.5
+offset_top = -52.0
+offset_right = 115.5
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.694118, 0.364706, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.490196)
+theme_override_constants/outline_size = 6
+text = "[ C ] for next save"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadModeDelTip" type="Label" parent="ToolOverlay/BuildTool/LoadModeBg"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -115.5
+offset_top = -31.0
+offset_right = 115.5
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.991782, 0.0535578, 7.70092e-07, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 0.490196)
+theme_override_constants/outline_size = 6
+text = "[ Del ] to delete"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PaintbrushTool" type="VBoxContainer" parent="ToolOverlay"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -466.5
+offset_top = -92.0
+offset_right = -235.5
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Controls" type="Label" parent="ToolOverlay/PaintbrushTool"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
+theme_override_constants/outline_size = 6
+text = "..."
+vertical_alignment = 1
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/paintbrush"
+
+[node name="Spacer2" type="Control" parent="ToolOverlay/PaintbrushTool"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="SelectedColour" type="ColorRect" parent="ToolOverlay/PaintbrushTool"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="MissileTool" type="Control" parent="ToolOverlay"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MissileTimer" type="TextureProgressBar" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -464.0
+offset_top = 138.0
+offset_right = -136.0
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 25.0
+step = 0.1
+value = 25.0
+fill_mode = 1
+nine_patch_stretch = true
+texture_under = ExtResource("13_jaf8i")
+texture_progress = ExtResource("12_2re8m")
+
+[node name="DynamicLabel" type="Label" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -464.0
+offset_top = 242.0
+offset_right = -177.0
+offset_bottom = 258.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.54902)
+theme_override_constants/outline_size = 8
+text = "MISSILE TIME REMAINING"
+uppercase = true
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/missile/time"
+
+[node name="MissileDistance" type="TextureProgressBar" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 136.0
+offset_top = 138.0
+offset_right = 464.0
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 150.0
+fill_mode = 1
+nine_patch_stretch = true
+texture_under = ExtResource("15_kkx1g")
+texture_progress = ExtResource("14_yidfq")
+
+[node name="DynamicLabel2" type="Label" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 179.0
+offset_top = 242.0
+offset_right = 466.0
+offset_bottom = 258.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.54902)
+theme_override_constants/outline_size = 8
+text = "NEAREST PLAYER DISTANCE"
+horizontal_alignment = 2
+uppercase = true
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/missile/distance"
+
+[node name="DynamicLabel3" type="Label" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 414.0
+offset_top = 218.0
+offset_right = 460.0
+offset_bottom = 234.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.54902)
+theme_override_constants/outline_size = 8
+text = "NEAR"
+horizontal_alignment = 1
+uppercase = true
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/missile/near"
+
+[node name="DynamicLabel4" type="Label" parent="ToolOverlay/MissileTool"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 136.0
+offset_top = 218.0
+offset_right = 183.0
+offset_bottom = 234.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.54902)
+theme_override_constants/outline_size = 8
+text = "FAR"
+horizontal_alignment = 1
+uppercase = true
+script = ExtResource("6_qxctu")
+json_text = "ui/tool_overlay/missile/far"
+
+[node name="VersionLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Tinybox beta 00.0.0"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("6_qxctu")
+json_text = "Tinybox %version%"
+raw_format = true
+
+[node name="Ping" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -385.0
+offset_top = 8.0
+offset_right = -293.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Ping: ?"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("2_884d4")
+
+[node name="Frames" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -279.0
+offset_top = 8.0
+offset_right = -199.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Fps: 100"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_x8dyc")
+
+[node name="ToolList" type="HBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 251.0
+offset_bottom = 56.0
+theme_override_constants/separation = 0
+
+[node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
+offset_left = -224.0
+offset_top = 64.0
+offset_right = -8.0
+offset_bottom = -13.0
+show_team_names = false
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+self_modulate = Color(0.380392, 0.643137, 0.560784, 1)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -224.0
+offset_top = 32.0
+offset_right = -8.0
+offset_bottom = 53.0
+grow_horizontal = 0
+pivot_offset = Vector2(216, 0)
+max_value = 20.0
+step = 1.0
+value = 20.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="HealthBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -6.5
+offset_right = 29.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Health"
+horizontal_alignment = 1
+script = ExtResource("6_qxctu")
+json_text = "ui/health"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthBar"]
+libraries = {
+"": SubResource("AnimationLibrary_7ywci")
+}
+
+[node name="MinigameControls" type="HBoxContainer" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -454.0
+offset_top = -83.0
+offset_right = 454.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="GameTimer" type="ProgressBar" parent="MinigameControls"]
+self_modulate = Color(0.188235, 0.192157, 0.309804, 1)
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+max_value = 720.0
+step = 1.0
+value = 20.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MinigameControls/GameTimer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -6.5
+offset_right = 29.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "10:00 left in game!"
+horizontal_alignment = 1
+
+[node name="TeamCash" type="ProgressBar" parent="MinigameControls"]
+self_modulate = Color(0.843137, 0.619608, 0.298039, 1)
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+max_value = 700.0
+step = 1.0
+value = 20.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MinigameControls/TeamCash"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -6.5
+offset_right = 29.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Team cash remaning: 1000"
+horizontal_alignment = 1
+
+[node name="TeamTargetHP" type="ProgressBar" parent="MinigameControls"]
+self_modulate = Color(0.211765, 0.513726, 0.435294, 1)
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+max_value = 750.0
+step = 1.0
+value = 750.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MinigameControls/TeamTargetHP"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -6.5
+offset_right = 29.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Your team's target HP: 500"
+horizontal_alignment = 1
+
+[node name="DMLeader" type="ProgressBar" parent="MinigameControls"]
+self_modulate = Color(0.584314, 0.298039, 0.745098, 1)
+custom_minimum_size = Vector2(300, 25)
+layout_mode = 2
+max_value = 15.0
+step = 1.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MinigameControls/DMLeader"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -6.5
+offset_right = 29.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "No leader yet."
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MinigameControls"]
+libraries = {
+"": SubResource("AnimationLibrary_dd8xq")
+}
+
+[node name="Crosshair" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_6t1fc")
+expand_mode = 4
+stretch_mode = 3
+
+[node name="PauseMenu" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(540, 540)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.133333, 0.231373, 0.701961)
+
+[node name="Menu" type="VBoxContainer" parent="PauseMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -263.5
+offset_right = 163.0
+offset_bottom = 264.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
+theme_override_constants/line_spacing = -20
+theme_override_fonts/font = ExtResource("7_svln6")
+theme_override_font_sizes/font_size = 50
+text = "Paused -
+Sandbox"
+script = ExtResource("6_qxctu")
+json_text = "ui/sandbox_mode"
+
+[node name="Spacer" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("3_5o4ik")]
+layout_mode = 2
+json_text = "ui/leave"
+
+[node name="StartGame" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Start Minigame Lobby"
+script = ExtResource("5_6v07r")
+json_text = "ui/start_game"
+
+[node name="Spacer4" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Spacer7" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Switch Maps"
+script = ExtResource("6_qxctu")
+json_text = "ui/switch_maps"
+
+[node name="Spacer6" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="MapSelection" type="OptionButton" parent="PauseMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 6
+selected = 0
+popup/item_0/text = "Frozen Field"
+popup/item_0/id = 1
+popup/item_1/text = "Caffeina"
+popup/item_1/id = 2
+popup/item_2/text = "Calm Creek"
+popup/item_2/id = 3
+popup/item_3/text = "Grasslands"
+popup/item_3/id = 4
+popup/item_4/text = "Floaty"
+popup/item_4/id = 5
+popup/item_5/text = "Warp"
+popup/item_5/id = 6
+
+[node name="ChangeMap" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Switch to this map (deletes
+everything!)"
+script = ExtResource("5_6v07r")
+json_text = "ui/switch_maps_button"
+
+[node name="Spacer3" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="DebugMenu" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 88.0
+offset_top = -127.0
+offset_right = 615.0
+offset_bottom = 127.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+script = ExtResource("3_igmde")
+
+[node name="Label" type="Label" parent="DebugMenu"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
+theme_override_constants/outline_size = 2
+text = "------------- DEBUG MENU -------------- (Press ` to hide)"
+
+[node name="DebugText" type="Label" parent="DebugMenu"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
+theme_override_constants/outline_size = 2
+text = "debug"
+autowrap_mode = 2
+
+[node name="FakePoint" type="Button" parent="DebugMenu"]
+layout_mode = 2
+text = "Host: Give fake point to server"
+script = ExtResource("5_6v07r")
+
+[node name="LockPlayer" type="Button" parent="DebugMenu"]
+layout_mode = 2
+text = "Toggle player locked state"
+script = ExtResource("5_6v07r")
+
+[node name="ResetTools" type="Button" parent="DebugMenu"]
+layout_mode = 2
+text = "Reset player tools"
+script = ExtResource("5_6v07r")
+
+[node name="SaveTestWorld" type="Button" parent="DebugMenu"]
+layout_mode = 2
+text = "Save test.tbw"
+script = ExtResource("5_6v07r")
+
+[node name="LoadTestWorld" type="Button" parent="DebugMenu"]
+layout_mode = 2
+text = "Load test.tbw"
+script = ExtResource("5_6v07r")
+
+[node name="IntroOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="IntroOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="IntroOverlay"]
+libraries = {
+"": SubResource("AnimationLibrary_ogfxc")
+}
+
+[node name="TitleText" type="Label" parent="IntroOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -316.0
+offset_top = -44.0
+offset_right = 316.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("7_svln6")
+theme_override_font_sizes/font_size = 72
+text = "Map Name Here"
+horizontal_alignment = 1
+
+[node name="Tip" type="Label" parent="IntroOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -316.0
+offset_top = 80.0
+offset_right = 316.0
+offset_bottom = 168.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
+theme_override_constants/outline_size = 8
+text = "Tip: (uninitialized)"
+horizontal_alignment = 1
+autowrap_mode = 3

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dobx5tdiojdut"]
+
+[resource]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+distance_fade_mode = 1
+distance_fade_max_distance = 250.0

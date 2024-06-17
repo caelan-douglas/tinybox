@@ -1,0 +1,67 @@
+Attributions for /data/audio:
+
+	clang.ogg:
+		by Jose; licensed under Creative Commons 0
+		https://freesound.org/people/KJose/sounds/528676/
+	
+	clang_1.ogg:
+		by Anthousai; licensed under Creative Commons 0
+		https://freesound.org/people/Anthousai/sounds/406493/
+
+	deflect.ogg:
+		by JohnBuhr; licensed under Creative Commons 0
+		https://freesound.org/people/JohnBuhr/sounds/326784/
+	
+	beep/beep_fifths.ogg:
+		by pan14; licensed under Creative Commons 0
+		https://freesound.org/people/pan14/sounds/263125/
+	
+	beep/beep_low.ogg:
+		by pan14; licensed under Creative Commons 0
+		https://freesound.org/people/pan14/sounds/263126/
+
+	beep/beep.ogg, beep/missile_beep.ogg:
+		by Entershift; licensed under Creative Commons 0
+		https://freesound.org/people/Entershift/sounds/704134/
+
+	bat/bat_0.ogg:
+		by Reitanna; licensed under Creative Commons 0
+		https://freesound.org/people/Reitanna/sounds/323725/
+	bat/bat_1.ogg:
+		by robbeman; licensed under Creative Commons 0
+		https://freesound.org/people/robbeman/sounds/495644/
+
+	fire/fire_crackle.ogg:
+		by northern87; licensed under Creative Commons 0
+		https://freesound.org/people/northern87/sounds/369983/
+
+	extinguisher/extinguisher.ogg:
+		by Iamgiorgio; licensed under Creative Commons 0
+		https://freesound.org/people/Iamgiorgio/sounds/371839/
+	
+	spring.ogg:
+		by Imbubec; licensed under Creative Commons 0
+		https://freesound.org/people/lmbubec/sounds/119795/
+		
+	sparkle.ogg:
+		(modified)
+		by opticaillusions; licensed under Creative Commons 0
+		https://freesound.org/people/opticaillusions/sounds/554312/
+
+	lifter.ogg:
+		(modified)
+		by rastaman94; licensed under Creative Commons 0
+		https://freesound.org/people/rastaman94/sounds/241193/
+
+	flamethrower/flamethrower.ogg:
+		by sidequesting; licensed under Creative Commons 0
+		https://freesound.org/people/sidequesting/sounds/494085/
+	
+	water/splash_0.ogg:
+		by swordofkings128; licensed under Creative Commons 0
+		https://freesound.org/people/swordofkings128/sounds/398032/
+	
+	wobble.ogg:
+		by deleted_user_2104797; licensed under Creative Commons 0
+		https://freesound.org/people/deleted_user_2104797/sounds/148987/
+	

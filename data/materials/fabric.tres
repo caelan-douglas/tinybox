@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cykv2jwvq8q3p"]
+
+[ext_resource type="Texture2D" uid="uid://c36ws0cwo4te5" path="res://data/models/character/textures/fabric.jpg" id="1_57ifo"]
+
+[resource]
+resource_local_to_scene = true
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_57ifo")
+uv1_scale = Vector3(2, 2, 1)
+uv1_offset = Vector3(0, -1, 0)

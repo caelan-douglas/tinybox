@@ -1,0 +1,118 @@
+extends Node
+signal master_setting_changed
+signal music_setting_changed
+signal sfx_setting_changed
+
+var master_setting = 1.0
+var music_setting = 0.6
+var sfx_setting = 1.0
+var min_db = 30
+var current_song_name = ""
+var song_list = [""]
+
+@onready var music_player : AudioStreamPlayer = $AudioStreamPlayer
+@onready var music_animator = $AudioStreamPlayer/AnimationPlayer
+
+func _ready():
+	master_setting = MusicHandler.load_master_setting()
+	music_setting = MusicHandler.load_music_setting()
+	sfx_setting = MusicHandler.load_sfx_setting()
+
+func switch_song(new_song_names : Array[String], overwrite_song_list = true):
+	if overwrite_song_list:
+		song_list = new_song_names
+	#print("Switching songs to: ", str(new_song_names), " ;;; Total song list: ", str(song_list))
+	var new_song_name = new_song_names.pick_random()
+	# blank song name stops the music
+	if new_song_name == "":
+		current_song_name = new_song_name
+		music_animator.play("song_fade_out")
+		await get_tree().create_timer(3).timeout
+		# don't stop the music if a new song has started since the 3s timeout
+		if current_song_name == "":
+			music_player.disconnect("finished", switch_song)
+			music_player.stop()
+	elif current_song_name != new_song_name:
+		var new = load(str("res://data/audio/music/", new_song_name, ".ogg"))
+		if new != null:
+			# if we are switching from one song to another, fade (unless we're transitioning from no song)
+			if music_player.playing && current_song_name != "":
+				current_song_name = new_song_name
+				music_animator.play("song_fade_out")
+				await get_tree().create_timer(3).timeout
+				# don't start old music if a new song has started since the 3s timeout
+				if current_song_name == new_song_name:
+					music_player.stream = new
+					music_player.play()
+					# keep songs playing from queue
+					music_animator.play("RESET")
+			# if there is no song currently playing, just play the new one
+			else:
+				current_song_name = new_song_name
+				music_player.stream = new
+				music_player.play()
+				music_animator.play("RESET")
+
+func _physics_process(delta):
+	if !music_player.playing && song_list != [""]:
+		# don't play the same song again if there is more than one song
+		var songs_minus_current = song_list.duplicate()
+		if song_list.size() > 1:
+			if songs_minus_current.has(current_song_name):
+				songs_minus_current.erase(current_song_name)
+		current_song_name = "NULL"
+		switch_song(songs_minus_current, false)
+
+func get_master_setting() -> float:
+	return master_setting
+
+func set_master_setting(new : float) -> void:
+	master_setting = new
+	if new == 0:
+		AudioServer.set_bus_mute(0, true)
+	else:
+		AudioServer.set_bus_mute(0, false)
+	AudioServer.set_bus_volume_db(0, (-min_db + (min_db * new)))
+	emit_signal("master_setting_changed")
+
+func load_master_setting() -> float:
+	var loaded_preset = UserPreferences.load_pref("master_setting")
+	if loaded_preset != null:
+		set_master_setting(loaded_preset)
+	return master_setting
+
+func get_music_setting() -> float:
+	return music_setting
+
+func set_music_setting(new : float) -> void:
+	music_setting = new
+	if new == 0:
+		AudioServer.set_bus_mute(1, true)
+	else:
+		AudioServer.set_bus_mute(1, false)
+	AudioServer.set_bus_volume_db(1, (-min_db + (min_db * new)))
+	emit_signal("music_setting_changed")
+
+func load_music_setting() -> float:
+	var loaded_preset = UserPreferences.load_pref("music_setting")
+	if loaded_preset != null:
+		set_music_setting(loaded_preset)
+	return music_setting
+
+func get_sfx_setting() -> float:
+	return sfx_setting
+
+func set_sfx_setting(new : float) -> void:
+	sfx_setting = new
+	if new == 0:
+		AudioServer.set_bus_mute(2, true)
+	else:
+		AudioServer.set_bus_mute(2, false)
+	AudioServer.set_bus_volume_db(2, (-min_db + (min_db * new)))
+	emit_signal("sfx_setting_changed")
+
+func load_sfx_setting() -> float:
+	var loaded_preset = UserPreferences.load_pref("sfx_setting")
+	if loaded_preset != null:
+		set_sfx_setting(loaded_preset)
+	return sfx_setting

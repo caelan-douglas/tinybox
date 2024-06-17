@@ -1,0 +1,39 @@
+[gd_resource type="Environment" load_steps=6 format=3 uid="uid://bquh7sgklsbgg"]
+
+[ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="1_b8wx4"]
+
+[sub_resource type="Gradient" id="Gradient_ckbve"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_17j4y"]
+gradient = SubResource("Gradient_ckbve")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jhq5o"]
+panorama = ExtResource("1_b8wx4")
+
+[sub_resource type="Sky" id="Sky_wh8fr"]
+sky_material = SubResource("PanoramaSkyMaterial_jhq5o")
+radiance_size = 2
+
+[resource]
+background_mode = 2
+background_energy_multiplier = 0.8
+sky = SubResource("Sky_wh8fr")
+sky_rotation = Vector3(0, 2.34049, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.338358, 0.430332, 0.593269, 1)
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.001
+fog_sky_affect = 0.787
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_17j4y")

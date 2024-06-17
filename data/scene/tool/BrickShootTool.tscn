@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbby63iktokvn"]
+
+[ext_resource type="Script" path="res://src/ShootTool.gd" id="1_f6bw5"]
+
+[node name="BrickShootTool" type="Node3D"]
+script = ExtResource("1_f6bw5")
+tool_name = "Shoot Brick"
+_shoot_type = 1
+shot_speed = 40
+shot_cooldown = 70
+show_cooldown_on_ui_partner = true
+visual_mesh_name = "ClayBallToolVisual"
+lock_camera_to_aim = true

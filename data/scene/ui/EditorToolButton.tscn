@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5g56ul6w1lsy"]
+
+[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="1_l37ur"]
+
+[node name="EditorTool" type="Button"]
+custom_minimum_size = Vector2(160, 48)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+text = "texttexttext"
+clip_text = true
+
+[node name="NumberLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = -14.0
+offset_right = 47.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
+theme_override_fonts/font = ExtResource("1_l37ur")
+theme_override_font_sizes/font_size = 64
+text = "1"

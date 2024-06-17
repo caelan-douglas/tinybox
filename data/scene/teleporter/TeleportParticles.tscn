@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://dnjrw3cumbife"]
+
+[ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="1_recen"]
+[ext_resource type="Script" path="res://src/ExpireAfterTime.gd" id="2_mf6nb"]
+
+[sub_resource type="Gradient" id="Gradient_o5qp0"]
+offsets = PackedFloat32Array(0, 0.266862, 0.791789, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_25w0m"]
+gradient = SubResource("Gradient_o5qp0")
+
+[sub_resource type="Curve" id="Curve_csgoh"]
+max_value = 3.5
+_data = [Vector2(0, 0.944084), 0.0, 0.0, 0, 0, Vector2(0.140078, 3.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_8c8xs"]
+curve = SubResource("Curve_csgoh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5ycu7"]
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0.5, 0.5)
+angular_velocity_min = -30.0
+angular_velocity_max = 30.0
+gravity = Vector3(0, 0.4, 0)
+scale_min = 0.05
+scale_max = 0.13
+scale_curve = SubResource("CurveTexture_8c8xs")
+color = Color(2, 1.7, 1, 1)
+color_ramp = SubResource("GradientTexture1D_25w0m")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h4is5"]
+render_priority = 1
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 4
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_recen")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_distance = 100.0
+distance_fade_max_distance = 120.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_2qxob"]
+material = SubResource("StandardMaterial3D_h4is5")
+
+[node name="TeleportParticles" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.259364, 0)
+extra_cull_margin = 128.0
+emitting = false
+amount = 96
+lifetime = 1.5
+one_shot = true
+speed_scale = 2.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_5ycu7")
+draw_pass_1 = SubResource("QuadMesh_2qxob")
+script = ExtResource("2_mf6nb")
+time = 2.0

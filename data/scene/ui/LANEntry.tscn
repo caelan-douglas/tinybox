@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bg1gptagfnt0d"]
+
+[ext_resource type="Script" path="res://src/ui/LANEntry.gd" id="1_gdx5s"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_pi6th"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_f83gn"]
+
+[node name="LANEntry" type="HBoxContainer"]
+script = ExtResource("1_gdx5s")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Name's Server"
+script = ExtResource("1_pi6th")
+
+[node name="Join" type="Button" parent="."]
+layout_mode = 2
+text = "Join"
+script = ExtResource("2_f83gn")
+json_text = "ui/join"

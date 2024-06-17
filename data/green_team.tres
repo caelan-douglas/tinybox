@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cimhewj2wn54n"]
+
+[ext_resource type="Script" path="res://src/Team.gd" id="1_7p6gy"]
+
+[resource]
+script = ExtResource("1_7p6gy")
+name = "Green"
+members = []
+colour = Color(0.384314, 0.635294, 0.321569, 1)
+friendly_fire = false

@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm2oif7toxstd"]
+
+[sub_resource type="Environment" id="Environment_g7rfk"]
+background_mode = 1
+sky_rotation = Vector3(0, 2.34049, 0)
+ambient_light_source = 2
+ambient_light_color = Color(0.129412, 0.176471, 0.262745, 1)
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+volumetric_fog_density = 0.02
+
+[node name="ComputerScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g7rfk")
+
+[node name="Point2" type="SpotLight3D" parent="."]
+transform = Transform3D(0.965926, -0.0669873, 0.25, -0.224144, -0.699469, 0.678603, 0.12941, -0.711516, -0.69065, 8.27496, 4.30343, -4.53997)
+light_color = Color(0.862745, 0.909804, 0.964706, 1)
+light_energy = 3.037
+shadow_enabled = true
+spot_range = 9.251
+spot_angle = 18.5423
+
+[node name="Point3" type="OmniLight3D" parent="."]
+transform = Transform3D(0.965926, -0.0669873, 0.25, -0.224144, -0.699469, 0.678603, 0.12941, -0.711516, -0.69065, 2.27496, 2.80343, -8.03996)
+light_color = Color(0.831373, 0.572549, 0.443137, 1)
+light_energy = 3.037
+shadow_enabled = true
+omni_range = 19.0
+
+[node name="computer2" type="Node3D" parent="."]
+transform = Transform3D(-25, 0, 2.18557e-06, 0, 25, 0, -2.18557e-06, 0, -25, 12, -2.2, 0)

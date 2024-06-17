@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://gd6l0n3l7l38"]
+
+[ext_resource type="Script" path="res://src/MinigameTarget.gd" id="1_ak3c7"]
+[ext_resource type="PackedScene" uid="uid://bx5kiubfc00do" path="res://data/models/dog/dog.blend" id="2_3gw3a"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3d5u8"]
+properties/0/path = NodePath(".:team")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:health")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:position")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xqhp1"]
+size = Vector3(0.345459, 1, 0.724609)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hndxl"]
+animation = &"dog_idle_expressive"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_mvoet"]
+graph_offset = Vector2(-105.557, 32.2771)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_hndxl")
+nodes/Animation/position = Vector2(100, 180)
+node_connections = [&"output", 0, &"Animation"]
+
+[node name="Dog" type="RigidBody3D"]
+freeze = true
+script = ExtResource("1_ak3c7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_3d5u8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.360343, 0.0130028)
+shape = SubResource("BoxShape3D_xqhp1")
+
+[node name="dog2" parent="." instance=ExtResource("2_3gw3a")]
+
+[node name="Skeleton3D" parent="dog2/dog_Armature" index="0"]
+bones/0/rotation = Quaternion(0.740196, -1.85979e-16, -1.85972e-16, 0.672391)
+bones/0/scale = Vector3(1, 1, 1.00004)
+bones/1/rotation = Quaternion(-0.180307, 2.60664e-16, 3.49681e-17, 0.98361)
+bones/2/rotation = Quaternion(-0.173607, 0.00130722, -0.00276837, 0.98481)
+bones/2/scale = Vector3(1, 1, 1)
+bones/3/rotation = Quaternion(0.304338, 0.000923449, -0.0029189, 0.952559)
+bones/4/rotation = Quaternion(-0.663893, -0.046706, -0.274525, 0.694046)
+bones/5/rotation = Quaternion(-0.663893, 0.0467061, 0.274525, 0.694046)
+bones/7/scale = Vector3(1, 1, 1)
+bones/8/rotation = Quaternion(-0.0131156, -0.0139803, 0.0154194, 0.999697)
+bones/10/scale = Vector3(1, 1, 1)
+bones/11/rotation = Quaternion(-0.0131156, 0.0139803, -0.0154194, 0.999697)
+bones/12/rotation = Quaternion(0.955697, -0.163004, 0.041206, 0.241608)
+bones/12/scale = Vector3(1, 1, 0.999997)
+bones/13/rotation = Quaternion(-0.0992233, 0.0169204, 0.167278, 0.980758)
+bones/14/rotation = Quaternion(-0.129973, 0.0221651, 0.166664, 0.977158)
+bones/15/rotation = Quaternion(-0.0862324, 0.0147052, 0.167487, 0.981986)
+bones/16/rotation = Quaternion(0.767546, 8.63351e-17, 1.0338e-16, 0.640994)
+bones/17/rotation = Quaternion(0.20673, -0.0292476, 0.0386489, 0.977197)
+bones/18/rotation = Quaternion(-0.19162, 0.039569, -0.0623345, 0.978688)
+bones/19/rotation = Quaternion(0.767546, 8.63351e-17, 1.0338e-16, 0.640994)
+bones/20/rotation = Quaternion(0.20673, 0.0292476, -0.0386489, 0.977197)
+bones/21/rotation = Quaternion(-0.19162, -0.039569, 0.0623345, 0.978688)
+
+[node name="AnimationPlayer" parent="dog2" index="1"]
+autoplay = "dog_idle_expressive"
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../dog2")
+tree_root = SubResource("AnimationNodeBlendTree_mvoet")
+anim_player = NodePath("../dog2/AnimationPlayer")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.37653, 0)
+pixel_size = 0.0008
+billboard = 1
+fixed_size = true
+text = "Defend me!"
+
+[editable path="dog2"]

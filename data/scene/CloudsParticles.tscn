@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdeq6bmhjenve"]
+
+[ext_resource type="Material" uid="uid://b5lyiq31bpwyd" path="res://data/materials/clouds_billboard.tres" id="1_wh2v2"]
+
+[sub_resource type="Gradient" id="Gradient_2ktwl"]
+offsets = PackedFloat32Array(0, 0.266862, 0.791789, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.121569, 1, 1, 1, 0.0784314, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_86dsd"]
+gradient = SubResource("Gradient_2ktwl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hoqdg"]
+emission_shape = 3
+emission_box_extents = Vector3(64, 64, 64)
+angular_velocity_min = -5.0
+angular_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 44.06
+scale_max = 120.62
+color_ramp = SubResource("GradientTexture1D_86dsd")
+
+[sub_resource type="QuadMesh" id="1"]
+material = ExtResource("1_wh2v2")
+
+[node name="Clouds" type="GPUParticles3D"]
+extra_cull_margin = 128.0
+amount = 120
+lifetime = 20.0
+preprocess = 600.0
+speed_scale = 2.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_hoqdg")
+draw_pass_1 = SubResource("1")

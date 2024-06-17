@@ -1,0 +1,31 @@
+[gd_scene load_steps=8 format=3 uid="uid://1w0g52r8trv5"]
+
+[ext_resource type="PackedScene" uid="uid://1wmd4qkbqouo" path="res://data/models/visual_mesh/paintbrush/paintbrush.blend" id="1_ug4gc"]
+[ext_resource type="Material" uid="uid://dfsfnl84nbw7c" path="res://data/materials/wood_charred.tres" id="2_g1iq5"]
+[ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="3_ax5o6"]
+
+[sub_resource type="Gradient" id="Gradient_cfrcf"]
+colors = PackedColorArray(0.390397, 0.31067, 0.261007, 1, 0.784636, 0.675624, 0.550567, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7uuey"]
+frequency = 0.0156
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g24eg"]
+height = 32
+color_ramp = SubResource("Gradient_cfrcf")
+noise = SubResource("FastNoiseLite_7uuey")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucyj8"]
+albedo_texture = SubResource("NoiseTexture2D_g24eg")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="paintbrush" parent="." instance=ExtResource("1_ug4gc")]
+transform = Transform3D(-0.00170374, 0.193642, 0.0500001, 0.0133975, 0.0500001, -0.193185, -0.199543, 0.0017037, -0.0133975, -0.0317974, 0.0804799, -0.0516177)
+
+[node name="Cylinder" parent="paintbrush" index="0"]
+surface_material_override/0 = ExtResource("2_g1iq5")
+surface_material_override/1 = ExtResource("3_ax5o6")
+surface_material_override/2 = SubResource("StandardMaterial3D_ucyj8")
+
+[editable path="paintbrush"]

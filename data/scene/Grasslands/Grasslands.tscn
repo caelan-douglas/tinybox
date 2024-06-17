@@ -1,0 +1,109 @@
+[gd_scene load_steps=17 format=3 uid="uid://ec0shar7op8x"]
+
+[ext_resource type="Script" path="res://src/Map.gd" id="1_tvdfo"]
+[ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="2_4ibwf"]
+[ext_resource type="Script" path="res://src/Teams.gd" id="2_bstj4"]
+[ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="3_v6era"]
+[ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="4_kaq6k"]
+[ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="5_7lr36"]
+[ext_resource type="Texture2D" uid="uid://c36ws0cwo4te5" path="res://data/models/character/textures/fabric.jpg" id="7_gx82l"]
+[ext_resource type="Environment" uid="uid://bquh7sgklsbgg" path="res://data/scene/Frozen Field/picnic_environment.tres" id="8_n7xb2"]
+[ext_resource type="PackedScene" uid="uid://2ba4b1hakg87" path="res://data/scene/building/BasicTower.tscn" id="9_p3w0i"]
+[ext_resource type="PackedScene" uid="uid://bnerevgdih5mn" path="res://data/scene/building/BasicCar.tscn" id="10_umciu"]
+[ext_resource type="PackedScene" uid="uid://baiu57k2676um" path="res://data/scene/lifter/Lifter.tscn" id="11_bprh0"]
+[ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="12_fj32c"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_voudb"]
+size = Vector3(1000, 100, 1000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_up2nf"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.529412, 0.67451, 0.427451, 1)
+albedo_texture = ExtResource("7_gx82l")
+uv1_scale = Vector3(160, 160, 160)
+uv1_offset = Vector3(0, -1, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7h3uk"]
+material = SubResource("StandardMaterial3D_up2nf")
+size = Vector3(1000, 1, 1000)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i3xod"]
+
+[node name="Grasslands" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+script = ExtResource("1_tvdfo")
+
+[node name="Camera" parent="." instance=ExtResource("2_4ibwf")]
+
+[node name="Teams" type="Node" parent="."]
+script = ExtResource("2_bstj4")
+team_list = Array[Resource]([ExtResource("3_v6era"), ExtResource("4_kaq6k"), ExtResource("5_7lr36")])
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -49.5, 0)
+shape = SubResource("BoxShape3D_voudb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+mesh = SubResource("BoxMesh_7h3uk")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("8_n7xb2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.327924, -0.377446, 0, 0.754893, 0.655848, 0.5, -0.567981, 0.653756, 0, 2.74168, 0)
+shadow_enabled = true
+
+[node name="Spawns" type="Node" parent="."]
+
+[node name="0" type="Node" parent="Spawns"]
+
+[node name="Spawn" type="Node3D" parent="Spawns/0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 50, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Spawns/0/Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.447465, 0)
+mesh = SubResource("CylinderMesh_i3xod")
+
+[node name="1" type="Node" parent="Spawns"]
+
+[node name="Spawn" type="Node3D" parent="Spawns/1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 50, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Spawns/1/Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.447465, 0)
+mesh = SubResource("CylinderMesh_i3xod")
+
+[node name="2" type="Node" parent="Spawns"]
+
+[node name="Spawn" type="Node3D" parent="Spawns/2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Spawns/2/Spawn"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.447465, 0)
+mesh = SubResource("CylinderMesh_i3xod")
+
+[node name="BasicTower" parent="." instance=ExtResource("9_p3w0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 17)
+
+[node name="BasicTower2" parent="." instance=ExtResource("9_p3w0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -11)
+
+[node name="BasicTower3" parent="." instance=ExtResource("9_p3w0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -30)
+
+[node name="BasicTower4" parent="." instance=ExtResource("9_p3w0i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 39)
+
+[node name="BasicCar" parent="." instance=ExtResource("10_umciu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 1)
+
+[node name="Lifter" parent="." instance=ExtResource("11_bprh0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.531837, 6)
+
+[node name="Pickup" parent="." instance=ExtResource("12_fj32c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, -4)
+type = 3
+ammo = 999

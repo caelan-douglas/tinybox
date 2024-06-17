@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo2g6ud0bnb1j"]
+
+[ext_resource type="Script" path="res://src/ShootTool.gd" id="1_cotb6"]
+
+[node name="MissileTool" type="Node3D"]
+script = ExtResource("1_cotb6")
+tool_name = "Missiles"
+_shoot_type = 6
+shot_speed = 11
+shot_cooldown = 1300
+explosion_size = 2.0
+show_cooldown_on_ui_partner = true
+visual_mesh_name = "MissileLauncherVisualMesh"
+lock_camera_to_aim = true

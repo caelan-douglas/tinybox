@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkgow87pkcjf6"]
+
+[ext_resource type="Script" path="res://src/Building.gd" id="1_m50m1"]
+[ext_resource type="PackedScene" uid="uid://6dcw2huh16uq" path="res://data/scene/brick/HalfBrick.tscn" id="2_j8dfb"]
+[ext_resource type="PackedScene" uid="uid://cwymj2xlxiri4" path="res://data/scene/brick/CylinderBrick.tscn" id="3_iemxh"]
+[ext_resource type="PackedScene" uid="uid://dca5npetcw4di" path="res://data/scene/brick/MotorSeat.tscn" id="4_7wenm"]
+
+[node name="BasicCar" type="Node3D"]
+script = ExtResource("1_m50m1")
+
+[node name="Brick" parent="." instance=ExtResource("2_j8dfb")]
+_material = 3
+
+[node name="Brick6" parent="." instance=ExtResource("2_j8dfb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+_material = 3
+
+[node name="Brick10" parent="." instance=ExtResource("2_j8dfb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+_material = 3
+
+[node name="Brick2" parent="." instance=ExtResource("2_j8dfb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+_material = 3
+
+[node name="Brick3" parent="." instance=ExtResource("2_j8dfb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+_material = 3
+
+[node name="Brick7" parent="." instance=ExtResource("3_iemxh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+_material = 3
+
+[node name="Brick8" parent="." instance=ExtResource("3_iemxh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+_material = 3
+
+[node name="Brick16" parent="." instance=ExtResource("4_7wenm")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2, 1, 0)
+_material = 3

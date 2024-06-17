@@ -1,0 +1,15 @@
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://material/particle/draw/cloud.png" type="Texture" id=1]
+
+[resource]
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_specular_mode = 4
+params_billboard_keep_scale = true
+albedo_texture = ExtResource( 1 )
+proximity_fade_enable = true
+proximity_fade_distance = 100.0
+distance_fade_mode = 1
+distance_fade_min_distance = 0.0
+distance_fade_max_distance = 120.0

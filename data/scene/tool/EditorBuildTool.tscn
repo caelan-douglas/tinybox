@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj387li7w0abc"]
+
+[ext_resource type="Script" path="res://src/EditorBuildTool.gd" id="1_1jwcf"]
+[ext_resource type="PackedScene" uid="uid://cb1sikepc8br0" path="res://data/scene/PreviewNode.tscn" id="2_3p1u0"]
+
+[node name="EditorBuildTool" type="Node"]
+script = ExtResource("1_1jwcf")
+
+[node name="PreviewNode" parent="." instance=ExtResource("2_3p1u0")]

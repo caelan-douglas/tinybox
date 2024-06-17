@@ -1,0 +1,91 @@
+{
+    "ui": {
+        "close": "Close",
+        "cancel": "Cancel",
+        "quit": "Quit to desktop",
+        "back": "<<< Back",
+        "back_save": "<<< Save",
+        "host_or_join": "Host or Join",
+        "host": "Host server",
+        "join": "Join server",
+        "leave": "Leave server",
+        "start_game": "Start minigame lobby",
+        "lobby": "Lobby Settings",
+        "participants": "Participants",
+        "appearance_button": "Player Appearance...",
+        "appearance": "Player Appearance",
+        "settings": "Settings",
+        "keybinds": "Keybinds",
+        "defaults": "Reset to defaults",
+        "master_volume": "Master Volume",
+        "music_volume": "Music Volume",
+        "sfx_volume": "SFX Volume",
+        "colour": "Colour",
+        "news": "New in this build",
+        "host_clicked": "Starting server...",
+        "join_clicked": "Trying to join...",
+        "map_selection": "Choose a map:",
+        "switch_maps": "Switch Maps",
+        "switch_maps_button": "Switch to this map (deletes\neverything!)",
+        "custom_maps": "Custom Maps",
+        "world_editor": "World editor",
+        "map_vote": "Map Vote",
+        "multiplayer_prefs": "Multiplayer Preferences",
+        "host_panel": "Host a server",
+        "join_panel": "Join a server via IP",
+        "health": "Health",
+        "sandbox_mode": "Paused -\nSandbox",
+        "minigame_mode": "Paused -\nMinigame",
+        "graphics_settings": {
+            "cool": "Graffix: COOL",
+            "bad": "Graffix: BAD",
+            "awful": "Graffix: AWFUL"
+        },
+        "music_settings": {
+            "on": "Music: On",
+            "off": "Music: Off"
+        },
+        "sfx_settings": {
+            "on": "SFX: On",
+            "off": "SFX: Off"
+        },
+        "tutorial_settings": {
+            "on": "Show tutorial in-game: Yes",
+            "off": "Show tutorial in-game: No"
+        },
+        "host_public_settings": {
+            "on": "Port-forward w/ uPnP: Yes",
+            "off": "Port-forward w/ uPnP: No"
+        },
+        "tool_overlay": {
+            "build_tool": "[ T ]:          Change type\n[ M ]:    Change material\n[ R ]: Rotate horizontally\n[ F ]:    Rotate vertically\n[ X ]:          Swap modes\n[ Shift ]:          Height up\n[ Ctrl/Cmd ]: Height down",
+            "paintbrush": "[ R ]:          Next colour\n[ F ]:     Previous colour",
+            "missile": {
+                "time": "MISSILE TIME REMAINING",
+                "distance": "NEAREST PLAYER DISTANCE",
+                "near": "NEAR",
+                "far": "FAR"
+            }
+        }
+    },
+    "tip": {
+        "0": "Tip: If you are sparkling, you will always land on your feet - even if you dive.",
+        "1": "Tip: You can use the Extinguisher + Rockets as a mode of propulsion. This is especially effective on Warp.",
+        "2": "Tip: Bouncyballs can displace light bricks like plastic.",
+        "3": "Tip: Bombs go through teleporters. Bombs explode. You can use this.",
+        "4": "Tip: Using lifters, the Extinguisher, Rockets, and a dive together, you can soar quite far through the air.",
+        "5": "Tip: The Flamethrower is prone to blowing up when it's hit by something.",
+        "6": "Tip: When you are in a vehicle, the Extinguisher can be used as a boost.",
+        "7": "Tip: Jumping while in a dive will send you into a roll if you are going fast enough.",
+        "8": "Tip: The guided Missiles are good for long-range. But be careful, they leave your character out in the open whilst you're controlling the missile."
+    },
+    "common": {
+        "yes": "Yes",
+        "no": "No"
+    },
+    "appearance": {
+        "long_sleeve": "Long sleeve",
+        "short_sleeve": "Short sleeve"
+    },
+    "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\n\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
+}

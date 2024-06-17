@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://s6202fw0jgpo"]
+
+[resource]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.596078, 0.760784, 0.945098, 1)
+metallic = 0.4
+metallic_texture_channel = 2
+roughness = 0.1
+roughness_texture_channel = 1
+normal_scale = 0.1
+rim_enabled = true
+rim = 0.16

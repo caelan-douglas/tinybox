@@ -1,0 +1,260 @@
+[gd_scene load_steps=6 format=3 uid="uid://b4heya8wtwyuo"]
+
+[ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
+[ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
+[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
+[ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
+
+[node name="EditorCanvas" type="CanvasLayer"]
+script = ExtResource("1_4dmeu")
+
+[node name="VersionLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -240.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.756863, 0.756863, 0.756863, 1)
+text = "Tinybox Nov 2023 Beta 2"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("6_aufvl")
+json_text = "Tinybox %version%"
+raw_format = true
+
+[node name="ToolList" type="HBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -92.5
+offset_top = 8.0
+offset_right = 92.5
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_constants/separation = 0
+
+[node name="ItemChooser" type="Control" parent="."]
+custom_minimum_size = Vector2(540, 400)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -200.0
+offset_right = 270.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="ItemChooser"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="ItemChooser"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -52.0
+offset_right = 154.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="DynamicLabel" type="Label" parent="ItemChooser/Menu"]
+layout_mode = 2
+text = "Pick item..."
+script = ExtResource("6_aufvl")
+
+[node name="Spacer" type="Control" parent="ItemChooser/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="ItemGrid" type="GridContainer" parent="ItemChooser/Menu"]
+layout_mode = 2
+columns = 4
+
+[node name="Button" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Brick"
+
+[node name="Button3" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Half Brick"
+text_overrun_behavior = 3
+
+[node name="Button4" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Wheel"
+
+[node name="Button5" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Seat"
+
+[node name="Button2" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "PineTree"
+
+[node name="Button6" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Lifter"
+
+[node name="WorldProperties" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(540, 400)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -200.0
+offset_right = 270.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="WorldProperties"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="WorldProperties"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -52.0
+offset_right = 154.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="DynamicLabel" type="Label" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "World properties"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer" type="Control" parent="WorldProperties/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Water" type="Button" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Toggle water"
+
+[node name="WaterHeightAdjuster" parent="WorldProperties/Menu" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="WorldProperties/Menu/WaterHeightAdjuster" index="2"]
+text = "Water height: 42"
+
+[node name="PauseMenu" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(540, 540)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.133333, 0.231373, 0.701961)
+
+[node name="Menu" type="VBoxContainer" parent="PauseMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -264.0
+offset_right = 154.0
+offset_bottom = 264.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
+theme_override_constants/line_spacing = -20
+theme_override_fonts/font = ExtResource("11_j8mfy")
+theme_override_font_sizes/font_size = 50
+text = "Editor"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("12_nulw5")]
+layout_mode = 2
+text = "Leave Editor"
+
+[node name="StartGame" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+disabled = true
+text = "Test world"
+
+[node name="Spacer3" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Save world"
+script = ExtResource("6_aufvl")
+
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/Menu"]
+layout_mode = 2
+placeholder_text = "World name..."
+
+[node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Save world"
+
+[node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[editable path="WorldProperties/Menu/WaterHeightAdjuster"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dudk6o40fwhnj"]
+
+[ext_resource type="Script" path="res://src/ui/LeaveButton.gd" id="1_jupgq"]
+
+[node name="LeaveButton" type="Button"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -218.0
+offset_top = 25.0
+offset_bottom = 56.0
+grow_horizontal = 0
+text = "Leave Server"
+script = ExtResource("1_jupgq")

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://bg2508sm35hrk"]
+
+[ext_resource type="Script" path="res://src/Teleporter.gd" id="1_nymie"]
+[ext_resource type="Material" uid="uid://d4ihw612im0uk" path="res://data/materials/teleporter.tres" id="2_u0fjr"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_p2abd"]
+material = ExtResource("2_u0fjr")
+size = Vector2(3, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5r640"]
+size = Vector3(3, 3, 0.5)
+
+[node name="Teleporter" type="Node3D"]
+script = ExtResource("1_nymie")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, -1, 0, 1, -2.98023e-08, 0, 1.4, 0)
+mesh = SubResource("PlaneMesh_p2abd")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("BoxShape3D_5r640")

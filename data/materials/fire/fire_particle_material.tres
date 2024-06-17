@@ -1,0 +1,18 @@
+[gd_resource type="ParticleProcessMaterial" load_steps=3 format=3 uid="uid://b4jes2y0rq28n"]
+
+[sub_resource type="Gradient" id="Gradient_66m8f"]
+offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 0.854066, 0.417514, 0, 1, 0.313726, 0.313726, 0.313726, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dnoau"]
+gradient = SubResource("Gradient_66m8f")
+width = 128
+
+[resource]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+angular_velocity_min = 61.28
+angular_velocity_max = 61.28
+gravity = Vector3(0, 2, 0)
+color_ramp = SubResource("GradientTexture1D_dnoau")

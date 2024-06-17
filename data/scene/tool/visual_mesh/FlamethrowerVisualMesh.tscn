@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjq6dqtwfjogw"]
+
+[ext_resource type="PackedScene" uid="uid://c6xdj188h5b3e" path="res://data/models/flamethrower/flamethrower.blend" id="1_bfbkp"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="flamethrower" parent="." instance=ExtResource("1_bfbkp")]
+transform = Transform3D(0.128797, 0.585572, -0.0227124, -0.101488, -0.000613967, -0.591352, -0.577157, 0.130783, 0.098916, -0.481171, -0.158747, -0.126868)

@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://chomms4fmxi38"]
+
+[ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="1_1j42a"]
+[ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_7d0lv"]
+
+[resource]
+resource_local_to_scene = true
+resource_name = "clay.vincent.hair"
+albedo_color = Color(0.654902, 0.376471, 0.415686, 1)
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_1j42a")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("2_7d0lv")

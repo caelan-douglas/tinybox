@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://1mdeppfhe4p6"]
+
+[ext_resource type="Script" path="res://src/BuildTool.gd" id="1_mysif"]
+
+[node name="BuildTool" type="Node3D"]
+script = ExtResource("1_mysif")
+visual_mesh_name = "BuildToolVisualMesh"
+lock_camera_to_aim = true

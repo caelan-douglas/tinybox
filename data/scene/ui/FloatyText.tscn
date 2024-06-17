@@ -1,0 +1,106 @@
+[gd_scene load_steps=5 format=3 uid="uid://dv48wiw65w5d"]
+
+[ext_resource type="Script" path="res://src/ui/FloatyText.gd" id="1_qevpb"]
+
+[sub_resource type="Animation" id="Animation_p7s4r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.756863, 0.0823529, 0.282353, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:outline_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.0980392, 0.0352941, 0.0431373, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_v3dr5"]
+resource_name = "floaty"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.3, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.05, 0.14, -0.02), Vector3(-0.04, 0.325, 0.04), Vector3(0, 0.465, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.5, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.756863, 0.0823529, 0.282353, 1), Color(0.756863, 0.0823529, 0.282353, 1), Color(0.756863, 0.0823529, 0.282353, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:outline_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.5, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.0980392, 0.0352941, 0.0431373, 1), Color(0.0980392, 0.0352941, 0.0431373, 1), Color(0.0980392, 0.0352941, 0.0431373, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o7ov2"]
+_data = {
+"RESET": SubResource("Animation_p7s4r"),
+"floaty": SubResource("Animation_v3dr5")
+}
+
+[node name="FloatyText" type="Node3D"]
+script = ExtResource("1_qevpb")
+
+[node name="Label" type="Label3D" parent="."]
+pixel_size = 0.0007
+billboard = 1
+no_depth_test = true
+fixed_size = true
+modulate = Color(0.756863, 0.0823529, 0.282353, 1)
+outline_modulate = Color(0.0980392, 0.0352941, 0.0431373, 1)
+text = "Cost"
+outline_size = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Label"]
+libraries = {
+"": SubResource("AnimationLibrary_o7ov2")
+}

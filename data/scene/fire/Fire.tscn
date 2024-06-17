@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://dwfrmjgcn6sg3"]
+
+[ext_resource type="Script" path="res://src/Fire.gd" id="1_35qdu"]
+[ext_resource type="PlaneMesh" uid="uid://b13qst208r6f6" path="res://data/materials/fire/fire_material.tres" id="2_8txrk"]
+[ext_resource type="AudioStream" uid="uid://c4pp0lvm8hoam" path="res://data/audio/fire/fire_crackle.ogg" id="3_vjlv8"]
+
+[sub_resource type="Gradient" id="Gradient_66m8f"]
+offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pvn45"]
+gradient = SubResource("Gradient_66m8f")
+width = 128
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h5lsf"]
+lifetime_randomness = 0.7
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+angular_velocity_min = 0.43
+angular_velocity_max = 101.84
+gravity = Vector3(0, 2, 0)
+color_ramp = SubResource("GradientTexture1D_pvn45")
+turbulence_enabled = true
+turbulence_noise_strength = 0.2
+turbulence_noise_scale = 10.0
+turbulence_noise_speed = Vector3(1, 0, 1)
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.2
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_n12pc"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("3_vjlv8")
+stream_0/weight = 1.0
+
+[node name="Fire" type="Node3D"]
+script = ExtResource("1_35qdu")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 12
+lifetime = 2.5
+randomness = 1.0
+fixed_fps = 13
+process_material = SubResource("ParticleProcessMaterial_h5lsf")
+draw_pass_1 = ExtResource("2_8txrk")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_n12pc")
+volume_db = -12.0
+max_db = -3.0
+max_distance = 30.0
+bus = &"SFX"
+attenuation_filter_cutoff_hz = 20500.0

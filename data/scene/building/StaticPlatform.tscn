@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvd28jfngaekc"]
+
+[ext_resource type="Script" path="res://src/Building.gd" id="1_qh54s"]
+[ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="2_ds0sd"]
+
+[node name="Building" type="Node3D"]
+script = ExtResource("1_qh54s")
+
+[node name="Brick" parent="." instance=ExtResource("2_ds0sd")]
+_material = 5
+
+[node name="Brick2" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+_material = 5
+
+[node name="Brick3" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+_material = 5
+
+[node name="Brick4" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+_material = 5
+
+[node name="Brick5" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+_material = 5
+
+[node name="Brick6" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+_material = 5
+
+[node name="Brick7" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+_material = 5
+
+[node name="Brick8" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
+_material = 5
+
+[node name="Brick9" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+_material = 5
+
+[node name="Brick10" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2)
+_material = 5
+
+[node name="Brick11" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+_material = 5
+
+[node name="Brick12" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+_material = 5
+
+[node name="Brick13" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
+_material = 5
+
+[node name="Brick14" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
+_material = 5
+
+[node name="Brick15" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
+_material = 5
+
+[node name="Brick16" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+_material = 5
+
+[node name="Brick17" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+_material = 5
+
+[node name="Brick19" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1)
+_material = 5
+
+[node name="Brick21" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+_material = 5
+
+[node name="Brick22" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+_material = 5
+
+[node name="Brick24" parent="." instance=ExtResource("2_ds0sd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1)
+_material = 5

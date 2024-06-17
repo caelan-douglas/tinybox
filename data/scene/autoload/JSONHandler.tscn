@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1ueot6dtqe03"]
+
+[ext_resource type="Script" path="res://src/JSONHandler.gd" id="1_fdqd8"]
+
+[node name="JSONHandler" type="Node"]
+script = ExtResource("1_fdqd8")

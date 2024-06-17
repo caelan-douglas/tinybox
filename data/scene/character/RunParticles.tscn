@@ -1,0 +1,73 @@
+[gd_scene load_steps=12 format=3 uid="uid://b41armf0g1vux"]
+
+[ext_resource type="Texture2D" uid="uid://ueteyyevj7r4" path="res://data/textures/jump_particle_tex.png" id="1_adjc5"]
+[ext_resource type="Script" path="res://src/ExpireAfterTime.gd" id="2_2oayn"]
+
+[sub_resource type="Gradient" id="Gradient_66m8f"]
+offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dnoau"]
+gradient = SubResource("Gradient_66m8f")
+width = 128
+
+[sub_resource type="Curve" id="Curve_5pjlv"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0xmbd"]
+
+[sub_resource type="Curve" id="Curve_60bb2"]
+min_value = -1.0
+max_value = 0.0
+_data = [Vector2(0.00344828, -1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_p5ek0"]
+curve_x = SubResource("Curve_5pjlv")
+curve_y = SubResource("Curve_0xmbd")
+curve_z = SubResource("Curve_60bb2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7ygoq"]
+emission_shape = 1
+emission_sphere_radius = 0.15
+angle_max = 360.0
+direction = Vector3(0, 0, 0)
+angular_velocity_min = 61.28
+angular_velocity_max = 61.28
+directional_velocity_min = 0.5
+directional_velocity_max = 2.5
+directional_velocity_curve = SubResource("CurveXYZTexture_p5ek0")
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_dnoau")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlhma"]
+transparency = 3
+alpha_hash_scale = 2.0
+alpha_antialiasing_mode = 0
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.709804, 0.709804, 0.709804, 1)
+albedo_texture = ExtResource("1_adjc5")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ogf60"]
+material = SubResource("StandardMaterial3D_dlhma")
+size = Vector2(0.5, 0.5)
+orientation = 2
+
+[node name="run_particles" type="GPUParticles3D"]
+emitting = false
+amount = 3
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 45
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_7ygoq")
+draw_pass_1 = SubResource("PlaneMesh_ogf60")
+script = ExtResource("2_2oayn")

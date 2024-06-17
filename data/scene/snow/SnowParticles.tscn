@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://c7u565kah5317"]
+
+[ext_resource type="Texture2D" uid="uid://c6juqn73t8ejc" path="res://data/textures/snowflake.png" id="1_tk1uy"]
+[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="2_rsxal"]
+
+[sub_resource type="Curve" id="Curve_ic4rd"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.200855, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_u8i7l"]
+curve = SubResource("Curve_ic4rd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t4lqj"]
+emission_shape = 3
+emission_box_extents = Vector3(7, 0.5, 8)
+gravity = Vector3(0, -0.8, 0)
+scale_min = 0.8
+scale_max = 1.4
+scale_curve = SubResource("CurveTexture_u8i7l")
+turbulence_enabled = true
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 8.299
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.005
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvcte"]
+transparency = 1
+shading_mode = 2
+specular_mode = 2
+albedo_texture = ExtResource("1_tk1uy")
+emission_enabled = true
+emission = Color(0.641934, 0.641934, 0.641934, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 15.0
+distance_fade_min_distance = 1.0
+distance_fade_max_distance = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_eeqkv"]
+material = SubResource("StandardMaterial3D_fvcte")
+size = Vector2(0.06, 0.06)
+
+[node name="SnowParticles" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25937, -6)
+extra_cull_margin = 128.0
+amount = 512
+lifetime = 5.0
+speed_scale = 2.3
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_t4lqj")
+draw_pass_1 = SubResource("QuadMesh_eeqkv")
+script = ExtResource("2_rsxal")
+visible_on_awful = false

@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhgp5nni0peas"]
+
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_uxdlw"]
+
+[node name="Adjuster" type="HBoxContainer"]
+
+[node name="DownBig" type="Button" parent="."]
+layout_mode = 2
+text = "--"
+
+[node name="Down" type="Button" parent="."]
+layout_mode = 2
+text = "-"
+
+[node name="DynamicLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Water height: 50"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_uxdlw")
+
+[node name="Up" type="Button" parent="."]
+layout_mode = 2
+text = "+"
+
+[node name="UpBig" type="Button" parent="."]
+layout_mode = 2
+text = "++"

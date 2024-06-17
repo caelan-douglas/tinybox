@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc0a0aso2d6l7"]
+
+[ext_resource type="PackedScene" uid="uid://dj6cada7sfy7a" path="res://data/models/fire_extinguisher/fire_extinguisher.blend" id="1_iqeu0"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="fire_extinguisher" parent="." instance=ExtResource("1_iqeu0")]
+transform = Transform3D(-0.167126, 0.445, -0.155053, -0.302676, 0.0247265, 0.397207, 0.361184, 0.22663, 0.261119, -0.410856, 0.0669742, -0.242282)

@@ -1,0 +1,43 @@
+[gd_scene load_steps=8 format=3 uid="uid://bhj43my7js408"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_jgbvu"]
+[ext_resource type="Script" path="res://src/World.gd" id="2_alcqr"]
+[ext_resource type="PackedScene" uid="uid://da61xyvkih0q" path="res://data/scene/MultiplayerMenuMap/MultiplayerMenuMap.tscn" id="3_lya7f"]
+[ext_resource type="Script" path="res://src/BrickGroups.gd" id="4_nsdny"]
+[ext_resource type="PackedScene" uid="uid://bot4om7nsyg2l" path="res://data/scene/ui/GameCanvas.tscn" id="5_ki5at"]
+[ext_resource type="PackedScene" uid="uid://c5aeyr5rirpm4" path="res://data/scene/MultiplayerMenu.tscn" id="5_ti6c5"]
+[ext_resource type="PackedScene" uid="uid://b4heya8wtwyuo" path="res://data/scene/ui/EditorCanvas.tscn" id="7_c1osm"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_jgbvu")
+
+[node name="World" type="Node3D" parent="."]
+script = ExtResource("2_alcqr")
+
+[node name="Map" type="Node3D" parent="World"]
+
+[node name="MultiplayerMenuMap" parent="World/Map" instance=ExtResource("3_lya7f")]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World"]
+_spawnable_scenes = PackedStringArray("res://data/scene/character/RigidPlayer.tscn", "res://data/scene/brick/Brick.tscn", "res://data/scene/brick/CylinderBrick.tscn", "res://data/scene/brick/HalfBrick.tscn", "res://data/scene/brick/LargeCylinderBrick.tscn", "res://data/scene/brick/MotorSeat.tscn", "res://data/scene/clay_ball/ClayBall.tscn", "res://data/scene/rocket/Rocket.tscn", "res://data/scene/bomb/Bomb.tscn", "res://data/scene/minigame/targets/Dog.tscn", "res://data/scene/water/WaterProjectile.tscn", "res://data/scene/fire/FireProjectile.tscn")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerWorldObjSpawner" type="MultiplayerSpawner" parent="World"]
+_spawnable_scenes = PackedStringArray("res://data/scene/editor_obj/PineTree.tscn", "res://data/scene/editor_obj/WorldWater.tscn")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]
+_spawnable_scenes = PackedStringArray("res://data/scene/Frozen Field/Frozen Field.tscn", "res://data/scene/Caffeina/Caffeina.tscn", "res://data/scene/Grasslands/Grasslands.tscn", "res://data/scene/Lobby/Lobby.tscn", "res://data/scene/Calm Creek/Calm Creek.tscn", "res://data/scene/Floaty/Floaty.tscn", "res://data/scene/Warp/Warp.tscn", "res://data/scene/BaseWorld/BaseWorld.tscn")
+spawn_path = NodePath("../Map")
+spawn_limit = 1
+
+[node name="BrickGroups" type="Node" parent="World"]
+script = ExtResource("4_nsdny")
+
+[node name="GameCanvas" parent="." instance=ExtResource("5_ki5at")]
+visible = false
+
+[node name="MultiplayerMenu" parent="." instance=ExtResource("5_ti6c5")]
+
+[node name="EditorCanvas" parent="." instance=ExtResource("7_c1osm")]
+visible = false

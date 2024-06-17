@@ -1,0 +1,998 @@
+[gd_scene load_steps=96 format=3 uid="uid://dinh2untg6m17"]
+
+[ext_resource type="Script" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
+[ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
+[ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="2_d7810"]
+[ext_resource type="Script" path="res://src/ToolInventory.gd" id="4_0qq5v"]
+[ext_resource type="PackedScene" uid="uid://bdoyyw0s2yfun" path="res://data/models/character/spawn_protection.blend" id="6_346qe"]
+[ext_resource type="PackedScene" uid="uid://cbks1seqvjwkh" path="res://data/models/character/character_model.blend" id="6_jdytf"]
+[ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="7_onyoa"]
+[ext_resource type="Texture2D" uid="uid://dacnw201grgcp" path="res://data/textures/dizzy_star.png" id="8_6lxy6"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="8_as1qh"]
+[ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="8_dwypa"]
+[ext_resource type="Texture2D" uid="uid://c36ws0cwo4te5" path="res://data/models/character/textures/fabric.jpg" id="9_tig65"]
+[ext_resource type="AudioStream" uid="uid://dx1nqg3lhu0tg" path="res://data/audio/clang.ogg" id="13_vu3wm"]
+[ext_resource type="AudioStream" uid="uid://ck83w2477sbka" path="res://data/audio/clang_1.ogg" id="14_tuqtl"]
+[ext_resource type="AudioStream" uid="uid://y50qbc1kv2fw" path="res://data/audio/clang_2.ogg" id="15_x7mcp"]
+[ext_resource type="AudioStream" uid="uid://hhw1130fet3a" path="res://data/audio/clang_3.ogg" id="16_srewf"]
+[ext_resource type="AudioStream" uid="uid://bso068q2pvggt" path="res://data/audio/sparkle.ogg" id="17_iikyd"]
+[ext_resource type="Texture2D" uid="uid://c3bv8fogwqd3s" path="res://data/textures/bubble.png" id="19_4icmy"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ktb66"]
+
+[sub_resource type="Gradient" id="2"]
+offsets = PackedFloat32Array(0, 0.266862, 0.791789, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ixnu6"]
+gradient = SubResource("2")
+
+[sub_resource type="Curve" id="Curve_rb14a"]
+max_value = 3.5
+_data = [Vector2(0, 0.944084), 0.0, 0.0, 0, 0, Vector2(0.140078, 3.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_c724s"]
+curve = SubResource("Curve_rb14a")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_btsg8"]
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0.5, 0.5)
+angular_velocity_min = -30.0
+angular_velocity_max = 30.0
+gravity = Vector3(0, 0.4, 0)
+scale_min = 0.05
+scale_max = 0.13
+scale_curve = SubResource("CurveTexture_c724s")
+color = Color(2, 1.7, 1, 1)
+color_ramp = SubResource("GradientTexture1D_ixnu6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsght"]
+render_priority = 1
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 4
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_3ey76")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_distance = 100.0
+distance_fade_max_distance = 120.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_4t1m1"]
+material = SubResource("StandardMaterial3D_gsght")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j240a"]
+radius = 0.262349
+height = 1.62796
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a40ip"]
+cull_mode = 2
+emission_enabled = true
+emission = Color(0.952941, 0.372549, 0, 1)
+emission_energy_multiplier = 8.0
+
+[sub_resource type="Animation" id="Animation_8tkq7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fwin2"]
+resource_name = "dizzy"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8typ0"]
+_data = {
+"RESET": SubResource("Animation_8tkq7"),
+"dizzy": SubResource("Animation_fwin2")
+}
+
+[sub_resource type="Gradient" id="Gradient_66m8f"]
+offsets = PackedFloat32Array(0, 0.019084, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dnoau"]
+gradient = SubResource("Gradient_66m8f")
+width = 128
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nceru"]
+emission_shape = 1
+emission_sphere_radius = 0.15
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0.3, 0)
+color_ramp = SubResource("GradientTexture1D_dnoau")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_edx0q"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.709804, 0.709804, 0.709804, 1)
+albedo_texture = ExtResource("19_4icmy")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v2b1p"]
+material = SubResource("StandardMaterial3D_edx0q")
+size = Vector2(0.15, 0.15)
+orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c5k3x"]
+resource_local_to_scene = true
+resource_name = "clay.vincent.hair"
+albedo_color = Color(0.654902, 0.376471, 0.415686, 1)
+metallic_texture_channel = 2
+roughness_texture = ExtResource("8_dwypa")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("7_onyoa")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usbpe"]
+resource_local_to_scene = true
+resource_name = "clay.vincent.hair"
+albedo_color = Color(0.882353, 0.631373, 0.607843, 1)
+metallic_texture_channel = 2
+roughness_texture = ExtResource("8_dwypa")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.25
+normal_texture = ExtResource("7_onyoa")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lccqw"]
+resource_local_to_scene = true
+albedo_color = Color(0.172549, 0.160784, 0.270588, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_alwnf"]
+resource_local_to_scene = true
+resource_name = "vincent.jacket"
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("9_tig65")
+uv1_offset = Vector3(0, -1, 0)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_11q12"]
+animation = &"appearance_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8w2r4"]
+animation = &"dead"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dyfq5"]
+animation = &"pose_arms_crossed"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dq0ti"]
+animation = &"roll"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4yhpg"]
+animation = &"walljump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2e3cl"]
+animation = &"ledgegrab"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kkr0a"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1j1kn"]
+animation = &"sit"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5jdyu"]
+animation = &"hold_tool"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_34wgt"]
+animation = &"slide"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jigi6"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0s6ig"]
+animation = &"dive"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yjagy"]
+animation = &"swim_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xjrre"]
+animation = &"swim_forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tx7om"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_1g3py"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_sh8nl"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_a6nyi"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_c6qb7"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_bukeh"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_2t5p8"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_3vxmc"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_86nei"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_vn347"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_u7j7d"]
+
+[sub_resource type="AnimationNodeBlend3" id="AnimationNodeBlend3_1k4e6"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_rfoi4"]
+filter_enabled = true
+filters = ["character/Skeleton3D:armlower.l", "character/Skeleton3D:armupper.l", "character/Skeleton3D:collarbone.l", "character/Skeleton3D:hand.l", "character/Skeleton3D:indexlower.l", "character/Skeleton3D:indexupper.l", "character/Skeleton3D:middlelower.l", "character/Skeleton3D:middleupper.l", "character/Skeleton3D:ringlower.l", "character/Skeleton3D:ringupper.l", "character/Skeleton3D:thumbupper.l", "vincent/Skeleton3D:armlower.l", "vincent/Skeleton3D:armupper.l", "vincent/Skeleton3D:collarbone.l", "vincent/Skeleton3D:hand.l", "vincent/Skeleton3D:indexlower.l", "vincent/Skeleton3D:indexupper.l", "vincent/Skeleton3D:middlelower.l", "vincent/Skeleton3D:middleupper.l", "vincent/Skeleton3D:ringlower.l", "vincent/Skeleton3D:ringupper.l", "vincent/Skeleton3D:thumbupper.l"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_qys0u"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_4m15x"]
+fadein_time = 0.2
+fadeout_time = 0.3
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_5jg8h"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ff1nd"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_7fdso"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ojles"]
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_rjj5s"]
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_wbmwm"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dwlu7"]
+graph_offset = Vector2(-539.023, 87.8347)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_tx7om")
+nodes/Animation/position = Vector2(-600, 80)
+"nodes/Animation 10/node" = SubResource("AnimationNodeAnimation_11q12")
+"nodes/Animation 10/position" = Vector2(60, 440)
+"nodes/Animation 11/node" = SubResource("AnimationNodeAnimation_8w2r4")
+"nodes/Animation 11/position" = Vector2(1960, 360)
+"nodes/Animation 12/node" = SubResource("AnimationNodeAnimation_dyfq5")
+"nodes/Animation 12/position" = Vector2(2380, 480)
+"nodes/Animation 13/node" = SubResource("AnimationNodeAnimation_dq0ti")
+"nodes/Animation 13/position" = Vector2(2280, 360)
+"nodes/Animation 14/node" = SubResource("AnimationNodeAnimation_4yhpg")
+"nodes/Animation 14/position" = Vector2(900, 420)
+"nodes/Animation 15/node" = SubResource("AnimationNodeAnimation_2e3cl")
+"nodes/Animation 15/position" = Vector2(1180, 400)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_kkr0a")
+"nodes/Animation 2/position" = Vector2(-240, 400)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_1j1kn")
+"nodes/Animation 3/position" = Vector2(400, 400)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_5jdyu")
+"nodes/Animation 4/position" = Vector2(-500, 240)
+"nodes/Animation 5/node" = SubResource("AnimationNodeAnimation_34wgt")
+"nodes/Animation 5/position" = Vector2(1800, 400)
+"nodes/Animation 6/node" = SubResource("AnimationNodeAnimation_jigi6")
+"nodes/Animation 6/position" = Vector2(580, 400)
+"nodes/Animation 7/node" = SubResource("AnimationNodeAnimation_0s6ig")
+"nodes/Animation 7/position" = Vector2(1300, 620)
+"nodes/Animation 8/node" = SubResource("AnimationNodeAnimation_yjagy")
+"nodes/Animation 8/position" = Vector2(2040, 480)
+"nodes/Animation 9/node" = SubResource("AnimationNodeAnimation_xjrre")
+"nodes/Animation 9/position" = Vector2(2100, 600)
+nodes/BlendDead/node = SubResource("AnimationNodeBlend2_1g3py")
+nodes/BlendDead/position = Vector2(2120, 140)
+nodes/BlendDive/node = SubResource("AnimationNodeBlend2_sh8nl")
+nodes/BlendDive/position = Vector2(1760, 140)
+nodes/BlendJump/node = SubResource("AnimationNodeBlend2_a6nyi")
+nodes/BlendJump/position = Vector2(860, 160)
+nodes/BlendOnLedge/node = SubResource("AnimationNodeBlend2_c6qb7")
+nodes/BlendOnLedge/position = Vector2(1460, 160)
+nodes/BlendOnWall/node = SubResource("AnimationNodeBlend2_bukeh")
+nodes/BlendOnWall/position = Vector2(1120, 160)
+nodes/BlendOutroPose/node = SubResource("AnimationNodeBlend2_2t5p8")
+nodes/BlendOutroPose/position = Vector2(2760, 140)
+nodes/BlendRoll/node = SubResource("AnimationNodeBlend2_3vxmc")
+nodes/BlendRoll/position = Vector2(2520, 120)
+nodes/BlendRun/node = SubResource("AnimationNodeBlend2_86nei")
+nodes/BlendRun/position = Vector2(60, 160)
+nodes/BlendSit/node = SubResource("AnimationNodeBlend2_vn347")
+nodes/BlendSit/position = Vector2(540, 160)
+nodes/BlendSlide/node = SubResource("AnimationNodeBlend2_u7j7d")
+nodes/BlendSlide/position = Vector2(1940, 140)
+nodes/BlendSwim/node = SubResource("AnimationNodeBlend3_1k4e6")
+nodes/BlendSwim/position = Vector2(2300, 140)
+nodes/BlendTool/node = SubResource("AnimationNodeBlend2_rfoi4")
+nodes/BlendTool/position = Vector2(-180, 100)
+nodes/DiveTimeScale/node = SubResource("AnimationNodeTimeScale_qys0u")
+nodes/DiveTimeScale/position = Vector2(1660, 360)
+nodes/IdleOneShot/node = SubResource("AnimationNodeOneShot_4m15x")
+nodes/IdleOneShot/position = Vector2(300, 160)
+nodes/OutroTimeSeek/node = SubResource("AnimationNodeTimeSeek_5jg8h")
+nodes/OutroTimeSeek/position = Vector2(2600, 320)
+nodes/RunTimeScale/node = SubResource("AnimationNodeTimeScale_ff1nd")
+nodes/RunTimeScale/position = Vector2(-80, 320)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_ojles")
+nodes/TimeScale/position = Vector2(2440, 300)
+"nodes/TimeScale 2/node" = SubResource("AnimationNodeTimeScale_7fdso")
+"nodes/TimeScale 2/position" = Vector2(-420, 80)
+nodes/TimeSeek/node = SubResource("AnimationNodeTimeSeek_rjj5s")
+nodes/TimeSeek/position = Vector2(740, 340)
+nodes/TimeSeekDive/node = SubResource("AnimationNodeTimeSeek_wbmwm")
+nodes/TimeSeekDive/position = Vector2(1480, 520)
+nodes/output/position = Vector2(3000, 320)
+node_connections = [&"BlendDead", 0, &"BlendSlide", &"BlendDead", 1, &"Animation 11", &"BlendDive", 0, &"BlendOnLedge", &"BlendDive", 1, &"DiveTimeScale", &"BlendJump", 0, &"BlendSit", &"BlendJump", 1, &"TimeSeek", &"BlendOnLedge", 0, &"BlendOnWall", &"BlendOnLedge", 1, &"Animation 15", &"BlendOnWall", 0, &"BlendJump", &"BlendOnWall", 1, &"Animation 14", &"BlendOutroPose", 0, &"BlendRoll", &"BlendOutroPose", 1, &"OutroTimeSeek", &"BlendRoll", 0, &"BlendSwim", &"BlendRoll", 1, &"TimeScale", &"BlendRun", 0, &"BlendTool", &"BlendRun", 1, &"RunTimeScale", &"BlendSit", 0, &"IdleOneShot", &"BlendSit", 1, &"Animation 3", &"BlendSlide", 0, &"BlendDive", &"BlendSlide", 1, &"Animation 5", &"BlendSwim", 0, &"BlendDead", &"BlendSwim", 1, &"Animation 8", &"BlendSwim", 2, &"Animation 9", &"BlendTool", 0, &"TimeScale 2", &"BlendTool", 1, &"Animation 4", &"DiveTimeScale", 0, &"TimeSeekDive", &"IdleOneShot", 0, &"BlendRun", &"IdleOneShot", 1, &"Animation 10", &"OutroTimeSeek", 0, &"Animation 12", &"RunTimeScale", 0, &"Animation 2", &"TimeScale", 0, &"Animation 13", &"TimeScale 2", 0, &"Animation", &"TimeSeek", 0, &"Animation 6", &"TimeSeekDive", 0, &"Animation 7", &"output", 0, &"BlendOutroPose"]
+
+[sub_resource type="Animation" id="Animation_nveij"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gxefw"]
+resource_name = "spawn"
+length = 3.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.2, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationPlayer:active")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6mglm"]
+_data = {
+"RESET": SubResource("Animation_nveij"),
+"spawn": SubResource("Animation_gxefw")
+}
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rlwhd"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("AnimationTree:parameters/BlendRun/blend_amount")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("collider:disabled")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_myf84"]
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, -5, 0)
+color_ramp = SubResource("GradientTexture1D_dnoau")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t7080"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.709804, 0.709804, 0.709804, 1)
+albedo_texture = ExtResource("19_4icmy")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mpka5"]
+material = SubResource("StandardMaterial3D_t7080")
+size = Vector2(0.05, 0.05)
+orientation = 2
+
+[sub_resource type="Animation" id="Animation_wxqg3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:amount_ratio")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_ssd1k"]
+resource_name = "drip"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:amount_ratio")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sotcv"]
+_data = {
+"RESET": SubResource("Animation_wxqg3"),
+"drip": SubResource("Animation_ssd1k")
+}
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2jp56"]
+random_pitch = 1.1
+streams_count = 4
+stream_0/stream = ExtResource("13_vu3wm")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("14_tuqtl")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("15_x7mcp")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("16_srewf")
+stream_3/weight = 1.0
+
+[sub_resource type="Animation" id="Animation_p5udv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-80.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_cver3"]
+resource_name = "fadein"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-50.0, -10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_lhfkh"]
+resource_name = "fadeout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-10.0, -50.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w1opw"]
+_data = {
+"RESET": SubResource("Animation_p5udv"),
+"fadein": SubResource("Animation_cver3"),
+"fadeout": SubResource("Animation_lhfkh")
+}
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_mvho4"]
+height = 0.4
+radius = 0.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_auofi"]
+height = 1.5
+radius = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_66qrj"]
+size = Vector3(0.5, 1, 1.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q7kx1"]
+size = Vector3(0.5, 0.506348, 0.53916)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j3bsj"]
+size = Vector3(0.5, 0.187073, 0.516333)
+
+[node name="RigidPlayer" type="RigidBody3D"]
+collision_layer = 2
+collision_mask = 131
+physics_material_override = SubResource("PhysicsMaterial_ktb66")
+can_sleep = false
+lock_rotation = true
+freeze_mode = 1
+continuous_cd = true
+max_contacts_reported = 1
+contact_monitor = true
+angular_damp = 2.0
+script = ExtResource("1_2xvh3")
+
+[node name="LifterParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.259364, 0)
+extra_cull_margin = 128.0
+emitting = false
+amount = 96
+lifetime = 3.0
+speed_scale = 2.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_btsg8")
+draw_pass_1 = SubResource("QuadMesh_4t1m1")
+
+[node name="Fire" parent="." instance=ExtResource("2_d7810")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.907355, 0)
+
+[node name="Tools" type="Node3D" parent="."]
+script = ExtResource("4_0qq5v")
+
+[node name="collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.808956, 0)
+shape = SubResource("CapsuleShape3D_j240a")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("8_as1qh")
+
+[node name="NameLabel" type="Label3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72865, 0)
+pixel_size = 0.0008
+billboard = 1
+double_sided = false
+fixed_size = true
+text = "name id"
+
+[node name="spawn_protection" parent="Smoothing" instance=ExtResource("6_346qe")]
+visible = false
+
+[node name="spawn_protection" parent="Smoothing/spawn_protection" index="0"]
+cast_shadow = 0
+surface_material_override/0 = SubResource("StandardMaterial3D_a40ip")
+
+[node name="AnimationPlayer" parent="Smoothing/spawn_protection" index="1"]
+autoplay = "spawn"
+
+[node name="dizzy_stars" type="Node3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58066, 0)
+visible = false
+
+[node name="Sprite3D" type="Sprite3D" parent="Smoothing/dizzy_stars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.399998, 0, 0)
+pixel_size = 0.003
+billboard = 1
+texture = ExtResource("8_6lxy6")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Smoothing/dizzy_stars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0864092, -0.120155, 0.431582)
+pixel_size = 0.003
+billboard = 1
+texture = ExtResource("8_6lxy6")
+
+[node name="Sprite3D3" type="Sprite3D" parent="Smoothing/dizzy_stars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.373128, 0.0663041, 0.0672764)
+pixel_size = 0.003
+billboard = 1
+texture = ExtResource("8_6lxy6")
+
+[node name="Sprite3D4" type="Sprite3D" parent="Smoothing/dizzy_stars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123353, -0.159532, -0.391168)
+pixel_size = 0.003
+billboard = 1
+texture = ExtResource("8_6lxy6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Smoothing/dizzy_stars"]
+libraries = {
+"": SubResource("AnimationLibrary_8typ0")
+}
+autoplay = "dizzy"
+
+[node name="character_model" parent="Smoothing" instance=ExtResource("6_jdytf")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Smoothing/character_model/character" index="1"]
+bones/0/position = Vector3(0.30231, 0.749771, -0.0210096)
+bones/0/rotation = Quaternion(0.839802, -0.00779576, 0.542789, 0.0072306)
+bones/1/rotation = Quaternion(-0.105482, 0.257163, 0.0461096, 0.959486)
+bones/2/rotation = Quaternion(-0.00376983, -0.00109123, -0.00535401, 0.999978)
+bones/3/position = Vector3(0.00801811, 0.127827, 0.00834138)
+bones/3/rotation = Quaternion(-0.180354, 0.280728, 0.0995043, 0.937424)
+bones/3/scale = Vector3(1, 1, 1)
+bones/4/rotation = Quaternion(-0.0927655, -0.000609814, -0.00542982, 0.995673)
+bones/5/position = Vector3(0.0346473, 0.115395, -0.0135449)
+bones/5/rotation = Quaternion(-0.308035, 0.25712, 0.11721, 0.908441)
+bones/5/scale = Vector3(1, 1, 1)
+bones/6/rotation = Quaternion(-0.22283, 0.000107931, -0.00546323, 0.974842)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/position = Vector3(-0.0429668, 0.052494, 0.00168528)
+bones/7/rotation = Quaternion(-0.0372231, 0.230413, 0.199993, 0.951592)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/position = Vector3(-0.294669, 0.747043, 0.011971)
+bones/9/rotation = Quaternion(0.579905, 0.122429, -0.804111, 0.0461267)
+bones/10/rotation = Quaternion(-0.102253, -0.302322, -0.0379064, 0.946947)
+bones/12/rotation = Quaternion(-0.333248, -0.283558, -0.11149, 0.89225)
+bones/12/scale = Vector3(1, 1, 1)
+bones/13/rotation = Quaternion(-0.245058, -0.000234037, 0.00545888, 0.969493)
+bones/14/rotation = Quaternion(-0.604317, -0.232151, -0.197335, 0.736183)
+bones/14/scale = Vector3(1, 1, 1)
+bones/15/rotation = Quaternion(-0.545906, -0.00198877, 0.00508953, 0.837829)
+bones/15/scale = Vector3(1, 1, 1)
+bones/16/rotation = Quaternion(-0.139726, -0.325712, -0.193425, 0.914864)
+bones/17/scale = Vector3(1, 1, 1)
+bones/18/position = Vector3(-0.120328, 0.0527378, 0.0322728)
+bones/18/rotation = Quaternion(0.100716, 0.699897, 0.699897, -0.100716)
+bones/19/rotation = Quaternion(7.36663e-08, -0.0849115, 0.996388, 9.75116e-08)
+bones/20/rotation = Quaternion(0, 0, 1, 0)
+bones/21/position = Vector3(-0.353872, 0.93929, 0.689607)
+bones/22/position = Vector3(0.255565, 0.0498091, -0.0345705)
+bones/22/rotation = Quaternion(-0.107632, 0.698867, 0.698867, 0.107632)
+bones/23/rotation = Quaternion(-7.36663e-08, -0.0849115, 0.996388, -9.75116e-08)
+bones/24/rotation = Quaternion(0, 0, 1, 0)
+bones/26/position = Vector3(0.00403294, 0.681664, -0.0386739)
+bones/26/rotation = Quaternion(-0.00884398, 1.0965e-07, -2.03499e-08, 0.999961)
+bones/27/rotation = Quaternion(-0.0138985, 0.993676, 0.0626138, -0.0921627)
+bones/28/rotation = Quaternion(0.0963525, -0.092397, 0.0170159, 0.990903)
+bones/29/position = Vector3(-0.0755105, 0.134086, 0.141418)
+bones/29/rotation = Quaternion(-0.153046, 0.690346, 0.690345, 0.153046)
+bones/29/scale = Vector3(1, 1, 1)
+bones/30/position = Vector3(0.0610098, 0.134087, 0.14818)
+bones/30/rotation = Quaternion(0.153046, 0.690346, 0.690345, -0.153046)
+bones/31/rotation = Quaternion(-0.153046, 0.690346, 0.690345, 0.153046)
+bones/32/rotation = Quaternion(0.153046, 0.690345, 0.690346, -0.153046)
+bones/32/scale = Vector3(1, 1, 1)
+bones/33/position = Vector3(-0.0172286, 0.0751096, 0.154668)
+bones/33/rotation = Quaternion(5.05001e-06, 0.552558, 0.833474, -3.66457e-06)
+bones/33/scale = Vector3(1, 1, 1)
+bones/34/position = Vector3(0.0172286, 0.0751096, 0.154668)
+bones/34/rotation = Quaternion(-5.10654e-06, 0.552558, 0.833474, 3.5987e-06)
+bones/34/scale = Vector3(1, 1, 1)
+bones/35/rotation = Quaternion(-9.93916e-09, 0.552558, 0.833474, -4.1717e-08)
+bones/35/scale = Vector3(1, 1, 1)
+bones/37/rotation = Quaternion(-0.00467571, 0.000830609, -0.0135923, 0.999896)
+bones/38/rotation = Quaternion(-0.00931725, 0.00102127, -0.0135793, 0.999864)
+bones/39/rotation = Quaternion(-1.9748e-09, 0.999786, -0.0206824, -5.08132e-10)
+bones/39/scale = Vector3(0.945, 0.945, 0.945)
+bones/40/rotation = Quaternion(0.483779, 0.342324, 0.640119, -0.488897)
+bones/40/scale = Vector3(1, 1, 1)
+bones/41/rotation = Quaternion(-0.435444, -0.375221, 0.158431, 0.802806)
+bones/41/scale = Vector3(1, 1, 1)
+bones/42/rotation = Quaternion(-0.204491, 0.0137544, -0.0779624, 0.975662)
+bones/43/rotation = Quaternion(-0.488983, 0.32526, 0.646954, 0.486366)
+bones/43/scale = Vector3(1, 1, 1)
+bones/44/rotation = Quaternion(-0.435021, 0.477616, -0.281864, 0.709361)
+bones/45/rotation = Quaternion(-0.0794695, -0.0140449, 0.0302976, 0.996278)
+bones/46/rotation = Quaternion(0.98939, -0.00728263, -0.141796, -0.0308052)
+bones/46/scale = Vector3(1, 0.999999, 0.999955)
+bones/47/rotation = Quaternion(-0.162245, 1.23232e-05, -0.0125994, 0.98667)
+bones/48/rotation = Quaternion(0.978987, 0.093265, 0.175902, -0.0441041)
+bones/48/scale = Vector3(1, 1, 0.999983)
+bones/49/rotation = Quaternion(-0.044459, -1.24285e-05, 0.00345202, 0.999005)
+bones/49/scale = Vector3(1, 1, 1)
+bones/50/position = Vector3(-7.98204e-08, 1.1638, -1.15144)
+
+[node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
+transform = Transform3D(-0.999999, 0.000134647, 0.00152045, 4.05605e-06, 0.996333, -0.0855626, -0.00152637, -0.0855625, -0.996332, -0.00173862, 1.2647, -0.0121223)
+bone_name = "neck"
+bone_idx = 28
+
+[node name="Bubbles" type="GPUParticles3D" parent="Smoothing/character_model/character/Skeleton3D/NeckAttachment"]
+transform = Transform3D(0.999999, -3.01412e-06, 0.0015293, -0.000136436, 0.995836, 0.0911592, -0.00152317, -0.0911593, 0.995835, -0.00135172, 0.0662254, 0.24794)
+emitting = false
+amount = 3
+lifetime = 3.0
+fixed_fps = 45
+process_material = SubResource("ParticleProcessMaterial_nceru")
+draw_pass_1 = SubResource("PlaneMesh_v2b1p")
+
+[node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
+transform = Transform3D(0.944999, 6.77154e-05, -0.00144085, -3.83676e-06, 0.944073, 0.0418494, 0.00144242, -0.0418493, 0.944072, -0.00175253, 1.59152, -0.00214375)
+
+[node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
+
+[node name="Character_001" parent="Smoothing/character_model/character/Skeleton3D" index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_usbpe")
+
+[node name="hair_ponytail" parent="Smoothing/character_model/character/Skeleton3D" index="6"]
+visible = false
+surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
+
+[node name="pants" parent="Smoothing/character_model/character/Skeleton3D" index="7"]
+surface_material_override/0 = SubResource("StandardMaterial3D_lccqw")
+
+[node name="shirt_jacket" parent="Smoothing/character_model/character/Skeleton3D" index="8"]
+visible = false
+surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
+
+[node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="9"]
+transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.294669, 0.747043, 0.011971)
+bone_name = "hand.l"
+bone_idx = 9
+
+[node name="shirt_shortsleeve" parent="Smoothing/character_model/character/Skeleton3D" index="10"]
+surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
+
+[node name="target" type="Node3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.08408, 0.00944006)
+
+[node name="aim_target" type="Node3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.66257, 1.35324, 1.71901)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Smoothing/character_model")
+tree_root = SubResource("AnimationNodeBlendTree_dwlu7")
+anim_player = NodePath("../Smoothing/character_model/AnimationPlayer")
+parameters/BlendDead/blend_amount = 0.0
+parameters/BlendDive/blend_amount = 0.0
+parameters/BlendJump/blend_amount = 0.0
+parameters/BlendOnLedge/blend_amount = 0.0
+parameters/BlendOnWall/blend_amount = 0.0
+parameters/BlendOutroPose/blend_amount = 0.0
+parameters/BlendRoll/blend_amount = 0.0
+parameters/BlendRun/blend_amount = 0.0
+parameters/BlendSit/blend_amount = 0.0
+parameters/BlendSlide/blend_amount = 0.0
+parameters/BlendSwim/blend_amount = -1.0
+parameters/BlendTool/blend_amount = 0.0
+parameters/DiveTimeScale/scale = 1.25
+parameters/IdleOneShot/active = false
+parameters/IdleOneShot/internal_active = false
+parameters/IdleOneShot/request = 0
+parameters/OutroTimeSeek/seek_request = -1.0
+parameters/RunTimeScale/scale = 1.25
+parameters/TimeScale/scale = 3.0
+"parameters/TimeScale 2/scale" = 0.33
+parameters/TimeSeek/seek_request = -1.0
+parameters/TimeSeekDive/seek_request = -1.0
+
+[node name="SpawnAnimator" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Smoothing/spawn_protection")
+libraries = {
+"": SubResource("AnimationLibrary_6mglm")
+}
+
+[node name="projectile_spawn_point" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.216161, 1.29777, 1.15273)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_rlwhd")
+
+[node name="AirTime" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
+[node name="TripTime" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="SlideTime" type="Timer" parent="."]
+wait_time = 1.2
+one_shot = true
+
+[node name="RollTime" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+
+[node name="RespawnTime" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="Drip" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 6.94665e-07, 7.45291e-07, -7.23332e-07, 0.999997, 0.00245176, -7.49365e-07, -0.00245174, 0.999997, -0.00682433, 1.04176, 0.00435111)
+emitting = false
+amount = 13
+lifetime = 0.6
+fixed_fps = 45
+process_material = SubResource("ParticleProcessMaterial_myf84")
+draw_pass_1 = SubResource("PlaneMesh_mpka5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Drip"]
+libraries = {
+"": SubResource("AnimationLibrary_sotcv")
+}
+
+[node name="TripAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_2jp56")
+bus = &"SFX"
+
+[node name="SparkleAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_iikyd")
+volume_db = -80.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SparkleAudio"]
+libraries = {
+"": SubResource("AnimationLibrary_w1opw")
+}
+
+[node name="GroundDetect" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0649392, 0)
+collision_layer = 4
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundDetect"]
+shape = SubResource("CylinderShape3D_mvho4")
+
+[node name="SlideDetect" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0649392, 0)
+collision_layer = 4
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SlideDetect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
+shape = SubResource("CylinderShape3D_auofi")
+
+[node name="ForwardDetect" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.935061, 0.5)
+collision_layer = 4
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForwardDetect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.1)
+shape = SubResource("BoxShape3D_66qrj")
+
+[node name="LedgeDetect" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.43506, 0.5)
+collision_layer = 4
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LedgeDetect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0968264, -0.35542)
+shape = SubResource("BoxShape3D_q7kx1")
+
+[node name="WallDetect" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.935061, 0.5)
+collision_layer = 4
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallDetect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256464, 0.166833)
+shape = SubResource("BoxShape3D_j3bsj")
+
+[node name="ForwardRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="LedgeRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0.4)
+target_position = Vector3(0, -1.5, 0)
+
+[editable path="Smoothing/spawn_protection"]
+[editable path="Smoothing/character_model"]

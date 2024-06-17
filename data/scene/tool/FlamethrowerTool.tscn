@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://dh3owrpeue4c4"]
+
+[ext_resource type="Script" path="res://src/ShootTool.gd" id="1_k2tpg"]
+[ext_resource type="AudioStream" uid="uid://cf0adpjntgj5s" path="res://data/audio/flamethrower/flamethrower.ogg" id="2_y8jgo"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fhpq3"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("2_y8jgo")
+stream_0/weight = 1.0
+
+[sub_resource type="Animation" id="Animation_tx3k3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_uslbx"]
+resource_name = "fadeout"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-10.0, -50.0, -10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xdt0q"]
+_data = {
+"RESET": SubResource("Animation_tx3k3"),
+"fadeout": SubResource("Animation_uslbx")
+}
+
+[node name="FlamethrowerTool" type="Node3D"]
+script = ExtResource("1_k2tpg")
+tool_name = "Flmethrwr"
+_shoot_type = 5
+shot_speed = 8
+explosion_size = 0.3
+ammo = 40
+restore_ammo = true
+max_ammo_restore = 40
+visual_mesh_name = "FlamethrowerVisualMesh"
+lock_camera_to_aim = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_fhpq3")
+volume_db = -10.0
+max_distance = 40.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xdt0q")
+}

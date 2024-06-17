@@ -1,0 +1,168 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2700emfkhkdu"]
+
+[ext_resource type="Script" path="res://src/Building.gd" id="1_o27bj"]
+[ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="2_tgs3v"]
+
+[node name="Building" type="Node3D"]
+script = ExtResource("1_o27bj")
+
+[node name="Brick" parent="." instance=ExtResource("2_tgs3v")]
+
+[node name="Brick2" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Brick3" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="Brick4" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Brick5" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+
+[node name="Brick6" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+
+[node name="Brick7" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Brick8" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
+
+[node name="Brick9" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2, 0)
+
+[node name="Brick10" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
+[node name="Brick11" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="Brick12" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+
+[node name="Brick13" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 0)
+
+[node name="Brick14" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 0)
+
+[node name="Brick15" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 0)
+
+[node name="Brick16" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2, 0)
+
+[node name="Brick17" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, 0)
+
+[node name="Brick18" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 0)
+
+[node name="Brick19" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="Brick20" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="Brick21" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="Brick22" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
+
+[node name="Brick23" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0)
+
+[node name="Brick24" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+
+[node name="Brick25" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
+
+[node name="Brick26" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2, 0)
+
+[node name="Brick27" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0)
+
+[node name="Brick28" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Brick29" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 3, 0)
+
+[node name="Brick30" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3, 0)
+
+[node name="Brick31" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="Brick32" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 4, 0)
+
+[node name="Brick33" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 4, 0)
+
+[node name="Brick34" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="Brick35" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 5, 0)
+
+[node name="Brick36" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 5, 0)
+
+[node name="Brick37" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 3, 0)
+
+[node name="Brick38" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3, 0)
+
+[node name="Brick39" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3, 0)
+
+[node name="Brick40" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 4, 0)
+
+[node name="Brick41" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, 0)
+
+[node name="Brick42" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+
+[node name="Brick43" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 5, 0)
+
+[node name="Brick44" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 5, 0)
+
+[node name="Brick45" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 5, 0)
+
+[node name="Brick46" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3, 0)
+
+[node name="Brick47" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 0)
+
+[node name="Brick48" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 0)
+
+[node name="Brick49" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 4, 0)
+
+[node name="Brick50" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+
+[node name="Brick51" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4, 0)
+
+[node name="Brick52" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 5, 0)
+
+[node name="Brick53" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, 0)
+
+[node name="Brick54" parent="." instance=ExtResource("2_tgs3v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5, 0)

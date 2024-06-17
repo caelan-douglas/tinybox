@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dj6s5raju62b5"]
+
+[ext_resource type="Script" path="res://src/MeleeTool.gd" id="1_ohei2"]
+
+[node name="BatTool" type="Node3D"]
+script = ExtResource("1_ohei2")
+visual_mesh_name = "BatVisualMesh"

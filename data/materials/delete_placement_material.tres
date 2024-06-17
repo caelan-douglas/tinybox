@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cj3o2yv1pql4d"]
+
+[sub_resource type="Gradient" id="Gradient_mwasn"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xo35u"]
+gradient = SubResource("Gradient_mwasn")
+
+[resource]
+transparency = 1
+albedo_color = Color(0.639216, 0.0392157, 0.0235294, 0.92549)
+emission_enabled = true
+emission = Color(0.741176, 0.188235, 0.239216, 1)
+emission_texture = SubResource("GradientTexture2D_xo35u")

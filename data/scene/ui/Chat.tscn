@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba2xodl3dk4qe"]
+
+[ext_resource type="Script" path="res://src/Chat.gd" id="1_udn37"]
+
+[node name="Chat" type="Control"]
+modulate = Color(1, 1, 1, 0.301961)
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -455.0
+offset_right = 408.0
+offset_bottom = -8.0
+grow_vertical = 0
+mouse_filter = 1
+script = ExtResource("1_udn37")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatList" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Press ` to chat or run command."
+max_length = 200

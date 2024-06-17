@@ -1,0 +1,95 @@
+[gd_scene load_steps=12 format=3 uid="uid://227kic5617ga"]
+
+[ext_resource type="Script" path="res://src/Camera.gd" id="1"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_m42ml"]
+dof_blur_far_distance = 60.0
+dof_blur_far_transition = 30.0
+dof_blur_amount = 0.04
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u43y"]
+transparency = 1
+blend_mode = 3
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.541176, 0.752941, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jfe4s"]
+material = SubResource("StandardMaterial3D_6u43y")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_da3n1"]
+radius = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_im1tt"]
+radius = 0.001
+
+[sub_resource type="Curve" id="Curve_y3tlc"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.451327, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_876jb"]
+curve = SubResource("Curve_y3tlc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q6ur4"]
+emission_shape_scale = Vector3(1, 5, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.25
+emission_ring_radius = 0.25
+emission_ring_inner_radius = 0.25
+gravity = Vector3(0, -1, 0)
+linear_accel_min = 30.0
+linear_accel_max = 40.0
+scale_curve = SubResource("CurveTexture_876jb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_110a6"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+specular_mode = 2
+albedo_color = Color(1, 1, 1, 0.227451)
+billboard_keep_scale = true
+point_size = 4.5
+use_particle_trails = true
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_dpfye"]
+material = SubResource("StandardMaterial3D_110a6")
+size = 0.002
+
+[node name="CameraGimbal" type="Node3D"]
+
+[node name="Camera" type="Camera3D" parent="."]
+attributes = SubResource("CameraAttributesPractical_m42ml")
+fov = 55.0
+script = ExtResource("1")
+
+[node name="WaterOverlay" type="MeshInstance3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.314685)
+visible = false
+mesh = SubResource("PlaneMesh_jfe4s")
+
+[node name="IntersectionArea" type="Area3D" parent="Camera"]
+collision_layer = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/IntersectionArea"]
+shape = SubResource("SphereShape3D_da3n1")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="Camera"]
+collision_layer = 8
+collision_mask = 0
+motion_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/CharacterBody3D"]
+shape = SubResource("SphereShape3D_im1tt")
+
+[node name="SpeedTrails" type="GPUParticles3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+cast_shadow = 0
+emitting = false
+amount = 128
+lifetime = 0.3
+local_coords = true
+trail_enabled = true
+trail_lifetime = 0.8
+process_material = SubResource("ParticleProcessMaterial_q6ur4")
+draw_pass_1 = SubResource("RibbonTrailMesh_dpfye")

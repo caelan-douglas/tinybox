@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://qabpabfggsdp"]
+
+[ext_resource type="Script" path="res://src/Team.gd" id="1_iov8e"]
+
+[resource]
+script = ExtResource("1_iov8e")
+name = "Default"
+members = []
+colour = Color(0.427451, 0.427451, 0.427451, 1)
+friendly_fire = true
+valid_for_minigame = true

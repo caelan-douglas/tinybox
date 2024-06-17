@@ -1,0 +1,30 @@
+[gd_resource type="PlaneMesh" load_steps=4 format=3 uid="uid://b13qst208r6f6"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yhr6m"]
+load_path = "res://.godot/imported/fire_tex.png-580e9e99fe0681f142345985f63baaa7.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7jdmf"]
+load_path = "res://.godot/imported/fire_tex.png-580e9e99fe0681f142345985f63baaa7.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scmp3"]
+transparency = 1
+blend_mode = 1
+shading_mode = 2
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_yhr6m")
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color(0.937255, 0.517647, 0.266667, 1)
+emission_energy_multiplier = 5.0
+emission_operator = 1
+emission_texture = SubResource("CompressedTexture2D_7jdmf")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[resource]
+material = SubResource("StandardMaterial3D_scmp3")
+size = Vector2(1.5, 1.5)
+orientation = 2

@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://g6dxqcfscwlp"]
+
+[ext_resource type="Texture2D" uid="uid://c6h5nejo6jnys" path="res://data/textures/metal_tex.png" id="1_vfk17"]
+
+[resource]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_vfk17")
+metallic = 0.5
+metallic_specular = 1.0
+roughness_texture = ExtResource("1_vfk17")
+roughness_texture_channel = 4
+rim_enabled = true
+rim = 0.3
+rim_tint = 0.8
+uv1_scale = Vector3(2, 2, 1)
+uv1_offset = Vector3(0, -1, 0)
