@@ -19,68 +19,13 @@ Files with different licenses are denoted in the various `licenses.txt` files lo
 
 The Godot Engine is under its own license, the details of which are noted at https://godotengine.org/license/.
 
-## About & technical stuff
+## About
 
 <img src=screenshot_1.png width="512px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
 
 ### Game vision
-Tinybox ('tiny sandbox') is designed to be a sandbox-first game that promotes creativity and experimentation. To expand on this, the project's primary goals as of now are to add new building features, a more open way for players to create their own levels and gamemodes, and the ability for players to create more complex multiplayer interactions, such as with a basic visual scripting language.
+Tinybox *('tiny + sandbox')* is designed to be a sandbox-first game that promotes creativity and experimentation. Some of the goals as of now are to add new building features that promote more interactions such as ropes or wires to connect things loosely, or buttons and switches that can connect to things and perform actions.
 
-### Blender imports
+Additionally, an open way for players to create their own levels and gamemodes is part of the goal. Ideally, players will be given a powerful toolkit that allows them to create complex levels, with some form of visual scripting to create unique features.
 
-In order to build the game from source you must have Blender 3.0+ installed and located in Godot:<br>
-`Editor > Editor Settings > FileSystem > Import > Blender 3 Path`
-
-### Code formatting
-
-Prefix a '_' on variables or functions that are 'private' (should only be used within the script file)
-
-#### Functions
-
-Public functions should be formatted as:
-
-`func public_function(arg_1 : Type) -> ReturnType:`
-
-"Private" functions should be:
-
-`func _private_function(arg_1 : Type) -> ReturnType:`
-
-#### Variables
-
-Variables should be defined with their type:
-
-`var public_var : String = "hi"`<br>
-`var _private_var : String = "private variable"`
-
-### Styling
-
-Scene files and scripts are generally named WithCapsLikeThis<br>
-RigidPlayer.gd<br>
-SomeSceneFile.tscn
-
-everything else is lowercase_with_underscores.tres
-
-### File structure
-
-```
-- /
-  - addons - External Godot addons
-  - doc - Miscellanious documentation (faq, manual, etc...)
-  - data - Resources (textures, audio, models, scene files, etc...)
-  - src - All script files
-```
-
-### Versioning
-
-Versioning is as follows:
-
-beta A.B.C
-
-where:
-- A - major release (big new feature)
-- B - minor release (smaller changes or additions that are visible to the player, or significant backend change like a large refactor)
-- C - hotfix release (small changes or fixes that are not visible to the player).
-
-For .0 releases, omit the .0 in the display version (for example, beta 11.0.0 would simply be beta 11; beta 11.5.0 would be beta 11.5)
-
-The `server_version` (located in Main.gd) is the version without periods (beta 11 would be 1100.)
+PvP is an integral part of Tinybox. In order to keep it aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way (ex. bombs and rockets for ranged weapons, rather than hitscan weapons.)
