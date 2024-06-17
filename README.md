@@ -2,7 +2,7 @@
 
 Free and open source sandbox game with peer-to-peer multiplayer, gamemodes, world editor (in progress), PvP and a physics-based building system. It is made with Godot 4 using GDScript.
 
-[![Tinybox](https://img.shields.io/badge/Get%20latest-beta%209.9-teal?style=plastic)](https://godotengine.org/)<br>
+[![Tinybox](https://img.shields.io/badge/Get%20latest-beta%209.9-teal?style=plastic)](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
 [![Godot](https://img.shields.io/badge/Godot%20version-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)
 <br>
 ### License
