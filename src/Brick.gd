@@ -515,7 +515,7 @@ func play_hit_sound(volume : float) -> void:
 	$AudioStreamPlayer3D.play()
 
 # Remove this brick
-@rpc("call_local")
+@rpc("any_peer", "call_local")
 func despawn():
 	queue_free()
 

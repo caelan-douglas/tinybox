@@ -204,8 +204,13 @@ func _process(delta):
 				m_pos_3d = Vector3(m_3d["position"])
 			if m_3d:
 				# if we are hovering a brick
-				if m_3d["collider"].owner is Brick && (m_3d["collider"].owner.get_multiplayer_authority() == get_multiplayer_authority()):
+				if m_3d["collider"].owner is Brick:
 					var brick = m_3d["collider"].owner
+					if brick.player_from != null:
+						# can't delete another team's brick
+						if brick.player_from.team != tool_player_owner.team:
+							UIHandler.show_alert("Can't delete! Brick belongs to another team", 2, false, true)
+							return
 					brick.show_delete_overlay()
 					if Input.is_action_just_pressed("click"):
 						var minigame = Global.get_world().minigame

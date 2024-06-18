@@ -22,8 +22,20 @@ func _ready():
 	$FakePoint.connect("pressed", _on_fake_point_pressed)
 	$LockPlayer.connect("pressed", _on_lock_player_pressed)
 	$ResetTools.connect("pressed", _on_reset_tools_pressed)
+	$ChangeTeam.connect("pressed", _on_change_team_pressed)
 	$LoadTestWorld.connect("pressed", _on_load_test_world_pressed)
 	$SaveTestWorld.connect("pressed", _on_save_test_world_pressed)
+
+func _on_change_team_pressed() -> void:
+	var player = Global.get_player()
+	var teams = Global.get_world().get_current_map().get_teams()
+	var team_idx = teams.get_team_index(player.team)
+	team_idx += 1
+	if team_idx >= teams.get_team_list().size():
+		team_idx = 0
+	# broadcast updated team to peers
+	player.update_team.rpc(teams.get_team_list()[team_idx].name)
+	player.update_info()
 
 func _on_load_test_world_pressed() -> void:
 	Global.get_world().load_tbw("test")
@@ -55,7 +67,7 @@ func _physics_process(delta):
 		debug_text.text = str("active physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\ngraphics cache contents: ", str(Global.graphics_cache))
 		var player = Global.get_player()
 		if player != null:
-			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), "\nPlayer lateral velocity total:", round(player.lateral_velocity.length()), "\nPlayer position (global): ", round(player.global_position), "\nPlayer state: ", player.states_as_names[player._state], "\nPlayer fire?: ", player.on_fire, "\nPlayer occupying seat: ", player.seat_occupying, "\nPlayer in air from lifter?: ", player.in_air_from_lifter, "\nPlayer last hit by ID:", player.last_hit_by_id, "\nPlayer in last hit state?", player.last_hit)
+			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), "\nPlayer position (global): ", round(player.global_position), "\nPlayer state: ", player.states_as_names[player._state], "\nPlayer fire?: ", player.on_fire, "\nPlayer occupying seat: ", player.seat_occupying)
 		debug_text.text += str("\n---------- WORLD TEAMS INFO -------------\n")
 		debug_text.text += str("World Teams Node list:\n")
 		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
