@@ -496,6 +496,16 @@ respawn_time = 15
 
 [node name="BasicCar" parent="." instance=ExtResource("18_p7uha")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+only_in_sandbox = true
+
+[node name="Pickup7" parent="." instance=ExtResource("16_na7cl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 2)
+type = 3
+ammo = 80
+respawn_time = 4
+restrict_to_minigame_type = false
+delete_in_sandbox = false
+only_in_sandbox = true
 
 [editable path="Camera"]
 [editable path="picnic_table"]

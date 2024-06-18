@@ -73,85 +73,95 @@ func _ready():
 
 func _on_body_entered(body) -> void:
 	if body is RigidPlayer && pickup_available:
-		pickup_available = false
-		audio.play()
-		# hide child mesh
-		if $MeshParent.get_child_count() > 0:
-			$MeshParent.get_child(0).visible = false
-		# only run on auth
-		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
-			var tool_inv = body.get_tool_inventory()
-			match(type):
-				PickupType.ROCKET:
-					# if we already have it, just add ammo
-					var result = tool_inv.has_tool_by_name("RocketTool")
-					if result:
-						# don't add to infinite ammo
-						if result.ammo >= 0:
-							result.ammo += ammo
-							result.update_ammo_display()
-					else:
-						var tool = rocket_tool.instantiate()
-						tool.ammo = ammo
-						tool_inv.add_child(tool)
-				PickupType.BOMB:
-					# if we already have it, just add ammo
-					var result = tool_inv.has_tool_by_name("BombTool")
-					if result:
-						# don't add to infinite ammo
-						if result.ammo >= 0:
-							result.ammo += ammo
-							result.update_ammo_display()
-					else:
-						var tool = bomb_tool.instantiate()
-						tool.ammo = ammo
-						tool_inv.add_child(tool)
-				PickupType.FLAMETHROWER:
-					# if we already have it, just add ammo
-					var result = tool_inv.has_tool_by_name("FlamethrowerTool")
-					if result:
-						# don't add to infinite ammo
-						if result.ammo >= 0:
-							result.ammo += ammo
-							result.update_ammo_display()
-					else:
-						var tool = flamethrower_tool.instantiate()
-						tool.ammo = ammo
-						# don't restore flamethrower fuel
-						tool.restore_ammo = false
-						tool_inv.add_child(tool)
-				PickupType.EXTINGUISHER:
-					# if we already have it, just add ammo (usually case for extinguisher)
-					var result = tool_inv.has_tool_by_name("ExtinguisherTool")
-					if result:
-						# don't add to infinite ammo
-						if result.ammo >= 0:
-							result.ammo += ammo
-							result.update_ammo_display()
-					else:
-						var tool = extinguisher_tool.instantiate()
-						tool.ammo = ammo
-						tool_inv.add_child(tool)
-				PickupType.MISSILE:
-					# if we already have it, just add ammo
-					var result = tool_inv.has_tool_by_name("MissileTool")
-					if result:
-						# don't add to infinite ammo
-						if result.ammo >= 0:
-							result.ammo += ammo
-							result.update_ammo_display()
-					else:
-						var tool = missile_tool.instantiate()
-						tool.ammo = ammo
-						tool_inv.add_child(tool)
-		respawn_timer.start()
-		await respawn_timer.timeout
-		# reset label
-		set_available_text()
-		# show child mesh
-		if $MeshParent.get_child_count() > 0:
-			$MeshParent.get_child(0).visible = true
-		pickup_available = true
+		_take_pickup(body)
+
+func _take_pickup(body) -> void:
+	pickup_available = false
+	audio.play()
+	# hide child mesh
+	if $MeshParent.get_child_count() > 0:
+		$MeshParent.get_child(0).visible = false
+	# only run on auth
+	if body.get_multiplayer_authority() == multiplayer.get_unique_id():
+		var tool_inv = body.get_tool_inventory()
+		match(type):
+			PickupType.ROCKET:
+				# if we already have it, just add ammo
+				var result = tool_inv.has_tool_by_name("RocketTool")
+				if result:
+					# don't add to infinite ammo
+					if result.ammo >= 0:
+						result.ammo += ammo
+						result.update_ammo_display()
+				else:
+					var tool = rocket_tool.instantiate()
+					tool.ammo = ammo
+					tool_inv.add_child(tool)
+			PickupType.BOMB:
+				# if we already have it, just add ammo
+				var result = tool_inv.has_tool_by_name("BombTool")
+				if result:
+					# don't add to infinite ammo
+					if result.ammo >= 0:
+						result.ammo += ammo
+						result.update_ammo_display()
+				else:
+					var tool = bomb_tool.instantiate()
+					tool.ammo = ammo
+					tool_inv.add_child(tool)
+			PickupType.FLAMETHROWER:
+				# if we already have it, just add ammo
+				var result = tool_inv.has_tool_by_name("FlamethrowerTool")
+				if result:
+					# don't add to infinite ammo
+					if result.ammo >= 0:
+						result.ammo += ammo
+						result.update_ammo_display()
+				else:
+					var tool = flamethrower_tool.instantiate()
+					tool.ammo = ammo
+					# don't restore flamethrower fuel
+					tool.restore_ammo = false
+					tool_inv.add_child(tool)
+			PickupType.EXTINGUISHER:
+				# if we already have it, just add ammo (usually case for extinguisher)
+				var result = tool_inv.has_tool_by_name("ExtinguisherTool")
+				if result:
+					# don't add to infinite ammo
+					if result.ammo >= 0:
+						result.ammo += ammo
+						result.update_ammo_display()
+				else:
+					var tool = extinguisher_tool.instantiate()
+					tool.ammo = ammo
+					tool_inv.add_child(tool)
+			PickupType.MISSILE:
+				# if we already have it, just add ammo
+				var result = tool_inv.has_tool_by_name("MissileTool")
+				if result:
+					# don't add to infinite ammo
+					if result.ammo >= 0:
+						result.ammo += ammo
+						result.update_ammo_display()
+				else:
+					var tool = missile_tool.instantiate()
+					tool.ammo = ammo
+					tool_inv.add_child(tool)
+	respawn_timer.start()
+	await respawn_timer.timeout
+	# reset label
+	set_available_text()
+	# show child mesh
+	if $MeshParent.get_child_count() > 0:
+		$MeshParent.get_child(0).visible = true
+	pickup_available = true
+	# check overlapping bodies after pickup is made available
+	# in case someone is still standing on it
+	for check_body in $Area3D.get_overlapping_bodies():
+		if check_body is RigidPlayer && pickup_available:
+			_take_pickup(check_body)
+			# don't keep iterating once we give the item away
+			return
 
 func set_available_text():
 	# different text for flamethrower and extinguisher
