@@ -774,10 +774,23 @@ func _integrate_forces(state) -> void:
 			if is_on_ground:
 				if int(slide_time.time_left * 10) % 2 == 0:
 					play_jump_particles()
+				if Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5:
+					air_from_jump = true
+					apply_central_impulse(Vector3.UP * jump_force)
+					change_state(AIR)
+			# somewhat controllable when sliding
+			var dir = -camera.get_global_transform().basis.z
+			dir.y = 0
+			dir = dir.normalized()
+			apply_force(dir * 7, Vector3.ZERO)
 		ROLL:
 			if is_on_ground:
 				if int(roll_time.time_left * 10) % 2 == 0:
 					play_jump_particles()
+				if Input.is_action_pressed("jump") && !locked:
+					air_from_jump = true
+					apply_central_impulse(Vector3.UP * jump_force * 1.5)
+					change_state(AIR)
 			var dir = -camera.get_global_transform().basis.z
 			dir.y = 0
 			dir = dir.normalized()
