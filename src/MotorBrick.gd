@@ -34,16 +34,16 @@ func set_material(new : Brick.BrickMaterial) -> void:
 	match(new):
 		# Metal
 		BrickMaterial.METAL:
-			target_speed = 23
+			target_speed = 46
 		# Plastic
 		BrickMaterial.PLASTIC:
-			target_speed = 18
+			target_speed = 36
 		# Rubber
 		BrickMaterial.RUBBER:
-			target_speed = 22
+			target_speed = 44
 		# Wood, Charred Wood
 		_:
-			target_speed = 20
+			target_speed = 40
 
 @rpc("any_peer", "call_local")
 func set_parent_seat(seat_as_path : NodePath) -> void:
@@ -83,9 +83,15 @@ func _physics_process(delta):
 	
 	var straight_mult = 1
 	if steer == 0:
-		straight_mult = 2
-		
-	angular_velocity = transform.basis.z * speed * target_speed * straight_mult
+		straight_mult = 3
+	
+	var to_velocity = transform.basis.z * speed * target_speed * straight_mult
+	
+	if to_velocity.length() > angular_velocity.length():
+		angular_velocity = lerp(angular_velocity, to_velocity, 0.025)
+	# faster decel
+	elif angular_velocity.length() != 0:
+		angular_velocity = lerp(angular_velocity, to_velocity, 1/angular_velocity.length() * 0.5)
 	
 	# if this is controlled by a seat
 	if parent_seat:
@@ -102,7 +108,7 @@ func _physics_process(delta):
 		else: dot_z = 0
 		
 		# set velocity for tank turning
-		angular_velocity -= transform.basis.z * steer * dot_z * target_speed
+		angular_velocity = lerp(angular_velocity, transform.basis.z * steer * -dot_z * target_speed * 0.7, 0.1)
 		
 		# in water propulsion
 		if in_water:
