@@ -18,6 +18,7 @@ extends Node
 class_name World
 signal map_loaded
 signal map_deleted
+signal tbw_loaded
 
 var rigidplayer_list = []
 
@@ -322,9 +323,10 @@ func _parse_and_open_tbw(lines : Array) -> void:
 							inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
 		count += 1
-	
 	# reset all player cameras once world is done loading
 	reset_player_cameras.rpc()
+	# announce we are done loading
+	emit_signal("tbw_loaded")
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path, new_pos, new_rot) -> void:

@@ -9,7 +9,10 @@ enum GameWinCondition {
 }
 
 func _ready():
-	get_viewport().get_camera_3d().locked = true
+	var camera = get_viewport().get_camera_3d()
+	camera.locked = true
+	camera.global_position = Vector3(0, 52, 4)
+	camera.global_rotation_degrees = Vector3(-10, 0, 0)
 	super()
 	# when map is initalized, set graphics on world
 	get_parent().get_parent()._on_graphics_preset_changed()

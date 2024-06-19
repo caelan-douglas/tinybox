@@ -27,7 +27,7 @@ _spawnable_scenes = PackedStringArray("res://data/scene/editor_obj/PineTree.tscn
 spawn_path = NodePath("..")
 
 [node name="MultiplayerWorldEnvSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/environments/Sunny.tscn", "res://data/scene/environments/Sunset.tscn", "res://data/scene/environments/Lethal.tscn")
+_spawnable_scenes = PackedStringArray("res://data/scene/environments/Sunny.tscn", "res://data/scene/environments/Sunset.tscn", "res://data/scene/environments/Molten.tscn")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]

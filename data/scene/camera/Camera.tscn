@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://227kic5617ga"]
+[gd_scene load_steps=16 format=3 uid="uid://227kic5617ga"]
 
 [ext_resource type="Script" path="res://src/Camera.gd" id="1"]
 
@@ -56,7 +56,96 @@ use_particle_trails = true
 material = SubResource("StandardMaterial3D_110a6")
 size = 0.002
 
+[sub_resource type="Animation" id="Animation_3fan0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2, 4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.174533, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bbcbh"]
+resource_name = "move_to_left_side"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 2, 4), Vector3(-2, 2, 4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.174533, 0, 0), Vector3(-0.174533, 1.0472, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kd2k8"]
+resource_name = "move_to_right_side"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 2, 4), Vector3(2, 2, 4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.174533, 0, 0), Vector3(-0.174533, -1.0472, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vcqc4"]
+_data = {
+"RESET": SubResource("Animation_3fan0"),
+"move_to_left_side": SubResource("Animation_bbcbh"),
+"move_to_right_side": SubResource("Animation_kd2k8")
+}
+
 [node name="CameraGimbal" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
 
 [node name="Camera" type="Camera3D" parent="."]
 attributes = SubResource("CameraAttributesPractical_m42ml")
@@ -93,3 +182,8 @@ trail_enabled = true
 trail_lifetime = 0.8
 process_material = SubResource("ParticleProcessMaterial_q6ur4")
 draw_pass_1 = SubResource("RibbonTrailMesh_dpfye")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_vcqc4")
+}

@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=11 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
-[ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="2_lhjrq"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="3_jjyfp"]
 [ext_resource type="PackedScene" uid="uid://dj387li7w0abc" path="res://data/scene/tool/EditorBuildTool.tscn" id="3_nojya"]
 [ext_resource type="Script" path="res://src/EditorPropertiesTool.gd" id="4_ga27o"]
@@ -39,8 +38,6 @@ script = ExtResource("4_ga27o")
 
 [node name="CameraTarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="Camera" parent="." instance=ExtResource("2_lhjrq")]
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")

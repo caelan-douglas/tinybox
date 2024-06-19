@@ -12,7 +12,7 @@ fill_from = Vector2(0, 0.175214)
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xm2hv"]
 sky_top_color = Color(0.547051, 0.134874, 0.119453, 1)
 sky_horizon_color = Color(0.75182, 0.481799, 0.564446, 1)
-ground_bottom_color = Color(0.556121, 0.164683, 0.0146301, 1)
+ground_bottom_color = Color(0.327961, 0.104184, 0.124367, 1)
 ground_horizon_color = Color(0.632422, 0.343895, 0.385946, 1)
 
 [sub_resource type="Sky" id="Sky_bmi35"]

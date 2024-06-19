@@ -19,6 +19,7 @@ extends Node
 signal upnp_completed(error)
 
 const Player = preload("res://data/scene/character/RigidPlayer.tscn")
+const CAMERA = preload("res://data/scene/camera/Camera.tscn")
 const PORT = 30814
 # thread for UPNP connection
 var thread = null
@@ -212,6 +213,12 @@ func _on_host_pressed() -> void:
 	var world = $World
 	world.load_map.call_deferred(load(str("res://data/scene/", selected_map, "/", selected_map, ".tscn")))
 	await Signal(world, "map_loaded")
+	
+	
+	# add camera
+	var camera_inst = CAMERA.instantiate()
+	world.add_child(camera_inst, true)
+	
 	add_peer(multiplayer.get_unique_id())
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -250,6 +257,11 @@ func _on_join_pressed(address = null, is_lan = false) -> void:
 	multiplayer.server_disconnected.connect(_on_host_disconnect_as_client)
 	$World.delete_old_map()
 	await Signal($World, "map_loaded")
+	
+	# add camera
+	var camera_inst = CAMERA.instantiate()
+	$World.add_child(camera_inst, true)
+	
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 	get_tree().current_scene.get_node("GameCanvas").visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -278,6 +290,10 @@ func _on_editor_pressed() -> void:
 	var world = $World
 	world.load_map.call_deferred(load(str("res://data/scene/EditorWorld/EditorWorld.tscn")))
 	await Signal(world, "map_loaded")
+	# add camera
+	var camera_inst = CAMERA.instantiate()
+	world.add_child(camera_inst, true)
+	
 	add_peer(multiplayer.get_unique_id())
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	

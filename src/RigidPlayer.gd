@@ -531,7 +531,8 @@ func unlock() -> void:
 
 func set_camera(new):
 	camera = new
-	camera.connect("camera_mode_changed", _on_camera_mode_changed)
+	if !camera.is_connected("camera_mode_changed", _on_camera_mode_changed):
+		camera.connect("camera_mode_changed", _on_camera_mode_changed)
 	if camera.has_method("set_target"):
 		camera.set_target(target, false)
 

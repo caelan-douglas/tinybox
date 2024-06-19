@@ -18,10 +18,26 @@ func _ready():
 	player.get_tool_inventory().delete_all_tools()
 	player.get_tool_inventory().set_disabled(true)
 	
+	# for when a new .tbw map is loaded
+	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
+	
 	var camera = get_viewport().get_camera_3d()
 	if camera is Camera:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+
+func _on_tbw_loaded() -> void:
+	# Check if map has water
+	for obj in Global.get_world().get_children():
+		if obj is Water:
+			active_water = obj
+			# update height display
+			water_height = active_water.global_position.y
+			adjust_water_height(0)
+	# Update environment text
+	var env = get_environment()
+	if env != null:
+		editor_canvas.get_node("WorldProperties/Menu/Environment").text = env.environment_name
 
 func show_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = true
@@ -49,7 +65,7 @@ func toggle_water() -> void:
 		active_water = null
 	else:
 		var water_inst = obj_water.instantiate()
-		Global.get_world().add_child(water_inst)
+		Global.get_world().add_child(water_inst, true)
 		water_inst.global_position = Vector3(0, water_height, 0)
 		active_water = water_inst
 
@@ -63,6 +79,12 @@ func delete_environment() -> void:
 	for obj in Global.get_world().get_children():
 		if obj is TBWEnvironment:
 			obj.queue_free()
+
+func get_environment() -> TBWEnvironment:
+	for obj in Global.get_world().get_children():
+		if obj is TBWEnvironment:
+			return obj
+	return null
 
 func switch_environment() -> void:
 	var env = null

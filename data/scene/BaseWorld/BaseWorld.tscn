@@ -12,6 +12,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 script = ExtResource("1_t851o")
 
 [node name="Camera" parent="." instance=ExtResource("2_u4j5j")]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_hrmyj")
