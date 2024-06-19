@@ -1,6 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=9 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
+[ext_resource type="Texture2D" uid="uid://bed4pahj3ao4t" path="res://data/textures/editor_icons/brick.png" id="3_ve37e"]
+[ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
+[ext_resource type="Texture2D" uid="uid://b06jqfkgscjul" path="res://data/textures/editor_icons/wheel.png" id="5_a7h3k"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
@@ -112,9 +115,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -270.0
+offset_left = -355.0
 offset_top = -200.0
-offset_right = 270.0
+offset_right = 355.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -152,45 +155,76 @@ script = ExtResource("6_aufvl")
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="ItemGrid" type="GridContainer" parent="ItemChooser/Menu"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ItemChooser/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 280)
 layout_mode = 2
-columns = 4
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
-[node name="Button" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="ItemGrid" type="GridContainer" parent="ItemChooser/Menu/ScrollContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="Button" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 text = "Brick"
+icon = ExtResource("3_ve37e")
 
-[node name="Button3" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button2" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 text = "Half Brick"
-text_overrun_behavior = 3
+icon = ExtResource("4_drvio")
 
-[node name="Button4" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button3" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 text = "Wheel"
+icon = ExtResource("5_a7h3k")
 
-[node name="Button5" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button7" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 text = "Seat"
+icon = ExtResource("5_a7h3k")
 
-[node name="Button2" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button4" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-text = "Pine tree"
+text = "PineTree"
+icon = ExtResource("5_a7h3k")
 
-[node name="Button7" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button5" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-text = "Big cliff"
+text = "Cliff_0"
+icon = ExtResource("5_a7h3k")
 
-[node name="Button6" type="Button" parent="ItemChooser/Menu/ItemGrid"]
-custom_minimum_size = Vector2(96, 96)
+[node name="Button8" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
+layout_mode = 2
+text = "Asteroid_0"
+icon = ExtResource("5_a7h3k")
+
+[node name="Button6" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 text = "Lifter"
+icon = ExtResource("5_a7h3k")
+
+[node name="Button9" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
+layout_mode = 2
+text = "Pickup"
+icon = ExtResource("5_a7h3k")
+
+[node name="Button10" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
+custom_minimum_size = Vector2(200, 64)
+layout_mode = 2
+text = "Mug"
+icon = ExtResource("5_a7h3k")
 
 [node name="WorldProperties" type="Control" parent="."]
 visible = false

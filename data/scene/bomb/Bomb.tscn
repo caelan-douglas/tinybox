@@ -12,8 +12,8 @@
 bounce = 0.1
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
-offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+offsets = PackedFloat32Array(0, 0.135965, 0.729258, 0.899563, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 0.489035, 0.276674, 1, 0.133196, 0.133196, 0.133196, 1, 0.313726, 0.313726, 0.313726, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_dnoau"]
 gradient = SubResource("Gradient_66m8f")
@@ -38,16 +38,10 @@ turbulence_influence_max = 0.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gh5qw"]
 transparency = 1
 blend_mode = 1
-shading_mode = 2
+shading_mode = 0
 disable_ambient_light = true
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("2_rmm7k")
-metallic_specular = 0.0
-emission_enabled = true
-emission = Color(0.937255, 0.517647, 0.266667, 1)
-emission_energy_multiplier = 10.0
-emission_operator = 1
-emission_texture = ExtResource("2_rmm7k")
 billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1

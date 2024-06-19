@@ -7,10 +7,12 @@ signal item_picked
 
 func _ready():
 	super()
-	await get_tree().process_frame
 	
 	# hide player and make them invulnerable
 	var player = Global.get_player()
+	while player == null:
+		await get_tree().process_frame
+		player = Global.get_player()
 	player.global_position = Vector3(0, 50, 0)
 	player.change_state(RigidPlayer.DUMMY)
 	player.invulnerable = true
@@ -44,12 +46,12 @@ func _on_tbw_loaded() -> void:
 
 func show_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = true
-	for b in editor_canvas.get_node("ItemChooser/Menu/ItemGrid").get_children():
+	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
 		b.connect("pressed", _on_item_chosen.bind(b.text), 8)
 
 func hide_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = false
-	for b in editor_canvas.get_node("ItemChooser/Menu/ItemGrid").get_children():
+	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
 		b.disconnect("pressed", _on_item_chosen.bind(b.text))
 
 func get_item_chooser_visible() -> bool:

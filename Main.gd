@@ -279,14 +279,7 @@ func _on_editor_pressed() -> void:
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 	get_tree().current_scene.get_node("EditorCanvas").visible = true
 	
-	# Create the server.
-	enet_peer.create_server(PORT)
-	# Set the current multiplayer peer to the server.
-	multiplayer.multiplayer_peer = enet_peer
-	# When a new player connects, add them with their id.
-	multiplayer.peer_connected.connect(add_peer)
-	multiplayer.peer_disconnected.connect(remove_player)
-	# Load the world using the multiplayerspawner spawn method.
+	# Editor is single player.
 	var world = $World
 	world.load_map.call_deferred(load(str("res://data/scene/EditorWorld/EditorWorld.tscn")))
 	await Signal(world, "map_loaded")
@@ -296,12 +289,6 @@ func _on_editor_pressed() -> void:
 	
 	add_peer(multiplayer.get_unique_id())
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
-	# Create the LAN advertiser.
-	lan_advertiser = ServerAdvertiser.new()
-	get_tree().current_scene.add_child(lan_advertiser)
-	lan_advertiser.serverInfo["name"] = str(display_name_field.text, "'s Editor")
-	lan_advertiser.broadcast_interval = 3
 
 # Notify clients if the host disconnects.
 func _on_host_disconnect_as_client() -> void:

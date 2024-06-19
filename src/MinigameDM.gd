@@ -44,8 +44,11 @@ func _init(_tdm = false):
 	tdm = _tdm
 
 func play_intro_animation(camera):
-	camera.get_parent().get_node("AnimationPlayer").play("intro")
 	var map_name = Global.get_world().get_current_map().name
+	if map_name == "Warp":
+		camera.get_parent().get_node("AnimationPlayer").play("intro")
+	else:
+		camera.get_parent().get_node("AnimationPlayer").play("intro_alt")
 	if tdm:
 		get_tree().current_scene.get_node("GameCanvas").play_intro_animation(str("Team Deathmatch - ", map_name))
 	else:

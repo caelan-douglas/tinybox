@@ -52,8 +52,11 @@ func receive_properties_as_new_client(args : Array) -> void:
 	pass
 
 func play_intro_animation(camera):
-	camera.get_parent().get_node("AnimationPlayer").play("intro")
 	var map_name = Global.get_world().get_current_map().name
+	if map_name == "Warp":
+		camera.get_parent().get_node("AnimationPlayer").play("intro")
+	else:
+		camera.get_parent().get_node("AnimationPlayer").play("intro_alt")
 	get_tree().current_scene.get_node("GameCanvas").play_intro_animation(str("Minigame - ", map_name))
 
 func play_outro_animation(camera):

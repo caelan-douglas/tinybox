@@ -1,9 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://bmj1rdfcs01ro"]
+[gd_scene load_steps=37 format=3 uid="uid://bmj1rdfcs01ro"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_rgygn"]
 [ext_resource type="AudioStream" uid="uid://dqqfcxecttbyn" path="res://data/audio/outdoorambience.ogg" id="2_bux7i"]
 [ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="3_aheup"]
-[ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="4_wtop0"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="5_0mr3s"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="6_7t2pk"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="7_y3k5n"]
@@ -50,67 +49,6 @@ fog_sun_scatter = 0.35
 fog_density = 0.0005
 fog_sky_affect = 0.269
 volumetric_fog_density = 0.02
-
-[sub_resource type="Animation" id="Animation_sxhdx"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_rxa7r"]
-resource_name = "intro"
-length = 10.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 3.5, 3.501, 7, 7.01, 10),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(2.97031, 0.74118, -20.3357), Vector3(2.97031, 1.74118, -20.3357), Vector3(25.3681, 19.4189, 12.2256), Vector3(26.8681, 19.4189, 9.62753), Vector3(27.6079, 46.996, 46.5299), Vector3(42.7411, 43.3772, 38.5367)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 3.5, 3.501, 7, 7.01, 10),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0.961676, 0), Vector3(0, 0.699877, 0), Vector3(-0.785398, 1.0472, -4.21468e-08), Vector3(-0.785398, 1.0472, -4.21468e-08), Vector3(-0.659058, 0.362478, 0.463648), Vector3(-0.75188, 0.684979, 0.253262)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ox22v"]
-_data = {
-"RESET": SubResource("Animation_sxhdx"),
-"intro": SubResource("Animation_rxa7r")
-}
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jug1k"]
 margin = 10.0
@@ -228,14 +166,6 @@ directional_shadow_split_1 = 0.005
 directional_shadow_split_2 = 0.05
 directional_shadow_split_3 = 0.1
 directional_shadow_max_distance = 3000.0
-
-[node name="Camera" parent="." instance=ExtResource("4_wtop0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Camera"]
-libraries = {
-"": SubResource("AnimationLibrary_ox22v")
-}
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("5_0mr3s")

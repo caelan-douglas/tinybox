@@ -1,16 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://dwfrmjgcn6sg3"]
+[gd_scene load_steps=10 format=3 uid="uid://dwfrmjgcn6sg3"]
 
 [ext_resource type="Script" path="res://src/Fire.gd" id="1_35qdu"]
 [ext_resource type="PlaneMesh" uid="uid://b13qst208r6f6" path="res://data/materials/fire/fire_material.tres" id="2_8txrk"]
 [ext_resource type="AudioStream" uid="uid://c4pp0lvm8hoam" path="res://data/audio/fire/fire_crackle.ogg" id="3_vjlv8"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
-offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+offsets = PackedFloat32Array(0, 0.0567686, 0.554585, 0.868996, 1)
+colors = PackedColorArray(0.817465, 0.495502, 0, 0, 1, 0.324878, 0.0442922, 1, 1, 0.361569, 0.0962328, 1, 0.281187, 0.281187, 0.281187, 1, 0.099986, 0.099986, 0.099986, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_pvn45"]
 gradient = SubResource("Gradient_66m8f")
 width = 128
+
+[sub_resource type="Curve" id="Curve_d1qly"]
+max_value = 2.5
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(1e-05, 2.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_p3i6u"]
+width = 64
+curve = SubResource("Curve_d1qly")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h5lsf"]
 lifetime_randomness = 0.7
@@ -21,6 +30,7 @@ angular_velocity_min = 0.43
 angular_velocity_max = 101.84
 gravity = Vector3(0, 2, 0)
 color_ramp = SubResource("GradientTexture1D_pvn45")
+emission_curve = SubResource("CurveTexture_p3i6u")
 turbulence_enabled = true
 turbulence_noise_strength = 0.2
 turbulence_noise_scale = 10.0
@@ -42,7 +52,7 @@ emitting = false
 amount = 12
 lifetime = 2.5
 randomness = 1.0
-fixed_fps = 13
+fixed_fps = 16
 process_material = SubResource("ParticleProcessMaterial_h5lsf")
 draw_pass_1 = ExtResource("2_8txrk")
 

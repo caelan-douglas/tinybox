@@ -1,0 +1,91 @@
+[gd_scene load_steps=14 format=3 uid="uid://bqsd8rt5norqj"]
+
+[ext_resource type="Script" path="res://src/TBWObject.gd" id="1_dxwla"]
+[ext_resource type="PackedScene" uid="uid://cpg5j58v26geb" path="res://data/models/mug/mug.blend" id="1_wd6kf"]
+[ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="2_dxmto"]
+[ext_resource type="Texture2D" uid="uid://btvbc36o37put" path="res://data/textures/coffee_tex.png" id="2_vjxen"]
+
+[sub_resource type="Gradient" id="Gradient_s2aiv"]
+offsets = PackedFloat32Array(0, 0.183246, 0.868996, 1)
+colors = PackedColorArray(0.239216, 0.239216, 0.239216, 0, 0.237539, 0.237539, 0.237539, 1, 0.0338533, 0.0338533, 0.0338533, 1, 0.099986, 0.099986, 0.099986, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q7cxp"]
+gradient = SubResource("Gradient_s2aiv")
+width = 128
+
+[sub_resource type="Curve" id="Curve_jknxg"]
+max_value = 2.5
+_data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(1e-05, 2.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_o2wrf"]
+width = 64
+curve = SubResource("Curve_jknxg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_al68n"]
+lifetime_randomness = 0.7
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+angular_velocity_min = 0.43
+angular_velocity_max = 101.84
+gravity = Vector3(2.08165e-12, 4, 2.08165e-12)
+color_ramp = SubResource("GradientTexture1D_q7cxp")
+emission_curve = SubResource("CurveTexture_o2wrf")
+turbulence_enabled = true
+turbulence_noise_strength = 0.2
+turbulence_noise_scale = 10.0
+turbulence_noise_speed = Vector3(1, 0, 1)
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojoxg"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+specular_mode = 2
+disable_ambient_light = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_dxmto")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tuigc"]
+material = SubResource("StandardMaterial3D_ojoxg")
+size = Vector2(3, 3)
+orientation = 2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k611e"]
+radius = 2.676
+height = 8.89039
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jlm6w"]
+albedo_texture = ExtResource("2_vjxen")
+
+[node name="Mug" type="StaticBody3D"]
+script = ExtResource("1_dxwla")
+tbw_object_type = "Mug"
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.7, 0)
+amount = 12
+lifetime = 2.5
+speed_scale = 0.5
+randomness = 1.0
+fixed_fps = 16
+process_material = SubResource("ParticleProcessMaterial_al68n")
+draw_pass_1 = SubResource("PlaneMesh_tuigc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.33762, 0)
+shape = SubResource("CapsuleShape3D_k611e")
+
+[node name="mug2" parent="." instance=ExtResource("1_wd6kf")]
+transform = Transform3D(50, 0, -7.4506e-07, 0, 50, 0, 7.4506e-07, 0, 50, 0, 0, 0)
+
+[node name="mug" parent="mug2" index="0"]
+surface_material_override/1 = SubResource("StandardMaterial3D_jlm6w")
+
+[editable path="mug2"]

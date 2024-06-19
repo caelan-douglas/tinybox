@@ -23,11 +23,10 @@ _spawnable_scenes = PackedStringArray("res://data/scene/character/RigidPlayer.ts
 spawn_path = NodePath("..")
 
 [node name="MultiplayerWorldObjSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/editor_obj/PineTree.tscn", "res://data/scene/editor_obj/WorldWater.tscn", "res://data/scene/editor_obj/Cliff_0.tscn", "res://data/scene/lifter/Lifter.tscn", "res://data/scene/pickup/Pickup.tscn")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerWorldEnvSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/environments/Sunny.tscn", "res://data/scene/environments/Sunset.tscn", "res://data/scene/environments/Molten.tscn")
+_spawnable_scenes = PackedStringArray("res://data/scene/environments/Sunny.tscn", "res://data/scene/environments/Sunset.tscn", "res://data/scene/environments/Molten.tscn", "res://data/scene/environments/Warp.tscn")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]

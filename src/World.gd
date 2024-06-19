@@ -287,16 +287,6 @@ func _parse_and_open_tbw(lines : Array) -> void:
 				var posrot = true
 				await get_tree().process_frame
 				match line_split[0]:
-					"Water":
-						inst = SpawnableObjects.obj_water.instantiate()
-					"PineTree":
-						inst = SpawnableObjects.obj_pine_tree.instantiate()
-					"Cliff_0":
-						inst = SpawnableObjects.obj_cliff_0.instantiate()
-					"Pickup":
-						inst = SpawnableObjects.obj_pickup.instantiate()
-					"Lifter":
-						inst = SpawnableObjects.obj_lifter.instantiate()
 					# World environments don't have pos or rotation
 					"Environment":
 						posrot = false
@@ -310,6 +300,11 @@ func _parse_and_open_tbw(lines : Array) -> void:
 									inst = SpawnableObjects.tbw_env_warp.instantiate()
 								_:
 									inst = SpawnableObjects.tbw_env_sunny.instantiate()
+					_:
+						# all other objects
+						var ret = SpawnableObjects.tbw_obj_from_string(line_split[0])
+						if ret != null:
+							inst = ret.instantiate()
 				# ignore invalid items
 				if inst != null:
 					add_child(inst, true)
