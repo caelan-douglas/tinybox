@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=9 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
@@ -8,8 +8,6 @@
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_qkc34"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_iwwdy"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_xvfrp"]
-[ext_resource type="Script" path="res://src/Building.gd" id="7_qx7xr"]
-[ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="8_3bvaj"]
 
 [node name="EditorWorld" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
@@ -42,113 +40,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")
 team_list = Array[Resource]([ExtResource("4_qkc34"), ExtResource("5_iwwdy"), ExtResource("6_xvfrp")])
-
-[node name="Building" type="Node3D" parent="."]
-script = ExtResource("7_qx7xr")
-
-[node name="Brick" parent="Building" instance=ExtResource("8_3bvaj")]
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick2" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick3" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick4" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick5" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick6" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick7" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick8" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick9" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick10" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick11" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick12" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick13" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick14" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick15" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick16" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick17" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick19" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick21" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick22" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
-
-[node name="Brick24" parent="Building" instance=ExtResource("8_3bvaj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1)
-_material = 5
-_colour = Color(0.980392, 0.980392, 0.980392, 1)
 
 [node name="Spawns" type="Node" parent="."]
 

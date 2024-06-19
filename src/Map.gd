@@ -30,4 +30,5 @@ func _ready():
 	# set song
 	MusicHandler.switch_song(songs)
 	# Modify default gravity
-	PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * gravity_scale)
+	if !self is Editor:
+		PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * gravity_scale)

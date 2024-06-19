@@ -54,7 +54,7 @@ func _send_on_change_map_pressed() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func _on_change_map_pressed(map_name) -> void:
 	# load intended map
-	Global.get_world().clear_bricks()
+	Global.get_world().clear_world()
 	Global.get_world().load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")))
 	
 	# reset some player stuff

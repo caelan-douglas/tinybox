@@ -145,9 +145,10 @@ _data = {
 }
 
 [node name="CameraGimbal" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 0, 2, 4)
 
 [node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
 attributes = SubResource("CameraAttributesPractical_m42ml")
 fov = 55.0
 script = ExtResource("1")
@@ -184,6 +185,7 @@ process_material = SubResource("ParticleProcessMaterial_q6ur4")
 draw_pass_1 = SubResource("RibbonTrailMesh_dpfye")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Camera")
 libraries = {
 "": SubResource("AnimationLibrary_vcqc4")
 }

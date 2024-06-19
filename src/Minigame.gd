@@ -173,7 +173,7 @@ func end() -> void:
 		camera.locked = false
 	Global.get_world().minigame = null
 	# remove all existing bricks
-	Global.get_world().clear_bricks()
+	Global.get_world().clear_world()
 	Global.get_world().load_map(load("res://data/scene/Frozen Field/Frozen Field.tscn"))
 	# refind node
 	camera = get_viewport().get_camera_3d()

@@ -58,7 +58,6 @@ func pick_item() -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_item_picked(item_name) -> void:
-	print("item picked: ", item_name)
 	ui_tool_name = item_name
 	ui_partner.text = str(ui_tool_name)
 	item_offset = Vector3.ZERO

@@ -34,6 +34,7 @@ extends Node
 @onready var tbw_env_sunny = load("res://data/scene/environments/Sunny.tscn")
 @onready var tbw_env_sunset = load("res://data/scene/environments/Sunset.tscn")
 @onready var tbw_env_molten = load("res://data/scene/environments/Molten.tscn")
+@onready var tbw_env_warp = load("res://data/scene/environments/Warp.tscn")
 
 # bricks
 @onready var brick = load("res://data/scene/brick/Brick.tscn")

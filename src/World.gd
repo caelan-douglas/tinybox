@@ -80,7 +80,7 @@ func start_minigame(map_name, win_condition, from_new_peer_connection = false) -
 			minigame = MinigameBaseDefense.new()
 	
 	# load intended map
-	clear_bricks()
+	clear_world()
 	# only load if a name was actually given
 	if map_name != "":
 		load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")))
@@ -216,32 +216,32 @@ func save_tbw(world_name) -> void:
 	for obj in get_children():
 		if obj != null:
 			if obj is TBWObject:
-				print(obj)
 				var type = obj.tbw_object_type
 				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z))
 			elif obj is TBWEnvironment:
 				file.store_line(str("Environment;", obj.environment_name))
 	# Store bricks in the same format as buildings.
-	file.store_line(str("[building]"))
+	
+	# Make sure there is actually a brick to save
+	var found_brick = false
 	for b in get_children():
 		if b != null:
 			if b is Brick:
+				if found_brick == false:
+					file.store_line(str("[building]"))
+					found_brick = true
 				var type = b._brick_type
 				file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
 	file.close()
 
-var load_dir = null
-func load_tbw(file_name = "test"):
+func load_tbw(file_name = "test", internal = false):
 	print("Attempting to load ", file_name, ".tbw")
-	if !load_dir:
-		load_dir = DirAccess.open("user://world")
 	
-	# load image
-	var scrdir = DirAccess.open("user://world_scr")
-	if scrdir:
-		var image = Image.load_from_file(str("user://world_scr/", file_name.split(".")[0], ".jpg"))
-		var texture = ImageTexture.create_from_image(image)
-	var load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
+	var load_file = null
+	if internal:
+		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+	else:
+		load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
 	if load_file != null:
 		# load building
 		var lines = []
@@ -265,7 +265,7 @@ func ask_server_to_open_tbw(name_from, lines):
 func _parse_and_open_tbw(lines : Array) -> void:
 	if !multiplayer.is_server(): return
 	
-	clear_bricks()
+	clear_world()
 	# Load default empty map, unless we are in the editor
 	if !(Global.get_world().get_current_map() is Editor):
 		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")))
@@ -306,6 +306,8 @@ func _parse_and_open_tbw(lines : Array) -> void:
 									inst = SpawnableObjects.tbw_env_sunset.instantiate()
 								"Molten":
 									inst = SpawnableObjects.tbw_env_molten.instantiate()
+								"Warp":
+									inst = SpawnableObjects.tbw_env_warp.instantiate()
 								_:
 									inst = SpawnableObjects.tbw_env_sunny.instantiate()
 				# ignore invalid items
@@ -347,6 +349,13 @@ func reset_player_cameras():
 func load_building_into_map(path_to_building : String) -> void:
 	var building = load(path_to_building)
 	var b_i = building.instantiate()
+
+@rpc("any_peer", "call_local", "reliable")
+func clear_world() -> void:
+	clear_bricks()
+	for node in get_children():
+		if node is TBWObject || node is TBWEnvironment:
+			node.queue_free()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_bricks() -> void:

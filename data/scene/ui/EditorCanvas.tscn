@@ -9,23 +9,6 @@
 [node name="EditorCanvas" type="CanvasLayer"]
 script = ExtResource("1_4dmeu")
 
-[node name="VersionLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -240.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(0.756863, 0.756863, 0.756863, 1)
-text = "Tinybox Nov 2023 Beta 2"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("6_aufvl")
-json_text = "Tinybox %version%"
-raw_format = true
-
 [node name="ToolList" type="HBoxContainer" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
@@ -93,7 +76,11 @@ row (6 for world properties)
 
 Click to place
 Right click to delete
-X to change item (build tool)"
+
+[ X ] to change item (build tool)
+[ C ] to change camera zoom
+
+WASD, [ Shift ], [ Ctrl / Cmd ]"
 script = ExtResource("6_aufvl")
 
 [node name="Spacer2" type="Control" parent="EntryScreen/Menu"]
@@ -362,5 +349,24 @@ text = "Save world"
 [node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+
+[node name="VersionLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Tinybox beta 00.0.0"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("6_aufvl")
+json_text = "Tinybox %version%"
+raw_format = true
 
 [editable path="WorldProperties/Menu/WaterHeightAdjuster"]

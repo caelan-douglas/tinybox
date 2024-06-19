@@ -25,6 +25,9 @@ func _ready():
 	if camera is Camera:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+	
+	# load default world
+	Global.get_world().load_tbw("editor_default", true)
 
 func _on_tbw_loaded() -> void:
 	# Check if map has water
@@ -104,6 +107,8 @@ func switch_environment() -> void:
 			new_env = SpawnableObjects.tbw_env_sunset.instantiate()
 		"Sunset":
 			new_env = SpawnableObjects.tbw_env_molten.instantiate()
+		"Molten":
+			new_env = SpawnableObjects.tbw_env_warp.instantiate()
 		# default load sunny
 		_:
 			new_env = SpawnableObjects.tbw_env_sunny.instantiate()

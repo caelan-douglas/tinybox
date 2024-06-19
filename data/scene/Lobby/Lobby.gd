@@ -21,4 +21,4 @@ func _ready():
 	if player:
 		player.change_state(RigidPlayer.DUMMY)
 	UIHandler.show_lobby_menu()
-	Global.get_world().clear_bricks()
+	Global.get_world().clear_world()
