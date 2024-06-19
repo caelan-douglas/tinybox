@@ -112,6 +112,31 @@ func _unhandled_input(event) -> void:
 		#		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		#			target_dist = clamp(target_dist + 2, 3, 40)
 
+func _control_camera_rotation(delta) -> void:
+	var controller_sensitivity = 14
+	var camera_vec = Vector2.ZERO
+	camera_vec.y = (Input.get_action_strength("camera_down") - Input.get_action_strength("camera_up")) * 0.5
+	camera_vec.x = Input.get_action_strength("camera_right") - Input.get_action_strength("camera_left")
+	
+	move_around_target(camera_vec * controller_sensitivity)
+	
+	if target != null:
+		if dist_to_hit != null:
+			dist_diff = lerp(dist_diff, dist_to_hit, 0.3)
+			var new_dist = clamp((dist - dist_diff), 1, 40) - 0.1
+			position = -new_dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
+			gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
+		else:
+			position = -dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
+			if do_interpolate:
+				gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
+			else:
+				gimbal.global_position = target.global_position
+				await get_tree().create_timer(0.1).timeout
+				do_interpolate = true
+	
+	dist = lerp(float(dist), float(target_dist), 9 * delta)
+
 var dist_to_hit = null
 var min_dist = 3
 var dist_diff = 0.0
@@ -123,28 +148,36 @@ func _process(delta):
 	if _camera_mode == CameraMode.CONTROLLED:
 		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
 		if controlled_cam_delay <= 0:
-			if Input.is_action_pressed("forward"):
-				controlled_cam_pos += Vector3(0, 0, 1)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
-			if Input.is_action_pressed("back"):
-				controlled_cam_pos += Vector3(0, 0, -1)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
-			if Input.is_action_pressed("left"):
-				controlled_cam_pos += Vector3(1, 0, 0)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
-			if Input.is_action_pressed("right"):
-				controlled_cam_pos += Vector3(-1, 0, 0)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
-			if Input.is_action_pressed("shift"):
-				controlled_cam_pos += Vector3(0, 1, 0)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
-			if Input.is_action_pressed("control"):
-				controlled_cam_pos += Vector3(0, -1, 0)
-				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			var move_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
+			var move_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
+			var move_vertical = Input.get_action_strength("shift") - Input.get_action_strength("control")
+			# don't move up/down with forward/sideways
+			var controlled_cam_lateral = Vector3.ZERO
+			# move relative to looking direction
+			controlled_cam_lateral += move_forward * get_global_transform().basis.z
+			controlled_cam_lateral += move_sideways * get_global_transform().basis.x
+			controlled_cam_lateral.y = 0
+			controlled_cam_pos += controlled_cam_lateral + (move_vertical * Vector3.UP)
+			# snap to grid
+			controlled_cam_pos = controlled_cam_pos.round()
+			controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
 		else:
 			controlled_cam_delay -= 60 * delta
 		global_position = Vector3(target.global_position.x, target.global_position.y + 5, target.global_position.z - 8)
-		look_at(target.global_position)
+		
+		# swap camera zoom
+		if Input.is_action_just_pressed("editor_camera_zoom"):
+			match (target_dist):
+				5:
+					target_dist = 10
+				10:
+					target_dist = 15
+				15:
+					target_dist = 25
+				_:
+					target_dist = 5
+		
+		_control_camera_rotation(delta)
 	
 	elif !locked:
 		gimbal.global_rotation = Vector3.ZERO
@@ -154,7 +187,6 @@ func _process(delta):
 		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
 			target_dist = clamp(target_dist + 2, 3, 40)
 		
-		dist = lerp(float(dist), float(target_dist), 9 * delta)
 		# if multithreaded physics, this section FROM HERE
 		# must be moved to physics process
 		# (physics api calls can only be called on physics_process)
@@ -183,27 +215,8 @@ func _process(delta):
 					speed_trails.emitting = false
 		# TO HERE
 		
-		var controller_sensitivity = 14
-		var camera_vec = Vector2.ZERO
-		camera_vec.y = (Input.get_action_strength("camera_down") - Input.get_action_strength("camera_up")) * 0.5
-		camera_vec.x = Input.get_action_strength("camera_right") - Input.get_action_strength("camera_left")
+		_control_camera_rotation(delta)
 		
-		move_around_target(camera_vec * controller_sensitivity)
-		
-		if target != null:
-			if dist_to_hit != null:
-				dist_diff = lerp(dist_diff, dist_to_hit, 0.3)
-				var new_dist = clamp((dist - dist_diff), 1, 40) - 0.1
-				position = -new_dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
-				gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
-			else:
-				position = -dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
-				if do_interpolate:
-					gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
-				else:
-					gimbal.global_position = target.global_position
-					await get_tree().create_timer(0.1).timeout
-					do_interpolate = true
 		# Toggle camera modes.
 		if Input.is_action_just_pressed("toggle_camera_mode"):
 			match _camera_mode:
