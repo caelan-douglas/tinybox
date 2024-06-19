@@ -1,6 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://eyv2kk27quaf"]
 
 [ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_0mx85"]
+[ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="2_cqpdx"]
 
 [sub_resource type="Gradient" id="Gradient_f1ai1"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
@@ -9,11 +10,8 @@ colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
 gradient = SubResource("Gradient_f1ai1")
 fill_from = Vector2(0, 0.175214)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xeyjv"]
-load_path = "res://.godot/imported/kloppenheim_03_puresky_4k.hdr-855811486dc258ccce1ab0964570e940.bptc.ctex"
-
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_nogvs"]
-panorama = SubResource("CompressedTexture2D_xeyjv")
+panorama = ExtResource("2_cqpdx")
 
 [sub_resource type="Sky" id="Sky_6nyd1"]
 sky_material = SubResource("PanoramaSkyMaterial_nogvs")
