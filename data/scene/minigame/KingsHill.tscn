@@ -66,6 +66,7 @@ script = ExtResource("1_jlb0r")
 restrict_to_minigame_type = true
 restriction = Array[int]([3])
 delete_in_sandbox = true
+tbw_object_type = "KingsHill"
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_mask = 2

@@ -20,6 +20,7 @@ var selected_item = null
 var item_offset = Vector3(0, 0, 0)
 
 @onready var preview_node = $PreviewNode
+@onready var preview_delete_area = $PreviewNode/DeleteArea
 
 func _ready():
 	init("Build")
@@ -57,8 +58,12 @@ func _on_item_picked(item_name) -> void:
 	ui_partner.text = str(ui_tool_name)
 	item_offset = Vector3.ZERO
 	match(item_name):
-		"PineTree":
+		# Decor / environment
+		"Pine tree":
 			selected_item = SpawnableObjects.obj_pine_tree
+		"Big cliff":
+			selected_item = SpawnableObjects.obj_cliff_0
+		# Special
 		"Lifter":
 			selected_item = SpawnableObjects.obj_lifter
 			item_offset = Vector3(0, -0.49, 0)
@@ -75,9 +80,25 @@ func _on_item_picked(item_name) -> void:
 func _process(delta):
 	if active:
 		var camera = get_viewport().get_camera_3d()
-		if Input.is_action_just_pressed("click") && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			var inst = selected_item.instantiate()
-			Global.get_world().add_child(inst, true)
-			inst.global_position = camera.controlled_cam_pos + item_offset
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			# place
+			if Input.is_action_just_pressed("click"):
+				var inst = selected_item.instantiate()
+				Global.get_world().add_child(inst, true)
+				inst.global_position = camera.controlled_cam_pos + item_offset
+			# delete
+			elif Input.is_action_just_pressed("editor_delete"):
+				# Delete the hovered object
+				if preview_delete_area != null:
+					# bricks, decor objects
+					for body in preview_delete_area.get_overlapping_bodies():
+						if body is Brick || body is TBWObject:
+							body.queue_free()
+					# Lifters
+					for area in preview_delete_area.get_overlapping_areas():
+						if area.owner is TBWObject:
+							area.owner.queue_free()
+			if Input.is_action_just_pressed("editor_select_item"):
+				pick_item()
 		if preview_node != null:
 			preview_node.global_position = camera.controlled_cam_pos

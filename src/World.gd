@@ -274,8 +274,8 @@ func _parse_and_open_tbw(lines : Array) -> void:
 		if line != "":
 			# final step, place building
 			if str(line) == "[building]":
-				# load building portion
-				_server_load_building(lines.slice(count+1), Vector3(0, 50, 0))
+				# load building portion, use global pos
+				_server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:
@@ -287,6 +287,8 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						inst = SpawnableObjects.obj_water.instantiate()
 					"PineTree":
 						inst = SpawnableObjects.obj_pine_tree.instantiate()
+					"Cliff_0":
+						inst = SpawnableObjects.obj_cliff_0.instantiate()
 					"Pickup":
 						inst = SpawnableObjects.obj_pickup.instantiate()
 					"Lifter":
@@ -349,15 +351,18 @@ func ask_server_to_load_building(name_from, lines, b_position):
 	_server_load_building(lines, b_position)
 
 # TODO: should do this in a thread
-func _server_load_building(lines, b_position):
+func _server_load_building(lines, b_position, use_global_position = false):
 	if !multiplayer.is_server(): return
 	
 	var building = Building.new(false)
 	add_child(building)
 	
 	var line_split_init = lines[0].split(";")
-	var building_pos = line_split_init[1].split(",")
-	var offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
+	var offset_pos = Vector3.ZERO
+	# convert global position into 'local' with offset of first brick
+	if !use_global_position:
+		var building_pos = line_split_init[1].split(",")
+		offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
 	
 	for line in lines:
 		if line != "":

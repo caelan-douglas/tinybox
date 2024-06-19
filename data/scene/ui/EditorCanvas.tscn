@@ -78,7 +78,7 @@ alignment = 1
 
 [node name="DynamicLabel" type="Label" parent="ItemChooser/Menu"]
 layout_mode = 2
-text = "Pick item..."
+text = "Pick item / object..."
 script = ExtResource("6_aufvl")
 
 [node name="Spacer" type="Control" parent="ItemChooser/Menu"]
@@ -113,7 +113,12 @@ text = "Seat"
 [node name="Button2" type="Button" parent="ItemChooser/Menu/ItemGrid"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
-text = "PineTree"
+text = "Pine tree"
+
+[node name="Button7" type="Button" parent="ItemChooser/Menu/ItemGrid"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+text = "Big cliff"
 
 [node name="Button6" type="Button" parent="ItemChooser/Menu/ItemGrid"]
 custom_minimum_size = Vector2(96, 96)

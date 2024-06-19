@@ -34,7 +34,7 @@ var lan_entries = []
 # Server version between client and server must match
 # in order for client to join.
 #
-# Same as display version, but with leading zero for minor release 
+# Same as display version, but with leading zero for minor release
 # to make room for double digit minor releases
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11

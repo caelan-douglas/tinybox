@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://de5w30v7u4ohu"]
+[gd_scene load_steps=27 format=3 uid="uid://de5w30v7u4ohu"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_l0mnu"]
 [ext_resource type="AudioStream" uid="uid://dqqfcxecttbyn" path="res://data/audio/outdoorambience.ogg" id="2_biee4"]
@@ -15,7 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://cvd28jfngaekc" path="res://data/scene/building/StaticPlatform.tscn" id="12_ykek7"]
 [ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="13_xvxc2"]
 [ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="16_na7cl"]
-[ext_resource type="PackedScene" uid="uid://bnerevgdih5mn" path="res://data/scene/building/BasicCar.tscn" id="18_p7uha"]
+[ext_resource type="PackedScene" uid="uid://6dcw2huh16uq" path="res://data/scene/brick/HalfBrick.tscn" id="16_w3h7l"]
+[ext_resource type="PackedScene" uid="uid://cwymj2xlxiri4" path="res://data/scene/brick/CylinderBrick.tscn" id="17_ox6ky"]
+[ext_resource type="PackedScene" uid="uid://dca5npetcw4di" path="res://data/scene/brick/MotorSeat.tscn" id="18_0tpip"]
 
 [sub_resource type="Animation" id="Animation_sxhdx"]
 length = 0.001
@@ -494,9 +496,69 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2.5, 0)
 type = 1
 respawn_time = 15
 
-[node name="BasicCar" parent="." instance=ExtResource("18_p7uha")]
+[node name="BasicCar" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+script = ExtResource("12_duo6k")
 only_in_sandbox = true
+
+[node name="Brick" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick6" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick10" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick12" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick11" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick2" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick3" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick4" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick5" parent="BasicCar" instance=ExtResource("16_w3h7l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick7" parent="BasicCar" instance=ExtResource("17_ox6ky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 2)
+_material = 4
+
+[node name="Brick9" parent="BasicCar" instance=ExtResource("17_ox6ky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+_material = 4
+
+[node name="Brick8" parent="BasicCar" instance=ExtResource("17_ox6ky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+_material = 4
+
+[node name="Brick54" parent="BasicCar" instance=ExtResource("17_ox6ky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+_material = 4
+
+[node name="Brick16" parent="BasicCar" instance=ExtResource("18_0tpip")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1, 1, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
+
+[node name="Brick17" parent="BasicCar" instance=ExtResource("18_0tpip")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 1, 0)
+_colour = Color(0.647059, 0.345098, 0.729412, 1)
 
 [node name="Pickup7" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 2)

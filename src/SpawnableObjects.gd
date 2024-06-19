@@ -26,6 +26,7 @@ extends Node
 # .tbw objects
 @onready var obj_water = load("res://data/scene/editor_obj/WorldWater.tscn")
 @onready var obj_pine_tree = load("res://data/scene/editor_obj/PineTree.tscn")
+@onready var obj_cliff_0 = load("res://data/scene/editor_obj/Cliff_0.tscn")
 @onready var obj_pickup = load("res://data/scene/pickup/Pickup.tscn")
 @onready var obj_lifter = load("res://data/scene/lifter/Lifter.tscn")
 
