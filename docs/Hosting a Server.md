@@ -1,4 +1,4 @@
-# Hosting a Server<img src=../docs-hosting-icon.png align="left" width="128px" style="padding: 20px">
+# Hosting a Server<img src=../.export_exclude/docs-hosting-icon.png align="left" width="128px" style="padding: 20px">
 
 Tinybox uses a P2P system where one player is the host and the rest of the clients connect directly to that host. The host must have Tinybox's port, `30814`, port-forwarded on their router.
 

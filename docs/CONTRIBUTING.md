@@ -55,6 +55,8 @@ everything else is lowercase_with_underscores.
 
 ```
 - /
+  - .export_exclude - any assets that are not part of the game
+                      (like images used in /docs files)
   - addons - External Godot addons
   - doc - Miscellanious documentation (faq, manual, etc...)
   - data - Resources (textures, audio, models, scene files, etc...)
@@ -62,4 +64,4 @@ everything else is lowercase_with_underscores.
 ```
 
 ### Credits
-If you wish to be in the game's credits, add your name (or GitHub username) to the [`/contributors.txt`](../contributors.txt) on a new line as part of your PR.
+If you wish to be listed as a contributor, add your name (or GitHub username) to the [`/contributors.txt`](../contributors.txt) on a new line as part of your PR.
