@@ -66,6 +66,9 @@
                 "near": "NEAR",
                 "far": "FAR"
             }
+        },
+        "editor": {
+            "welcome": "Welcome to the world editor!"
         }
     },
     "tip": {

@@ -28,6 +28,18 @@ func _on_map_loaded() -> void:
 		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", editor.adjust_water_height.bind(-1))
 		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", editor.adjust_water_height.bind(1))
 		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", editor.adjust_water_height.bind(10))
+		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
+		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed)
+
+func _on_new_world_pressed():
+	$EntryScreen.set_visible(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _on_load_world_pressed():
+	var world_name = $EntryScreen/Menu/LoadName.text
+	$EntryScreen.set_visible(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Global.get_world().load_tbw(world_name)
 
 func hide_pause_menu() -> void:
 	$PauseMenu.visible = false

@@ -115,23 +115,34 @@ func _unhandled_input(event) -> void:
 var dist_to_hit = null
 var min_dist = 3
 var dist_diff = 0.0
+const CONTROLLED_CAM_DELAY_TIME = 5
+var controlled_cam_delay = 5
 var controlled_cam_pos = Vector3(0, 50, 0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if _camera_mode == CameraMode.CONTROLLED:
-		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.5)
-		if Input.is_action_just_pressed("forward"):
-			controlled_cam_pos += Vector3(0, 0, 1)
-		if Input.is_action_just_pressed("back"):
-			controlled_cam_pos += Vector3(0, 0, -1)
-		if Input.is_action_just_pressed("left"):
-			controlled_cam_pos += Vector3(1, 0, 0)
-		if Input.is_action_just_pressed("right"):
-			controlled_cam_pos += Vector3(-1, 0, 0)
-		if Input.is_action_just_pressed("shift"):
-			controlled_cam_pos += Vector3(0, 1, 0)
-		if Input.is_action_just_pressed("control"):
-			controlled_cam_pos += Vector3(0, -1, 0)
+		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
+		if controlled_cam_delay <= 0:
+			if Input.is_action_pressed("forward"):
+				controlled_cam_pos += Vector3(0, 0, 1)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			if Input.is_action_pressed("back"):
+				controlled_cam_pos += Vector3(0, 0, -1)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			if Input.is_action_pressed("left"):
+				controlled_cam_pos += Vector3(1, 0, 0)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			if Input.is_action_pressed("right"):
+				controlled_cam_pos += Vector3(-1, 0, 0)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			if Input.is_action_pressed("shift"):
+				controlled_cam_pos += Vector3(0, 1, 0)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+			if Input.is_action_pressed("control"):
+				controlled_cam_pos += Vector3(0, -1, 0)
+				controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+		else:
+			controlled_cam_delay -= 60 * delta
 		global_position = Vector3(target.global_position.x, target.global_position.y + 5, target.global_position.z - 8)
 		look_at(target.global_position)
 	

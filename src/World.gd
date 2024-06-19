@@ -231,6 +231,7 @@ func save_tbw(world_name) -> void:
 
 var load_dir = null
 func load_tbw(file_name = "test"):
+	print("Attempting to load ", file_name, ".tbw")
 	if !load_dir:
 		load_dir = DirAccess.open("user://world")
 	
@@ -264,8 +265,9 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	if !multiplayer.is_server(): return
 	
 	clear_bricks()
-	# Load default empty map
-	load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")))
+	# Load default empty map, unless we are in the editor
+	if !(Global.get_world().get_current_map() is Editor):
+		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")))
 	
 	var current_step = "none"
 	var count = 0
@@ -293,16 +295,18 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						inst = SpawnableObjects.obj_pickup.instantiate()
 					"Lifter":
 						inst = SpawnableObjects.obj_lifter.instantiate()
-				add_child(inst, true)
-				# object position
-				if line_split.size() > 1:
-					var pos = line_split[1].split(",")
-					inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
-				# object position
-				if line_split.size() > 2:
-					var rot = line_split[2].split(",")
-					inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-				sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
+				# ignore invalid items
+				if inst != null:
+					add_child(inst, true)
+					# object position
+					if line_split.size() > 1:
+						var pos = line_split[1].split(",")
+						inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
+					# object position
+					if line_split.size() > 2:
+						var rot = line_split[2].split(",")
+						inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
+					sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
 		count += 1
 	
 	# reset all player cameras once world is done loading

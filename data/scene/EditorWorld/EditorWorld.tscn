@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://46bsl4nq14py"]
 
-[ext_resource type="Script" path="res://data/scene/EditorWorld/Editor.gd" id="1_v6r6j"]
+[ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
 [ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="2_lhjrq"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="3_jjyfp"]
@@ -62,12 +62,16 @@ script = ExtResource("2_eevk4")
 [node name="EditorBuildTool" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 
 [node name="EditorBuildTool2" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+starting_item = "Half Brick"
 
 [node name="EditorBuildTool3" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+starting_item = "Pine tree"
 
 [node name="EditorBuildTool4" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+starting_item = "Big cliff"
 
 [node name="EditorBuildTool5" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+starting_item = "Lifter"
 
 [node name="EditorPropertiesTool" type="Node" parent="EditorToolInventory"]
 script = ExtResource("4_ga27o")

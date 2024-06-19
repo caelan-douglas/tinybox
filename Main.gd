@@ -279,7 +279,7 @@ func _on_editor_pressed() -> void:
 	world.load_map.call_deferred(load(str("res://data/scene/EditorWorld/EditorWorld.tscn")))
 	await Signal(world, "map_loaded")
 	add_peer(multiplayer.get_unique_id())
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	# Create the LAN advertiser.
 	lan_advertiser = ServerAdvertiser.new()

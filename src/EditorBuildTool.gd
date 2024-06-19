@@ -22,8 +22,11 @@ var item_offset = Vector3(0, 0, 0)
 @onready var preview_node = $PreviewNode
 @onready var preview_delete_area = $PreviewNode/DeleteArea
 
+@export var starting_item : String = "Brick"
+
 func _ready():
 	init("Build")
+	_on_item_picked(starting_item)
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
@@ -33,9 +36,6 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	else:
 		if preview_node != null:
 			preview_node.visible = true
-		if selected_item == null:
-			await get_tree().process_frame
-			pick_item()
 
 func pick_item() -> void:
 	get_parent().set_disabled(true)
