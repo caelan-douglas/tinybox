@@ -211,15 +211,15 @@ func save_tbw(world_name) -> void:
 	
 	# Create tbw file.
 	var file = FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
-	
-	# Save objects first.
+	# Save objects before bricks
 	for obj in get_children():
 		if obj != null:
 			if obj is TBWObject:
 				print(obj)
 				var type = obj.tbw_object_type
 				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z))
-	
+			elif obj is TBWEnvironment:
+				file.store_line(str("Environment;", obj.environment_name))
 	# Store bricks in the same format as buildings.
 	file.store_line(str("[building]"))
 	for b in get_children():
@@ -283,6 +283,7 @@ func _parse_and_open_tbw(lines : Array) -> void:
 			else:
 				var line_split = line.split(";")
 				var inst = null
+				var posrot = true
 				await get_tree().process_frame
 				match line_split[0]:
 					"Water":
@@ -295,18 +296,31 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						inst = SpawnableObjects.obj_pickup.instantiate()
 					"Lifter":
 						inst = SpawnableObjects.obj_lifter.instantiate()
+					# World environments don't have pos or rotation
+					"Environment":
+						posrot = false
+						if line_split.size() > 1:
+							match line_split[1]:
+								"Sunset":
+									inst = SpawnableObjects.tbw_env_sunset.instantiate()
+								"Molten":
+									inst = SpawnableObjects.tbw_env_molten.instantiate()
+								_:
+									inst = SpawnableObjects.tbw_env_sunny.instantiate()
 				# ignore invalid items
 				if inst != null:
 					add_child(inst, true)
-					# object position
-					if line_split.size() > 1:
-						var pos = line_split[1].split(",")
-						inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
-					# object position
-					if line_split.size() > 2:
-						var rot = line_split[2].split(",")
-						inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-					sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
+					# if this object has position and rotation
+					if posrot:
+						# object position
+						if line_split.size() > 1:
+							var pos = line_split[1].split(",")
+							inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
+						# object rotation
+						if line_split.size() > 2:
+							var rot = line_split[2].split(",")
+							inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
+						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
 		count += 1
 	
 	# reset all player cameras once world is done loading

@@ -99,6 +99,7 @@ script = ExtResource("1_bvuci")
 visible = false
 light_color = Color(1, 0.619608, 0.431373, 1)
 light_energy = 25.0
+shadow_enabled = true
 omni_range = 15.0
 script = ExtResource("2_o4cne")
 visible_on_awful = false

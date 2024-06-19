@@ -30,6 +30,11 @@ extends Node
 @onready var obj_pickup = load("res://data/scene/pickup/Pickup.tscn")
 @onready var obj_lifter = load("res://data/scene/lifter/Lifter.tscn")
 
+# tbw environments
+@onready var tbw_env_sunny = load("res://data/scene/environments/Sunny.tscn")
+@onready var tbw_env_sunset = load("res://data/scene/environments/Sunset.tscn")
+@onready var tbw_env_molten = load("res://data/scene/environments/Molten.tscn")
+
 # bricks
 @onready var brick = load("res://data/scene/brick/Brick.tscn")
 @onready var half_brick = load("res://data/scene/brick/HalfBrick.tscn")

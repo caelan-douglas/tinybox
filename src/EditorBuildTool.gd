@@ -38,16 +38,21 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 			preview_node.visible = true
 
 func pick_item() -> void:
-	get_parent().set_disabled(true)
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	var editor = Global.get_world().get_current_map()
 	if editor is Editor:
-		editor.show_item_chooser()
-		editor.connect("item_picked", _on_item_picked, 8)
-		await Signal(editor, "item_picked")
-		editor.disconnect("item_picked", _on_item_picked)
-		get_parent().set_disabled(false)
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if !editor.get_item_chooser_visible() && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			get_parent().set_disabled(true)
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			editor.show_item_chooser()
+			editor.connect("item_picked", _on_item_picked, 8)
+			await Signal(editor, "item_picked")
+			editor.disconnect("item_picked", _on_item_picked)
+			get_parent().set_disabled(false)
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			get_parent().set_disabled(false)
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			editor.hide_item_chooser()
 	else:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -98,7 +103,7 @@ func _process(delta):
 					for area in preview_delete_area.get_overlapping_areas():
 						if area.owner is TBWObject:
 							area.owner.queue_free()
-			if Input.is_action_just_pressed("editor_select_item"):
-				pick_item()
+		if Input.is_action_just_pressed("editor_select_item"):
+			pick_item()
 		if preview_node != null:
 			preview_node.global_position = camera.controlled_cam_pos

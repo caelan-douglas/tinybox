@@ -28,14 +28,22 @@ func show_item_chooser() -> void:
 	for b in editor_canvas.get_node("ItemChooser/Menu/ItemGrid").get_children():
 		b.connect("pressed", _on_item_chosen.bind(b.text), 8)
 
+func hide_item_chooser() -> void:
+	editor_canvas.get_node("ItemChooser").visible = false
+	for b in editor_canvas.get_node("ItemChooser/Menu/ItemGrid").get_children():
+		b.disconnect("pressed", _on_item_chosen.bind(b.text))
+
+func get_item_chooser_visible() -> bool:
+	return editor_canvas.get_node("ItemChooser").visible
+
 func _on_item_chosen(item_name) -> void:
 	emit_signal("item_picked", item_name)
-	editor_canvas.get_node("ItemChooser").visible = false
+	hide_item_chooser()
 
 var active_water = null
 var water_height = 42
 @onready var obj_water = preload("res://data/scene/editor_obj/WorldWater.tscn")
-func toggle_water():
+func toggle_water() -> void:
 	if active_water != null:
 		active_water.queue_free()
 		active_water = null
@@ -45,8 +53,38 @@ func toggle_water():
 		water_inst.global_position = Vector3(0, water_height, 0)
 		active_water = water_inst
 
-func adjust_water_height(amt):
+func adjust_water_height(amt) -> void:
 	water_height += amt
 	if active_water != null:
 		active_water.global_position.y = water_height
 	editor_canvas.get_node("WorldProperties/Menu/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
+
+func delete_environment() -> void:
+	for obj in Global.get_world().get_children():
+		if obj is TBWEnvironment:
+			obj.queue_free()
+
+func switch_environment() -> void:
+	var env = null
+	for obj in Global.get_world().get_children():
+		if obj is TBWEnvironment:
+			env = obj
+	var current_env_name = ""
+	if env != null:
+		current_env_name = env.environment_name
+	# delete old environment
+	delete_environment()
+	
+	var new_env = null
+	match (current_env_name):
+		# switch from > to
+		"Sunny":
+			new_env = SpawnableObjects.tbw_env_sunset.instantiate()
+		"Sunset":
+			new_env = SpawnableObjects.tbw_env_molten.instantiate()
+		# default load sunny
+		_:
+			new_env = SpawnableObjects.tbw_env_sunny.instantiate()
+	Global.get_world().add_child(new_env, true)
+	current_env_name = new_env.environment_name
+	editor_canvas.get_node("WorldProperties/Menu/Environment").text = current_env_name

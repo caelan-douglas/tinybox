@@ -28,6 +28,8 @@ func _on_map_loaded() -> void:
 		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", editor.adjust_water_height.bind(-1))
 		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", editor.adjust_water_height.bind(1))
 		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", editor.adjust_water_height.bind(10))
+		$WorldProperties/Menu/Environment.connect("pressed", editor.switch_environment)
+		
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed)
 
@@ -36,6 +38,11 @@ func _on_new_world_pressed():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_load_world_pressed():
+	# delete old environment
+	var editor = Global.get_world().get_current_map()
+	if editor is Editor:
+		editor.delete_environment()
+	# load file
 	var world_name = $EntryScreen/Menu/LoadName.text
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

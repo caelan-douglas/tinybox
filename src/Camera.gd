@@ -147,6 +147,9 @@ var controlled_cam_pos = Vector3(0, 50, 0)
 func _process(delta):
 	if _camera_mode == CameraMode.CONTROLLED:
 		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
+		# reset if key is let go then pressed again
+		if Input.is_action_just_pressed("forward") || Input.is_action_just_pressed("back") || Input.is_action_just_pressed("right") || Input.is_action_just_pressed("left") || Input.is_action_just_pressed("shift") || Input.is_action_just_pressed("control"):
+			controlled_cam_delay = 0
 		if controlled_cam_delay <= 0:
 			var move_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
 			var move_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -157,7 +160,7 @@ func _process(delta):
 			controlled_cam_lateral += move_forward * get_global_transform().basis.z
 			controlled_cam_lateral += move_sideways * get_global_transform().basis.x
 			controlled_cam_lateral.y = 0
-			controlled_cam_pos += controlled_cam_lateral + (move_vertical * Vector3.UP)
+			controlled_cam_pos += controlled_cam_lateral.normalized() + (move_vertical * Vector3.UP)
 			# snap to grid
 			controlled_cam_pos = controlled_cam_pos.round()
 			controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
@@ -174,6 +177,8 @@ func _process(delta):
 					target_dist = 15
 				15:
 					target_dist = 25
+				25:
+					target_dist = 50
 				_:
 					target_dist = 5
 		

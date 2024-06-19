@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://212qt54q0qdp"]
+
+[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_4osw1"]
+
+[sub_resource type="Gradient" id="Gradient_otgt0"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aejai"]
+gradient = SubResource("Gradient_otgt0")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xm2hv"]
+sky_top_color = Color(0.547051, 0.134874, 0.119453, 1)
+sky_horizon_color = Color(0.75182, 0.481799, 0.564446, 1)
+ground_bottom_color = Color(0.556121, 0.164683, 0.0146301, 1)
+ground_horizon_color = Color(0.632422, 0.343895, 0.385946, 1)
+
+[sub_resource type="Sky" id="Sky_bmi35"]
+sky_material = SubResource("ProceduralSkyMaterial_xm2hv")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_ahc3q"]
+background_mode = 2
+background_energy_multiplier = 2.0
+sky = SubResource("Sky_bmi35")
+sky_rotation = Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16)
+ambient_light_source = 3
+ambient_light_color = Color(0.56112, 0.358581, 0.428702, 1)
+ambient_light_sky_contribution = 0.4
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.001
+fog_sky_affect = 0.787
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_aejai")
+
+[node name="Environment" type="Node"]
+script = ExtResource("1_4osw1")
+environment_name = "Molten"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ahc3q")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 52.7417, 0)
+light_color = Color(1, 0.400696, 0.161191, 1)
+light_energy = 3.0
+shadow_enabled = true
+shadow_opacity = 0.4
+shadow_blur = 10.0

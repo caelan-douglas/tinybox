@@ -249,10 +249,17 @@ alignment = 1
 layout_mode = 2
 text = "World properties"
 script = ExtResource("6_aufvl")
+json_text = "ui/editor/world_properties"
 
 [node name="Spacer" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
+custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Water"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water"
 
 [node name="Water" type="Button" parent="WorldProperties/Menu"]
 layout_mode = 2
@@ -263,6 +270,20 @@ layout_mode = 2
 
 [node name="DynamicLabel" parent="WorldProperties/Menu/WaterHeightAdjuster" index="2"]
 text = "Water height: 42"
+
+[node name="Spacer2" type="Control" parent="WorldProperties/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="DynamicLabel3" type="Label" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Environment"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/environment"
+
+[node name="Environment" type="Button" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Sunny"
 
 [node name="PauseMenu" type="Control" parent="."]
 visible = false

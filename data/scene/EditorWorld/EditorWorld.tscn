@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=12 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
@@ -11,45 +11,6 @@
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_xvfrp"]
 [ext_resource type="Script" path="res://src/Building.gd" id="7_qx7xr"]
 [ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="8_3bvaj"]
-
-[sub_resource type="Gradient" id="Gradient_yqyd0"]
-colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_m3cc2"]
-gradient = SubResource("Gradient_yqyd0")
-fill_from = Vector2(0, 0.175214)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cdvnx"]
-load_path = "res://.godot/imported/kloppenheim_03_puresky_4k.hdr-855811486dc258ccce1ab0964570e940.bptc.ctex"
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5623m"]
-panorama = SubResource("CompressedTexture2D_cdvnx")
-
-[sub_resource type="Sky" id="Sky_af2im"]
-sky_material = SubResource("PanoramaSkyMaterial_5623m")
-radiance_size = 2
-
-[sub_resource type="Environment" id="Environment_p2al3"]
-background_mode = 2
-background_energy_multiplier = 0.8
-sky = SubResource("Sky_af2im")
-sky_rotation = Vector3(0, 2.34049, 0)
-ambient_light_source = 3
-ambient_light_color = Color(0.338358, 0.430332, 0.593269, 1)
-ambient_light_sky_contribution = 0.5
-tonemap_mode = 3
-ssao_enabled = true
-ssao_radius = 2.0
-ssao_intensity = 3.0
-ssil_enabled = true
-glow_enabled = true
-fog_enabled = true
-fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
-fog_sun_scatter = 0.03
-fog_density = 0.001
-fog_sky_affect = 0.787
-adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture2D_m3cc2")
 
 [node name="EditorWorld" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
@@ -84,13 +45,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")
 team_list = Array[Resource]([ExtResource("4_qkc34"), ExtResource("5_iwwdy"), ExtResource("6_xvfrp")])
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_p2al3")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, 0.327924, -0.377446, 0, 0.754893, 0.655848, 0.5, -0.567981, 0.653756, 0, 2.74168, 0)
-shadow_enabled = true
 
 [node name="Building" type="Node3D" parent="."]
 script = ExtResource("7_qx7xr")
