@@ -217,7 +217,7 @@ func save_tbw(world_name) -> void:
 		if obj != null:
 			if obj is TBWObject:
 				var type = obj.tbw_object_type
-				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z))
+				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z, ";", obj.scale.x, ",", obj.scale.y, ",", obj.scale.z))
 			elif obj is TBWEnvironment:
 				file.store_line(str("Environment;", obj.environment_name))
 	# Store bricks in the same format as buildings.
@@ -315,7 +315,11 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						if line_split.size() > 2:
 							var rot = line_split[2].split(",")
 							inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation)
+						# scale
+						if line_split.size() > 3:
+							var scl = line_split[3].split(",")
+							inst.scale = Vector3(float(scl[0]), float(scl[1]), float(scl[2]))
+						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation, inst.scale)
 		count += 1
 	# reset all player cameras once world is done loading
 	reset_player_cameras.rpc()
@@ -323,11 +327,12 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	emit_signal("tbw_loaded")
 
 @rpc("any_peer", "call_remote", "reliable")
-func sync_tbw_obj_properties(obj_path, new_pos, new_rot) -> void:
+func sync_tbw_obj_properties(obj_path, new_pos, new_rot, new_scale) -> void:
 	var node = get_node_or_null(obj_path)
 	if node:
 		node.global_position = new_pos
 		node.global_rotation = new_rot
+		node.scale = new_scale
 
 @rpc("any_peer", "call_local", "reliable")
 func reset_player_cameras():
@@ -399,11 +404,14 @@ func _server_load_building(lines, b_position, use_global_position = false):
 				if line_split.size() > 2:
 					var rot = line_split[2].split(",")
 					b.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-				# colour
-				if line_split.size() > 5:
-					b._colour = Color.from_string(line_split[5], Color.WHITE)
 				# material
 				if line_split.size() > 3:
 					var mat = line_split[3]
 					b.set_material.rpc(int(mat))
+				
+				# state is 4, but not used yet
+				
+				# colour
+				if line_split.size() > 5:
+					b._colour = Color.from_string(line_split[5], Color.WHITE)
 	building.place()

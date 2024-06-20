@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://dj387li7w0abc"]
+[gd_scene load_steps=4 format=3 uid="uid://dj387li7w0abc"]
 
 [ext_resource type="Script" path="res://src/EditorBuildTool.gd" id="1_1jwcf"]
 [ext_resource type="PackedScene" uid="uid://cb1sikepc8br0" path="res://data/scene/PreviewNode.tscn" id="2_3p1u0"]
+[ext_resource type="AudioStream" uid="uid://btqo5m6d0rhqc" path="res://data/audio/invalid.ogg" id="3_g2inq"]
 
 [node name="EditorBuildTool" type="Node"]
 script = ExtResource("1_1jwcf")
 
 [node name="PreviewNode" parent="." instance=ExtResource("2_3p1u0")]
+
+[node name="InvalidAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_g2inq")
+volume_db = -6.0
+bus = &"SFX"

@@ -1,15 +1,16 @@
 # Contributing
-Contributions to Tinybox are appreciated. This is a hobby project, so pull requests will generally be reviewed whenever I get the chance - sorry if it takes a while!
+Contributions to Tinybox are appreciated! This is a hobby project, so pull requests will generally be reviewed whenever I get the chance - sorry if it takes a while!
 
 ## Setting up the project
 Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. The project's current Godot version can be found in the README in the root folder.<br>
-An additional step you will have to take is linking a Blender 3.0+ executeable in your Godot Editor settings:
+An additional step you will have to take is linking a Blender 3.0+ executeable in your Godot Editor settings. **I recommend you do this before loading the project to avoid import errors.**<br>
 `Editor > Editor Settings > FileSystem > Import > Blender 3 Path`<br>
-If done correctly, you should be able to see the .blend files in the /data/models directory within the Editor filesystem. On macOS, you will have to link the actual executeable within the Blender.app Contents, not Blender.app binary itself.
+If done correctly, you should be able to see the .blend files in the /data/models directory within the Editor filesystem. On macOS, you will have to link the actual executeable within the Blender.app Contents, not Blender.app binary itself. For example, on my macOS install the path I have set is:
+`/Applications/Blender.app/Contents/MacOS`
 
 ## Guidelines
 ### What's accepted?
-Please submit pull requests for bug fixes, code quality improvements, and optimizations of any kind. For new features, please see the **Game vision** section in the [`README.md`](../README.md) file to get an idea of the type of features that are planned for the game. If you're not sure about whether or not your feature idea aligns with the game's goals, you can always feel free to create a feature request in the Issues before making a PR to discuss it.
+Please submit pull requests for bug fixes, code quality improvements, and optimizations of any kind. For new features, please see the **Game vision** section in the [`README.md`](../README.md) file to get an idea of the type of features that are planned for the game. I recommend that you create an issue under the 'feature request' tag to discuss, before making a new feature PR - this way you know for sure whether it aligns with the goals of the game.
 
 ### What's not accepted?
 Pull requests for the following may be rejected:
@@ -22,12 +23,12 @@ Pull requests for the following may be rejected:
 Please run the game and do some basic testing to make sure your changes are functional before submitting the PR.
 
 ## Styling
-Be sure to add the GNU AGPLv3 copyright comment to the top of your .gd files (you can copy this from another file like `Main.gd`). Add yourself to the copyright notice (or 'and contributors' if you would rather not have your name in the notice.)
+Be sure to add the GNU AGPLv3 license details to the top of your .gd files (you can copy this from another file like `/Main.gd`). Add yourself to the copyright notice (or 'and contributors' if you would rather not have your name in the notice.)
 
 #### Code formatting
 - Please indent with tabs, not spaces.
 - Prefix a '_' on variables or functions that are 'private' (should only be used within the script file)
-- Define the return type in the function declaration (see below).
+- Define the return type in the function declaration when returning a single type (see below).
 
 #### Functions
 Public functions should be formatted as:<br>
@@ -40,15 +41,12 @@ Public functions should be formatted as:<br>
 
 Variables should be defined with their type:
 
-`var public_var : String = "hi"`<br>
+`var public_var : String = "hi, how are you?"`<br>
 `var _private_var : String = "private variable"`
 
-#### File names
+#### Naming convention
 
-Scene files and scripts are generally named WithCapsLikeThis<br>
-RigidPlayer.gd<br>
-SomeSceneFile.tscn
-
+**Scene files** and **scripts** are generally named WithCapsLikeThis<br>
 everything else is lowercase_with_underscores.
 
 #### File structure

@@ -162,3 +162,13 @@ func get_user_tbw_names() -> Array:
 		return dir.get_files()
 	else:
 		return []
+
+# gets children recursively
+func get_all_children(in_what):
+	var all_children = []
+	for child in in_what.get_children():
+		if child.get_child_count() > 0:
+			all_children.append(get_all_children(child))
+		all_children.append(child)
+	print(all_children)
+	return all_children

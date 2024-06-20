@@ -54,5 +54,3 @@ transform = Transform3D(0.776457, 0, -2.89778, 0, 3, 0, 2.89778, 0, 0.776457, -0
 mesh = SubResource("ArrayMesh_najbf")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_xtp4l")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Asteroid8"]

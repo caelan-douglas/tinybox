@@ -192,6 +192,34 @@ func _process(delta):
 		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
 			target_dist = clamp(target_dist + 2, 3, 40)
 		
+		# if multithreaded physics, this section FROM HERE
+		# must be moved to physics process
+		# (physics api calls can only be called on physics_process)
+		dist_to_hit = null
+		if target != null:
+			var applied_pos = target.global_position - dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
+			intersection_area.global_position = applied_pos
+			if intersection_area.get_overlapping_bodies().size() > 0:
+				var space_state = get_world_3d().direct_space_state
+				# layer mask for ray is 0x7 (binary is 0111 for layers 1, 2, 3; camera is 4)
+				var ray = PhysicsRayQueryParameters3D.create(target.global_position, applied_pos, 0x7)
+				var hit = space_state.intersect_ray(ray)
+				dist_to_hit = 0.0
+				if hit:
+					dist_to_hit = applied_pos.distance_to(hit["position"])
+					# a bit of padding between the hit object and camera
+					dist_to_hit += 0.4
+			# speed trails
+			if target.owner is RigidPlayer:
+				var player = target.owner
+				speed_trails.global_rotation = player.global_rotation
+				speed_trails.rotate_object_local(Vector3.LEFT, deg_to_rad(-90))
+				if player.lateral_velocity.length() > 12 && (player._state != RigidPlayer.DEAD && player._state != RigidPlayer.TRIPPED && player._state != RigidPlayer.DUMMY):
+					speed_trails.emitting = true
+				else:
+					speed_trails.emitting = false
+		# TO HERE
+		
 		_control_camera_rotation(delta)
 		
 		# Toggle camera modes.
@@ -205,35 +233,6 @@ func _process(delta):
 		look_at(target.global_position)
 		var far_dist = clamp(global_position.distance_to(target.global_position), 0, 40)
 		fov = 55 - far_dist
-
-func _physics_process(delta):
-	# if multithreaded physics, this section FROM HERE
-	# must be moved to physics process
-	# (physics api calls can only be called on physics_process)
-	dist_to_hit = null
-	if target != null:
-		var applied_pos = target.global_position - dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
-		intersection_area.global_position = applied_pos
-		if intersection_area.get_overlapping_bodies().size() > 0:
-			var space_state = get_world_3d().direct_space_state
-			# layer mask for ray is 0x7 (binary is 0111 for layers 1, 2, 3; camera is 4)
-			var ray = PhysicsRayQueryParameters3D.create(target.global_position, applied_pos, 0x7)
-			var hit = space_state.intersect_ray(ray)
-			dist_to_hit = 0.0
-			if hit:
-				dist_to_hit = applied_pos.distance_to(hit["position"])
-				# a bit of padding between the hit object and camera
-				dist_to_hit += 0.4
-		# speed trails
-		if target.owner is RigidPlayer:
-			var player = target.owner
-			speed_trails.global_rotation = player.global_rotation
-			speed_trails.rotate_object_local(Vector3.LEFT, deg_to_rad(-90))
-			if player.lateral_velocity.length() > 12 && (player._state != RigidPlayer.DEAD && player._state != RigidPlayer.TRIPPED && player._state != RigidPlayer.DUMMY):
-				speed_trails.emitting = true
-			else:
-				speed_trails.emitting = false
-	# TO HERE
 
 @rpc("call_local")
 func get_mouse_pos_3d():

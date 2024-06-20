@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://yuhjjkxkkftf"]
+[gd_scene load_steps=2 format=3 uid="uid://5ky2ry0n4tkp"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
 properties/0/path = NodePath(".:position")
