@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cpc0y6dffts5n"]
+[gd_scene load_steps=6 format=3 uid="uid://cpc0y6dffts5n"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_t851o"]
-[ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="2_u4j5j"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="3_hrmyj"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_id4bl"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_dpts0"]
@@ -10,9 +9,6 @@
 [node name="BaseWorld" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 script = ExtResource("1_t851o")
-
-[node name="Camera" parent="." instance=ExtResource("2_u4j5j")]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_hrmyj")

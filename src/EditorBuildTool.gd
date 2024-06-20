@@ -22,12 +22,8 @@ var item_offset = Vector3(0, 0, 0)
 @onready var preview_node = $PreviewNode
 @onready var preview_delete_area = $PreviewNode/DeleteArea
 
-@export var starting_item : String = "Brick"
-@export var starting_item_display_name : String = "Brick"
-
 func _ready():
-	init("Build")
-	_on_item_picked(starting_item, starting_item_display_name)
+	init("(empty)")
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
@@ -37,6 +33,8 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	else:
 		if preview_node != null:
 			preview_node.visible = true
+		if selected_item == null:
+			pick_item()
 
 func pick_item() -> void:
 	var editor = Global.get_world().get_current_map()
@@ -58,23 +56,29 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_item_picked(item_name_internal, item_name_display) -> void:
+func _on_item_picked(item_name_internal : String, item_name_display) -> void:
 	ui_tool_name = item_name_display
 	ui_partner.text = str(item_name_display)
 	item_offset = Vector3.ZERO
+	if !SpawnableObjects.objects.has(item_name_internal):
+		return
 	selected_item = SpawnableObjects.objects[item_name_internal]
-	if item_name_internal == "Lifter" || item_name_internal == "Pickup" || item_name_internal == "Mug":
-		item_offset = Vector3(0, -0.49, 0)
+	if item_name_internal != "obj_water":
+		# offset objects down a bit
+		if item_name_internal.begins_with("obj"):
+			item_offset = Vector3(0, -0.49, 0)
 
-func _process(delta):
+func _physics_process(delta):
 	if active:
 		var camera = get_viewport().get_camera_3d()
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
-			if Input.is_action_just_pressed("click"):
-				var inst = selected_item.instantiate()
-				Global.get_world().add_child(inst, true)
-				inst.global_position = camera.controlled_cam_pos + item_offset
+			if Input.is_action_pressed("click"):
+				if preview_delete_area != null:
+					if !preview_delete_area.has_overlapping_bodies():
+						var inst = selected_item.instantiate()
+						Global.get_world().add_child(inst, true)
+						inst.global_position = camera.controlled_cam_pos + item_offset
 			# delete
 			elif Input.is_action_just_pressed("editor_delete"):
 				# Delete the hovered object

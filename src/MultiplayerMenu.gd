@@ -17,7 +17,14 @@
 extends CanvasLayer
 class_name MultiplayerMenu
 
+@onready var map_selection : OptionButton = $MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
+
 func _ready():
+	# add user worlds to list
+	map_selection.add_separator("Your worlds")
+	for map in Global.get_user_tbw_names():
+		map_selection.add_item(map)
+	
 	$SettingsMenu/Graphics.connect("pressed", toggle_graphics_presets)
 	$MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/Appearance.connect("pressed", show_appearance_settings)
 	# play hair swing animation on new hair selected

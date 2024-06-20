@@ -64,7 +64,12 @@ func _physics_process(delta):
 		if get_parent().visible:
 			visible = !visible
 	if visible:
-		debug_text.text = str("active physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\ngraphics cache contents: ", str(Global.graphics_cache))
+		var brick_count = 0
+		var bricks = Global.get_world().get_children()
+		for b in bricks:
+			if b is Brick:
+				brick_count += 1
+		debug_text.text = str("bricks in world: ", str(brick_count), "\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\ngraphics cache contents: ", str(Global.graphics_cache))
 		var player = Global.get_player()
 		if player != null:
 			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), "\nPlayer position (global): ", round(player.global_position), "\nPlayer state: ", player.states_as_names[player._state], "\nPlayer fire?: ", player.on_fire, "\nPlayer occupying seat: ", player.seat_occupying)

@@ -168,65 +168,66 @@ columns = 3
 
 [node name="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
+internal_name = "brick"
 
 [node name="Button2" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Half brick"
 icon = ExtResource("4_drvio")
-internal_name = "HalfBrick"
+internal_name = "brick_half"
 
 [node name="Button3" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Wheel"
 icon = ExtResource("5_a7h3k")
-internal_name = "CylinderBrick"
+internal_name = "brick_cylinder"
 
 [node name="Button5" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Big wheel"
 icon = ExtResource("5_a7h3k")
-internal_name = "LargeCylinderBrick"
+internal_name = "brick_cylinder_large"
 
 [node name="Button4" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Seat"
-internal_name = "MotorSeat"
+internal_name = "brick_motor_seat"
 
 [node name="Button6" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Pine tree"
 icon = null
-internal_name = "PineTree"
+internal_name = "obj_pine_tree"
 
 [node name="Button7" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Big cliff"
 icon = null
-internal_name = "Cliff_0"
+internal_name = "obj_cliff_0"
 
 [node name="Button8" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Small asteroid"
 icon = null
-internal_name = "Asteroid_0"
+internal_name = "obj_asteroid_0"
 
 [node name="Button9" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Big mug"
 icon = null
-internal_name = "Mug"
+internal_name = "obj_mug"
 
 [node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Tool pickup"
 icon = null
-internal_name = "Pickup"
+internal_name = "obj_pickup"
 
 [node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Lifter"
 icon = null
-internal_name = "Lifter"
+internal_name = "obj_lifter"
 
 [node name="WorldProperties" type="Control" parent="."]
 visible = false

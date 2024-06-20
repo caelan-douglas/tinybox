@@ -211,7 +211,8 @@ func _on_host_pressed() -> void:
 	multiplayer.peer_disconnected.connect(remove_player)
 	# Load the world using the multiplayerspawner spawn method.
 	var world = $World
-	world.load_map.call_deferred(load(str("res://data/scene/", selected_map, "/", selected_map, ".tscn")))
+	# remove ".tbw"
+	world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
 	await Signal(world, "map_loaded")
 	
 	

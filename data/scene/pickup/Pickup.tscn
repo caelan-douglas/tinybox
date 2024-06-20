@@ -64,7 +64,7 @@ _data = {
 
 [node name="Pickup" type="Node3D"]
 script = ExtResource("1_obmro")
-tbw_object_type = "Pickup"
+tbw_object_type = "obj_pickup"
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 33

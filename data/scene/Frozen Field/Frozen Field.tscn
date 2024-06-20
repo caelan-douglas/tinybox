@@ -495,8 +495,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 2)
 type = 3
 ammo = 80
 respawn_time = 4
-restrict_to_minigame_type = false
-delete_in_sandbox = false
 only_in_sandbox = true
 
 [editable path="picnic_table"]

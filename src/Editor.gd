@@ -13,9 +13,10 @@ func _ready():
 	while player == null:
 		await get_tree().process_frame
 		player = Global.get_player()
-	player.global_position = Vector3(0, 50, 0)
+	player.global_position = Vector3(0, -1000, 0)
 	player.change_state(RigidPlayer.DUMMY)
-	player.invulnerable = true
+	player.locked = true
+	player.editor_mode = true
 	player.visible = false
 	player.get_tool_inventory().delete_all_tools()
 	player.get_tool_inventory().set_disabled(true)
@@ -105,15 +106,15 @@ func switch_environment() -> void:
 	var new_env = null
 	match (current_env_name):
 		# switch from > to
-		"Sunny":
-			new_env = SpawnableObjects.objects["environment_Sunset"].instantiate()
-		"Sunset":
-			new_env = SpawnableObjects.objects["environment_Molten"].instantiate()
-		"Molten":
-			new_env = SpawnableObjects.objects["environment_Warp"].instantiate()
+		"env_sunny":
+			new_env = SpawnableObjects.objects["env_sunset"].instantiate()
+		"env_sunset":
+			new_env = SpawnableObjects.objects["env_molten"].instantiate()
+		"env_molten":
+			new_env = SpawnableObjects.objects["env_warp"].instantiate()
 		# default load sunny
 		_:
-			new_env = SpawnableObjects.objects["environment_Sunny"].instantiate()
+			new_env = SpawnableObjects.objects["env_sunny"].instantiate()
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
 	editor_canvas.get_node("WorldProperties/Menu/Environment").text = current_env_name

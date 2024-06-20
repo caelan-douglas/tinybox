@@ -267,7 +267,7 @@ json_text = "ui/host_panel"
 [node name="MapSelection" type="OptionButton" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 8
+item_count = 7
 selected = 0
 popup/item_0/text = "Frozen Field"
 popup/item_0/id = 1
@@ -281,12 +281,8 @@ popup/item_4/text = "Warp"
 popup/item_4/id = 6
 popup/item_5/text = "BaseWorld"
 popup/item_5/id = 7
-popup/item_6/text = "Testing Maps"
-popup/item_6/id = 3
-popup/item_6/disabled = true
-popup/item_6/separator = true
-popup/item_7/text = "Grasslands"
-popup/item_7/id = 2
+popup/item_6/text = "Grasslands"
+popup/item_6/id = 2
 
 [node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
 layout_mode = 2

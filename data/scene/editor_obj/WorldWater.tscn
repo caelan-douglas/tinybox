@@ -19,7 +19,7 @@ size = Vector3(2000, 1391, 2000)
 [node name="Water" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 script = ExtResource("1_74equ")
-tbw_object_type = "Water"
+tbw_object_type = "obj_water"
 
 [node name="mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)

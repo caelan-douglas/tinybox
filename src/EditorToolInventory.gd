@@ -56,7 +56,6 @@ func arrange_tools():
 		# ask each tool (now in order) to re-add their ui element
 		for t in get_tools():
 			t.add_ui_partner()
-	get_tools()[0].set_tool_active(true)
 
 func set_disabled(new : bool) -> void:
 	if disabled != new:

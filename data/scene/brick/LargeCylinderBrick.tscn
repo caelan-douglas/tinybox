@@ -44,7 +44,7 @@ freeze = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_dvuh2")
-_brick_type = "LargeCylinderBrick"
+_brick_spawnable_type = "brick_cylinder_large"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_odmma")

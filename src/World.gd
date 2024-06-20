@@ -230,7 +230,7 @@ func save_tbw(world_name) -> void:
 				if found_brick == false:
 					file.store_line(str("[building]"))
 					found_brick = true
-				var type = b._brick_type
+				var type = b._brick_spawnable_type
 				file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
 	file.close()
 
@@ -388,21 +388,22 @@ func _server_load_building(lines, b_position, use_global_position = false):
 	for line in lines:
 		if line != "":
 			var line_split = line.split(";")
-			var b = SpawnableObjects.objects[line_split[0]].instantiate()
-			building.add_child(b, true)
-			# position
-			if line_split.size() > 1:
-				var pos = line_split[1].split(",")
-				b.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2])) - offset_pos + b_position
-			# rotation
-			if line_split.size() > 2:
-				var rot = line_split[2].split(",")
-				b.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-			# colour
-			if line_split.size() > 5:
-				b._colour = Color.from_string(line_split[5], Color.WHITE)
-			# material
-			if line_split.size() > 3:
-				var mat = line_split[3]
-				b.set_material.rpc(int(mat))
+			if SpawnableObjects.objects.has(line_split[0]):
+				var b = SpawnableObjects.objects[line_split[0]].instantiate()
+				building.add_child(b, true)
+				# position
+				if line_split.size() > 1:
+					var pos = line_split[1].split(",")
+					b.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2])) - offset_pos + b_position
+				# rotation
+				if line_split.size() > 2:
+					var rot = line_split[2].split(",")
+					b.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
+				# colour
+				if line_split.size() > 5:
+					b._colour = Color.from_string(line_split[5], Color.WHITE)
+				# material
+				if line_split.size() > 3:
+					var mat = line_split[3]
+					b.set_material.rpc(int(mat))
 	building.place()

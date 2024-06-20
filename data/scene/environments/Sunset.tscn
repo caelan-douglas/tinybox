@@ -41,7 +41,7 @@ adjustment_color_correction = SubResource("GradientTexture2D_0l2xg")
 
 [node name="Environment" type="Node"]
 script = ExtResource("1_0mx85")
-environment_name = "Sunset"
+environment_name = "env_sunset"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_oe2ii")

@@ -51,11 +51,11 @@ func _ready():
 	# Create new tool.
 	super.init("Build Tool", get_parent().get_parent())
 	# The types of bricks this can use.
-	brick_types = [SpawnableObjects.objects["Brick"], 
-	SpawnableObjects.objects["HalfBrick"], 
-	SpawnableObjects.objects["CylinderBrick"], 
-	SpawnableObjects.objects["LargeCylinderBrick"], 
-	SpawnableObjects.objects["MotorSeat"]]
+	brick_types = [SpawnableObjects.objects["brick"], 
+	SpawnableObjects.objects["brick_half"], 
+	SpawnableObjects.objects["brick_cylinder"], 
+	SpawnableObjects.objects["brick_cylinder_large"], 
+	SpawnableObjects.objects["brick_motor_seat"]]
 	# The materials of bricks this can use. Corresponds to the enums in
 	# Brick.gd.
 	brick_materials = [Brick.BrickMaterial.WOODEN, 
@@ -307,7 +307,7 @@ func _process(delta):
 					for b in hovered_group:
 						if b != null:
 							if b is Brick:
-								var type = b._brick_type
+								var type = b._brick_spawnable_type
 								file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
 					file.close()
 		# Load mode

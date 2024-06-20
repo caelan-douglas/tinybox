@@ -45,7 +45,7 @@ freeze_mode = 1
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_6w7jr")
-_brick_type = "MotorSeat"
+_brick_spawnable_type = "brick_motor_seat"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_e2irm")

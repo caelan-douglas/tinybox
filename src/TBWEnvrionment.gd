@@ -1,4 +1,4 @@
 extends Node
 class_name TBWEnvironment
 
-@export var environment_name : String = "Sunny"
+@export var environment_name : String = "env_sunny"

@@ -155,3 +155,10 @@ func play_kill_sound() -> void:
 	await get_tree().create_timer(0.3).timeout
 	audio.play()
 	audio.connect("finished", audio.queue_free)
+
+func get_user_tbw_names() -> Array:
+	var dir = DirAccess.open("user://world")
+	if dir:
+		return dir.get_files()
+	else:
+		return []

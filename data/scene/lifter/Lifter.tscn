@@ -19,7 +19,7 @@ albedo_texture = ExtResource("3_bs4t3")
 
 [node name="Lifter" type="Node3D"]
 script = ExtResource("1_kkssy")
-tbw_object_type = "Lifter"
+tbw_object_type = "obj_lifter"
 
 [node name="Particles" parent="." instance=ExtResource("2_ho4e0")]
 local_coords = true

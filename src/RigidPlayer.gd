@@ -71,6 +71,7 @@ var executing_player = null
 var death_camera_mode : Camera.CameraMode = Camera.CameraMode.FREE
 var locked = false
 var invulnerable = false
+var editor_mode = false
 var can_enter_seat = true
 var on_fire = false
 var in_air_from_lifter = false
@@ -640,8 +641,9 @@ func _integrate_forces(state) -> void:
 	if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		move_direction = get_movement_direction()
 	
-	if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
-		set_health(0, CauseOfDeath.OUT_OF_MAP)
+	if !editor_mode:
+		if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
+			set_health(0, CauseOfDeath.OUT_OF_MAP)
 	
 	match _state:
 		IDLE:

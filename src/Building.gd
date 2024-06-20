@@ -37,6 +37,10 @@ func _ready():
 		place()
 
 func place() -> void:
+	# don't place nothing
+	if get_children().size() < 1:
+		printerr("Building: Tried to load building with nothing in it.")
+		return
 	# change ownership first
 	for b in get_children():
 		# Set Smoothing to be not top level for now, model will follow brick's

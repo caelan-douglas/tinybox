@@ -43,7 +43,7 @@ shadow_mesh = SubResource("ArrayMesh_luvlj")
 [node name="Asteroid_0" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 script = ExtResource("1_ixcwp")
-tbw_object_type = "Asteroid_0"
+tbw_object_type = "obj_asteroid_0"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.776457, 0, -2.89778, 0, 3, 0, 2.89778, 0, 0.776457, -0.700001, -2.7, 1.2)

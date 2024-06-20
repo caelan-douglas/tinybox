@@ -64,7 +64,7 @@ var charred = false
 
 @export var _state : States = States.DUMMY_PLACED
 @export var _material : BrickMaterial = BrickMaterial.WOODEN
-@export var _brick_type : String = "Brick"
+@export var _brick_spawnable_type : String = "brick"
 @export var _colour : Color = "#fefefe"
 
 @onready var wood_material = preload("res://data/materials/wood.tres")

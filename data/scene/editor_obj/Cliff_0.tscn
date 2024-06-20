@@ -54,7 +54,7 @@ points = PackedVector3Array(4.12333, -0.147222, 12.1761, 0.319565, 5.81791, -12.
 [node name="Cliff_0" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 script = ExtResource("1_ode5c")
-tbw_object_type = "Cliff_0"
+tbw_object_type = "obj_cliff_0"
 
 [node name="cliff_0" type="Node3D" parent="."]
 

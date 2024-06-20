@@ -24,24 +24,24 @@ extends Node
 # Use load here instead of preload, to avoid a cyclic dependency.
 
 @onready var objects : Dictionary = {
-	"Water": load("res://data/scene/editor_obj/WorldWater.tscn"),
-	"PineTree": load("res://data/scene/editor_obj/PineTree.tscn"),
-	"Cliff_0": load("res://data/scene/editor_obj/Cliff_0.tscn"),
-	"Asteroid_0": load("res://data/scene/editor_obj/Asteroid_0.tscn"),
-	"Mug": load("res://data/scene/editor_obj/Mug.tscn"),
-	"Pickup": load("res://data/scene/pickup/Pickup.tscn"),
-	"Lifter": load("res://data/scene/lifter/Lifter.tscn"),
+	"obj_water": load("res://data/scene/editor_obj/WorldWater.tscn"),
+	"obj_pine_tree": load("res://data/scene/editor_obj/PineTree.tscn"),
+	"obj_cliff_0": load("res://data/scene/editor_obj/Cliff_0.tscn"),
+	"obj_asteroid_0": load("res://data/scene/editor_obj/Asteroid_0.tscn"),
+	"obj_mug": load("res://data/scene/editor_obj/Mug.tscn"),
+	"obj_pickup": load("res://data/scene/pickup/Pickup.tscn"),
+	"obj_lifter": load("res://data/scene/lifter/Lifter.tscn"),
 	# ENVIRONMENTS
-	"Sunny": load("res://data/scene/environments/Sunny.tscn"),
-	"Sunset": load("res://data/scene/environments/Sunset.tscn"),
-	"Molten": load("res://data/scene/environments/Molten.tscn"),
-	"Warp": load("res://data/scene/environments/Warp.tscn"),
+	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
+	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),
+	"env_molten": load("res://data/scene/environments/Molten.tscn"),
+	"env_warp": load("res://data/scene/environments/Warp.tscn"),
 	# BRICKS
-	"Brick": load("res://data/scene/brick/Brick.tscn"),
-	"HalfBrick": load("res://data/scene/brick/HalfBrick.tscn"),
-	"CylinderBrick": load("res://data/scene/brick/CylinderBrick.tscn"),
-	"LargeCylinderBrick": load("res://data/scene/brick/LargeCylinderBrick.tscn"),
-	"MotorSeat": load("res://data/scene/brick/MotorSeat.tscn")
+	"brick": load("res://data/scene/brick/Brick.tscn"),
+	"brick_half": load("res://data/scene/brick/HalfBrick.tscn"),
+	"brick_cylinder": load("res://data/scene/brick/CylinderBrick.tscn"),
+	"brick_cylinder_large": load("res://data/scene/brick/LargeCylinderBrick.tscn"),
+	"brick_motor_seat": load("res://data/scene/brick/MotorSeat.tscn")
 }
 
 # explosion

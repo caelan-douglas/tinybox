@@ -41,7 +41,7 @@ freeze = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_xgj62")
-_brick_type = "HalfBrick"
+_brick_spawnable_type = "brick_half"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_nyhmk")
