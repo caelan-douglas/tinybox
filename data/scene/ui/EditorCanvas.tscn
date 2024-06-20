@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
-[ext_resource type="Texture2D" uid="uid://bed4pahj3ao4t" path="res://data/textures/editor_icons/brick.png" id="3_ve37e"]
+[ext_resource type="PackedScene" uid="uid://b8s7blprpfw2p" path="res://data/scene/ui/EditorItemButton.tscn" id="3_1mjdq"]
 [ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
 [ext_resource type="Texture2D" uid="uid://b06jqfkgscjul" path="res://data/textures/editor_icons/wheel.png" id="5_a7h3k"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
@@ -166,65 +166,67 @@ vertical_scroll_mode = 2
 layout_mode = 2
 columns = 3
 
-[node name="Button" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "Brick"
-icon = ExtResource("3_ve37e")
 
-[node name="Button2" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button2" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "HalfBrick"
+text = "Half brick"
 icon = ExtResource("4_drvio")
+internal_name = "HalfBrick"
 
-[node name="Button3" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button3" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "CylinderBrick"
+text = "Wheel"
 icon = ExtResource("5_a7h3k")
+internal_name = "CylinderBrick"
 
-[node name="Button7" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button5" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "MotorSeat"
+text = "Big wheel"
 icon = ExtResource("5_a7h3k")
+internal_name = "LargeCylinderBrick"
 
-[node name="Button4" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button4" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "PineTree"
-icon = ExtResource("5_a7h3k")
+text = "Seat"
+internal_name = "MotorSeat"
 
-[node name="Button5" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button6" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "Cliff_0"
-icon = ExtResource("5_a7h3k")
+text = "Pine tree"
+icon = null
+internal_name = "PineTree"
 
-[node name="Button8" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button7" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
-text = "Asteroid_0"
-icon = ExtResource("5_a7h3k")
+text = "Big cliff"
+icon = null
+internal_name = "Cliff_0"
 
-[node name="Button6" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
+[node name="Button8" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Small asteroid"
+icon = null
+internal_name = "Asteroid_0"
+
+[node name="Button9" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Big mug"
+icon = null
+internal_name = "Mug"
+
+[node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Tool pickup"
+icon = null
+internal_name = "Pickup"
+
+[node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Lifter"
-icon = ExtResource("5_a7h3k")
-
-[node name="Button9" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
-layout_mode = 2
-text = "Pickup"
-icon = ExtResource("5_a7h3k")
-
-[node name="Button10" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
-custom_minimum_size = Vector2(200, 64)
-layout_mode = 2
-text = "Mug"
-icon = ExtResource("5_a7h3k")
+icon = null
+internal_name = "Lifter"
 
 [node name="WorldProperties" type="Control" parent="."]
 visible = false

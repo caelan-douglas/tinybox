@@ -47,18 +47,18 @@ func _on_tbw_loaded() -> void:
 func show_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = true
 	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
-		b.connect("pressed", _on_item_chosen.bind(b.text), 8)
+		b.connect("pressed", _on_item_chosen.bind(b.internal_name, b.text), 8)
 
 func hide_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = false
 	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
-		b.disconnect("pressed", _on_item_chosen.bind(b.text))
+		b.disconnect("pressed", _on_item_chosen.bind(b.internal_name, b.text))
 
 func get_item_chooser_visible() -> bool:
 	return editor_canvas.get_node("ItemChooser").visible
 
-func _on_item_chosen(item_name) -> void:
-	emit_signal("item_picked", item_name)
+func _on_item_chosen(item_name_internal, item_name_display) -> void:
+	emit_signal("item_picked", item_name_internal, item_name_display)
 	hide_item_chooser()
 
 var active_water = null

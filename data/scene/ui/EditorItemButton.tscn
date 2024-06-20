@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8s7blprpfw2p"]
+
+[ext_resource type="Texture2D" uid="uid://bed4pahj3ao4t" path="res://data/textures/editor_icons/brick.png" id="1_efnh4"]
+[ext_resource type="Script" path="res://src/ui/EditorItemButton.gd" id="2_kpesd"]
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(200, 64)
+text = "Brick"
+icon = ExtResource("1_efnh4")
+script = ExtResource("2_kpesd")
+internal_name = "Brick"

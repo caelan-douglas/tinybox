@@ -21,15 +21,19 @@ script = ExtResource("2_eevk4")
 
 [node name="EditorBuildTool2" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 starting_item = "HalfBrick"
+starting_item_display_name = "Half brick"
 
 [node name="EditorBuildTool3" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 starting_item = "PineTree"
+starting_item_display_name = "Pine tree"
 
 [node name="EditorBuildTool4" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 starting_item = "Pickup"
+starting_item_display_name = "Item pickup"
 
 [node name="EditorBuildTool5" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 starting_item = "Lifter"
+starting_item_display_name = "Lifter"
 
 [node name="EditorPropertiesTool" type="Node" parent="EditorToolInventory"]
 script = ExtResource("4_ga27o")

@@ -23,10 +23,11 @@ var item_offset = Vector3(0, 0, 0)
 @onready var preview_delete_area = $PreviewNode/DeleteArea
 
 @export var starting_item : String = "Brick"
+@export var starting_item_display_name : String = "Brick"
 
 func _ready():
 	init("Build")
-	_on_item_picked(starting_item)
+	_on_item_picked(starting_item, starting_item_display_name)
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
@@ -57,12 +58,12 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_item_picked(item_name) -> void:
-	ui_tool_name = item_name
-	ui_partner.text = str(ui_tool_name)
+func _on_item_picked(item_name_internal, item_name_display) -> void:
+	ui_tool_name = item_name_display
+	ui_partner.text = str(item_name_display)
 	item_offset = Vector3.ZERO
-	selected_item = SpawnableObjects.objects[item_name]
-	if item_name == "Lifter" || item_name == "Pickup" || item_name == "Mug":
+	selected_item = SpawnableObjects.objects[item_name_internal]
+	if item_name_internal == "Lifter" || item_name_internal == "Pickup" || item_name_internal == "Mug":
 		item_offset = Vector3(0, -0.49, 0)
 
 func _process(delta):
