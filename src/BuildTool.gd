@@ -51,11 +51,11 @@ func _ready():
 	# Create new tool.
 	super.init("Build Tool", get_parent().get_parent())
 	# The types of bricks this can use.
-	brick_types = [SpawnableObjects.brick, 
-	SpawnableObjects.half_brick, 
-	SpawnableObjects.cylinder_brick, 
-	SpawnableObjects.large_cylinder_brick, 
-	SpawnableObjects.motor_seat]
+	brick_types = [SpawnableObjects.objects["Brick"], 
+	SpawnableObjects.objects["HalfBrick"], 
+	SpawnableObjects.objects["CylinderBrick"], 
+	SpawnableObjects.objects["LargeCylinderBrick"], 
+	SpawnableObjects.objects["MotorSeat"]]
 	# The materials of bricks this can use. Corresponds to the enums in
 	# Brick.gd.
 	brick_materials = [Brick.BrickMaterial.WOODEN, 

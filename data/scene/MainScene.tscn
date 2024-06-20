@@ -19,14 +19,10 @@ script = ExtResource("2_alcqr")
 [node name="MultiplayerMenuMap" parent="World/Map" instance=ExtResource("3_lya7f")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/character/RigidPlayer.tscn", "res://data/scene/brick/Brick.tscn", "res://data/scene/brick/CylinderBrick.tscn", "res://data/scene/brick/HalfBrick.tscn", "res://data/scene/brick/LargeCylinderBrick.tscn", "res://data/scene/brick/MotorSeat.tscn", "res://data/scene/clay_ball/ClayBall.tscn", "res://data/scene/rocket/Rocket.tscn", "res://data/scene/bomb/Bomb.tscn", "res://data/scene/minigame/targets/Dog.tscn", "res://data/scene/water/WaterProjectile.tscn", "res://data/scene/fire/FireProjectile.tscn")
+_spawnable_scenes = PackedStringArray("res://data/scene/character/RigidPlayer.tscn", "res://data/scene/clay_ball/ClayBall.tscn", "res://data/scene/rocket/Rocket.tscn", "res://data/scene/bomb/Bomb.tscn", "res://data/scene/minigame/targets/Dog.tscn", "res://data/scene/water/WaterProjectile.tscn", "res://data/scene/fire/FireProjectile.tscn")
 spawn_path = NodePath("..")
 
-[node name="MultiplayerWorldObjSpawner" type="MultiplayerSpawner" parent="World"]
-spawn_path = NodePath("..")
-
-[node name="MultiplayerWorldEnvSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/environments/Sunny.tscn", "res://data/scene/environments/Sunset.tscn", "res://data/scene/environments/Molten.tscn", "res://data/scene/environments/Warp.tscn")
+[node name="MultiplayerObjSpawner" type="MultiplayerSpawner" parent="World"]
 spawn_path = NodePath("..")
 
 [node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]

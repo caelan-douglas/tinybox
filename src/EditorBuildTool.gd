@@ -61,21 +61,9 @@ func _on_item_picked(item_name) -> void:
 	ui_tool_name = item_name
 	ui_partner.text = str(ui_tool_name)
 	item_offset = Vector3.ZERO
-	match(item_name):
-		# Bricks
-		"Brick":
-			selected_item = SpawnableObjects.brick
-		"Half Brick":
-			selected_item = SpawnableObjects.half_brick
-		"Wheel":
-			selected_item = SpawnableObjects.cylinder_brick
-		"Seat":
-			selected_item = SpawnableObjects.motor_seat
-		# Decor, objets
-		_:
-			selected_item = SpawnableObjects.tbw_obj_from_string(item_name)
-			if item_name == "Lifter" || item_name == "Pickup" || item_name == "Mug":
-				item_offset = Vector3(0, -0.49, 0)
+	selected_item = SpawnableObjects.objects[item_name]
+	if item_name == "Lifter" || item_name == "Pickup" || item_name == "Mug":
+		item_offset = Vector3(0, -0.49, 0)
 
 func _process(delta):
 	if active:

@@ -106,14 +106,14 @@ func switch_environment() -> void:
 	match (current_env_name):
 		# switch from > to
 		"Sunny":
-			new_env = SpawnableObjects.tbw_env_sunset.instantiate()
+			new_env = SpawnableObjects.objects["environment_Sunset"].instantiate()
 		"Sunset":
-			new_env = SpawnableObjects.tbw_env_molten.instantiate()
+			new_env = SpawnableObjects.objects["environment_Molten"].instantiate()
 		"Molten":
-			new_env = SpawnableObjects.tbw_env_warp.instantiate()
+			new_env = SpawnableObjects.objects["environment_Warp"].instantiate()
 		# default load sunny
 		_:
-			new_env = SpawnableObjects.tbw_env_sunny.instantiate()
+			new_env = SpawnableObjects.objects["environment_Sunny"].instantiate()
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
 	editor_canvas.get_node("WorldProperties/Menu/Environment").text = current_env_name

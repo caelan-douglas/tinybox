@@ -291,20 +291,17 @@ func _parse_and_open_tbw(lines : Array) -> void:
 					"Environment":
 						posrot = false
 						if line_split.size() > 1:
-							match line_split[1]:
-								"Sunset":
-									inst = SpawnableObjects.tbw_env_sunset.instantiate()
-								"Molten":
-									inst = SpawnableObjects.tbw_env_molten.instantiate()
-								"Warp":
-									inst = SpawnableObjects.tbw_env_warp.instantiate()
-								_:
-									inst = SpawnableObjects.tbw_env_sunny.instantiate()
+							# name to spawnable object dict key
+							if SpawnableObjects.objects.has(line_split[1]):
+								var ret = SpawnableObjects.objects[line_split[1]]
+								if ret != null:
+									inst = ret.instantiate()
 					_:
 						# all other objects
-						var ret = SpawnableObjects.tbw_obj_from_string(line_split[0])
-						if ret != null:
-							inst = ret.instantiate()
+						if SpawnableObjects.objects.has(line_split[0]):
+							var ret = SpawnableObjects.objects[line_split[0]]
+							if ret != null:
+								inst = ret.instantiate()
 				# ignore invalid items
 				if inst != null:
 					add_child(inst, true)
@@ -391,18 +388,7 @@ func _server_load_building(lines, b_position, use_global_position = false):
 	for line in lines:
 		if line != "":
 			var line_split = line.split(";")
-			var b = null
-			match line_split[0]:
-				"Brick":
-					b = SpawnableObjects.brick.instantiate()
-				"HalfBrick":
-					b = SpawnableObjects.half_brick.instantiate()
-				"CylinderBrick":
-					b = SpawnableObjects.cylinder_brick.instantiate()
-				"LargeCylinderBrick":
-					b = SpawnableObjects.large_cylinder_brick.instantiate()
-				"MotorSeat":
-					b = SpawnableObjects.motor_seat.instantiate()
+			var b = SpawnableObjects.objects[line_split[0]].instantiate()
 			building.add_child(b, true)
 			# position
 			if line_split.size() > 1:

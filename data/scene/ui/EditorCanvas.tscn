@@ -175,19 +175,19 @@ icon = ExtResource("3_ve37e")
 [node name="Button2" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
 custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-text = "Half Brick"
+text = "HalfBrick"
 icon = ExtResource("4_drvio")
 
 [node name="Button3" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
 custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-text = "Wheel"
+text = "CylinderBrick"
 icon = ExtResource("5_a7h3k")
 
 [node name="Button7" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
 custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-text = "Seat"
+text = "MotorSeat"
 icon = ExtResource("5_a7h3k")
 
 [node name="Button4" type="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid"]
