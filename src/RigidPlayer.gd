@@ -842,7 +842,7 @@ func entered_seat(path_to_seat : String) -> void:
 	else:
 		var failed_seat : Node3D = get_node(path_to_seat)
 		if failed_seat is MotorSeat:
-				failed_seat.set_controlling_player.rpc(null)
+				failed_seat.set_controlling_player.rpc(-1)
 
 # When the seat the player in gets destroyed (called from seat)
 @rpc("any_peer", "call_local")

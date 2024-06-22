@@ -96,7 +96,7 @@ func on_hit(body : Node3D) -> void:
 			# if it's someone else. don't kick ourselves out...
 			if body.controlling_player.get_multiplayer_authority() != get_multiplayer_authority():
 				body.controlling_player.seat_destroyed.rpc_id(body.controlling_player.get_multiplayer_authority(), true)
-				body.set_controlling_player.rpc(null)
+				body.set_controlling_player.rpc(-1)
 
 func on_large_hit(body : Node3D) -> void:
 	# only run on auth
