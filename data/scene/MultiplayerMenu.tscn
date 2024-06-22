@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene load_steps=11 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_o48rt"]
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="2_x7twp"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_yuqno"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="5_6abn7"]
+[ext_resource type="Script" path="res://src/ui/MapList.gd" id="5_uk2yp"]
 [ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="6_m42ur"]
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
@@ -267,22 +268,7 @@ json_text = "ui/host_panel"
 [node name="MapSelection" type="OptionButton" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 7
-selected = 0
-popup/item_0/text = "Frozen Field"
-popup/item_0/id = 1
-popup/item_1/text = "Calm Creek"
-popup/item_1/id = 4
-popup/item_2/text = "Caffeina"
-popup/item_2/id = 0
-popup/item_3/text = "Floaty"
-popup/item_3/id = 5
-popup/item_4/text = "Warp"
-popup/item_4/id = 6
-popup/item_5/text = "BaseWorld"
-popup/item_5/id = 7
-popup/item_6/text = "Grasslands"
-popup/item_6/id = 2
+script = ExtResource("5_uk2yp")
 
 [node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
 layout_mode = 2

@@ -1033,7 +1033,6 @@ layout_mode = 2
 
 [node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("3_5o4ik")]
 layout_mode = 2
-json_text = "ui/leave"
 
 [node name="StartGame" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2

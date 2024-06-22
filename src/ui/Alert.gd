@@ -15,14 +15,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Panel
+class_name Alert
 
 func timeout() -> void:
-	var anim = $AnimationPlayer
+	var anim : AnimationPlayer = $AnimationPlayer
 	anim.play("hide")
 	# for alert boxes, disable their buttons so that they cannot be clicked
 	# multiple times once already pressed
 	if has_node("Content/HBoxContainer"):
-		for b in $Content/HBoxContainer.get_children():
+		for b : Button in $Content/HBoxContainer.get_children():
 			b.disabled = true
 	await Signal(anim, "animation_finished")
 	queue_free()

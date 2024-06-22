@@ -16,34 +16,34 @@
 
 extends CanvasLayer
 
-func _ready():
+func _ready() -> void:
 	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
 
 func _on_map_loaded() -> void:
-	var editor = Global.get_world().get_current_map()
+	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
-		$WorldProperties/Menu/Water.connect("pressed", editor.toggle_water)
-		$WorldProperties/Menu/WaterHeightAdjuster/DownBig.connect("pressed", editor.adjust_water_height.bind(-10))
-		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", editor.adjust_water_height.bind(-1))
-		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", editor.adjust_water_height.bind(1))
-		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", editor.adjust_water_height.bind(10))
-		$WorldProperties/Menu/Environment.connect("pressed", editor.switch_environment)
+		$WorldProperties/Menu/Water.connect("pressed", (editor as Editor).toggle_water)
+		$WorldProperties/Menu/WaterHeightAdjuster/DownBig.connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
+		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
+		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", (editor as Editor).adjust_water_height.bind(1))
+		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", (editor as Editor).adjust_water_height.bind(10))
+		$WorldProperties/Menu/Environment.connect("pressed", (editor as Editor).switch_environment)
 		
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed)
 
-func _on_new_world_pressed():
+func _on_new_world_pressed() -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_load_world_pressed():
+func _on_load_world_pressed() -> void:
 	# delete old environment
-	var editor = Global.get_world().get_current_map()
+	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
-		editor.delete_environment()
+		(editor as Editor).delete_environment()
 	# load file
-	var world_name = $EntryScreen/Menu/LoadName.text
+	var world_name : String = $EntryScreen/Menu/LoadName.text
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	Global.get_world().load_tbw(world_name)
@@ -58,7 +58,7 @@ func show_pause_menu() -> void:
 	Global.get_player().locked = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-func _process(delta):
+func _process(delta : float) -> void:
 	if Input.is_action_just_pressed("pause") && visible:
 		if $PauseMenu.visible:
 			hide_pause_menu()
@@ -66,7 +66,7 @@ func _process(delta):
 			show_pause_menu()
 
 func _on_save_world_pressed() -> void:
-	var world_name = $PauseMenu/Menu/SaveWorldName.text
+	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
 	if world_name == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, true, false)
 	else:

@@ -17,23 +17,23 @@
 extends Node3D
 class_name Tool
 
-var ui_partner
-var ui_tool_name = ""
-var ui_shortcut = null
+var ui_partner : Control = null
+var ui_tool_name := ""
+var ui_shortcut : int = -1
 var tool_player_owner : RigidPlayer = null
-var ui_button = preload("res://data/scene/ui/ToolButton.tscn")
-var disabled = false
-var active = false
-var deleting = false
+var ui_button : PackedScene = preload("res://data/scene/ui/ToolButton.tscn")
+var disabled := false
+var active := false
+var deleting := false
 
-var visual_mesh = null
-@export var visual_mesh_name = ""
-@export var lock_camera_to_aim = false
-var tool_visual
-var visual_mesh_instance = null
+var visual_mesh : PackedScene = null
+@export var visual_mesh_name := ""
+@export var lock_camera_to_aim := false
+var tool_visual : Node3D = null
+var visual_mesh_instance : Node3D = null
 
 # Visual helper overlay for GameCanvas UI
-var tool_overlay = null
+var tool_overlay : Control = null
 	
 # Function for initializing this tool.
 # Arg 1: The name of this tool.
@@ -64,8 +64,9 @@ func update_tool_number() -> void:
 	if !is_multiplayer_authority(): return
 	
 	# first try to load a saved preferred key - saved by tool name
-	var loaded_key = UserPreferences.load_pref(str("keybind_", name), "keybinds")
-	if loaded_key != null:
+	var loaded_key_result : Variant = UserPreferences.load_pref(str("keybind_", name), "keybinds")
+	if loaded_key_result != null:
+		var loaded_key : String = str(loaded_key_result)
 		# special case for mouse button
 		if loaded_key == "MMB":
 			ui_shortcut = MOUSE_BUTTON_MIDDLE
@@ -73,7 +74,7 @@ func update_tool_number() -> void:
 			ui_shortcut = OS.find_keycode_from_string(loaded_key)
 		ui_partner.get_node("NumberLabel").text = loaded_key
 	else:
-		var tool_inv_index = tool_player_owner.get_tool_inventory().get_index_of_tool(self)
+		var tool_inv_index : int = tool_player_owner.get_tool_inventory().get_index_of_tool(self)
 		ui_partner.get_node("NumberLabel").text = str(((tool_inv_index + 1) % 10))
 		match(tool_inv_index):
 			0:
@@ -100,7 +101,7 @@ func update_tool_number() -> void:
 	tool_player_owner.get_tool_inventory().arrange_tools()
 
 # Handle the UI and tool selection.
-func _unhandled_input(event) -> void:
+func _unhandled_input(event : InputEvent) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
@@ -120,22 +121,21 @@ func show_tool_visual(mode : bool) -> void:
 		if visual_mesh != null:
 			add_visual_mesh_instance()
 			if tool_player_owner:
-				var tween = get_tree().create_tween()
-				tween.tween_property(tool_player_owner.animator, "parameters/BlendTool/blend_amount", 1.0, 0.2)
+				var tween : Tween = get_tree().create_tween()
+				tween.tween_property(tool_player_owner.animator as AnimationMixer, "parameters/BlendTool/blend_amount", 1.0, 0.2)
 	else:
 		for c in tool_visual.get_children():
 			c.queue_free()
 		visual_mesh_instance = null
 		if tool_player_owner:
-			var tween = get_tree().create_tween().set_parallel(true)
-			tween.tween_property(tool_player_owner.animator, "parameters/BlendTool/blend_amount", 0.0, 0.2)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(tool_player_owner.animator as AnimationMixer, "parameters/BlendTool/blend_amount", 0.0, 0.2)
 
 func add_visual_mesh_instance() -> void:
 	visual_mesh_instance = visual_mesh.instantiate()
 	tool_visual.add_child(visual_mesh_instance)
 
-func get_tool_active():
-	if !is_multiplayer_authority(): return
+func get_tool_active() -> bool:
 	return active
 
 func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
@@ -145,7 +145,7 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 	# Enable/disable tool helper UI.
 	if tool_overlay != null:
 		tool_overlay.visible = mode
-	var camera = get_viewport().get_camera_3d()
+	var camera : Camera3D = get_viewport().get_camera_3d()
 	if mode == true:
 		if camera is Camera:
 			if lock_camera_to_aim:
@@ -153,7 +153,7 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 			else:
 				camera.set_mode_locked(false, Camera.CameraMode.FREE)
 		# disable other tools
-		for t in tool_player_owner.get_tool_inventory().get_tools():
+		for t : Tool in tool_player_owner.get_tool_inventory().get_tools():
 			if t != self:
 				if t.get_tool_active() == true:
 					t.set_tool_active(false, false, false)
@@ -186,7 +186,7 @@ func delete() -> void:
 		set_tool_active(false)
 		tool_player_owner.get_tool_inventory().remove_child(self)
 		tool_player_owner.get_tool_inventory().arrange_tools()
-		for t in tool_player_owner.get_tool_inventory().get_tools():
+		for t : Tool in tool_player_owner.get_tool_inventory().get_tools():
 			t.update_tool_number()
 		ui_partner.queue_free()
 		call_deferred("queue_free")

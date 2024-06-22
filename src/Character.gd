@@ -29,33 +29,33 @@ enum {
 	RESPAWN
 }
 
-@export var health = 750
-@export var team = "Default"
-@onready var label = $Label3D
+@export var health : int = 750
+@export var team := "Default"
+@onready var label : Label = $Label3D
 
-func set_health(new):
+func set_health(new : int) -> int:
 	health = new
 	label.text = str("Health: ", health)
 	update_health.rpc(health)
 	return health
 
-func get_health():
+func get_health() -> int:
 	return health
 
 # Update peers with new health
 @rpc("call_remote")
-func update_health(new) -> void:
+func update_health(new : int) -> void:
 	health = new
 	label.text = str("Health: ", health)
 
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
+func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	
-	var explosion_force = randi_range(20, 30)
+	var explosion_force := randi_range(20, 30)
 	# reduce health depending on distance of explosion; notify health handler who it was from
-	var offset_pos = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
+	var offset_pos : Vector3 = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
 	set_health(get_health() - (28 / int(1 + offset_pos.distance_to(explosion_position))))
-	var explosion_dir = explosion_position.direction_to(global_position) * explosion_force
+	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * explosion_force
 	apply_impulse(explosion_dir)

@@ -17,11 +17,11 @@
 extends Node3D
 class_name GraphicsVisibility
 
-@export var visible_on_cool = true
-@export var visible_on_bad = true
-@export var visible_on_awful = true
+@export var visible_on_cool := true
+@export var visible_on_bad := true
+@export var visible_on_awful := true
 
-func _ready():
+func _ready() -> void:
 	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
 	_on_graphics_preset_changed()
 

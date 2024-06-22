@@ -36,70 +36,70 @@ enum BrickMaterial {
 }
 
 # Size of grid cells.
-const CELL_SIZE = 1
+const CELL_SIZE : int = 1
 # Range of placement.
-var placement_range = 6
+var placement_range : int = 6
 # Range of placement in Sandbox mode.
-var sandbox_placement_range = 16
+var sandbox_placement_range : int = 16
 # When this brick is deglued, it will affect others in this radius.
-var deglue_radius = 2
+var deglue_radius : float = 2
 # How hard this brick must be hit to be unjoined.
-var unjoin_velocity = 40
-var health = 20
+var unjoin_velocity : float = 40
+var health : int = 20
 # variables for syncing with clients in physics_process
-var time_since_moved = 0
-var sync_step = 0
+var time_since_moved : float = 0
+var sync_step : int = 0
 # for spawning buildings
-var joinable = true
+var joinable : bool = true
 # for larger bricks
-var mass_mult = 1
-@export var flammable = true
-var on_fire = false
-var charred = false
-@export var glued = true
+var mass_mult : float = 1
+@export var flammable : bool = true
+var on_fire : bool = false
+var charred : bool = false
+@export var glued : bool = true
 
-@onready var group = name
-@onready var world = Global.get_world()
-@onready var brick_groups = world.get_node("BrickGroups")
+@onready var group : String = name
+@onready var world : World = Global.get_world()
+@onready var brick_groups : BrickGroups = world.get_node("BrickGroups")
 
 @export var _state : States = States.DUMMY_PLACED
 @export var _material : BrickMaterial = BrickMaterial.WOODEN
 @export var _brick_spawnable_type : String = "brick"
 @export var _colour : Color = "#fefefe"
 
-@onready var wood_material = preload("res://data/materials/wood.tres")
-@onready var wood_charred_material = preload("res://data/materials/wood_charred.tres")
-@onready var metal_material = preload("res://data/materials/metal.tres")
-@onready var plastic_material = preload("res://data/materials/plastic.tres")
-@onready var rubber_material = preload("res://data/materials/rubber.tres")
-@onready var static_material = preload("res://data/materials/static.tres")
+@onready var wood_material : Material = preload("res://data/materials/wood.tres")
+@onready var wood_charred_material : Material = preload("res://data/materials/wood_charred.tres")
+@onready var metal_material : Material = preload("res://data/materials/metal.tres")
+@onready var plastic_material : Material = preload("res://data/materials/plastic.tres")
+@onready var rubber_material : Material = preload("res://data/materials/rubber.tres")
+@onready var static_material : Material = preload("res://data/materials/static.tres")
 
 # for showing cost in minigame
-@onready var floaty_text = preload("res://data/scene/ui/FloatyText.tscn")
+@onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
 
-@onready var fire = $Fire
-@onready var collider = $collider
-@onready var cam_collider = $CameraMousePosInterceptor/collider
-@onready var intersect_d = $IntersectDetector
-@onready var model_mesh = $Smoothing/model/Cube
-@onready var smoothing = $Smoothing
+@onready var fire : Fire = $Fire
+@onready var collider : CollisionShape3D = $collider
+@onready var cam_collider : CollisionShape3D = $CameraMousePosInterceptor/collider
+@onready var intersect_d : Area3D = $IntersectDetector
+@onready var model_mesh : MeshInstance3D = $Smoothing/model/Cube
+@onready var smoothing : Node3D = $Smoothing
 
-@onready var joint = $"Joint"
-@onready var joint_detector = $"JointDetector"
+@onready var joint : Generic6DOFJoint3D = $"Joint"
+@onready var joint_detector : Area3D = $"JointDetector"
 
-@onready var inactivity_timer = $InactivityTimer
+@onready var inactivity_timer : Timer = $InactivityTimer
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var invalid_material = preload("res://data/materials/invalid_placement_material.tres")
-@onready var delete_material = preload("res://data/materials/delete_placement_material.tres")
-@onready var save_material = preload("res://data/materials/save_placement_material.tres")
-@onready var hit_sounds_wood = [
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var invalid_material : Material = preload("res://data/materials/invalid_placement_material.tres")
+@onready var delete_material : Material = preload("res://data/materials/delete_placement_material.tres")
+@onready var save_material : Material = preload("res://data/materials/save_placement_material.tres")
+@onready var hit_sounds_wood : Array[AudioStream] = [
 	preload("res://data/audio/wood/wood_hit_0.ogg"),
 	preload("res://data/audio/wood/wood_hit_1.ogg"),
 	preload("res://data/audio/wood/wood_hit_2.ogg"),
 	preload("res://data/audio/wood/wood_hit_3.ogg")
 ]
-@onready var hit_sounds_metal = [
+@onready var hit_sounds_metal : Array[AudioStream] = [
 	preload("res://data/audio/metal/metal_hit_0.ogg"),
 	preload("res://data/audio/metal/metal_hit_1.ogg"),
 	preload("res://data/audio/metal/metal_hit_2.ogg")
@@ -109,7 +109,7 @@ var charred = false
 var tool_from : Tool
 # Whether or not this brick was just spawned by its tool. This variable
 # is used in the build function.
-var just_spawned_from_tool = true
+var just_spawned_from_tool : bool = true
 
 # Set the material of this brick to a different one, 
 # and update any related properties.
@@ -184,25 +184,25 @@ func set_material(new : BrickMaterial) -> void:
 			flammable = false
 
 func show_delete_overlay() -> void:
-	var curr_mat = model_mesh.get_surface_override_material(0)
+	var curr_mat : Material = model_mesh.get_surface_override_material(0)
 	model_mesh.set_surface_override_material(0, delete_material)
 	await get_tree().process_frame
 	model_mesh.set_surface_override_material(0, curr_mat)
 
 func show_save_overlay() -> void:
-	var curr_mat = model_mesh.get_surface_override_material(0)
+	var curr_mat : Material = model_mesh.get_surface_override_material(0)
 	model_mesh.set_surface_override_material(0, save_material)
 	await get_tree().process_frame
 	model_mesh.set_surface_override_material(0, curr_mat)
 
-func set_physics_material_properties(fric : float, bounce : float):
-	var physmat = PhysicsMaterial.new()
+func set_physics_material_properties(fric : float, bounce : float) -> void:
+	var physmat : PhysicsMaterial = PhysicsMaterial.new()
 	physmat.friction = fric
 	physmat.bounce = bounce
 	physics_material_override = physmat
 
 # Returns the material resource of this brick.
-func get_material():
+func get_material() -> Material:
 	match(_material):
 		0:
 			return wood_material
@@ -214,17 +214,17 @@ func get_material():
 			return plastic_material
 		4:
 			return rubber_material
-		5:
+		_:
 			return static_material
 
 @rpc("any_peer", "call_local", "reliable")
 func set_colour(new : Color) -> void:
 	_colour = new
-	var new_material = get_material().duplicate()
+	var new_material : Material = get_material().duplicate()
 	# By default, new materials are added to the cache.
-	var add_material_to_cache = true
+	var add_material_to_cache := true
 	# Check over the graphics cache to make sure we don't already have the same material created.
-	for cached_material in Global.graphics_cache:
+	for cached_material : Material in Global.graphics_cache:
 		# If the material texture and colour matches (that's all that really matters):
 		if cached_material.albedo_color == new && cached_material.albedo_texture == new_material.albedo_texture:
 			# Instead of using the duplicate material we created, use the cached material.
@@ -237,7 +237,7 @@ func set_colour(new : Color) -> void:
 		new_material.albedo_color = new
 	model_mesh.set_surface_override_material(0, new_material)
 
-func get_colour():
+func get_colour() -> Color:
 	return _colour
 
 # Set whether or not this brick is glued.
@@ -252,12 +252,12 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 	# iterate through all bricks in group. Do not run this on dummy bricks.
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
 		if brick_groups.groups.has(str(group)):
-			for b in brick_groups.groups[str(group)]:
+			for b : Brick in brick_groups.groups[str(group)]:
 				# do not unglue static neighbours
 				if b != null && b._material != BrickMaterial.STATIC:
 					if new == false:
 					# only deglue inside the deglue radius, OR if the brick to be deglued is above the one that was hit (allows roofs to fall)
-						var is_above_threshold = (b.global_position.y > self.global_position.y) && abs(b.global_position.x - self.global_position.x) < 2 && abs(b.global_position.z - self.global_position.z) < 2
+						var is_above_threshold : bool = (b.global_position.y > self.global_position.y) && abs(b.global_position.x - self.global_position.x) < 2 && abs(b.global_position.z - self.global_position.z) < 2
 						if (b.global_position.distance_to(self.global_position) < deglue_radius) || is_above_threshold:
 							b.glued = new
 							b.freeze = new
@@ -277,17 +277,17 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 	freeze = new
 
 # Returns whether or not this brick is glued.
-func get_glued():
+func get_glued() -> bool:
 	return glued
 
 # Unfreezes this brick and the entire group that it belongs to.
 @rpc("call_local")
-func unfreeze_entire_group():
+func unfreeze_entire_group() -> void:
 	if _material != BrickMaterial.STATIC:
 		glued = false
 		freeze = false
 	if brick_groups.groups.has(str(group)):
-		for b in brick_groups.groups[str(group)]:
+		for b : Brick in brick_groups.groups[str(group)]:
 			if b != null && b._material != BrickMaterial.STATIC:
 				b.glued = false
 				b.freeze = false
@@ -319,7 +319,7 @@ func light_fire() -> void:
 		on_fire = true
 		fire.light()
 		if is_multiplayer_authority():
-			var fire_timer = Timer.new()
+			var fire_timer := Timer.new()
 			fire_timer.wait_time = 20
 			fire_timer.one_shot = false
 			fire_timer.connect("timeout", reduce_health.bind(20))
@@ -342,22 +342,22 @@ func extinguish_fire() -> void:
 # Arg 1: The position of the explosion. Required to determine impulse on the brick.
 # Arg 2: From who this explosion came from.
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom = null) -> void:
+func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	
 	set_glued(false)
 	unjoin()
-	var explosion_force = randi_range(80, 200)
+	var explosion_force := randi_range(80, 200)
 	if explosion_force > 160:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
 	await get_tree().create_timer(0.1).timeout
-	var explosion_dir = explosion_position.direction_to(global_position) * explosion_force
+	var explosion_dir := explosion_position.direction_to(global_position) * explosion_force
 	apply_impulse(explosion_dir, Vector3(randf_range(0, 0.05), randf_range(0, 0.05), randf_range(0, 0.05)))
 
 # Calls on enter scene
-func _ready():
+func _ready() -> void:
 	super()
 	connect("body_entered", _on_body_entered)
 	connect("sleeping_state_changed", _on_sleeping_state_changed)
@@ -414,12 +414,12 @@ func spawn_projectile(auth : int, shot_speed : int = 30, material : BrickMateria
 		global_position = Vector3(global_position.x, global_position.y + 2.5, global_position.z)
 	
 	# Set velocity to the position entry of the get_mouse_pos_3d dict.
-	var target_pos = Vector3()
+	var target_pos := Vector3()
 	if camera is Camera:
 		if camera.get_mouse_pos_3d():
-			target_pos = Vector3(camera.get_mouse_pos_3d()["position"])
+			target_pos = Vector3(camera.get_mouse_pos_3d()["position"] as Vector3)
 	# vector pointing to the target pos
-	var direction = global_position.direction_to(target_pos)
+	var direction := global_position.direction_to(target_pos)
 	linear_velocity = direction * shot_speed
 	angular_velocity = Vector3(1, 1, 1) * (shot_speed * 0.3)
 	
@@ -436,19 +436,19 @@ func _sync_properties(args : Array) -> void:
 	global_position = args[0]
 	global_rotation = args[1]
 	if _material != args[2]:
-		set_material(args[2])
+		set_material(args[2] as BrickMaterial)
 	# join with brick path, so long as the brick has one
 	if args[3] != null && args[3] != NodePath():
-		join(args[3])
+		join(args[3] as NodePath)
 	if glued != args[4] || freeze != args[4]:
-		set_glued(args[4], false)
+		set_glued(args[4] as bool, false)
 
 # sync properties for spawning or new player join
 @rpc("any_peer", "call_remote", "reliable")
 func _sync_properties_spawn(args : Array) -> void:
 	global_position = args[0]
 	global_rotation = args[1]
-	set_multiplayer_authority(args[2])
+	set_multiplayer_authority(args[2] as int)
 	# freeze always true for other clients
 	freeze = true
 
@@ -459,16 +459,16 @@ func _sync_properties_always(args : Array) -> void:
 	global_rotation = args[1]
 
 # When a new peer connects, send all this brick's properties to the peer.
-func _on_peer_connected(id) -> void:
+func _on_peer_connected(id : int) -> void:
 	# only execute from the owner
 	if !is_multiplayer_authority(): return
 	_sync_properties_spawn.rpc_id(id, [global_position, global_rotation, get_multiplayer_authority()])
 
 # When hit by something else.
-func _on_body_entered(body) -> void:
+func _on_body_entered(body : PhysicsBody3D) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
-	var total_velocity = linear_velocity.length()
+	var total_velocity : float = linear_velocity.length()
 	
 	if body is RigidBody3D && !(body is ClayBall):
 		total_velocity += body.linear_velocity.length()
@@ -516,7 +516,7 @@ func play_hit_sound(volume : float) -> void:
 
 # Remove this brick
 @rpc("any_peer", "call_local")
-func despawn():
+func despawn() -> void:
 	queue_free()
 
 # Build mode, used when a brick is spawning from a tool.
@@ -538,22 +538,22 @@ func build() -> void:
 		# remove this for all peers
 		despawn.rpc()
 	# get mouse position in 3d space
-	var m_3d = Vector3()
+	var m_3d : Dictionary = {}
 	if camera is Camera:
 		m_3d = camera.get_mouse_pos_3d()
-	var m_pos_3d = Vector3()
+	var m_pos_3d := Vector3()
 	# we must check if the mouse's ray is not hitting anything
-	if m_3d:
+	if m_3d["position"]:
 		# if it is hitting something
-		m_pos_3d = Vector3(m_3d["position"])
+		m_pos_3d = m_3d["position"] as Vector3
 	# snap to grid
-	var snapped_pos = (m_pos_3d / CELL_SIZE).round() * CELL_SIZE
+	var snapped_pos := (m_pos_3d / CELL_SIZE).round() * CELL_SIZE
 	# match floor on y
 	snapped_pos.y = m_pos_3d.y + (CELL_SIZE * 0.5)
 	# snap in relation to other bricks if mouse is over brick
 	if m_3d:
 		if m_3d["collider"].owner is Brick:
-			var m_3d_normal = m_3d["normal"]
+			var m_3d_normal : Vector3 = m_3d["normal"] as Vector3
 			# we can get normal from the camera's mouse collision ray
 			snapped_pos = m_3d["collider"].owner.global_position + m_3d_normal
 	# offset Y pos from tool's offset value
@@ -567,10 +567,10 @@ func build() -> void:
 	just_spawned_from_tool = false
 	
 	# placement range
-	var too_far = global_position.distance_to(player_from.global_position) > placement_range
+	var too_far : bool = global_position.distance_to(player_from.global_position as Vector3) > placement_range
 	if Global.get_world().minigame == null:
-		too_far = global_position.distance_to(player_from.global_position) > sandbox_placement_range
-	var valid = true
+		too_far = global_position.distance_to(player_from.global_position as Vector3) > sandbox_placement_range
+	var valid := true
 	if intersect_d == null || intersect_d.has_overlapping_bodies() || too_far:
 		valid = false
 	
@@ -584,11 +584,11 @@ func build() -> void:
 		rotate_x(deg_to_rad(90))
 	
 	# if there is an active minigame
-	var cannot_afford = false
-	var too_close_to_target = false
-	var minigame = Global.get_world().minigame
+	var cannot_afford := false
+	var too_close_to_target := false
+	var minigame : Object = Global.get_world().minigame
 	# minigame costs
-	var cost = 2
+	var cost := 2
 	if minigame != null:
 		# only base defense has costs and placement limits
 		if minigame is MinigameBaseDefense:
@@ -603,7 +603,7 @@ func build() -> void:
 					valid = false
 					cannot_afford = true
 			# can't place directly next to target
-			for target in minigame.team_targets:
+			for target : MinigameTarget in minigame.team_targets:
 				if target.team == player_from.team:
 					if global_position.distance_to(target.global_position) < 5:
 						valid = false
@@ -626,7 +626,7 @@ func build() -> void:
 						# pay for brick
 						minigame.set_team_cash.rpc(player_from.team, -cost)
 						# floaty cost text
-						var floaty_i = floaty_text.instantiate()
+						var floaty_i : Node3D = floaty_text.instantiate()
 						floaty_i.get_node("Label").text = str("-$", cost)
 						floaty_i.global_position = Vector3(global_position.x, global_position.y + 0.5, global_position.z)
 						Global.get_world().add_child(floaty_i)
@@ -647,7 +647,7 @@ func build() -> void:
 
 # Check joint for any nearby bricks to join to.
 # Arg 1: A set group to put this brick into. Used mainly for spawning prebuilt buildings.
-func check_joints(set_group = "") -> void:
+func check_joints(set_group : String = "") -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
@@ -659,10 +659,10 @@ func check_joints(set_group = "") -> void:
 		brick_groups.groups[str(group)] = []
 
 # Update this brick's joint.
-func update_joint(set_group = "") -> void:
+func update_joint(set_group : String = "") -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
-	var found_brick = false
+	var found_brick := false
 	# join bricks that are adjacent
 	for body in joint_detector.get_overlapping_bodies():
 		# don't join with self
@@ -695,7 +695,7 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 		return
 	
 	# Do not join to dummy bricks.
-	var brick_node_state = get_node(path_to_brick)._state
+	var brick_node_state : States = get_node(path_to_brick)._state
 	if (brick_node_state == States.DUMMY_BUILD || brick_node_state == States.DUMMY_PLACED || brick_node_state == States.DUMMY_PROJECTILE):
 		return
 	
@@ -711,7 +711,7 @@ func update_joined_brick_groups(path_to_brick : NodePath, set_group : String = "
 	
 	# if we are determining group dynamically
 	if set_group == "":
-		var brick = get_node(path_to_brick)
+		var brick : Brick = get_node(path_to_brick)
 		# Set my group to the other brick's group.
 		group = brick.group
 		# Add this brick and the other brick to the group if they are not already in it.
@@ -752,7 +752,7 @@ func _on_sleeping_state_changed() -> void:
 func _inactivity_despawn() -> void:
 	despawn.rpc()
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	# used by motor seat
@@ -777,7 +777,7 @@ func _physics_process(delta):
 
 # State change
 @rpc("any_peer", "call_local")
-func change_state(state) -> void:
+func change_state(state : States) -> void:
 	if state == States.PLACED:
 		# make server brick owner when brick is placed
 		set_multiplayer_authority(1)
@@ -807,8 +807,8 @@ func enter_state() -> void:
 			rotation = Vector3.ZERO
 			# Set the rotation to the tool rotation.
 			if tool_from != null:
-				rotate_y(deg_to_rad(tool_from.brick_rotation_y))
-				rotate_x(deg_to_rad(tool_from.brick_rotation_x))
+				rotate_y(deg_to_rad(tool_from.brick_rotation_y as float))
+				rotate_x(deg_to_rad(tool_from.brick_rotation_x as float))
 			# check if this is placed next to any other bricks, if so, join them
 			check_joints()
 		States.PLACED:
@@ -845,12 +845,12 @@ func entered_water() -> void:
 	gravity_scale = -0.3
 
 @rpc("any_peer", "call_remote", "reliable")
-func request_group_from_authority(id_from):
-	var group_array = []
+func request_group_from_authority(id_from : int) -> void:
+	var group_array := []
 	if brick_groups.groups.has(str(group)):
-		for b in brick_groups.groups[str(group)]:
+		for b : Brick in brick_groups.groups[str(group)]:
 			if b != null:
 				group_array.append(b)
 	# for every brick in the array, tell the non-auth its new group is this one's
-	for b in group_array:
+	for b : Brick in group_array:
 		brick_groups.receive_group_from_authority.rpc_id(id_from, b.name)

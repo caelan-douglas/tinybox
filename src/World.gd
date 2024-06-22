@@ -20,10 +20,10 @@ signal map_loaded
 signal map_deleted
 signal tbw_loaded
 
-var rigidplayer_list = []
+var rigidplayer_list : Array = []
 
 # active minigame
-var minigame = null
+var minigame : Minigame = null
 
 func add_player_to_list(player : RigidPlayer) -> void:
 	if !rigidplayer_list.has(player):
@@ -39,21 +39,21 @@ func teleport_player(player : RigidPlayer, pos : Vector3) -> void:
 
 func teleport_all_players(pos : Vector3) -> void:
 	await get_tree().process_frame
-	for p in rigidplayer_list:
+	for p : RigidPlayer in rigidplayer_list:
 		p.global_position = Vector3(float(pos.x), float(pos.y), float(pos.z))
 
-func _ready():
+func _ready() -> void:
 	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
 	$MultiplayerMapSpawner.connect("spawned", _on_multiplayer_map_spawned)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 
-func _on_peer_connected(id) -> void:
+func _on_peer_connected(id : int) -> void:
 	if !multiplayer.is_server(): return
 	
 	print("peer connected on world: ", str(id))
 	
 	if minigame != null:
-		var connected_win_cond = Lobby.GameWinCondition.BASE_DEFENSE
+		var connected_win_cond : Lobby.GameWinCondition = Lobby.GameWinCondition.BASE_DEFENSE
 		if minigame is MinigameDM:
 			connected_win_cond = Lobby.GameWinCondition.DEATHMATCH
 			if minigame.tdm:
@@ -61,13 +61,19 @@ func _on_peer_connected(id) -> void:
 		elif minigame is MinigameKing:
 			connected_win_cond = Lobby.GameWinCondition.KINGS
 		start_minigame.rpc_id(id, "", connected_win_cond, true)
+	
+	# sync tbw objects
+	for obj : Node in get_children():
+		if obj is TBWObject:
+			var tbw : TBWObject = obj as TBWObject
+			sync_tbw_obj_properties.rpc(tbw.get_path(), tbw.global_position, tbw.global_rotation, tbw.scale)
 
-func _on_multiplayer_map_spawned(map) -> void:
+func _on_multiplayer_map_spawned(map : Map) -> void:
 	emit_signal("map_loaded")
 
 # Starts a new minigame with the scene's map name and a win condition.
 @rpc("any_peer", "call_local", "reliable")
-func start_minigame(map_name, win_condition, from_new_peer_connection = false) -> void:
+func start_minigame(map_name : String, win_condition : Lobby.GameWinCondition, from_new_peer_connection := false) -> void:
 	minigame = null
 	match (win_condition):
 		Lobby.GameWinCondition.DEATHMATCH:
@@ -83,10 +89,10 @@ func start_minigame(map_name, win_condition, from_new_peer_connection = false) -
 	clear_world()
 	# only load if a name was actually given
 	if map_name != "":
-		load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")))
+		load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")) as PackedScene)
 	
 	# create minigame
-	var teams = get_current_map().get_teams().get_team_list()
+	var teams : Array = get_current_map().get_teams().get_team_list()
 	minigame.playing_team_names = [teams[1].name, teams[2].name]
 	minigame.name = "Minigame"
 	# if a player has joined midway, sync some properties from server
@@ -94,60 +100,60 @@ func start_minigame(map_name, win_condition, from_new_peer_connection = false) -
 		minigame.from_new_peer_connection = true
 	add_child(minigame)
 
-func _on_graphics_preset_changed():
+func _on_graphics_preset_changed() -> void:
 	match Global.get_graphics_preset():
 		# COOL
 		0:
 			if $Map.get_children().size() > 0:
-				var loaded_map = $Map.get_child(0)
+				var loaded_map : Map = $Map.get_child(0)
 				if loaded_map.has_node("WorldEnvironment"):
-					var env = loaded_map.get_node("WorldEnvironment")
+					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
 					env.environment.ssao_enabled = true
 					env.environment.ssil_enabled = true
-				var light = loaded_map.get_node_or_null("DirectionalLight3D")
+				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
 				if light:
 					light.shadow_enabled = true
-				var caff_light = loaded_map.get_node_or_null("SpotLight3D")
+				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
 				if caff_light:
 					light.shadow_enabled = true
 		# BAD
 		1:
 			if $Map.get_children().size() > 0:
-				var loaded_map = $Map.get_child(0)
+				var loaded_map : Map = $Map.get_child(0)
 				if loaded_map.has_node("WorldEnvironment"):
-					var env = loaded_map.get_node("WorldEnvironment")
+					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
 					env.environment.ssao_enabled = false
 					env.environment.ssil_enabled = false
-				var light = loaded_map.get_node_or_null("DirectionalLight3D")
+				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
 				if light:
 					light.shadow_enabled = true
-				var caff_light = loaded_map.get_node_or_null("SpotLight3D")
+				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
 				if caff_light:
 					light.shadow_enabled = true
 		# AWFUL
 		2:
 			if $Map.get_children().size() > 0:
-				var loaded_map = $Map.get_child(0)
+				var loaded_map : Map = $Map.get_child(0)
 				if loaded_map.has_node("WorldEnvironment"):
-					var env = loaded_map.get_node("WorldEnvironment")
+					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
 					env.environment.ssao_enabled = false
 					env.environment.ssil_enabled = false
 				# no shadows on awful graphics
-				var light = loaded_map.get_node_or_null("DirectionalLight3D")
+				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
 				if light:
 					light.shadow_enabled = false
-				var caff_light = loaded_map.get_node_or_null("SpotLight3D")
+				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
 				if caff_light:
 					light.shadow_enabled = false
 
 # Get the current map.
-func get_current_map():
+func get_current_map() -> Map:
 	return $Map.get_child(0)
 
 func delete_old_map() -> void:
 	# Remove old map (if it exists)
-	var old_map = $Map
-	for c in old_map.get_children():
+	var old_map : Node3D = $Map
+	for c : Node in old_map.get_children():
 		old_map.remove_child(c)
 		c.queue_free()
 	emit_signal("map_deleted")
@@ -156,29 +162,29 @@ func delete_old_map() -> void:
 func load_map(map: PackedScene) -> void:
 	delete_old_map()
 	# Add new level.
-	var current_map = map.instantiate()
+	var current_map : Map = map.instantiate()
 	$Map.add_child(current_map)
 	emit_signal("map_loaded")
 
 # Save the currently open world as a .tbw file.
-func save_tbw(world_name) -> void:
-	var dir = DirAccess.open("user://world")
+func save_tbw(world_name : String) -> void:
+	var dir : DirAccess = DirAccess.open("user://world")
 	if !dir:
 		DirAccess.make_dir_absolute("user://world")
 	
 	# save building to file
 	dir = DirAccess.open("user://world")
-	var count = 0
+	var count : int = 0
 	if dir:
 		dir.list_dir_begin()
-		var file_name = dir.get_next()
+		var file_name : String = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir():
 				count += 1
 			file_name = dir.get_next()
 	else:
 		print("An error occurred when trying to access the path.")
-	var save_name = str(world_name)
+	var save_name : String = str(world_name)
 	
 	# get frame image and save it
 	# hide everything
@@ -187,9 +193,9 @@ func save_tbw(world_name) -> void:
 		get_tree().current_scene.get_node("EditorCanvas").visible = false
 		# wait 1 frame so we can get screenshot
 		await get_tree().process_frame
-		var img = get_viewport().get_texture().get_image()
+		var img := get_viewport().get_texture().get_image()
 		img.shrink_x2()
-		var scrdir = DirAccess.open("user://world_scr")
+		var scrdir := DirAccess.open("user://world_scr")
 		if !scrdir:
 			DirAccess.make_dir_absolute("user://world_scr")
 		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
@@ -199,9 +205,9 @@ func save_tbw(world_name) -> void:
 		get_tree().current_scene.get_node("GameCanvas").visible = false
 		# wait 1 frame so we can get screenshot
 		await get_tree().process_frame
-		var img = get_viewport().get_texture().get_image()
+		var img := get_viewport().get_texture().get_image()
 		img.shrink_x2()
-		var scrdir = DirAccess.open("user://world_scr")
+		var scrdir := DirAccess.open("user://world_scr")
 		if !scrdir:
 			DirAccess.make_dir_absolute("user://world_scr")
 		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
@@ -211,42 +217,50 @@ func save_tbw(world_name) -> void:
 	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, false, true)
 	
 	# Create tbw file.
-	var file = FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
+	var file := FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
 	# Save objects before bricks
 	for obj in get_children():
 		if obj != null:
 			if obj is TBWObject:
-				var type = obj.tbw_object_type
+				var type : String = obj.tbw_object_type
 				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z, ";", obj.scale.x, ",", obj.scale.y, ",", obj.scale.z))
 			elif obj is TBWEnvironment:
 				file.store_line(str("Environment;", obj.environment_name))
 	# Store bricks in the same format as buildings.
 	
 	# Make sure there is actually a brick to save
-	var found_brick = false
-	for b in get_children():
+	var found_brick := false
+	for b : Node in get_children():
 		if b != null:
 			if b is Brick:
 				if found_brick == false:
 					file.store_line(str("[building]"))
 					found_brick = true
-				var type = b._brick_spawnable_type
+				var type : String = b._brick_spawnable_type
 				file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
 	file.close()
 
-func load_tbw(file_name = "test", internal = false):
+func load_tbw(file_name := "test", internal := false) -> void:
 	print("Attempting to load ", file_name, ".tbw")
 	
-	var load_file = null
+	var load_file : FileAccess = null
 	if internal:
 		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+		# if file does not exist
+		if load_file == null:
+			# check user
+			load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
 	else:
 		load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
+		# if file does not exist
+		if load_file == null:
+			# check internal
+			load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
 	if load_file != null:
 		# load building
-		var lines = []
+		var lines := []
 		while not load_file.eof_reached():
-			var line = load_file.get_line()
+			var line := load_file.get_line()
 			lines.append(str(line))
 		if multiplayer.is_server():
 			_parse_and_open_tbw(lines)
@@ -257,7 +271,7 @@ func load_tbw(file_name = "test", internal = false):
 
 # server loads tbws
 @rpc("any_peer", "call_local", "reliable")
-func ask_server_to_open_tbw(name_from, lines):
+func ask_server_to_open_tbw(name_from : String, lines : Array) -> void:
 	if !multiplayer.is_server(): return
 	_parse_and_open_tbw(lines)
 
@@ -268,12 +282,12 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	clear_world()
 	# Load default empty map, unless we are in the editor
 	if !(Global.get_world().get_current_map() is Editor):
-		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")))
+		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")) as PackedScene)
 	
-	var current_step = "none"
-	var count = 0
+	var current_step := "none"
+	var count : int = 0
 	# run through each line
-	for line in lines:
+	for line : String in lines:
 		if line != "":
 			# final step, place building
 			if str(line) == "[building]":
@@ -282,9 +296,9 @@ func _parse_and_open_tbw(lines : Array) -> void:
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:
-				var line_split = line.split(";")
-				var inst = null
-				var posrot = true
+				var line_split := line.split(";")
+				var inst : Node = null
+				var posrot := true
 				await get_tree().process_frame
 				match line_split[0]:
 					# World environments don't have pos or rotation
@@ -293,13 +307,13 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						if line_split.size() > 1:
 							# name to spawnable object dict key
 							if SpawnableObjects.objects.has(line_split[1]):
-								var ret = SpawnableObjects.objects[line_split[1]]
+								var ret : PackedScene = SpawnableObjects.objects[line_split[1]]
 								if ret != null:
 									inst = ret.instantiate()
 					_:
 						# all other objects
 						if SpawnableObjects.objects.has(line_split[0]):
-							var ret = SpawnableObjects.objects[line_split[0]]
+							var ret : PackedScene = SpawnableObjects.objects[line_split[0]]
 							if ret != null:
 								inst = ret.instantiate()
 				# ignore invalid items
@@ -309,15 +323,15 @@ func _parse_and_open_tbw(lines : Array) -> void:
 					if posrot:
 						# object position
 						if line_split.size() > 1:
-							var pos = line_split[1].split(",")
+							var pos := line_split[1].split(",")
 							inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
 						# object rotation
 						if line_split.size() > 2:
-							var rot = line_split[2].split(",")
+							var rot := line_split[2].split(",")
 							inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
 						# scale
 						if line_split.size() > 3:
-							var scl = line_split[3].split(",")
+							var scl := line_split[3].split(",")
 							inst.scale = Vector3(float(scl[0]), float(scl[1]), float(scl[2]))
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation, inst.scale)
 		count += 1
@@ -327,25 +341,25 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	emit_signal("tbw_loaded")
 
 @rpc("any_peer", "call_remote", "reliable")
-func sync_tbw_obj_properties(obj_path, new_pos, new_rot, new_scale) -> void:
-	var node = get_node_or_null(obj_path)
+func sync_tbw_obj_properties(obj_path : String, new_pos : Vector3, new_rot : Vector3, new_scale : Vector3) -> void:
+	var node : Node3D = get_node_or_null(obj_path)
 	if node:
 		node.global_position = new_pos
 		node.global_rotation = new_rot
 		node.scale = new_scale
 
 @rpc("any_peer", "call_local", "reliable")
-func reset_player_cameras():
+func reset_player_cameras() -> void:
 	# refind node
-	var camera = get_viewport().get_camera_3d()
+	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
 		Global.get_player().set_camera(camera)
 
 # Load a building into the existing map.
 # Arg 1: The path to the building scene file.
 func load_building_into_map(path_to_building : String) -> void:
-	var building = load(path_to_building)
-	var b_i = building.instantiate()
+	var building := load(path_to_building)
+	var b_i : Node3D = building.instantiate()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_world() -> void:
@@ -368,45 +382,45 @@ func send_start_lobby() -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func start_lobby() -> void:
-	load_map(load("res://data/scene/Lobby/Lobby.tscn"))
+	load_map(load("res://data/scene/Lobby/Lobby.tscn") as PackedScene)
 
 # server places bricks
 @rpc("any_peer", "call_local", "reliable")
-func ask_server_to_load_building(name_from, lines, b_position):
+func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3) -> void:
 	if !multiplayer.is_server(): return
 	_server_load_building(lines, b_position)
 
 # TODO: should do this in a thread
-func _server_load_building(lines, b_position, use_global_position = false):
+func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	
-	var building = Building.new(false)
+	var building := Building.new(false)
 	add_child(building)
 	
-	var line_split_init = lines[0].split(";")
-	var offset_pos = Vector3.ZERO
+	var line_split_init : PackedStringArray = lines[0].split(";")
+	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:
-		var building_pos = line_split_init[1].split(",")
+		var building_pos : PackedStringArray = line_split_init[1].split(",")
 		offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
 	
-	for line in lines:
+	for line : String in lines:
 		if line != "":
-			var line_split = line.split(";")
+			var line_split := line.split(";")
 			if SpawnableObjects.objects.has(line_split[0]):
-				var b = SpawnableObjects.objects[line_split[0]].instantiate()
+				var b : Node3D = SpawnableObjects.objects[line_split[0]].instantiate()
 				building.add_child(b, true)
 				# position
 				if line_split.size() > 1:
-					var pos = line_split[1].split(",")
+					var pos := line_split[1].split(",")
 					b.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2])) - offset_pos + b_position
 				# rotation
 				if line_split.size() > 2:
-					var rot = line_split[2].split(",")
+					var rot := line_split[2].split(",")
 					b.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
 				# material
 				if line_split.size() > 3:
-					var mat = line_split[3]
+					var mat := line_split[3]
 					b.set_material.rpc(int(mat))
 				
 				# state is 4, but not used yet

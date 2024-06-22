@@ -17,18 +17,18 @@
 extends SyncedRigidbody3D
 class_name ClayBall
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var world = Global.get_world()
-@onready var spring_audio = $SpringAudio
-@onready var area = $Area3D
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var world : World = Global.get_world()
+@onready var spring_audio : AudioStreamPlayer3D = $SpringAudio
+@onready var area : Area3D = $Area3D
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	area.connect("body_entered", _on_body_entered)
 	despawn_time = 15
 	super()
 
-func _on_body_entered(body):
+func _on_body_entered(body : Node3D) -> void:
 	spring_audio.volume_db = -15 + linear_velocity.length()
 	clamp(spring_audio.volume_db, -50, 0)
 	spring_audio.play()
@@ -46,7 +46,7 @@ func _on_body_entered(body):
 			body.reduce_health((randi() % 3) + 1, RigidPlayer.CauseOfDeath.HIT_BY_BALL, get_multiplayer_authority())
 
 @rpc("call_local")
-func spawn_projectile(auth : int, shot_speed = 30, random_pos = false) -> void:
+func spawn_projectile(auth : int, shot_speed := 30, random_pos := false) -> void:
 	set_multiplayer_authority(auth)
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
@@ -62,7 +62,7 @@ func spawn_projectile(auth : int, shot_speed = 30, random_pos = false) -> void:
 		translate_object_local(Vector3(randf_range(-0.5, 0.5), randf_range(-0.5, 0.5), 0))
 	
 	# Set ball velocity to the position entry of get_mouse_pos_3d dict.
-	var direction = Vector3.ZERO
+	var direction := Vector3.ZERO
 	if camera:
 		direction = -camera.global_transform.basis.z
 	linear_velocity = direction * shot_speed

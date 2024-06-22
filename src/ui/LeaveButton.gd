@@ -16,12 +16,12 @@
 
 extends DynamicButton
 
-func _ready():
+func _ready() -> void:
 	super()
 	connect("pressed", ask_leave_server)
 
 func ask_leave_server() -> void:
-	var actions = []
+	var actions := []
 	if multiplayer.is_server():
 		actions = UIHandler.show_alert_with_actions("Are you sure you wish to leave? You are the host \nof the server, all players will be disconnected.", ["Close server", "Stay"])
 	else:

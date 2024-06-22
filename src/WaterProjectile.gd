@@ -19,21 +19,21 @@ class_name WaterProjectile
 
 # From Extinguisher
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var world = Global.get_world()
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var world : World = Global.get_world()
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	$Area3D.connect("body_entered", _on_body_entered)
 	despawn_time = 3
 	super()
 
-func _on_body_entered(body):
+func _on_body_entered(body : PhysicsBody3D) -> void:
 	if body.has_method("extinguish_fire"):
 		body.extinguish_fire()
 
 @rpc("call_local")
-func spawn_projectile(auth : int, shot_speed = 30) -> void:
+func spawn_projectile(auth : int, shot_speed := 30) -> void:
 	set_multiplayer_authority(auth)
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
@@ -46,7 +46,7 @@ func spawn_projectile(auth : int, shot_speed = 30) -> void:
 		global_position.y -= 0.7
 	
 	# determine direction from camera
-	var direction = Vector3.ZERO
+	var direction := Vector3.ZERO
 	if camera:
 		direction = -camera.global_transform.basis.z
 	# if player in vehicle, propel vehicle

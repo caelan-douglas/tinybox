@@ -17,7 +17,7 @@
 extends Tool
 class_name PaintbrushTool
 
-var colours = [Color.WHITE, 
+var colours : Array[Color] = [Color.WHITE, 
 Color.CRIMSON, 
 Color.DARK_RED, 
 Color.CORAL, 
@@ -33,14 +33,14 @@ Color.PURPLE,
 Color.PINK, 
 Color.BLACK]
 
-var _selected_colour_idx = 0
+var _selected_colour_idx : int = 0
 
-func _ready():
+func _ready() -> void:
 	# Create new tool.
-	super.init("Paintbrush", get_parent().get_parent())
+	super.init("Paintbrush", get_parent().get_parent() as RigidPlayer)
 	tool_overlay = get_tree().current_scene.get_node_or_null("GameCanvas/ToolOverlay/PaintbrushTool")
 
-func _process(delta):
+func _process(delta : float) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
@@ -59,20 +59,20 @@ func _process(delta):
 				tool_overlay.get_node("SelectedColour").color = colours[_selected_colour_idx]
 		if Input.is_action_pressed("click"):
 			# get mouse position in 3d space
-			var m_3d = get_viewport().get_camera_3d().get_mouse_pos_3d()
-			var m_pos_3d = Vector3()
+			var m_3d : Dictionary = get_viewport().get_camera_3d().get_mouse_pos_3d()
+			var m_pos_3d := Vector3()
 			# we must check if the mouse's ray is not hitting anything
 			if m_3d:
 				# if it is hitting something
-				m_pos_3d = Vector3(m_3d["position"])
+				m_pos_3d = m_3d["position"] as Vector3
 			if m_3d:
 				# if we are hovering a brick and we are NOT auth
 				if (m_3d["collider"] is Brick && (m_3d["collider"].get_multiplayer_authority() != get_multiplayer_authority())) || (m_3d["collider"].get_parent() is Brick && (m_3d["collider"].get_parent().get_multiplayer_authority() != get_multiplayer_authority())):
-					var hov_brick = m_3d["collider"]
+					var hov_brick : Node3D = m_3d["collider"] as Node3D
 					if m_3d["collider"].get_parent() is Brick:
-						hov_brick = m_3d["collider"].get_parent()
+						hov_brick = m_3d["collider"].get_parent() as Brick
 					hov_brick.set_colour.rpc(colours[_selected_colour_idx])
 				# if we ARE auth
 				elif m_3d["collider"].owner is Brick && (m_3d["collider"].owner.get_multiplayer_authority() == get_multiplayer_authority()):
-					var brick = m_3d["collider"].owner
+					var brick : Brick = m_3d["collider"].owner
 					brick.set_colour.rpc(colours[_selected_colour_idx])

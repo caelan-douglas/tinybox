@@ -19,6 +19,6 @@ extends Resource
 # Resource file for map teams.
 
 @export var name: String = "Default"
-@export var members = []
-@export var colour = Color("#404040")
-@export var cash = 700
+@export var members := []
+@export var colour := Color("#404040")
+@export var cash : int = 700

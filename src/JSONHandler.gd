@@ -16,12 +16,12 @@
 
 extends Node
 
-func search_for_entry (json: Dictionary, tree: String):
-	var found_entry = ""
+func search_for_entry(json: Dictionary, tree: String) -> Variant:
+	var found_entry := ""
 	# array of all the entries in the path
-	var entries = tree.split("/")
+	var entries : Array = tree.split("/")
 	# the last entry in the tree, the one we are looking for
-	var last_entry = entries.size() - 1
+	var last_entry := entries.size() - 1
 	
 	#print("looking at ", entries[0], ", trying to find ", entries[last_entry])
 	# if this is the last entry
@@ -30,21 +30,22 @@ func search_for_entry (json: Dictionary, tree: String):
 			return json[entries[0]]
 		else:
 			# make a new tree, starting at the next tree iteration
-			var pos = tree.find(str(entries[1]))
-			var new_tree = tree.substr(pos)
+			var pos := tree.find(str(entries[1]))
+			var new_tree := tree.substr(pos)
 			
-			return search_for_entry(json[entries[0]], new_tree)
+			return search_for_entry(json[entries[0]] as Dictionary, new_tree)
 	else:
-		var err = str("JSON entry not found: ", tree, " (please report)")
+		var err := str("JSON entry not found: ", tree, " (please report)")
 		return err
 
-func find_entry_in_file(key: String, file_name: String = "locale_en"):
-	var file = FileAccess.open(str("res://data/json/", file_name, ".json"), FileAccess.READ)
-	var json = JSON.new()
-	var parse_result = json.parse_string(file.get_as_text())
+func find_entry_in_file(key: String, file_name: String = "locale_en") -> Variant:
+	var file := FileAccess.open(str("res://data/json/", file_name, ".json"), FileAccess.READ)
+	var json := JSON.new()
+	var parse_result : Variant = json.parse_string(file.get_as_text())
 	
 	if parse_result == null:
 		printerr("JSONHandler: JSON parse result threw error: ", parse_result.error)
+		return null
 	else:
-		var dict  = parse_result as Dictionary
+		var dict : Dictionary = parse_result as Dictionary
 		return search_for_entry(dict, key)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=10 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8s7blprpfw2p" path="res://data/scene/ui/EditorItemButton.tscn" id="3_1mjdq"]
 [ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
 [ext_resource type="Texture2D" uid="uid://b06jqfkgscjul" path="res://data/textures/editor_icons/wheel.png" id="5_a7h3k"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
+[ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="6_5wr8i"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
@@ -220,13 +221,15 @@ internal_name = "obj_mug"
 [node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Tool pickup"
-icon = null
+icon = ExtResource("6_5wr8i")
+expand_icon = true
 internal_name = "obj_pickup"
 
 [node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Lifter"
-icon = null
+icon = ExtResource("6_5wr8i")
+expand_icon = true
 internal_name = "obj_lifter"
 
 [node name="WorldProperties" type="Control" parent="."]

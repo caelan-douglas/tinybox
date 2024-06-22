@@ -17,22 +17,22 @@
 extends Node
 class_name ToolInventory
 
-var last_held_tool = null
+var last_held_tool : Tool = null
 # resets after 10 frames
-var tool_just_holding = null
-var disabled = false
+var tool_just_holding : Tool = null
+var disabled := false
 
-var all_tools = [preload("res://data/scene/tool/BuildTool.tscn"), preload("res://data/scene/tool/BouncyballTool.tscn"), preload("res://data/scene/tool/BatTool.tscn"), preload("res://data/scene/tool/ExtinguisherTool.tscn"), preload("res://data/scene/tool/RocketTool.tscn"), preload("res://data/scene/tool/BombTool.tscn"), preload("res://data/scene/tool/FlamethrowerTool.tscn"), preload("res://data/scene/tool/MissileTool.tscn"), preload("res://data/scene/tool/PaintbrushTool.tscn")]
+var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"), preload("res://data/scene/tool/BouncyballTool.tscn"), preload("res://data/scene/tool/BatTool.tscn"), preload("res://data/scene/tool/ExtinguisherTool.tscn"), preload("res://data/scene/tool/RocketTool.tscn"), preload("res://data/scene/tool/BombTool.tscn"), preload("res://data/scene/tool/FlamethrowerTool.tscn"), preload("res://data/scene/tool/MissileTool.tscn"), preload("res://data/scene/tool/PaintbrushTool.tscn")]
 
-var hold_timer = 0
+var hold_timer := 0
 
 # initialize default tools
-func _ready():
+func _ready() -> void:
 	reset()
 
-func _process(delta):
+func _process(delta : float) -> void:
 	if !disabled && get_tools().size() > 0 &&(Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
-		var active_tool = get_active_tool()
+		var active_tool : Tool = get_active_tool()
 		if active_tool == null:
 			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_left") && !(Input.is_action_pressed("control")):
@@ -40,7 +40,7 @@ func _process(delta):
 			elif !Input.is_action_pressed("control"):
 				get_tools()[0].set_tool_active(true)
 		else:
-			var active_tool_idx = get_index_of_tool(active_tool)
+			var active_tool_idx : int = get_index_of_tool(active_tool)
 			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_right") && !Input.is_action_pressed("control"):
 				active_tool_idx += 1
@@ -71,40 +71,40 @@ func set_disabled(new : bool) -> void:
 		# restore held tool
 		elif new == false && last_held_tool != null:
 			last_held_tool.set_tool_active(true)
-		for t in get_tools():
+		for t : Tool in get_tools():
 			if t.has_method("set_disabled"):
 				t.set_disabled(new)
 
-func arrange_tools():
-	var tool_list = get_tree().current_scene.get_node("GameCanvas/ToolList")
+func arrange_tools() -> void:
+	var tool_list : Control = get_tree().current_scene.get_node("GameCanvas/ToolList")
 	if get_tools().size() == tool_list.get_children().size():
 		get_tools().sort_custom(_arrange_tools_by_ui_shortcut)
 		# remove unsorted ui elements
 		for item in tool_list.get_children():
 			tool_list.remove_child(item)
 		# ask each tool (now in order) to re-add their ui element
-		for t in get_tools():
+		for t : Tool in get_tools():
 			t.add_ui_partner()
 			if t is ShootTool:
 				t.update_ammo_display()
 
-func _arrange_tools_by_ui_shortcut(a, b):
+func _arrange_tools_by_ui_shortcut(a : Tool, b : Tool) -> bool:
 	if a.ui_shortcut < b.ui_shortcut:
 		return true
 	return false
 
 # Get all the tools in this inventory.
-func get_tools():
+func get_tools() -> Array:
 	return get_children()
 
-func get_active_tool():
-	for t in get_tools():
+func get_active_tool() -> Tool:
+	for t : Tool in get_tools():
 		if t.get_tool_active() == true:
 			return t
 	return null
 
-func has_tool_by_name(name):
-	for t in get_tools():
+func has_tool_by_name(name : String) -> Tool:
+	for t : Tool in get_tools():
 		if t.name == name:
 			return t
 	return null
@@ -115,31 +115,31 @@ func add_tool(tool : Tool) -> void:
 		add_child(tool)
 
 # get the index of a tool in a list.
-func get_index_of_tool(tool : Tool):
+func get_index_of_tool(tool : Tool) -> int:
 	# count each tool in inventory
 	for i in range(get_tools().size()):
 		if get_tools()[i] == tool:
 			# return index of this tool
 			return i
 	# tool is not in this inventory
-	return null
+	return -1
 
-func delete_all_tools():
-	for t in get_tools():
+func delete_all_tools() -> void:
+	for t : Tool in get_tools():
 		t.delete()
 
-func give_all_tools():
-	for at in all_tools:
-		add_tool(at.instantiate())
+func give_all_tools() -> void:
+	for at : PackedScene in all_tools:
+		add_tool(at.instantiate() as Tool)
 
 # give build, bat, ball, and extinguisher
-func give_minigame_tools():
-	add_tool(all_tools[0].instantiate())
-	add_tool(all_tools[1].instantiate())
-	add_tool(all_tools[2].instantiate())
-	add_tool(all_tools[3].instantiate())
+func give_minigame_tools() -> void:
+	add_tool(all_tools[0].instantiate() as Tool)
+	add_tool(all_tools[1].instantiate() as Tool)
+	add_tool(all_tools[2].instantiate() as Tool)
+	add_tool(all_tools[3].instantiate() as Tool)
 
 # resets inventory to default (sandbox) state (all tools in def. states)
-func reset():
+func reset() -> void:
 	delete_all_tools()
 	give_all_tools()

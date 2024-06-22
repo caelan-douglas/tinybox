@@ -17,22 +17,22 @@
 extends Node3D
 class_name PreviewCharacter
 
-@onready var shirt_textures = [preload("res://data/models/character/textures/fabric.jpg"), 
+@onready var shirt_textures : Array = [preload("res://data/models/character/textures/fabric.jpg"), 
 preload("res://data/textures/clothing/cloth_tex_0.png"), 
 preload("res://data/textures/clothing/cloth_tex_1.png"), 
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
 
-func _ready():
+func _ready() -> void:
 	Global.connect("appearance_changed", change_appearance)
 	change_appearance()
 
 func change_appearance() -> void:
-	var armature = get_node("character/Skeleton3D")
-	var hair_material = armature.get_node("hair_short/hair_short").get_surface_override_material(0)
-	var shirt_material = armature.get_node("shirt_shortsleeve").get_surface_override_material(0)
-	var pants_material = armature.get_node("pants").get_surface_override_material(0)
-	var skin_material = armature.get_node("Character_001").get_surface_override_material(0)
+	var armature : Skeleton3D = get_node("character/Skeleton3D")
+	var hair_material : Material = armature.get_node("hair_short/hair_short").get_surface_override_material(0)
+	var shirt_material : Material = armature.get_node("shirt_shortsleeve").get_surface_override_material(0)
+	var pants_material : Material = armature.get_node("pants").get_surface_override_material(0)
+	var skin_material : Material = armature.get_node("Character_001").get_surface_override_material(0)
 	
 	if Global.shirt_colour != null:
 		shirt_material.albedo_color = Global.shirt_colour

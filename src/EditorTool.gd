@@ -17,11 +17,11 @@
 extends Node
 class_name EditorTool
 
-var ui_partner
-var ui_tool_name = ""
-var ui_shortcut = null
-var ui_button = preload("res://data/scene/ui/EditorToolButton.tscn")
-var active = false
+var ui_partner : Control = null
+var ui_tool_name := ""
+var ui_shortcut : int = -1
+var ui_button : PackedScene = preload("res://data/scene/ui/EditorToolButton.tscn")
+var active := false
 
 # Function for initializing this tool.
 # Arg 1: The name of this tool.
@@ -41,7 +41,7 @@ func add_ui_partner() -> void:
 	ui_partner.text = str(ui_tool_name)
 
 func update_tool_number() -> void:
-	var tool_inv_index = get_parent().get_index_of_tool(self)
+	var tool_inv_index : int = get_parent().get_index_of_tool(self)
 	ui_partner.get_node("NumberLabel").text = str(((tool_inv_index + 1) % 10))
 	match(tool_inv_index):
 		0:
@@ -68,7 +68,7 @@ func update_tool_number() -> void:
 	get_parent().arrange_tools()
 
 # Handle the UI and tool selection.
-func _unhandled_input(event) -> void:
+func _unhandled_input(event : InputEvent) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
@@ -81,8 +81,8 @@ func _unhandled_input(event) -> void:
 			if event.pressed and event.button_index == ui_shortcut:
 				set_tool_active(!get_tool_active())
 
-func get_tool_active():
-	if !is_multiplayer_authority(): return
+func get_tool_active() -> bool:
+	if !is_multiplayer_authority(): false
 	return active
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
@@ -91,7 +91,7 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	active = mode
 	if mode == true:
 		# disable other tools
-		for t in get_parent().get_tools():
+		for t : EditorTool in get_parent().get_tools():
 			if t != self:
 				if t.get_tool_active() == true:
 					t.set_tool_active(false, false)

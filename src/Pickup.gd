@@ -16,8 +16,8 @@
 
 extends RestrictedNode3D
 
-@onready var area = $Area3D
-var pickup_available = true
+@onready var area : Area3D = $Area3D
+var pickup_available := true
 
 enum PickupType {
 	ROCKET,
@@ -28,26 +28,26 @@ enum PickupType {
 }
 
 @export var type : PickupType = PickupType.ROCKET
-@export var ammo = 2
-@export var respawn_time = 10
+@export var ammo : int = 2
+@export var respawn_time : float = 10
 
-@onready var audio = $AudioStreamPlayer3D
-@onready var respawn_timer = $RespawnTimer
-@onready var label = $Label3D
+@onready var audio : AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var respawn_timer : Timer = $RespawnTimer
+@onready var label : Label3D = $Label3D
 
-@onready var rocket_mesh = preload("res://data/scene/tool/visual_mesh/RocketLauncherVisualMesh.tscn")
-@onready var bomb_mesh = preload("res://data/scene/tool/visual_mesh/BombVisualMesh.tscn")
-@onready var flamethrower_mesh = preload("res://data/scene/tool/visual_mesh/FlamethrowerVisualMesh.tscn")
-@onready var extinguisher_mesh = preload("res://data/scene/tool/visual_mesh/FireExtinguisherVisualMesh.tscn")
-@onready var missile_mesh = preload("res://data/scene/tool/visual_mesh/MissileLauncherVisualMesh.tscn")
+@onready var rocket_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/RocketLauncherVisualMesh.tscn")
+@onready var bomb_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/BombVisualMesh.tscn")
+@onready var flamethrower_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FlamethrowerVisualMesh.tscn")
+@onready var extinguisher_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FireExtinguisherVisualMesh.tscn")
+@onready var missile_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/MissileLauncherVisualMesh.tscn")
 
-@onready var rocket_tool = preload("res://data/scene/tool/RocketTool.tscn")
-@onready var missile_tool = preload("res://data/scene/tool/MissileTool.tscn")
-@onready var bomb_tool = preload("res://data/scene/tool/BombTool.tscn")
-@onready var flamethrower_tool = preload("res://data/scene/tool/FlamethrowerTool.tscn")
-@onready var extinguisher_tool = preload("res://data/scene/tool/ExtinguisherTool.tscn")
+@onready var rocket_tool : PackedScene = preload("res://data/scene/tool/RocketTool.tscn")
+@onready var missile_tool : PackedScene = preload("res://data/scene/tool/MissileTool.tscn")
+@onready var bomb_tool : PackedScene = preload("res://data/scene/tool/BombTool.tscn")
+@onready var flamethrower_tool : PackedScene = preload("res://data/scene/tool/FlamethrowerTool.tscn")
+@onready var extinguisher_tool : PackedScene = preload("res://data/scene/tool/ExtinguisherTool.tscn")
 
-func _ready():
+func _ready() -> void:
 	super()
 	if !scheduled_for_deletion:
 		respawn_timer.wait_time = respawn_time
@@ -56,26 +56,26 @@ func _ready():
 		
 		match(type):
 			PickupType.ROCKET:
-				var mesh_i = rocket_mesh.instantiate()
+				var mesh_i : Node3D = rocket_mesh.instantiate()
 				$MeshParent.add_child(mesh_i)
 			PickupType.BOMB:
-				var mesh_i = bomb_mesh.instantiate()
+				var mesh_i : Node3D = bomb_mesh.instantiate()
 				$MeshParent.add_child(mesh_i)
 			PickupType.FLAMETHROWER:
-				var mesh_i = flamethrower_mesh.instantiate()
+				var mesh_i : Node3D = flamethrower_mesh.instantiate()
 				$MeshParent.add_child(mesh_i)
 			PickupType.EXTINGUISHER:
-				var mesh_i = extinguisher_mesh.instantiate()
+				var mesh_i : Node3D = extinguisher_mesh.instantiate()
 				$MeshParent.add_child(mesh_i)
 			PickupType.MISSILE:
-				var mesh_i = missile_mesh.instantiate()
+				var mesh_i : Node3D = missile_mesh.instantiate()
 				$MeshParent.add_child(mesh_i)
 
-func _on_body_entered(body) -> void:
+func _on_body_entered(body : Node3D) -> void:
 	if body is RigidPlayer && pickup_available:
-		_take_pickup(body)
+		_take_pickup(body as RigidPlayer)
 
-func _take_pickup(body) -> void:
+func _take_pickup(body : RigidPlayer) -> void:
 	pickup_available = false
 	audio.play()
 	# hide child mesh
@@ -83,68 +83,68 @@ func _take_pickup(body) -> void:
 		$MeshParent.get_child(0).visible = false
 	# only run on auth
 	if body.get_multiplayer_authority() == multiplayer.get_unique_id():
-		var tool_inv = body.get_tool_inventory()
+		var tool_inv : ToolInventory = body.get_tool_inventory()
 		match(type):
 			PickupType.ROCKET:
 				# if we already have it, just add ammo
-				var result = tool_inv.has_tool_by_name("RocketTool")
+				var result : Tool = tool_inv.has_tool_by_name("RocketTool")
 				if result:
 					# don't add to infinite ammo
 					if result.ammo >= 0:
 						result.ammo += ammo
 						result.update_ammo_display()
 				else:
-					var tool = rocket_tool.instantiate()
+					var tool : Tool = rocket_tool.instantiate()
 					tool.ammo = ammo
 					tool_inv.add_child(tool)
 			PickupType.BOMB:
 				# if we already have it, just add ammo
-				var result = tool_inv.has_tool_by_name("BombTool")
+				var result : Tool = tool_inv.has_tool_by_name("BombTool")
 				if result:
 					# don't add to infinite ammo
 					if result.ammo >= 0:
 						result.ammo += ammo
 						result.update_ammo_display()
 				else:
-					var tool = bomb_tool.instantiate()
+					var tool : Tool = bomb_tool.instantiate()
 					tool.ammo = ammo
 					tool_inv.add_child(tool)
 			PickupType.FLAMETHROWER:
 				# if we already have it, just add ammo
-				var result = tool_inv.has_tool_by_name("FlamethrowerTool")
+				var result : Tool = tool_inv.has_tool_by_name("FlamethrowerTool")
 				if result:
 					# don't add to infinite ammo
 					if result.ammo >= 0:
 						result.ammo += ammo
 						result.update_ammo_display()
 				else:
-					var tool = flamethrower_tool.instantiate()
+					var tool : Tool = flamethrower_tool.instantiate()
 					tool.ammo = ammo
 					# don't restore flamethrower fuel
 					tool.restore_ammo = false
 					tool_inv.add_child(tool)
 			PickupType.EXTINGUISHER:
 				# if we already have it, just add ammo (usually case for extinguisher)
-				var result = tool_inv.has_tool_by_name("ExtinguisherTool")
+				var result : Tool = tool_inv.has_tool_by_name("ExtinguisherTool")
 				if result:
 					# don't add to infinite ammo
 					if result.ammo >= 0:
 						result.ammo += ammo
 						result.update_ammo_display()
 				else:
-					var tool = extinguisher_tool.instantiate()
+					var tool : Tool = extinguisher_tool.instantiate()
 					tool.ammo = ammo
 					tool_inv.add_child(tool)
 			PickupType.MISSILE:
 				# if we already have it, just add ammo
-				var result = tool_inv.has_tool_by_name("MissileTool")
+				var result : Tool = tool_inv.has_tool_by_name("MissileTool")
 				if result:
 					# don't add to infinite ammo
 					if result.ammo >= 0:
 						result.ammo += ammo
 						result.update_ammo_display()
 				else:
-					var tool = missile_tool.instantiate()
+					var tool : Tool = missile_tool.instantiate()
 					tool.ammo = ammo
 					tool_inv.add_child(tool)
 	respawn_timer.start()
@@ -157,13 +157,13 @@ func _take_pickup(body) -> void:
 	pickup_available = true
 	# check overlapping bodies after pickup is made available
 	# in case someone is still standing on it
-	for check_body in $Area3D.get_overlapping_bodies():
+	for check_body : Node3D in $Area3D.get_overlapping_bodies():
 		if check_body is RigidPlayer && pickup_available:
-			_take_pickup(check_body)
+			_take_pickup(check_body as RigidPlayer)
 			# don't keep iterating once we give the item away
 			return
 
-func set_available_text():
+func set_available_text() -> void:
 	# different text for flamethrower and extinguisher
 	if type == PickupType.EXTINGUISHER:
 		label.text = str("Foam: ", ammo)
@@ -172,7 +172,7 @@ func set_available_text():
 	else:
 		label.text = str("Shots: ", ammo)
 
-func _process(delta):
+func _process(delta : float) -> void:
 	if pickup_available == false:
-		var cur_respawn = respawn_timer.time_left
+		var cur_respawn : float = respawn_timer.time_left
 		label.text = str("Respawn in ", round(cur_respawn), "...")

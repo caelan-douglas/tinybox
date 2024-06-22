@@ -19,15 +19,15 @@
 extends TBWObject
 class_name RestrictedNode3D
 
-@export var restrict_to_minigame_type = false
+@export var restrict_to_minigame_type := false
 @export var restriction : Array[Lobby.GameWinCondition] = [Lobby.GameWinCondition.DEATHMATCH]
-@export var delete_in_sandbox = false
-@export var only_in_sandbox = false
-var scheduled_for_deletion = false
+@export var delete_in_sandbox := false
+@export var only_in_sandbox := false
+var scheduled_for_deletion := false
 
-func _ready():
+func _ready() -> void:
 	if only_in_sandbox:
-		var minigame = Global.get_world().minigame
+		var minigame : Minigame = Global.get_world().minigame
 		if minigame != null:
 			scheduled_for_deletion = true
 			call_deferred("queue_free")
@@ -35,9 +35,9 @@ func _ready():
 	# server checks for minigame
 	if restrict_to_minigame_type:
 		# check first if this building has gamemode restrictions
-		var minigame = Global.get_world().minigame
+		var minigame : Minigame = Global.get_world().minigame
 		if minigame != null:
-			var no_match = false
+			var no_match := false
 			if minigame is MinigameBaseDefense:
 				if !restriction.has(Lobby.GameWinCondition.BASE_DEFENSE):
 					no_match = true

@@ -17,4 +17,4 @@
 extends HBoxContainer
 class_name LANEntry
 
-var entry_server_ip = ""
+var entry_server_ip := ""

@@ -19,16 +19,16 @@ class_name FireProjectile
 
 # From Flamethrower
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var world = Global.get_world()
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var world : World = Global.get_world()
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	$Area3D.connect("body_entered", _on_body_entered)
 	despawn_time = 2.5
 	super()
 
-func _on_body_entered(body):
+func _on_body_entered(body : Node3D) -> void:
 	# only run on auth
 	if !is_multiplayer_authority(): return
 	
@@ -42,7 +42,7 @@ func _on_body_entered(body):
 				body.light_fire.rpc()
 
 @rpc("call_local")
-func spawn_projectile(auth : int, shot_speed = 30) -> void:
+func spawn_projectile(auth : int, shot_speed := 30) -> void:
 	set_multiplayer_authority(auth)
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
@@ -55,7 +55,7 @@ func spawn_projectile(auth : int, shot_speed = 30) -> void:
 		global_position = player_from.get_node("projectile_spawn_point").global_position
 	
 	# determine direction from camera
-	var direction = Vector3.ZERO
+	var direction := Vector3.ZERO
 	if camera:
 		direction = -camera.global_transform.basis.z
 	# set own velocity

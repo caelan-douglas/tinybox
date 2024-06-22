@@ -17,12 +17,12 @@
 extends Node
 class_name EditorToolInventory
 
-var disabled = false
-var last_held_tool = null
+var disabled := false
+var last_held_tool : EditorTool = null
 
-func _process(delta):
+func _process(delta : float) -> void:
 	if !disabled && (Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
-		var active_tool = get_active_tool()
+		var active_tool : EditorTool = get_active_tool()
 		if active_tool == null:
 			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_left"):
@@ -30,7 +30,7 @@ func _process(delta):
 			else:
 				get_tools()[0].set_tool_active(true)
 		else:
-			var active_tool_idx = get_index_of_tool(active_tool)
+			var active_tool_idx : int = get_index_of_tool(active_tool)
 			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_right"):
 				active_tool_idx += 1
@@ -46,15 +46,15 @@ func _process(delta):
 					return
 			get_tools()[active_tool_idx].set_tool_active(true)
 
-func arrange_tools():
-	var tool_list = get_tree().current_scene.get_node("EditorCanvas/ToolList")
+func arrange_tools() -> void:
+	var tool_list : Control = get_tree().current_scene.get_node("EditorCanvas/ToolList")
 	if get_tools().size() == tool_list.get_children().size():
 		get_tools().sort_custom(_arrange_tools_by_ui_shortcut)
 		# remove unsorted ui elements
 		for item in tool_list.get_children():
 			tool_list.remove_child(item)
 		# ask each tool (now in order) to re-add their ui element
-		for t in get_tools():
+		for t : EditorTool in get_tools():
 			t.add_ui_partner()
 
 func set_disabled(new : bool) -> void:
@@ -66,27 +66,27 @@ func set_disabled(new : bool) -> void:
 		# restore held tool
 		elif new == false && last_held_tool != null:
 			last_held_tool.set_tool_active(true)
-		for t in get_tools():
+		for t : EditorTool in get_tools():
 			if t.has_method("set_disabled"):
 				t.set_disabled(new)
 
-func _arrange_tools_by_ui_shortcut(a, b):
+func _arrange_tools_by_ui_shortcut(a : EditorTool, b : EditorTool) -> bool:
 	if a.ui_shortcut < b.ui_shortcut:
 		return true
 	return false
 
 # Get all the tools in this inventory.
-func get_tools():
+func get_tools() -> Array:
 	return get_children()
 
-func get_active_tool():
-	for t in get_tools():
+func get_active_tool() -> EditorTool:
+	for t : EditorTool in get_tools():
 		if t.get_tool_active() == true:
 			return t
 	return null
 
-func has_tool_by_name(name):
-	for t in get_tools():
+func has_tool_by_name(name : String) -> EditorTool:
+	for t : EditorTool in get_tools():
 		if t.name == name:
 			return t
 	return null
@@ -97,11 +97,11 @@ func add_tool(tool : Tool) -> void:
 		add_child(tool)
 
 # get the index of a tool in a list.
-func get_index_of_tool(tool : EditorTool):
+func get_index_of_tool(tool : EditorTool) -> int:
 	# count each tool in inventory
 	for i in range(get_tools().size()):
 		if get_tools()[i] == tool:
 			# return index of this tool
 			return i
 	# tool is not in this inventory
-	return null
+	return -1

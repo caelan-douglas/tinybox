@@ -16,7 +16,7 @@
 
 extends EditorTool
 
-func _ready():
+func _ready() -> void:
 	init("World properties")
 
 func add_ui_partner() -> void:
@@ -26,7 +26,7 @@ func add_ui_partner() -> void:
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
 	
-	var properties_panel = get_tree().current_scene.get_node("EditorCanvas/WorldProperties")
+	var properties_panel : Control = get_tree().current_scene.get_node("EditorCanvas/WorldProperties")
 	properties_panel.visible = mode
 	if properties_panel.visible:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

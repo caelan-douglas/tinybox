@@ -17,12 +17,10 @@
 extends Character
 class_name MinigameTarget
 
-var minigame = null
+var minigame : Minigame = null
 
-func set_health(new):
-	# only run on authority
-	if !is_multiplayer_authority(): return
-	
+func set_health(new : int) -> int:
 	if minigame:
 		if !minigame.build_period:
 			super(new)
+	return health

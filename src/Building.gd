@@ -19,14 +19,14 @@
 extends RestrictedNode3D
 class_name Building
 
-var place_on_spawn = true
-var building_group = []
-var first_brick_pos = Vector3.ZERO
+var place_on_spawn := true
+var building_group := []
+var first_brick_pos := Vector3.ZERO
 
-func _init(_place_on_spawn = true):
+func _init(_place_on_spawn := true) -> void:
 	place_on_spawn = _place_on_spawn
 
-func _ready():
+func _ready() -> void:
 	# only server spawns buildings
 	if !multiplayer.is_server():
 		# If not the server, delete self
@@ -45,15 +45,15 @@ func place() -> void:
 	for b in get_children():
 		# Set Smoothing to be not top level for now, model will follow brick's
 		# position
-		var smoothing = b.get_node("Smoothing")
+		var smoothing : Node3D = b.get_node("Smoothing")
 		smoothing.top_level = false
-		var old_pos = b.global_position
-		var old_rot = b.global_rotation
+		var old_pos : Vector3 = b.global_position
+		var old_rot : Vector3 = b.global_rotation
 		remove_child(b)
 		# we duplicate the scene so that it syncs across clients on spawn
 		# MultiplayerSpawners must have the node enter the tree under their
 		# root path in order for them to sync, so we create a new node
-		var bdupe = b.duplicate()
+		var bdupe : Brick = b.duplicate()
 		Global.get_world().add_child(bdupe, true)
 		# Update group name, otherwise the first item in this
 		# building will still be group "Brick", thus causing it
@@ -71,15 +71,15 @@ func place() -> void:
 	await get_tree().create_timer(0.1).timeout
 	
 	first_brick_pos = building_group[0].global_position
-	var building_group_extras = []
+	var building_group_extras := []
 	# sort array by position
 	building_group.sort_custom(_pos_sort)
 	# first make all basic brick colliders disabled
-	for b in building_group:
+	for b : Brick in building_group:
 		b.joinable = false
 		b.model_mesh.visible = false
 	# now move all extra bricks (motorseat, motorbrick) to building_group_extras
-	for b in building_group:
+	for b : Brick in building_group:
 		if b is MotorBrick || b is MotorSeat:
 			building_group_extras.append(b)
 			building_group.erase(b)
@@ -88,8 +88,8 @@ func place() -> void:
 	# now for each basic brick:
 	# 1. enable its collider
 	# 2. check neighbours
-	var count = 0
-	for b in building_group:
+	var count : int = 0
+	for b : Brick in building_group:
 		b.joinable = true
 		b.model_mesh.visible = true
 		b.check_joints()
@@ -103,11 +103,11 @@ func place() -> void:
 	# 2. check neighbours
 	await get_tree().process_frame
 	count = 0
-	for b in building_group_extras:
+	for b : Brick in building_group_extras:
 		b.joinable = true
 		b.model_mesh.visible = true
 		b.check_joints()
 		count += 1
 
-func _pos_sort(a, b) -> bool:
+func _pos_sort(a : Node3D, b : Node3D) -> bool:
 	return a.global_position.distance_to(first_brick_pos) < b.global_position.distance_to(first_brick_pos)

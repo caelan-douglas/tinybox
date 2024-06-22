@@ -18,19 +18,18 @@ extends RigidBody3D
 class_name SyncedRigidbody3D
 
 # If this body is spawned by a player, it will be referenced here.
-var player_from = null
+var player_from : RigidPlayer = null
 # How long from spawn before this despawns.
-var despawn_time = -1
+var despawn_time : float = -1
 # Whether or not to add a MultiplayerSynchronizer to this at spawn.
-@export var add_synchronizer_on_spawn = false
+@export var add_synchronizer_on_spawn  := false
+var synchronizer : MultiplayerSynchronizer = null
 
-var synchronizer = null
-
-func _ready():
+func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_player_left)
 	if (despawn_time != -1) && despawn_time > 0:
-		var despawn_timer = get_tree().create_timer(despawn_time)
+		var despawn_timer : SceneTreeTimer = get_tree().create_timer(despawn_time)
 		despawn_timer.connect("timeout", despawn)
 	
 	# add a synchronizer if we don't have one
@@ -46,11 +45,11 @@ func despawn() -> void:
 
 # Add a multiplayer synchronizer.
 func add_synchronizer() -> void:
-	var sync = MultiplayerSynchronizer.new()
+	var sync := MultiplayerSynchronizer.new()
 	
-	var pos_as_path = str(get_path(), ":position")
-	var rot_as_path = str(get_path(), ":rotation")
-	var src = SceneReplicationConfig.new()
+	var pos_as_path : String = str(get_path(), ":position")
+	var rot_as_path : String = str(get_path(), ":rotation")
+	var src := SceneReplicationConfig.new()
 	src.add_property(pos_as_path)
 	src.add_property(rot_as_path)
 	src.property_set_watch(pos_as_path, true)
@@ -65,7 +64,7 @@ func add_synchronizer() -> void:
 func _sync_properties_spawn(args : Array) -> void:
 	global_position = args[0]
 	global_rotation = args[1]
-	set_multiplayer_authority(args[2])
+	set_multiplayer_authority(args[2] as int)
 
 # When a peer connects, sync properties about this to them.
 func _on_peer_connected(id : int) -> void:
@@ -88,10 +87,10 @@ func exited_water() -> void:
 	angular_damp = 0.3
 
 @rpc("any_peer", "call_local", "reliable")
-func deflect(player_facing) -> void:
+func deflect(player_facing : Vector3) -> void:
 	linear_velocity = -linear_velocity
 	rotate(Vector3.UP, PI)
 
 @rpc("any_peer", "call_local", "unreliable")
-func apply_force_rpc(dir) -> void:
+func apply_force_rpc(dir : Vector3) -> void:
 	apply_force(dir)

@@ -17,12 +17,12 @@
 extends Brick
 class_name MotorBrick
 
-var speed = 0
-var target_speed = 20
-var steer = 0
+var speed : float = 0
+var target_speed : float = 20
+var steer : float = 0
 
-var parent_seat = null
-var in_water = false
+var parent_seat : MotorSeat = null
+var in_water := false
 
 # Set the material of this brick to a different one, 
 # and update any related properties.
@@ -49,7 +49,7 @@ func set_material(new : Brick.BrickMaterial) -> void:
 func set_parent_seat(seat_as_path : NodePath) -> void:
 	parent_seat = get_node(seat_as_path)
 
-func _ready():
+func _ready() -> void:
 	super()
 	# only show dir arrow to owner of brick
 	if !is_multiplayer_authority():
@@ -78,14 +78,14 @@ func enter_state() -> void:
 		_:
 			$DirectionArrow.visible = false
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	super(delta)
 	
-	var straight_mult = 1
+	var straight_mult : float = 1
 	if steer == 0:
 		straight_mult = 3
 	
-	var to_velocity = transform.basis.z * speed * target_speed * straight_mult
+	var to_velocity : Vector3 = transform.basis.z * speed * target_speed * straight_mult
 	
 	if to_velocity.length() > angular_velocity.length():
 		angular_velocity = lerp(angular_velocity, to_velocity, 0.025)
@@ -96,9 +96,9 @@ func _physics_process(delta):
 	# if this is controlled by a seat
 	if parent_seat:
 		# rotation relative to seat left/right
-		var z_vec = global_transform.basis.z
-		var rel_pos = parent_seat.global_position - global_position
-		var dot_z = z_vec.dot(rel_pos)
+		var z_vec : Vector3 = global_transform.basis.z
+		var rel_pos : Vector3 = parent_seat.global_position - global_position
+		var dot_z : float = z_vec.dot(rel_pos)
 		
 		# determines if wheel is on left or right side of seat.
 		if dot_z > 0:
@@ -118,7 +118,7 @@ func _physics_process(delta):
 			if steer != 0:
 				# apply angular velocity to all bricks
 				if brick_groups.groups.has(str(group)):
-					for b in brick_groups.groups[str(group)]:
+					for b : Brick in brick_groups.groups[str(group)]:
 						if b != null:
 							b.angular_velocity = parent_seat.transform.basis.y * -steer * 3
 

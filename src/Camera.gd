@@ -27,22 +27,22 @@ enum CameraMode {
 
 # The target that the camera points to and follows.
 var target : Node
-var yaw = 180
-var pitch = -25
-var dist = 5
-var target_dist = 5
-var aim_dist = 3
-var sensitivity = 0.15
+var yaw : float = 180
+var pitch : float = -25
+var dist : float = 5
+var target_dist : float = 5
+var aim_dist : float = 3
+var sensitivity : float = 0.15
 var _camera_mode : CameraMode = CameraMode.FREE
-var mode_locked = false
-var locked = false
+var mode_locked := false
+var locked := false
 # don't interpolate from spawn point
-var do_interpolate = false
-@onready var speed_trails = $SpeedTrails
-@onready var gimbal = get_parent()
-@onready var intersection_area = $IntersectionArea
+var do_interpolate := false
+@onready var speed_trails : GPUParticles3D = $SpeedTrails
+@onready var gimbal : Node3D = get_parent()
+@onready var intersection_area : Area3D = $IntersectionArea
 
-func get_mode_locked():
+func get_mode_locked() -> bool:
 	return mode_locked
 
 func set_mode_locked(new : bool, mode : CameraMode = CameraMode.AIM) -> void:
@@ -55,7 +55,7 @@ func set_mode_locked(new : bool, mode : CameraMode = CameraMode.AIM) -> void:
 			mode_locked = false
 			set_camera_mode(mode)
 
-func get_camera_mode():
+func get_camera_mode() -> CameraMode:
 	return _camera_mode
 
 func set_camera_mode(new : CameraMode) -> void:
@@ -67,11 +67,11 @@ func set_camera_mode(new : CameraMode) -> void:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = false
 		emit_signal("camera_mode_changed")
 
-func set_target(new_target : Node, interpolate = true):
+func set_target(new_target : Node, interpolate := true) -> void:
 	if !locked:
 		do_interpolate = interpolate
 		if new_target == null:
-			var last_pos = Vector3.ZERO
+			var last_pos := Vector3.ZERO
 			if target != null:
 				last_pos = target.global_position
 			target = Node3D.new()
@@ -80,14 +80,14 @@ func set_target(new_target : Node, interpolate = true):
 		else:
 			target = new_target
 
-func set_target_wait_to_player(target_1 : Node, wait_time = 1):
+func set_target_wait_to_player(target_1 : Node, wait_time := 1) -> void:
 	set_target(target_1)
 	await get_tree().create_timer(wait_time).timeout
 	# update player camera to appropriate mode
 	Global.get_player()._on_camera_mode_changed()
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	# always move camera last
 	set_process_priority(255)
 	set_physics_process_priority(255)
@@ -99,11 +99,11 @@ func move_around_target(vec: Vector2) -> void:
 	pitch = max(min(pitch - vec.y * sensitivity, 60), -85)
 	rotation = Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0)
 
-func _unhandled_input(event) -> void:
+func _unhandled_input(event : InputEvent) -> void:
 	if !locked:
 		if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			var mouse = event
-			var mouse_delta = mouse.get_relative()
+			var mouse : InputEventMouseMotion = event
+			var mouse_delta : Vector2 = mouse.get_relative()
 			move_around_target(mouse_delta)
 		#if event is InputEventMouseButton:
 		#	if event.is_pressed():
@@ -112,9 +112,9 @@ func _unhandled_input(event) -> void:
 		#		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		#			target_dist = clamp(target_dist + 2, 3, 40)
 
-func _control_camera_rotation(delta) -> void:
-	var controller_sensitivity = 14
-	var camera_vec = Vector2.ZERO
+func _control_camera_rotation(delta : float) -> void:
+	var controller_sensitivity := 14
+	var camera_vec := Vector2.ZERO
 	camera_vec.y = (Input.get_action_strength("camera_down") - Input.get_action_strength("camera_up")) * 0.5
 	camera_vec.x = Input.get_action_strength("camera_right") - Input.get_action_strength("camera_left")
 	
@@ -123,7 +123,7 @@ func _control_camera_rotation(delta) -> void:
 	if target != null:
 		if dist_to_hit != null:
 			dist_diff = lerp(dist_diff, dist_to_hit, 0.3)
-			var new_dist = clamp((dist - dist_diff), 1, 40) - 0.1
+			var new_dist : float = clamp((dist - dist_diff), 1, 40) - 0.1
 			position = -new_dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
 			gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
 		else:
@@ -137,25 +137,25 @@ func _control_camera_rotation(delta) -> void:
 	
 	dist = lerp(float(dist), float(target_dist), 9 * delta)
 
-var dist_to_hit = null
-var min_dist = 3
-var dist_diff = 0.0
+var dist_to_hit : float = 0.0
+var min_dist : float = 3
+var dist_diff : float = 0.0
 const CONTROLLED_CAM_DELAY_TIME = 5
-var controlled_cam_delay = 5
-var controlled_cam_pos = Vector3(0, 50, 0)
+var controlled_cam_delay := 5
+var controlled_cam_pos := Vector3(0, 50, 0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta : float) -> void:
 	if _camera_mode == CameraMode.CONTROLLED:
 		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
 		# reset if key is let go then pressed again
 		if Input.is_action_just_pressed("forward") || Input.is_action_just_pressed("back") || Input.is_action_just_pressed("right") || Input.is_action_just_pressed("left") || Input.is_action_just_pressed("shift") || Input.is_action_just_pressed("control"):
 			controlled_cam_delay = 0
 		if controlled_cam_delay <= 0:
-			var move_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
-			var move_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
-			var move_vertical = Input.get_action_strength("shift") - Input.get_action_strength("control")
+			var move_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
+			var move_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
+			var move_vertical : float = Input.get_action_strength("shift") - Input.get_action_strength("control")
 			# don't move up/down with forward/sideways
-			var controlled_cam_lateral = Vector3.ZERO
+			var controlled_cam_lateral := Vector3.ZERO
 			# move relative to looking direction
 			controlled_cam_lateral += move_forward * get_global_transform().basis.z
 			controlled_cam_lateral += move_sideways * get_global_transform().basis.x
@@ -166,11 +166,11 @@ func _process(delta):
 			controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
 		else:
 			controlled_cam_delay -= 60 * delta
-		global_position = Vector3(target.global_position.x, target.global_position.y + 5, target.global_position.z - 8)
+		global_position = Vector3(target.global_position.x as float, target.global_position.y + 5 as float, target.global_position.z - 8 as float)
 		
 		# swap camera zoom
 		if Input.is_action_just_pressed("editor_camera_zoom"):
-			match (target_dist):
+			match (int(target_dist)):
 				5:
 					target_dist = 10
 				10:
@@ -195,23 +195,22 @@ func _process(delta):
 		# if multithreaded physics, this section FROM HERE
 		# must be moved to physics process
 		# (physics api calls can only be called on physics_process)
-		dist_to_hit = null
+		dist_to_hit = 0.0
 		if target != null:
-			var applied_pos = target.global_position - dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
+			var applied_pos : Vector3 = target.global_position - dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
 			intersection_area.global_position = applied_pos
 			if intersection_area.get_overlapping_bodies().size() > 0:
-				var space_state = get_world_3d().direct_space_state
+				var space_state := get_world_3d().direct_space_state
 				# layer mask for ray is 0x7 (binary is 0111 for layers 1, 2, 3; camera is 4)
-				var ray = PhysicsRayQueryParameters3D.create(target.global_position, applied_pos, 0x7)
-				var hit = space_state.intersect_ray(ray)
-				dist_to_hit = 0.0
+				var ray := PhysicsRayQueryParameters3D.create(target.global_position as Vector3, applied_pos, 0x7)
+				var hit := space_state.intersect_ray(ray)
 				if hit:
-					dist_to_hit = applied_pos.distance_to(hit["position"])
+					dist_to_hit = applied_pos.distance_to(hit["position"] as Vector3)
 					# a bit of padding between the hit object and camera
 					dist_to_hit += 0.4
 			# speed trails
 			if target.owner is RigidPlayer:
-				var player = target.owner
+				var player : RigidPlayer = target.owner
 				speed_trails.global_rotation = player.global_rotation
 				speed_trails.rotate_object_local(Vector3.LEFT, deg_to_rad(-90))
 				if player.lateral_velocity.length() > 12 && (player._state != RigidPlayer.DEAD && player._state != RigidPlayer.TRIPPED && player._state != RigidPlayer.DUMMY):
@@ -230,24 +229,24 @@ func _process(delta):
 				CameraMode.AIM:
 					set_camera_mode(CameraMode.FREE)
 	elif _camera_mode == CameraMode.TRACK && target != null:
-		look_at(target.global_position)
-		var far_dist = clamp(global_position.distance_to(target.global_position), 0, 40)
+		look_at(target.global_position as Vector3)
+		var far_dist : float = clamp(global_position.distance_to(target.global_position as Vector3), 0, 40)
 		fov = 55 - far_dist
 
 @rpc("call_local")
-func get_mouse_pos_3d():
+func get_mouse_pos_3d() -> Dictionary:
 	if get_world_3d():
-		var space_state = get_world_3d().direct_space_state
-		var mouse_pos = get_viewport().get_mouse_position()
-		var r_origin = project_ray_origin(mouse_pos)
-		var r_end = r_origin + project_ray_normal(mouse_pos) * 8000
+		var space_state := get_world_3d().direct_space_state
+		var mouse_pos : Vector2 = get_viewport().get_mouse_position()
+		var r_origin := project_ray_origin(mouse_pos)
+		var r_end := r_origin + project_ray_normal(mouse_pos) * 8000
 		# collision mask on layer 1(bit1), 2(bit2), 6(bit32)
-		var ray_query = PhysicsRayQueryParameters3D.create(r_origin, r_end, 1|32)
-		var r_array = space_state.intersect_ray(ray_query)
+		var ray_query := PhysicsRayQueryParameters3D.create(r_origin, r_end, 1|32)
+		var r_array : Dictionary = space_state.intersect_ray(ray_query)
 		
 		if r_array:
 			return r_array
-	return Vector3()
+	return {}
 
 func entered_water() -> void:
 	$WaterOverlay.visible = true

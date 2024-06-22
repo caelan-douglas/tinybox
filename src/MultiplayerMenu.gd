@@ -17,13 +17,7 @@
 extends CanvasLayer
 class_name MultiplayerMenu
 
-@onready var map_selection : OptionButton = $MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
-
-func _ready():
-	# add user worlds to list
-	map_selection.add_separator("Your worlds")
-	for map in Global.get_user_tbw_names():
-		map_selection.add_item(map)
+func _ready() -> void:
 	
 	$SettingsMenu/Graphics.connect("pressed", toggle_graphics_presets)
 	$MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/Appearance.connect("pressed", show_appearance_settings)
@@ -37,19 +31,19 @@ func _ready():
 	$KeybindsMenu/HBoxContainer/Back.connect("pressed", hide_keybinds)
 	
 	# Appearance settings
-	var hair_colour_picker = $AppearanceMenu/HairPanel/HairPanelContainer/ColorPickerButton
+	var hair_colour_picker : Control = $AppearanceMenu/HairPanel/HairPanelContainer/ColorPickerButton
 	hair_colour_picker.connect("color_changed", Global.set_hair_colour)
-	var shirt_colour_picker = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/ColorPickerButton
+	var shirt_colour_picker : Control = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/ColorPickerButton
 	shirt_colour_picker.connect("color_changed", Global.set_shirt_colour)
-	var pants_colour_picker = $AppearanceMenu/PantsPanel/PantsPanelContainer/ColorPickerButton
+	var pants_colour_picker : Control = $AppearanceMenu/PantsPanel/PantsPanelContainer/ColorPickerButton
 	pants_colour_picker.connect("color_changed", Global.set_pants_colour)
-	var skin_colour_picker = $AppearanceMenu/SkinPanel/SkinPanelContainer/ColorPickerButton
+	var skin_colour_picker : Control = $AppearanceMenu/SkinPanel/SkinPanelContainer/ColorPickerButton
 	skin_colour_picker.connect("color_changed", Global.set_skin_colour)
-	var hair_picker = $AppearanceMenu/HairPanel/HairPanelContainer/Picker
+	var hair_picker : Control = $AppearanceMenu/HairPanel/HairPanelContainer/Picker
 	hair_picker.connect("item_selected", Global.set_hair)
-	var shirt_picker = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer/TypePicker
+	var shirt_picker : Control = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer/TypePicker
 	shirt_picker.connect("item_selected", Global.set_shirt)
-	var shirt_tex_picker = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer/TexturePicker
+	var shirt_tex_picker : Control = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer/TexturePicker
 	shirt_tex_picker.connect("item_selected", Global.set_shirt_texture)
 	
 	# Set to loaded settings
@@ -61,7 +55,7 @@ func _ready():
 	shirt_picker.selected = Global.shirt
 	shirt_tex_picker.selected = Global.shirt_texture
 	
-	var current_preset = Global.load_graphics_preset()
+	var current_preset : int = Global.load_graphics_preset()
 	match current_preset:
 		0:
 			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/cool")
@@ -72,7 +66,7 @@ func _ready():
 
 # Toggles the graphics presets via Global and saves the setting.
 func toggle_graphics_presets() -> void:
-	var current_preset = Global.get_graphics_preset()
+	var current_preset : int = Global.get_graphics_preset()
 	match current_preset:
 		0:
 			# set to BAD as we pressed button on COOL
@@ -94,8 +88,8 @@ func show_appearance_settings() -> void:
 	Global.get_world().get_current_map().get_node("Camera3D/character_model").visible = true
 	play_preview_character_appearance_animation()
 
-func play_preview_character_appearance_animation(selected_hair = null) -> void:
-	var animator = Global.get_world().get_current_map().get_node("Camera3D/character_model/AnimationPlayer")
+func play_preview_character_appearance_animation(selected_hair : int = -1) -> void:
+	var animator : AnimationPlayer = Global.get_world().get_current_map().get_node("Camera3D/character_model/AnimationPlayer")
 	# don't play animation again if it's already playing
 	if animator.get_current_animation() != "appearance_idle" && animator.get_current_animation() != "appearance_turnaround":
 		animator.play("appearance_idle")

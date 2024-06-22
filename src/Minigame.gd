@@ -18,55 +18,55 @@ extends Node
 class_name Minigame
 signal intro_completed
 
-var playing_team_names = []
+var playing_team_names := []
 # local to each client
-var my_team
+var my_team : String
 # total game time (includes build time); normally 720
-var game_time = 720
-var game_timer = null
-var in_intro = true
-var from_new_peer_connection = false
-var game_over = false
+var game_time := 720
+var game_timer : Timer = null
+var in_intro := true
+var from_new_peer_connection := false
+var game_over := false
 
-var current_leader_id = 1
-var winner_name = ""
+var current_leader_id : int = 1
+var winner_name := ""
 
-@onready var minigame_ui = get_tree().current_scene.get_node("GameCanvas/MinigameControls")
-@onready var game_timer_ui = get_tree().current_scene.get_node("GameCanvas/MinigameControls/GameTimer")
-@onready var game_timer_ui_text = get_tree().current_scene.get_node("GameCanvas/MinigameControls/GameTimer/Label")
-@onready var team_cash_ui = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamCash")
-@onready var team_cash_ui_text = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamCash/Label")
-@onready var team_target_hp_ui = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamTargetHP")
-@onready var team_target_hp_ui_text = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamTargetHP/Label")
-@onready var dm_leader_ui = get_tree().current_scene.get_node("GameCanvas/MinigameControls/DMLeader")
-@onready var dm_leader_ui_text = get_tree().current_scene.get_node("GameCanvas/MinigameControls/DMLeader/Label")
+@onready var minigame_ui : Control = get_tree().current_scene.get_node("GameCanvas/MinigameControls")
+@onready var game_timer_ui : ProgressBar = get_tree().current_scene.get_node("GameCanvas/MinigameControls/GameTimer")
+@onready var game_timer_ui_text : Label = get_tree().current_scene.get_node("GameCanvas/MinigameControls/GameTimer/Label")
+@onready var team_cash_ui : ProgressBar = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamCash")
+@onready var team_cash_ui_text : Label = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamCash/Label")
+@onready var team_target_hp_ui : ProgressBar = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamTargetHP")
+@onready var team_target_hp_ui_text : Label = get_tree().current_scene.get_node("GameCanvas/MinigameControls/TeamTargetHP/Label")
+@onready var dm_leader_ui : ProgressBar = get_tree().current_scene.get_node("GameCanvas/MinigameControls/DMLeader")
+@onready var dm_leader_ui_text : Label = get_tree().current_scene.get_node("GameCanvas/MinigameControls/DMLeader/Label")
 
-@onready var world = get_parent()
+@onready var world : World = get_parent()
 
 @rpc("any_peer", "call_remote", "reliable")
-func sync_properties_with_new_client(new_client_id) -> void:
+func sync_properties_with_new_client(new_client_id : int) -> void:
 	pass
 
 @rpc("any_peer", "call_remote", "reliable")
 func receive_properties_as_new_client(args : Array) -> void:
 	pass
 
-func play_intro_animation(camera):
-	var map_name = Global.get_world().get_current_map().name
+func play_intro_animation(camera : Camera3D) -> void:
+	var map_name : String = Global.get_world().get_current_map().name
 	if map_name == "Warp":
 		camera.get_parent().get_node("AnimationPlayer").play("intro")
 	else:
 		camera.get_parent().get_node("AnimationPlayer").play("intro_alt")
 	get_tree().current_scene.get_node("GameCanvas").play_intro_animation(str("Minigame - ", map_name))
 
-func play_outro_animation(camera):
-	var player = Global.get_player()
+func play_outro_animation(camera : Camera3D) -> void:
+	var player : RigidPlayer = Global.get_player()
 	player.change_state(RigidPlayer.DUMMY)
-	var outro_spot = Global.get_world().get_current_map().get_node_or_null("OutroSpot")
+	var outro_spot : Node3D = Global.get_world().get_current_map().get_node_or_null("OutroSpot")
 	# others go in a non-visible area
 	Global.get_world().teleport_player(player, Vector3(0, 299, 0))
 	# make leader player show animation
-	var winning_player = get_tree().current_scene.get_node_or_null(str("World/", current_leader_id))
+	var winning_player : RigidPlayer = get_tree().current_scene.get_node_or_null(str("World/", current_leader_id))
 	if winning_player != null:
 		Global.get_world().teleport_player(winning_player, outro_spot.global_position)
 		winning_player.global_rotation = outro_spot.global_rotation
@@ -76,7 +76,7 @@ func play_outro_animation(camera):
 	# move camera
 	get_tree().current_scene.get_node("GameCanvas").play_outro_animation(str(winner_name, " wins!"))
 	camera.global_position = Vector3(outro_spot.global_position.x - 1, outro_spot.global_position.y + 1.2, outro_spot.global_position.z - 1)
-	var pos_to_look = Vector3(winning_player.global_position.x, winning_player.global_position.y + 1, winning_player.global_position.z)
+	var pos_to_look : Vector3 = Vector3(winning_player.global_position.x, winning_player.global_position.y + 1, winning_player.global_position.z)
 	camera.look_at(pos_to_look)
 	await get_tree().create_timer(2).timeout
 	camera.global_position = Vector3(outro_spot.global_position.x + 1, outro_spot.global_position.y + 1, outro_spot.global_position.z - 1)
@@ -87,13 +87,13 @@ func play_outro_animation(camera):
 	await get_tree().create_timer(5).timeout
 	winning_player.animator["parameters/BlendOutroPose/blend_amount"] = 0
 
-func _ready():
+func _ready() -> void:
 	game_over = false
 	# in case coming from last minigame
 	minigame_ui.visible = false
 	# ready player
-	var camera = get_viewport().get_camera_3d()
-	var player = Global.get_player()
+	var camera : Camera3D = get_viewport().get_camera_3d()
+	var player : RigidPlayer = Global.get_player()
 	while player == null:
 		await get_tree().process_frame
 		player = Global.get_player()
@@ -125,11 +125,11 @@ func _ready():
 	game_timer.connect("timeout", _on_game_timer_timeout)
 	emit_signal("intro_completed")
 
-func get_team_cash(team_name : String):
+func get_team_cash(team_name : String) -> int:
 	return world.get_current_map().get_teams().get_team(team_name).cash
 
 @rpc("any_peer", "call_local", "reliable")
-func set_team_cash(team_name : String, new):
+func set_team_cash(team_name : String, new : int) -> void:
 	world.get_current_map().get_teams().get_team(team_name).cash = get_team_cash(team_name) + new
 	if get_team_cash(team_name) > 700:
 		world.get_current_map().get_teams().get_team(team_name).cash = 700
@@ -149,7 +149,7 @@ func delete() -> void:
 	Global.get_player().get_tool_inventory().reset()
 	Global.get_world().get_current_map().get_node("TeamConfines/collider").disabled = true
 	Global.get_world().get_current_map().get_node("TeamConfines/caution").visible = false
-	for team in playing_team_names:
+	for team : String in playing_team_names:
 		# reset team cash
 		set_team_cash(team, 9999)
 	
@@ -159,13 +159,13 @@ func delete() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func end() -> void:
 	game_over = true
-	var camera = get_viewport().get_camera_3d()
-	var player = Global.get_player()
+	var camera : Camera3D = get_viewport().get_camera_3d()
+	var player : RigidPlayer = Global.get_player()
 	if multiplayer.is_server():
 		Global.disconnect("player_list_information_update", _on_player_list_update)
 	minigame_ui.visible = false
 	# play outro
-	var outro_spot = Global.get_world().get_current_map().get_node_or_null("OutroSpot")
+	var outro_spot : Node3D = Global.get_world().get_current_map().get_node_or_null("OutroSpot")
 	if outro_spot != null:
 		camera.set_camera_mode(Camera.CameraMode.FREE)
 		camera.fov = 55
@@ -177,7 +177,7 @@ func end() -> void:
 	Global.get_world().minigame = null
 	# remove all existing bricks
 	Global.get_world().clear_world()
-	Global.get_world().load_map(load("res://data/scene/Frozen Field/Frozen Field.tscn"))
+	Global.get_world().load_map(load("res://data/scene/Frozen Field/Frozen Field.tscn") as PackedScene)
 	# refind node
 	camera = get_viewport().get_camera_3d()
 	if camera is Camera:

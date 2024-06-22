@@ -17,12 +17,12 @@
 extends TBWObject
 class_name Water
 
-@onready var area = $WaterArea
-@onready var deep_area = $DeepWaterArea
-@onready var splash_sound = preload("res://data/scene/water/Splash.tscn")
-@onready var splash_particles = preload("res://data/scene/water/SplashParticles.tscn")
+@onready var area : Area3D = $WaterArea
+@onready var deep_area : Area3D = $DeepWaterArea
+@onready var splash_sound : PackedScene = preload("res://data/scene/water/Splash.tscn")
+@onready var splash_particles : PackedScene = preload("res://data/scene/water/SplashParticles.tscn")
 
-func _ready():
+func _ready() -> void:
 	# for splash visuals & camera colour
 	area.connect("body_entered", _on_body_entered)
 	area.connect("body_exited", _on_body_exited)
@@ -31,19 +31,19 @@ func _ready():
 	deep_area.connect("body_entered", _on_deep_body_entered)
 	deep_area.connect("body_exited", _on_deep_body_exited)
 
-func _on_deep_body_entered(body) -> void:
+func _on_deep_body_entered(body : PhysicsBody3D) -> void:
 	# all objects except player
 	if body.has_method("entered_water"):
 		body.entered_water()
 
-func _on_deep_body_exited(body) -> void:
+func _on_deep_body_exited(body : PhysicsBody3D) -> void:
 	if body.has_method("exited_water"):
 		body.exited_water()
 	elif body.owner != null:
 		if body.owner.has_method("exited_water"):
 			body.owner.exited_water()
 
-func _on_body_entered(body) -> void:
+func _on_body_entered(body : Node3D) -> void:
 	# visual splash
 	if body is RigidBody3D:
 		if body.linear_velocity.length() > 1.5:
@@ -56,18 +56,18 @@ func _on_body_entered(body) -> void:
 		if body.get_parent() is Camera:
 			body.get_parent().entered_water()
 
-func _on_body_exited(body) -> void:
+func _on_body_exited(body : Node3D) -> void:
 	if body.get_parent() != null:
 		if body.get_parent() is Camera:
 			body.get_parent().exited_water()
 
 func splash(pos : Vector3) -> void:
-	var audio = splash_sound.instantiate()
+	var audio : AudioStreamPlayer3D = splash_sound.instantiate()
 	add_child(audio)
 	audio.global_position = pos
 	audio.connect("finished", audio.queue_free)
 	
-	var particles = splash_particles.instantiate()
+	var particles : GPUParticles3D = splash_particles.instantiate()
 	add_child(particles)
 	particles.global_position = pos
 	particles.emitting = true

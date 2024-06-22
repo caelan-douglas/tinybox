@@ -16,11 +16,11 @@
 
 extends Label
 
-@onready var update_timer = Timer.new()
-var ms_sent = 0
-var ms_recieved = 0
+@onready var update_timer : Timer = Timer.new()
+var ms_sent : float = 0
+var ms_recieved : float = 0
 
-func _ready():
+func _ready() -> void:
 	add_child(update_timer)
 	update_timer.wait_time = 1
 	update_timer.connect("timeout", _on_ping_update)

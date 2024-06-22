@@ -17,14 +17,14 @@
 extends Node3D
 class_name Map
 
-@export var gravity_scale = 1.0
+@export var gravity_scale := 1.0
 @export var songs : Array[String] = ["mus1"]
 
 # Return the teams node for this map
-func get_teams() -> Node:
+func get_teams() -> Teams:
 	return get_node("Teams")
 
-func _ready():
+func _ready() -> void:
 	#when map is initalized, set graphics on world
 	get_parent().get_parent()._on_graphics_preset_changed()
 	# set song

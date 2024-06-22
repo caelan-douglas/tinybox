@@ -16,28 +16,28 @@
 
 extends RestrictedNode3D
 
-@onready var area = $Area3D
+@onready var area : Area3D = $Area3D
 @export var destinations : Array[Node3D]
 
-@onready var particles = preload("res://data/scene/teleporter/TeleportParticles.tscn")
+@onready var particles : PackedScene = preload("res://data/scene/teleporter/TeleportParticles.tscn")
 
-func _ready():
+func _ready() -> void:
 	super()
 	if !scheduled_for_deletion:
 		$Area3D.connect("body_entered", _on_body_entered)
 
-func _on_body_entered(body) -> void:
+func _on_body_entered(body : Node3D) -> void:
 	if (body is RigidPlayer || body is Bomb || body is ClayBall) && destinations.size() > 0:
 		# run on player auth
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
-			var dest = destinations.pick_random()
+			var dest : Node3D = destinations.pick_random()
 			body.global_position = dest.global_position
 			# spawn particles for all clients
 			_spawn_particles.rpc(dest.global_position)
 
 @rpc("any_peer", "call_local", "reliable")
-func _spawn_particles(pos) -> void:
-	var p = particles.instantiate()
+func _spawn_particles(pos : Vector3) -> void:
+	var p : GPUParticles3D = particles.instantiate()
 	add_child(p)
 	p.global_position = pos
 	p.emitting = true

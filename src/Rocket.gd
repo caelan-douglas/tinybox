@@ -17,22 +17,22 @@
 extends SyncedRigidbody3D
 class_name Rocket
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var world = Global.get_world()
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var world : World = Global.get_world()
 
-@onready var explosion = SpawnableObjects.explosion
-var explosion_size = 2
-var speed = 20
-var grace_period = true
-@export var guided = false
-var tool_overlay = null
-var tool_overlay_time = null
-var tool_overlay_dist = null
-var despawn_timer = null
-var addl_vel = Vector3.ZERO
+@onready var explosion : PackedScene = SpawnableObjects.explosion
+var explosion_size : int = 2
+var speed : int = 20
+var grace_period := true
+@export var guided := false
+var tool_overlay : Control = null
+var tool_overlay_time : Control = null
+var tool_overlay_dist : Control = null
+var despawn_timer : SceneTreeTimer = null
+var addl_vel := Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	# despawn in 15 seconds in case fired off map
 	if guided:
 		despawn_time = 25
@@ -42,7 +42,7 @@ func _ready():
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_player_left)
 	if (despawn_time != -1) && despawn_time > 0:
-		despawn_timer = get_tree().create_timer(despawn_time)
+		despawn_timer = get_tree().create_timer(despawn_time as float)
 		despawn_timer.connect("timeout", _send_explode.bind(1, null))
 	
 	if guided:
@@ -53,12 +53,12 @@ func _ready():
 	if add_synchronizer_on_spawn:
 		add_synchronizer()
 
-func _send_explode(from_whom_id : int, peer_position) -> void:
+func _send_explode(from_whom_id : int, peer_position : Vector3) -> void:
 	explode.rpc(from_whom_id, peer_position)
 
 @rpc("any_peer", "call_local", "reliable")
-func explode(from_whom_id : int, peer_position) -> void:
-	var explosion_i = explosion.instantiate()
+func explode(from_whom_id : int, peer_position : Vector3) -> void:
+	var explosion_i : Explosion = explosion.instantiate()
 	get_tree().current_scene.add_child(explosion_i)
 	explosion_i.set_explosion_size(explosion_size)
 	explosion_i.set_explosion_owner(from_whom_id)
@@ -91,7 +91,7 @@ func spawn_projectile(auth : int, shot_speed : float = 15) -> void:
 		global_position = player_from.get_node("projectile_spawn_point").global_position
 	
 	# determine rocket direction
-	var direction = Vector3.ZERO
+	var direction := Vector3.ZERO
 	if camera:
 		direction = -camera.global_transform.basis.z
 		global_rotation = camera.global_rotation
@@ -123,7 +123,7 @@ func spawn_projectile(auth : int, shot_speed : float = 15) -> void:
 	await get_tree().create_timer(0.3).timeout
 	grace_period = false
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	
 	if guided && is_multiplayer_authority():
@@ -133,7 +133,7 @@ func _physics_process(delta):
 			global_rotation.x = lerp_angle(global_rotation.x, camera.global_rotation.x, delta * 1.4)
 		else:
 			explode.rpc(get_multiplayer_authority(), global_position)
-		var dir = -global_transform.basis.z
+		var dir : Vector3 = -global_transform.basis.z
 		dir = dir.normalized()
 		linear_velocity = dir * speed
 		
@@ -146,8 +146,8 @@ func _physics_process(delta):
 		
 		# show the distance of the nearest player
 		if tool_overlay_dist != null:
-			var min_dist = 9999
-			for p in Global.get_world().rigidplayer_list:
+			var min_dist : float = 9999
+			for p : RigidPlayer in Global.get_world().rigidplayer_list:
 				if p != player_from && p.global_position.distance_to(global_position) < min_dist:
 					min_dist = p.global_position.distance_to(global_position)
 			tool_overlay_dist.value = min_dist
@@ -155,7 +155,7 @@ func _physics_process(delta):
 		# not guided
 		linear_velocity = -global_transform.basis.z.normalized() * speed + addl_vel
 
-func connect_explosion(body) -> void:
+func connect_explosion(body : Node3D) -> void:
 	# explode on collision hit. the authority determines if the collision hit
 	# & sends the result to all peers.
 	

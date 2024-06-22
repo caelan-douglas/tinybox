@@ -16,16 +16,16 @@
 
 extends RestrictedNode3D
 
-@onready var area = $Area3D
+@onready var area : Area3D = $Area3D
 
-func _ready():
+func _ready() -> void:
 	super()
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	for body in area.get_overlapping_bodies():
 		if body is RigidPlayer || body is Brick || body is Bomb || body is ClayBall:
 			if body.get_multiplayer_authority() == multiplayer.get_unique_id():
-				var force = 160
+				var force : float = 160
 				if body is RigidPlayer:
 					force = 21
 					if !body.in_air_from_lifter:

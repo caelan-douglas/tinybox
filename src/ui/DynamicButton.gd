@@ -18,14 +18,14 @@ extends Button
 class_name DynamicButton
 
 @export var json_text : String = ""
-@export var grab_initial_focus = false
+@export var grab_initial_focus := false
 
-func _ready():
+func _ready() -> void:
 	set_text_to_json(json_text)
 	if is_visible_in_tree() && grab_initial_focus:
 		grab_focus()
 
-func set_text_to_json(json) -> void:
+func set_text_to_json(json : String) -> void:
 	json_text = json
 	if json_text != "":
 		text = JsonHandler.find_entry_in_file(json_text)

@@ -15,12 +15,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends CanvasLayer
-signal win_condition_changed(new_win_condition)
+signal win_condition_changed(new_win_condition : Lobby.GameWinCondition)
 
-var lobby
-var win_condition = Lobby.GameWinCondition.DEATHMATCH
+var lobby : Node = null
+var win_condition := Lobby.GameWinCondition.DEATHMATCH
 
-func _ready():
+func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	$PlayerMenu/ChangeTeam.connect("pressed", change_team)
 	$PlayerMenu/BalanceTeams.connect("pressed", balance_teams)
@@ -63,8 +63,8 @@ func change_win_condition() -> void:
 	change_win_condition_peers.rpc(win_condition)
 
 @rpc("any_peer", "call_local", "reliable")
-func change_win_condition_peers(new) -> void:
-	var new_text = "Type: Base Defense"
+func change_win_condition_peers(new : Lobby.GameWinCondition) -> void:
+	var new_text := "Type: Base Defense"
 	match (new):
 		Lobby.GameWinCondition.BASE_DEFENSE:
 			new_text = "Type: Base Defense"
@@ -79,49 +79,49 @@ func change_win_condition_peers(new) -> void:
 	$PreGameMenu/MapVoteLabel.text = str("Map Vote (for ", new_text, ")")
 	emit_signal("win_condition_changed", new)
 
-var votes = [0, 0, 0, 0]
+var votes : Array[int] = [0, 0, 0, 0]
 @rpc("any_peer", "call_local", "reliable")
-func add_ready(num) -> void:
+func add_ready(num : int) -> void:
 	votes[num] += 1
 	# update display
-	var voted_map_count_text = get_node_or_null(str("PreGameMenu/Maps/", num, "/VoteCount"))
+	var voted_map_count_text : Label = get_node_or_null(str("PreGameMenu/Maps/", num, "/VoteCount"))
 	if voted_map_count_text:
 		voted_map_count_text.text = str(votes[num])
 	# server starts
 	if multiplayer.is_server():
-		var participants = Global.get_world().rigidplayer_list
-		var sum = 0
+		var participants : Array = Global.get_world().rigidplayer_list
+		var sum := 0
 		for v in votes:
 			sum += v
 		# if all votes have been cast, start
 		if sum == participants.size():
-			var selected_map = 0
+			var selected_map := 0
 			# determine vote winner
-			var highest_vote = 0
+			var highest_vote := 0
 			for i in range(votes.size()):
 				if votes[i] > highest_vote:
 					selected_map = i
 					highest_vote = votes[i]
 			# fallback map
-			var voted_map_name = "Frozen Field"
+			var voted_map_name := "Frozen Field"
 			# get voted map name
-			var voted_map_label = get_node_or_null(str("PreGameMenu/Maps/", selected_map, "/Name"))
+			var voted_map_label : Label = get_node_or_null(str("PreGameMenu/Maps/", selected_map, "/Name"))
 			if voted_map_label:
 				voted_map_name = voted_map_label.text
 			# load map
 			Global.get_world().start_minigame.rpc(voted_map_name, win_condition)
 
-func _on_map_vote(num) -> void:
+func _on_map_vote(num : int) -> void:
 	for c in $PreGameMenu/Maps.get_children():
 		c.disabled = true
 	add_ready.rpc(num)
 
 @rpc("any_peer", "call_local", "reliable")
 func pre_game() -> void:
-	var player = Global.get_player()
-	var teams = Global.get_world().get_current_map().get_teams()
-	var team_idx = teams.get_team_index(player.team)
-	var camera = get_viewport().get_camera_3d()
+	var player : RigidPlayer = Global.get_player()
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var team_idx : int = teams.get_team_index(str(player.team))
+	var camera : Camera3D = get_viewport().get_camera_3d()
 	
 	match team_idx:
 		1:
@@ -140,8 +140,8 @@ func pre_game() -> void:
 func balance_teams() -> void:
 	if !multiplayer.is_server(): return
 	
-	var teams = Global.get_world().get_current_map().get_teams()
-	var participants = Global.get_world().rigidplayer_list
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var participants : Array = Global.get_world().rigidplayer_list
 	
 	for i in range(participants.size()):
 		if win_condition == Lobby.GameWinCondition.BASE_DEFENSE || win_condition == Lobby.GameWinCondition.TEAM_DEATHMATCH:
@@ -154,13 +154,13 @@ func balance_teams() -> void:
 			participants[i].update_team.rpc(teams.get_team_list()[0].name)
 		update_team.rpc(str(participants[i].name))
 		# update player positions in lobby
-		update_auth_player_position.rpc_id(participants[i].get_multiplayer_authority())
+		update_auth_player_position.rpc_id(participants[i].get_multiplayer_authority() as int)
 
 @rpc("any_peer", "call_local", "reliable")
 func update_auth_player_position() -> void:
-	var player = Global.get_player()
-	var teams = Global.get_world().get_current_map().get_teams()
-	var team_idx = teams.get_team_index(player.team)
+	var player : RigidPlayer = Global.get_player()
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var team_idx : int = teams.get_team_index(str(player.team))
 	
 	match team_idx:
 		1:
@@ -171,9 +171,9 @@ func update_auth_player_position() -> void:
 			player.global_position = Vector3(randf_range(1, 3), 50, randf_range(-1, -3))
 
 func change_team() -> void:
-	var player = Global.get_player()
-	var teams = Global.get_world().get_current_map().get_teams()
-	var team_idx = teams.get_team_index(player.team)
+	var player : RigidPlayer = Global.get_player()
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var team_idx : int = teams.get_team_index(str(player.team))
 	team_idx += 1
 	if team_idx >= teams.get_team_list().size():
 		# start at 1 to exclude Default
@@ -185,5 +185,5 @@ func change_team() -> void:
 	update_team.rpc(multiplayer.get_unique_id())
 
 @rpc("any_peer", "call_local", "reliable")
-func update_team(id) -> void:
+func update_team(id : int) -> void:
 	Global.update_player_list_information()

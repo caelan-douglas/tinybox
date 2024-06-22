@@ -21,20 +21,20 @@ enum MeleeType {
 	BAT
 }
 
-@export var tool_name = "Bat"
+@export var tool_name := "Bat"
 @export var _melee_type : MeleeType = MeleeType.BAT
-@export var damage = 4
-@export var cooldown = 7
-var cooldown_counter = 0
-var deflect_time = 0
-var is_hitting = false
+@export var damage : int = 4
+@export var cooldown : int = 7
+var cooldown_counter : int = 0
+var deflect_time := 0
+var is_hitting := false
 
-var hit_area
-var large_hit_area
+var hit_area : Area3D = null
+var large_hit_area : Area3D = null
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	super.init(tool_name, get_parent().get_parent())
+func _ready() -> void:
+	super.init(tool_name, get_parent().get_parent() as RigidPlayer)
 
 func add_visual_mesh_instance() -> void:
 	visual_mesh_instance = visual_mesh.instantiate()
@@ -46,7 +46,7 @@ func add_visual_mesh_instance() -> void:
 	if large_hit_area:
 		large_hit_area.connect("body_entered", on_large_hit)
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	# if this tool is selected
@@ -64,14 +64,14 @@ func _physics_process(delta):
 func swing() -> void:
 	if visual_mesh_instance != null:
 		# we must get it here because the visual mesh instance changes
-		var animator = visual_mesh_instance.get_node_or_null("AnimationPlayer")
+		var animator : AnimationPlayer = visual_mesh_instance.get_node_or_null("AnimationPlayer")
 		if animator:
 			animator.play("hit")
 		is_hitting = true
 		await get_tree().create_timer(0.2).timeout
 		is_hitting = false
 
-func on_hit(body) -> void:
+func on_hit(body : Node3D) -> void:
 	# reduce player health on hit
 	if body is RigidPlayer:
 		# only run this on the authority of who was it (not necessarily
@@ -98,14 +98,14 @@ func on_hit(body) -> void:
 				body.controlling_player.seat_destroyed.rpc_id(body.controlling_player.get_multiplayer_authority(), true)
 				body.set_controlling_player.rpc(null)
 
-func on_large_hit(body) -> void:
+func on_large_hit(body : Node3D) -> void:
 	# only run on auth
 	if !is_multiplayer_authority(): return
 	
 	# Deflects rockets, bombs, balls, and other players.
 	if (body is Rocket || body is Bomb || body is ClayBall) && deflect_time < 1 && is_hitting:
 		if visual_mesh_instance != null:
-			var deflect = visual_mesh_instance.get_node_or_null("DeflectAudio")
+			var deflect : AudioStreamPlayer3D = visual_mesh_instance.get_node_or_null("DeflectAudio")
 			deflect_time = 40
 			deflect.play()
 		# deflect body on body's auth

@@ -17,11 +17,11 @@
 extends Node3D
 class_name Explosion
 
-@onready var particles = $GPUParticles3D
-@onready var area = $Area3D
-@onready var audio = $AudioStreamPlayer3D
-@onready var distant_sound = preload("res://data/audio/explosion/explode_distant.ogg")
-@onready var general_sounds = [
+@onready var particles : GPUParticles3D = $GPUParticles3D
+@onready var area : Area3D = $Area3D
+@onready var audio : AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var distant_sound : AudioStream = preload("res://data/audio/explosion/explode_distant.ogg")
+@onready var general_sounds : Array[AudioStream] = [
 	preload("res://data/audio/explosion/explode_0.ogg"),
 	preload("res://data/audio/explosion/explode_1.ogg"),
 ]
@@ -29,14 +29,14 @@ class_name Explosion
 var by_whom : int = 1
 
 func set_explosion_size(new : float) -> void:
-	area.get_node("CollisionShape3D").get_shape().set("radius", new)
-	$GPUParticles3D.scale = Vector3(new/4, new/4, new/4)
-	$GPUParticles3D.amount = new*80/2
+	(area.get_node("CollisionShape3D") as CollisionShape3D).get_shape().set("radius", new)
+	particles.scale = Vector3(new/4, new/4, new/4)
+	particles.amount = new*80/2
 
-func set_explosion_owner(who_id : int):
+func set_explosion_owner(who_id : int) -> void:
 	by_whom = who_id
 
-func _ready():
+func _ready() -> void:
 	particles.emitting = true
 	# delete explosion after 8s to allow particles & sound to play out
 	get_tree().create_timer(8).connect("timeout", queue_free)
@@ -46,7 +46,7 @@ func _ready():
 	area.call_deferred("queue_free")
 
 func play_sound() -> void:
-	var camera = get_viewport().get_camera_3d()
+	var camera : Camera = get_viewport().get_camera_3d()
 	if camera == null:
 		return
 	if global_position.distance_to(camera.global_position) > 100:
@@ -61,6 +61,6 @@ func play_sound() -> void:
 		audio.volume_db = 4
 		audio.play()
 
-func explode(body) -> void:
+func explode(body : Node3D) -> void:
 	if body.has_method("explode") && !(body is Explosion) && !(body is Rocket) && !(body is Bomb):
 		body.explode.rpc_id(body.get_multiplayer_authority(), global_position, by_whom)

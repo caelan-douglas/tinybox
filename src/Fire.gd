@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Node3D
+class_name Fire
 
 func light() -> void:
 	$GPUParticles3D.emitting = true

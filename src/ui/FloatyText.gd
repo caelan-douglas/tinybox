@@ -16,9 +16,9 @@
 
 extends Node3D
 
-@onready var animator = $Label/AnimationPlayer
+@onready var animator : AnimationPlayer = $Label/AnimationPlayer
 
-func _ready():
+func _ready() -> void:
 	animator.play("floaty")
 	await Signal(animator, "animation_finished")
 	queue_free()

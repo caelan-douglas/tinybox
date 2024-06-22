@@ -17,22 +17,22 @@
 extends SyncedRigidbody3D
 class_name Bomb
 
-@onready var camera = get_viewport().get_camera_3d()
-@onready var world = Global.get_world()
+@onready var camera : Camera3D = get_viewport().get_camera_3d()
+@onready var world : World = Global.get_world()
 
-@onready var explosion = SpawnableObjects.explosion
-@export var explode_time = 3
-@export var explosion_size = 3
+@onready var explosion : PackedScene = SpawnableObjects.explosion
+@export var explode_time : float = 3
+@export var explosion_size : float = 3
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	# despawn in 30 seconds in case fired off map
 	despawn_time = 30
 	super()
 
 @rpc("any_peer", "call_local")
 func explode(from_whom_id : int) -> void:
-	var explosion_i = explosion.instantiate()
+	var explosion_i : Explosion = explosion.instantiate()
 	get_tree().current_scene.add_child(explosion_i)
 	explosion_i.set_explosion_size(explosion_size)
 	# player_from id is later used in death messages
@@ -55,11 +55,11 @@ func spawn_projectile(auth : int, shot_speed : int = 15) -> void:
 		global_position = Vector3(global_position.x, global_position.y + 2.5, global_position.z)
 	
 	# determine direction from camera
-	var direction = Vector3.ZERO
+	var direction : Vector3 = Vector3.ZERO
 	if camera:
 		direction = -camera.global_transform.basis.z
 	
-	var player_velocity = player_from.linear_velocity
+	var player_velocity : Vector3 = player_from.linear_velocity
 	if player_from._state == RigidPlayer.IN_SEAT:
 		player_velocity = player_from.seat_occupying.linear_velocity * 2
 	linear_velocity = direction * shot_speed + player_velocity
@@ -71,5 +71,5 @@ func spawn_projectile(auth : int, shot_speed : int = 15) -> void:
 
 # deflected bombs get sent in the direction of the player who is holding the tool
 @rpc("any_peer", "call_local", "reliable")
-func deflect(player_facing) -> void:
+func deflect(player_facing : Vector3) -> void:
 	apply_central_impulse(-player_facing * 10)

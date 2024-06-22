@@ -19,10 +19,10 @@ extends Node
 const file_name = "tb_user_prefs"
 
 # Saves a preference to the disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
-func save_pref(key, value, section = "preferences") -> void:
-	var config = ConfigFile.new()
+func save_pref(key : String, value: Variant, section := "preferences") -> void:
+	var config := ConfigFile.new()
 	# in case the file already exists, load it
-	var err = config.load("user://preferences.txt")
+	var err := config.load("user://preferences.txt")
 	if err != OK:
 		# if the file doesn't exist, create a new one
 		config = ConfigFile.new()
@@ -31,10 +31,10 @@ func save_pref(key, value, section = "preferences") -> void:
 	config.save("user://preferences.txt")
 
 # Loads a preference from disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
-func load_pref(key, section = "preferences"):
-	var config = ConfigFile.new()
+func load_pref(key : String, section := "preferences") -> Variant:
+	var config := ConfigFile.new()
 	# Load data from a file.
-	var err = config.load("user://preferences.txt")
+	var err := config.load("user://preferences.txt")
 	# If the file didn't load, ignore it.
 	if err != OK:
 		return
@@ -43,21 +43,21 @@ func load_pref(key, section = "preferences"):
 	else:
 		return null
 
-func delete_pref(section, key):
-	var config = ConfigFile.new()
+func delete_pref(section : String, key : String) -> void:
+	var config := ConfigFile.new()
 	# Load data from a file.
-	var err = config.load("user://preferences.txt")
+	var err := config.load("user://preferences.txt")
 	# If the file didn't load, ignore it.
 	if err != OK:
 		return
 	config.erase_section_key(section, key)
 	config.save("user://preferences.txt")
 
-func has_section(section):
-	var config = ConfigFile.new()
+func has_section(section : String) -> bool:
+	var config := ConfigFile.new()
 	# Load data from a file.
-	var err = config.load("user://preferences.txt")
+	var err := config.load("user://preferences.txt")
 	# If the file didn't load, ignore it.
 	if err != OK:
-		return
+		return false
 	return config.has_section(section)

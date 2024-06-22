@@ -19,8 +19,8 @@ extends TextureButton
 @export var excluded_modes : Array[Lobby.GameWinCondition] = []
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	update_exclusions(owner.win_condition)
+func _ready() -> void:
+	update_exclusions(owner.win_condition as Lobby.GameWinCondition)
 	owner.connect("win_condition_changed", update_exclusions)
 
 func update_exclusions(new_win_condition : Lobby.GameWinCondition) -> void:

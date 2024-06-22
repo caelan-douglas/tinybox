@@ -16,14 +16,14 @@
 
 extends EditorTool
 
-var selected_item = null
-var item_offset = Vector3(0, 0, 0)
+var selected_item : PackedScene = null
+var item_offset := Vector3(0, 0, 0)
 
-@onready var preview_node = $PreviewNode
-@onready var preview_delete_area = $PreviewNode/DeleteArea
-@onready var preview_cube = $PreviewNode/Cube
+@onready var preview_node : Node3D = $PreviewNode
+@onready var preview_delete_area : Area3D = $PreviewNode/DeleteArea
+@onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
 
-func _ready():
+func _ready() -> void:
 	init("(empty)")
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
@@ -38,7 +38,7 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 			pick_item()
 
 func pick_item() -> void:
-	var editor = Global.get_world().get_current_map()
+	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
 		if !editor.get_item_chooser_visible() && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			get_parent().set_disabled(true)
@@ -57,7 +57,7 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_item_picked(item_name_internal : String, item_name_display) -> void:
+func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
 	ui_tool_name = item_name_display
 	ui_partner.text = str(item_name_display)
 	item_offset = Vector3.ZERO
@@ -69,8 +69,8 @@ func _on_item_picked(item_name_internal : String, item_name_display) -> void:
 		if item_name_internal != "obj_water":
 			item_offset = Vector3(0, -0.49, 0)
 		# update preview of mesh
-		var instance = selected_item.instantiate()
-		var new_mesh = find_item_mesh(Global.get_all_children(instance))
+		var instance : Node3D = selected_item.instantiate()
+		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(instance) as Array)
 		if new_mesh is MeshInstance3D:
 			var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
 			preview_mesh.mesh = new_mesh.mesh
@@ -88,22 +88,23 @@ func _on_item_picked(item_name_internal : String, item_name_display) -> void:
 		else:
 			preview_node.get_node("ObjPreview").visible = false
 
-func find_item_mesh(array):
-	for c in array:
+func find_item_mesh(array : Array) -> MeshInstance3D:
+	for c : Variant in array:
 		if c is MeshInstance3D:
 			return c
 		elif c is Array:
-			return find_item_mesh(c)
+			return find_item_mesh(c as Array)
+	return null
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	if active:
-		var camera = get_viewport().get_camera_3d()
+		var camera : Camera3D = get_viewport().get_camera_3d()
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
 			if Input.is_action_pressed("click"):
 				if preview_delete_area != null:
 					if !preview_delete_area.has_overlapping_bodies() && !preview_delete_area.has_overlapping_areas():
-						var inst = selected_item.instantiate()
+						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
 						inst.global_position = camera.controlled_cam_pos + item_offset
 						inst.global_rotation = preview_node.global_rotation

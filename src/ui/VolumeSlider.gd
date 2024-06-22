@@ -24,25 +24,25 @@ enum AudioBus {
 
 @export var bus : AudioBus = AudioBus.MASTER
 
-func _ready():
+func _ready() -> void:
 	connect("value_changed", set_volume)
 	await get_tree().process_frame
 	match(bus):
 		AudioBus.MASTER:
-			var current = MusicHandler.load_master_setting()
+			var current := MusicHandler.load_master_setting()
 			if current != null:
 				value = current
 		AudioBus.MUSIC:
-			var current = MusicHandler.load_music_setting()
+			var current := MusicHandler.load_music_setting()
 			if current != null:
 				value = current
 		AudioBus.SFX:
-			var current = MusicHandler.load_sfx_setting()
+			var current := MusicHandler.load_sfx_setting()
 			if current != null:
 				value = current
 
 # Toggle music on/off and save the setting.
-func set_volume(new) -> void:
+func set_volume(new : float) -> void:
 	match(bus):
 		AudioBus.MASTER:
 			MusicHandler.set_master_setting(new)

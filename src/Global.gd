@@ -19,8 +19,8 @@ signal graphics_preset_changed
 signal appearance_changed
 signal player_list_information_update
 
-var display_name
-var connected_to_server = false
+var display_name : String = ""
+var connected_to_server := false
 
 enum GraphicsPresets {
 	COOL,
@@ -29,33 +29,33 @@ enum GraphicsPresets {
 }
 
 # A cache of already painted materials that can be re-used. Keeps draw call counts down.
-var graphics_cache = []
+var graphics_cache : Array[Material] = []
 
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
 
 # Appearance settings
-var shirt = 0
-var shirt_texture = 0
-var hair = 0
-var shirt_colour = Color("#ffffff")
-var pants_colour = Color("#1a203d")
-var hair_colour = Color("#a7606a")
-var skin_colour = Color("d29185")
+var shirt : int = 0
+var shirt_texture : int = 0
+var hair : int = 0
+var shirt_colour := Color("#ffffff")
+var pants_colour := Color("#1a203d")
+var hair_colour := Color("#a7606a")
+var skin_colour := Color("d29185")
 
-var beep_low = preload("res://data/audio/beep/beep_low.ogg")
-var beep_fifths = preload("res://data/audio/beep/beep_fifths.ogg")
+var beep_low : AudioStream = preload("res://data/audio/beep/beep_low.ogg")
+var beep_fifths : AudioStream = preload("res://data/audio/beep/beep_fifths.ogg")
 
-func set_shirt(new) -> void:
+func set_shirt(new : int) -> void:
 	shirt = new
 	emit_signal("appearance_changed")
-func set_shirt_texture(new) -> void:
+func set_shirt_texture(new : int) -> void:
 	shirt_texture = new
 	# TODO: better way to handle this
 	if shirt_texture == 2 && get_tree().current_scene.get_node("MultiplayerMenu/AppearanceMenu").visible == true:
 		UIHandler.show_alert("This shirt design is best used with a white shirt.", 5)
 	emit_signal("appearance_changed")
-func set_hair(new) -> void:
+func set_hair(new : int) -> void:
 	hair = new
 	emit_signal("appearance_changed")
 func set_shirt_colour(new : Color) -> void:
@@ -71,7 +71,7 @@ func set_skin_colour(new : Color) -> void:
 	skin_colour = new
 	emit_signal("appearance_changed")
 
-func _ready():
+func _ready() -> void:
 	load_appearance()
 
 func save_appearance() -> void:
@@ -84,26 +84,26 @@ func save_appearance() -> void:
 	UserPreferences.save_pref("skin_colour", skin_colour)
 
 func load_appearance() -> void:
-	var loaded_shirt = UserPreferences.load_pref("shirt")
+	var loaded_shirt : int = UserPreferences.load_pref("shirt") as int
 	if loaded_shirt != null:
 		set_shirt(loaded_shirt)
-	var loaded_shirt_texture = UserPreferences.load_pref("shirt_texture")
+	var loaded_shirt_texture : int = UserPreferences.load_pref("shirt_texture") as int
 	if loaded_shirt_texture != null:
 		set_shirt_texture(loaded_shirt_texture)
-	var loaded_hair = UserPreferences.load_pref("hair")
+	var loaded_hair : int = UserPreferences.load_pref("hair") as int
 	if loaded_hair != null:
 		set_hair(loaded_hair)
 	
-	var loaded_shirt_colour = UserPreferences.load_pref("shirt_colour")
+	var loaded_shirt_colour : Color = UserPreferences.load_pref("shirt_colour") as Color
 	if loaded_shirt_colour != null:
 		set_shirt_colour(loaded_shirt_colour)
-	var loaded_pants_colour = UserPreferences.load_pref("pants_colour")
+	var loaded_pants_colour : Color = UserPreferences.load_pref("pants_colour") as Color
 	if loaded_pants_colour != null:
 		set_pants_colour(loaded_pants_colour)
-	var loaded_hair_colour = UserPreferences.load_pref("hair_colour")
+	var loaded_hair_colour : Color = UserPreferences.load_pref("hair_colour") as Color
 	if loaded_hair_colour != null:
 		set_hair_colour(loaded_hair_colour)
-	var loaded_skin_colour = UserPreferences.load_pref("skin_colour")
+	var loaded_skin_colour : Color = UserPreferences.load_pref("skin_colour") as Color
 	if loaded_skin_colour != null:
 		set_skin_colour(loaded_skin_colour)
 
@@ -128,7 +128,7 @@ func set_graphics_preset(new : GraphicsPresets) -> void:
 
 # Loads the saved graphics preset from disk.
 func load_graphics_preset() -> GraphicsPresets:
-	var loaded_preset = UserPreferences.load_pref("graphics_preset")
+	var loaded_preset : int = UserPreferences.load_pref("graphics_preset") as int
 	if loaded_preset != null:
 		set_graphics_preset(loaded_preset)
 	return graphics_preset
@@ -138,10 +138,10 @@ func update_player_list_information() -> void:
 	emit_signal("player_list_information_update")
 
 # TODO: Maybe this should move to MusicHandler? + MusicHandler could be called AudioHandler?
-var last_kill_time = 0
+var last_kill_time := 0
 @rpc("any_peer", "call_remote", "reliable")
 func play_kill_sound() -> void:
-	var audio = AudioStreamPlayer.new()
+	var audio := AudioStreamPlayer.new()
 	audio.volume_db = 1
 	get_world().add_child(audio)
 	if Time.get_unix_time_from_system() - last_kill_time < 4:
@@ -157,15 +157,15 @@ func play_kill_sound() -> void:
 	audio.connect("finished", audio.queue_free)
 
 func get_user_tbw_names() -> Array:
-	var dir = DirAccess.open("user://world")
+	var dir : DirAccess = DirAccess.open("user://world")
 	if dir:
 		return dir.get_files()
 	else:
 		return []
 
 # gets children recursively
-func get_all_children(in_what):
-	var all_children = []
+func get_all_children(in_what : Node) -> Array:
+	var all_children := []
 	for child in in_what.get_children():
 		if child.get_child_count() > 0:
 			all_children.append(get_all_children(child))

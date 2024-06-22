@@ -17,7 +17,7 @@
 extends RigidBody3D
 class_name RigidPlayer
 
-signal hit_by_melee(tool)
+signal hit_by_melee(tool : Tool)
 
 enum {
 	IDLE,
@@ -41,7 +41,7 @@ enum {
 }
 
 # DEBUG
-var states_as_names = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Exit swimming", "Slide", "Rolling", "On wall", "On ledge"]
+var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Exit swimming", "Slide", "Rolling", "On wall", "On ledge"]
 
 enum CauseOfDeath {
 	EXPLOSION,
@@ -54,66 +54,66 @@ enum CauseOfDeath {
 }
 
 var _state : int = IDLE
-var display_name = ""
-var camera
-var jump_force = 2.4
+var display_name := ""
+var camera : Camera3D = null
+var jump_force := 2.4
 # when holding jump
-var extra_jump_force = 2.4
-var move_speed = 5
-var decel_multiplier = 0.85
-var player_grav = 1.4
-var team = "Default"
-var seat_occupying = null
-var health = 20
-var spawns = []
-var death_message = ""
-var executing_player = null
+var extra_jump_force := 2.4
+var move_speed : float = 5
+var decel_multiplier := 0.85
+var player_grav := 1.4
+var team := "Default"
+var seat_occupying : MotorSeat = null
+var health : int = 20
+var spawns := []
+var death_message := ""
+var executing_player : Node3D = null
 var death_camera_mode : Camera.CameraMode = Camera.CameraMode.FREE
-var locked = false
-var invulnerable = false
-var editor_mode = false
-var can_enter_seat = true
-var on_fire = false
-var in_air_from_lifter = false
-var external_propulsion = false
+var locked := false
+var invulnerable := false
+var editor_mode := false
+var can_enter_seat := true
+var on_fire := false
+var in_air_from_lifter := false
+var external_propulsion := false
 
-var lateral_velocity = Vector3.ZERO
+var lateral_velocity := Vector3.ZERO
 
-var last_hit_by_id = -1
-var last_hit = false
+var last_hit_by_id : int = -1
+var last_hit := false
 
-var kills = 0
-var deaths = 0
+var kills : int = 0
+var deaths : int = 0
 
-@onready var fire = $Fire
-@onready var bubble_particles = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
-@onready var drip_animator = $Drip/AnimationPlayer
-@onready var target = $Smoothing/target
-@onready var aim_target = $Smoothing/aim_target
-@onready var ground_detect = $GroundDetect
-@onready var slide_detect = $GroundDetect
-@onready var forward_detect = $ForwardDetect
-@onready var wall_detect = $WallDetect
-@onready var ledge_detect = $LedgeDetect
+@onready var fire : Fire = $Fire
+@onready var bubble_particles : GPUParticles3D = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
+@onready var drip_animator : AnimationPlayer = $Drip/AnimationPlayer
+@onready var target : Node3D = $Smoothing/target
+@onready var aim_target : Node3D = $Smoothing/aim_target
+@onready var ground_detect : Area3D = $GroundDetect
+@onready var slide_detect : Area3D = $GroundDetect
+@onready var forward_detect : Area3D = $ForwardDetect
+@onready var wall_detect : Area3D = $WallDetect
+@onready var ledge_detect : Area3D = $LedgeDetect
 @onready var forward_ray : RayCast3D = $ForwardRay
 @onready var ledge_ray : RayCast3D = $LedgeRay
-@onready var air_time = $AirTime
-@onready var trip_time = $TripTime
-@onready var slide_time = $SlideTime
-@onready var roll_time = $RollTime
-@onready var respawn_time = $RespawnTime
-@onready var trip_audio = $TripAudio
-@onready var sparkle_audio_anim = $SparkleAudio/AnimationPlayer
-@onready var world = Global.get_world()
-@onready var animator = $AnimationTree
-@onready var collider = $collider
-@onready var lifter_particles = $LifterParticles
-@onready var health_bar = get_tree().current_scene.get_node("GameCanvas/HealthBar")
-@onready var respawn_overlay = get_tree().current_scene.get_node("GameCanvas/RespawnOverlay/AnimationPlayer")
-@onready var jump_particles = preload("res://data/scene/character/JumpParticles.tscn")
-@onready var run_particles = preload("res://data/scene/character/RunParticles.tscn")
+@onready var air_time : Timer = $AirTime
+@onready var trip_time : Timer = $TripTime
+@onready var slide_time : Timer = $SlideTime
+@onready var roll_time : Timer = $RollTime
+@onready var respawn_time : Timer = $RespawnTime
+@onready var trip_audio : AudioStreamPlayer3D = $TripAudio
+@onready var sparkle_audio_anim : AnimationPlayer = $SparkleAudio/AnimationPlayer
+@onready var world : World = Global.get_world()
+@onready var animator : AnimationTree = $AnimationTree
+@onready var collider : CollisionShape3D = $collider
+@onready var lifter_particles : GPUParticles3D = $LifterParticles
+@onready var health_bar : ProgressBar = get_tree().current_scene.get_node("GameCanvas/HealthBar")
+@onready var respawn_overlay : AnimationPlayer = get_tree().current_scene.get_node("GameCanvas/RespawnOverlay/AnimationPlayer")
+@onready var jump_particles : PackedScene = preload("res://data/scene/character/JumpParticles.tscn")
+@onready var run_particles : PackedScene = preload("res://data/scene/character/RunParticles.tscn")
 
-@onready var shirt_textures = [preload("res://data/models/character/textures/fabric.jpg"), 
+@onready var shirt_textures : Array = [preload("res://data/models/character/textures/fabric.jpg"), 
 preload("res://data/textures/clothing/cloth_tex_0.png"), 
 preload("res://data/textures/clothing/cloth_tex_1.png"), 
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
@@ -129,7 +129,7 @@ func light_fire(from_who_id : int = -1, initial_damage : int = 1) -> void:
 			# take initial damage
 			reduce_health(initial_damage, CauseOfDeath.FIRE, from_who_id)
 			# 2 damage / s
-			var fire_timer = Timer.new()
+			var fire_timer := Timer.new()
 			fire_timer.wait_time = 0.5
 			fire_timer.one_shot = false
 			fire_timer.connect("timeout", reduce_health.bind(1, CauseOfDeath.FIRE, from_who_id))
@@ -153,19 +153,19 @@ func extinguish_fire() -> void:
 				$FireTimer.queue_free()
 		fire.extinguish()
 
-func _set_can_enter_seat(mode):
+func _set_can_enter_seat(mode : bool) -> void:
 	can_enter_seat = mode
 
 func change_appearance() -> void:
 	update_appearance.rpc(Global.shirt, Global.shirt_texture, Global.hair, Global.shirt_colour, Global.pants_colour, Global.hair_colour, Global.skin_colour)
 
 @rpc ("call_local")
-func update_appearance(shirt = null, shirt_texture = null, hair = null, shirt_colour = null, pants_colour = null, hair_colour = null, skin_colour = null) -> void:
-	var armature = get_node("Smoothing/character_model/character/Skeleton3D")
-	var hair_material = armature.get_node("hair_short/hair_short").get_surface_override_material(0)
-	var shirt_material = armature.get_node("shirt_shortsleeve").get_surface_override_material(0)
-	var pants_material = armature.get_node("pants").get_surface_override_material(0)
-	var skin_material = armature.get_node("Character_001").get_surface_override_material(0)
+func update_appearance(shirt : int, shirt_texture : int, hair : int, shirt_colour : Color, pants_colour : Color, hair_colour : Color, skin_colour : Color) -> void:
+	var armature : Skeleton3D = get_node("Smoothing/character_model/character/Skeleton3D")
+	var hair_material : Material = armature.get_node("hair_short/hair_short").get_surface_override_material(0)
+	var shirt_material : Material = armature.get_node("shirt_shortsleeve").get_surface_override_material(0)
+	var pants_material : Material = armature.get_node("pants").get_surface_override_material(0)
+	var skin_material : Material = armature.get_node("Character_001").get_surface_override_material(0)
 	
 	if shirt_colour != null:
 		shirt_material.albedo_color = shirt_colour
@@ -209,7 +209,7 @@ func get_tool_inventory() -> Node:
 	return $Tools
 
 # When this player hits something too hard, trip them.
-func _on_body_entered(body) -> void:
+func _on_body_entered(body : Node3D) -> void:
 	if (body is RigidBody3D) && (!body is RigidPlayer):
 		if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
 			if _state != STANDING_UP && _state != IN_SEAT:
@@ -251,22 +251,22 @@ func _on_body_entered(body) -> void:
 				reduce_health(5)
 
 # Set this player's authority to its client.
-func _enter_tree():
+func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int(), true)
 
-func _is_friendly_fire(other_player):
+func _is_friendly_fire(other_player : RigidPlayer) -> bool:
 	# default team can't have friendly fire
 	if team != "Default":
-		var executing_team = Global.get_world().get_current_map().get_teams().get_team(other_player.team)
-		var my_team = Global.get_world().get_current_map().get_teams().get_team(team)
+		var executing_team : Team = Global.get_world().get_current_map().get_teams().get_team(other_player.team)
+		var my_team : Team = Global.get_world().get_current_map().get_teams().get_team(team)
 		if my_team == executing_team:
 			return true
 	return false
 
-func reduce_health(amount, potential_cause_of_death = null, potential_executor_id = null) -> void:
+func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
 	set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
 
-func set_health(new, potential_cause_of_death = null, potential_executor_id = null):
+func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> int:
 	if !invulnerable && _state != DEAD:
 		# flash health on damage
 		if new < health:
@@ -278,11 +278,11 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 			if Global.get_world().minigame != null:
 				respawn_time.wait_time = 10
 			# death feed handler
-			if potential_cause_of_death != null:
+			if potential_cause_of_death != -1:
 				# determine if there is an executing player
 				executing_player = null
-				var executing_player_name = null
-				if potential_executor_id:
+				var executing_player_name : String = ""
+				if potential_executor_id != -1:
 					executing_player = Global.get_world().get_node_or_null(str(potential_executor_id))
 					if executing_player != null:
 						executing_player_name = executing_player.display_name
@@ -294,7 +294,7 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 								death_message = str(display_name, " blew themselves up!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
-								if _is_friendly_fire(executing_player):
+								if _is_friendly_fire(executing_player as RigidPlayer):
 									death_message = str(executing_player_name, " blew up their teammate ", display_name, "! Good going!")
 								# If friendly fire is ON
 								else:
@@ -319,7 +319,7 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 								death_message = str(display_name, " was involved in a flamethrower accident!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
-								if _is_friendly_fire(executing_player):
+								if _is_friendly_fire(executing_player as RigidPlayer):
 									death_message = str(executing_player_name, " blew up their teammate ", display_name, "! Good job!")
 								# If friendly fire is ON
 								else:
@@ -338,7 +338,7 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 						if executing_player != null:
 							if executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
-								if _is_friendly_fire(executing_player):
+								if _is_friendly_fire(executing_player as RigidPlayer):
 									death_message = str(executing_player_name, " pulverized their teammate ", display_name, "! Great work!")
 								# If friendly fire is ON
 								else:
@@ -361,7 +361,7 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 								death_message = str(display_name, " hit themselves with a ball!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
-								if _is_friendly_fire(executing_player):
+								if _is_friendly_fire(executing_player as RigidPlayer):
 									death_message = str(executing_player_name, " hit their teammate ", display_name, " too hard with a ball! Great work!")
 								# If friendly fire is ON
 								else:
@@ -383,8 +383,8 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 						respawn_time.wait_time = 5
 						# if we were last hit by someone's projectile
 						if last_hit && last_hit_by_id != -1:
-							var last_hit_executing_player = Global.get_world().get_node_or_null(str(last_hit_by_id))
-							var last_hit_executing_player_name = last_hit_executing_player.display_name
+							var last_hit_executing_player : RigidPlayer = Global.get_world().get_node_or_null(str(last_hit_by_id))
+							var last_hit_executing_player_name : String = last_hit_executing_player.display_name
 							# self
 							if last_hit_by_id == multiplayer.get_unique_id():
 								death_message = str(display_name, " hit themselves away!")
@@ -431,7 +431,7 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 								death_message = str(display_name, " played with fire!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
-								if _is_friendly_fire(executing_player):
+								if _is_friendly_fire(executing_player as RigidPlayer):
 									death_message = str(executing_player_name, " turned their teammate ", display_name, " into a pile of ash!")
 								# If friendly fire is ON
 								else:
@@ -475,29 +475,29 @@ func set_health(new, potential_cause_of_death = null, potential_executor_id = nu
 		update_health.rpc(health)
 	return health
 
-func get_health():
+func get_health() -> int:
 	return health
 
 @rpc("any_peer", "call_local", "reliable")
-func set_last_hit_by_id(who) -> void:
+func set_last_hit_by_id(who : int) -> void:
 	last_hit_by_id = who
 	last_hit = true
 
 # Update peers with new health
 @rpc("call_remote")
-func update_health(new) -> void:
+func update_health(new : int) -> void:
 	health = new
 
 # Update this player's team with a new team.
 @rpc("any_peer", "call_local", "reliable")
-func update_team(new) -> void:
-	var team_list = world.get_current_map().get_teams().get_team_list()
-	for t in team_list:
+func update_team(new : String) -> void:
+	var team_list : Array = world.get_current_map().get_teams().get_team_list()
+	for t : Team in team_list:
 		if t.members.has(str(name)):
 			t.members.erase(str(name))
 	# Make this the team resource
 	team = new
-	var world_team = world.get_current_map().get_teams().get_team(new)
+	var world_team : Team = world.get_current_map().get_teams().get_team(new)
 	if world_team != null:
 		world_team.members.append(str(name))
 	# Make nametag colour team's colour
@@ -514,11 +514,11 @@ func update_name(new : String) -> void:
 	display_name = new
 	
 	# Add the player to the player list.
-	var player_list = get_tree().current_scene.get_node("GameCanvas/PlayerList")
+	var player_list : Control = get_tree().current_scene.get_node("GameCanvas/PlayerList")
 	player_list.add_player(self)
 
 # Update peers with new name and team info on join.
-func update_info(id = -1) -> void:
+func update_info(id : int = -1) -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)
 	change_appearance()
@@ -530,14 +530,14 @@ func lock() -> void:
 func unlock() -> void:
 	locked = false
 
-func set_camera(new):
+func set_camera(new : Camera3D) -> void:
 	camera = new
 	if !camera.is_connected("camera_mode_changed", _on_camera_mode_changed):
 		camera.connect("camera_mode_changed", _on_camera_mode_changed)
 	if camera.has_method("set_target"):
 		camera.set_target(target, false)
 
-func _ready():
+func _ready() -> void:
 	# execute for everyone
 	Global.get_world().add_player_to_list(self)
 	
@@ -558,7 +558,7 @@ func _ready():
 	change_appearance()
 	# find team spawns
 	spawns = world.get_current_map().get_teams().get_team_spawns(team)
-	var spawn = spawns[randi() % spawns.size()]
+	var spawn : Node3D = spawns[randi() % spawns.size()]
 	global_position = spawn.global_position
 	# hide your own name label
 	$Smoothing/NameLabel.visible = false
@@ -566,10 +566,10 @@ func _ready():
 	protect_spawn(3.5, false)
 
 @rpc("any_peer", "call_local")
-func set_lifter_particles(mode):
+func set_lifter_particles(mode : bool) -> void:
 	lifter_particles.emitting = mode
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	# Idle animations
 	if _state == IDLE:
@@ -582,7 +582,7 @@ func _physics_process(delta):
 	# Set animation blend
 	animator["parameters/BlendRun/blend_amount"] = clamp(linear_velocity.length() / move_speed, 0, 1)
 	# Set looking direction
-	var hor_linear_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
+	var hor_linear_velocity := Vector3(linear_velocity.x, 0, linear_velocity.z)
 	if _state != TRIPPED and _state != DEAD and _state != STANDING_UP and _state != ON_WALL and _state != ON_LEDGE:
 		# if the active camera has the custom Camera script
 		if camera is Camera:
@@ -603,8 +603,8 @@ func _physics_process(delta):
 			translate_object_local(Vector3(0, -0.7, 0))
 			rotate_object_local(Vector3.UP, deg_to_rad(180))
 	
-var idle_time = 0
-var idle_max = 300
+var idle_time : int = 0
+var idle_max : int = 300
 func check_idle() -> void:
 	idle_time += 1
 	if idle_time > idle_max:
@@ -617,19 +617,19 @@ func play_idle_animation() -> void:
 	animator.set("parameters/IdleOneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func play_jump_particles() -> void:
-	var jump_particles_i = jump_particles.instantiate()
+	var jump_particles_i : GPUParticles3D = jump_particles.instantiate()
 	add_child(jump_particles_i)
 	jump_particles_i.emitting = true
 
-var air_duration = 0
-var last_move_direction = Vector3.ZERO
-var air_from_jump = false
-var on_wall_cooldown = 0
+var air_duration : float = 0
+var last_move_direction := Vector3.ZERO
+var air_from_jump := false
+var on_wall_cooldown : int = 0
 # Manages movement
-func _integrate_forces(state) -> void:
+func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	if !is_multiplayer_authority(): return
 	# executes on owner only
-	var is_on_ground = false
+	var is_on_ground := false
 	if ground_detect.has_overlapping_bodies():
 		is_on_ground = true
 	
@@ -637,7 +637,7 @@ func _integrate_forces(state) -> void:
 		camera = get_viewport().get_camera_3d()
 	
 	# only captured mouse gets move dir
-	var move_direction = Vector3.ZERO
+	var move_direction := Vector3.ZERO
 	if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		move_direction = get_movement_direction()
 	
@@ -680,7 +680,7 @@ func _integrate_forces(state) -> void:
 				# only on authority client
 				# 140deg change
 				if last_move_direction.angle_to(move_direction) > 2.443:
-					var run_particles_i = run_particles.instantiate()
+					var run_particles_i : GPUParticles3D = run_particles.instantiate()
 					# so that rotation does not inherit character's rotation
 					get_tree().current_scene.add_child(run_particles_i)
 					run_particles_i.global_rotation.y = atan2(state.linear_velocity.x, state.linear_velocity.z)
@@ -724,9 +724,9 @@ func _integrate_forces(state) -> void:
 		ON_WALL:
 			# align with wall
 			if forward_ray.is_colliding():
-				var normal = -forward_ray.get_collision_normal()
+				var normal : Vector3 = -forward_ray.get_collision_normal()
 				# angle to wall normal
-				var diff = global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
+				var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
 				# rotate smoothly
 				if abs(diff) > 0.05:
 					rotate_y(diff * 0.2)
@@ -738,7 +738,7 @@ func _integrate_forces(state) -> void:
 			if Input.is_action_just_pressed("jump") && !locked:
 				rotate_object_local(Vector3.UP, deg_to_rad(180))
 				change_state(DIVE)
-				var forward = get_global_transform().basis.z
+				var forward : Vector3 = get_global_transform().basis.z
 				apply_central_impulse(forward * 2.5)
 				apply_central_impulse(Vector3.UP * 9)
 			elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
@@ -748,16 +748,16 @@ func _integrate_forces(state) -> void:
 		ON_LEDGE:
 			# align with wall
 			if forward_ray.is_colliding():
-				var normal = -forward_ray.get_collision_normal()
+				var normal : Vector3 = -forward_ray.get_collision_normal()
 				# angle to wall normal
-				var diff = global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
+				var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
 				# rotate smoothly
 				if abs(diff) > 0.05:
 					rotate_y(diff * 0.2)
 			# align with ledge
-			var top = ledge_ray.get_collision_point()
-			var offset = 1.45
-			var diff = (global_position.y + offset) - top.y
+			var top := ledge_ray.get_collision_point()
+			var offset := 1.45
+			var diff := (global_position.y + offset) - top.y
 			if abs(diff) > 0.01:
 				linear_velocity = Vector3(0, -diff * 5, 0)
 			# if no longer on ledge
@@ -781,7 +781,7 @@ func _integrate_forces(state) -> void:
 					apply_central_impulse(Vector3.UP * jump_force)
 					change_state(AIR)
 			# somewhat controllable when sliding
-			var dir = -camera.get_global_transform().basis.z
+			var dir : Vector3 = -camera.get_global_transform().basis.z
 			dir.y = 0
 			dir = dir.normalized()
 			apply_force(dir * 7, Vector3.ZERO)
@@ -793,23 +793,23 @@ func _integrate_forces(state) -> void:
 					air_from_jump = true
 					apply_central_impulse(Vector3.UP * jump_force * 1.5)
 					change_state(AIR)
-			var dir = -camera.get_global_transform().basis.z
+			var dir : Vector3 = -camera.get_global_transform().basis.z
 			dir.y = 0
 			dir = dir.normalized()
 			apply_force(dir * 25, Vector3.ZERO)
 			# cap velocity
-			var max_speed = 15
+			var max_speed : float = 15
 			# prevents the player from rolling faster at 45 degree angles
 			# (approx. *1/sqrt2 speed when at 45deg angle)
-			var horizontal_velocity = Vector3(state.linear_velocity.x, 0, state.linear_velocity.z)
-			var length = min(max_speed, horizontal_velocity.length())
+			var horizontal_velocity : Vector3 = Vector3(state.linear_velocity.x, 0, state.linear_velocity.z)
+			var length : float = min(max_speed, horizontal_velocity.length())
 			state.linear_velocity = Vector3(horizontal_velocity.normalized().x * length, state.linear_velocity.y, horizontal_velocity.normalized().z * length)
 		TRIPPED:	
 			pass
 		IN_SEAT:
 			if seat_occupying is MotorSeat && !locked:
-				var dir_forward = Input.get_action_strength("forward") - Input.get_action_strength("back")
-				var dir_steer = Input.get_action_strength("right") - Input.get_action_strength("left")
+				var dir_forward : float = Input.get_action_strength("forward") - Input.get_action_strength("back")
+				var dir_steer : float = Input.get_action_strength("right") - Input.get_action_strength("left")
 				seat_occupying.drive.rpc(dir_forward, dir_steer)
 				state.linear_velocity = Vector3.ZERO
 			if Input.is_action_just_pressed("exit_vehicle") && !locked:
@@ -819,9 +819,9 @@ func _integrate_forces(state) -> void:
 		DEAD:
 			pass
 		SWIMMING, SWIMMING_IDLE:
-			var force_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
-			var force_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
-			var dir = camera.get_global_transform().basis.z * (move_speed * 0.8 * force_forward)
+			var force_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
+			var force_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
+			var dir : Vector3 = camera.get_global_transform().basis.z * (move_speed * 0.8 * force_forward)
 			dir += camera.get_global_transform().basis.x * (move_speed * 0.8 * force_sideways)
 			apply_force(dir, Vector3.ZERO)
 			if dir.length() >= 1 && _state != SWIMMING:
@@ -832,7 +832,7 @@ func _integrate_forces(state) -> void:
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
-func entered_seat(path_to_seat) -> void:
+func entered_seat(path_to_seat : String) -> void:
 	# Don't enter the seat in special states
 	if can_enter_seat and (_state == IDLE || _state == AIR || _state == RUN || _state == DIVE || _state == SLIDE || _state == SWIMMING || _state == SWIMMING_IDLE):
 		change_state(IN_SEAT)
@@ -840,13 +840,13 @@ func entered_seat(path_to_seat) -> void:
 		UIHandler.show_alert("Press [ Jump ] to stop driving!", 6)
 	# don't enter seat if in special state, tell seat that we could not enter
 	else:
-		var failed_seat = get_node(path_to_seat)
+		var failed_seat : Node3D = get_node(path_to_seat)
 		if failed_seat is MotorSeat:
 				failed_seat.set_controlling_player.rpc(null)
 
 # When the seat the player in gets destroyed (called from seat)
 @rpc("any_peer", "call_local")
-func seat_destroyed(offset = false) -> void:
+func seat_destroyed(offset := false) -> void:
 	seat_occupying = null
 	if offset:
 		global_position.y += 2
@@ -854,14 +854,14 @@ func seat_destroyed(offset = false) -> void:
 	apply_central_impulse(Vector3.UP * jump_force)
 
 @rpc("any_peer", "call_remote")
-func trip_by_player(hit_velocity) -> void:
+func trip_by_player(hit_velocity : Vector3) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	change_state(TRIPPED)
 	await get_tree().process_frame
 	linear_velocity = hit_velocity
 
-func change_state(state) -> void:
+func change_state(state : int) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	# reset idle timer
@@ -903,34 +903,34 @@ func enter_state() -> void:
 		air_duration = 0
 		# prevent fast jumps off wall from cutting off jump animation afterwards
 		if _state == ON_WALL:
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.01)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.01)
 		elif _state != DIVE && _state != EXIT_SEAT:
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.3)
 	if _state != DUMMY:
 		freeze = false
 	
 	if _state != SLIDE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 0.0, 0.2)
 		
 	if _state != ROLL:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
 	
 	if _state != ON_WALL:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 0.0, 0.2)
 	
 	if _state != ON_LEDGE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendOnLedge/blend_amount", 0.0, 0.2)
 	
 	if _state != DEAD:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDead/blend_amount", 0.0, 0.3)
 	
 	# lifter handling
@@ -943,7 +943,7 @@ func enter_state() -> void:
 		last_hit = false
 	
 	if _state != SWIMMING && _state != SWIMMING_IDLE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
 	
 	# tools handling
@@ -974,14 +974,14 @@ func enter_state() -> void:
 			air_time.start()
 			# set jump animation playhead back to 0
 			animator.set("parameters/TimeSeek/seek_request", 0.0)
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 1.0, 0.1)
 			change_state_non_authority.rpc(AIR)
 		DIVE:
-			var forward = get_global_transform().basis.z
+			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * 4)
 			animator.set("parameters/TimeSeekDive/seek_request", 0.0)
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 1.0, 0.2)
 			change_state_non_authority.rpc(DIVE)
 		SLIDE:
@@ -990,9 +990,9 @@ func enter_state() -> void:
 			slide_time.start()
 			lock_rotation = true
 			physics_material_override.friction = 1
-			var forward = get_global_transform().basis.z
+			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * linear_velocity.length() * 0.5)
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE)
 			# stand up after slide timeout
@@ -1006,9 +1006,9 @@ func enter_state() -> void:
 			roll_time.start()
 			lock_rotation = true
 			physics_material_override.friction = 0.5
-			var forward = get_global_transform().basis.z
+			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * linear_velocity.length() * 0.5)
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 1.0, 0.2)
 			change_state_non_authority.rpc(ROLL)
 			# stand up after slide timeout
@@ -1038,7 +1038,7 @@ func enter_state() -> void:
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
-			var tween = create_tween()
+			var tween : Tween = create_tween()
 			tween.tween_property(self, "rotation", Vector3(0, rotation.y, 0), 0.4)
 			change_state_non_authority.rpc(IDLE)
 			await get_tree().create_timer(0.4).timeout
@@ -1059,7 +1059,7 @@ func enter_state() -> void:
 			if seat_occupying is MotorSeat:
 				# reset speed
 				seat_occupying.drive.rpc(0, 0)
-				seat_occupying.set_controlling_player.rpc(null)
+				seat_occupying.set_controlling_player.rpc(-1)
 			set_global_position.call_deferred(Vector3(seat_occupying.global_position.x, seat_occupying.global_position.y + 3, seat_occupying.global_position.z))
 			set_global_rotation(Vector3.ZERO)
 			# re-enable collider
@@ -1080,7 +1080,7 @@ func enter_state() -> void:
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
 			lock_rotation = true
-			var tween = create_tween()
+			var tween : Tween = create_tween()
 			tween.tween_property(self, "rotation", Vector3(0, rotation.y, 0), 0.2)
 			tween.tween_property(animator, "parameters/BlendDead/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(DEAD)
@@ -1103,7 +1103,7 @@ func enter_state() -> void:
 				camera.locked = true
 				camera.set_camera_mode(Camera.CameraMode.TRACK)
 			# show timer
-			var cur_respawn = respawn_time.wait_time
+			var cur_respawn := respawn_time.wait_time
 			for second in respawn_time.wait_time:
 				# in case we instantly changed states
 				if _state == DEAD:
@@ -1141,7 +1141,7 @@ func enter_state() -> void:
 		SWIMMING:
 			gravity_scale = 0
 			linear_damp = 0.8
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 1.0, 0.5)
 			change_state_non_authority.rpc(SWIMMING)
 			# always get propulsed by rockets when swimming
@@ -1149,7 +1149,7 @@ func enter_state() -> void:
 		SWIMMING_IDLE:
 			gravity_scale = 0
 			linear_damp = 0.8
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 0.0, 0.5)
 			# TODO: Maybe a little inefficient, merge swimming & swimming idle states with
 			# blended animations somehow
@@ -1164,13 +1164,13 @@ func enter_state() -> void:
 			change_state(IDLE)
 		ON_WALL:
 			air_time.start()
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			play_jump_particles()
 			tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 1.0, 0.2)
 			change_state_non_authority.rpc(ON_WALL)
 		ON_LEDGE:
 			air_time.start()
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			play_jump_particles()
 			tween.tween_property(animator, "parameters/BlendOnLedge/blend_amount", 1.0, 0.2)
 			change_state_non_authority.rpc(ON_LEDGE)
@@ -1181,37 +1181,37 @@ func enter_state() -> void:
 func go_to_spawn() -> void:
 	spawns = world.get_current_map().get_teams().get_team_spawns(team)
 	await get_tree().process_frame
-	set_global_position(spawns[randi() % spawns.size()].global_position)
+	set_global_position(spawns[randi() % spawns.size()].global_position as Vector3)
 
 # replicates states on non-authority clients, mainly for animation reasons
 @rpc("call_remote", "reliable")
-func change_state_non_authority(state) -> void:
+func change_state_non_authority(state : int) -> void:
 	_state = state
 	
 	if _state != DUMMY:
 		animator["parameters/BlendOutroPose/blend_amount"] = 0
 	if _state != AIR:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
 	if _state != DIVE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.1)
 	if _state != IN_SEAT:
 		animator["parameters/BlendSit/blend_amount"] = 0
 	if _state != SLIDE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 0.0, 0.2)
 	if _state != ROLL:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
 	if _state != DEAD:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDead/blend_amount", 0.0, 0.2)
 	if _state != ON_WALL:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 0.0, 0.2)
 	if _state != ON_LEDGE:
-		var tween = get_tree().create_tween().set_parallel(true)
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendOnLedge/blend_amount", 0.0, 0.2)
 	# reset idle animation
 	animator.set("parameters/IdleOneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FADE_OUT)
@@ -1225,7 +1225,7 @@ func change_state_non_authority(state) -> void:
 			air_time.start()
 			# set jump animation playhead back to 0
 			animator.set("parameters/TimeSeek/seek_request", 0.0)
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 1.0, 0.1)
 			# jump particles
 			play_jump_particles()
@@ -1235,47 +1235,47 @@ func change_state_non_authority(state) -> void:
 			$Smoothing/dizzy_stars/AnimationPlayer.play("dizzy")
 		DIVE:
 			# non-parallel tween runs sequentially
-			var tween = get_tree().create_tween()
+			var tween : Tween = get_tree().create_tween()
 			animator.set("parameters/TimeSeekDive/seek_request", 0.0)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 1.0, 0.2)
 		SLIDE:
 			# non-parallel tween runs sequentially
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
 			for i in range(9):
 				play_jump_particles()
 				await get_tree().create_timer(0.2).timeout
 		ROLL:
 			# non-parallel tween runs sequentially
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 1.0, 0.2)
 			for i in range(10):
 				play_jump_particles()
 				await get_tree().create_timer(0.2).timeout
 		SWIMMING:
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 1.0, 0.5)
 		SWIMMING_IDLE:
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 0.0, 0.5)
 		EXIT_SWIMMING:
 			drip_animator.play("drip")
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
 		IN_SEAT:
 			animator["parameters/BlendSit/blend_amount"] = 1
 		DEAD:
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendDead/blend_amount", 1.0, 0.3)
 		ON_WALL:
 			air_time.start()
 			play_jump_particles()
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 1.0, 0.2)
 		ON_LEDGE:
 			air_time.start()
 			play_jump_particles()
-			var tween = get_tree().create_tween().set_parallel(true)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendOnLedge/blend_amount", 1.0, 0.2)
 		DUMMY:
 			pass
@@ -1284,10 +1284,10 @@ func change_state_non_authority(state) -> void:
 func play_trip_audio() -> void:
 	trip_audio.play()
 
-func get_movement_direction():
+func get_movement_direction() -> Vector3:
 	# only execute on yourself
-	if !is_multiplayer_authority(): return
-	var dir = Vector3.ZERO
+	if !is_multiplayer_authority(): return Vector3.ZERO
+	var dir := Vector3.ZERO
 	
 	dir.x = Input.get_action_strength("right") - Input.get_action_strength("left")
 	dir.z = Input.get_action_strength("back") - Input.get_action_strength("forward")
@@ -1308,22 +1308,22 @@ func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	# default death type is explosion
-	var cause_of_death = CauseOfDeath.EXPLOSION
+	var cause_of_death : CauseOfDeath = CauseOfDeath.EXPLOSION
 	# check if holding flamethrower, if so set proper cause of death
-	var flamethrower = get_tool_inventory().has_tool_by_name("FlamethrowerTool")
+	var flamethrower : Tool = get_tool_inventory().has_tool_by_name("FlamethrowerTool")
 	if flamethrower != null && get_tool_inventory().tool_just_holding != null:
 		if flamethrower == get_tool_inventory().tool_just_holding:
 			cause_of_death = CauseOfDeath.FLAMETHROWER_EXPLOSION
 	
-	var explosion_force = randi_range(20, 30)
+	var explosion_force : float = randi_range(20, 30)
 	# reduce health depending on distance of explosion; notify health handler who it was from
-	var offset_pos = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
-	var result_health = set_health(get_health() - (28 / int(1 + offset_pos.distance_to(explosion_position))), cause_of_death, from_whom)
+	var offset_pos : Vector3 = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
+	var result_health : int = set_health(get_health() - (28 / int(1 + offset_pos.distance_to(explosion_position))), cause_of_death, from_whom)
 	# only trip / light fire if we are not dead
 	if result_health > 0:
 		change_state(TRIPPED)
 		light_fire.rpc(from_whom)
-	var explosion_dir = explosion_position.direction_to(global_position) * explosion_force
+	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * explosion_force
 	apply_impulse(explosion_dir)
 
 @rpc("call_local", "reliable")
@@ -1341,7 +1341,7 @@ func increment_kills() -> void:
 	kills += 1
 	update_kills.rpc(kills)
 
-func protect_spawn(time : float = 3.5, overlay = true) -> void:
+func protect_spawn(time : float = 3.5, overlay := true) -> void:
 	play_protect_spawn_animation.rpc()
 	if overlay:
 		respawn_overlay.play("respawn")

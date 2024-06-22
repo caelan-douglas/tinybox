@@ -35,6 +35,11 @@ SpawnableObjects="*res://src/SpawnableObjects.gd"
 
 file_logging/enable_file_logging=true
 settings/stdout/verbose_stdout=true
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_property_access=1
+gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_cast=1
+gdscript/warnings/unsafe_call_argument=2
 
 [display]
 

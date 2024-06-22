@@ -16,21 +16,21 @@
 
 extends Node
 
-signal upnp_completed(error)
+signal upnp_completed(error : Object)
 
-const Player = preload("res://data/scene/character/RigidPlayer.tscn")
-const CAMERA = preload("res://data/scene/camera/Camera.tscn")
+const Player : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
+const CAMERA : PackedScene = preload("res://data/scene/camera/Camera.tscn")
 const PORT = 30814
 # thread for UPNP connection
-var thread = null
-var upnp = null
-var host_public = true
-var upnp_err = -1
-var enet_peer = ENetMultiplayerPeer.new()
+var thread : Thread = null
+var upnp : UPNP = null
+var host_public := true
+var upnp_err : int = -1
+var enet_peer := ENetMultiplayerPeer.new()
 # For LAN servers
 var lan_advertiser : ServerAdvertiser = null
 var lan_listener : ServerListener = ServerListener.new()
-var lan_entries = []
+var lan_entries := []
 
 # Server version between client and server must match
 # in order for client to join.
@@ -40,23 +40,23 @@ var lan_entries = []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version = 9110
+var server_version : int = 9110
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version = "beta 9.11pre"
+var display_version := "beta 9.11pre"
 
-@onready var host_button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Host
-@onready var host_public_button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/HostPublic
-@onready var join_button = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Join
-@onready var display_name_field = $MultiplayerMenu/MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/DisplayName
-@onready var join_address = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Address
-@onready var host_map_selector = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
-@onready var editor_button = $MultiplayerMenu/MainMenu/LeftColumn/Editor
+@onready var host_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Host
+@onready var host_public_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/HostPublic
+@onready var join_button : Button = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Join
+@onready var display_name_field : LineEdit = $MultiplayerMenu/MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/DisplayName
+@onready var join_address : LineEdit = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Address
+@onready var host_map_selector : OptionButton = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
+@onready var editor_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Editor
 
-func _ready():
+func _ready() -> void:
 	# fullscreen if not in debug mode
 	if !OS.has_feature("editor") && !OS.get_name() == "macOS":
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
@@ -66,6 +66,9 @@ func _ready():
 	
 	# Clear the graphics cache when entering the main menu.
 	Global.graphics_cache = []
+	# Update the spawnable scenes in case the player left a server.
+	# (re-adds all spawnable objs to the multiplayerspawner)w
+	SpawnableObjects.update_spawnable_scenes()
 	
 	host_button.connect("pressed", _on_host_pressed)
 	host_public_button.connect("toggled", _on_host_public_toggled)
@@ -74,12 +77,12 @@ func _ready():
 	editor_button.connect("pressed", _on_editor_pressed)
 	
 	# Load display name from prefs.
-	var display_pref = UserPreferences.load_pref("display_name")
+	var display_pref : String = UserPreferences.load_pref("display_name")
 	if display_pref != null:
 		display_name_field.text = str(display_pref)
 	
 	# Load join address from prefs.
-	var address = UserPreferences.load_pref("join_address")
+	var address : String = UserPreferences.load_pref("join_address")
 	if address != null:
 		join_address.text = str(address)
 	
@@ -88,11 +91,11 @@ func _ready():
 	lan_listener.connect("new_server", _on_new_lan_server)
 	lan_listener.connect("remove_server", _on_remove_lan_server)
 
-func _on_new_lan_server(serverInfo):
-	var multiplayer_menu = get_node_or_null("MultiplayerMenu")
-	var lan_entry = load("res://data/scene/ui/LANEntry.tscn")
+func _on_new_lan_server(serverInfo : Dictionary) -> void:
+	var multiplayer_menu : CanvasLayer = get_node_or_null("MultiplayerMenu")
+	var lan_entry : PackedScene = load("res://data/scene/ui/LANEntry.tscn")
 	if multiplayer_menu:
-		var new_lan_entry = lan_entry.instantiate()
+		var new_lan_entry : Control = lan_entry.instantiate()
 		get_node("MultiplayerMenu/MainMenu/RightColumn/LANPanel/LANPanelContainer/Label").text = "Join a server via LAN"
 		multiplayer_menu.get_node("MainMenu/RightColumn/LANPanel/LANPanelContainer").add_child(new_lan_entry)
 		new_lan_entry.get_node("Name").text = str(serverInfo.name)
@@ -100,8 +103,8 @@ func _on_new_lan_server(serverInfo):
 		new_lan_entry.entry_server_ip = serverInfo.ip
 		lan_entries.append(new_lan_entry)
 
-func _on_remove_lan_server(serverIp):
-	for entry in lan_entries:
+func _on_remove_lan_server(serverIp : String) -> void:
+	for entry : Control in lan_entries:
 		if entry is LANEntry:
 			if entry.entry_server_ip == serverIp:
 				lan_entries.erase(entry)
@@ -109,22 +112,22 @@ func _on_remove_lan_server(serverIp):
 				if lan_entries.size() < 1:
 					get_node("MultiplayerMenu/MainMenu/RightColumn/LANPanel/LANPanelContainer/Label").text = "Searching for LAN servers..."
 
-func verify_display_name(check_string):
-	var regex = RegEx.new()
+func verify_display_name(check_string : String) -> Variant:
+	var regex := RegEx.new()
 	regex.compile("^\\s+$")
 	if regex.search(str(check_string)):
 		return "has only whitespaces"
 	return null
 
-func get_display_name_from_field():
-	var t_display_name = display_name_field.text
+func get_display_name_from_field() -> Variant:
+	var t_display_name : String = display_name_field.text
 	# User must have a display name.
 	if t_display_name == "" || t_display_name == null:
 		UIHandler.show_alert("Please enter a display name", 4)
 		display_name_field.text = ""
 		return null
 	# Users can't have a display name that's only whitespace.
-	var check_result = verify_display_name(t_display_name)
+	var check_result : Variant = verify_display_name(t_display_name)
 	if check_result != null:
 		UIHandler.show_alert(str("Display name invalid (", check_result, ")"), 4)
 		display_name_field.text = ""
@@ -134,11 +137,11 @@ func get_display_name_from_field():
 	return t_display_name
 
 # UPnP setup thread
-func _upnp_setup(server_port):
+func _upnp_setup(server_port : int) -> void:
 	upnp = UPNP.new()
 	host_button.call_deferred("set", "text", "Finding gateway...")
 	# timeout 2500ms
-	var err = upnp.discover(2500)
+	var err := upnp.discover(2500)
 	
 	if err != OK:
 		push_error(str(err))
@@ -149,8 +152,8 @@ func _upnp_setup(server_port):
 	
 	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
 		host_button.call_deferred("set", "text", "Configuring...")
-		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "UDP")
-		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "TCP")
+		upnp.add_port_mapping(server_port, server_port, str(ProjectSettings.get_setting("application/config/name")), "UDP")
+		upnp.add_port_mapping(server_port, server_port, str(ProjectSettings.get_setting("application/config/name")), "TCP")
 		call_deferred("emit_signal", "upnp_completed", OK)
 	elif upnp.get_device_count() < 1:
 		UIHandler.call_deferred("show_alert", "Failed to start server because: No devices", 15, false, true)
@@ -160,7 +163,7 @@ func _upnp_setup(server_port):
 		UIHandler.call_deferred("show_alert", "Failed to start server because: Unknown\n(UPnP is probably disabled on your router)", 15, false, true)
 		call_deferred("emit_signal", "upnp_completed", 28)
 
-func _exit_tree():
+func _exit_tree() -> void:
 	# Wait for thread finish here to handle game exit while the thread is running.
 	if thread != null:
 		thread.wait_to_finish()
@@ -169,7 +172,7 @@ func _exit_tree():
 		upnp.delete_port_mapping(PORT, "UDP")
 		upnp.delete_port_mapping(PORT, "TCP")
 
-func _on_host_public_toggled(mode) -> void:
+func _on_host_public_toggled(mode : bool) -> void:
 	host_public = mode
 	if mode:
 		host_public_button.set_text_to_json("ui/host_public_settings/on")
@@ -200,7 +203,7 @@ func _on_host_pressed() -> void:
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 	get_tree().current_scene.get_node("GameCanvas").visible = true
 	# Get the host's selected map from the dropdown.
-	var selected_map = host_map_selector.get_item_text(host_map_selector.selected)
+	var selected_map : String = host_map_selector.get_item_text(host_map_selector.selected)
 	
 	# Create the server.
 	enet_peer.create_server(PORT)
@@ -210,14 +213,12 @@ func _on_host_pressed() -> void:
 	multiplayer.peer_connected.connect(add_peer)
 	multiplayer.peer_disconnected.connect(remove_player)
 	# Load the world using the multiplayerspawner spawn method.
-	var world = $World
+	var world : World = $World
 	# remove ".tbw"
 	world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
 	await Signal(world, "map_loaded")
-	
-	
 	# add camera
-	var camera_inst = CAMERA.instantiate()
+	var camera_inst : Node3D = CAMERA.instantiate()
 	world.add_child(camera_inst, true)
 	
 	add_peer(multiplayer.get_unique_id())
@@ -230,16 +231,16 @@ func _on_host_pressed() -> void:
 	lan_advertiser.broadcast_interval = 3
 
 # Only runs for client
-func _on_join_pressed(address = null, is_lan = false) -> void:
+func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 	if address == null:
 		address = join_address.text
 	# Save address for join (only if not LAN.)
 	if !is_lan:
-		UserPreferences.save_pref("join_address", address)
+		UserPreferences.save_pref("join_address", str(address))
 	
 	# debug name
 	if display_name_field.text == "Merle":
-		var names = ["Test1", "Test2", "Dog man", "Dog", "Extra Long Name Very Long"]
+		var names := ["Test1", "Test2", "Dog man", "Dog", "Extra Long Name Very Long"]
 		Global.display_name = names.pick_random()
 	else:
 		Global.display_name = get_display_name_from_field()
@@ -250,7 +251,7 @@ func _on_join_pressed(address = null, is_lan = false) -> void:
 	join_button.text = "Trying to join..."
 	
 	# Create the client.
-	enet_peer.create_client(address, PORT)
+	enet_peer.create_client(str(address), PORT)
 	# Set the current multiplayer peer to the client.
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.connection_failed.connect(kick_client.bind("Server timeout or couldn't find server."))
@@ -260,7 +261,7 @@ func _on_join_pressed(address = null, is_lan = false) -> void:
 	await Signal($World, "map_loaded")
 	
 	# add camera
-	var camera_inst = CAMERA.instantiate()
+	var camera_inst : Node3D = CAMERA.instantiate()
 	$World.add_child(camera_inst, true)
 	
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
@@ -281,11 +282,11 @@ func _on_editor_pressed() -> void:
 	get_tree().current_scene.get_node("EditorCanvas").visible = true
 	
 	# Editor is single player.
-	var world = $World
+	var world : World = $World
 	world.load_map.call_deferred(load(str("res://data/scene/EditorWorld/EditorWorld.tscn")))
 	await Signal(world, "map_loaded")
 	# add camera
-	var camera_inst = CAMERA.instantiate()
+	var camera_inst : Node3D = CAMERA.instantiate()
 	world.add_child(camera_inst, true)
 	
 	add_peer(multiplayer.get_unique_id())
@@ -295,7 +296,8 @@ func _on_editor_pressed() -> void:
 func _on_host_disconnect_as_client() -> void:
 	# in case host disconnects while mouse is captured
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	UIHandler.show_alert("Host disconnected :(", -1, true, true)
+	UIHandler.show_alert("Host disconnected :(", 12, false, true)
+	leave_server()
 
 func leave_server() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
@@ -321,7 +323,7 @@ func add_peer(peer_id : int) -> void:
 			rpc_id(peer_id, "client_info_request_from_server")
 		# for the server just add them
 		else:
-			var player = Player.instantiate()
+			var player : RigidPlayer = Player.instantiate()
 			player.name = str(peer_id)
 			$World.add_child(player)
 			Global.connected_to_server = true
@@ -352,7 +354,7 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 				return
 	# nothing wrong
 	response_from_server_joined.rpc_id(id, 0)
-	var player = Player.instantiate()
+	var player : RigidPlayer = Player.instantiate()
 	player.name = str(id)
 	$World.add_child(player)
 
@@ -370,7 +372,7 @@ func response_from_server_joined(response_code : int) -> void:
 
 # Removes a player from the server given an id.
 func remove_player(peer_id : int) -> void:
-	var player = $World.get_node_or_null(str(peer_id))
+	var player : RigidPlayer = $World.get_node_or_null(str(peer_id))
 	if player:
 		# don't tell clients that the host disconnected
 		if peer_id != 1:

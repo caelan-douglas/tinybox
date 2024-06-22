@@ -16,8 +16,8 @@
 
 extends Node
 
-@export var time = 1.0
+@export var time := 1.0
 
-func _ready():
+func _ready() -> void:
 	await get_tree().create_timer(time).timeout
 	queue_free()

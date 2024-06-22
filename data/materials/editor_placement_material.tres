@@ -6,11 +6,11 @@
 transparency = 2
 alpha_scissor_threshold = 0.629
 alpha_antialiasing_mode = 0
-blend_mode = 1
 albedo_color = Color(0, 0.662952, 0.945079, 1)
 albedo_texture = ExtResource("1_101lp")
 emission_enabled = true
 emission = Color(0, 0.568627, 0.941176, 1)
 rim_enabled = true
 rim_tint = 1.0
-uv1_scale = Vector3(0.8, 0.8, 0.8)
+uv1_scale = Vector3(0.05, 0.05, 0.05)
+uv1_triplanar = true

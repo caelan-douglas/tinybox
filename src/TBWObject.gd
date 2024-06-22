@@ -19,4 +19,4 @@
 extends Node3D
 class_name TBWObject
 
-@export var tbw_object_type = ""
+@export var tbw_object_type : String = ""

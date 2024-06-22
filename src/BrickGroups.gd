@@ -15,17 +15,18 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Node
+class_name BrickGroups
 
 # Holds a list of all brick's groups in the map. Bricks read and write their own groups to this.
-@export var groups = {}
+@export var groups : Dictionary = {}
 
-var non_auth_group = []
-var receive_timeout = 0
+var non_auth_group : Array = []
+var receive_timeout : int = 0
 
 @rpc("any_peer", "call_remote", "reliable")
-func receive_group_from_authority(brick_name):
+func receive_group_from_authority(brick_name : String) -> void:
 	receive_timeout = 45
 	non_auth_group.append(brick_name)
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	receive_timeout -= 1

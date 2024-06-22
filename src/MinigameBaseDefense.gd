@@ -19,39 +19,39 @@ class_name MinigameBaseDefense
 
 # Base Defense
 
-var team_targets = []
+var team_targets : Array[MinigameTarget] = []
 # normally 180
-var build_time = 180
-var build_period = true
-var build_timer = null
+var build_time := 180
+var build_period := true
+var build_timer : Timer = null
 
-var target_dog = preload("res://data/scene/minigame/targets/Dog.tscn")
+var target_dog : PackedScene = preload("res://data/scene/minigame/targets/Dog.tscn")
 
 @rpc("any_peer", "call_remote", "reliable")
-func sync_properties_with_new_client(new_client_id) -> void:
+func sync_properties_with_new_client(new_client_id : int) -> void:
 	# RUNS ON SERVER, SENDS PROPS TO CLIENT
 	receive_properties_as_new_client.rpc_id(new_client_id, [game_timer.time_left, current_leader_id, winner_name, build_timer.time_left, build_period])
 
 @rpc("any_peer", "call_remote", "reliable")
 func receive_properties_as_new_client(args : Array) -> void:
-	game_timer.time_left = args[0]
-	current_leader_id = args[1]
-	winner_name = args[2]
-	build_timer.time_left = args[3]
-	build_period = args[4]
+	game_timer.wait_time = args[0] as float
+	current_leader_id = args[1] as int
+	winner_name = args[2] as String
+	build_timer.wait_time = args[3] as float
+	build_period = args[4] as bool
 
-func play_intro_animation(camera):
-	var map_name = Global.get_world().get_current_map().name
+func play_intro_animation(camera : Camera3D) -> void:
+	var map_name : String = Global.get_world().get_current_map().name
 	if map_name == "Warp":
 		camera.get_parent().get_node("AnimationPlayer").play("intro")
 	else:
 		camera.get_parent().get_node("AnimationPlayer").play("intro_alt")
 	get_tree().current_scene.get_node("GameCanvas").play_intro_animation(str("Base Defense - ", map_name))
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	await Signal(self, "intro_completed")
-	var map_name = Global.get_world().get_current_map().name
+	var map_name : String = Global.get_world().get_current_map().name
 	# floaty has shorter build period
 	match(map_name):
 		"Floaty":
@@ -82,22 +82,22 @@ func _ready():
 	# only run on server
 	if multiplayer.is_server():
 		# team sizes, in order of playing_team_names
-		var team_sizes = []
+		var team_sizes := []
 		# first check if inbalanced
-		for team in playing_team_names:
+		for team : String in playing_team_names:
 			var team_players : Array = Global.get_world().get_current_map().get_teams().get_players_in_team(team)
 			team_sizes.append(team_players.size())
-		var greatest_team_size = 0
+		var greatest_team_size := 0
 		# determine greatest team size
-		for size in team_sizes:
+		for size : int in team_sizes:
 			if size > greatest_team_size:
 				greatest_team_size = size
 		# now spawn targets
-		var team_idx = 0
-		for t in playing_team_names:
+		var team_idx := 0
+		for t : String in playing_team_names:
 			# determine team target health by comparing against greatest team size
-			var target_health = (1 + greatest_team_size) * 750 / (1 + team_sizes[team_idx])
-			var target = create_team_target(t, target_health)
+			var target_health : int = (1 + greatest_team_size) * 750 / (1 + team_sizes[team_idx])
+			var target : Node3D = create_team_target(t, target_health)
 			team_targets.append(target)
 			# append team targets for clients too
 			append_team_targets_client.rpc(target.get_path(), t)
@@ -108,39 +108,39 @@ func _ready():
 		sync_properties_with_new_client.rpc_id(1, multiplayer.get_unique_id())
 
 @rpc("call_remote", "reliable")
-func append_team_targets_client(t_as_path : NodePath, team_name) -> void:
-	var target_node = get_node(t_as_path)
+func append_team_targets_client(t_as_path : NodePath, team_name : String) -> void:
+	var target_node : Node3D = get_node(t_as_path)
 	team_targets.append(target_node)
 	# set colour for clients too
 	target_node.get_node("Label3D").modulate = Global.get_world().get_current_map().get_teams().get_team(team_name).colour
 
-func create_team_target(team_name, health = 750) -> Node:
-	var target_i = target_dog.instantiate()
+func create_team_target(team_name : String, health := 750) -> Node:
+	var target_i : MinigameTarget = target_dog.instantiate()
 	target_i.name = str("Target", team_name)
 	world.add_child(target_i)
 	target_i.team = team_name
 	target_i.health = health
 	target_i.minigame = self
 	target_i.get_node("Label3D").modulate = Global.get_world().get_current_map().get_teams().get_team(team_name).colour
-	var team_spawn = Global.get_world().get_current_map().get_teams().get_team_target_spawn(team_name)
+	var team_spawn : Node3D = Global.get_world().get_current_map().get_teams().get_team_target_spawn(team_name)
 	if team_spawn != null:
 		target_i.global_position = team_spawn.global_position
 	return target_i
 
-var passive_income_interval = 400
-var interval = 0
-func _physics_process(delta):
+var passive_income_interval := 400
+var interval := 0
+func _physics_process(delta : float) -> void:
 	# only run on server
 	if multiplayer.is_server() && !in_intro:
-		for t in playing_team_names:
-			for target in team_targets:
+		for t : String in playing_team_names:
+			for target : MinigameTarget in team_targets:
 				if target.team == t:
 					if target.health <= 0:
 						UIHandler.show_alert.rpc(str(t, " lost!!!"), 8)
 						end.rpc()
 					# reset targets that fall off map
 					if target.global_position.y < 40:
-						var team_spawn = Global.get_world().get_current_map().get_teams().get_team_target_spawn(t)
+						var team_spawn : Node3D = Global.get_world().get_current_map().get_teams().get_team_target_spawn(t)
 						if team_spawn != null:
 							target.global_position = team_spawn.global_position
 							target.linear_velocity = Vector3.ZERO
@@ -149,7 +149,7 @@ func _physics_process(delta):
 			interval += 1
 			if interval > passive_income_interval:
 				interval = 0
-				for t in playing_team_names:
+				for t : String in playing_team_names:
 					set_team_cash.rpc(t, 6)
 
 @rpc("call_local", "reliable")
@@ -167,20 +167,20 @@ func delete() -> void:
 		target.queue_free()
 	super()
 
-func _process(delta):
+func _process(delta : float) -> void:
 	# wait for intro
 	if in_intro:
 		return
 	if build_period && build_timer != null:
 		game_timer_ui.value = build_timer.time_left
-		var mins = int((build_timer.time_left) / 60)
-		var seconds = str('%02d' % (int(build_timer.time_left) % 60))
+		var mins := str(int((build_timer.time_left) / 60))
+		var seconds := str('%02d' % (int(build_timer.time_left) % 60))
 		game_timer_ui_text.text = str("Build period: ", mins, ":", seconds, "!")
 	# game period
 	else:
 		game_timer_ui.value = game_timer.time_left
-		var mins = int(game_timer.time_left / 60)
-		var seconds = str('%02d' % (int(game_timer.time_left) % 60))
+		var mins := str(int(game_timer.time_left as int / 60))
+		var seconds := str('%02d' % (int(game_timer.time_left as int) % 60))
 		game_timer_ui_text.text = str(mins, ":", seconds, " left in game!")
 	# team target ui
 	for target in team_targets:
@@ -188,5 +188,5 @@ func _process(delta):
 			team_target_hp_ui.value = target.get_health()
 			team_target_hp_ui_text.text = str("Your team's target HP: ", target.get_health())
 	# team cash ui
-	team_cash_ui.value = get_team_cash(my_team)
-	team_cash_ui_text.text = str("Team cash remaining: ", get_team_cash(my_team))
+	team_cash_ui.value = get_team_cash(str(my_team))
+	team_cash_ui_text.text = str("Team cash remaining: ", get_team_cash(str(my_team)))

@@ -1,6 +1,6 @@
 extends DynamicButton
 
-@export var internal_name = ""
+@export var internal_name : String = ""
 
-func _ready():
+func _ready() -> void:
 	super()

@@ -24,32 +24,32 @@ enum BuildMode {
 	LOAD
 }
 
-var _mode = BuildMode.BUILD
-var building = false
-var last_delete_hovered = null
-var switched_type = false
-var brick_types = []
-var brick_materials = []
+var _mode : BuildMode = BuildMode.BUILD
+var building := false
+var last_delete_hovered : Node3D = null
+var switched_type := false
+var brick_types := []
+var brick_materials := []
 var selected_brick_material : Brick.BrickMaterial = Brick.BrickMaterial.WOODEN
-var selected_brick_type = 0
-var brick_rotation_x = 0
-var brick_rotation_y = 0
-var mode_text = null
-var load_mode_name_text = null
-var load_mode_img = null
-var load_mode_bg = null
-@onready var brick_groups = Global.get_world().get_node("BrickGroups")
+var selected_brick_type : int = 0
+var brick_rotation_x : float = 0
+var brick_rotation_y : float = 0
+var mode_text : Label = null
+var load_mode_name_text : Label = null
+var load_mode_img : TextureRect = null
+var load_mode_bg : ColorRect = null
+@onready var brick_groups : BrickGroups = Global.get_world().get_node("BrickGroups")
 
-@export var tool_name = "Build Tool"
+@export var tool_name := "Build Tool"
 
 # load not preload as buildings can also spawn bricks, and instantiated children cannot also preload
 # and buildtool is spawned by inventory
 
-@onready var load_arrow = preload("res://data/scene/ui/LoadArrow.tscn")
+@onready var load_arrow : PackedScene = preload("res://data/scene/ui/LoadArrow.tscn")
 
-func _ready():
+func _ready() -> void:
 	# Create new tool.
-	super.init("Build Tool", get_parent().get_parent())
+	super.init("Build Tool", get_parent().get_parent() as RigidPlayer)
 	# The types of bricks this can use.
 	brick_types = [SpawnableObjects.objects["brick"], 
 	SpawnableObjects.objects["brick_half"], 
@@ -70,13 +70,13 @@ func _ready():
 	load_mode_img = tool_overlay.get_node_or_null("LoadModeBg/LoadModeImg")
 
 # Set whether or not this is in building mode.
-func set_building(mode) -> void:
+func set_building(mode : bool) -> void:
 	building = mode
 
 # Spawn a new brick.
 @rpc("call_local", "reliable")
-func spawn_brick(id : int, brick_type, material : Brick.BrickMaterial) -> void:
-	var b = brick_types[brick_type].instantiate()
+func spawn_brick(id : int, brick_type : int, material : Brick.BrickMaterial) -> void:
+	var b : Brick = brick_types[brick_type].instantiate()
 	Global.get_world().add_child(b, true)
 	b.spawn.rpc(id, material)
 
@@ -89,37 +89,15 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 	if mode == false:
 		set_building(false)
 
-func change_mode(new = null):
-	# save and load aren't available during minigames
-	var minigame = Global.get_world().minigame
-	if new != null:
-		if new == _mode: return
-		_mode = new
-		
-		# delete arrow outside of load mode
-		if new != BuildMode.LOAD:
-			if spawned_load_arrow != null:
-				spawned_load_arrow.queue_free()
-				load_mode_bg.visible = false
-	elif new == null:
-		# determine next mode as new mode
-		match(_mode):
-			BuildMode.BUILD:
-				_mode = BuildMode.DELETE
-			BuildMode.DELETE:
-				# only build and delete for minigames
-				if minigame != null:
-					_mode = BuildMode.BUILD
-				else:
-					_mode = BuildMode.SAVE
-			BuildMode.SAVE:
-				_mode = BuildMode.LOAD
-			BuildMode.LOAD:
-				_mode = BuildMode.BUILD
-				# delete arrow outside of load mode
-				if spawned_load_arrow != null:
-					spawned_load_arrow.queue_free()
-				load_mode_bg.visible = false
+func change_mode(new : BuildMode) -> void:
+	if new == _mode: return
+	_mode = new
+	
+	# delete arrow outside of load mode
+	if new != BuildMode.LOAD:
+		if spawned_load_arrow != null:
+			spawned_load_arrow.queue_free()
+			load_mode_bg.visible = false
 	
 	# enter mode
 	match(_mode):
@@ -140,17 +118,17 @@ func change_mode(new = null):
 			if mode_text:
 				mode_text.text = "MODE: LOAD"
 
-var spawned_load_arrow = null
-var load_dir = null
-var file_name = ""
-var just_entered_load_mode = false
-var can_load = true
-var build_offset_y = 0
+var spawned_load_arrow : Node3D = null
+var load_dir : DirAccess = null
+var file_name := ""
+var just_entered_load_mode := false
+var can_load := true
+var build_offset_y := 0
 
-func _set_can_load(mode):
+func _set_can_load(mode : bool) -> void:
 	can_load = mode
 
-func _process(delta):
+func _process(delta : float) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
@@ -180,7 +158,15 @@ func _process(delta):
 		
 		# Switch delete/build/save/load mode.
 		if Input.is_action_just_pressed("build_tool_mode"):
-			change_mode()
+			match(_mode):
+				BuildMode.BUILD:
+					change_mode(BuildMode.DELETE)
+				BuildMode.DELETE:
+					change_mode(BuildMode.SAVE)
+				BuildMode.SAVE:
+					change_mode(BuildMode.LOAD)
+				BuildMode.LOAD:
+					change_mode(BuildMode.BUILD)
 		
 		# If we are not building, and we select the build tool, set it to
 		# building and spawn a new brick.
@@ -191,21 +177,21 @@ func _process(delta):
 			if !multiplayer.is_server():
 				spawn_brick.rpc_id(1, multiplayer.get_unique_id(), selected_brick_type, brick_materials[selected_brick_material])
 			else:
-				spawn_brick(multiplayer.get_unique_id(), selected_brick_type, brick_materials[selected_brick_material])
+				spawn_brick(multiplayer.get_unique_id(), selected_brick_type, brick_materials[selected_brick_material] as Brick.BrickMaterial)
 		
 		# Delete mode
 		if _mode == BuildMode.DELETE:
 			# get mouse position in 3d space
-			var m_3d = get_viewport().get_camera_3d().get_mouse_pos_3d()
-			var m_pos_3d = Vector3()
+			var m_3d : Dictionary = get_viewport().get_camera_3d().get_mouse_pos_3d()
+			var m_pos_3d := Vector3()
 			# we must check if the mouse's ray is not hitting anything
 			if m_3d:
 				# if it is hitting something
-				m_pos_3d = Vector3(m_3d["position"])
+				m_pos_3d = m_3d["position"] as Vector3
 			if m_3d:
 				# if we are hovering a brick
 				if m_3d["collider"].owner is Brick:
-					var brick = m_3d["collider"].owner
+					var brick : Brick = m_3d["collider"].owner
 					if brick.player_from != null:
 						# can't delete another team's brick
 						if brick.player_from.team != tool_player_owner.team:
@@ -213,13 +199,13 @@ func _process(delta):
 							return
 					brick.show_delete_overlay()
 					if Input.is_action_just_pressed("click"):
-						var minigame = Global.get_world().minigame
+						var minigame : Object = Global.get_world().minigame
 						if minigame != null:
 							# only base defense has costs
 							if minigame is MinigameBaseDefense:
 								if minigame.playing_team_names.has(tool_player_owner.team):
 									# refund brick
-									var cost = 2
+									var cost : int = 2
 									# minigame costs
 									if brick._material == Brick.BrickMaterial.METAL:
 										cost = 8
@@ -232,24 +218,24 @@ func _process(delta):
 		# Save mode
 		if _mode == BuildMode.SAVE:
 			# get mouse position in 3d space
-			var m_3d = get_viewport().get_camera_3d().get_mouse_pos_3d()
-			var m_pos_3d = Vector3()
+			var m_3d : Dictionary = get_viewport().get_camera_3d().get_mouse_pos_3d()
+			var m_pos_3d := Vector3()
 			# we must check if the mouse's ray is not hitting anything
 			if m_3d:
 				# if it is hitting something
-				m_pos_3d = Vector3(m_3d["position"])
+				m_pos_3d = m_3d["position"] as Vector3
 			if m_3d:
-				var hovered_group = []
+				var hovered_group := []
 				# if we are hovering a brick and we are NOT auth
 				if (m_3d["collider"] is Brick && (m_3d["collider"].get_multiplayer_authority() != get_multiplayer_authority())) || (m_3d["collider"].get_parent() is Brick && (m_3d["collider"].get_parent().get_multiplayer_authority() != get_multiplayer_authority())):
-					var hov_brick = m_3d["collider"]
+					var hov_brick := m_3d["collider"] as Brick
 					if m_3d["collider"].get_parent() is Brick:
 						hov_brick = m_3d["collider"].get_parent()
 					if !brick_groups.non_auth_group.has(hov_brick.name) && brick_groups.receive_timeout < 1:
 						brick_groups.non_auth_group = []
 						hov_brick.request_group_from_authority.rpc_id(hov_brick.get_multiplayer_authority(), multiplayer.get_unique_id())
-					for b in brick_groups.non_auth_group:
-						var found_brick = Global.get_world().get_node_or_null(NodePath(str(b)))
+					for b : String in brick_groups.non_auth_group:
+						var found_brick : Brick = Global.get_world().get_node_or_null(NodePath(str(b))) as Brick
 						if found_brick != null:
 							if !Input.is_action_just_pressed("click"):
 								found_brick.show_save_overlay()
@@ -257,10 +243,10 @@ func _process(delta):
 								hovered_group.append(found_brick)
 				# if we ARE auth
 				elif m_3d["collider"].owner is Brick && (m_3d["collider"].owner.get_multiplayer_authority() == get_multiplayer_authority()):
-					var brick = m_3d["collider"].owner
-					var group = brick.group
+					var brick : Brick = m_3d["collider"].owner
+					var group : String = brick.group
 					# show save appearance on all bricks
-					for b in brick_groups.groups[str(group)]:
+					for b : Brick in brick_groups.groups[str(group)]:
 						if b != null:
 							if !Input.is_action_just_pressed("click"):
 								b.show_save_overlay()
@@ -268,23 +254,23 @@ func _process(delta):
 								hovered_group.append(b)
 				
 				if Input.is_action_just_pressed("click") && hovered_group.size() > 0:
-					var dir = DirAccess.open("user://building")
+					var dir := DirAccess.open("user://building")
 					if !dir:
 						DirAccess.make_dir_absolute("user://building")
 					
 					# save building to file
 					dir = DirAccess.open("user://building")
-					var count = 0
+					var count : int = 0
 					if dir:
 						dir.list_dir_begin()
-						var file_name = dir.get_next()
+						var file_name := dir.get_next()
 						while file_name != "":
 							if !dir.current_is_dir():
 								count += 1
 							file_name = dir.get_next()
 					else:
 						print("An error occurred when trying to access the path.")
-					var save_name = str("Building", ("%X" % Time.get_unix_time_from_system()))
+					var save_name : String = str("Building", ("%X" % Time.get_unix_time_from_system()))
 					
 					# get frame image and save it
 					# hide everything
@@ -292,9 +278,9 @@ func _process(delta):
 					get_tree().current_scene.get_node("GameCanvas").visible = false
 					# wait 1 frame so we can get screenshot
 					await get_tree().process_frame
-					var img = get_viewport().get_texture().get_image()
+					var img := get_viewport().get_texture().get_image()
 					img.shrink_x2()
-					var scrdir = DirAccess.open("user://building_scr")
+					var scrdir := DirAccess.open("user://building_scr")
 					if !scrdir:
 						DirAccess.make_dir_absolute("user://building_scr")
 					img.save_jpg(str("user://building_scr/", save_name, ".jpg"))
@@ -303,22 +289,22 @@ func _process(delta):
 					get_tree().current_scene.get_node("GameCanvas").visible = true
 					UIHandler.show_alert(str("Saved as ", save_name), 4, false, false, true)
 					
-					var file = FileAccess.open(str("user://building/", save_name, ".txt"), FileAccess.WRITE)
-					for b in hovered_group:
+					var file := FileAccess.open(str("user://building/", save_name, ".txt"), FileAccess.WRITE)
+					for b : Node3D in hovered_group:
 						if b != null:
 							if b is Brick:
-								var type = b._brick_spawnable_type
+								var type : String = b._brick_spawnable_type
 								file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
 					file.close()
 		# Load mode
 		if _mode == BuildMode.LOAD:
 			# get mouse position in 3d space
-			var m_3d = get_viewport().get_camera_3d().get_mouse_pos_3d()
-			var m_pos_3d = Vector3()
+			var m_3d : Dictionary = get_viewport().get_camera_3d().get_mouse_pos_3d()
+			var m_pos_3d := Vector3()
 			# we must check if the mouse's ray is not hitting anything
 			if m_3d:
 				# if it is hitting something
-				m_pos_3d = Vector3(m_3d["position"])
+				m_pos_3d = m_3d["position"] as Vector3
 				# load arrow visual
 				if spawned_load_arrow == null:
 					spawned_load_arrow = load_arrow.instantiate()
@@ -347,22 +333,22 @@ func _process(delta):
 					just_entered_load_mode = false
 					
 					# load image
-					var scrdir = DirAccess.open("user://building_scr")
+					var scrdir := DirAccess.open("user://building_scr")
 					if scrdir:
-						var image = Image.load_from_file(str("user://building_scr/", file_name.split(".")[0], ".jpg"))
-						var texture = ImageTexture.create_from_image(image)
+						var image := Image.load_from_file(str("user://building_scr/", file_name.split(".")[0], ".jpg"))
+						var texture := ImageTexture.create_from_image(image)
 						load_mode_img.texture = texture
 				elif Input.is_action_just_pressed("click"):
 					if can_load:
-						var load_file = FileAccess.open(str("user://building/", file_name), FileAccess.READ)
+						var load_file := FileAccess.open(str("user://building/", file_name), FileAccess.READ)
 						if load_file != null:
 							# start delay timer
 							can_load = false
 							get_tree().create_timer(7).connect("timeout", _set_can_load.bind(true))
 							# load building
-							var lines = []
+							var lines := []
 							while not load_file.eof_reached():
-								var line = load_file.get_line()
+								var line := load_file.get_line()
 								lines.append(str(line))
 							if multiplayer.is_server():
 								Global.get_world()._server_load_building(lines, m_pos_3d)

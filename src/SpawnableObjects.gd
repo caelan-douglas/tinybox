@@ -45,14 +45,17 @@ extends Node
 }
 
 # explosion
-@onready var explosion = load("res://data/scene/explosion/Explosion.tscn")
+@onready var explosion : PackedScene = load("res://data/scene/explosion/Explosion.tscn")
 
 # Automatically populate the MultiplayerWorldObjSpawner node with all tbw objects.
-func _ready():
+func _ready() -> void:
+	update_spawnable_scenes()
+
+# called whenever the main menu is opened
+func update_spawnable_scenes() -> void:
 	var obj_spawner : MultiplayerSpawner = Global.get_world().get_node_or_null("MultiplayerObjSpawner")
 	while obj_spawner == null:
 		await get_tree().process_frame
 		obj_spawner = Global.get_world().get_node_or_null("MultiplayerObjSpawner")
-	
-	for obj in objects:
-		obj_spawner.add_spawnable_scene(objects[obj].resource_path)
+	for obj : Variant in objects:
+		obj_spawner.add_spawnable_scene(objects[obj].resource_path as String)

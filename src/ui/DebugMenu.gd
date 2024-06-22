@@ -16,9 +16,9 @@
 
 extends VBoxContainer
 
-@onready var debug_text = $DebugText
+@onready var debug_text : Label = $DebugText
 
-func _ready():
+func _ready() -> void:
 	$FakePoint.connect("pressed", _on_fake_point_pressed)
 	$LockPlayer.connect("pressed", _on_lock_player_pressed)
 	$ResetTools.connect("pressed", _on_reset_tools_pressed)
@@ -27,9 +27,9 @@ func _ready():
 	$SaveTestWorld.connect("pressed", _on_save_test_world_pressed)
 
 func _on_change_team_pressed() -> void:
-	var player = Global.get_player()
-	var teams = Global.get_world().get_current_map().get_teams()
-	var team_idx = teams.get_team_index(player.team)
+	var player : RigidPlayer = Global.get_player()
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var team_idx : int = teams.get_team_index(str(player.team))
 	team_idx += 1
 	if team_idx >= teams.get_team_list().size():
 		team_idx = 0
@@ -58,28 +58,28 @@ func _on_reset_tools_pressed() -> void:
 	if Global.get_player() != null:
 		Global.get_player().get_tool_inventory().reset()
 
-func _physics_process(delta):
+func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("debug_menu"):
 		# game canvas should be visible
 		if get_parent().visible:
 			visible = !visible
 	if visible:
-		var brick_count = 0
-		var bricks = Global.get_world().get_children()
-		for b in bricks:
+		var brick_count : int = 0
+		var bricks : Array = Global.get_world().get_children()
+		for b : Node in bricks:
 			if b is Brick:
 				brick_count += 1
 		debug_text.text = str("bricks in world: ", str(brick_count), "\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\ngraphics cache contents: ", str(Global.graphics_cache))
-		var player = Global.get_player()
+		var player : RigidPlayer = Global.get_player()
 		if player != null:
 			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), "\nPlayer position (global): ", round(player.global_position), "\nPlayer state: ", player.states_as_names[player._state], "\nPlayer fire?: ", player.on_fire, "\nPlayer occupying seat: ", player.seat_occupying)
 		debug_text.text += str("\n---------- WORLD TEAMS INFO -------------\n")
 		debug_text.text += str("World Teams Node list:\n")
 		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
-			var teams = Global.get_world().get_current_map().get_teams()
+			var teams : Teams = Global.get_world().get_current_map().get_teams()
 			debug_text.text += str(teams.get_team_list())
 			debug_text.text += str("\n------------PLAYER TEAMS INFO ------------\n")
-			for t in teams.get_team_list():
-				var team_name = t.name
+			for t : Team in teams.get_team_list():
+				var team_name : String = t.name
 				debug_text.text += str("\n----- ", team_name, " -----\n")
 				debug_text.text += str(teams.get_players_in_team(team_name))
