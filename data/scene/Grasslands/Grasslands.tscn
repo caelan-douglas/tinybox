@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ec0shar7op8x"]
+[gd_scene load_steps=15 format=3 uid="uid://ec0shar7op8x"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_tvdfo"]
 [ext_resource type="PackedScene" uid="uid://227kic5617ga" path="res://data/scene/camera/Camera.tscn" id="2_4ibwf"]
@@ -8,8 +8,6 @@
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="5_7lr36"]
 [ext_resource type="Texture2D" uid="uid://c36ws0cwo4te5" path="res://data/models/character/textures/fabric.jpg" id="7_gx82l"]
 [ext_resource type="Environment" uid="uid://bquh7sgklsbgg" path="res://data/scene/Frozen Field/picnic_environment.tres" id="8_n7xb2"]
-[ext_resource type="PackedScene" uid="uid://2ba4b1hakg87" path="res://data/scene/building/BasicTower.tscn" id="9_p3w0i"]
-[ext_resource type="PackedScene" uid="uid://bnerevgdih5mn" path="res://data/scene/building/BasicCar.tscn" id="10_umciu"]
 [ext_resource type="PackedScene" uid="uid://baiu57k2676um" path="res://data/scene/lifter/Lifter.tscn" id="11_bprh0"]
 [ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="12_fj32c"]
 
@@ -84,21 +82,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Spawns/2/Spawn"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.447465, 0)
 mesh = SubResource("CylinderMesh_i3xod")
-
-[node name="BasicTower" parent="." instance=ExtResource("9_p3w0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 17)
-
-[node name="BasicTower2" parent="." instance=ExtResource("9_p3w0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -11)
-
-[node name="BasicTower3" parent="." instance=ExtResource("9_p3w0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -30)
-
-[node name="BasicTower4" parent="." instance=ExtResource("9_p3w0i")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 39)
-
-[node name="BasicCar" parent="." instance=ExtResource("10_umciu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 1)
 
 [node name="Lifter" parent="." instance=ExtResource("11_bprh0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.531837, 6)

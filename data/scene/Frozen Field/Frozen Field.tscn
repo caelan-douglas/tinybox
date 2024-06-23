@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://de5w30v7u4ohu"]
+[gd_scene load_steps=18 format=3 uid="uid://de5w30v7u4ohu"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_l0mnu"]
 [ext_resource type="AudioStream" uid="uid://dqqfcxecttbyn" path="res://data/audio/outdoorambience.ogg" id="2_biee4"]
@@ -11,12 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://fcce6nsnj7qq" path="res://data/textures/caution.png" id="10_gsw7i"]
 [ext_resource type="PackedScene" uid="uid://bnv3iultks1fi" path="res://data/scene/minigame/KingsHill.tscn" id="12_5ritw"]
 [ext_resource type="Script" path="res://src/Building.gd" id="12_duo6k"]
-[ext_resource type="PackedScene" uid="uid://cvd28jfngaekc" path="res://data/scene/building/StaticPlatform.tscn" id="12_ykek7"]
-[ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="13_xvxc2"]
 [ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="16_na7cl"]
-[ext_resource type="PackedScene" uid="uid://6dcw2huh16uq" path="res://data/scene/brick/HalfBrick.tscn" id="16_w3h7l"]
-[ext_resource type="PackedScene" uid="uid://cwymj2xlxiri4" path="res://data/scene/brick/CylinderBrick.tscn" id="17_ox6ky"]
-[ext_resource type="PackedScene" uid="uid://dca5npetcw4di" path="res://data/scene/brick/MotorSeat.tscn" id="18_0tpip"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hun4m"]
 size = Vector3(105.3, 5, 46.5)
@@ -163,230 +158,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ywqan")
 [node name="OutroSpot" type="Marker3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 21)
 
-[node name="Building" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
-script = ExtResource("12_duo6k")
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
-[node name="Brick" parent="Building" instance=ExtResource("13_xvxc2")]
-_material = 5
-
-[node name="Brick2" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-_material = 5
-
-[node name="Brick3" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-_material = 5
-
-[node name="Brick4" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-_material = 5
-
-[node name="Brick5" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-_material = 5
-
-[node name="Brick6" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-_material = 5
-
-[node name="Brick7" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
-_material = 5
-
-[node name="Brick8" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
-_material = 5
-
-[node name="Brick9" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
-_material = 5
-
-[node name="Brick10" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2)
-_material = 5
-
-[node name="Brick11" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-_material = 5
-
-[node name="Brick12" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
-_material = 5
-
-[node name="Brick13" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
-_material = 5
-
-[node name="Brick14" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
-_material = 5
-
-[node name="Brick15" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
-_material = 5
-
-[node name="Brick16" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
-_material = 5
-
-[node name="Brick17" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
-_material = 5
-
-[node name="Brick18" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 2)
-_material = 5
-
-[node name="Brick20" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
-_material = 5
-
-[node name="Brick36" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
-_material = 5
-
-[node name="Brick37" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
-_material = 5
-
-[node name="Brick19" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1)
-_material = 5
-
-[node name="Brick21" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-_material = 5
-
-[node name="Brick22" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
-_material = 5
-
-[node name="Brick24" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1)
-_material = 5
-
-[node name="Brick23" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
-_material = 5
-
-[node name="Brick25" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 1)
-_material = 5
-
-[node name="Brick26" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -1)
-_material = 5
-
-[node name="Brick27" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 3)
-_material = 5
-
-[node name="Brick28" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1, 0, 3)
-_material = 5
-
-[node name="Brick29" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0, 3)
-_material = 5
-
-[node name="Brick38" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 3)
-_material = 5
-
-[node name="Brick39" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 3)
-_material = 5
-
-[node name="Brick40" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 4)
-_material = 5
-
-[node name="Brick41" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1, 0, 4)
-_material = 5
-
-[node name="Brick42" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0, 4)
-_material = 5
-
-[node name="Brick43" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2, 0, -3)
-_material = 5
-
-[node name="Brick44" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2, 0, -3)
-_material = 5
-
-[node name="Brick45" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.49691e-08, 0, -4)
-_material = 5
-
-[node name="Brick46" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, -4)
-_material = 5
-
-[node name="Brick47" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1, 0, -4)
-_material = 5
-
-[node name="Brick30" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -3)
-_material = 5
-
-[node name="Brick31" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1, 0, -3)
-_material = 5
-
-[node name="Brick32" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1, 0, -3)
-_material = 5
-
-[node name="Brick33" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
-_material = 5
-
-[node name="Brick34" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 1)
-_material = 5
-
-[node name="Brick35" parent="Building" instance=ExtResource("13_xvxc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -1)
-_material = 5
-
-[node name="Building2" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
-[node name="Building3" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
-[node name="Building4" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 2, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
-[node name="Building6" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, 0, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
-[node name="Building5" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
-
 [node name="KingsHill" parent="." instance=ExtResource("12_5ritw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
@@ -399,12 +170,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, 0.5, 0)
 type = 4
 ammo = 1
 respawn_time = 30
-
-[node name="Building7" parent="." instance=ExtResource("12_ykek7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 0, 0)
-restrict_to_minigame_type = true
-restriction = Array[int]([3])
-delete_in_sandbox = true
 
 [node name="Pickup6" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 0.5, 0)
@@ -426,75 +191,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2.5, 0)
 type = 1
 respawn_time = 15
 
-[node name="BasicCar" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
-script = ExtResource("12_duo6k")
-only_in_sandbox = true
-
-[node name="Brick" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick6" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick10" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick12" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -1)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick11" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick2" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick3" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick4" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick5" parent="BasicCar" instance=ExtResource("16_w3h7l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick7" parent="BasicCar" instance=ExtResource("17_ox6ky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 2)
-_material = 4
-
-[node name="Brick9" parent="BasicCar" instance=ExtResource("17_ox6ky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
-_material = 4
-
-[node name="Brick8" parent="BasicCar" instance=ExtResource("17_ox6ky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
-_material = 4
-
-[node name="Brick54" parent="BasicCar" instance=ExtResource("17_ox6ky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
-_material = 4
-
-[node name="Brick16" parent="BasicCar" instance=ExtResource("18_0tpip")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1, 1, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
-[node name="Brick17" parent="BasicCar" instance=ExtResource("18_0tpip")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 1, 0)
-_colour = Color(0.647059, 0.345098, 0.729412, 1)
-
 [node name="Pickup7" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 2)
 type = 3
 ammo = 80
 respawn_time = 4
 only_in_sandbox = true
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("12_duo6k")
 
 [editable path="picnic_table"]

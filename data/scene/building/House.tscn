@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1y121agw7exu"]
+[gd_scene load_steps=4 format=3 uid="uid://b2r5pfqddvkod"]
 
 [ext_resource type="Script" path="res://src/Building.gd" id="1_1ebu5"]
 [ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="2_sw2hg"]

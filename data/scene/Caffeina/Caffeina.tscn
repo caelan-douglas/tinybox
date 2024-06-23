@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bwff01cm8q6qi"]
+[gd_scene load_steps=29 format=3 uid="uid://bwff01cm8q6qi"]
 
 [ext_resource type="Script" path="res://src/Teams.gd" id="1_f1b66"]
 [ext_resource type="Script" path="res://src/Map.gd" id="1_g1pl0"]
@@ -11,16 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="9_iga28"]
 [ext_resource type="PackedScene" uid="uid://w5ui4ll1jtgn" path="res://data/scene/chair/Chair.tscn" id="10_8if20"]
 [ext_resource type="PackedScene" uid="uid://bqsd8rt5norqj" path="res://data/scene/editor_obj/Mug.tscn" id="12_wl7xv"]
-[ext_resource type="PackedScene" uid="uid://d2700emfkhkdu" path="res://data/scene/building/Wall.tscn" id="13_18kmh"]
 [ext_resource type="PackedScene" uid="uid://1sqf4570yn2c" path="res://data/scene/Caffeina/room_model/CaffeinaRoomModel.tscn" id="14_ij330"]
 [ext_resource type="Texture2D" uid="uid://fcce6nsnj7qq" path="res://data/textures/caution.png" id="14_k03sm"]
 [ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="14_qyulh"]
 [ext_resource type="ArrayMesh" uid="uid://b7aj46221lehd" path="res://data/models/tree/pine_tree_0_mesh.res" id="17_cltu3"]
-[ext_resource type="PackedScene" uid="uid://c1y121agw7exu" path="res://data/scene/building/House.tscn" id="17_geiox"]
-[ext_resource type="PackedScene" uid="uid://bnerevgdih5mn" path="res://data/scene/building/BasicCar.tscn" id="18_2f8pw"]
-[ext_resource type="PackedScene" uid="uid://bf8foyp2syk35" path="res://data/scene/building/Platform.tscn" id="18_hn2ft"]
-[ext_resource type="PackedScene" uid="uid://d3abjr010enjv" path="res://data/scene/building/TeleporterFrame.tscn" id="20_xliqf"]
-[ext_resource type="PackedScene" uid="uid://cvd28jfngaekc" path="res://data/scene/building/StaticPlatform.tscn" id="21_tyexr"]
 [ext_resource type="PackedScene" uid="uid://baiu57k2676um" path="res://data/scene/lifter/Lifter.tscn" id="22_jdjcs"]
 [ext_resource type="PackedScene" uid="uid://bg2508sm35hrk" path="res://data/scene/teleporter/Teleporter.tscn" id="23_ngefv"]
 [ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="24_65o0o"]
@@ -257,85 +251,6 @@ shadow_reverse_cull_face = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 220.0
 directional_shadow_pancake_size = 0.0
-
-[node name="Building" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -9, 1, -4)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building2" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 1)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building8" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -5, 7, -5)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building9" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -5, 7, -11)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building3" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4, 1, -18)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building7" parent="." instance=ExtResource("18_hn2ft")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -2)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building6" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(1.31134e-07, 0, 1, 0, 1, 0, -1, 0, 1.31134e-07, 0, 1, 1)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="DM_Building" parent="." instance=ExtResource("17_geiox")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 1, 16)
-restrict_to_minigame_type = true
-
-[node name="DM_Building2" parent="." instance=ExtResource("17_geiox")]
-transform = Transform3D(-1, 0, 4.37114e-08, 0, 1, 0, -4.37114e-08, 0, -1, 19, 1, 2)
-restrict_to_minigame_type = true
-
-[node name="DM_BasicCar" parent="." instance=ExtResource("18_2f8pw")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, 1, -1)
-restrict_to_minigame_type = true
-
-[node name="DM_BasicCar3" parent="." instance=ExtResource("18_2f8pw")]
-transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -41, 1, -18)
-restrict_to_minigame_type = true
-
-[node name="DM_BasicCar4" parent="." instance=ExtResource("18_2f8pw")]
-transform = Transform3D(-0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, -41, 1, -11)
-restrict_to_minigame_type = true
-
-[node name="DM_BasicCar2" parent="." instance=ExtResource("18_2f8pw")]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 38, 1, 8)
-restrict_to_minigame_type = true
-
-[node name="DM_Building3" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -9, 1, 5)
-restrict_to_minigame_type = true
-
-[node name="DM_Building5" parent="." instance=ExtResource("13_18kmh")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -9, 1, -18)
-restrict_to_minigame_type = true
-
-[node name="DM_Building6" parent="." instance=ExtResource("20_xliqf")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 11, 0.5, 21)
-restrict_to_minigame_type = true
-
-[node name="DM_Building7" parent="." instance=ExtResource("21_tyexr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 11, 14)
-restrict_to_minigame_type = true
-
-[node name="DM_Building8" parent="." instance=ExtResource("21_tyexr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 9, -11)
-restrict_to_minigame_type = true
 
 [node name="Lifter" parent="." instance=ExtResource("22_jdjcs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0.5, 10)

@@ -355,12 +355,6 @@ func reset_player_cameras() -> void:
 	if camera is Camera:
 		Global.get_player().set_camera(camera)
 
-# Load a building into the existing map.
-# Arg 1: The path to the building scene file.
-func load_building_into_map(path_to_building : String) -> void:
-	var building := load(path_to_building)
-	var b_i : Node3D = building.instantiate()
-
 @rpc("any_peer", "call_local", "reliable")
 func clear_world() -> void:
 	clear_bricks()
@@ -394,8 +388,8 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	
-	var building := Building.new(false)
-	add_child(building)
+	var building_group := []
+	var first_brick_pos := Vector3.ZERO
 	
 	var line_split_init : PackedStringArray = lines[0].split(";")
 	var offset_pos := Vector3.ZERO
@@ -404,12 +398,18 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		var building_pos : PackedStringArray = line_split_init[1].split(",")
 		offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
 	
+	
+	### Reading file
+	
+	print(str("Building: reading lines... ", Time.get_ticks_msec()))
 	for line : String in lines:
 		if line != "":
 			var line_split := line.split(";")
 			if SpawnableObjects.objects.has(line_split[0]):
-				var b : Node3D = SpawnableObjects.objects[line_split[0]].instantiate()
-				building.add_child(b, true)
+				var b : Brick = SpawnableObjects.objects[line_split[0]].instantiate()
+				add_child(b, true)
+				building_group.append(b)
+				b.change_state.rpc(Brick.States.PLACED)
 				# position
 				if line_split.size() > 1:
 					var pos := line_split[1].split(",")
@@ -428,4 +428,65 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 				# colour
 				if line_split.size() > 5:
 					b._colour = Color.from_string(line_split[5], Color.WHITE)
-	building.place()
+	print(str("done.", Time.get_ticks_msec()))
+	
+	### Placing bricks
+	
+	# don't place nothing
+	if building_group.size() < 1:
+		printerr("Building: Tried to load building with nothing in it.")
+		return
+	# change ownership first
+	# wait a bit before checking joints
+	print(str("Building: waiting... ", Time.get_ticks_msec()))
+	await get_tree().create_timer(0.1).timeout
+	print(str("Building: sorting... ", Time.get_ticks_msec()))
+	# update first brick pos for sorter
+	first_brick_pos = building_group[0].global_position
+	var building_group_extras := []
+	# sort array by position
+	building_group.sort_custom(_pos_sort)
+	print(str("done.", Time.get_ticks_msec()))
+	print(str("Building: moving bricks... ", Time.get_ticks_msec()))
+	# first make all basic brick colliders disabled
+	for b : Brick in building_group:
+		b.joinable = false
+		b.model_mesh.visible = false
+	# now move all extra bricks (motorseat, motorbrick) to building_group_extras
+	for b : Brick in building_group:
+		if b is MotorBrick || b is MotorSeat:
+			building_group_extras.append(b)
+			building_group.erase(b)
+	# resort basic bricks
+	building_group.sort_custom(_pos_sort)
+	print(str("done.", Time.get_ticks_msec()))
+	print(str("Building: joining... ", Time.get_ticks_msec()))
+	# now for each basic brick:
+	# 1. enable its collider
+	# 2. check neighbours
+	var count : int = 0
+	for b : Brick in building_group:
+		b.joinable = true
+		b.model_mesh.visible = true
+		b.check_joints()
+		if count == 1:
+			# recheck first brick in array on second brick check
+			# (never gets chance to join)
+			building_group[0].check_joints()
+		count += 1
+	# now for each extra brick:
+	# 1. enable its collider
+	# 2. check neighbours
+	await get_tree().process_frame
+	count = 0
+	for b : Brick in building_group_extras:
+		b.joinable = true
+		b.model_mesh.visible = true
+		b.check_joints()
+		count += 1
+	
+	print(str("done.", Time.get_ticks_msec()))
+
+var first_brick_pos : Vector3 = Vector3.ZERO
+func _pos_sort(a : Node3D, b : Node3D) -> bool:
+	return a.global_position.distance_to(first_brick_pos) < b.global_position.distance_to(first_brick_pos)

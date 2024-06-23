@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bmj1rdfcs01ro"]
+[gd_scene load_steps=34 format=3 uid="uid://bmj1rdfcs01ro"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_rgygn"]
 [ext_resource type="AudioStream" uid="uid://dqqfcxecttbyn" path="res://data/audio/outdoorambience.ogg" id="2_bux7i"]
@@ -16,10 +16,7 @@
 [ext_resource type="Material" uid="uid://d30b1sj22govo" path="res://data/materials/water.tres" id="16_5voma"]
 [ext_resource type="Texture2D" uid="uid://fcce6nsnj7qq" path="res://data/textures/caution.png" id="17_bd40p"]
 [ext_resource type="PackedScene" uid="uid://3fiodktyscht" path="res://data/scene/pickup/Pickup.tscn" id="18_spqxr"]
-[ext_resource type="PackedScene" uid="uid://ckhrso040j2lq" path="res://data/scene/building/TeleporterFullFrame.tscn" id="19_fa64g"]
 [ext_resource type="PackedScene" uid="uid://bg2508sm35hrk" path="res://data/scene/teleporter/Teleporter.tscn" id="20_i5ryx"]
-[ext_resource type="PackedScene" uid="uid://cvd28jfngaekc" path="res://data/scene/building/StaticPlatform.tscn" id="21_y1ncu"]
-[ext_resource type="PackedScene" uid="uid://bnerevgdih5mn" path="res://data/scene/building/BasicCar.tscn" id="22_w6cw3"]
 [ext_resource type="PackedScene" uid="uid://baiu57k2676um" path="res://data/scene/lifter/Lifter.tscn" id="23_txeca"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jhq5o"]
@@ -352,75 +349,60 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 5.5, -55)
 type = 1
 ammo = 4
 respawn_time = 20
-restriction = 1
 
 [node name="Pickup6" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 5.5, -71)
 type = 1
 ammo = 4
 respawn_time = 20
-restriction = 1
 
 [node name="Pickup10" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -153.3, 5.5, -55)
 type = 1
 ammo = 4
 respawn_time = 20
-restriction = 1
 
 [node name="Pickup11" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -153.3, 5.5, -71)
 type = 1
 ammo = 4
 respawn_time = 20
-restriction = 1
 
 [node name="Pickup2" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -251, 27.8, -176)
 type = 2
 ammo = 350
 respawn_time = 60
-restriction = 1
 
 [node name="Pickup3" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, -21.3, -31)
 ammo = 15
 respawn_time = 40
-restriction = 1
 
 [node name="Pickup4" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -98, 6.60001, -46.6)
 respawn_time = 15
-restriction = 1
 
 [node name="Pickup5" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 1.00001, -116.6)
 ammo = 3
 respawn_time = 15
-restriction = 1
 
 [node name="Pickup7" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 12.4, -48.6)
 type = 1
 ammo = 5
 respawn_time = 15
-restriction = 1
 
 [node name="Pickup8" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 7.40001, -39.6)
 ammo = 3
 respawn_time = 30
-restriction = 1
 
 [node name="Pickup9" parent="." instance=ExtResource("18_spqxr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87, 7.40001, -83.6)
 ammo = 3
 respawn_time = 30
-restriction = 1
-
-[node name="Building" parent="." instance=ExtResource("19_fa64g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74, -18, -85)
-restrict_to_minigame_type = true
 
 [node name="Teleporter" parent="." node_paths=PackedStringArray("destinations") instance=ExtResource("20_i5ryx")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -74, -17.9, -83)
@@ -462,28 +444,6 @@ gizmo_extents = 15.0
 [node name="TeleporterDest9" type="Marker3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -87, 7.7, -85)
 gizmo_extents = 15.0
-
-[node name="Building2" parent="." instance=ExtResource("21_y1ncu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69, 12.9, -53)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
-
-[node name="Building3" parent="." instance=ExtResource("21_y1ncu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 6.9, -38)
-restrict_to_minigame_type = true
-
-[node name="Building4" parent="." instance=ExtResource("21_y1ncu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87, 6.9, -85)
-restrict_to_minigame_type = true
-
-[node name="Building5" parent="." instance=ExtResource("21_y1ncu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 1.9, -118)
-restrict_to_minigame_type = true
-
-[node name="BasicCar" parent="." instance=ExtResource("22_w6cw3")]
-transform = Transform3D(0.996195, -0.0871557, 0, 0.0871557, 0.996195, 0, 0, 0, 1, 71, 14.2, -53)
-restrict_to_minigame_type = true
-delete_in_sandbox = true
 
 [node name="Lifter" parent="." instance=ExtResource("23_txeca")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72, 2.3, -118)

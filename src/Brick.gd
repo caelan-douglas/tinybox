@@ -546,7 +546,7 @@ func build() -> void:
 		m_3d = camera.get_mouse_pos_3d()
 	var m_pos_3d := Vector3()
 	# we must check if the mouse's ray is not hitting anything
-	if m_3d["position"]:
+	if m_3d.has("position"):
 		# if it is hitting something
 		m_pos_3d = m_3d["position"] as Vector3
 	# snap to grid
@@ -554,7 +554,7 @@ func build() -> void:
 	# match floor on y
 	snapped_pos.y = m_pos_3d.y + (CELL_SIZE * 0.5)
 	# snap in relation to other bricks if mouse is over brick
-	if m_3d:
+	if m_3d.has("collider"):
 		if m_3d["collider"].owner is Brick:
 			var m_3d_normal : Vector3 = m_3d["normal"] as Vector3
 			# we can get normal from the camera's mouse collision ray
