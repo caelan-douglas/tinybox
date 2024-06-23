@@ -40,3 +40,32 @@ visible = false
 
 [node name="EditorCanvas" parent="." instance=ExtResource("7_c1osm")]
 visible = false
+
+[node name="LoadingCanvas" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="LoadingCanvas"]
+custom_minimum_size = Vector2(400, 80)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.133333, 0.231373, 1)
+
+[node name="Label" type="Label" parent="LoadingCanvas"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -8.0
+offset_right = 20.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Loading file...     Bricks: 0"
+horizontal_alignment = 1

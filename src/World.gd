@@ -21,6 +21,7 @@ signal map_deleted
 signal tbw_loaded
 
 var rigidplayer_list : Array = []
+@onready var loading_canvas : CanvasLayer = get_tree().current_scene.get_node("LoadingCanvas")
 
 # active minigame
 var minigame : Minigame = null
@@ -398,11 +399,26 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		var building_pos : PackedStringArray = line_split_init[1].split(",")
 		offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
 	
+	# BIG file, show loading visual
+	var loading_text : Label = loading_canvas.get_node("Label")
+	if lines.size() > 100:
+		loading_canvas.visible = true
 	
 	### Reading file
-	
+	# amount of lines to read in a frame
+	var max_proc := 32
+	var cur_proc := 0
+	var total_proc := 0
 	print(str("Building: reading lines... ", Time.get_ticks_msec()))
 	for line : String in lines:
+		cur_proc += 1
+		total_proc += 1
+		# wait a frame if we have read max lines for this frame
+		if cur_proc > max_proc:
+			await get_tree().process_frame
+			cur_proc = 0
+			if loading_canvas.visible:
+				loading_text.text = str("Loading file...     Bricks: ", total_proc)
 		if line != "":
 			var line_split := line.split(";")
 			if SpawnableObjects.objects.has(line_split[0]):
@@ -428,7 +444,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 				# colour
 				if line_split.size() > 5:
 					b._colour = Color.from_string(line_split[5], Color.WHITE)
-	print(str("done.", Time.get_ticks_msec()))
 	
 	### Placing bricks
 	
@@ -438,16 +453,12 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		return
 	# change ownership first
 	# wait a bit before checking joints
-	print(str("Building: waiting... ", Time.get_ticks_msec()))
 	await get_tree().create_timer(0.1).timeout
-	print(str("Building: sorting... ", Time.get_ticks_msec()))
 	# update first brick pos for sorter
 	first_brick_pos = building_group[0].global_position
 	var building_group_extras := []
 	# sort array by position
 	building_group.sort_custom(_pos_sort)
-	print(str("done.", Time.get_ticks_msec()))
-	print(str("Building: moving bricks... ", Time.get_ticks_msec()))
 	# first make all basic brick colliders disabled
 	for b : Brick in building_group:
 		b.joinable = false
@@ -459,8 +470,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			building_group.erase(b)
 	# resort basic bricks
 	building_group.sort_custom(_pos_sort)
-	print(str("done.", Time.get_ticks_msec()))
-	print(str("Building: joining... ", Time.get_ticks_msec()))
 	# now for each basic brick:
 	# 1. enable its collider
 	# 2. check neighbours
@@ -485,7 +494,8 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		b.check_joints()
 		count += 1
 	
-	print(str("done.", Time.get_ticks_msec()))
+	print(str("Done loading building", Time.get_ticks_msec()))
+	loading_canvas.visible = false
 
 var first_brick_pos : Vector3 = Vector3.ZERO
 func _pos_sort(a : Node3D, b : Node3D) -> bool:
