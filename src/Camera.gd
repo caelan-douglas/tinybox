@@ -96,7 +96,7 @@ func _ready() -> void:
 func move_around_target(vec: Vector2) -> void:
 	# fmod is modulo on floats
 	yaw = fmod((yaw - vec.x * sensitivity), 360)
-	pitch = max(min(pitch - vec.y * sensitivity, 60), -85)
+	pitch = max(min(pitch - vec.y * sensitivity, 70), -85)
 	rotation = Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0)
 
 func _unhandled_input(event : InputEvent) -> void:
@@ -140,7 +140,7 @@ func _control_camera_rotation(delta : float) -> void:
 var dist_to_hit : float = 0.0
 var min_dist : float = 3
 var dist_diff : float = 0.0
-const CONTROLLED_CAM_DELAY_TIME = 5
+const CONTROLLED_CAM_DELAY_TIME = 10
 var controlled_cam_delay := 5
 var controlled_cam_pos := Vector3(0, 50, 0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.

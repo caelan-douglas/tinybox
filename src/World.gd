@@ -285,13 +285,30 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	if !(Global.get_world().get_current_map() is Editor):
 		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")) as PackedScene)
 	
+	# BIG file, show loading visual
+	var loading_text : Label = loading_canvas.get_node("Label")
+	if lines.size() > 100:
+		loading_canvas.visible = true
+	
 	var current_step := "none"
 	var count : int = 0
+	# amount of lines to read in a frame
+	var max_proc := 32
+	var cur_proc := 0
 	# run through each line
 	for line : String in lines:
+		cur_proc += 1
+		# wait a frame if we have read max lines for this frame
+		if cur_proc > max_proc:
+			await get_tree().process_frame
+			cur_proc = 0
+			if loading_canvas.visible:
+				loading_text.text = str("Loading .tbw file...     Objects: ", count)
 		if line != "":
 			# final step, place building
 			if str(line) == "[building]":
+				# disable loading canvas if we used it
+				loading_canvas.visible = false
 				# load building portion, use global pos
 				_server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break

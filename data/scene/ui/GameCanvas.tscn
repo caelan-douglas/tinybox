@@ -745,6 +745,13 @@ uppercase = true
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/missile/far"
 
+[node name="ToolList" type="HBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 251.0
+offset_bottom = 56.0
+theme_override_constants/separation = 0
+
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -797,13 +804,6 @@ text = "Fps: 100"
 horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("10_x8dyc")
-
-[node name="ToolList" type="HBoxContainer" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 251.0
-offset_bottom = 56.0
-theme_override_constants/separation = 0
 
 [node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
 offset_left = -224.0

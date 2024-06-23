@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/Camera.gd" id="1"]
 [ext_resource type="Animation" uid="uid://2t1dvsdwkiht" path="res://data/animation/camera/intro.res" id="2_c4qs1"]
+[ext_resource type="Material" uid="uid://bo38d2joh47t4" path="res://data/materials/camera_water_overlay.tres" id="2_togp0"]
 [ext_resource type="Animation" uid="uid://dbl1eyp0l5u06" path="res://data/animation/camera/intro_alt.res" id="3_vdhlv"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_m42ml"]
@@ -9,15 +10,8 @@ dof_blur_far_distance = 60.0
 dof_blur_far_transition = 30.0
 dof_blur_amount = 0.04
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u43y"]
-transparency = 1
-blend_mode = 3
-no_depth_test = true
-shading_mode = 0
-albedo_color = Color(0.541176, 0.752941, 1, 1)
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_jfe4s"]
-material = SubResource("StandardMaterial3D_6u43y")
+material = ExtResource("2_togp0")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_da3n1"]
 radius = 0.3

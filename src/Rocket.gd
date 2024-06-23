@@ -53,17 +53,17 @@ func _ready() -> void:
 	if add_synchronizer_on_spawn:
 		add_synchronizer()
 
-func _send_explode(from_whom_id : int, peer_position : Vector3) -> void:
+func _send_explode(from_whom_id : int, peer_position : Variant) -> void:
 	explode.rpc(from_whom_id, peer_position)
 
 @rpc("any_peer", "call_local", "reliable")
-func explode(from_whom_id : int, peer_position : Vector3) -> void:
+func explode(from_whom_id : int, peer_position : Variant) -> void:
 	var explosion_i : Explosion = explosion.instantiate()
 	get_tree().current_scene.add_child(explosion_i)
 	explosion_i.set_explosion_size(explosion_size)
 	explosion_i.set_explosion_owner(from_whom_id)
 	if peer_position != null:
-		explosion_i.global_position = peer_position
+		explosion_i.global_position = peer_position as Vector3
 	else:
 		explosion_i.global_position = global_position
 	explosion_i.play_sound()
