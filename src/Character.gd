@@ -31,7 +31,7 @@ enum {
 
 @export var health : int = 750
 @export var team := "Default"
-@onready var label : Label = $Label3D
+@onready var label : Label3D = $Label3D
 
 func set_health(new : int) -> int:
 	health = new

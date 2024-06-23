@@ -44,6 +44,7 @@ freeze = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_dvuh2")
+mass_mult = 2.0
 _brick_spawnable_type = "brick_cylinder_large"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]

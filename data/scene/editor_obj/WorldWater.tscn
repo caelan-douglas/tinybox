@@ -27,14 +27,14 @@ mesh = SubResource("PlaneMesh_gsv0s")
 skeleton = NodePath("../..")
 
 [node name="WaterArea" type="Area3D" parent="."]
-collision_mask = 15
+collision_mask = 143
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WaterArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -677.3, 0)
 shape = SubResource("BoxShape3D_8ft4g")
 
 [node name="DeepWaterArea" type="Area3D" parent="."]
-collision_mask = 7
+collision_mask = 135
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeepWaterArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -688.6, 0)

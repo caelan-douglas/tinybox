@@ -207,7 +207,7 @@ func dm_new_leader(new_id : int, new_leader_name : String, new_leader_kills : in
 
 @rpc("any_peer", "call_local", "reliable")
 func tdm_update_team_score(team_name : String, kills : int) -> void:
-	for t : ProgressBar in minigame_ui.get_children():
+	for t : Node in minigame_ui.get_children():
 		if t.name == team_name:
 			var team_ui : ProgressBar = t
 			team_ui.max_value = dm_limit

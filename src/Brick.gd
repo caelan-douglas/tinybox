@@ -52,7 +52,7 @@ var sync_step : int = 0
 # for spawning buildings
 var joinable : bool = true
 # for larger bricks
-var mass_mult : float = 1
+@export var mass_mult : float = 1
 @export var flammable : bool = true
 var on_fire : bool = false
 var charred : bool = false
@@ -517,6 +517,9 @@ func play_hit_sound(volume : float) -> void:
 # Remove this brick
 @rpc("any_peer", "call_local")
 func despawn() -> void:
+	if brick_groups.groups.has(str(group)):
+		if brick_groups.groups[str(group)].has(self):
+			brick_groups.groups[str(group)].erase(self)
 	queue_free()
 
 # Build mode, used when a brick is spawning from a tool.
