@@ -27,6 +27,11 @@ enum AudioBus {
 func _ready() -> void:
 	connect("value_changed", set_volume)
 	await get_tree().process_frame
+	load_settings()
+	# when the gamecanvas is shown or hidden
+	connect("visibility_changed", load_settings)
+
+func load_settings() -> void:
 	match(bus):
 		AudioBus.MASTER:
 			var current := MusicHandler.load_master_setting()

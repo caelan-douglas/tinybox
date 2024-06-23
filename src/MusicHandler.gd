@@ -78,7 +78,7 @@ func set_master_setting(new : float) -> void:
 func load_master_setting() -> float:
 	var loaded_preset : float = UserPreferences.load_pref("master_setting")
 	if loaded_preset != null:
-		set_master_setting(int(loaded_preset))
+		set_master_setting(float(loaded_preset))
 	return master_setting
 
 func get_music_setting() -> float:
@@ -96,7 +96,7 @@ func set_music_setting(new : float) -> void:
 func load_music_setting() -> float:
 	var loaded_preset : float = UserPreferences.load_pref("music_setting")
 	if loaded_preset != null:
-		set_music_setting(int(loaded_preset))
+		set_music_setting(float(loaded_preset))
 	return music_setting
 
 func get_sfx_setting() -> float:
@@ -114,5 +114,5 @@ func set_sfx_setting(new : float) -> void:
 func load_sfx_setting() -> float:
 	var loaded_preset : float = UserPreferences.load_pref("sfx_setting")
 	if loaded_preset != null:
-		set_sfx_setting(int(loaded_preset))
+		set_sfx_setting(float(loaded_preset))
 	return sfx_setting

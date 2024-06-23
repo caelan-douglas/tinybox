@@ -1085,11 +1085,11 @@ json_text = "ui/switch_maps_button"
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 
-[node name="HostPanel" type="Panel" parent="PauseMenu/Menu"]
+[node name="VolumePanel" type="Panel" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 240)
 layout_mode = 2
 
-[node name="HostPanelContainer" type="VBoxContainer" parent="PauseMenu/Menu/HostPanel"]
+[node name="VolumePanelContainer" type="VBoxContainer" parent="PauseMenu/Menu/VolumePanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1102,32 +1102,32 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label3" type="Label" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="Label3" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Master Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/master_volume"
 
-[node name="MasterVol" type="HSlider" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="MasterVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
 value = 1.0
 script = ExtResource("16_da6k8")
 
-[node name="Spacer8" type="Control" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="Spacer8" type="Control" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="Label4" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Music Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/music_volume"
 
-[node name="MusicVol" type="HSlider" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="MusicVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -1135,18 +1135,18 @@ value = 1.0
 script = ExtResource("16_da6k8")
 bus = 1
 
-[node name="Spacer9" type="Control" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="Spacer9" type="Control" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="Label5" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "SFX Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/sfx_volume"
 
-[node name="SFXVol" type="HSlider" parent="PauseMenu/Menu/HostPanel/HostPanelContainer"]
+[node name="SFXVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
