@@ -1,10 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://bad2ir20f17hp"]
+[gd_scene load_steps=20 format=3 uid="uid://bad2ir20f17hp"]
 
 [ext_resource type="PackedScene" uid="uid://dvma38j4deff1" path="res://data/models/visual_mesh/bat/bat.blend" id="1_0ox7v"]
 [ext_resource type="AudioStream" uid="uid://dk8g4hiv8ims5" path="res://data/audio/bat/bat_0.ogg" id="1_e1vdc"]
-[ext_resource type="Material" uid="uid://dxhun2g3o3x2k" path="res://data/materials/wood.tres" id="2_7sf2u"]
 [ext_resource type="AudioStream" uid="uid://bws3maurg3ruf" path="res://data/audio/bat/bat_1.ogg" id="2_ik4bm"]
 [ext_resource type="AudioStream" uid="uid://cljd50r3t0qyo" path="res://data/audio/deflect.ogg" id="3_qxgff"]
+[ext_resource type="Texture2D" uid="uid://dcvo4y6ejsxgr" path="res://data/textures/wood_tex.jpg" id="5_hi8ii"]
+[ext_resource type="Texture2D" uid="uid://ctgjf8684lvi4" path="res://data/textures/wood_tex_normal.jpg" id="6_m6t0x"]
+[ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="7_q23tx"]
 
 [sub_resource type="Animation" id="Animation_d7ghb"]
 length = 0.001
@@ -167,6 +169,20 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_lbbej")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpb8w"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.621767, 0.478887, 0.446137, 1)
+albedo_texture = ExtResource("5_hi8ii")
+metallic_specular = 0.1
+roughness = 0.45
+roughness_texture = ExtResource("7_q23tx")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.2
+normal_texture = ExtResource("6_m6t0x")
+uv1_offset = Vector3(0, 0.135, 0.695)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_v1ufs"]
 size = Vector3(0.1, 0.8, 0.1)
 
@@ -199,7 +215,7 @@ transform = Transform3D(-0.49839, 2.16649, -1.14364, -2.43546, -0.564325, -0.007
 
 [node name="bat" parent="mesh" index="0"]
 mesh = SubResource("ArrayMesh_mca60")
-surface_material_override/0 = ExtResource("2_7sf2u")
+surface_material_override/0 = SubResource("StandardMaterial3D_wpb8w")
 
 [node name="HitArea" type="Area3D" parent="mesh"]
 collision_mask = 3

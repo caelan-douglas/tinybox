@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=11 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8s7blprpfw2p" path="res://data/scene/ui/EditorItemButton.tscn" id="3_1mjdq"]
+[ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_b6w4i"]
 [ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
 [ext_resource type="Texture2D" uid="uid://b06jqfkgscjul" path="res://data/textures/editor_icons/wheel.png" id="5_a7h3k"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
@@ -91,9 +92,8 @@ script = ExtResource("6_aufvl")
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="LoadName" type="LineEdit" parent="EntryScreen/Menu"]
+[node name="MapSelection" parent="EntryScreen/Menu" instance=ExtResource("3_b6w4i")]
 layout_mode = 2
-placeholder_text = "Existing world name"
 
 [node name="Load" type="Button" parent="EntryScreen/Menu"]
 layout_mode = 2
@@ -194,6 +194,20 @@ layout_mode = 2
 text = "Seat"
 internal_name = "brick_motor_seat"
 
+[node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Tool pickup"
+icon = ExtResource("6_5wr8i")
+expand_icon = true
+internal_name = "obj_pickup"
+
+[node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Lifter"
+icon = ExtResource("6_5wr8i")
+expand_icon = true
+internal_name = "obj_lifter"
+
 [node name="Button6" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Pine tree"
@@ -217,20 +231,6 @@ layout_mode = 2
 text = "Big mug"
 icon = null
 internal_name = "obj_mug"
-
-[node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Tool pickup"
-icon = ExtResource("6_5wr8i")
-expand_icon = true
-internal_name = "obj_pickup"
-
-[node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Lifter"
-icon = ExtResource("6_5wr8i")
-expand_icon = true
-internal_name = "obj_lifter"
 
 [node name="Button12" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
@@ -384,6 +384,7 @@ layout_mode = 2
 [node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("12_nulw5")]
 layout_mode = 2
 text = "Leave Editor"
+editor_leave_text = true
 
 [node name="StartGame" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2
@@ -406,6 +407,22 @@ placeholder_text = "World name..."
 [node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2
 text = "Save world"
+
+[node name="Spacer4" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Load world"
+script = ExtResource("6_aufvl")
+
+[node name="MapSelection" parent="PauseMenu/Menu" instance=ExtResource("3_b6w4i")]
+layout_mode = 2
+
+[node name="Load" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Load world"
 
 [node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)

@@ -32,22 +32,31 @@ func _on_map_loaded() -> void:
 		$WorldProperties/Menu/Background.connect("pressed", (editor as Editor).switch_background)
 		
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
-		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed)
+		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Menu/MapSelection))
+		$PauseMenu/Menu/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/Menu/MapSelection, true))
 
 func _on_new_world_pressed() -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_load_world_pressed() -> void:
+func _on_load_world_pressed(map_selector : OptionButton, confirm := false) -> void:
+	if confirm:
+		var actions := UIHandler.show_alert_with_actions("Are you sure? Any unsaved changes will be lost.", ["Load world", "Cancel"], true)
+		actions[0].connect("pressed", _load_world.bind(map_selector))
+	else:
+		_load_world(map_selector)
+
+func _load_world(map_selector : OptionButton) -> void:
 	# delete old environment
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
 		(editor as Editor).delete_environment()
 	# load file
-	var world_name : String = $EntryScreen/Menu/LoadName.text
+	var world_name : String = map_selector.get_item_text(map_selector.selected)
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	Global.get_world().load_tbw(world_name)
+	# remove ".tbw" from string
+	Global.get_world().load_tbw(world_name.split(".")[0])
 
 func hide_pause_menu() -> void:
 	$PauseMenu.visible = false
