@@ -29,6 +29,7 @@ func _on_map_loaded() -> void:
 		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", (editor as Editor).adjust_water_height.bind(1))
 		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", (editor as Editor).adjust_water_height.bind(10))
 		$WorldProperties/Menu/Environment.connect("pressed", (editor as Editor).switch_environment)
+		$WorldProperties/Menu/Background.connect("pressed", (editor as Editor).switch_background)
 		
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed)

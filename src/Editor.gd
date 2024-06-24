@@ -44,6 +44,10 @@ func _on_tbw_loaded() -> void:
 	var env : Node = get_environment()
 	if env != null:
 		editor_canvas.get_node("WorldProperties/Menu/Environment").text = env.environment_name
+	# Update background text
+	var bg : TBWObject = get_background()
+	if bg != null:
+		editor_canvas.get_node("WorldProperties/Menu/Background").text = bg.tbw_object_type
 
 func show_item_chooser() -> void:
 	editor_canvas.get_node("ItemChooser").visible = true
@@ -92,6 +96,19 @@ func get_environment() -> TBWEnvironment:
 			return obj
 	return null
 
+func delete_background() -> void:
+	for obj in Global.get_world().get_children():
+		if obj is TBWObject:
+			if obj.tbw_object_type.begins_with("bg_"):
+				obj.queue_free()
+
+func get_background() -> TBWObject:
+	for obj in Global.get_world().get_children():
+		if obj is TBWObject:
+			if obj.tbw_object_type.begins_with("bg_"):
+				return obj
+	return null
+
 func switch_environment() -> void:
 	var env : Node = null
 	for obj in Global.get_world().get_children():
@@ -118,3 +135,37 @@ func switch_environment() -> void:
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
 	editor_canvas.get_node("WorldProperties/Menu/Environment").text = current_env_name
+
+func switch_background() -> void:
+	var bg : TBWObject = null
+	for obj in Global.get_world().get_children():
+		if obj is TBWObject:
+			if obj.tbw_object_type.begins_with("bg_"):
+				bg = obj
+	var current_bg_name := ""
+	if bg != null:
+		current_bg_name = bg.tbw_object_type
+	# delete old
+	delete_background()
+	
+	var new_bg : TBWObject = null
+	match (current_bg_name):
+		# switch from frozen field -> warp
+		"bg_frozen_field":
+			# we deleted the environment so just end here
+			new_bg = SpawnableObjects.objects["bg_warp"].instantiate()
+			pass
+		# switch from warp -> none
+		"bg_warp":
+			new_bg = null
+			pass
+		# switch from none
+		_:
+			new_bg = SpawnableObjects.objects["bg_frozen_field"].instantiate()
+			pass
+	if new_bg != null:
+		Global.get_world().add_child(new_bg, true)
+		current_bg_name = new_bg.tbw_object_type
+	else:
+		current_bg_name = "(none)"
+	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name

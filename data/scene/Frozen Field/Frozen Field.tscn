@@ -169,13 +169,11 @@ type = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, 0.5, 0)
 type = 4
 ammo = 1
-respawn_time = 30
 
 [node name="Pickup6" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 0.5, 0)
 type = 4
 ammo = 1
-respawn_time = 30
 
 [node name="Pickup2" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -11)
@@ -184,18 +182,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -11)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 2.5, 0)
 type = 2
 ammo = 30
-respawn_time = 15
 
 [node name="Pickup4" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 2.5, 0)
 type = 1
-respawn_time = 15
 
 [node name="Pickup7" parent="." instance=ExtResource("16_na7cl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 2)
 type = 3
 ammo = 80
-respawn_time = 4
 only_in_sandbox = true
 
 [node name="Node3D" type="Node3D" parent="."]

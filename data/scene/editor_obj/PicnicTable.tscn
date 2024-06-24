@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7yu2igsi1y5h"]
+
+[ext_resource type="Script" path="res://src/TBWObject.gd" id="1_uoyed"]
+[ext_resource type="PackedScene" uid="uid://crgcajojbhirg" path="res://data/models/picnic_table/picnictable.blend" id="1_v263w"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6oha7"]
+size = Vector3(105.3, 5, 46.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4k6aq"]
+size = Vector3(105.3, 5, 14)
+
+[node name="PicnicTable" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+script = ExtResource("1_uoyed")
+tbw_object_type = "obj_picnic_table"
+
+[node name="picnictable" parent="." instance=ExtResource("1_v263w")]
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -2.5, 2.08165e-12)
+shape = SubResource("BoxShape3D_6oha7")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -19.25, 29.7)
+shape = SubResource("BoxShape3D_4k6aq")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -19.25, -29.7)
+shape = SubResource("BoxShape3D_4k6aq")

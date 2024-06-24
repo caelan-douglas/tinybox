@@ -31,11 +31,15 @@ extends Node
 	"obj_mug": load("res://data/scene/editor_obj/Mug.tscn"),
 	"obj_pickup": load("res://data/scene/pickup/Pickup.tscn"),
 	"obj_lifter": load("res://data/scene/lifter/Lifter.tscn"),
+	"obj_picnic_table": load("res://data/scene/editor_obj/PicnicTable.tscn"),
 	# ENVIRONMENTS
 	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),
 	"env_molten": load("res://data/scene/environments/Molten.tscn"),
 	"env_warp": load("res://data/scene/environments/Warp.tscn"),
+	# BACKGROUNDS
+	"bg_frozen_field": load("res://data/scene/backgrounds/FrozenField.tscn"),
+	"bg_warp": load("res://data/scene/backgrounds/Warp.tscn"),
 	# BRICKS
 	"brick": load("res://data/scene/brick/Brick.tscn"),
 	"brick_half": load("res://data/scene/brick/HalfBrick.tscn"),

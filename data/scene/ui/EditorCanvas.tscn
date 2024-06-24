@@ -232,6 +232,13 @@ icon = ExtResource("6_5wr8i")
 expand_icon = true
 internal_name = "obj_lifter"
 
+[node name="Button12" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Big picnic table"
+icon = null
+expand_icon = true
+internal_name = "obj_picnic_table"
+
 [node name="WorldProperties" type="Control" parent="."]
 visible = false
 custom_minimum_size = Vector2(540, 400)
@@ -311,6 +318,20 @@ json_text = "ui/editor/environment"
 [node name="Environment" type="Button" parent="WorldProperties/Menu"]
 layout_mode = 2
 text = "Sunny"
+
+[node name="Spacer3" type="Control" parent="WorldProperties/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="DynamicLabel4" type="Label" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Background"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/background"
+
+[node name="Background" type="Button" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "(none)"
 
 [node name="PauseMenu" type="Control" parent="."]
 visible = false

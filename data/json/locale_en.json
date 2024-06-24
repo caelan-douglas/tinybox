@@ -72,7 +72,8 @@
             "welcome": "Welcome to the world editor!",
             "world_properties": "World properties",
             "water": "Water",
-            "environment": "Environment"
+            "environment": "Environment",
+            "background": "Background"
         }
     },
     "tip": {

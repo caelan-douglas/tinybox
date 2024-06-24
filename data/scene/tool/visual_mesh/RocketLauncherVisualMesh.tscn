@@ -1,8 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://cuby2ah84p07d"]
+[gd_scene load_steps=5 format=3 uid="uid://cuby2ah84p07d"]
 
 [ext_resource type="PackedScene" uid="uid://bp5p6tytrnqu3" path="res://data/models/visual_mesh/rocket_launcher/launcher.blend" id="1_7dnap"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_qa423"]
-[ext_resource type="Material" uid="uid://icymbbpv386g" path="res://data/materials/rubber.tres" id="3_yjd4u"]
+[ext_resource type="Texture2D" uid="uid://d2yj122mqtsxk" path="res://data/textures/sharp_noise_tex.png" id="3_75cqw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oxgi5"]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.259294, 0.259294, 0.259294, 1)
+metallic_texture_channel = 2
+roughness = 0.55
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.1
+normal_texture = ExtResource("3_75cqw")
+rim_enabled = true
+rim = 0.16
 
 [node name="Node3D" type="Node3D"]
 
@@ -11,6 +24,6 @@ transform = Transform3D(0.391658, 0.920088, 0.00624801, -0.0477143, 0.0270912, -
 
 [node name="Cube" parent="launcher" index="0"]
 surface_material_override/0 = ExtResource("2_qa423")
-surface_material_override/1 = ExtResource("3_yjd4u")
+surface_material_override/1 = SubResource("StandardMaterial3D_oxgi5")
 
 [editable path="launcher"]
