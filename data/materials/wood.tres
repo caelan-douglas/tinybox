@@ -7,7 +7,6 @@
 [resource]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.801695, 0.648819, 0.593311, 1)
 albedo_texture = ExtResource("1_0whjp")
 roughness_texture = ExtResource("3_kt6hq")
 roughness_texture_channel = 4

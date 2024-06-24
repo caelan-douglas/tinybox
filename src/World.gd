@@ -460,13 +460,14 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 				
 				# colour
 				if line_split.size() > 5:
-					b._colour = Color.from_string(line_split[5], Color.WHITE)
+					b.set_colour(Color.from_string(line_split[5], Color.WHITE))
 	
 	### Placing bricks
 	
 	# don't place nothing
 	if building_group.size() < 1:
 		printerr("Building: Tried to load building with nothing in it.")
+		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, true, false)
 		return
 	# change ownership first
 	# wait a bit before checking joints

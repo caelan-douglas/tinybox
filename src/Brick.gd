@@ -64,8 +64,9 @@ var charred : bool = false
 
 @export var _state : States = States.DUMMY_PLACED
 @export var _material : BrickMaterial = BrickMaterial.WOODEN
+@onready var mesh_material : Material = Material.new()
 @export var _brick_spawnable_type : String = "brick"
-@export var _colour : Color = "#fefefe"
+@export var _colour : Color = "#ffffff"
 
 @onready var wood_material : Material = preload("res://data/materials/wood.tres")
 @onready var wood_charred_material : Material = preload("res://data/materials/wood_charred.tres")
@@ -182,6 +183,7 @@ func set_material(new : BrickMaterial) -> void:
 			set_physics_material_properties(1, 0)
 			
 			flammable = false
+	mesh_material = model_mesh.get_surface_override_material(0)
 
 func show_delete_overlay() -> void:
 	var curr_mat : Material = model_mesh.get_surface_override_material(0)
@@ -202,31 +204,22 @@ func set_physics_material_properties(fric : float, bounce : float) -> void:
 	physics_material_override = physmat
 
 # Returns the material resource of this brick.
-func get_material() -> Material:
-	match(_material):
-		0:
-			return wood_material
-		1:
-			return wood_charred_material
-		2:
-			return metal_material
-		3:
-			return plastic_material
-		4:
-			return rubber_material
-		_:
-			return static_material
+func get_mesh_material() -> Material:
+	return mesh_material
 
 @rpc("any_peer", "call_local", "reliable")
 func set_colour(new : Color) -> void:
 	_colour = new
-	var new_material : Material = get_material().duplicate()
+	# Duplicate current material.
+	var new_material : Material = get_mesh_material().duplicate()
 	# By default, new materials are added to the cache.
 	var add_material_to_cache := true
 	# Check over the graphics cache to make sure we don't already have the same material created.
 	for cached_material : Material in Global.graphics_cache:
 		# If the material texture and colour matches (that's all that really matters):
-		if cached_material.albedo_color == new && cached_material.albedo_texture == new_material.albedo_texture:
+		if (cached_material.albedo_color == new && 
+		cached_material.albedo_texture == new_material.albedo_texture && 
+		cached_material.normal_texture == new_material.normal_texture):
 			# Instead of using the duplicate material we created, use the cached material.
 			new_material = cached_material
 			# Don't add this material to cache, since we're pulling it from the cache already.
@@ -364,9 +357,7 @@ func _ready() -> void:
 	inactivity_timer.connect("timeout", _inactivity_despawn)
 	# set material to spawn material
 	set_material(_material)
-		# set colour, if need be (avoid otherwise as not to make unnecessary new materials)
-	if _colour.to_html(false) != "fefefe":
-		set_colour(_colour)
+	await get_tree().process_frame
 
 # Spawns this brick, usually from a tool. Called reliably so that a client
 # does not miss their brick being spawned.
@@ -384,6 +375,11 @@ func spawn(auth : int, material : BrickMaterial = BrickMaterial.WOODEN) -> void:
 		# notify other clients of this brick's properties
 		_sync_properties_spawn.rpc([global_position, global_rotation, get_multiplayer_authority()])
 	change_state.rpc(States.BUILD)
+	# default material colours
+	if _material == BrickMaterial.RUBBER:
+		set_colour("#000000")
+	elif _material == BrickMaterial.WOODEN:
+		set_colour("#cca597")
 
 # Spawns this brick in Editor mode.
 @rpc("call_local", "reliable")
@@ -617,7 +613,8 @@ func build() -> void:
 		if !valid:
 			model_mesh.set_surface_override_material(0, invalid_material)
 		else: 
-			model_mesh.set_surface_override_material(0, get_material())
+			model_mesh.set_surface_override_material(0, get_mesh_material())
+			set_colour(_colour)
 	
 	# place brick
 	if Input.is_action_just_pressed("click"):
@@ -671,7 +668,7 @@ func update_joint(set_group : String = "") -> void:
 		# don't join with self
 		if body is Brick && self != body:
 			found_brick = true
-			if body.joinable && body.get_material() != static_material:
+			if body.joinable && _material != BrickMaterial.STATIC:
 				# Don't let wheels join with each other
 				if body is MotorBrick && self is MotorBrick:
 					pass

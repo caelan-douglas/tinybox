@@ -53,6 +53,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.227451, 0.133333, 0.231373, 1)
 
 [node name="Label" type="Label" parent="LoadingCanvas"]

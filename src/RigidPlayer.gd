@@ -776,7 +776,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if is_on_ground:
 				if int(slide_time.time_left * 10) % 2 == 0:
 					play_jump_particles()
-				if Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5:
+				# jump if pressed or going too slow
+				if (Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5) || linear_velocity.length() < 1:
 					air_from_jump = true
 					apply_central_impulse(Vector3.UP * jump_force)
 					change_state(AIR)
@@ -980,6 +981,7 @@ func enter_state() -> void:
 		DIVE:
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * 4)
+			apply_central_impulse(Vector3.UP * 4)
 			animator.set("parameters/TimeSeekDive/seek_request", 0.0)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 1.0, 0.2)
