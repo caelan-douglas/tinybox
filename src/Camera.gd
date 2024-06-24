@@ -33,6 +33,7 @@ var dist : float = 5
 var target_dist : float = 5
 var aim_dist : float = 3
 var sensitivity : float = 0.15
+var max_dist : float = 40
 var _camera_mode : CameraMode = CameraMode.FREE
 var mode_locked := false
 var locked := false
@@ -61,10 +62,15 @@ func get_camera_mode() -> CameraMode:
 func set_camera_mode(new : CameraMode) -> void:
 	if !mode_locked:
 		_camera_mode = new
+		max_dist = 40
 		if new == CameraMode.AIM:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = true
 		else:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = false
+		
+		# longer zoom in controlled (editor) mode
+		if new == CameraMode.CONTROLLED:
+			max_dist = 150
 		emit_signal("camera_mode_changed")
 
 func set_target(new_target : Node, interpolate := true) -> void:
@@ -123,7 +129,7 @@ func _control_camera_rotation(delta : float) -> void:
 	if target != null:
 		if dist_to_hit != null:
 			dist_diff = lerp(dist_diff, dist_to_hit, 0.3)
-			var new_dist : float = clamp((dist - dist_diff), 1, 40) - 0.1
+			var new_dist : float = clamp((dist - dist_diff), 1, max_dist) - 0.1
 			position = -new_dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
 			gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
 		else:
@@ -179,6 +185,8 @@ func _process(delta : float) -> void:
 					target_dist = 25
 				25:
 					target_dist = 50
+				50:
+					target_dist = 100
 				_:
 					target_dist = 5
 		
@@ -188,9 +196,9 @@ func _process(delta : float) -> void:
 		gimbal.global_rotation = Vector3.ZERO
 		# zoom
 		if Input.is_action_just_pressed("zoom_in") && Input.is_action_pressed("control"):
-			target_dist = clamp(target_dist - 2, 3, 40)
+			target_dist = clamp(target_dist - 2, 3, max_dist)
 		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
-			target_dist = clamp(target_dist + 2, 3, 40)
+			target_dist = clamp(target_dist + 2, 3, max_dist)
 		
 		# if multithreaded physics, this section FROM HERE
 		# must be moved to physics process
