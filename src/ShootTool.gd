@@ -82,6 +82,8 @@ func _ready() -> void:
 		restore_timer.connect("timeout", increase_ammo)
 		add_child(restore_timer)
 		restore_timer.start()
+	
+	tool_overlay = get_tree().current_scene.get_node_or_null("GameCanvas/ToolOverlay/ChargedTool")
 
 @onready var explosion : PackedScene = SpawnableObjects.explosion
 func _on_player_body_entered(body : Node3D) -> void:
@@ -257,6 +259,10 @@ func _physics_process(delta : float) -> void:
 				else:
 					if charged_shot_amt < charged_shot_amt_max:
 						charged_shot_amt += 1
+						power_meter.value = charged_shot_amt
+						# just increased above
+						if charged_shot_amt >= charged_shot_amt_max:
+							power_meter_anim.play("power_max")
 			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !player_is_locked:
 				# Limit the speed at which we can fire.
 				shot_cooldown_counter = shot_cooldown
@@ -273,12 +279,16 @@ func _physics_process(delta : float) -> void:
 				else:
 					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
 			else:
-				charged_shot_amt = 0
 				stop_audio = true
+				_end_shot()
 		elif (ammo < 1 && ammo != -1):
 			stop_audio = true
+			_end_shot()
+		else:
+			_end_shot()
 	else: 
 		stop_audio = true
+		_end_shot()
 	if stop_audio && (audio != null && audio_anim != null):
 		# if audio is currently playing, and we are not fading out, fade out
 		if audio.playing && !audio_anim.is_playing():
@@ -299,3 +309,24 @@ func _physics_process(delta : float) -> void:
 					if shot_cooldown_counter != 1:
 						ui_progress.value = shot_cooldown_counter
 					else: ui_progress.value = 0
+
+func _end_shot() -> void:
+	charged_shot_amt = 0
+	if power_meter != null:
+		power_meter.value = 0
+		if power_meter_anim != null:
+			power_meter_anim.play("RESET")
+
+var power_meter : TextureProgressBar = null
+var power_meter_anim : AnimationPlayer = null
+func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
+	super(mode, from_click, free_camera_on_inactive)
+
+	if tool_overlay != null:
+		if !charged_shot:
+			tool_overlay.visible = false
+		else:
+			tool_overlay.visible = mode
+			power_meter = tool_overlay.get_node("Power")
+			power_meter_anim = tool_overlay.get_node("Power/AnimationPlayer")
+	

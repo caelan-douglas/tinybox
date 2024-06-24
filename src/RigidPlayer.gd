@@ -687,6 +687,9 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					run_particles_i.global_position = Vector3(global_position.x, global_position.y + 0.2, global_position.z)
 					run_particles_i.emitting = true
 				last_move_direction = move_direction
+			else:
+				# change to idle when locked
+				change_state(IDLE)
 		AIR:
 			# avoid setting velocity when being pushed by extinguisher
 			if !external_propulsion:
