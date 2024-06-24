@@ -68,4 +68,7 @@ Attributions for /data/audio:
 	invalid.ogg:
 		by philRacoIndie; licensed under Creative Commons 0
 		https://freesound.org/people/philRacoIndie/sounds/551543/
+	throw.ogg:
+		by denao270; licensed under Creative Commons 0
+		https://freesound.org/people/denao270/sounds/346373/
 	

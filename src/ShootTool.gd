@@ -33,6 +33,9 @@ enum ShootType {
 @export var shot_speed := 30
 @export var shot_cooldown := 5
 @export var explosion_size := 1.5
+@export var charged_shot := false
+var charged_shot_amt : float = 0
+var charged_shot_amt_max : float = 60
 @export var show_cooldown_on_ui_partner := false
 @export var ammo : int = -1
 @export var restore_ammo := false
@@ -235,20 +238,42 @@ func _physics_process(delta : float) -> void:
 				if tool_player_owner.locked:
 					player_is_locked = true
 			if Input.is_action_pressed("click") && !player_is_locked:
+				# For single-click shots
+				if !charged_shot:
+					# Limit the speed at which we can fire.
+					shot_cooldown_counter = shot_cooldown
+					if (audio != null && audio_anim != null):
+						if !audio.playing || audio_anim.is_playing():
+							_set_tool_audio_playing.rpc(true)
+					if fire_sound == true && audio != null:
+						audio.pitch_scale = 1
+						audio.play()
+					# if we are NOT the server,
+					# make server spawn ball so it is synced by MultiplayerSpawner
+					if !multiplayer.is_server():
+						spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed, _shoot_type)
+					else:
+						spawn_projectile(multiplayer.get_unique_id(), shot_speed, _shoot_type)
+				else:
+					if charged_shot_amt < charged_shot_amt_max:
+						charged_shot_amt += 1
+			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !player_is_locked:
+				# Limit the speed at which we can fire.
+				shot_cooldown_counter = shot_cooldown
+				
 				if (audio != null && audio_anim != null):
 					if !audio.playing || audio_anim.is_playing():
 						_set_tool_audio_playing.rpc(true)
 				if fire_sound == true && audio != null:
+					audio.pitch_scale = 1 + (0.5 * (charged_shot_amt/charged_shot_amt_max))
 					audio.play()
-				# Limit the speed at which we can fire.
-				shot_cooldown_counter = shot_cooldown
-				# if we are NOT the server,
-				# make server spawn ball so it is synced by MultiplayerSpawner
+				
 				if !multiplayer.is_server():
-					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed, _shoot_type)
+					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
 				else:
-					spawn_projectile(multiplayer.get_unique_id(), shot_speed, _shoot_type)
+					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
 			else:
+				charged_shot_amt = 0
 				stop_audio = true
 		elif (ammo < 1 && ammo != -1):
 			stop_audio = true
