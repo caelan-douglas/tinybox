@@ -85,7 +85,7 @@ var charred : bool = false
 @onready var model_mesh : MeshInstance3D = $Smoothing/model/Cube
 @onready var smoothing : Node3D = $Smoothing
 
-@onready var joint : Generic6DOFJoint3D = $"Joint"
+@onready var joint_scn : PackedScene = preload("res://data/scene/brick/BrickJoint.tscn")
 @onready var joint_detector : Area3D = $"JointDetector"
 
 @onready var inactivity_timer : Timer = $InactivityTimer
@@ -650,35 +650,27 @@ func build() -> void:
 func check_joints(set_group : String = "") -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
-	
 	if joint_detector.has_overlapping_bodies():
 		# update our child Joint
-		update_joint(set_group)
+		var found_brick := false
+		# join bricks that are adjacent
+		for body in joint_detector.get_overlapping_bodies():
+			# don't join with self
+			if body is Brick && body != self:
+				found_brick = true
+				if body.joinable && _material != BrickMaterial.STATIC:
+					# Don't let wheels join with each other
+					if body is MotorBrick && self is MotorBrick:
+						pass
+					# Don't let wheels join with seats
+					elif (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
+						pass
+					else:
+						join(body.get_path(), set_group)
+		if !found_brick:
+			# we don't have any bricks to join to
+			brick_groups.groups[str(group)] = []
 	else:
-		# we don't have any bricks to join to
-		brick_groups.groups[str(group)] = []
-
-# Update this brick's joint.
-func update_joint(set_group : String = "") -> void:
-	# only execute on yourself
-	if !is_multiplayer_authority(): return
-	var found_brick := false
-	# join bricks that are adjacent
-	for body in joint_detector.get_overlapping_bodies():
-		# don't join with self
-		if body is Brick && self != body:
-			found_brick = true
-			if body.joinable && _material != BrickMaterial.STATIC:
-				# Don't let wheels join with each other
-				if body is MotorBrick && self is MotorBrick:
-					pass
-				# Don't let wheels join with seats
-				elif (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
-					pass
-				else:
-					join(body.get_path(), set_group)
-					return
-	if !found_brick:
 		# we don't have any bricks to join to
 		brick_groups.groups[str(group)] = []
 
@@ -699,42 +691,36 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	if (brick_node_state == States.DUMMY_BUILD || brick_node_state == States.DUMMY_PLACED || brick_node_state == States.DUMMY_PROJECTILE):
 		return
 	
+	var joint : Generic6DOFJoint3D = joint_scn.instantiate()
+	add_child(joint, true)
+	# wheels have no z angular limit
+	if self is MotorBrick:
+		joint.set("angular_limit_z/enabled", false)
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
 	# Update the brick groups.
-	update_joined_brick_groups(path_to_brick, set_group)
+	update_brick_groups(group)
 
-# Update the BrickGroups group.
-func update_joined_brick_groups(path_to_brick : NodePath, set_group : String = "") -> void:
-	# only execute on yourself
-	if !is_multiplayer_authority(): return
-	
-	# if we are determining group dynamically
-	if set_group == "":
-		var brick : Brick = get_node(path_to_brick)
-		# Set my group to the other brick's group.
-		group = brick.group
-		# Add this brick and the other brick to the group if they are not already in it.
-		if !brick_groups.groups[str(group)].has(self):
-			brick_groups.groups[str(group)].append(self)
-		if !brick_groups.groups[str(group)].has(brick):
-			brick_groups.groups[str(group)].append(brick)
-	# determing group based on set group name
-	else:
-		group = set_group
-		if !brick_groups.groups.has(str(set_group)):
-			brick_groups.groups[str(set_group)] = []
-		brick_groups.groups[str(set_group)].append(self)
-	
+func update_brick_groups(group : String, exclusions : Array[Brick] = []) -> void:
+	if !brick_groups.groups[str(group)].has(self):
+		brick_groups.groups[str(group)].append(self)
+	for body in joint_detector.get_overlapping_bodies():
+		# don't join with self
+		if body is Brick && body != self:
+			if !exclusions.has(body):
+				body.group = group
+				exclusions.append(self)
+				body.update_brick_groups(group, exclusions)
+
 # Unjoin this brick from its partner.
 @rpc("any_peer", "call_local", "reliable")
 func unjoin() -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	
-	joint.set_node_a(NodePath())
-	joint.set_node_b(NodePath())
-	
+	for j in get_children():
+		if j is Generic6DOFJoint3D:
+			j.queue_free()
 	# reset group
 	group = name
 

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bhil8lbbf6ucm"]
+
+[node name="Joint" type="Generic6DOFJoint3D"]
+linear_limit_x/softness = 1.5
+linear_limit_y/softness = 1.5
+linear_limit_z/softness = 1.5
+angular_limit_x/softness = 1.0
+angular_limit_x/restitution = 0.05
+angular_limit_y/softness = 1.0
+angular_limit_y/restitution = 0.05
+angular_limit_z/softness = 1.0
+angular_limit_z/restitution = 0.05
