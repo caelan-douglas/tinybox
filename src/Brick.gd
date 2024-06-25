@@ -490,10 +490,9 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 	if body is RigidPlayer && linear_velocity.length() > 2 && !(self is MotorSeat):
 		body.trip_by_player.rpc(linear_velocity * 2)
 	
-	# Play sounds, but only if not hit by another brick. Projectiles get an
-	# exception.
+	# Play sounds
 	if total_velocity > 7:
-		if !(body is Brick && _state != States.DUMMY_PROJECTILE) && (_state != States.BUILD) && (_state != States.DUMMY_BUILD):
+		if !(body is Brick) && (_state != States.BUILD) && (_state != States.DUMMY_BUILD):
 			if $SoundExpiration.is_stopped():
 				play_hit_sound.rpc((-20 + (total_velocity * 2)))
 				$SoundExpiration.start()
@@ -699,6 +698,7 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
 	# Update the brick groups.
+	#update_joined_brick_groups(path_to_brick, set_group)
 	update_brick_groups(group)
 
 func update_brick_groups(group : String, exclusions : Array[Brick] = []) -> void:
@@ -721,6 +721,7 @@ func unjoin() -> void:
 	for j in get_children():
 		if j is Generic6DOFJoint3D:
 			j.queue_free()
+	
 	# reset group
 	group = name
 

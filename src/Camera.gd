@@ -207,12 +207,17 @@ func _process(delta : float) -> void:
 		if target != null:
 			var applied_pos : Vector3 = target.global_position - dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
 			intersection_area.global_position = applied_pos
-			if intersection_area.get_overlapping_bodies().size() > 0:
-				var space_state := get_world_3d().direct_space_state
-				# layer mask for ray is 0x7 (binary is 0111 for layers 1, 2, 3; camera is 4)
-				var ray := PhysicsRayQueryParameters3D.create(target.global_position as Vector3, applied_pos, 0x7)
-				var hit := space_state.intersect_ray(ray)
-				if hit:
+			var space_state := get_world_3d().direct_space_state
+			# layer mask for ray is 0x7 (binary is 0111 for layers 1, 2, 3; camera is 4)
+			var ray := PhysicsRayQueryParameters3D.create(target.global_position as Vector3, applied_pos, 0x7)
+			var hit := space_state.intersect_ray(ray)
+			if hit:
+				var is_hollow_shape := false
+				var shape : CollisionShape3D = hit["collider"].get_node_or_null("CollisionShape3D")
+				if shape != null:
+					if shape.shape is ConcavePolygonShape3D:
+						is_hollow_shape = true
+				if intersection_area.get_overlapping_bodies().size() > 0 || is_hollow_shape:
 					dist_to_hit = applied_pos.distance_to(hit["position"] as Vector3)
 					# a bit of padding between the hit object and camera
 					dist_to_hit += 0.4
