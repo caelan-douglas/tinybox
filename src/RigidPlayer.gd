@@ -35,13 +35,14 @@ enum {
 	SWIMMING_IDLE,
 	EXIT_SWIMMING,
 	SLIDE,
+	SLIDE_BACK,
 	ROLL,
 	ON_WALL,
 	ON_LEDGE
 }
 
 # DEBUG
-var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Exit swimming", "Slide", "Rolling", "On wall", "On ledge"]
+var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Exit swimming", "Slide", "Slide back", "Rolling", "On wall", "On ledge"]
 
 enum CauseOfDeath {
 	EXPLOSION,
@@ -673,6 +674,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				# jump particles
 				play_jump_particles()
 				change_state(AIR)
+			elif is_on_ground and Input.is_action_just_pressed("shift") && !locked && linear_velocity.length() > 1.1:
+				change_state(SLIDE_BACK)
 			elif !locked:
 				state.linear_velocity.x = move_direction.x * move_speed
 				state.linear_velocity.z = move_direction.z * move_speed
@@ -789,6 +792,21 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			dir.y = 0
 			dir = dir.normalized()
 			apply_force(dir * 7, Vector3.ZERO)
+		SLIDE_BACK:
+			if is_on_ground:
+				if int(slide_time.time_left * 10) % 2 == 0:
+					play_jump_particles()
+				# jump if pressed or going too slow
+				if Input.is_action_pressed("jump") && !locked:
+					apply_central_impulse(Vector3.UP * jump_force)
+					change_state(DIVE)
+				if linear_velocity.length() < 2:
+					change_state(IDLE)
+			# somewhat controllable when sliding
+			var dir : Vector3 = -camera.get_global_transform().basis.z
+			dir.y = 0
+			dir = dir.normalized()
+			apply_force(dir * 10, Vector3.ZERO)
 		ROLL:
 			if is_on_ground:
 				if int(roll_time.time_left * 10) % 2 == 0:
@@ -800,14 +818,19 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			var dir : Vector3 = -camera.get_global_transform().basis.z
 			dir.y = 0
 			dir = dir.normalized()
-			apply_force(dir * 25, Vector3.ZERO)
 			# cap velocity
 			var max_speed : float = 15
-			# prevents the player from rolling faster at 45 degree angles
-			# (approx. *1/sqrt2 speed when at 45deg angle)
-			var horizontal_velocity : Vector3 = Vector3(state.linear_velocity.x, 0, state.linear_velocity.z)
-			var length : float = min(max_speed, horizontal_velocity.length())
-			state.linear_velocity = Vector3(horizontal_velocity.normalized().x * length, state.linear_velocity.y, horizontal_velocity.normalized().z * length)
+			# basis of camera minus vertical component
+			var cam_horiz_basis : Vector3 = camera.get_global_transform().basis.z
+			cam_horiz_basis.y = 0
+			# basis of player minus vertical component
+			var horiz_basis : Vector3 = get_global_transform().basis.z
+			horiz_basis.y = 0
+			var cam_align : float = cam_horiz_basis.angle_to(horiz_basis)
+			var mult : float = (1/(cam_align/3.14159))
+			# limit speed unless we are facing a different direction for turning
+			if state.linear_velocity.length() < max_speed * mult:
+				apply_force(dir * 25, Vector3.ZERO)
 		TRIPPED:	
 			pass
 		IN_SEAT:
@@ -838,7 +861,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 @rpc("any_peer", "call_local")
 func entered_seat(path_to_seat : String) -> void:
 	# Don't enter the seat in special states
-	if can_enter_seat and (_state == IDLE || _state == AIR || _state == RUN || _state == DIVE || _state == SLIDE || _state == SWIMMING || _state == SWIMMING_IDLE):
+	if can_enter_seat and (_state == IDLE || _state == AIR || _state == RUN || _state == DIVE || _state == SLIDE || _state == SLIDE_BACK || _state == SWIMMING || _state == SWIMMING_IDLE):
 		change_state(IN_SEAT)
 		seat_occupying = get_node(path_to_seat)
 		UIHandler.show_alert("Press [ Jump ] to stop driving!", 6)
@@ -921,6 +944,10 @@ func enter_state() -> void:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 0.0, 0.2)
 		
+	if _state != SLIDE_BACK:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 0.0, 0.2)
+		
 	if _state != ROLL:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
@@ -996,10 +1023,26 @@ func enter_state() -> void:
 			lock_rotation = true
 			physics_material_override.friction = 1
 			var forward : Vector3 = get_global_transform().basis.z
-			apply_central_impulse(forward * linear_velocity.length() * 0.5)
+			apply_central_impulse(forward)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE)
+			# stand up after slide timeout
+			await slide_time.timeout
+			# if we are still sliding after waiting, don't intercept states:
+			if _state == SLIDE:
+				change_state(IDLE)
+		SLIDE_BACK:
+			# re-enable collider
+			set_player_collider.call_deferred(true)
+			slide_time.start()
+			lock_rotation = true
+			physics_material_override.friction = 1
+			var forward : Vector3 = get_global_transform().basis.z
+			apply_central_impulse(forward * 6)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 1.0, 0.3)
+			change_state_non_authority.rpc(SLIDE_BACK)
 			# stand up after slide timeout
 			await slide_time.timeout
 			# if we are still sliding after waiting, don't intercept states:
@@ -1020,7 +1063,12 @@ func enter_state() -> void:
 			await roll_time.timeout
 			# if we are still sliding after waiting, don't intercept states:
 			if _state == ROLL:
-				change_state(SLIDE)
+				# on ground, back slide
+				if ground_detect.has_overlapping_bodies():
+					change_state(SLIDE_BACK)
+				# in air, normal slide
+				else:
+					change_state(SLIDE)
 		TRIPPED:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
@@ -1206,6 +1254,9 @@ func change_state_non_authority(state : int) -> void:
 	if _state != SLIDE:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 0.0, 0.2)
+	if _state != SLIDE_BACK:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 0.0, 0.2)
 	if _state != ROLL:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
@@ -1247,6 +1298,13 @@ func change_state_non_authority(state : int) -> void:
 			# non-parallel tween runs sequentially
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
+			for i in range(9):
+				play_jump_particles()
+				await get_tree().create_timer(0.2).timeout
+		SLIDE_BACK:
+			# non-parallel tween runs sequentially
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 1.0, 0.3)
 			for i in range(9):
 				play_jump_particles()
 				await get_tree().create_timer(0.2).timeout
