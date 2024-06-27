@@ -99,6 +99,7 @@ var deaths : int = 0
 @onready var forward_ray : RayCast3D = $ForwardRay
 @onready var ledge_ray : RayCast3D = $LedgeRay
 @onready var air_time : Timer = $AirTime
+@onready var ledge_time : Timer = $LedgeTime
 @onready var trip_time : Timer = $TripTime
 @onready var slide_time : Timer = $SlideTime
 @onready var roll_time : Timer = $RollTime
@@ -707,7 +708,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				apply_central_impulse(Vector3.UP * (extra_jump_force / (air_duration + 1 * 0.333)))
 			else:
 				air_from_jump = false
-			if is_on_ground and air_time.is_stopped():
+			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
 				change_state(IDLE)
 			# jump grace period
 			if Input.is_action_just_pressed("jump") && !locked && air_duration < 5:
@@ -744,8 +745,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if Input.is_action_just_pressed("jump") && !locked:
 				rotate_object_local(Vector3.UP, deg_to_rad(180))
 				change_state(DIVE)
-				var forward : Vector3 = get_global_transform().basis.z
-				apply_central_impulse(forward * 2.5)
+				var forward : Vector3 = -camera.get_global_transform().basis.z
+				apply_central_impulse(forward * 5)
 				apply_central_impulse(Vector3.UP * 9)
 			elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
 				on_wall_cooldown = 20
@@ -771,9 +772,13 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				change_state(IDLE)
 			# jump / move off wall
 			if Input.is_action_just_pressed("jump") && !locked:
+				air_from_jump = true
 				on_wall_cooldown = 20
-				apply_central_impulse(Vector3.UP * 6)
+				apply_central_impulse(Vector3.UP * 4)
 				change_state(AIR)
+				# also start ledge time to avoid 'double jump' from jumping on
+				# surface we just went up to
+				ledge_time.start()
 			elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
 				on_wall_cooldown = 20
 				rotate_object_local(Vector3.UP, deg_to_rad(180))
@@ -798,8 +803,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					play_jump_particles()
 				# jump if pressed or going too slow
 				if Input.is_action_pressed("jump") && !locked:
-					apply_central_impulse(Vector3.UP * jump_force)
-					change_state(DIVE)
+					#apply_central_impulse(Vector3.UP * jump_force)
+					change_state(ROLL)
 				if linear_velocity.length() < 2:
 					change_state(IDLE)
 			# somewhat controllable when sliding
@@ -811,10 +816,18 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if is_on_ground:
 				if int(roll_time.time_left * 10) % 2 == 0:
 					play_jump_particles()
-				if Input.is_action_pressed("jump") && !locked:
+				if Input.is_action_pressed("jump") && !locked && roll_time.time_left < 1:
 					air_from_jump = true
 					apply_central_impulse(Vector3.UP * jump_force * 1.5)
 					change_state(AIR)
+				# only stop rolling on ground
+				if roll_time.is_stopped():
+					change_state(SLIDE)
+			# if going too slow
+			if linear_velocity.length() < 1:
+				air_from_jump = true
+				apply_central_impulse(Vector3.UP * jump_force)
+				change_state(AIR)
 			var dir : Vector3 = -camera.get_global_transform().basis.z
 			dir.y = 0
 			dir = dir.normalized()
@@ -918,6 +931,9 @@ func change_state(state : int) -> void:
 func enter_state() -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
+	
+	# DEBUG
+	#UIHandler.show_alert(states_as_names[_state], 1, false, false, true)
 	
 	# reset external propulsion
 	external_propulsion = false
@@ -1059,16 +1075,7 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 1.0, 0.2)
 			change_state_non_authority.rpc(ROLL)
-			# stand up after slide timeout
-			await roll_time.timeout
-			# if we are still sliding after waiting, don't intercept states:
-			if _state == ROLL:
-				# on ground, back slide
-				if ground_detect.has_overlapping_bodies():
-					change_state(SLIDE_BACK)
-				# in air, normal slide
-				else:
-					change_state(SLIDE)
+			# roll time is handled in integrate_forces
 		TRIPPED:
 			# re-enable collider
 			set_player_collider.call_deferred(true)

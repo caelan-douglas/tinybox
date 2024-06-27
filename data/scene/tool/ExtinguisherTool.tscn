@@ -80,7 +80,6 @@ ammo = 25
 restore_ammo = true
 max_ammo_restore = 25
 visual_mesh_name = "FireExtinguisherVisualMesh"
-lock_camera_to_aim = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamRandomizer_7fsnj")
