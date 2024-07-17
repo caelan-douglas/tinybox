@@ -17,6 +17,10 @@
 extends RestrictedNode3D
 
 @onready var area : Area3D = $Area3D
+var lift_force : float = 21
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "scale", "lift_force"]
 
 func _ready() -> void:
 	super()
@@ -27,11 +31,11 @@ func _physics_process(delta : float) -> void:
 			if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 				var force : float = 160
 				if body is RigidPlayer:
-					force = 21
+					force = lift_force
 					if !body.in_air_from_lifter:
 						body.in_air_from_lifter = true
 						# will only run on auth
 						body.sparkle_audio_anim.play("fadein")
 				if body is Bomb || body is ClayBall:
-					force = 15
+					force = lift_force * 0.71
 				body.apply_force(Vector3.UP * force)

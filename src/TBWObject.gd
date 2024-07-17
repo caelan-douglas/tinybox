@@ -22,3 +22,6 @@ class_name TBWObject
 @export var tbw_object_type : String = ""
 
 var properties_to_save : Array[String] = ["global_position", "global_rotation", "scale"]
+
+func set_property(property : StringName, value : Variant) -> void:
+	set(property, value)

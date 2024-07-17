@@ -50,6 +50,16 @@ enum PickupType {
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "type", "ammo", "respawn_time"]
 
+func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
+	if property == "ammo":
+		set_available_text()
+	elif property == "respawn_time":
+		respawn_timer.wait_time = respawn_time
+		set_available_text()
+	elif property == "type":
+		set_mesh()
+
 func _ready() -> void:
 	super()
 	if !scheduled_for_deletion:
@@ -57,22 +67,27 @@ func _ready() -> void:
 		$Area3D.connect("body_entered", _on_body_entered)
 		set_available_text()
 		
-		match(type):
-			PickupType.ROCKET:
-				var mesh_i : Node3D = rocket_mesh.instantiate()
-				$MeshParent.add_child(mesh_i)
-			PickupType.BOMB:
-				var mesh_i : Node3D = bomb_mesh.instantiate()
-				$MeshParent.add_child(mesh_i)
-			PickupType.FLAMETHROWER:
-				var mesh_i : Node3D = flamethrower_mesh.instantiate()
-				$MeshParent.add_child(mesh_i)
-			PickupType.EXTINGUISHER:
-				var mesh_i : Node3D = extinguisher_mesh.instantiate()
-				$MeshParent.add_child(mesh_i)
-			PickupType.MISSILE:
-				var mesh_i : Node3D = missile_mesh.instantiate()
-				$MeshParent.add_child(mesh_i)
+		set_mesh()
+
+func set_mesh() -> void:
+	for c : Node in $MeshParent.get_children():
+		c.queue_free()
+	match(type):
+		PickupType.ROCKET:
+			var mesh_i : Node3D = rocket_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
+		PickupType.BOMB:
+			var mesh_i : Node3D = bomb_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
+		PickupType.FLAMETHROWER:
+			var mesh_i : Node3D = flamethrower_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
+		PickupType.EXTINGUISHER:
+			var mesh_i : Node3D = extinguisher_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
+		PickupType.MISSILE:
+			var mesh_i : Node3D = missile_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
 
 func _on_body_entered(body : Node3D) -> void:
 	if body is RigidPlayer && pickup_available:

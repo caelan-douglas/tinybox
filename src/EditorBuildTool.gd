@@ -61,6 +61,21 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+func list_object_properties(instance : TBWObject) -> void:
+	selected_item_properties = instance.properties_to_save
+	for child : Node in editor_props_list.get_children():
+		child.queue_free()
+	var title : Label = Label.new()
+	title.text = str("- Object properties -\n\n")
+	editor_props_list.add_child(title)
+	for prop_name : String in instance.properties_to_save:
+		# don't list pos rot or scale
+		if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
+			var prop : Variant = instance.get(prop_name)
+			var entry : Label = Label.new()
+			entry.text = str(prop_name, ": ", prop)
+			editor_props_list.add_child(entry)
+
 func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
 	ui_tool_name = item_name_display
 	ui_partner.text = str(item_name_display)
@@ -77,18 +92,7 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 		var instance : Node3D = selected_item.instantiate()
 		
 		if instance is TBWObject:
-			selected_item_properties = instance.properties_to_save
-			for child : Node in editor_props_list.get_children():
-				child.queue_free()
-			var title : Label = Label.new()
-			title.text = str("Object properties\n\n")
-			editor_props_list.add_child(title)
-			for prop_name : String in instance.properties_to_save:
-				if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
-					var prop : Variant = instance.get(prop_name)
-					var entry : Label = Label.new()
-					entry.text = str(prop_name, ": ", prop)
-					editor_props_list.add_child(entry)
+			list_object_properties(instance as TBWObject)
 		else:
 			for child : Node in editor_props_list.get_children():
 				child.queue_free()

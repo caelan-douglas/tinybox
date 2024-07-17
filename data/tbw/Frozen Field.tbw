@@ -1,0 +1,6 @@
+obj_picnic_table ; global_position:(0, 49.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+obj_picnic_table ; global_position:(0, 49.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+obj_picnic_table ; global_position:(0, 49.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+obj_picnic_table ; global_position:(0, 49.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+bg_frozen_field ; global_position:(0, 0, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+Environment ; env_sunny

@@ -355,7 +355,8 @@ func _parse_and_open_tbw(lines : Array) -> void:
 								# determine type of second half
 								var property : Variant = Global.property_string_to_property(property_name, property_split[1])
 								# set the property
-								inst.set(property_name, property)
+								inst.set_property(property_name, property)
+								print(property_name, " ", str(property))
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation, inst.scale)
 		count += 1
 	# reset all player cameras once world is done loading
