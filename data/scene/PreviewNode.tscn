@@ -81,7 +81,7 @@ skeleton = NodePath("")
 
 [node name="DeleteArea" type="Area3D" parent="."]
 collision_layer = 16
-collision_mask = 35
+collision_mask = 291
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeleteArea"]
 shape = SubResource("SphereShape3D_51elq")

@@ -308,6 +308,7 @@ editor_rotate_down={
 3d_physics/layer_4="camera"
 3d_physics/layer_5="extra"
 3d_physics/layer_8="clayball"
+3d_physics/layer_9="editor_selection_area"
 
 [physics]
 

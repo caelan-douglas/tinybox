@@ -146,32 +146,74 @@ func _control_camera_rotation(delta : float) -> void:
 var dist_to_hit : float = 0.0
 var min_dist : float = 3
 var dist_diff : float = 0.0
-const CONTROLLED_CAM_DELAY_TIME = 10
-var controlled_cam_delay := 5
+const CONTROLLED_CAM_DELAY_TIME = 15
+const CONTROLLED_CAM_DELAY_TIME_HELD = 7
+var held_key_time := 0
+var controlled_cam_delay := Vector3(0, 0, 0)
 var controlled_cam_pos := Vector3(0, 50, 0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta : float) -> void:
 	if _camera_mode == CameraMode.CONTROLLED:
 		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
-		# reset if key is let go then pressed again
-		if Input.is_action_just_pressed("forward") || Input.is_action_just_pressed("back") || Input.is_action_just_pressed("right") || Input.is_action_just_pressed("left") || Input.is_action_just_pressed("shift") || Input.is_action_just_pressed("control"):
-			controlled_cam_delay = 0
-		if controlled_cam_delay <= 0:
-			var move_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
-			var move_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-			var move_vertical : float = Input.get_action_strength("shift") - Input.get_action_strength("control")
-			# don't move up/down with forward/sideways
-			var controlled_cam_lateral := Vector3.ZERO
-			# move relative to looking direction
-			controlled_cam_lateral += move_forward * get_global_transform().basis.z
-			controlled_cam_lateral += move_sideways * get_global_transform().basis.x
-			controlled_cam_lateral.y = 0
-			controlled_cam_pos += controlled_cam_lateral.normalized() + (move_vertical * Vector3.UP)
-			# snap to grid
-			controlled_cam_pos = controlled_cam_pos.round()
-			controlled_cam_delay = CONTROLLED_CAM_DELAY_TIME
+		
+		if Input.is_action_just_pressed("forward") || Input.is_action_just_pressed("back"):
+			controlled_cam_delay.z = 0
+		if Input.is_action_just_pressed("left") || Input.is_action_just_pressed("right"):
+			controlled_cam_delay.x = 0
+		if Input.is_action_just_pressed("shift") || Input.is_action_just_pressed("control"):
+			controlled_cam_delay.y = 0
+		
+		var move_forward : float = 0
+		if controlled_cam_delay.z <= 0:
+			move_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
+			if controlled_cam_delay.x > 5:
+				# sync delay to avoid stairstepping
+				controlled_cam_delay.z = controlled_cam_delay.x
+			else:
+				if held_key_time > 6:
+					controlled_cam_delay.z = CONTROLLED_CAM_DELAY_TIME_HELD
+				else:
+					controlled_cam_delay.z = CONTROLLED_CAM_DELAY_TIME
+		var move_sideways : float = 0
+		if controlled_cam_delay.x <= 0:
+			move_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
+			if controlled_cam_delay.z > 5:
+				# sync delay to avoid stairstepping
+				controlled_cam_delay.x = controlled_cam_delay.z
+			else:
+				if held_key_time > 6:
+					controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME_HELD
+				else:
+					controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME
+		var move_vertical : float = 0
+		if controlled_cam_delay.y <= 0:
+			move_vertical = Input.get_action_strength("shift") - Input.get_action_strength("control")
+			if held_key_time > 5:
+				controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME_HELD
+			else:
+				controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME
+		# don't move up/down with forward/sideways
+		var controlled_cam_lateral := Vector3.ZERO
+		# move relative to looking direction
+		controlled_cam_lateral += move_forward * get_global_transform().basis.z
+		controlled_cam_lateral += move_sideways * get_global_transform().basis.x
+		controlled_cam_lateral.y = 0
+		controlled_cam_pos += controlled_cam_lateral.normalized() + (move_vertical * Vector3.UP)
+		# snap to grid
+		controlled_cam_pos = controlled_cam_pos.round()
+		
+		if controlled_cam_delay.x > 0:
+			controlled_cam_delay.x -= 60 * delta
+		if controlled_cam_delay.y > 0:
+			controlled_cam_delay.y -= 60 * delta
+		if controlled_cam_delay.z > 0:
+			controlled_cam_delay.z -= 60 * delta
+		
+		# shorter control time if holding key
+		if Input.is_action_pressed("forward") || Input.is_action_pressed("back") || Input.is_action_pressed("right") || Input.is_action_pressed("left") || Input.is_action_pressed("shift") || Input.is_action_pressed("control"):
+			held_key_time += delta * 400
 		else:
-			controlled_cam_delay -= 60 * delta
+			held_key_time = 0
 		global_position = Vector3(target.global_position.x as float, target.global_position.y + 5 as float, target.global_position.z - 8 as float)
 		
 		# swap camera zoom

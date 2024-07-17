@@ -20,6 +20,8 @@ extends CanvasLayer
 @onready var intro_overlay : Control = $IntroOverlay
 @onready var intro_text : Label = $IntroOverlay/TitleText
 @onready var tip_text : Label = $IntroOverlay/Tip
+@onready var pause_tip_text : Label = $PauseMenu/Tip
+const NUM_OF_TIPS = 12
 
 func hide_pause_menu() -> void:
 	$PauseMenu.visible = false
@@ -36,6 +38,9 @@ func show_pause_menu() -> void:
 		$PauseMenu/Menu/Title.json_text = "ui/sandbox_mode"
 		$PauseMenu/Menu/ChangeMap.disabled = false
 	$PauseMenu/Menu/Title.update_text()
+	# show tip on pause screen
+	var tipnum : int = randi() % NUM_OF_TIPS
+	pause_tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _process(delta : float) -> void:
@@ -70,7 +75,7 @@ func play_intro_animation(text : String) -> void:
 	hide_pause_menu()
 	intro_text.text = text
 	intro_animator.play("intro")
-	var tipnum : int = randi() % 9
+	var tipnum : int = randi() % NUM_OF_TIPS
 	tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
 
 func play_outro_animation(text : String) -> void:

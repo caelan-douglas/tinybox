@@ -1250,6 +1250,25 @@ value = 1.0
 script = ExtResource("16_da6k8")
 bus = 2
 
+[node name="Tip" type="Label" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -316.0
+offset_top = -54.0
+offset_right = 316.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
+theme_override_constants/outline_size = 8
+text = "Tip: (uninitialized)"
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="DebugMenu" type="VBoxContainer" parent="."]
 visible = false
 anchors_preset = 4

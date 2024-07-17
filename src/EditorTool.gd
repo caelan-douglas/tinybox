@@ -22,6 +22,7 @@ var ui_tool_name := ""
 var ui_shortcut : int = -1
 var ui_button : PackedScene = preload("res://data/scene/ui/EditorToolButton.tscn")
 var active := false
+var disabled := false
 
 # Function for initializing this tool.
 # Arg 1: The name of this tool.
@@ -74,10 +75,10 @@ func _unhandled_input(event : InputEvent) -> void:
 	
 	if ui_shortcut != null:
 		# only can be used when not disabled
-		if (event is InputEventKey):
+		if (event is InputEventKey) && !disabled:
 			if event.pressed and event.keycode == ui_shortcut:
 				set_tool_active(!get_tool_active())
-		elif (event is InputEventMouseButton):
+		elif (event is InputEventMouseButton) && !disabled:
 			if event.pressed and event.button_index == ui_shortcut:
 				set_tool_active(!get_tool_active())
 
@@ -102,3 +103,11 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	else:
 		if !from_click:
 			ui_partner.button_pressed = false
+
+func set_disabled(new : bool) -> void:
+	if !is_multiplayer_authority(): return
+	
+	disabled = new
+	ui_partner.disabled = new
+	if new == true && get_tool_active():
+		set_tool_active(false)

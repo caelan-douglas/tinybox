@@ -47,6 +47,9 @@ enum PickupType {
 @onready var flamethrower_tool : PackedScene = preload("res://data/scene/tool/FlamethrowerTool.tscn")
 @onready var extinguisher_tool : PackedScene = preload("res://data/scene/tool/ExtinguisherTool.tscn")
 
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "scale", "type", "ammo", "respawn_time"]
+
 func _ready() -> void:
 	super()
 	if !scheduled_for_deletion:

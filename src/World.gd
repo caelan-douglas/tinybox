@@ -224,9 +224,12 @@ func save_tbw(world_name : String) -> void:
 		if obj != null:
 			if obj is TBWObject:
 				var type : String = obj.tbw_object_type
-				file.store_line(str(type, ";", obj.global_position.x, ",", obj.global_position.y, ",", obj.global_position.z, ";", obj.global_rotation.x, ",", obj.global_rotation.y, ",", obj.global_rotation.z, ";", obj.scale.x, ",", obj.scale.y, ",", obj.scale.z))
+				file.store_string(str(type))
+				for p : String in obj.properties_to_save:
+					file.store_string(str(" ; ", p , ":", obj.get(p)))
+				file.store_line("")
 			elif obj is TBWEnvironment:
-				file.store_line(str("Environment;", obj.environment_name))
+				file.store_line(str("Environment ; ", obj.environment_name))
 	# Store bricks in the same format as buildings.
 	
 	# Make sure there is actually a brick to save
@@ -238,7 +241,10 @@ func save_tbw(world_name : String) -> void:
 					file.store_line(str("[building]"))
 					found_brick = true
 				var type : String = b._brick_spawnable_type
-				file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
+				file.store_string(str(type))
+				for p : String in b.properties_to_save:
+					file.store_string(str(" ; ", p , ":", b.get(p)))
+				file.store_line("")
 	file.close()
 
 func load_tbw(file_name := "test", internal := false) -> void:
@@ -314,14 +320,14 @@ func _parse_and_open_tbw(lines : Array) -> void:
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:
-				var line_split := line.split(";")
+				var line_split := line.split(" ; ")
 				var inst : Node = null
-				var posrot := true
+				var props := true
 				await get_tree().process_frame
 				match line_split[0]:
 					# World environments don't have pos or rotation
 					"Environment":
-						posrot = false
+						props = false
 						if line_split.size() > 1:
 							# name to spawnable object dict key
 							if SpawnableObjects.objects.has(line_split[1]):
@@ -337,20 +343,19 @@ func _parse_and_open_tbw(lines : Array) -> void:
 				# ignore invalid items
 				if inst != null:
 					add_child(inst, true)
-					# if this object has position and rotation
-					if posrot:
-						# object position
-						if line_split.size() > 1:
-							var pos := line_split[1].split(",")
-							inst.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2]))
-						# object rotation
-						if line_split.size() > 2:
-							var rot := line_split[2].split(",")
-							inst.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-						# scale
-						if line_split.size() > 3:
-							var scl := line_split[3].split(",")
-							inst.scale = Vector3(float(scl[0]), float(scl[1]), float(scl[2]))
+					# if this object has properties
+					if props:
+						var prop_list := line_split.slice(1)
+						for p : String in prop_list:
+							var property_split := p.split(":")
+							# name is first half
+							var property_name := property_split[0]
+							# don't load scripts
+							if property_name != "script":
+								# determine type of second half
+								var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+								# set the property
+								inst.set(property_name, property)
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation, inst.scale)
 		count += 1
 	# reset all player cameras once world is done loading
@@ -437,30 +442,21 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			if loading_canvas.visible:
 				loading_text.text = str("Loading file...     Bricks: ", total_proc)
 		if line != "":
-			var line_split := line.split(";")
+			var line_split := line.split(" ; ")
 			if SpawnableObjects.objects.has(line_split[0]):
 				var b : Brick = SpawnableObjects.objects[line_split[0]].instantiate()
 				add_child(b, true)
 				building_group.append(b)
 				b.change_state.rpc(Brick.States.PLACED)
-				# position
-				if line_split.size() > 1:
-					var pos := line_split[1].split(",")
-					b.global_position = Vector3(float(pos[0]), float(pos[1]), float(pos[2])) - offset_pos + b_position
-				# rotation
-				if line_split.size() > 2:
-					var rot := line_split[2].split(",")
-					b.global_rotation = Vector3(float(rot[0]), float(rot[1]), float(rot[2]))
-				# material
-				if line_split.size() > 3:
-					var mat := line_split[3]
-					b.set_material.rpc(int(mat))
-				
-				# state is 4, but not used yet
-				
-				# colour
-				if line_split.size() > 5:
-					b.set_colour(Color.from_string(line_split[5], Color.WHITE))
+				var prop_list := line_split.slice(1)
+				for p : String in prop_list:
+					var property_split := p.split(":")
+					# name is first half
+					var property_name := property_split[0]
+					# determine type of second half
+					var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+					# set the property
+					b.set(property_name, property)
 	
 	### Placing bricks
 	

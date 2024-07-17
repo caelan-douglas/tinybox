@@ -34,12 +34,23 @@ func _on_map_loaded() -> void:
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Menu/MapSelection))
 		$PauseMenu/Menu/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/Menu/MapSelection, true))
+		
+		$EntryScreen/Menu/New.grab_focus()
+		
+		# disable tools for entry screen
+		editor.editor_tool_inventory.set_disabled(true)
 
 func _on_new_world_pressed() -> void:
+	var editor : Node3D = Global.get_world().get_current_map()
+	if editor is Editor:
+		editor.editor_tool_inventory.set_disabled(false)
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_load_world_pressed(map_selector : OptionButton, confirm := false) -> void:
+	var editor : Node3D = Global.get_world().get_current_map()
+	if editor is Editor:
+		editor.editor_tool_inventory.set_disabled(false)
 	if confirm:
 		var actions := UIHandler.show_alert_with_actions("Are you sure? Any unsaved changes will be lost.", ["Load world", "Cancel"], true)
 		actions[0].connect("pressed", _load_world.bind(map_selector))
@@ -59,11 +70,17 @@ func _load_world(map_selector : OptionButton) -> void:
 	Global.get_world().load_tbw(world_name.split(".")[0])
 
 func hide_pause_menu() -> void:
+	var editor : Node3D = Global.get_world().get_current_map()
+	if editor is Editor:
+		editor.editor_tool_inventory.set_disabled(false)
 	$PauseMenu.visible = false
 	Global.get_player().locked = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
+	var editor : Node3D = Global.get_world().get_current_map()
+	if editor is Editor:
+		editor.editor_tool_inventory.set_disabled(true)
 	$PauseMenu.visible = true
 	Global.get_player().locked = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

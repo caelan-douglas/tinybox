@@ -4,6 +4,7 @@ class_name Editor
 signal item_picked
 
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
+@onready var editor_tool_inventory : EditorToolInventory = get_node("EditorToolInventory")
 
 func _ready() -> void:
 	super()
@@ -50,11 +51,13 @@ func _on_tbw_loaded() -> void:
 		editor_canvas.get_node("WorldProperties/Menu/Background").text = bg.tbw_object_type
 
 func show_item_chooser() -> void:
+	editor_tool_inventory.set_disabled(true)
 	editor_canvas.get_node("ItemChooser").visible = true
 	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
 		b.connect("pressed", _on_item_chosen.bind(b.internal_name, b.text), 8)
 
 func hide_item_chooser() -> void:
+	editor_tool_inventory.set_disabled(false)
 	editor_canvas.get_node("ItemChooser").visible = false
 	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
 		b.disconnect("pressed", _on_item_chosen.bind(b.internal_name, b.text))

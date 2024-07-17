@@ -17,8 +17,12 @@
 extends EditorTool
 
 var selected_item : PackedScene = null
+var selected_item_name_internal : String = ""
+var selected_item_properties : Array[Variant] = []
 var item_offset := Vector3(0, 0, 0)
 
+@onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
+@onready var editor_props_list : VBoxContainer = get_tree().current_scene.get_node("EditorCanvas/ObjectProperties/Menu") 
 @onready var preview_node : Node3D = $PreviewNode
 @onready var preview_delete_area : Area3D = $PreviewNode/DeleteArea
 @onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
@@ -64,12 +68,31 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	if !SpawnableObjects.objects.has(item_name_internal):
 		return
 	selected_item = SpawnableObjects.objects[item_name_internal]
+	selected_item_name_internal = item_name_internal
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water":
-			item_offset = Vector3(0, -0.49, 0)
-		# update preview of mesh
+			item_offset = Vector3(0, -0.5, 0)
+		# update preview of mesh and properties
 		var instance : Node3D = selected_item.instantiate()
+		
+		if instance is TBWObject:
+			selected_item_properties = instance.properties_to_save
+			for child : Node in editor_props_list.get_children():
+				child.queue_free()
+			var title : Label = Label.new()
+			title.text = str("Object properties\n\n")
+			editor_props_list.add_child(title)
+			for prop_name : String in instance.properties_to_save:
+				if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
+					var prop : Variant = instance.get(prop_name)
+					var entry : Label = Label.new()
+					entry.text = str(prop_name, ": ", prop)
+					editor_props_list.add_child(entry)
+		else:
+			for child : Node in editor_props_list.get_children():
+				child.queue_free()
+		
 		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(instance) as Array)
 		if new_mesh is MeshInstance3D:
 			var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
@@ -103,7 +126,26 @@ func _physics_process(delta : float) -> void:
 			# place
 			if Input.is_action_pressed("click"):
 				if preview_delete_area != null:
-					if !preview_delete_area.has_overlapping_bodies() && !preview_delete_area.has_overlapping_areas():
+					# if there is something where we are trying to place
+					var valid : bool = true
+					
+					if preview_delete_area.has_overlapping_bodies():
+						valid = false
+					
+					# if it's trying to place underwater, that's fine
+					for body in preview_delete_area.get_overlapping_areas():
+						if body.owner is TBWObject:
+							if body.owner.tbw_object_type == "obj_water":
+								valid = true
+							else:
+								valid = false
+								break
+						else:
+							valid = false
+							break
+					
+					# place if valid
+					if valid:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
 						inst.global_position = camera.controlled_cam_pos + item_offset
@@ -137,9 +179,3 @@ func _physics_process(delta : float) -> void:
 				preview_node.rotate_y(deg_to_rad(-22.5))
 			elif Input.is_action_just_pressed("editor_rotate_right"):
 				preview_node.rotate_y(deg_to_rad(22.5))
-			# scale
-			if Input.is_action_just_pressed("editor_scale_up"):
-				preview_node.scale += Vector3(0.5, 0.5, 0.5)
-			elif Input.is_action_just_pressed("editor_scale_down"):
-				preview_node.scale -= Vector3(0.5, 0.5, 0.5)
-			preview_node.scale = clamp(preview_node.scale, Vector3(0.5, 0.5, 0.5), Vector3(5, 5, 5))

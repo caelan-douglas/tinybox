@@ -233,14 +233,11 @@ func _on_body_entered(body : Node3D) -> void:
 	# as dive uses the jump animation
 	if _state == DIVE && !(body is MotorSeat):
 		# on ground
-		if slide_detect.has_overlapping_bodies() && !in_air_from_lifter:
+		if slide_detect.has_overlapping_bodies():
 			change_state(SLIDE)
 		# hit wall
-		elif !in_air_from_lifter:
-			change_state(TRIPPED)
-		# don't slide after diving out of lifters
 		else:
-			change_state(IDLE)
+			change_state(TRIPPED)
 	
 	if _state == ROLL:
 		# trip other players when rolling into them
@@ -727,6 +724,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		DIVE:
 			# high velocity into roll
 			if Input.is_action_just_pressed("jump") && !locked && lateral_velocity.length() > 10:
+				apply_central_impulse(Vector3.UP * 4)
 				change_state(ROLL)
 		ON_WALL:
 			# align with wall
@@ -816,12 +814,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if is_on_ground:
 				if int(roll_time.time_left * 10) % 2 == 0:
 					play_jump_particles()
-				if Input.is_action_pressed("jump") && !locked && roll_time.time_left < 1:
-					air_from_jump = true
-					apply_central_impulse(Vector3.UP * jump_force * 1.5)
-					change_state(AIR)
-				# only stop rolling on ground
-				if roll_time.is_stopped():
+				if (Input.is_action_pressed("jump") && !locked && roll_time.time_left < 0.5) || roll_time.is_stopped():
 					change_state(SLIDE)
 			# if going too slow
 			if linear_velocity.length() < 1:

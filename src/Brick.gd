@@ -35,6 +35,8 @@ enum BrickMaterial {
 	STATIC
 }
 
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "_material", "_state", "_colour"]
+
 # Size of grid cells.
 const CELL_SIZE : int = 1
 # Range of placement.
@@ -699,18 +701,28 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	joint.set_node_a(self.get_path())
 	# Update the brick groups.
 	#update_joined_brick_groups(path_to_brick, set_group)
-	update_brick_groups(group)
+	update_brick_groups(path_to_brick, set_group)
 
-func update_brick_groups(group : String, exclusions : Array[Brick] = []) -> void:
-	if !brick_groups.groups[str(group)].has(self):
-		brick_groups.groups[str(group)].append(self)
-	for body in joint_detector.get_overlapping_bodies():
-		# don't join with self
-		if body is Brick && body != self:
-			if !exclusions.has(body):
-				body.group = group
-				exclusions.append(self)
-				body.update_brick_groups(group, exclusions)
+func update_brick_groups(path_to_brick : NodePath, set_group : String = "") -> void:
+	# only execute on yourself
+	if !is_multiplayer_authority(): return
+	
+	# if we are determining group dynamically
+	if set_group == "":
+		var brick : Brick = get_node(path_to_brick)
+		# Set my group to the other brick's group.
+		group = brick.group
+		# Add this brick and the other brick to the group if they are not already in it.
+		if !brick_groups.groups[str(group)].has(self):
+			brick_groups.groups[str(group)].append(self)
+		if !brick_groups.groups[str(group)].has(brick):
+			brick_groups.groups[str(group)].append(brick)
+	# determing group based on set group name
+	else:
+		group = set_group
+		if !brick_groups.groups.has(str(set_group)):
+			brick_groups.groups[str(set_group)] = []
+		brick_groups.groups[str(set_group)].append(self)
 
 # Unjoin this brick from its partner.
 @rpc("any_peer", "call_local", "reliable")

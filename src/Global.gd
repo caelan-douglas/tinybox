@@ -172,3 +172,20 @@ func get_all_children(in_what : Node) -> Array:
 		all_children.append(child)
 	print(all_children)
 	return all_children
+
+func property_string_to_property(property_name : String, property : String) -> Variant:
+	match(property_name):
+		"global_position", "global_rotation", "scale":
+			property = property.erase(0)
+			property = property.erase(property.length())
+			var property_split := property.split(", ")
+			return Vector3(float(property_split[0]), float(property_split[1]), float(property_split[2]))
+		"_material", "_state":
+			return int(property)
+		"_colour":
+			property = property.erase(0)
+			property = property.erase(property.length())
+			var property_split := property.split(", ")
+			return Color(float(property_split[0]), float(property_split[1]), float(property_split[2]), float(property_split[3]))
+		_:
+			return int(property)
