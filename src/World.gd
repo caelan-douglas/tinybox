@@ -414,12 +414,13 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var building_group := []
 	var first_brick_pos := Vector3.ZERO
 	
-	var line_split_init : PackedStringArray = lines[0].split(";")
+	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:
-		var building_pos : PackedStringArray = line_split_init[1].split(",")
-		offset_pos = Vector3(float(building_pos[0]), float(building_pos[1]), float(building_pos[2]))
+		print(line_split_init)
+		var building_pos : Variant = Global.property_string_to_property("global_position", line_split_init[1].split(":")[1])
+		offset_pos = building_pos as Vector3
 	
 	# BIG file, show loading visual
 	var loading_text : Label = loading_canvas.get_node("Label")
@@ -455,6 +456,9 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 					var property_name := property_split[0]
 					# determine type of second half
 					var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+					if property_name == "global_position":
+						property = property as Vector3
+						property = property - offset_pos + b_position
 					# set the property
 					b.set(property_name, property)
 	

@@ -294,7 +294,10 @@ func _process(delta : float) -> void:
 						if b != null:
 							if b is Brick:
 								var type : String = b._brick_spawnable_type
-								file.store_line(str(type, ";", b.global_position.x, ",", b.global_position.y, ",", b.global_position.z, ";", b.global_rotation.x, ",", b.global_rotation.y, ",", b.global_rotation.z, ";", b._material, ";", b._state, ";", b._colour.to_html(false)))
+								file.store_string(str(type))
+								for p : String in b.properties_to_save:
+									file.store_string(str(" ; ", p , ":", b.get(p)))
+								file.store_line("")
 					file.close()
 		# Load mode
 		if _mode == BuildMode.LOAD:
