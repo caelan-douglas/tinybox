@@ -418,7 +418,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:
-		print(line_split_init)
 		var building_pos : Variant = Global.property_string_to_property("global_position", line_split_init[1].split(":")[1])
 		offset_pos = building_pos as Vector3
 	
@@ -459,8 +458,14 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 					if property_name == "global_position":
 						property = property as Vector3
 						property = property - offset_pos + b_position
-					# set the property
-					b.set(property_name, property)
+					
+					if property_name == "_colour":
+						b.set_colour(property as Color)
+					elif property_name == "_material":
+						b.set_material(property as Brick.BrickMaterial)
+					else:	
+						# set the property
+						b.set(property_name, property)
 	
 	### Placing bricks
 	
