@@ -5,6 +5,7 @@
         "quit": "Quit to desktop",
         "back": "<<< Back",
         "back_save": "<<< Save",
+        "save": "Save",
         "host_or_join": "Host or Join",
         "host": "Host server",
         "join": "Join server",

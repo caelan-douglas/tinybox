@@ -177,7 +177,8 @@ func switch_background() -> void:
 	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name
 
 func _process(delta : float) -> void:
-	if Input.is_action_just_pressed("editor_release_mouse"):
+	# don't release / unrelease mouse when editing text
+	if Input.is_action_just_pressed("editor_release_mouse") && !Global.is_text_focused:
 		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:

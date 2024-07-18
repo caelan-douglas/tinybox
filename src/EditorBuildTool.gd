@@ -90,6 +90,7 @@ func relist_object_properties() -> void:
 
 var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn")
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
+var text_editor : PackedScene = preload("res://data/scene/ui/TextEditor.tscn")
 func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 	selected_item_properties[prop_name] = prop
 	var entry : Control = null
@@ -107,8 +108,18 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		entry.get_node("Down").connect("pressed", update_object_property.bind(-1, prop_name, true, label))
 		entry.get_node("Up").connect("pressed", update_object_property.bind(1, prop_name, true, label))
 		entry.get_node("UpBig").connect("pressed", update_object_property.bind(10, prop_name, true, label))
+	# Add line editor
+	if prop is String:
+		entry = text_editor.instantiate()
+		var text : TextEdit = entry.get_node("TextEdit")
+		var save_button : Button = entry.get_node("Save")
+		save_button.connect("pressed", _update_object_property_from_text_instance.bind(text, prop_name))
 	if entry != null:
 		editor_props_list.add_child(entry)
+
+func _update_object_property_from_text_instance(instance : TextEdit, prop_name : String) -> void:
+	var text : String = instance.text
+	update_object_property(text, prop_name)
 
 func update_object_property(new_value : Variant, prop_name : String, increment : bool = false, update_label : Label = null) -> void:
 	if selected_item_properties.has(prop_name):
@@ -215,12 +226,12 @@ func _physics_process(delta : float) -> void:
 							continue
 						elif area.owner is TBWObject:
 							area.owner.queue_free()
-		if Input.is_action_just_pressed("editor_select_item"):
-			pick_item()
-		if preview_node != null:
-			preview_node.global_position = camera.controlled_cam_pos
-			# rotation
-			if Input.is_action_just_pressed("editor_rotate_left"):
-				preview_node.rotate_y(deg_to_rad(-22.5))
-			elif Input.is_action_just_pressed("editor_rotate_right"):
-				preview_node.rotate_y(deg_to_rad(22.5))
+			if Input.is_action_just_pressed("editor_select_item"):
+				pick_item()
+			if preview_node != null:
+				preview_node.global_position = camera.controlled_cam_pos
+				# rotation
+				if Input.is_action_just_pressed("editor_rotate_left"):
+					preview_node.rotate_y(deg_to_rad(-22.5))
+				elif Input.is_action_just_pressed("editor_rotate_right"):
+					preview_node.rotate_y(deg_to_rad(22.5))

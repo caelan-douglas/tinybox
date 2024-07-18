@@ -232,7 +232,7 @@ custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ItemChooser/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 280)
+custom_minimum_size = Vector2(2.08165e-12, 300)
 layout_mode = 2
 follow_focus = true
 horizontal_scroll_mode = 0
@@ -313,6 +313,13 @@ text = "Big picnic table"
 icon = null
 expand_icon = true
 internal_name = "obj_picnic_table"
+
+[node name="Button13" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Sign"
+icon = null
+expand_icon = true
+internal_name = "obj_sign"
 
 [node name="WorldProperties" type="Control" parent="."]
 visible = false

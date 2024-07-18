@@ -164,7 +164,7 @@ func _process(delta : float) -> void:
 			controlled_cam_delay.y = 0
 		
 		var move_forward : float = 0
-		if controlled_cam_delay.z <= 0:
+		if controlled_cam_delay.z <= 0 && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			move_forward = Input.get_action_strength("back") - Input.get_action_strength("forward")
 			if controlled_cam_delay.x > 5:
 				# sync delay to avoid stairstepping
@@ -175,7 +175,7 @@ func _process(delta : float) -> void:
 				else:
 					controlled_cam_delay.z = CONTROLLED_CAM_DELAY_TIME
 		var move_sideways : float = 0
-		if controlled_cam_delay.x <= 0:
+		if controlled_cam_delay.x <= 0 && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			move_sideways = Input.get_action_strength("right") - Input.get_action_strength("left")
 			if controlled_cam_delay.z > 5:
 				# sync delay to avoid stairstepping
@@ -186,7 +186,7 @@ func _process(delta : float) -> void:
 				else:
 					controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME
 		var move_vertical : float = 0
-		if controlled_cam_delay.y <= 0:
+		if controlled_cam_delay.y <= 0 && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			move_vertical = Input.get_action_strength("shift") - Input.get_action_strength("control")
 			if held_key_time > 5:
 				controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME_HELD

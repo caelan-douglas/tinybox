@@ -21,6 +21,7 @@ signal player_list_information_update
 
 var display_name : String = ""
 var connected_to_server := false
+var is_text_focused := false
 
 enum GraphicsPresets {
 	COOL,
@@ -73,6 +74,7 @@ func set_skin_colour(new : Color) -> void:
 
 func _ready() -> void:
 	load_appearance()
+	get_viewport().connect("gui_focus_changed", _on_gui_focus_changed)
 
 func save_appearance() -> void:
 	UserPreferences.save_pref("shirt", shirt)
@@ -186,5 +188,14 @@ func property_string_to_property(property_name : String, property : String) -> V
 			property = property.erase(property.length())
 			var property_split := property.split(", ")
 			return Color(float(property_split[0]), float(property_split[1]), float(property_split[2]), float(property_split[3]))
+		"text", "string":
+			return str(property)
 		_:
 			return int(property)
+
+func _on_gui_focus_changed(control : Control) -> void:
+	if control is LineEdit || control is TextEdit:
+		is_text_focused = true
+	else:
+		is_text_focused = false
+	
