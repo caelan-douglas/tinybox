@@ -226,7 +226,13 @@ func save_tbw(world_name : String) -> void:
 				var type : String = obj.tbw_object_type
 				file.store_string(str(type))
 				for p : String in obj.properties_to_save:
-					file.store_string(str(" ; ", p , ":", obj.get(p)))
+					# make sure strings dont add line breaks, replace them
+					# with \n
+					var value : Variant = obj.get(p)
+					if obj.get(p) is String:
+						value = value.c_escape()
+					# store property inline
+					file.store_string(str(" ; ", p , ":", value))
 				file.store_line("")
 			elif obj is TBWEnvironment:
 				file.store_line(str("Environment ; ", obj.environment_name))
