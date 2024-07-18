@@ -256,29 +256,24 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 	# iterate through all bricks in group. Do not run this on dummy bricks.
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
 		if brick_groups.groups.has(str(group)):
-			for b : Brick in brick_groups.groups[str(group)]:
-				# do not unglue static neighbours`
-				if b != null && b._material != BrickMaterial.STATIC:
-					if new == false:
-					# only deglue inside the deglue radius, OR if the brick to be deglued is above the one that was hit (allows roofs to fall)
-						var is_above_threshold : bool = (b.global_position.y > self.global_position.y) && abs(b.global_position.x - self.global_position.x) < 2 && abs(b.global_position.z - self.global_position.z) < 2
-						if (b.global_position.distance_to(self.global_position) < deglue_radius) || is_above_threshold:
+			for b : Variant in brick_groups.groups[str(group)]:
+				# do not unglue static neighbours
+				if b != null:
+					b = b as Brick
+					if b._material != BrickMaterial.STATIC:
+						if new == false:
+						# only deglue inside the deglue radius, OR if the brick to be deglued is above the one that was hit (allows roofs to fall)
+							var is_above_threshold : bool = (b.global_position.y > self.global_position.y) && abs(b.global_position.x - self.global_position.x) < 2 && abs(b.global_position.z - self.global_position.z) < 2
+							if b == self || ((b.global_position.distance_to(self.global_position) < deglue_radius) || is_above_threshold):
+								if ungroup && brick_groups.groups.has(str(b)):
+									brick_groups.groups.get(str(b)).erase(self)
+								# reset group to own
+								b.group = b.name
+								b.glued = new
+								b.freeze = new
+						else:
 							b.glued = new
 							b.freeze = new
-					else:
-						b.glued = new
-						b.freeze = new
-	
-	# Do not run this on dummy bricks.
-	if new == false && ungroup && (_state == States.BUILD || _state == States.PLACED):
-		# erase self from group
-		if brick_groups.groups.has(str(group)):
-			brick_groups.groups.get(str(group)).erase(self)
-		# reset group to own
-		group = name
-	
-	glued = new
-	freeze = new
 
 # Returns whether or not this brick is glued.
 func get_glued() -> bool:
@@ -291,10 +286,12 @@ func unfreeze_entire_group() -> void:
 		glued = false
 		freeze = false
 	if brick_groups.groups.has(str(group)):
-		for b : Brick in brick_groups.groups[str(group)]:
-			if b != null && b._material != BrickMaterial.STATIC:
-				b.glued = false
-				b.freeze = false
+		for b : Variant in brick_groups.groups[str(group)]:
+			if b != null:
+				b = b as Brick
+				if b._material != BrickMaterial.STATIC:
+					b.glued = false
+					b.freeze = false
 
 # Reduce this brick's health by a set amount. Will char wooden bricks if their health falls below 0.
 func reduce_health(amount : int) -> void:
@@ -505,7 +502,7 @@ func despawn() -> void:
 	if brick_groups.groups.has(str(group)):
 		if brick_groups.groups[str(group)].has(self):
 			brick_groups.groups[str(group)].erase(self)
-	call_deferred("queue_free")
+	queue_free()
 
 # Build mode, used when a brick is spawning from a tool.
 func build() -> void:
@@ -835,8 +832,9 @@ func entered_water() -> void:
 func request_group_from_authority(id_from : int) -> void:
 	var group_array := []
 	if brick_groups.groups.has(str(group)):
-		for b : Brick in brick_groups.groups[str(group)]:
+		for b : Variant in brick_groups.groups[str(group)]:
 			if b != null:
+				b = b as Brick
 				group_array.append(b)
 	# for every brick in the array, tell the non-auth its new group is this one's
 	for b : Brick in group_array:

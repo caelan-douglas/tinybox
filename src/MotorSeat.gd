@@ -102,8 +102,9 @@ func sit(player : RigidPlayer) -> void:
 	# find child motors
 	vehicle_weight = 0
 	if brick_groups.groups.has(str(group)):
-		for b : Brick in brick_groups.groups[str(group)]:
+		for b : Variant in brick_groups.groups[str(group)]:
 			if b != null:
+				b = b as Brick
 				vehicle_weight += b.mass
 				if b is MotorBrick:
 					attached_motors.append(b)

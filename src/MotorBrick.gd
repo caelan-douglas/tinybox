@@ -118,8 +118,9 @@ func _physics_process(delta : float) -> void:
 			if steer != 0:
 				# apply angular velocity to all bricks
 				if brick_groups.groups.has(str(group)):
-					for b : Brick in brick_groups.groups[str(group)]:
+					for b : Variant in brick_groups.groups[str(group)]:
 						if b != null:
+							b = b as Brick
 							b.angular_velocity = parent_seat.transform.basis.y * -steer * 3
 
 func entered_water() -> void:
