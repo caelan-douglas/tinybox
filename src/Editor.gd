@@ -69,6 +69,9 @@ func _on_item_chosen(item_name_internal : String, item_name_display : String) ->
 	emit_signal("item_picked", item_name_internal, item_name_display)
 	hide_item_chooser()
 
+func get_object_properties_visible() -> bool:
+	return editor_canvas.get_node("ObjectProperties").visible
+
 var active_water : Node3D = null
 var water_height : float = 42
 @onready var obj_water : PackedScene = preload("res://data/scene/editor_obj/WorldWater.tscn")
@@ -172,3 +175,10 @@ func switch_background() -> void:
 	else:
 		current_bg_name = "(none)"
 	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name
+
+func _process(delta : float) -> void:
+	if Input.is_action_just_pressed("editor_release_mouse"):
+		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

@@ -25,6 +25,81 @@ offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
+[node name="ObjectProperties" type="Control" parent="."]
+custom_minimum_size = Vector2(320, 400)
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 36.0
+offset_top = -200.0
+offset_right = 396.0
+offset_bottom = 200.0
+grow_vertical = 2
+
+[node name="DynamicLabel2" type="Label" parent="ObjectProperties"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -156.0
+offset_top = -26.0
+offset_right = 156.0
+offset_bottom = -10.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
+theme_override_constants/outline_size = 6
+text = "Press R to free / capture mouse."
+horizontal_alignment = 1
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/free_mouse"
+
+[node name="Panel" type="Panel" parent="ObjectProperties"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="ObjectProperties"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -154.0
+offset_top = -152.0
+offset_right = 154.0
+offset_bottom = 178.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="DynamicLabel" type="Label" parent="ObjectProperties/Menu"]
+layout_mode = 2
+text = "Adjustable object properties
+will appear here."
+script = ExtResource("6_aufvl")
+
+[node name="DynamicLabel3" type="Label" parent="ObjectProperties"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -156.0
+offset_top = 20.0
+offset_right = 156.0
+offset_bottom = 36.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
+theme_override_constants/outline_size = 6
+text = "Property Editor"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/property_editor"
+
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 400)
 layout_mode = 3
@@ -76,16 +151,16 @@ layout_mode = 2
 
 [node name="DynamicLabel2" type="Label" parent="EntryScreen/Menu"]
 layout_mode = 2
-text = "Tools available at the top
-row (6 for world properties)
+text = "Number row to select tools
 
 Click to place
 Right click to delete
 
-[ X ] to change item (build tool)
+[ X ] to change object
 [ C ] to change camera zoom
 
-WASD, [ Shift ], [ Ctrl / Cmd ]"
+WASD, [ Shift ], [ Ctrl / Cmd ]
+to move"
 script = ExtResource("6_aufvl")
 
 [node name="Spacer2" type="Control" parent="EntryScreen/Menu"]
@@ -427,48 +502,6 @@ text = "Load world"
 [node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-
-[node name="ObjectProperties" type="Control" parent="."]
-custom_minimum_size = Vector2(360, 400)
-layout_mode = 3
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 61.0
-offset_top = -200.0
-offset_right = 421.0
-offset_bottom = 200.0
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="ObjectProperties"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Menu" type="VBoxContainer" parent="ObjectProperties"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -52.0
-offset_right = 154.0
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="DynamicLabel" type="Label" parent="ObjectProperties/Menu"]
-layout_mode = 2
-text = "Adjustable object properties
-will appear here."
-script = ExtResource("6_aufvl")
 
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1

@@ -257,7 +257,7 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
 		if brick_groups.groups.has(str(group)):
 			for b : Brick in brick_groups.groups[str(group)]:
-				# do not unglue static neighbours
+				# do not unglue static neighbours`
 				if b != null && b._material != BrickMaterial.STATIC:
 					if new == false:
 					# only deglue inside the deglue radius, OR if the brick to be deglued is above the one that was hit (allows roofs to fall)
@@ -505,7 +505,7 @@ func despawn() -> void:
 	if brick_groups.groups.has(str(group)):
 		if brick_groups.groups[str(group)].has(self):
 			brick_groups.groups[str(group)].erase(self)
-	queue_free()
+	call_deferred("queue_free")
 
 # Build mode, used when a brick is spawning from a tool.
 func build() -> void:

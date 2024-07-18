@@ -71,6 +71,8 @@
         "editor": {
             "welcome": "Welcome to the world editor!",
             "world_properties": "World properties",
+            "property_editor": "Property Editor",
+            "free_mouse": "Press R to free / capture mouse.",
             "water": "Water",
             "environment": "Environment",
             "background": "Background"
