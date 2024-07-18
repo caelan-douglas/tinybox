@@ -84,28 +84,28 @@ func save_appearance() -> void:
 	UserPreferences.save_pref("skin_colour", skin_colour)
 
 func load_appearance() -> void:
-	var loaded_shirt : int = UserPreferences.load_pref("shirt") as int
+	var loaded_shirt : Variant = UserPreferences.load_pref("shirt")
 	if loaded_shirt != null:
-		set_shirt(loaded_shirt)
-	var loaded_shirt_texture : int = UserPreferences.load_pref("shirt_texture") as int
+		set_shirt(loaded_shirt as int)
+	var loaded_shirt_texture : Variant = UserPreferences.load_pref("shirt_texture")
 	if loaded_shirt_texture != null:
-		set_shirt_texture(loaded_shirt_texture)
-	var loaded_hair : int = UserPreferences.load_pref("hair") as int
+		set_shirt_texture(loaded_shirt_texture as int)
+	var loaded_hair : Variant = UserPreferences.load_pref("hair")
 	if loaded_hair != null:
-		set_hair(loaded_hair)
+		set_hair(loaded_hair as int)
 	
-	var loaded_shirt_colour : Color = UserPreferences.load_pref("shirt_colour") as Color
+	var loaded_shirt_colour : Variant = UserPreferences.load_pref("shirt_colour")
 	if loaded_shirt_colour != null:
-		set_shirt_colour(loaded_shirt_colour)
-	var loaded_pants_colour : Color = UserPreferences.load_pref("pants_colour") as Color
+		set_shirt_colour(loaded_shirt_colour as Color)
+	var loaded_pants_colour : Variant = UserPreferences.load_pref("pants_colour")
 	if loaded_pants_colour != null:
-		set_pants_colour(loaded_pants_colour)
-	var loaded_hair_colour : Color = UserPreferences.load_pref("hair_colour") as Color
+		set_pants_colour(loaded_pants_colour as Color)
+	var loaded_hair_colour : Variant = UserPreferences.load_pref("hair_colour")
 	if loaded_hair_colour != null:
-		set_hair_colour(loaded_hair_colour)
-	var loaded_skin_colour : Color = UserPreferences.load_pref("skin_colour") as Color
+		set_hair_colour(loaded_hair_colour as Color)
+	var loaded_skin_colour : Variant = UserPreferences.load_pref("skin_colour")
 	if loaded_skin_colour != null:
-		set_skin_colour(loaded_skin_colour)
+		set_skin_colour(loaded_skin_colour as Color)
 
 # Returns the World.
 func get_world() -> World:
@@ -128,9 +128,9 @@ func set_graphics_preset(new : GraphicsPresets) -> void:
 
 # Loads the saved graphics preset from disk.
 func load_graphics_preset() -> GraphicsPresets:
-	var loaded_preset : int = UserPreferences.load_pref("graphics_preset") as int
+	var loaded_preset : Variant = UserPreferences.load_pref("graphics_preset")
 	if loaded_preset != null:
-		set_graphics_preset(loaded_preset)
+		set_graphics_preset(loaded_preset as int)
 	return graphics_preset
 
 # When the PlayerList gets updated, this is called.

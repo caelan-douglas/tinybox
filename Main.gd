@@ -77,12 +77,12 @@ func _ready() -> void:
 	editor_button.connect("pressed", _on_editor_pressed)
 	
 	# Load display name from prefs.
-	var display_pref : String = UserPreferences.load_pref("display_name")
+	var display_pref : Variant = UserPreferences.load_pref("display_name")
 	if display_pref != null:
 		display_name_field.text = str(display_pref)
 	
 	# Load join address from prefs.
-	var address : String = UserPreferences.load_pref("join_address")
+	var address : Variant = UserPreferences.load_pref("join_address")
 	if address != null:
 		join_address.text = str(address)
 	
@@ -180,9 +180,9 @@ func _on_host_public_toggled(mode : bool) -> void:
 		host_public_button.set_text_to_json("ui/host_public_settings/off")
 
 func _on_host_pressed() -> void:
-	Global.display_name = get_display_name_from_field()
-	if Global.display_name == null:
+	if get_display_name_from_field() == null:
 		return
+	Global.display_name = get_display_name_from_field()
 	
 	# Change button text to notify user server is starting.
 	host_button.text = "Starting server..."
