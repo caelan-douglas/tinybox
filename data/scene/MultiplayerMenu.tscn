@@ -166,7 +166,6 @@ json_text = "ui/world_editor"
 [node name="Tutorial" type="Button" parent="MainMenu/LeftColumn"]
 self_modulate = Color(0, 1.1, 1.5, 1)
 layout_mode = 2
-disabled = true
 text = "Tutorial"
 script = ExtResource("2_o48rt")
 json_text = "ui/tutorial"

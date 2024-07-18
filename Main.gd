@@ -55,6 +55,7 @@ var display_version := "beta 9.11pre"
 @onready var join_address : LineEdit = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Address
 @onready var host_map_selector : OptionButton = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
 @onready var editor_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Editor
+@onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Tutorial
 
 func _ready() -> void:
 	# fullscreen if not in debug mode
@@ -75,6 +76,7 @@ func _ready() -> void:
 	host_public = host_public_button.button_pressed
 	join_button.connect("pressed", _on_join_pressed)
 	editor_button.connect("pressed", _on_editor_pressed)
+	tutorial_button.connect("pressed", _on_tutorial_pressed)
 	
 	# Load display name from prefs.
 	var display_pref : Variant = UserPreferences.load_pref("display_name")
@@ -243,9 +245,9 @@ func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 		var names := ["Test1", "Test2", "Dog man", "Dog", "Extra Long Name Very Long"]
 		Global.display_name = names.pick_random()
 	else:
-		Global.display_name = get_display_name_from_field()
-		if Global.display_name == null:
+		if get_display_name_from_field() == null:
 			return
+		Global.display_name = get_display_name_from_field()
 		
 	# Change button text to notify user we are joining.
 	join_button.text = "Trying to join..."
@@ -270,9 +272,9 @@ func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 
 # Entering the world editor.
 func _on_editor_pressed() -> void:
-	Global.display_name = get_display_name_from_field()
-	if Global.display_name == null:
+	if get_display_name_from_field() == null:
 		return
+	Global.display_name = get_display_name_from_field()
 	
 	# Change button text to notify user server is starting.
 	editor_button.text = "Loading editor..."
@@ -291,6 +293,30 @@ func _on_editor_pressed() -> void:
 	
 	add_peer(multiplayer.get_unique_id())
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+# Entering the tutorial.
+func _on_tutorial_pressed() -> void:
+	if get_display_name_from_field() == null:
+		return
+	Global.display_name = get_display_name_from_field()
+	
+	# Change button text to notify user server is starting.
+	tutorial_button.text = "Loading tutorial..."
+	tutorial_button.disabled = true
+	
+	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
+	get_tree().current_scene.get_node("GameCanvas").visible = true
+	
+	# Editor is single player.
+	var world : World = $World
+	world.load_tbw.call_deferred("tutorial")
+	await Signal(world, "map_loaded")
+	# add camera
+	var camera_inst : Node3D = CAMERA.instantiate()
+	world.add_child(camera_inst, true)
+	
+	add_peer(multiplayer.get_unique_id())
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 # Notify clients if the host disconnects.
 func _on_host_disconnect_as_client() -> void:
