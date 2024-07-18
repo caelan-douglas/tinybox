@@ -765,6 +765,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			var diff := (global_position.y + offset) - top.y
 			if abs(diff) > 0.01:
 				linear_velocity = Vector3(0, -diff * 5, 0)
+			linear_velocity = linear_velocity.clamp(Vector3(0, -5, 0), Vector3(0, 5, 0))
 			# if no longer on ledge
 			if (!forward_detect.has_overlapping_bodies() || ledge_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
 				change_state(IDLE)
