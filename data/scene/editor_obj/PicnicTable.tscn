@@ -15,15 +15,16 @@ script = ExtResource("1_uoyed")
 tbw_object_type = "obj_picnic_table"
 
 [node name="picnictable" parent="." instance=ExtResource("1_v263w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -1, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -2.08165e-12, 2.08165e-12)
 shape = SubResource("BoxShape3D_6oha7")
 
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17.75, 29.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16.75, 29.7)
 shape = SubResource("BoxShape3D_4k6aq")
 
 [node name="CollisionShape3D6" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17.75, -29.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16.75, -29.7)
 shape = SubResource("BoxShape3D_4k6aq")

@@ -39,7 +39,6 @@ func _ready() -> void:
 	else:
 		despawn_time = 15
 	# replace super ready: explode instead of despawn on timer out
-	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_player_left)
 	if (despawn_time != -1) && despawn_time > 0:
 		despawn_timer = get_tree().create_timer(despawn_time as float)

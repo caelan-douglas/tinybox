@@ -50,16 +50,17 @@ script = ExtResource("1_ixcwp")
 tbw_object_type = "obj_asteroid_0"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(3, -1.04636e-15, 1.04636e-15, 1.04636e-15, 3, -1.04636e-15, -1.04636e-15, 1.04636e-15, 3, 0, 0, 0)
+transform = Transform3D(3, -1.04636e-15, 1.04636e-15, 1.04636e-15, 3, -1.04636e-15, -1.04636e-15, 1.04636e-15, 3, 0, 1, 0)
 shape = SubResource("ConcavePolygonShape3D_3j18k")
 
 [node name="Asteroid" type="MeshInstance3D" parent="."]
-transform = Transform3D(3, -1.04636e-15, 1.04636e-15, 1.04636e-15, 3, -1.04636e-15, -1.04636e-15, 1.04636e-15, 3, 0, 0, 0)
+transform = Transform3D(3, -1.04636e-15, 1.04636e-15, 1.04636e-15, 3, -1.04636e-15, -1.04636e-15, 1.04636e-15, 3, 0, 1, 0)
 mesh = SubResource("ArrayMesh_52c3j")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_xtp4l")
 
 [node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 256
 collision_mask = 0
 monitoring = false

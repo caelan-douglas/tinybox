@@ -170,7 +170,6 @@ func get_all_children(in_what : Node) -> Array:
 		if child.get_child_count() > 0:
 			all_children.append(get_all_children(child))
 		all_children.append(child)
-	print(all_children)
 	return all_children
 
 func property_string_to_property(property_name : String, property : String) -> Variant:

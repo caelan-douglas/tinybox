@@ -25,3 +25,9 @@ var properties_to_save : Array[String] = ["global_position", "global_rotation", 
 
 func set_property(property : StringName, value : Variant) -> void:
 	set(property, value)
+
+func properties_as_dict() -> Dictionary:
+	var dict : Dictionary = {}
+	for p : String in properties_to_save:
+		dict[p] = get(p)
+	return dict

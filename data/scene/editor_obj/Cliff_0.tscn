@@ -61,11 +61,12 @@ script = ExtResource("1_ode5c")
 tbw_object_type = "obj_cliff_0"
 
 [node name="rock_001" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.00945061, -0.154269, 0.987984, 0.00587738, -0.988002, -0.154328, 0.999938, 0.00726526, -0.0084306, 0, 0, 0)
+transform = Transform3D(0.00945056, -0.154269, 0.987984, 0.00587739, -0.988002, -0.154328, 0.999938, 0.00726525, -0.00843048, 0, 1, 0)
 mesh = SubResource("ArrayMesh_php8v")
 skeleton = NodePath("")
 
 [node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 256
 collision_mask = 0
 monitoring = false
@@ -83,5 +84,5 @@ transform = Transform3D(0.00945061, -0.154269, 0.987984, 0.00587738, -0.988002, 
 shape = SubResource("ConvexPolygonShape3D_tiqtv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.00945061, -0.154269, 0.987984, 0.00587738, -0.988002, -0.154328, 0.999938, 0.00726526, -0.0084306, 0, -2.08165e-12, 0)
+transform = Transform3D(0.00945061, -0.154269, 0.987984, 0.00587738, -0.988002, -0.154328, 0.999938, 0.00726526, -0.0084306, 0, 1, 0)
 shape = SubResource("ConcavePolygonShape3D_x5fuy")

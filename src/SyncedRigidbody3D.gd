@@ -26,7 +26,6 @@ var despawn_time : float = -1
 var synchronizer : MultiplayerSynchronizer = null
 
 func _ready() -> void:
-	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_player_left)
 	if (despawn_time != -1) && despawn_time > 0:
 		var despawn_timer : SceneTreeTimer = get_tree().create_timer(despawn_time)
@@ -58,18 +57,6 @@ func add_synchronizer() -> void:
 	sync.replication_interval = 0.04
 	sync.replication_config = src
 	add_child(sync)
-
-# sync properties with client over rpc
-@rpc("any_peer", "call_remote")
-func _sync_properties_spawn(args : Array) -> void:
-	global_position = args[0]
-	global_rotation = args[1]
-	set_multiplayer_authority(args[2] as int)
-
-# When a peer connects, sync properties about this to them.
-func _on_peer_connected(id : int) -> void:
-	if !is_multiplayer_authority(): return
-	_sync_properties_spawn.rpc_id(id, [global_position, global_rotation, get_multiplayer_authority()])
 
 # If the authority of this object has left the game, set the authority to the server.
 func _player_left(id : int) -> void:

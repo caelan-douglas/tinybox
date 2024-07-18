@@ -35,7 +35,7 @@ enum BrickMaterial {
 	STATIC
 }
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "_material", "_state", "_colour"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "_material", "_colour"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -113,6 +113,15 @@ var tool_from : Tool
 # Whether or not this brick was just spawned by its tool. This variable
 # is used in the build function.
 var just_spawned_from_tool : bool = true
+
+# Set a custom property
+func set_property(property : StringName, value : Variant) -> void:
+	if property == "_colour":
+		set_colour(value as Color)
+	elif property == "_material":
+		set_material(value as Brick.BrickMaterial)
+	else:
+		set(property, value)
 
 # Set the material of this brick to a different one, 
 # and update any related properties.
@@ -354,6 +363,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 # Calls on enter scene
 func _ready() -> void:
 	super()
+	multiplayer.peer_connected.connect(_on_peer_connected)
 	connect("body_entered", _on_body_entered)
 	connect("sleeping_state_changed", _on_sleeping_state_changed)
 	inactivity_timer.connect("timeout", _inactivity_despawn)
@@ -373,15 +383,15 @@ func spawn(auth : int, material : BrickMaterial = BrickMaterial.WOODEN) -> void:
 	# what player this brick came from
 	player_from = world.get_node(str(auth))
 	tool_from = player_from.get_node("Tools/BuildTool")
-	if is_multiplayer_authority():
-		# notify other clients of this brick's properties
-		_sync_properties_spawn.rpc([global_position, global_rotation, get_multiplayer_authority()])
 	change_state.rpc(States.BUILD)
 	# default material colours
 	if _material == BrickMaterial.RUBBER:
 		set_colour("#000000")
 	elif _material == BrickMaterial.WOODEN:
 		set_colour("#cca597")
+	if is_multiplayer_authority():
+		# notify other clients of this brick's properties
+		sync_properties.rpc(properties_as_dict())
 
 # Spawns this brick in Editor mode.
 @rpc("call_local", "reliable")
@@ -426,41 +436,19 @@ func spawn_projectile(auth : int, shot_speed : int = 30, material : BrickMateria
 	
 	if is_multiplayer_authority():
 		# notify other clients of this brick's properties
-		_sync_properties_spawn.rpc([global_position, global_rotation, get_multiplayer_authority()])
+		sync_properties.rpc(properties_as_dict())
 
-# sync ALL properties with client over rpc
 @rpc("any_peer", "call_remote", "reliable")
-func _sync_properties(args : Array) -> void:
-	global_position = args[0]
-	global_rotation = args[1]
-	if _material != args[2]:
-		set_material(args[2] as BrickMaterial)
-	# join with brick path, so long as the brick has one
-	if args[3] != null && args[3] != NodePath():
-		join(args[3] as NodePath)
-	if glued != args[4] || freeze != args[4]:
-		set_glued(args[4] as bool, false)
-
-# sync properties for spawning or new player join
-@rpc("any_peer", "call_remote", "reliable")
-func _sync_properties_spawn(args : Array) -> void:
-	global_position = args[0]
-	global_rotation = args[1]
-	set_multiplayer_authority(args[2] as int)
-	# freeze always true for other clients
-	freeze = true
-
-# sync properties that need constant updates with client over rpc
-@rpc("any_peer", "call_remote")
-func _sync_properties_always(args : Array) -> void:
-	global_position = args[0]
-	global_rotation = args[1]
+func sync_properties(props : Dictionary) -> void:
+	for prop : String in props.keys():
+		if prop != "script":
+			set_property(prop, props[prop])
 
 # When a new peer connects, send all this brick's properties to the peer.
 func _on_peer_connected(id : int) -> void:
 	# only execute from the owner
 	if !is_multiplayer_authority(): return
-	_sync_properties_spawn.rpc_id(id, [global_position, global_rotation, get_multiplayer_authority()])
+	sync_properties.rpc_id(id, properties_as_dict())
 
 # When hit by something else.
 func _on_body_entered(body : PhysicsBody3D) -> void:
@@ -853,3 +841,9 @@ func request_group_from_authority(id_from : int) -> void:
 	# for every brick in the array, tell the non-auth its new group is this one's
 	for b : Brick in group_array:
 		brick_groups.receive_group_from_authority.rpc_id(id_from, b.name)
+
+func properties_as_dict() -> Dictionary:
+	var dict : Dictionary = {}
+	for p : String in properties_to_save:
+		dict[p] = get(p)
+	return dict

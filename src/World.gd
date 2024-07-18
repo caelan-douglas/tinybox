@@ -67,7 +67,7 @@ func _on_peer_connected(id : int) -> void:
 	for obj : Node in get_children():
 		if obj is TBWObject:
 			var tbw : TBWObject = obj as TBWObject
-			sync_tbw_obj_properties.rpc(tbw.get_path(), tbw.global_position, tbw.global_rotation, tbw.scale)
+			sync_tbw_obj_properties.rpc_id(id, tbw.get_path(), tbw.properties_as_dict())
 
 func _on_multiplayer_map_spawned(map : Map) -> void:
 	emit_signal("map_loaded")
@@ -356,8 +356,7 @@ func _parse_and_open_tbw(lines : Array) -> void:
 								var property : Variant = Global.property_string_to_property(property_name, property_split[1])
 								# set the property
 								inst.set_property(property_name, property)
-								print(property_name, " ", str(property))
-						sync_tbw_obj_properties.rpc(inst.get_path(), inst.global_position, inst.global_rotation, inst.scale)
+						sync_tbw_obj_properties.rpc(inst.get_path(), inst.properties_as_dict())
 		count += 1
 	# reset all player cameras once world is done loading
 	reset_player_cameras.rpc()
@@ -365,12 +364,11 @@ func _parse_and_open_tbw(lines : Array) -> void:
 	emit_signal("tbw_loaded")
 
 @rpc("any_peer", "call_remote", "reliable")
-func sync_tbw_obj_properties(obj_path : String, new_pos : Vector3, new_rot : Vector3, new_scale : Vector3) -> void:
-	var node : Node3D = get_node_or_null(obj_path)
-	if node:
-		node.global_position = new_pos
-		node.global_rotation = new_rot
-		node.scale = new_scale
+func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:
+	var node : TBWObject = get_node_or_null(obj_path)
+	for prop : String in props.keys():
+		if prop != "script":
+			node.set_property(prop, props[prop])
 
 @rpc("any_peer", "call_local", "reliable")
 func reset_player_cameras() -> void:
@@ -454,19 +452,15 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 					var property_split := p.split(":")
 					# name is first half
 					var property_name := property_split[0]
-					# determine type of second half
-					var property : Variant = Global.property_string_to_property(property_name, property_split[1])
-					if property_name == "global_position":
-						property = property as Vector3
-						property = property - offset_pos + b_position
-					
-					if property_name == "_colour":
-						b.set_colour(property as Color)
-					elif property_name == "_material":
-						b.set_material(property as Brick.BrickMaterial)
-					else:	
+					# don't use state yet
+					if property_name != "_state":
+						# determine type of second half
+						var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+						if property_name == "global_position":
+							property = property as Vector3
+							property = property - offset_pos + b_position
 						# set the property
-						b.set(property_name, property)
+						b.set_property(property_name, property)
 	
 	### Placing bricks
 	

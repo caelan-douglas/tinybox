@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dm3jibndc5tmf"]
+
+[node name="ColourPicker" type="HBoxContainer"]
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Colour"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "..."
+color = Color(1, 1, 1, 1)
+edit_alpha = false

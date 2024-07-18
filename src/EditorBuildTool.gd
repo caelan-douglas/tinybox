@@ -18,7 +18,7 @@ extends EditorTool
 
 var selected_item : PackedScene = null
 var selected_item_name_internal : String = ""
-var selected_item_properties : Array[Variant] = []
+var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
 
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
@@ -40,6 +40,9 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 			preview_node.visible = true
 		if selected_item == null:
 			pick_item()
+		# update object property list
+		if selected_item_properties.keys().size() > 0:
+			relist_object_properties()
 
 func pick_item() -> void:
 	var editor : Map = Global.get_world().get_current_map()
@@ -61,20 +64,60 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func list_object_properties(instance : TBWObject) -> void:
-	selected_item_properties = instance.properties_to_save
+func list_object_properties(instance : Node) -> void:
+	# clear properties for new item
+	selected_item_properties = {}
+	
 	for child : Node in editor_props_list.get_children():
 		child.queue_free()
 	var title : Label = Label.new()
 	title.text = str("- Object properties -\n\n")
 	editor_props_list.add_child(title)
-	for prop_name : String in instance.properties_to_save:
-		# don't list pos rot or scale
-		if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
-			var prop : Variant = instance.get(prop_name)
-			var entry : Label = Label.new()
-			entry.text = str(prop_name, ": ", prop)
-			editor_props_list.add_child(entry)
+	if instance is Brick || instance is TBWObject:
+		for prop_name : String in instance.properties_to_save:
+			# don't list pos rot or scale
+			if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
+				var prop : Variant = instance.get(prop_name)
+				add_object_property_entry(prop_name, prop)
+
+func relist_object_properties() -> void:
+	# delete current list
+	for child : Node in editor_props_list.get_children():
+		child.queue_free()
+	# reload list
+	for property : String in selected_item_properties.keys():
+		add_object_property_entry(property, selected_item_properties[property])
+
+var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn")
+var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
+func add_object_property_entry(prop_name : String, prop : Variant) -> void:
+	selected_item_properties[prop_name] = prop
+	var entry : Control = null
+	# Add colour picker
+	if prop is Color:
+		entry = colour_picker.instantiate()
+		entry.get_node("ColorPickerButton").color = prop
+		entry.get_node("ColorPickerButton").connect("color_changed", update_object_property.bind(prop_name))
+	# Add adjuster for floats and ints
+	if prop is float || prop is int:
+		entry = adjuster.instantiate()
+		var label : Label = entry.get_node("DynamicLabel")
+		label.text = str(prop_name, ": ", prop)
+		entry.get_node("DownBig").connect("pressed", update_object_property.bind(-10, prop_name, true, label))
+		entry.get_node("Down").connect("pressed", update_object_property.bind(-1, prop_name, true, label))
+		entry.get_node("Up").connect("pressed", update_object_property.bind(1, prop_name, true, label))
+		entry.get_node("UpBig").connect("pressed", update_object_property.bind(10, prop_name, true, label))
+	if entry != null:
+		editor_props_list.add_child(entry)
+
+func update_object_property(new_value : Variant, prop_name : String, increment : bool = false, update_label : Label = null) -> void:
+	if selected_item_properties.has(prop_name):
+		if increment:
+			selected_item_properties[prop_name] += new_value
+		else:
+			selected_item_properties[prop_name] = new_value
+		if update_label:
+			update_label.text = str(prop_name, ": ", selected_item_properties[prop_name])
 
 func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
 	ui_tool_name = item_name_display
@@ -84,18 +127,13 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 		return
 	selected_item = SpawnableObjects.objects[item_name_internal]
 	selected_item_name_internal = item_name_internal
+	# show editable properties
+	var instance : Node3D = selected_item.instantiate()
+	list_object_properties(instance)
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water":
 			item_offset = Vector3(0, -0.5, 0)
-		# update preview of mesh and properties
-		var instance : Node3D = selected_item.instantiate()
-		
-		if instance is TBWObject:
-			list_object_properties(instance as TBWObject)
-		else:
-			for child : Node in editor_props_list.get_children():
-				child.queue_free()
 		
 		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(instance) as Array)
 		if new_mesh is MeshInstance3D:
@@ -156,6 +194,9 @@ func _physics_process(delta : float) -> void:
 						inst.global_rotation = preview_node.global_rotation
 						if !(inst is Brick):
 							inst.scale = preview_node.scale
+						if inst is TBWObject || inst is Brick:
+							for property : String in selected_item_properties.keys():
+								inst.set_property(property, selected_item_properties[property])
 					# if trying to spawn a brick in an invalid location
 					# and not dragging
 					elif !$InvalidAudio.playing && Input.is_action_just_pressed("click"):
