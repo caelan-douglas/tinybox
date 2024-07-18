@@ -217,7 +217,7 @@ func _process(delta : float) -> void:
 		global_position = Vector3(target.global_position.x as float, target.global_position.y + 5 as float, target.global_position.z - 8 as float)
 		
 		# swap camera zoom
-		if Input.is_action_just_pressed("editor_camera_zoom"):
+		if Input.is_action_just_pressed("editor_camera_zoom") && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			match (int(target_dist)):
 				5:
 					target_dist = 10
