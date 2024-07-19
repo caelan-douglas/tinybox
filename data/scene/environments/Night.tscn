@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://c018ya3k3q2en"]
+
+[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_l5xax"]
+
+[sub_resource type="Gradient" id="Gradient_5lid8"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nokmd"]
+gradient = SubResource("Gradient_5lid8")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7f3tg"]
+sky_top_color = Color(0.0133784, 0.0368797, 0.139024, 1)
+sky_horizon_color = Color(0.0777729, 0.116976, 0.172705, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0.0784314, 0.117647, 0.172549, 1)
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_uy7uq"]
+sky_material = SubResource("ProceduralSkyMaterial_7f3tg")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_pcala"]
+background_mode = 2
+background_energy_multiplier = 2.0
+sky = SubResource("Sky_uy7uq")
+sky_rotation = Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16)
+ambient_light_source = 3
+ambient_light_color = Color(0.105218, 0.180403, 0.392964, 1)
+ambient_light_sky_contribution = 0.4
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.001
+fog_sky_affect = 0.787
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_nokmd")
+
+[node name="Environment" type="Node"]
+script = ExtResource("1_l5xax")
+environment_name = "env_night"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pcala")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.965926, -1.13133e-08, -0.258819, -0.258819, 4.2222e-08, 0.965926, -4.80746e-16, 1, -4.37114e-08, 0, 52.7417, 0)
+light_color = Color(0.287663, 0.411759, 0.518215, 1)
+light_energy = 2.0
+shadow_enabled = true
+shadow_opacity = 0.4
+shadow_blur = 10.0

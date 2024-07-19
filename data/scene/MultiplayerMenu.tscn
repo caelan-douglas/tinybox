@@ -237,9 +237,6 @@ layout_mode = 2
 
 [node name="DynamicLabel" type="Label" parent="MainMenu/RightColumn"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 0.513726)
-theme_override_constants/outline_size = 6
 text = "Host or Join"
 script = ExtResource("3_yuqno")
 json_text = "ui/host_or_join"
@@ -355,6 +352,37 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Searching for LAN servers..."
 script = ExtResource("3_yuqno")
+
+[node name="ChangelogColumn" type="VBoxContainer" parent="MainMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="MainMenu/ChangelogColumn"]
+custom_minimum_size = Vector2(0, 71)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="MainMenu/ChangelogColumn"]
+layout_mode = 2
+text = "Updates for %version%:
+
+-  Add back slide (press 
+   Shift while running.)
+-  Add tutorial.
+-  Add new editor features:
+----  Sign
+----  Property editor
+----  Night environment
+-  Fix brick grouping.
+-  Brick groups now fall
+   when they have no support.
+-  Visitors of your world can
+   now request to load their
+   own worlds.
+-  Adjust vehicle controls.
+-  Fix crash when no prefs
+   file existed."
+script = ExtResource("3_yuqno")
+raw_format = true
 
 [node name="AppearanceMenu" type="VBoxContainer" parent="."]
 visible = false

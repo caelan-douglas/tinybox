@@ -26,6 +26,8 @@ func _ready() -> void:
 			text = JsonHandler.find_entry_in_file(json_text)
 		else:
 			text = format(json_text)
+	elif raw_format && text != "":
+		text = format(text)
 
 func update_text() -> void:
 	if json_text != "":

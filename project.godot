@@ -43,8 +43,8 @@ gdscript/warnings/unsafe_call_argument=2
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
+window/size/viewport_width=1200
+window/size/viewport_height=720
 window/size/window_height_override=720
 window/dpi/allow_hidpi=false
 

@@ -132,6 +132,8 @@ func switch_environment() -> void:
 		"env_sunny":
 			new_env = SpawnableObjects.objects["env_sunset"].instantiate()
 		"env_sunset":
+			new_env = SpawnableObjects.objects["env_night"].instantiate()
+		"env_night":
 			new_env = SpawnableObjects.objects["env_molten"].instantiate()
 		"env_molten":
 			new_env = SpawnableObjects.objects["env_warp"].instantiate()
