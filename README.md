@@ -1,6 +1,6 @@
-# Tinybox<img src=icon.png align="left" width="128px" style="padding: 20px">
-
-Free and open source sandbox game with peer-to-peer multiplayer, gamemodes, world editor (in progress), PvP and a physics-based building system. It is made with Godot 4 using GDScript.
+<br>
+<p align="center"><img src=title.png width="450px"></p>
+Free and open source sandbox game with peer-to-peer multiplayer, gamemodes, world editor (in progress), PvP and a physics-based building system. It is made with Godot 4 using GDScript.<br><br>
 
 [![Tinybox](https://img.shields.io/badge/Get%20latest-beta%20version-teal?style=plastic)](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
 [![Godot](https://img.shields.io/badge/Godot%20version-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)
@@ -22,9 +22,8 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
-<img src=.export_exclude/screenshot_1.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
-<br>
-<img src=.export_exclude/screenshot_2.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
+<p align="center"><img src=.export_exclude/screenshot_1.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);"></p>
+<p align="center"><img src=.export_exclude/screenshot_2.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);"></p>
 
 ### Game vision
 Tinybox *('tiny + sandbox')* is a sandbox-focused game that promotes creativity and experimentation. Some of the goals as of now are to add new building features that promote more interactions such as ropes or wires to connect things loosely, or buttons and switches that can connect to things and perform actions.

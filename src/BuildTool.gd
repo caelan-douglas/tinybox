@@ -315,7 +315,7 @@ func _process(delta : float) -> void:
 					Global.get_world().add_child(spawned_load_arrow)
 				spawned_load_arrow.global_position = m_pos_3d
 				# avoid loading buildings in the ground
-				m_pos_3d.y += 1
+				m_pos_3d.y += 0.5
 			if m_3d:
 				if Input.is_action_just_pressed("load_next_building") || just_entered_load_mode:
 					if !load_dir:

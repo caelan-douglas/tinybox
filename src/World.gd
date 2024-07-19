@@ -441,6 +441,9 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var first_brick_pos := Vector3.ZERO
 	
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
+	if line_split_init.size() < 2:
+		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, true, false)
+		return
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:

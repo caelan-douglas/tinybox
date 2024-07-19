@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
+[ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_o48rt"]
-[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="2_x7twp"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_yuqno"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="5_6abn7"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="5_mmcxg"]
@@ -128,26 +128,29 @@ theme_override_constants/separation = 48
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="MainMenu/LeftColumn"]
+[node name="Title" type="TextureRect" parent="MainMenu/LeftColumn"]
 layout_mode = 2
-size_flags_horizontal = 0
-theme_override_fonts/font = ExtResource("2_x7twp")
-theme_override_font_sizes/font_size = 48
-text = "Tinybox"
+texture = ExtResource("2_5iqxy")
+expand_mode = 5
+stretch_mode = 5
 
-[node name="Control5" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="DynamicLabel" type="Label" parent="MainMenu/LeftColumn"]
-layout_mode = 2
+[node name="DynamicLabel" type="Label" parent="MainMenu/LeftColumn/Title"]
+layout_mode = 1
+offset_left = 178.0
+offset_top = 63.0
+offset_right = 280.0
+offset_bottom = 79.0
 text = "beta"
 script = ExtResource("3_yuqno")
 json_text = "%version%"
 raw_format = true
 
-[node name="Control6" type="Control" parent="MainMenu/LeftColumn"]
+[node name="Control5" type="Control" parent="MainMenu/LeftColumn"]
 custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Control6" type="Control" parent="MainMenu/LeftColumn"]
+custom_minimum_size = Vector2(2.08165e-12, 51)
 layout_mode = 2
 
 [node name="Settings" type="Button" parent="MainMenu/LeftColumn"]
@@ -232,7 +235,7 @@ custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 
 [node name="TopSpacer" type="Control" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 71)
+custom_minimum_size = Vector2(2.08165e-12, 110)
 layout_mode = 2
 
 [node name="DynamicLabel" type="Label" parent="MainMenu/RightColumn"]
@@ -352,37 +355,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Searching for LAN servers..."
 script = ExtResource("3_yuqno")
-
-[node name="ChangelogColumn" type="VBoxContainer" parent="MainMenu"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-
-[node name="TopSpacer" type="Control" parent="MainMenu/ChangelogColumn"]
-custom_minimum_size = Vector2(0, 71)
-layout_mode = 2
-
-[node name="DynamicLabel" type="Label" parent="MainMenu/ChangelogColumn"]
-layout_mode = 2
-text = "Updates for %version%:
-
--  Add back slide (press 
-   Shift while running.)
--  Add tutorial.
--  Add new editor features:
-----  Sign
-----  Property editor
-----  Night environment
--  Fix brick grouping.
--  Brick groups now fall
-   when they have no support.
--  Visitors of your world can
-   now request to load their
-   own worlds.
--  Adjust vehicle controls.
--  Fix crash when no prefs
-   file existed."
-script = ExtResource("3_yuqno")
-raw_format = true
 
 [node name="AppearanceMenu" type="VBoxContainer" parent="."]
 visible = false

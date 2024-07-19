@@ -86,9 +86,10 @@ func despawn(check_world_groups : bool = true) -> void:
 		controlling_player.seat_destroyed.rpc_id(controlling_player.get_multiplayer_authority())
 	else:
 		controlling_player = null
-	for b : Brick in attached_motors:
+	for b : Variant in attached_motors:
 		if b != null:
-			b.parent_seat = null
+			if b is MotorBrick:
+				b.parent_seat = null
 	super()
 
 # Sets the controlling player of this seat, and gives control to the player that sat down.
