@@ -511,8 +511,8 @@ func play_hit_sound(volume : float) -> void:
 
 # Remove this brick
 @rpc("any_peer", "call_local")
-func despawn() -> void:
-	if _state == States.PLACED:
+func despawn(check_world_groups : bool = true) -> void:
+	if _state == States.PLACED && check_world_groups:
 		brick_groups.check_world_groups()
 	queue_free()
 

@@ -57,7 +57,7 @@ func _ready() -> void:
 
 # Remove this brick
 @rpc("call_local")
-func despawn() -> void:
+func despawn(check_world_groups : bool = true) -> void:
 	if parent_seat:
 		if parent_seat.attached_motors.has(self):
 			parent_seat.attached_motors.erase(self)

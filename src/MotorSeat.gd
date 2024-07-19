@@ -81,7 +81,7 @@ func drive(input_forward : float, input_steer : float) -> void:
 
 # Remove this brick
 @rpc("call_local")
-func despawn() -> void:
+func despawn(check_world_groups : bool = true) -> void:
 	if controlling_player != null:
 		controlling_player.seat_destroyed.rpc_id(controlling_player.get_multiplayer_authority())
 	else:

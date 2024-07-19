@@ -1134,6 +1134,7 @@ layout_mode = 2
 
 [node name="StartGame" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2
+disabled = true
 text = "Start Minigame Lobby"
 script = ExtResource("5_6v07r")
 json_text = "ui/start_game"

@@ -414,7 +414,8 @@ func clear_bricks() -> void:
 	# remove all existing bricks
 	for b in get_children():
 		if b is Brick:
-			b.despawn()
+			# despawn and don't check world groups
+			b.despawn(false)
 
 func send_start_lobby() -> void:
 	if has_node("Minigame"):
