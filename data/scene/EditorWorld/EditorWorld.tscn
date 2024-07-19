@@ -31,7 +31,7 @@ script = ExtResource("2_eevk4")
 script = ExtResource("4_ga27o")
 
 [node name="CameraTarget" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 50, 2.08165e-12)
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")

@@ -70,6 +70,7 @@ func set_camera_mode(new : CameraMode) -> void:
 		
 		# longer zoom in controlled (editor) mode
 		if new == CameraMode.CONTROLLED:
+			target_dist = 10
 			max_dist = 150
 		emit_signal("camera_mode_changed")
 

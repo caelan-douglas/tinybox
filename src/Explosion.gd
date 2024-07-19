@@ -43,6 +43,9 @@ func _ready() -> void:
 	area.connect("body_entered", explode)
 	# delete explosion hitbox after 0.1s
 	await get_tree().create_timer(0.1).timeout
+	# update brick groups after an explosion
+	var brick_groups : BrickGroups = Global.get_world().get_node("BrickGroups")
+	brick_groups.check_world_groups()
 	area.call_deferred("queue_free")
 
 func play_sound() -> void:

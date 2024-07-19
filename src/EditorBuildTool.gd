@@ -163,6 +163,10 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 			return
 		else:
 			preview_node.get_node("ObjPreview").visible = false
+	# if switching to non-obj (ex. a brick) don't show any preview
+	else:
+		var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
+		preview_mesh.visible = false
 
 func find_item_mesh(array : Array) -> MeshInstance3D:
 	for c : Variant in array:

@@ -250,7 +250,7 @@ func get_colour() -> Color:
 # Arg 2: Whether or not this brick being deglued will affect its group memebers.
 # Arg 3: Whether or not to ungroup this brick as well.
 @rpc("call_local")
-func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -> void:
+func set_glued(new : bool, affect_others : bool = true) -> void:
 	# static brick material cannot be unglued
 	if _material == BrickMaterial.STATIC:
 		return
@@ -276,14 +276,15 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 func check_group_static_neighbours(include_self : bool = true) -> void:
 	var no_static_neighbours := true
 	# update and check entire group
-	for b : Variant in brick_groups.groups[str(group)]:
-		# check if at least 1 brick has a static neighbour
-		if b != null:
-			b = b as Brick
-			if b == self && !include_self:
-				pass
-			elif b.glued && b.has_static_neighbour:
-				no_static_neighbours = false
+	if brick_groups.groups.has(str(group)):
+		for b : Variant in brick_groups.groups[str(group)]:
+			# check if at least 1 brick has a static neighbour
+			if b != null:
+				b = b as Brick
+				if b == self && !include_self:
+					pass
+				elif b.glued && b.has_static_neighbour:
+					no_static_neighbours = false
 	# no static neighbours, entire group should fall
 	if no_static_neighbours:
 		unfreeze_entire_group()
@@ -359,7 +360,6 @@ func extinguish_fire() -> void:
 func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
-	
 	set_glued(false)
 	unjoin()
 	var explosion_force := randi_range(80, 200)

@@ -253,7 +253,7 @@ func save_tbw(world_name : String) -> void:
 				file.store_line("")
 	file.close()
 
-func load_tbw(file_name := "test", internal := false) -> void:
+func load_tbw(file_name := "test", internal := false, reset_player_and_cameras := true) -> void:
 	print("Attempting to load ", file_name, ".tbw")
 	
 	var load_file : FileAccess = null
@@ -276,7 +276,7 @@ func load_tbw(file_name := "test", internal := false) -> void:
 			var line := load_file.get_line()
 			lines.append(str(line))
 		if multiplayer.is_server():
-			_parse_and_open_tbw(lines)
+			_parse_and_open_tbw(lines, reset_player_and_cameras)
 		else:
 			ask_server_to_open_tbw.rpc_id(1, Global.display_name, file_name, lines)
 	else:
@@ -301,7 +301,7 @@ func _world_accepted(name_from : String, world_name : String, lines : Array) -> 
 	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\ncreated by ", name_from), 7)
 
 # Only to be run as server
-func _parse_and_open_tbw(lines : Array) -> void:
+func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
 	
 	clear_world()
@@ -377,8 +377,9 @@ func _parse_and_open_tbw(lines : Array) -> void:
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.properties_as_dict())
 		count += 1
 	# reset all player cameras once world is done loading
-	reset_player_cameras.rpc()
-	reset_player_positions.rpc()
+	if reset_camera_and_player:
+		reset_player_cameras.rpc()
+		reset_player_positions.rpc()
 	# announce we are done loading
 	emit_signal("tbw_loaded")
 

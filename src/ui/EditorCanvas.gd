@@ -67,7 +67,7 @@ func _load_world(map_selector : OptionButton) -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# remove ".tbw" from string
-	Global.get_world().load_tbw(world_name.split(".")[0])
+	Global.get_world().load_tbw(world_name.split(".")[0], false, false)
 
 func hide_pause_menu() -> void:
 	var editor : Node3D = Global.get_world().get_current_map()
