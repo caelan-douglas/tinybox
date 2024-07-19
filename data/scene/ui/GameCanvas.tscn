@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=35 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="16_da6k8"]
+[ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
 length = 0.001
@@ -1155,25 +1156,11 @@ layout_mode = 2
 [node name="MapSelection" type="OptionButton" parent="PauseMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 6
-selected = 0
-popup/item_0/text = "Frozen Field"
-popup/item_0/id = 1
-popup/item_1/text = "Caffeina"
-popup/item_1/id = 2
-popup/item_2/text = "Calm Creek"
-popup/item_2/id = 3
-popup/item_3/text = "Grasslands"
-popup/item_3/id = 4
-popup/item_4/text = "Floaty"
-popup/item_4/id = 5
-popup/item_5/text = "Warp"
-popup/item_5/id = 6
+script = ExtResource("16_oucrq")
 
 [node name="ChangeMap" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2
-text = "Switch to this map (deletes
-everything!)"
+text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
 

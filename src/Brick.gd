@@ -513,7 +513,6 @@ func play_hit_sound(volume : float) -> void:
 @rpc("any_peer", "call_local")
 func despawn() -> void:
 	if _state == States.PLACED:
-		check_group_static_neighbours(false)
 		brick_groups.check_world_groups()
 	queue_free()
 
@@ -702,6 +701,11 @@ func unjoin() -> void:
 	
 	for j in get_children():
 		if j is Generic6DOFJoint3D:
+			var other_brick : Variant = Global.get_world().get_node_or_null(str(j.node_b))
+			if other_brick != null:
+				for other_j : Node in other_brick.get_children():
+					if other_j is Generic6DOFJoint3D:
+						other_j.queue_free()
 			j.queue_free()
 
 # When this brick sleeps or unsleeps, controlled by the physics engine.

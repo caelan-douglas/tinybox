@@ -54,21 +54,7 @@ func _process(delta : float) -> void:
 func _send_on_change_map_pressed() -> void:
 	var map_selector : OptionButton = $PauseMenu/Menu/MapSelection
 	var map_name : String = map_selector.get_item_text(map_selector.selected)
-	_on_change_map_pressed.rpc(map_name)
-
-@rpc("any_peer", "call_local", "reliable")
-func _on_change_map_pressed(map_name : String) -> void:
-	# load intended map
-	Global.get_world().clear_world()
-	Global.get_world().load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")) as PackedScene)
-	
-	# reset some player stuff
-	var camera : Camera3D = get_viewport().get_camera_3d()
-	if camera is Camera:
-		Global.get_player().set_camera(camera)
-	var player : RigidPlayer = Global.get_player()
-	player.change_state(RigidPlayer.IDLE)
-	player.go_to_spawn()
+	Global.get_world().load_tbw(map_name.split(".")[0])
 
 func play_intro_animation(text : String) -> void:
 	# in case player was paused

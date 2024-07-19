@@ -278,15 +278,27 @@ func load_tbw(file_name := "test", internal := false) -> void:
 		if multiplayer.is_server():
 			_parse_and_open_tbw(lines)
 		else:
-			ask_server_to_open_tbw.rpc_id(1, Global.display_name, lines)
+			ask_server_to_open_tbw.rpc_id(1, Global.display_name, file_name, lines)
 	else:
 		UIHandler.show_alert("World not found or corrupt!", 8, false, true)
 
 # server loads tbws
 @rpc("any_peer", "call_local", "reliable")
-func ask_server_to_open_tbw(name_from : String, lines : Array) -> void:
+func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Array) -> void:
 	if !multiplayer.is_server(): return
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	var actions := UIHandler.show_alert_with_actions(str(name_from, " wishes to load the world \"", world_name, ".tbw\".\nAll bricks will be destroyed. Is this OK?"), ["Load world", "Do not load"], true)
+	actions[0].connect("pressed", _world_accepted.bind(name_from, world_name, lines))
+	actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
+
+func _world_denied(name_from : String, world_name : String) -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, true)
+
+func _world_accepted(name_from : String, world_name : String, lines : Array) -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_parse_and_open_tbw(lines)
+	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\ncreated by ", name_from), 7)
 
 # Only to be run as server
 func _parse_and_open_tbw(lines : Array) -> void:
@@ -366,6 +378,7 @@ func _parse_and_open_tbw(lines : Array) -> void:
 		count += 1
 	# reset all player cameras once world is done loading
 	reset_player_cameras.rpc()
+	reset_player_positions.rpc()
 	# announce we are done loading
 	emit_signal("tbw_loaded")
 
@@ -382,6 +395,12 @@ func reset_player_cameras() -> void:
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
 		Global.get_player().set_camera(camera)
+
+@rpc("any_peer", "call_local", "reliable")
+func reset_player_positions() -> void:
+	var player : RigidPlayer = Global.get_player()
+	player.change_state(RigidPlayer.IDLE)
+	player.go_to_spawn()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_world() -> void:
@@ -507,6 +526,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			# (never gets chance to join)
 			building_group[0].check_joints()
 		count += 1
+		b.sync_properties.rpc(b.properties_as_dict())
 	# now for each extra brick:
 	# 1. enable its collider
 	# 2. check neighbours
@@ -517,6 +537,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		b.model_mesh.visible = true
 		b.check_joints()
 		count += 1
+		b.sync_properties.rpc(b.properties_as_dict())
 	
 	print(str("Done loading building, checking groups. ", Time.get_ticks_msec()))
 	# Update the brick groups.
