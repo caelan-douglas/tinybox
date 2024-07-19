@@ -64,11 +64,11 @@ func play_outro_animation(camera : Camera3D) -> void:
 	player.change_state(RigidPlayer.DUMMY)
 	var outro_spot : Node3D = Global.get_world().get_current_map().get_node_or_null("OutroSpot")
 	# others go in a non-visible area
-	Global.get_world().teleport_player(player, Vector3(0, 299, 0))
+	player.teleport(Vector3(0, 299, 0))
 	# make leader player show animation
 	var winning_player : RigidPlayer = get_tree().current_scene.get_node_or_null(str("World/", current_leader_id))
 	if winning_player != null:
-		Global.get_world().teleport_player(winning_player, outro_spot.global_position)
+		winning_player.teleport(outro_spot.global_position)
 		winning_player.global_rotation = outro_spot.global_rotation
 		winning_player.animator.set("parameters/OutroTimeSeek/seek_request", 0.0)
 		winning_player.animator["parameters/BlendOutroPose/blend_amount"] = 1

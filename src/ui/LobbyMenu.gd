@@ -164,11 +164,9 @@ func update_auth_player_position() -> void:
 	
 	match team_idx:
 		1:
-			await get_tree().process_frame
-			player.global_position = Vector3(randf_range(-1, -3), 50, randf_range(-1, -3))
+			player.teleport(Vector3(randf_range(-1, -3), 50, randf_range(-1, -3)))
 		_:
-			await get_tree().process_frame
-			player.global_position = Vector3(randf_range(1, 3), 50, randf_range(-1, -3))
+			player.teleport(Vector3(randf_range(1, 3), 50, randf_range(-1, -3)))
 
 func change_team() -> void:
 	var player : RigidPlayer = Global.get_player()

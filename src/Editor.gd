@@ -9,18 +9,7 @@ signal item_picked
 func _ready() -> void:
 	super()
 	
-	# hide player and make them invulnerable
-	var player : RigidPlayer = Global.get_player()
-	while player == null:
-		await get_tree().process_frame
-		player = Global.get_player()
-	player.global_position = Vector3(0, -1000, 0)
-	player.change_state(RigidPlayer.DUMMY)
-	player.locked = true
-	player.editor_mode = true
-	player.visible = false
-	player.get_tool_inventory().delete_all_tools()
-	player.get_tool_inventory().set_disabled(true)
+	await disable_player()
 	
 	# for when a new .tbw map is loaded
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
@@ -177,6 +166,73 @@ func switch_background() -> void:
 	else:
 		current_bg_name = "(none)"
 	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name
+
+func disable_player() -> int:
+	# hide player and make them invulnerable
+	var player : RigidPlayer = Global.get_player()
+	while player == null:
+		await get_tree().process_frame
+		player = Global.get_player()
+	player.teleport(Vector3(0, -1000, 0))
+	player.change_state(RigidPlayer.DUMMY)
+	player.locked = true
+	player.editor_mode = true
+	player.visible = false
+	player.get_tool_inventory().delete_all_tools()
+	player.get_tool_inventory().set_disabled(true)
+	return 0
+
+func enable_player() -> int:
+	# show player and game tools
+	var player : RigidPlayer = Global.get_player()
+	while player == null:
+		await get_tree().process_frame
+		player = Global.get_player()
+	player.teleport(Vector3(0, 50, 0))
+	# grace period for invincibility
+	await get_tree().create_timer(0.15).timeout
+	player.change_state(RigidPlayer.IDLE)
+	player.locked = false
+	player.editor_mode = false
+	player.visible = true
+	player.get_tool_inventory().give_all_tools()
+	player.get_tool_inventory().set_disabled(false)
+	return 0
+
+var test_mode_world_name : String = ""
+func enter_test_mode(world_name : String) -> void:
+	# save in case player makes any changes / destroys things in testing
+	Global.get_world().save_tbw(str(world_name))
+	test_mode_world_name = world_name
+	
+	await enable_player()
+	await get_tree().process_frame
+	editor_canvas.visible = false
+	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
+	game_canvas.visible = true
+	var camera : Camera3D = get_viewport().get_camera_3d()
+	var player : RigidPlayer = Global.get_player()
+	if camera is Camera:
+		camera.set_camera_mode(Camera.CameraMode.FREE)
+		camera.set_target(player.target)
+	game_canvas.hide_pause_menu()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func exit_test_mode() -> void:
+	# don't reset player and cameras
+	Global.get_world().load_tbw(str(test_mode_world_name), false, false)
+	
+	await disable_player()
+	await get_tree().process_frame
+	editor_canvas.visible = true
+	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
+	game_canvas.visible = false
+	var camera : Camera3D = get_viewport().get_camera_3d()
+	if camera is Camera:
+		camera.set_target($CameraTarget)
+		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+	editor_canvas.hide_pause_menu()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _process(delta : float) -> void:
 	# don't release / unrelease mouse when editing text

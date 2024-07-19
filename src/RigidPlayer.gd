@@ -121,6 +121,13 @@ preload("res://data/textures/clothing/cloth_tex_1.png"),
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
 
+var teleport_requested : bool = false
+var teleport_pos : Vector3 = Vector3.ZERO
+@rpc("any_peer", "call_local", "reliable")
+func teleport(new_pos : Vector3) -> void:
+	teleport_requested = true
+	teleport_pos = new_pos
+
 # Lights this player on fire.
 @rpc("any_peer", "call_local")
 func light_fire(from_who_id : int = -1, initial_damage : int = 1) -> void:
@@ -863,6 +870,13 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			elif dir.length() < 1 && _state != SWIMMING_IDLE:
 				change_state(SWIMMING_IDLE)
 	lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
+	
+	# handle teleport requests
+	if teleport_requested:
+		teleport_requested = false
+		var t := state.transform
+		t.origin = teleport_pos
+		state.set_transform(t)
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")

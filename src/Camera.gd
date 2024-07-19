@@ -67,7 +67,6 @@ func set_camera_mode(new : CameraMode) -> void:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = true
 		else:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = false
-		
 		# longer zoom in controlled (editor) mode
 		if new == CameraMode.CONTROLLED:
 			target_dist = 10
@@ -215,7 +214,6 @@ func _process(delta : float) -> void:
 			held_key_time += delta * 400
 		else:
 			held_key_time = 0
-		global_position = Vector3(target.global_position.x as float, target.global_position.y + 5 as float, target.global_position.z - 8 as float)
 		
 		# swap camera zoom
 		if Input.is_action_just_pressed("editor_camera_zoom") && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

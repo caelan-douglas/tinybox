@@ -34,14 +34,10 @@ func remove_player_from_list(player : RigidPlayer) -> void:
 	if rigidplayer_list.has(player):
 		rigidplayer_list.erase(player)
 
-func teleport_player(player : RigidPlayer, pos : Vector3) -> void:
-	await get_tree().process_frame
-	player.global_position = Vector3(float(pos.x), float(pos.y), float(pos.z))
-
 func teleport_all_players(pos : Vector3) -> void:
 	await get_tree().process_frame
 	for p : RigidPlayer in rigidplayer_list:
-		p.global_position = Vector3(float(pos.x), float(pos.y), float(pos.z))
+		p.teleport(Vector3(float(pos.x), float(pos.y), float(pos.z)))
 
 func _ready() -> void:
 	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)

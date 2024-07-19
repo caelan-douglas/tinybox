@@ -34,11 +34,21 @@ func _on_map_loaded() -> void:
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Menu/MapSelection))
 		$PauseMenu/Menu/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/Menu/MapSelection, true))
+		$PauseMenu/Menu/TestWorld.connect("pressed", _on_test_world_pressed)
 		
 		$EntryScreen/Menu/New.grab_focus()
 		
 		# disable tools for entry screen
 		editor.editor_tool_inventory.set_disabled(true)
+
+func _on_test_world_pressed() -> void:
+	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
+	if world_name == "":
+		UIHandler.show_alert("Please enter a world name before testing!", 4, false, true, false)
+	else:
+		var editor : Node3D = Global.get_world().get_current_map()
+		if editor is Editor:
+			editor.enter_test_mode(str(world_name))
 
 func _on_new_world_pressed() -> void:
 	var editor : Node3D = Global.get_world().get_current_map()

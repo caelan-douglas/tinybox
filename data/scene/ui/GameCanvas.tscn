@@ -1257,6 +1257,64 @@ text = "Tip: (uninitialized)"
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="TestModePauseMenu" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(540, 540)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="TestModePauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.227451, 0.133333, 0.231373, 0.701961)
+
+[node name="Menu" type="VBoxContainer" parent="TestModePauseMenu"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -263.5
+offset_right = 163.0
+offset_bottom = 264.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="TestModePauseMenu/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
+theme_override_constants/line_spacing = -20
+theme_override_fonts/font = ExtResource("7_svln6")
+theme_override_font_sizes/font_size = 50
+text = "Paused -
+Testing"
+script = ExtResource("6_qxctu")
+
+[node name="Spacer" type="Control" parent="TestModePauseMenu/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="ReturnToEditor" parent="TestModePauseMenu/Menu" instance=ExtResource("3_5o4ik")]
+layout_mode = 2
+text = "Return to editor"
+script = null
+
+[node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 120)
+layout_mode = 2
+
 [node name="DebugMenu" type="VBoxContainer" parent="."]
 visible = false
 anchors_preset = 4

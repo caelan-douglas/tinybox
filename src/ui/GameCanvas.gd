@@ -24,31 +24,50 @@ extends CanvasLayer
 const NUM_OF_TIPS = 12
 
 func hide_pause_menu() -> void:
-	$PauseMenu.visible = false
-	Global.get_player().locked = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Global.get_world().get_current_map() is Editor:
+		$TestModePauseMenu.visible = false
+		Global.get_player().locked = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	else:
+		$PauseMenu.visible = false
+		Global.get_player().locked = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
-	$PauseMenu.visible = true
-	Global.get_player().locked = true
-	if Global.get_world().minigame != null:
-		$PauseMenu/Menu/Title.json_text = "ui/minigame_mode"
-		$PauseMenu/Menu/ChangeMap.disabled = true
-	else:
-		$PauseMenu/Menu/Title.json_text = "ui/sandbox_mode"
-		$PauseMenu/Menu/ChangeMap.disabled = false
-	$PauseMenu/Menu/Title.update_text()
-	# show tip on pause screen
-	var tipnum : int = randi() % NUM_OF_TIPS
-	pause_tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# if in editor world, we are testing, so show test pause menu
+	if Global.get_world().get_current_map() is Editor:
+		var editor : Editor = Global.get_world().get_current_map()
+		$TestModePauseMenu.visible = true
+		Global.get_player().locked = true
+		$TestModePauseMenu/Menu/ReturnToEditor.connect("pressed", editor.exit_test_mode)
+	else:
+		$PauseMenu.visible = true
+		Global.get_player().locked = true
+		if Global.get_world().minigame != null:
+			$PauseMenu/Menu/Title.json_text = "ui/minigame_mode"
+			$PauseMenu/Menu/ChangeMap.disabled = true
+		else:
+			$PauseMenu/Menu/Title.json_text = "ui/sandbox_mode"
+			$PauseMenu/Menu/ChangeMap.disabled = false
+		$PauseMenu/Menu/Title.update_text()
+		# show tip on pause screen
+		var tipnum : int = randi() % NUM_OF_TIPS
+		pause_tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
 
 func _process(delta : float) -> void:
 	if Input.is_action_just_pressed("pause") && visible:
-		if $PauseMenu.visible:
-			hide_pause_menu()
+		# in editor testing mode
+		if Global.get_world().get_current_map() is Editor:
+			if $TestModePauseMenu.visible:
+				hide_pause_menu()
+			else:
+				show_pause_menu()
 		else:
-			show_pause_menu()
+			if $PauseMenu.visible:
+				hide_pause_menu()
+			else:
+				show_pause_menu()
 		
 
 func _send_on_change_map_pressed() -> void:

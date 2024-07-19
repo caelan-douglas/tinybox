@@ -202,7 +202,7 @@ func _physics_process(delta : float) -> void:
 							break
 					
 					# place if valid
-					if valid:
+					if valid && selected_item != null:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
 						inst.global_position = camera.controlled_cam_pos + item_offset

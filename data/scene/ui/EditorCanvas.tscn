@@ -468,11 +468,6 @@ layout_mode = 2
 text = "Leave Editor"
 editor_leave_text = true
 
-[node name="StartGame" type="Button" parent="PauseMenu/Menu"]
-layout_mode = 2
-disabled = true
-text = "Test world"
-
 [node name="Spacer3" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
@@ -489,6 +484,11 @@ placeholder_text = "World name..."
 [node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
 layout_mode = 2
 text = "Save world"
+
+[node name="TestWorld" type="Button" parent="PauseMenu/Menu"]
+self_modulate = Color(1, 2.702, 1, 1)
+layout_mode = 2
+text = "Save & test world"
 
 [node name="Spacer4" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)
