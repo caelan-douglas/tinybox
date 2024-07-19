@@ -202,8 +202,11 @@ func enable_player() -> int:
 var test_mode_world_name : String = ""
 func enter_test_mode(world_name : String) -> void:
 	# save in case player makes any changes / destroys things in testing
-	Global.get_world().save_tbw(str(world_name))
+	await Global.get_world().save_tbw(str(world_name))
 	test_mode_world_name = world_name
+	
+	# load world so that brick groups and joints are generated
+	Global.get_world().load_tbw(str(test_mode_world_name), false, false)
 	
 	await enable_player()
 	await get_tree().process_frame
@@ -217,6 +220,7 @@ func enter_test_mode(world_name : String) -> void:
 		camera.set_target(player.target)
 	game_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	UIHandler.show_alert("Changes you make in testing mode will not be saved.\nPause to return to the editor.", 10)
 
 func exit_test_mode() -> void:
 	# don't reset player and cameras
