@@ -271,6 +271,8 @@ func set_glued(new : bool, affect_others : bool = true) -> void:
 						else:
 							b.glued = new
 							b.freeze = new
+	# wait a bit in case of an explosion (see explode func in Explosion.gd)
+	await get_tree().create_timer(0.4).timeout
 	check_group_static_neighbours()
 
 func check_group_static_neighbours(include_self : bool = true) -> void:

@@ -43,10 +43,12 @@ func _ready() -> void:
 	area.connect("body_entered", explode)
 	# delete explosion hitbox after 0.1s
 	await get_tree().create_timer(0.1).timeout
-	# update brick groups after an explosion
+	area.call_deferred("queue_free")
+	# update brick groups after an explosion (wait a bit for any displaced
+	# bricks to fall)
+	await get_tree().create_timer(0.2).timeout
 	var brick_groups : BrickGroups = Global.get_world().get_node("BrickGroups")
 	brick_groups.check_world_groups()
-	area.call_deferred("queue_free")
 
 func play_sound() -> void:
 	var camera : Camera = get_viewport().get_camera_3d()
