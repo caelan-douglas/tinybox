@@ -59,6 +59,7 @@ var joinable : bool = true
 var on_fire : bool = false
 var charred : bool = false
 @export var glued : bool = true
+var has_static_neighbour : bool = false
 
 @onready var group : String = name
 @onready var world : World = Global.get_world()
@@ -262,18 +263,30 @@ func set_glued(new : bool, affect_others : bool = true, ungroup : bool = true) -
 					b = b as Brick
 					if b._material != BrickMaterial.STATIC:
 						if new == false:
-						# only deglue inside the deglue radius, OR if the brick to be deglued is above the one that was hit (allows roofs to fall)
-							var is_above_threshold : bool = (b.global_position.y > self.global_position.y) && abs(b.global_position.x - self.global_position.x) < 2 && abs(b.global_position.z - self.global_position.z) < 2
-							if b == self || ((b.global_position.distance_to(self.global_position) < deglue_radius) || is_above_threshold):
-								if ungroup && brick_groups.groups.has(str(b)):
-									brick_groups.groups.get(str(b)).erase(self)
-								# reset group to own
-								b.group = b.name
+						# only deglue inside the deglue radius
+							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius:
 								b.glued = new
 								b.freeze = new
+								b.has_static_neighbour = false
 						else:
 							b.glued = new
 							b.freeze = new
+	check_group_static_neighbours()
+
+func check_group_static_neighbours(include_self : bool = true) -> void:
+	var no_static_neighbours := true
+	# update and check entire group
+	for b : Variant in brick_groups.groups[str(group)]:
+		# check if at least 1 brick has a static neighbour
+		if b != null:
+			b = b as Brick
+			if b == self && !include_self:
+				pass
+			elif b.glued && b.has_static_neighbour:
+				no_static_neighbours = false
+	# no static neighbours, entire group should fall
+	if no_static_neighbours:
+		unfreeze_entire_group()
 
 # Returns whether or not this brick is glued.
 func get_glued() -> bool:
@@ -499,9 +512,9 @@ func play_hit_sound(volume : float) -> void:
 # Remove this brick
 @rpc("any_peer", "call_local")
 func despawn() -> void:
-	if brick_groups.groups.has(str(group)):
-		if brick_groups.groups[str(group)].has(self):
-			brick_groups.groups[str(group)].erase(self)
+	if _state == States.PLACED:
+		check_group_static_neighbours(false)
+		brick_groups.check_world_groups()
 	queue_free()
 
 # Build mode, used when a brick is spawning from a tool.
@@ -653,12 +666,8 @@ func check_joints(set_group : String = "") -> void:
 						pass
 					else:
 						join(body.get_path(), set_group)
-		if !found_brick:
-			# we don't have any bricks to join to
-			brick_groups.groups[str(group)] = []
-	else:
-		# we don't have any bricks to join to
-		brick_groups.groups[str(group)] = []
+			elif body is StaticBody3D:
+				has_static_neighbour = true
 
 # Join with another brick.
 # Arg 1: The other brick to join to, as a NodePath.
@@ -684,30 +693,6 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 		joint.set("angular_limit_z/enabled", false)
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
-	# Update the brick groups.
-	#update_joined_brick_groups(path_to_brick, set_group)
-	update_brick_groups(path_to_brick, set_group)
-
-func update_brick_groups(path_to_brick : NodePath, set_group : String = "") -> void:
-	# only execute on yourself
-	if !is_multiplayer_authority(): return
-	
-	# if we are determining group dynamically
-	if set_group == "":
-		var brick : Brick = get_node(path_to_brick)
-		# Set my group to the other brick's group.
-		group = brick.group
-		# Add this brick and the other brick to the group if they are not already in it.
-		if !brick_groups.groups[str(group)].has(self):
-			brick_groups.groups[str(group)].append(self)
-		if !brick_groups.groups[str(group)].has(brick):
-			brick_groups.groups[str(group)].append(brick)
-	# determing group based on set group name
-	else:
-		group = set_group
-		if !brick_groups.groups.has(str(set_group)):
-			brick_groups.groups[str(set_group)] = []
-		brick_groups.groups[str(set_group)].append(self)
 
 # Unjoin this brick from its partner.
 @rpc("any_peer", "call_local", "reliable")
@@ -718,9 +703,6 @@ func unjoin() -> void:
 	for j in get_children():
 		if j is Generic6DOFJoint3D:
 			j.queue_free()
-	
-	# reset group
-	group = name
 
 # When this brick sleeps or unsleeps, controlled by the physics engine.
 func _on_sleeping_state_changed() -> void:
@@ -804,6 +786,9 @@ func enter_state() -> void:
 				freeze = false
 			# check if this is placed next to any other bricks, if so, join them
 			check_joints()
+			# update world groups if placed by a tool
+			if tool_from != null:
+				brick_groups.check_world_groups()
 		States.DUMMY_BUILD:
 			cam_collider.disabled = true
 			collider.disabled = true

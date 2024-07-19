@@ -30,3 +30,51 @@ func receive_group_from_authority(brick_name : String) -> void:
 
 func _physics_process(delta : float) -> void:
 	receive_timeout -= 1
+
+var max_proc : int = 64
+var cur_proc : int = 0
+func check_world_groups() -> void:
+	groups = {}
+	
+	# reset all groups
+	for b : Variant in Global.get_world().get_children():
+		if b != null:
+			if b is Brick:
+				set_brick_group(b as Brick, str(b.name))
+	
+	for b : Variant in Global.get_world().get_children():
+		if b != null:
+			if b is Brick:
+				if b.joint_detector.has_overlapping_bodies():
+					for other : Variant in b.joint_detector.get_overlapping_bodies():
+						if other is Brick:
+							if other != b && other.group != b.group:
+								var other_size := 0
+								var my_size := 0
+								for othergroup : Variant in groups[other.group]:
+									other_size += 1
+								for mygroup : Variant in groups[b.group]:
+									my_size += 1
+								
+								var larger_group_name := ""
+								var smaller_group_name := ""
+								if my_size >= other_size || other_size == 1:
+									larger_group_name = b.group
+									smaller_group_name = other.group
+								else:
+									larger_group_name = other.group
+									smaller_group_name = b.group
+								
+								# for clearing later
+								var group_to_be_cleared : String = smaller_group_name
+								for smaller_group_brick : Brick in groups[smaller_group_name]:
+									# join to larger group
+									set_brick_group(smaller_group_brick, larger_group_name)
+								# clear old group
+								groups[smaller_group_name] = []
+
+func set_brick_group(b : Brick, group_name : String) -> void:
+	b.group = group_name
+	if !groups.has(group_name):
+		groups[group_name] = []
+	groups[group_name].append(b)

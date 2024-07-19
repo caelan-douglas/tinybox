@@ -518,7 +518,9 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		b.check_joints()
 		count += 1
 	
-	print(str("Done loading building", Time.get_ticks_msec()))
+	print(str("Done loading building, checking groups. ", Time.get_ticks_msec()))
+	# Update the brick groups.
+	get_node("BrickGroups").check_world_groups()
 	loading_canvas.visible = false
 
 var first_brick_pos : Vector3 = Vector3.ZERO
