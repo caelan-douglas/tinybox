@@ -28,7 +28,7 @@
         "join_clicked": "Trying to join...",
         "map_selection": "Choose a map:",
         "switch_maps": "Switch Maps",
-        "switch_maps_button": "Switch to this map (deletes\neverything!)",
+        "switch_maps_button": "Request to load this map",
         "custom_maps": "Custom Maps",
         "world_editor": "World editor",
         "map_vote": "Map Vote",

@@ -1130,6 +1130,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("3_5o4ik")]
+self_modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 
 [node name="StartGame" type="Button" parent="PauseMenu/Menu"]
@@ -1164,6 +1165,23 @@ layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
+
+[node name="Spacer8" type="Control" parent="PauseMenu/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Save a copy of this world"
+script = ExtResource("6_qxctu")
+
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/Menu"]
+layout_mode = 2
+placeholder_text = "World name..."
+
+[node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
+layout_mode = 2
+text = "Save a copy"
 
 [node name="Spacer7" type="Control" parent="PauseMenu/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 30)
@@ -1360,20 +1378,6 @@ script = ExtResource("5_6v07r")
 [node name="ChangeTeam" type="Button" parent="DebugMenu"]
 layout_mode = 2
 text = "Change team"
-script = ExtResource("5_6v07r")
-
-[node name="Control" type="Control" parent="DebugMenu"]
-custom_minimum_size = Vector2(2.08165e-12, 12)
-layout_mode = 2
-
-[node name="SaveTestWorld" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Save test.tbw"
-script = ExtResource("5_6v07r")
-
-[node name="LoadTestWorld" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Load test.tbw"
 script = ExtResource("5_6v07r")
 
 [node name="IntroOverlay" type="Control" parent="."]

@@ -224,7 +224,7 @@ custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 
 [node name="Quit" type="Button" parent="MainMenu/LeftColumn"]
-self_modulate = Color(7.101, 0, 0.057, 1)
+self_modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 text = "Quit to desktop"
 script = ExtResource("2_o48rt")

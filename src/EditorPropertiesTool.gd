@@ -17,7 +17,7 @@
 extends EditorTool
 
 func _ready() -> void:
-	init("World properties")
+	init("World settings")
 
 func add_ui_partner() -> void:
 	super.add_ui_partner()

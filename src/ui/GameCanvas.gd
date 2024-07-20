@@ -92,3 +92,11 @@ func play_outro_animation(text : String) -> void:
 func _ready() -> void:
 	$PauseMenu/Menu/StartGame.connect("pressed", Global.get_world().send_start_lobby)
 	$PauseMenu/Menu/ChangeMap.connect("pressed", _send_on_change_map_pressed)
+	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
+
+func _on_save_world_pressed() -> void:
+	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
+	if world_name == "":
+		UIHandler.show_alert("Please enter a world name above!", 4, false, true, false)
+	else:
+		Global.get_world().save_tbw(str(world_name))

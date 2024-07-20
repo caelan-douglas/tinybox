@@ -46,7 +46,6 @@ func _ready() -> void:
 	
 	if guided:
 		$MissileBeep.playing = true
-		$FireTrail.emitting = true
 	
 	# add a synchronizer if we don't have one
 	if add_synchronizer_on_spawn:

@@ -1,11 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://dq4jgcqroudj7"]
+[gd_scene load_steps=17 format=3 uid="uid://dq4jgcqroudj7"]
 
 [ext_resource type="Script" path="res://src/Rocket.gd" id="1_a6qbv"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_m2crw"]
 [ext_resource type="AudioStream" uid="uid://vtp8j8bjaigv" path="res://data/audio/beep/missile_beep.ogg" id="3_12qq6"]
 [ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="3_pdgie"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="4_x22qc"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="5_82mtp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b7orn"]
 radius = 0.25
@@ -144,7 +143,6 @@ bus = &"SFX"
 
 [node name="FireTrail" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.7)
-emitting = false
 amount = 96
 lifetime = 3.0
 randomness = 1.0
@@ -165,16 +163,3 @@ surface_material_override/0 = SubResource("StandardMaterial3D_o2utw")
 
 [node name="target" type="Marker3D" parent="Smoothing"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.8)
-visible = false
-light_color = Color(0.898039, 0.6, 0.47451, 1)
-light_energy = 5.0
-light_volumetric_fog_energy = 0.0
-distance_fade_enabled = true
-distance_fade_begin = 20.0
-omni_range = 20.0
-script = ExtResource("5_82mtp")
-visible_on_bad = false
-visible_on_awful = false

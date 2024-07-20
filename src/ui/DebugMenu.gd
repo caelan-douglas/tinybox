@@ -23,8 +23,6 @@ func _ready() -> void:
 	$LockPlayer.connect("pressed", _on_lock_player_pressed)
 	$ResetTools.connect("pressed", _on_reset_tools_pressed)
 	$ChangeTeam.connect("pressed", _on_change_team_pressed)
-	$LoadTestWorld.connect("pressed", _on_load_test_world_pressed)
-	$SaveTestWorld.connect("pressed", _on_save_test_world_pressed)
 
 func _on_change_team_pressed() -> void:
 	var player : RigidPlayer = Global.get_player()
@@ -36,12 +34,6 @@ func _on_change_team_pressed() -> void:
 	# broadcast updated team to peers
 	player.update_team.rpc(teams.get_team_list()[team_idx].name)
 	player.update_info()
-
-func _on_load_test_world_pressed() -> void:
-	Global.get_world().load_tbw("test")
-
-func _on_save_test_world_pressed() -> void:
-	Global.get_world().save_tbw("test")
 
 func _on_fake_point_pressed() -> void:
 	if multiplayer.is_server():
