@@ -269,6 +269,11 @@ layout_mode = 2
 text = "Seat"
 internal_name = "brick_motor_seat"
 
+[node name="Button14" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Button"
+internal_name = "brick_button"
+
 [node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Tool pickup"

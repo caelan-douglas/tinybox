@@ -188,7 +188,7 @@ func property_string_to_property(property_name : String, property : String) -> V
 			property = property.erase(property.length())
 			var property_split := property.split(", ")
 			return Color(float(property_split[0]), float(property_split[1]), float(property_split[2]), float(property_split[3]))
-		"text", "string":
+		"text", "string", "connection":
 			# unescape strings because strings are stored inline with \n
 			return str(property.c_unescape())
 		_:

@@ -5,6 +5,8 @@ signal item_picked
 
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var editor_tool_inventory : EditorToolInventory = get_node("EditorToolInventory")
+@onready var selector : Node = get_node("CameraTarget/Selector")
+@onready var select_area : Area3D = get_node("CameraTarget/SelectArea")
 
 func _ready() -> void:
 	super()
@@ -232,12 +234,31 @@ func exit_test_mode() -> void:
 	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
 	game_canvas.visible = false
 	var camera : Camera3D = get_viewport().get_camera_3d()
+	# in case player died and exited while respawning
+	camera.locked = false
 	if camera is Camera:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
 	editor_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+func select_brick() -> Brick:
+	# Reset selected brick
+	brick_selected = null
+	editor_tool_inventory.set_disabled(true)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	selector.visible = true
+	# Wait for brick to be selected
+	while (brick_selected == null):
+		await get_tree().process_frame
+	# Brick has been selected
+	editor_tool_inventory.set_disabled(false)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	selector.visible = false
+	
+	return brick_selected
+
+var brick_selected : Brick = null
 func _process(delta : float) -> void:
 	# don't release / unrelease mouse when editing text
 	if Input.is_action_just_pressed("editor_release_mouse") && !Global.is_text_focused:
@@ -245,3 +266,8 @@ func _process(delta : float) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+	if Input.is_action_just_pressed("click"):
+		for body in select_area.get_overlapping_bodies():
+			if body is Brick:
+				brick_selected = body as Brick

@@ -30,6 +30,7 @@ JsonHandler="*res://data/scene/autoload/JSONHandler.tscn"
 MusicHandler="*res://data/scene/MusicHandler.tscn"
 UserPreferences="*res://src/UserPreferences.gd"
 SpawnableObjects="*res://src/SpawnableObjects.gd"
+EventHandler="*res://src/EventHandler.gd"
 
 [debug]
 

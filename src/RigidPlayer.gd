@@ -236,6 +236,10 @@ func _on_body_entered(body : Node3D) -> void:
 	elif body is StaticBody3D && body.name == "KillPlane":
 		reduce_health(20, CauseOfDeath.OUT_OF_MAP)
 	
+	# stepped on button
+	if body is ButtonBrick:
+		body.stepped.rpc(get_path())
+	
 	# if we just dived, and hit something, set the animation to normal trip animation
 	# as dive uses the jump animation
 	if _state == DIVE && !(body is MotorSeat):

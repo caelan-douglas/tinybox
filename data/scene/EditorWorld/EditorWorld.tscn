@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=12 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
@@ -8,6 +8,27 @@
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_qkc34"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_iwwdy"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_xvfrp"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1vni3"]
+radius = 0.7
+height = 1.4
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iw3x4"]
+transparency = 2
+alpha_scissor_threshold = 0.629
+alpha_antialiasing_mode = 0
+albedo_color = Color(1, 0.40383, 0.0768668, 1)
+emission_enabled = true
+emission = Color(0, 0.568627, 0.941176, 1)
+rim_enabled = true
+rim_tint = 1.0
+uv1_scale = Vector3(0.05, 0.05, 0.05)
+uv1_triplanar = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_su7fl"]
+radius = 0.25
 
 [node name="EditorWorld" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
@@ -32,6 +53,18 @@ script = ExtResource("4_ga27o")
 
 [node name="CameraTarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 50, 2.08165e-12)
+
+[node name="Selector" type="MeshInstance3D" parent="CameraTarget"]
+visible = false
+mesh = SubResource("SphereMesh_1vni3")
+surface_material_override/0 = SubResource("StandardMaterial3D_iw3x4")
+
+[node name="SelectArea" type="Area3D" parent="CameraTarget"]
+collision_layer = 16
+collision_mask = 291
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraTarget/SelectArea"]
+shape = SubResource("SphereShape3D_su7fl")
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")
