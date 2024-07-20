@@ -818,7 +818,7 @@ bones/49/scale = Vector3(1, 1, 1)
 bones/50/position = Vector3(-7.98204e-08, 1.1638, -1.15144)
 
 [node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
-transform = Transform3D(-0.999999, 0.000136063, 0.00152361, -2.17669e-07, 0.996023, -0.0890926, -0.00152967, -0.0890925, -0.996022, -0.00173826, 1.26527, -0.015002)
+transform = Transform3D(-0.999999, 0.000136144, 0.00152367, -1.54088e-07, 0.996023, -0.0890926, -0.00152974, -0.0890925, -0.996022, -0.00173824, 1.26527, -0.015002)
 bone_name = "neck"
 bone_idx = 28
 
@@ -832,7 +832,7 @@ process_material = SubResource("ParticleProcessMaterial_nceru")
 draw_pass_1 = SubResource("PlaneMesh_v2b1p")
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
-transform = Transform3D(0.944999, 6.89247e-05, -0.00144389, 2.05355e-07, 0.943919, 0.0451945, 0.00144553, -0.0451945, 0.943917, -0.00175181, 1.59211, -0.00618177)
+transform = Transform3D(0.944999, 6.89986e-05, -0.00144395, 1.45271e-07, 0.943919, 0.0451945, 0.0014456, -0.0451944, 0.943918, -0.00175177, 1.59211, -0.00618175)
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
@@ -852,7 +852,7 @@ visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 
 [node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="9"]
-transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.284511, 0.74124, 0.0115149)
+transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678123, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.284511, 0.74124, 0.0115149)
 bone_name = "hand.l"
 bone_idx = 9
 

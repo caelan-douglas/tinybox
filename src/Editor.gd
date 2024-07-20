@@ -22,7 +22,7 @@ func _ready() -> void:
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
 	
 	# load default world
-	Global.get_world().load_tbw("editor_default", true, false)
+	Global.get_world().load_tbw("editor_default", false, false)
 
 func _on_tbw_loaded() -> void:
 	# Check if map has water

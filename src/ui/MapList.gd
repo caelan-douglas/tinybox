@@ -8,4 +8,10 @@ func _ready() -> void:
 	# add user worlds to list
 	add_separator("Your worlds")
 	for map : String in Global.get_user_tbw_names():
-		add_item(map)
+		var image : Image = Global.get_world().get_tbw_image(map.split(".")[0])
+		if image != null:
+			image.resize(80, 64)
+			var tex : ImageTexture = ImageTexture.create_from_image(image)
+			add_icon_item(tex, map)
+		else:
+			add_item(map)

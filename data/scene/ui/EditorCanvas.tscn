@@ -101,7 +101,7 @@ script = ExtResource("6_aufvl")
 json_text = "ui/editor/property_editor"
 
 [node name="EntryScreen" type="Control" parent="."]
-custom_minimum_size = Vector2(540, 400)
+custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5

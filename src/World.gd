@@ -190,17 +190,21 @@ func save_tbw(world_name : String) -> void:
 		get_tree().current_scene.get_node("EditorCanvas").visible = false
 		# wait 1 frame so we can get screenshot
 		await get_tree().process_frame
+		await get_tree().process_frame
 		var img := get_viewport().get_texture().get_image()
 		img.shrink_x2()
 		var scrdir := DirAccess.open("user://world_scr")
 		if !scrdir:
 			DirAccess.make_dir_absolute("user://world_scr")
 		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
+		# wait 1 frame
+		await get_tree().process_frame
 		get_tree().current_scene.get_node("EditorCanvas").visible = true
 	else:
 		Global.get_player().visible = false
 		get_tree().current_scene.get_node("GameCanvas").visible = false
-		# wait 1 frame so we can get screenshot
+		# wait a bit so we can get screenshot
+		await get_tree().process_frame
 		await get_tree().process_frame
 		var img := get_viewport().get_texture().get_image()
 		img.shrink_x2()
@@ -209,6 +213,8 @@ func save_tbw(world_name : String) -> void:
 			DirAccess.make_dir_absolute("user://world_scr")
 		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
 		# show everything again
+		# wait 1 frame
+		await get_tree().process_frame
 		Global.get_player().visible = true
 		get_tree().current_scene.get_node("GameCanvas").visible = true
 	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, false, true)
@@ -249,30 +255,28 @@ func save_tbw(world_name : String) -> void:
 				file.store_line("")
 	file.close()
 
-func load_tbw(file_name := "test", internal := false, reset_player_and_cameras := true) -> void:
+func load_tbw(file_name := "test", switching := false, reset_player_and_cameras := true) -> void:
 	print("Attempting to load ", file_name, ".tbw")
 	
 	var load_file : FileAccess = null
-	if internal:
+	load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
+	# if file does not exist, check internal
+	if load_file == null:
+		# check internal
 		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
-		# if file does not exist
-		if load_file == null:
-			# check user
-			load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
-	else:
-		load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
-		# if file does not exist
-		if load_file == null:
-			# check internal
-			load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
 	if load_file != null:
 		# load building
 		var lines := []
 		while not load_file.eof_reached():
 			var line := load_file.get_line()
 			lines.append(str(line))
+		# if we are server
 		if multiplayer.is_server():
+			# switching from pause menu, show "map switching" alert to users
+			if switching:
+				show_tbw_switch_alert(Global.display_name, file_name)
 			_parse_and_open_tbw(lines, reset_player_and_cameras)
+		# if we are client
 		else:
 			ask_server_to_open_tbw.rpc_id(1, Global.display_name, file_name, lines)
 	else:
@@ -288,12 +292,21 @@ func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Arr
 	actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
 
 func _world_denied(name_from : String, world_name : String) -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# if the alert showed when the game wasn't paused, go back to captured
+	if !Global.is_paused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# show alert to all users that map was denied
 	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, true)
 
 func _world_accepted(name_from : String, world_name : String, lines : Array) -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# if the alert showed when the game wasn't paused, go back to captured
+	if !Global.is_paused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_parse_and_open_tbw(lines)
+	# show alert to all users that map was switched
+	show_tbw_switch_alert(name_from, world_name)
+
+func show_tbw_switch_alert(name_from : String, world_name : String) -> void:
 	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\ncreated by ", name_from), 7)
 
 # Only to be run as server
@@ -548,3 +561,11 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 var first_brick_pos : Vector3 = Vector3.ZERO
 func _pos_sort(a : Node3D, b : Node3D) -> bool:
 	return a.global_position.distance_to(first_brick_pos) < b.global_position.distance_to(first_brick_pos)
+
+func get_tbw_image(tbw_name : String) -> Image:
+	# load image
+	var scrdir := DirAccess.open("user://world_scr")
+	if scrdir:
+		var image := Image.load_from_file(str("user://world_scr/", tbw_name, ".jpg"))
+		return image
+	return null

@@ -80,6 +80,7 @@ func _load_world(map_selector : OptionButton) -> void:
 	Global.get_world().load_tbw(world_name.split(".")[0], false, false)
 
 func hide_pause_menu() -> void:
+	Global.is_paused = false
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(false)
@@ -88,6 +89,7 @@ func hide_pause_menu() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
+	Global.is_paused = true
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(true)

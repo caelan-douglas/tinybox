@@ -64,7 +64,8 @@ func _ready() -> void:
 	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
 	elif !OS.has_feature("editor") && OS.get_name() == "macOS":
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	
+	# reset paused state
+	Global.is_paused = false
 	# Clear the graphics cache when entering the main menu.
 	Global.graphics_cache = []
 	# Update the spawnable scenes in case the player left a server.

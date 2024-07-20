@@ -40,6 +40,7 @@ freeze = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_1idt1")
+_brick_spawnable_type = "brick_lamp"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_bwia1")

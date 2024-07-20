@@ -21,9 +21,17 @@ extends CanvasLayer
 @onready var intro_text : Label = $IntroOverlay/TitleText
 @onready var tip_text : Label = $IntroOverlay/Tip
 @onready var pause_tip_text : Label = $PauseMenu/Tip
+@onready var client_request_world_timer : Timer = $RequestWorldTimer
+
 const NUM_OF_TIPS = 12
 
+func _ready() -> void:
+	$PauseMenu/Menu/StartGame.connect("pressed", Global.get_world().send_start_lobby)
+	$PauseMenu/Menu/ChangeMap.connect("pressed", _send_on_change_map_pressed)
+	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
+
 func hide_pause_menu() -> void:
+	Global.is_paused = false
 	if Global.get_world().get_current_map() is Editor:
 		$TestModePauseMenu.visible = false
 		Global.get_player().locked = false
@@ -34,6 +42,7 @@ func hide_pause_menu() -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
+	Global.is_paused = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	# if in editor world, we are testing, so show test pause menu
 	if Global.get_world().get_current_map() is Editor:
@@ -73,7 +82,17 @@ func _process(delta : float) -> void:
 func _send_on_change_map_pressed() -> void:
 	var map_selector : OptionButton = $PauseMenu/Menu/MapSelection
 	var map_name : String = map_selector.get_item_text(map_selector.selected)
-	Global.get_world().load_tbw(map_name.split(".")[0])
+	# load tbw with switching flag
+	# clients must wait 15s between loading worlds to avoid spam
+	if multiplayer.is_server():
+		Global.get_world().load_tbw(map_name.split(".")[0], true)
+	else:
+		if client_request_world_timer.is_stopped():
+			Global.get_world().load_tbw(map_name.split(".")[0], true)
+			UIHandler.show_alert(str("Your request to load \"", map_name, "\" was sent to the host."), 4)
+			client_request_world_timer.start()
+		else:
+			UIHandler.show_alert(str("Wait ", round(client_request_world_timer.time_left), " more seconds before requesting\nto load another world!"), 5, false, true)
 
 func play_intro_animation(text : String) -> void:
 	# in case player was paused
@@ -88,11 +107,6 @@ func play_outro_animation(text : String) -> void:
 	hide_pause_menu()
 	intro_text.text = text
 	intro_animator.play("outro")
-
-func _ready() -> void:
-	$PauseMenu/Menu/StartGame.connect("pressed", Global.get_world().send_start_lobby)
-	$PauseMenu/Menu/ChangeMap.connect("pressed", _send_on_change_map_pressed)
-	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
 
 func _on_save_world_pressed() -> void:
 	var world_name : String = $PauseMenu/Menu/SaveWorldName.text

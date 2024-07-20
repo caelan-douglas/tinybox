@@ -22,6 +22,7 @@ signal player_list_information_update
 var display_name : String = ""
 var connected_to_server := false
 var is_text_focused := false
+var is_paused := false
 
 enum GraphicsPresets {
 	COOL,

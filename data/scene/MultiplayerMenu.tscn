@@ -249,7 +249,7 @@ custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [node name="HostPanel" type="Panel" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(2.08165e-12, 200)
 layout_mode = 2
 
 [node name="HostPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/HostPanel"]
@@ -273,6 +273,7 @@ script = ExtResource("3_yuqno")
 json_text = "ui/host_panel"
 
 [node name="MapSelection" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer" instance=ExtResource("5_mmcxg")]
+custom_minimum_size = Vector2(2.08165e-12, 78)
 layout_mode = 2
 
 [node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]

@@ -1443,3 +1443,7 @@ theme_override_constants/outline_size = 8
 text = "Tip: (uninitialized)"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="RequestWorldTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
