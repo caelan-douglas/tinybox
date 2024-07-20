@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a new bug report
 title: "[bug]"
-labels: bug, enhancement
+labels: bug
 assignees: caelan-douglas
 
 ---
