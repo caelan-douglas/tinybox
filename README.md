@@ -22,8 +22,9 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
-<p align="center"><img src=.export_exclude/screenshot_1.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);"></p>
-<p align="center"><img src=.export_exclude/screenshot_2.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);"></p>
+<img src=.export_exclude/screenshot_1.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
+<img src=.export_exclude/screenshot_2.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
+<img src=.export_exclude/screenshot_3.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
 
 ### Game vision
 Tinybox *('tiny + sandbox')* is a sandbox-focused game that promotes creativity and experimentation. Some of the goals as of now are to add new building features that promote more interactions such as ropes or wires to connect things loosely, or buttons and switches that can connect to things and perform actions.
