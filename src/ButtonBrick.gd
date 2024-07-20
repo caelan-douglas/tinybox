@@ -46,7 +46,8 @@ func run_event() -> void:
 	if get_node_or_null(connection) != null && last_stepped_by != null:
 		match (event):
 			EventHandler.Event.TELEPORT_PLAYER:
-				EventHandler.run_event(event, [last_stepped_by.name, get_node(connection).global_position])
+				if last_stepped_by is RigidPlayer:
+					EventHandler.run_event(event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
 			EventHandler.Event.EXPLODE:
-				EventHandler.run_event(event, [last_stepped_by.name, get_node(connection).global_position])
+				EventHandler.run_event(event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
 			

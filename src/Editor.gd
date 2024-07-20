@@ -248,13 +248,17 @@ func select_brick() -> Brick:
 	editor_tool_inventory.set_disabled(true)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	selector.visible = true
+	# Keep track of where player was
+	var camera : Camera = get_viewport().get_camera_3d()
+	var last_pos : Vector3 = camera.controlled_cam_pos
 	# Wait for brick to be selected
 	while (brick_selected == null):
 		await get_tree().process_frame
 	# Brick has been selected
-	editor_tool_inventory.set_disabled(false)
+	editor_tool_inventory.set_disabled(false, 0.1)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	selector.visible = false
+	camera.controlled_cam_pos = last_pos
 	
 	return brick_selected
 

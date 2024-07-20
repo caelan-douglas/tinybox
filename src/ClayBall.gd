@@ -44,6 +44,10 @@ func _on_body_entered(body : Node3D) -> void:
 		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 			body.change_state(RigidPlayer.TRIPPED)
 			body.reduce_health((randi() % 3) + 1, RigidPlayer.CauseOfDeath.HIT_BY_BALL, get_multiplayer_authority())
+	if is_multiplayer_authority():
+		# stepped on button
+		if body is ButtonBrick:
+			body.stepped.rpc(get_path())
 
 @rpc("call_local")
 func spawn_projectile(auth : int, shot_speed := 30, random_pos := false) -> void:

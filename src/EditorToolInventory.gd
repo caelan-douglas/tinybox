@@ -57,12 +57,16 @@ func arrange_tools() -> void:
 		for t : EditorTool in get_tools():
 			t.add_ui_partner()
 
-func set_disabled(new : bool) -> void:
+func set_disabled(new : bool, delay : float = -1) -> void:
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
 	if disabled != new:
 		disabled = new
 		# if setting disabled, take note of the active tool
 		if new == true:
 			last_held_tool = get_active_tool()
+			for t : EditorTool in get_tools():
+				t.set_tool_active(false)
 		# restore held tool
 		elif new == false && last_held_tool != null:
 			last_held_tool.set_tool_active(true)

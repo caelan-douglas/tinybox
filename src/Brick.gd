@@ -570,7 +570,16 @@ func build() -> void:
 	if Global.get_world().minigame == null:
 		too_far = global_position.distance_to(player_from.global_position as Vector3) > sandbox_placement_range
 	var valid := true
-	if intersect_d == null || intersect_d.has_overlapping_bodies() || too_far:
+	if intersect_d != null:
+		for body in intersect_d.get_overlapping_bodies():
+			if body.owner is Water:
+				valid = true
+			else:
+				valid = false
+				break
+	else:
+		valid = false
+	if too_far:
 		valid = false
 	
 	# Rotate brick

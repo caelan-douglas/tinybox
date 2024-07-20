@@ -56,7 +56,7 @@ func _ready() -> void:
 	SpawnableObjects.objects["brick_cylinder"], 
 	SpawnableObjects.objects["brick_cylinder_large"], 
 	SpawnableObjects.objects["brick_motor_seat"],
-	SpawnableObjects.objects["brick_button"]]
+	SpawnableObjects.objects["brick_lamp"]]
 	# The materials of bricks this can use. Corresponds to the enums in
 	# Brick.gd.
 	brick_materials = [Brick.BrickMaterial.WOODEN, 

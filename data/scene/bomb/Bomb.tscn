@@ -301,6 +301,7 @@ visible = false
 light_color = Color(0.898039, 0.6, 0.47451, 1)
 light_energy = 5.0
 light_volumetric_fog_energy = 0.0
+distance_fade_enabled = true
 omni_range = 20.0
 script = ExtResource("7_7cjlw")
 visible_on_bad = false

@@ -21,6 +21,7 @@ var selected_item_name_internal : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
 
+@onready var tool_inventory : EditorToolInventory = get_parent()
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var editor_props_list : VBoxContainer = get_tree().current_scene.get_node("EditorCanvas/ObjectProperties/Menu") 
 @onready var preview_node : Node3D = $PreviewNode
@@ -206,8 +207,14 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 	return null
 
 func _physics_process(delta : float) -> void:
+	if preview_node != null:
+		preview_node.global_position = get_viewport().get_camera_3d().controlled_cam_pos
+		# rotation
+		if Input.is_action_just_pressed("editor_rotate_left"):
+			preview_node.rotate_y(deg_to_rad(-22.5))
+		elif Input.is_action_just_pressed("editor_rotate_right"):
+			preview_node.rotate_y(deg_to_rad(22.5))
 	if active:
-		var camera : Camera3D = get_viewport().get_camera_3d()
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
 			if Input.is_action_pressed("click"):
@@ -234,7 +241,7 @@ func _physics_process(delta : float) -> void:
 					if valid && selected_item != null:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
-						inst.global_position = camera.controlled_cam_pos + item_offset
+						inst.global_position = get_viewport().get_camera_3d().controlled_cam_pos + item_offset
 						inst.global_rotation = preview_node.global_rotation
 						if !(inst is Brick):
 							inst.scale = preview_node.scale
@@ -261,10 +268,3 @@ func _physics_process(delta : float) -> void:
 							area.owner.queue_free()
 			if Input.is_action_just_pressed("editor_select_item"):
 				pick_item()
-			if preview_node != null:
-				preview_node.global_position = camera.controlled_cam_pos
-				# rotation
-				if Input.is_action_just_pressed("editor_rotate_left"):
-					preview_node.rotate_y(deg_to_rad(-22.5))
-				elif Input.is_action_just_pressed("editor_rotate_right"):
-					preview_node.rotate_y(deg_to_rad(22.5))
