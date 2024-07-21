@@ -23,6 +23,7 @@ enum {
 	IDLE,
 	RUN,
 	AIR,
+	HIGH_JUMP,
 	TRIPPED,
 	STANDING_UP,
 	IN_SEAT,
@@ -43,7 +44,7 @@ enum {
 }
 
 # DEBUG
-var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Swimming dash", "Exit swimming", "Slide", "Slide back", "Rolling", "On wall", "On ledge"]
+var states_as_names : Array[String] = ["Idle", "Run", "Air", "High jump", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Swimming dash", "Exit swimming", "Slide", "Slide back", "Rolling", "On wall", "On ledge"]
 
 enum CauseOfDeath {
 	EXPLOSION,
@@ -106,6 +107,7 @@ var deaths : int = 0
 @onready var trip_time : Timer = $TripTime
 @onready var slide_time : Timer = $SlideTime
 @onready var swim_dash_time : Timer = $SwimDashTime
+@onready var high_jump_time : Timer = $HighJumpTime
 @onready var roll_time : Timer = $RollTime
 @onready var respawn_time : Timer = $RespawnTime
 @onready var trip_audio : AudioStreamPlayer3D = $TripAudio
@@ -124,6 +126,8 @@ preload("res://data/textures/clothing/cloth_tex_0.png"),
 preload("res://data/textures/clothing/cloth_tex_1.png"), 
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
+
+@onready var debug_menu : Control = get_tree().current_scene.get_node("GameCanvas/DebugMenu")
 
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
@@ -660,17 +664,21 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		IDLE:
 			state.linear_velocity.x *= decel_multiplier
 			state.linear_velocity.z *= decel_multiplier
-			if move_direction.x or move_direction.z:
+			if is_on_ground and Input.is_action_pressed("jump") && !locked:
+				air_from_jump = true
+				# jump particles
+				play_jump_particles()
+				# high jump, but only if not holding jump
+				if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+					change_state(HIGH_JUMP)
+				else:
+					apply_central_impulse(Vector3.UP * jump_force)
+					change_state(AIR)
+			elif move_direction.x or move_direction.z:
 				if is_on_ground:
 					change_state(RUN)
 				else:
 					change_state(AIR)
-			elif is_on_ground and Input.is_action_pressed("jump") && !locked:
-				air_from_jump = true
-				apply_central_impulse(Vector3.UP * jump_force)
-				# jump particles
-				play_jump_particles()
-				change_state(AIR)
 			elif !is_on_ground:
 				change_state(AIR)
 		RUN:
@@ -680,10 +688,14 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				change_state(AIR)
 			elif is_on_ground and Input.is_action_pressed("jump") && !locked:
 				air_from_jump = true
-				apply_central_impulse(Vector3.UP * jump_force)
 				# jump particles
 				play_jump_particles()
-				change_state(AIR)
+				# high jump, but only if not holding jump
+				if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+					change_state(HIGH_JUMP)
+				else:
+					apply_central_impulse(Vector3.UP * jump_force)
+					change_state(AIR)
 			elif is_on_ground and Input.is_action_just_pressed("shift") && !locked && linear_velocity.length() > 1.1:
 				change_state(SLIDE_BACK)
 			elif !locked:
@@ -711,14 +723,15 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			air_duration += 1
 			if on_wall_cooldown > 0:
 				on_wall_cooldown -= 1
+			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
+				# when landing from 1st jump, a second well-timed jump can do a high jump
+				if air_from_jump == true:
+					high_jump_time.start()
+				change_state(IDLE)
 			# when the player holds jump, do a longer jump
 			# extra jump force / air duration to make a more parabolic jump
 			if (Input.is_action_pressed("jump") && !locked && air_duration < 20 && air_duration > 0) || (air_from_jump && air_duration > 0 && air_duration < 5):
 				apply_central_impulse(Vector3.UP * (extra_jump_force / (air_duration + 1 * 0.333)))
-			else:
-				air_from_jump = false
-			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
-				change_state(IDLE)
 			# jump grace period
 			if Input.is_action_just_pressed("jump") && !locked && air_duration < 5:
 				apply_central_impulse(Vector3.UP * jump_force)
@@ -727,6 +740,18 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			# dive if jump is pressed again mid-air and we have space to dive
 			elif Input.is_action_just_pressed("jump") && !locked && air_duration > 8 && !forward_detect.has_overlapping_bodies():
 				change_state(DIVE)
+			# wall jump detect
+			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+				change_state(ON_WALL)
+			# ledge detect
+			elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+				change_state(ON_LEDGE)
+		HIGH_JUMP:
+			state.linear_velocity.x = move_direction.x * move_speed
+			state.linear_velocity.z = move_direction.z * move_speed
+			air_duration += 1
+			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
+				change_state(IDLE)
 			# wall jump detect
 			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 				change_state(ON_WALL)
@@ -959,17 +984,22 @@ func enter_state() -> void:
 	if !is_multiplayer_authority(): return
 	
 	# DEBUG
-	#UIHandler.show_alert(states_as_names[_state], 1, false, false, true)
+	if debug_menu.visible:
+		UIHandler.show_alert(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3, false, false, true)
 	
 	# reset external propulsion
 	external_propulsion = false
 	# reset blend states
 	animator["parameters/BlendSit/blend_amount"] = 0
+	
 	if _state != DUMMY:
 		animator["parameters/BlendOutroPose/blend_amount"] = 0
+		freeze = false
+	
 	animator.set("parameters/IdleOneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FADE_OUT)
+	
 	if _state != AIR:
-		air_duration = 0
+		air_from_jump = false
 		# prevent fast jumps off wall from cutting off jump animation afterwards
 		if _state == ON_WALL:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -979,8 +1009,13 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.3)
-	if _state != DUMMY:
-		freeze = false
+	
+	if _state != AIR && _state != HIGH_JUMP:
+		air_duration = 0
+	
+	if _state != HIGH_JUMP:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 0.0, 0.1)
 	
 	if _state != SLIDE:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -1007,12 +1042,12 @@ func enter_state() -> void:
 		tween.tween_property(animator, "parameters/BlendDead/blend_amount", 0.0, 0.3)
 	
 	# lifter handling
-	if _state != AIR && _state != DIVE:
+	if _state != AIR && _state != DIVE && _state != HIGH_JUMP:
 		in_air_from_lifter = false
 		sparkle_audio_anim.play("fadeout")
 	
 	# last hit handling: states that should not change the fact you were 'last hit'
-	if _state != AIR && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
+	if _state != AIR && _state != HIGH_JUMP && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
 		last_hit = false
 	
 	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH:
@@ -1057,6 +1092,15 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 1.0, 0.1)
 			change_state_non_authority.rpc(AIR)
+		HIGH_JUMP:
+			physics_material_override.friction = 0
+			air_time.start()
+			var forward : Vector3 = get_global_transform().basis.z
+			apply_central_impulse(Vector3.UP * 12)
+			animator.set("parameters/TimeSeekHighJump/seek_request", 0.0)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 1.0, 0.1)
+			change_state_non_authority.rpc(HIGH_JUMP)
 		DIVE:
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * 4)
@@ -1300,6 +1344,9 @@ func change_state_non_authority(state : int) -> void:
 	if _state != AIR:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
+	if _state != HIGH_JUMP:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 0.0, 0.1)
 	if _state != DIVE:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.1)
@@ -1344,6 +1391,12 @@ func change_state_non_authority(state : int) -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 1.0, 0.1)
 			# jump particles
+			play_jump_particles()
+		HIGH_JUMP:
+			air_time.start()
+			animator.set("parameters/TimeSeekHighJump/seek_request", 0.0)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 1.0, 0.1)
 			play_jump_particles()
 		TRIPPED:
 			# dizzy stars visual effect

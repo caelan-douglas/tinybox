@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://dinh2untg6m17"]
+[gd_scene load_steps=105 format=3 uid="uid://dinh2untg6m17"]
 
 [ext_resource type="Script" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
@@ -205,6 +205,9 @@ animation = &"slide_back"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6eyrf"]
 animation = &"swim_dash"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tjy8b"]
+animation = &"high_jump"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kkr0a"]
 animation = &"run"
 
@@ -235,6 +238,8 @@ animation = &"idle"
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_1g3py"]
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_sh8nl"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_h3ge5"]
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_a6nyi"]
 
@@ -274,34 +279,40 @@ fadeout_time = 0.3
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_7fdso"]
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ahdis"]
+
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_ojles"]
 
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_rjj5s"]
 
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_wbmwm"]
 
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_knahr"]
+
 [sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_ey6ep"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_dwlu7"]
-graph_offset = Vector2(1214.27, 114.889)
+graph_offset = Vector2(181.087, 93.7981)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_tx7om")
 nodes/Animation/position = Vector2(-600, 80)
 "nodes/Animation 10/node" = SubResource("AnimationNodeAnimation_11q12")
 "nodes/Animation 10/position" = Vector2(60, 440)
 "nodes/Animation 11/node" = SubResource("AnimationNodeAnimation_8w2r4")
-"nodes/Animation 11/position" = Vector2(2180, 360)
+"nodes/Animation 11/position" = Vector2(2520, 360)
 "nodes/Animation 12/node" = SubResource("AnimationNodeAnimation_dyfq5")
-"nodes/Animation 12/position" = Vector2(2760, 500)
+"nodes/Animation 12/position" = Vector2(3100, 500)
 "nodes/Animation 13/node" = SubResource("AnimationNodeAnimation_dq0ti")
-"nodes/Animation 13/position" = Vector2(2660, 400)
+"nodes/Animation 13/position" = Vector2(3000, 400)
 "nodes/Animation 14/node" = SubResource("AnimationNodeAnimation_4yhpg")
-"nodes/Animation 14/position" = Vector2(900, 420)
+"nodes/Animation 14/position" = Vector2(1240, 420)
 "nodes/Animation 15/node" = SubResource("AnimationNodeAnimation_2e3cl")
-"nodes/Animation 15/position" = Vector2(1180, 400)
+"nodes/Animation 15/position" = Vector2(1520, 400)
 "nodes/Animation 16/node" = SubResource("AnimationNodeAnimation_op6ut")
-"nodes/Animation 16/position" = Vector2(1940, 400)
+"nodes/Animation 16/position" = Vector2(2280, 400)
 "nodes/Animation 17/node" = SubResource("AnimationNodeAnimation_6eyrf")
-"nodes/Animation 17/position" = Vector2(2500, 540)
+"nodes/Animation 17/position" = Vector2(2840, 540)
+"nodes/Animation 18/node" = SubResource("AnimationNodeAnimation_tjy8b")
+"nodes/Animation 18/position" = Vector2(640, 560)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_kkr0a")
 "nodes/Animation 2/position" = Vector2(-240, 400)
 "nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_1j1kn")
@@ -309,63 +320,69 @@ nodes/Animation/position = Vector2(-600, 80)
 "nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_5jdyu")
 "nodes/Animation 4/position" = Vector2(-500, 240)
 "nodes/Animation 5/node" = SubResource("AnimationNodeAnimation_34wgt")
-"nodes/Animation 5/position" = Vector2(1760, 400)
+"nodes/Animation 5/position" = Vector2(2100, 400)
 "nodes/Animation 6/node" = SubResource("AnimationNodeAnimation_jigi6")
 "nodes/Animation 6/position" = Vector2(580, 400)
 "nodes/Animation 7/node" = SubResource("AnimationNodeAnimation_0s6ig")
-"nodes/Animation 7/position" = Vector2(1240, 560)
+"nodes/Animation 7/position" = Vector2(1580, 560)
 "nodes/Animation 8/node" = SubResource("AnimationNodeAnimation_yjagy")
-"nodes/Animation 8/position" = Vector2(2260, 480)
+"nodes/Animation 8/position" = Vector2(2600, 480)
 "nodes/Animation 9/node" = SubResource("AnimationNodeAnimation_xjrre")
-"nodes/Animation 9/position" = Vector2(2320, 600)
+"nodes/Animation 9/position" = Vector2(2660, 600)
 nodes/BlendDead/node = SubResource("AnimationNodeBlend2_1g3py")
-nodes/BlendDead/position = Vector2(2340, 140)
+nodes/BlendDead/position = Vector2(2680, 140)
 nodes/BlendDive/node = SubResource("AnimationNodeBlend2_sh8nl")
-nodes/BlendDive/position = Vector2(1760, 140)
+nodes/BlendDive/position = Vector2(2100, 140)
+nodes/BlendHighJump/node = SubResource("AnimationNodeBlend2_h3ge5")
+nodes/BlendHighJump/position = Vector2(1140, 160)
 nodes/BlendJump/node = SubResource("AnimationNodeBlend2_a6nyi")
 nodes/BlendJump/position = Vector2(860, 160)
 nodes/BlendOnLedge/node = SubResource("AnimationNodeBlend2_c6qb7")
-nodes/BlendOnLedge/position = Vector2(1460, 160)
+nodes/BlendOnLedge/position = Vector2(1800, 160)
 nodes/BlendOnWall/node = SubResource("AnimationNodeBlend2_bukeh")
-nodes/BlendOnWall/position = Vector2(1120, 160)
+nodes/BlendOnWall/position = Vector2(1460, 160)
 nodes/BlendOutroPose/node = SubResource("AnimationNodeBlend2_2t5p8")
-nodes/BlendOutroPose/position = Vector2(3140, 160)
+nodes/BlendOutroPose/position = Vector2(3480, 160)
 nodes/BlendRoll/node = SubResource("AnimationNodeBlend2_3vxmc")
-nodes/BlendRoll/position = Vector2(2960, 160)
+nodes/BlendRoll/position = Vector2(3300, 160)
 nodes/BlendRun/node = SubResource("AnimationNodeBlend2_86nei")
 nodes/BlendRun/position = Vector2(60, 160)
 nodes/BlendSit/node = SubResource("AnimationNodeBlend2_vn347")
 nodes/BlendSit/position = Vector2(540, 160)
 nodes/BlendSlide/node = SubResource("AnimationNodeBlend2_u7j7d")
-nodes/BlendSlide/position = Vector2(1940, 140)
+nodes/BlendSlide/position = Vector2(2280, 140)
 nodes/BlendSlideBack/node = SubResource("AnimationNodeBlend2_q2ya7")
-nodes/BlendSlideBack/position = Vector2(2140, 140)
+nodes/BlendSlideBack/position = Vector2(2480, 140)
 nodes/BlendSwim/node = SubResource("AnimationNodeBlend3_1k4e6")
-nodes/BlendSwim/position = Vector2(2520, 140)
+nodes/BlendSwim/position = Vector2(2860, 140)
 nodes/BlendSwimDash/node = SubResource("AnimationNodeBlend2_ygwd2")
-nodes/BlendSwimDash/position = Vector2(2700, 120)
+nodes/BlendSwimDash/position = Vector2(3040, 120)
 nodes/BlendTool/node = SubResource("AnimationNodeBlend2_rfoi4")
 nodes/BlendTool/position = Vector2(-180, 100)
 nodes/DiveTimeScale/node = SubResource("AnimationNodeTimeScale_qys0u")
-nodes/DiveTimeScale/position = Vector2(1580, 360)
+nodes/DiveTimeScale/position = Vector2(1920, 360)
 nodes/IdleOneShot/node = SubResource("AnimationNodeOneShot_4m15x")
 nodes/IdleOneShot/position = Vector2(300, 160)
 nodes/OutroTimeSeek/node = SubResource("AnimationNodeTimeSeek_5jg8h")
-nodes/OutroTimeSeek/position = Vector2(2980, 340)
+nodes/OutroTimeSeek/position = Vector2(3320, 340)
 nodes/RunTimeScale/node = SubResource("AnimationNodeTimeScale_ff1nd")
 nodes/RunTimeScale/position = Vector2(-80, 320)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_ojles")
-nodes/TimeScale/position = Vector2(2820, 320)
+nodes/TimeScale/position = Vector2(3160, 320)
 "nodes/TimeScale 2/node" = SubResource("AnimationNodeTimeScale_7fdso")
 "nodes/TimeScale 2/position" = Vector2(-420, 80)
+"nodes/TimeScale 3/node" = SubResource("AnimationNodeTimeScale_ahdis")
+"nodes/TimeScale 3/position" = Vector2(840, 480)
 nodes/TimeSeek/node = SubResource("AnimationNodeTimeSeek_rjj5s")
 nodes/TimeSeek/position = Vector2(740, 340)
 nodes/TimeSeekDive/node = SubResource("AnimationNodeTimeSeek_wbmwm")
-nodes/TimeSeekDive/position = Vector2(1400, 440)
+nodes/TimeSeekDive/position = Vector2(1740, 440)
+nodes/TimeSeekHighJump/node = SubResource("AnimationNodeTimeSeek_knahr")
+nodes/TimeSeekHighJump/position = Vector2(960, 340)
 nodes/TimeSeekSwimDash/node = SubResource("AnimationNodeTimeSeek_ey6ep")
-nodes/TimeSeekSwimDash/position = Vector2(2540, 340)
-nodes/output/position = Vector2(3380, 340)
-node_connections = [&"BlendDead", 0, &"BlendSlideBack", &"BlendDead", 1, &"Animation 11", &"BlendDive", 0, &"BlendOnLedge", &"BlendDive", 1, &"DiveTimeScale", &"BlendJump", 0, &"BlendSit", &"BlendJump", 1, &"TimeSeek", &"BlendOnLedge", 0, &"BlendOnWall", &"BlendOnLedge", 1, &"Animation 15", &"BlendOnWall", 0, &"BlendJump", &"BlendOnWall", 1, &"Animation 14", &"BlendOutroPose", 0, &"BlendRoll", &"BlendOutroPose", 1, &"OutroTimeSeek", &"BlendRoll", 0, &"BlendSwimDash", &"BlendRoll", 1, &"TimeScale", &"BlendRun", 0, &"BlendTool", &"BlendRun", 1, &"RunTimeScale", &"BlendSit", 0, &"IdleOneShot", &"BlendSit", 1, &"Animation 3", &"BlendSlide", 0, &"BlendDive", &"BlendSlide", 1, &"Animation 5", &"BlendSlideBack", 0, &"BlendSlide", &"BlendSlideBack", 1, &"Animation 16", &"BlendSwim", 0, &"BlendDead", &"BlendSwim", 1, &"Animation 8", &"BlendSwim", 2, &"Animation 9", &"BlendSwimDash", 0, &"BlendSwim", &"BlendSwimDash", 1, &"TimeSeekSwimDash", &"BlendTool", 0, &"TimeScale 2", &"BlendTool", 1, &"Animation 4", &"DiveTimeScale", 0, &"TimeSeekDive", &"IdleOneShot", 0, &"BlendRun", &"IdleOneShot", 1, &"Animation 10", &"OutroTimeSeek", 0, &"Animation 12", &"RunTimeScale", 0, &"Animation 2", &"TimeScale", 0, &"Animation 13", &"TimeScale 2", 0, &"Animation", &"TimeSeek", 0, &"Animation 6", &"TimeSeekDive", 0, &"Animation 7", &"TimeSeekSwimDash", 0, &"Animation 17", &"output", 0, &"BlendOutroPose"]
+nodes/TimeSeekSwimDash/position = Vector2(2880, 340)
+nodes/output/position = Vector2(3720, 340)
+node_connections = [&"BlendDead", 0, &"BlendSlideBack", &"BlendDead", 1, &"Animation 11", &"BlendDive", 0, &"BlendOnLedge", &"BlendDive", 1, &"DiveTimeScale", &"BlendHighJump", 0, &"BlendJump", &"BlendHighJump", 1, &"TimeSeekHighJump", &"BlendJump", 0, &"BlendSit", &"BlendJump", 1, &"TimeSeek", &"BlendOnLedge", 0, &"BlendOnWall", &"BlendOnLedge", 1, &"Animation 15", &"BlendOnWall", 0, &"BlendHighJump", &"BlendOnWall", 1, &"Animation 14", &"BlendOutroPose", 0, &"BlendRoll", &"BlendOutroPose", 1, &"OutroTimeSeek", &"BlendRoll", 0, &"BlendSwimDash", &"BlendRoll", 1, &"TimeScale", &"BlendRun", 0, &"BlendTool", &"BlendRun", 1, &"RunTimeScale", &"BlendSit", 0, &"IdleOneShot", &"BlendSit", 1, &"Animation 3", &"BlendSlide", 0, &"BlendDive", &"BlendSlide", 1, &"Animation 5", &"BlendSlideBack", 0, &"BlendSlide", &"BlendSlideBack", 1, &"Animation 16", &"BlendSwim", 0, &"BlendDead", &"BlendSwim", 1, &"Animation 8", &"BlendSwim", 2, &"Animation 9", &"BlendSwimDash", 0, &"BlendSwim", &"BlendSwimDash", 1, &"TimeSeekSwimDash", &"BlendTool", 0, &"TimeScale 2", &"BlendTool", 1, &"Animation 4", &"DiveTimeScale", 0, &"TimeSeekDive", &"IdleOneShot", 0, &"BlendRun", &"IdleOneShot", 1, &"Animation 10", &"OutroTimeSeek", 0, &"Animation 12", &"RunTimeScale", 0, &"Animation 2", &"TimeScale", 0, &"Animation 13", &"TimeScale 2", 0, &"Animation", &"TimeScale 3", 0, &"Animation 18", &"TimeSeek", 0, &"Animation 6", &"TimeSeekDive", 0, &"Animation 7", &"TimeSeekHighJump", 0, &"TimeScale 3", &"TimeSeekSwimDash", 0, &"Animation 17", &"output", 0, &"BlendOutroPose"]
 
 [sub_resource type="Animation" id="Animation_nveij"]
 length = 0.001
@@ -644,7 +661,7 @@ _data = {
 }
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_mvho4"]
-height = 0.4
+height = 0.6
 radius = 0.01
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_auofi"]
@@ -753,7 +770,7 @@ autoplay = "dizzy"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Smoothing/character_model/character" index="1"]
-bones/0/position = Vector3(0.299213, 0.74668, -0.0210743)
+bones/0/position = Vector3(0.291037, 0.738516, -0.0212454)
 bones/0/rotation = Quaternion(0.839802, -0.00779576, 0.542789, 0.0072306)
 bones/0/scale = Vector3(1, 1, 1)
 bones/1/rotation = Quaternion(-0.105482, 0.257163, 0.0461096, 0.959486)
@@ -768,10 +785,10 @@ bones/5/rotation = Quaternion(-0.308035, 0.25712, 0.11721, 0.908441)
 bones/5/scale = Vector3(1, 1, 1)
 bones/6/rotation = Quaternion(-0.22283, 0.000107931, -0.00546323, 0.974842)
 bones/6/scale = Vector3(1, 1, 1)
-bones/7/position = Vector3(-0.0429668, 0.052494, 0.00168528)
+bones/7/position = Vector3(-0.0429668, 0.052494, 0.00168533)
 bones/7/rotation = Quaternion(-0.0372231, 0.230413, 0.199993, 0.951592)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/position = Vector3(-0.291963, 0.745497, 0.0118495)
+bones/9/position = Vector3(-0.283673, 0.740761, 0.0114772)
 bones/9/rotation = Quaternion(0.579905, 0.122429, -0.804111, 0.0461267)
 bones/9/scale = Vector3(1, 1, 1)
 bones/10/rotation = Quaternion(-0.102253, -0.302322, -0.0379064, 0.946947)
@@ -783,7 +800,7 @@ bones/14/rotation = Quaternion(-0.604317, -0.232151, -0.197335, 0.736183)
 bones/14/scale = Vector3(1, 1, 1)
 bones/15/rotation = Quaternion(-0.545906, -0.00198877, 0.00508953, 0.837829)
 bones/15/scale = Vector3(1, 1, 1)
-bones/16/rotation = Quaternion(-0.139726, -0.325712, -0.193425, 0.914864)
+bones/16/rotation = Quaternion(-0.139726, -0.325711, -0.193425, 0.914864)
 bones/17/scale = Vector3(1, 1, 1)
 bones/18/position = Vector3(-0.120328, 0.0527378, 0.0322728)
 bones/18/rotation = Quaternion(0.100716, 0.699897, 0.699897, -0.100716)
@@ -795,9 +812,9 @@ bones/22/rotation = Quaternion(-0.107632, 0.698867, 0.698867, 0.107632)
 bones/23/rotation = Quaternion(-7.36663e-08, -0.0849115, 0.996388, -9.75116e-08)
 bones/24/rotation = Quaternion(0, 0, 1, 0)
 bones/26/position = Vector3(0.00403294, 0.681664, -0.0386739)
-bones/26/rotation = Quaternion(-0.00807008, 1.09848e-07, -1.92782e-08, 0.999967)
-bones/27/rotation = Quaternion(-0.0134923, 0.993943, 0.0582489, -0.0922136)
-bones/28/rotation = Quaternion(0.0942564, -0.0924244, 0.0168223, 0.991106)
+bones/26/rotation = Quaternion(-0.00280069, 1.09376e-07, -2.17991e-08, 0.999996)
+bones/27/rotation = Quaternion(-0.0124228, 0.994551, 0.0467172, -0.0923718)
+bones/28/rotation = Quaternion(0.0882583, -0.0925334, 0.0162737, 0.991657)
 bones/29/position = Vector3(-0.0755105, 0.134086, 0.141418)
 bones/29/rotation = Quaternion(-0.153046, 0.690346, 0.690346, 0.153046)
 bones/29/scale = Vector3(1, 1, 1)
@@ -814,30 +831,30 @@ bones/34/rotation = Quaternion(-5.10654e-06, 0.552558, 0.833474, 3.5987e-06)
 bones/34/scale = Vector3(1, 1, 1)
 bones/35/rotation = Quaternion(-9.93916e-09, 0.552558, 0.833474, -4.1717e-08)
 bones/35/scale = Vector3(1, 1, 1)
-bones/37/rotation = Quaternion(-0.00471352, -0.000711565, 0.0112402, 0.999925)
-bones/38/rotation = Quaternion(-0.00935452, -0.00086927, 0.0112292, 0.999893)
-bones/39/rotation = Quaternion(9.85737e-10, 0.999786, -0.0206824, -2.46434e-09)
+bones/37/rotation = Quaternion(-0.00473061, -0.00145084, 0.0231443, 0.99972)
+bones/38/rotation = Quaternion(-0.00937035, -0.00177554, 0.0231216, 0.999687)
+bones/39/rotation = Quaternion(-2.07102e-10, 0.999786, -0.0206824, 2.04005e-09)
 bones/39/scale = Vector3(0.945, 0.945, 0.945)
-bones/40/rotation = Quaternion(0.485239, 0.339322, 0.642581, -0.486305)
+bones/40/rotation = Quaternion(0.489041, 0.331355, 0.649009, -0.479406)
 bones/40/scale = Vector3(1, 1, 1)
-bones/41/rotation = Quaternion(-0.433708, -0.375535, 0.156819, 0.803915)
+bones/41/rotation = Quaternion(-0.429099, -0.376615, 0.151675, 0.806864)
 bones/41/scale = Vector3(1, 1, 1)
-bones/42/rotation = Quaternion(-0.209292, 0.013738, -0.0797928, 0.974495)
-bones/43/rotation = Quaternion(-0.492247, 0.322226, 0.64985, 0.481204)
+bones/42/rotation = Quaternion(-0.220677, 0.0136974, -0.0841332, 0.971615)
+bones/43/rotation = Quaternion(-0.500737, 0.314129, 0.657329, 0.467445)
 bones/43/scale = Vector3(1, 1, 1)
-bones/44/rotation = Quaternion(-0.428016, 0.476484, -0.283465, 0.713732)
-bones/45/rotation = Quaternion(-0.0956552, -0.0140219, 0.0364683, 0.994647)
-bones/46/rotation = Quaternion(0.989454, -0.00753459, -0.141799, -0.0285954)
+bones/44/rotation = Quaternion(-0.411735, 0.475486, -0.284349, 0.723556)
+bones/45/rotation = Quaternion(-0.127514, -0.0139641, 0.0486142, 0.990546)
+bones/46/rotation = Quaternion(0.989608, -0.00823929, -0.141803, -0.0223423)
 bones/46/scale = Vector3(1, 0.999999, 0.999955)
-bones/47/rotation = Quaternion(-0.162568, 1.23229e-05, -0.0126246, 0.986617)
-bones/48/rotation = Quaternion(0.979076, 0.0935734, 0.175776, -0.0419099)
+bones/47/rotation = Quaternion(-0.161679, 1.23239e-05, -0.0125555, 0.986764)
+bones/48/rotation = Quaternion(0.979307, 0.094416, 0.175427, -0.0356288)
 bones/48/scale = Vector3(1, 1, 0.999983)
-bones/49/rotation = Quaternion(-0.0448406, -1.24161e-05, 0.00348164, 0.998988)
+bones/49/rotation = Quaternion(-0.0437921, -1.24218e-05, 0.00340025, 0.999035)
 bones/49/scale = Vector3(1, 1, 1)
 bones/50/position = Vector3(-7.98204e-08, 1.1638, -1.15144)
 
 [node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
-transform = Transform3D(-0.999999, 0.000135324, 0.00152198, -2.55711e-09, 0.996071, -0.0885578, -0.00152795, -0.0885577, -0.99607, -0.00173806, 1.26493, -0.013998)
+transform = Transform3D(-0.999999, 0.000136119, 0.00152381, -2.21026e-07, 0.996021, -0.0891147, -0.00152985, -0.0891146, -0.99602, -0.00173846, 1.2653, -0.015192)
 bone_name = "neck"
 bone_idx = 28
 
@@ -851,7 +868,7 @@ process_material = SubResource("ParticleProcessMaterial_nceru")
 draw_pass_1 = SubResource("PlaneMesh_v2b1p")
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
-transform = Transform3D(0.944999, 6.82894e-05, -0.00144232, 3.95878e-09, 0.943943, 0.0446876, 0.00144391, -0.0446876, 0.943942, -0.00175181, 1.59177, -0.00500217)
+transform = Transform3D(0.944999, 6.89704e-05, -0.0014441, 2.08743e-07, 0.943918, 0.0452154, 0.00144571, -0.0452153, 0.943916, -0.001752, 1.59215, -0.00637885)
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
@@ -871,7 +888,7 @@ visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 
 [node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="9"]
-transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.291963, 0.745497, 0.0118495)
+transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.283673, 0.740761, 0.0114772)
 bone_name = "hand.l"
 bone_idx = 9
 
@@ -890,6 +907,7 @@ tree_root = SubResource("AnimationNodeBlendTree_dwlu7")
 anim_player = NodePath("../Smoothing/character_model/AnimationPlayer")
 parameters/BlendDead/blend_amount = 0.0
 parameters/BlendDive/blend_amount = 0.0
+parameters/BlendHighJump/blend_amount = 0.0
 parameters/BlendJump/blend_amount = 0.0
 parameters/BlendOnLedge/blend_amount = 0.0
 parameters/BlendOnWall/blend_amount = 0.0
@@ -910,8 +928,10 @@ parameters/OutroTimeSeek/seek_request = -1.0
 parameters/RunTimeScale/scale = 1.25
 parameters/TimeScale/scale = 3.0
 "parameters/TimeScale 2/scale" = 0.33
+"parameters/TimeScale 3/scale" = 1.3
 parameters/TimeSeek/seek_request = -1.0
 parameters/TimeSeekDive/seek_request = -1.0
+parameters/TimeSeekHighJump/seek_request = -1.0
 parameters/TimeSeekSwimDash/seek_request = -1.0
 
 [node name="SpawnAnimator" type="AnimationPlayer" parent="."]
@@ -944,6 +964,10 @@ one_shot = true
 
 [node name="SwimDashTime" type="Timer" parent="."]
 wait_time = 0.7
+one_shot = true
+
+[node name="HighJumpTime" type="Timer" parent="."]
+wait_time = 0.18
 one_shot = true
 
 [node name="RollTime" type="Timer" parent="."]

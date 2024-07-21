@@ -1,17 +1,13 @@
 obj_water ; global_position:(0, 42, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(0, 49.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
-obj_sign ; global_position:(0, 50.5, 8) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1) ; text:Welcome to Tinybox!\n\nMove around using\nW / A / S / D and Space\nto jump.
 obj_pine_tree ; global_position:(6, 50.5, 4) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1)
 obj_pine_tree ; global_position:(-7, 50.5, -5) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-10, 50.5, 21) ; global_rotation:(0, -2.356195, 0) ; scale:(1, 1, 1)
 obj_pine_tree ; global_position:(-19, 51.5, 14) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1)
-obj_sign ; global_position:(-12, 51.5, 13) ; global_rotation:(0, -0.785398, 0) ; scale:(1, 1, 1) ; text:You can perform a slide by pressing SHIFT.\nTry it here!
-obj_sign ; global_position:(-8, 51.5, 28) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 0.999999) ; text:To swim, look in the direction you wish to go and hold W (forward).\nDash underwater by pressing SHIFT.
 obj_asteroid_0 ; global_position:(-23, 49.5, 56) ; global_rotation:(0, 0.785398, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-24, 49.5, 79) ; global_rotation:(0, -1.963496, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-43, 49.5, 84) ; global_rotation:(0, -1.570796, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-30, 49.5, 94) ; global_rotation:(0, 1.178097, 0) ; scale:(1, 1, 1)
-obj_sign ; global_position:(-20, 50.5, 76) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 0.999999) ; text:When sliding with SHIFT you can press SPACE to enter a roll.\nIn mid-air you will roll until you land.
 obj_cliff_0 ; global_position:(-33, 62.5, 110) ; global_rotation:(0, 1.963496, 0) ; scale:(1, 1, 1)
 obj_lifter ; global_position:(-25, 50.5, 96) ; global_rotation:(0, 0.785398, 0) ; scale:(1, 1, 1) ; lift_force:21
 obj_pine_tree ; global_position:(-42, 63.5, 107) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1)
@@ -23,10 +19,19 @@ obj_asteroid_0 ; global_position:(-18, 60.5, 118) ; global_rotation:(0, 2.748894
 obj_asteroid_0 ; global_position:(-7, 61.5, 117) ; global_rotation:(0, -2.748893, 0) ; scale:(1, 1, 1)
 obj_asteroid_0 ; global_position:(-14, 52.5, 110) ; global_rotation:(0, -2.356194, 0) ; scale:(1, 1, 1)
 obj_asteroid_0 ; global_position:(-17, 50.5, 103) ; global_rotation:(0, -2.356194, 0) ; scale:(1, 1, 1)
-obj_sign ; global_position:(-8, 62.5, 121) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1) ; text:You can propel yourself great distances in the air using the Extinguisher.
 obj_pickup ; global_position:(-6, 62.5, 116) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1) ; type:3 ; ammo:300 ; respawn_time:20
-obj_sign ; global_position:(-25, 50.5, 56) ; global_rotation:(0, -1.178097, 0) ; scale:(1, 1, 1) ; text:Perform a dive to get extra distance out of a jump by pressing SPACE in mid-air.
 Environment ; env_sunny
+obj_asteroid_0 ; global_position:(-37, 50.5, 94) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
+obj_sign ; global_position:(-35, 51.5, 95) ; global_rotation:(0, 0, 0) ; scale:(0.999999, 1, 0.999999) ; text:You can perform high jumps by immediately pressing JUMP again after landing. Try getting up there.
+obj_sign ; global_position:(1, 50.5, 7) ; global_rotation:(0, 0, 0) ; scale:(0.999999, 1, 0.999999) ; text:Welcome to Tinybox!\nMove using\nW A S D or Left Stick\nJUMP with Space or ( A )
+obj_sign ; global_position:(-12, 51.5, 13) ; global_rotation:(0, -0.785398, 0) ; scale:(0.999998, 1, 0.999998) ; text:Perform a slide by pressing\nSHIFT\nor\n( B )
+obj_sign ; global_position:(-8, 51.5, 28) ; global_rotation:(0, 0, 0) ; scale:(0.999998, 1, 0.999998) ; text:To swim, look in the direction you wish to go and hold forward.\nPress SHIFT / ( B ) to dash underwater.
+obj_sign ; global_position:(-25, 50.5, 56) ; global_rotation:(0, -1.178097, 0) ; scale:(0.999998, 1, 0.999997) ; text:Perform a dive to get extra distance out of a jump by pressing JUMP again in mid-air.
+obj_sign ; global_position:(-20, 50.5, 76) ; global_rotation:(0, 0.000001, 0) ; scale:(0.999997, 1, 0.999997) ; text:While sliding with SHIFT / ( B ), JUMP to enter a roll.
+obj_sign ; global_position:(-5, 62.5, 120) ; global_rotation:(0, 0.785399, 0) ; scale:(0.999997, 1, 0.999997) ; text:Build up momentum in the air by jumping and using the Extinguisher to propel yourself.
+obj_sign ; global_position:(-8, 62.5, 122) ; global_rotation:(0, 0.3927, 0) ; scale:(0.999997, 1, 0.999996) ; text:When diving (JUMP in mid-air), if you have enough speed, you can press JUMP again to enter a mid-air roll.
+obj_asteroid_0 ; global_position:(-23, 49.5, 122) ; global_rotation:(0, -0.785397, 0) ; scale:(0.999997, 1, 0.999996)
+obj_sign ; global_position:(-23, 50.5, 121) ; global_rotation:(0, 2.748895, 0) ; scale:(0.999996, 1, 0.999996) ; text:Psst... you can use the Extinguisher as a boost underwater too.
 [building]
 brick ; global_position:(-6, 51, 6) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(1, 1, 1, 1)
 brick ; global_position:(-7, 51, 6) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(1, 1, 1, 1)

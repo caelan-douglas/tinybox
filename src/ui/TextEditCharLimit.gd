@@ -1,6 +1,6 @@
 extends TextEdit
 
-@export var char_limit : int = 50
+@export var char_limit : int = 130
 var caret_line : int = 0
 var caret_col : int = 0
 
