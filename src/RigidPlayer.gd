@@ -33,6 +33,7 @@ enum {
 	DIVE,
 	SWIMMING,
 	SWIMMING_IDLE,
+	SWIMMING_DASH,
 	EXIT_SWIMMING,
 	SLIDE,
 	SLIDE_BACK,
@@ -42,7 +43,7 @@ enum {
 }
 
 # DEBUG
-var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Exit swimming", "Slide", "Slide back", "Rolling", "On wall", "On ledge"]
+var states_as_names : Array[String] = ["Idle", "Run", "Air", "Tripped", "Standing up", "In seat", "Exit seat", "Dead", "Respawn", "Dummy", "Dive", "Swimming", "Swimming idle", "Swimming dash", "Exit swimming", "Slide", "Slide back", "Rolling", "On wall", "On ledge"]
 
 enum CauseOfDeath {
 	EXPLOSION,
@@ -77,6 +78,7 @@ var can_enter_seat := true
 var on_fire := false
 var in_air_from_lifter := false
 var external_propulsion := false
+var swim_dash_cooldown : int = 0
 
 var lateral_velocity := Vector3.ZERO
 
@@ -88,6 +90,7 @@ var deaths : int = 0
 
 @onready var fire : Fire = $Fire
 @onready var bubble_particles : GPUParticles3D = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
+@onready var character_model : Node3D = $Smoothing/character_model
 @onready var drip_animator : AnimationPlayer = $Drip/AnimationPlayer
 @onready var target : Node3D = $Smoothing/target
 @onready var aim_target : Node3D = $Smoothing/aim_target
@@ -102,6 +105,7 @@ var deaths : int = 0
 @onready var ledge_time : Timer = $LedgeTime
 @onready var trip_time : Timer = $TripTime
 @onready var slide_time : Timer = $SlideTime
+@onready var swim_dash_time : Timer = $SwimDashTime
 @onready var roll_time : Timer = $RollTime
 @onready var respawn_time : Timer = $RespawnTime
 @onready var trip_audio : AudioStreamPlayer3D = $TripAudio
@@ -246,9 +250,6 @@ func _on_body_entered(body : Node3D) -> void:
 		# on ground
 		if slide_detect.has_overlapping_bodies():
 			change_state(SLIDE)
-		# hit wall
-		else:
-			change_state(TRIPPED)
 	
 	if _state == ROLL:
 		# trip other players when rolling into them
@@ -737,6 +738,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if Input.is_action_just_pressed("jump") && !locked && lateral_velocity.length() > 10:
 				apply_central_impulse(Vector3.UP * 4)
 				change_state(ROLL)
+			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+				change_state(ON_WALL)
 		ON_WALL:
 			# align with wall
 			if forward_ray.is_colliding():
@@ -864,6 +867,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		DEAD:
 			pass
 		SWIMMING, SWIMMING_IDLE:
+			if swim_dash_cooldown > 0:
+				swim_dash_cooldown -= 1
 			var force_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
 			var force_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
 			var dir : Vector3 = camera.get_global_transform().basis.z * (move_speed * 0.8 * force_forward)
@@ -873,6 +878,15 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				change_state(SWIMMING)
 			elif dir.length() < 1 && _state != SWIMMING_IDLE:
 				change_state(SWIMMING_IDLE)
+			if Input.is_action_just_pressed("shift") && swim_dash_cooldown < 1:
+				change_state(SWIMMING_DASH)
+			# rotate model in direction of swimming
+			# arctan between y vel and total horizontal vel
+			character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.26, 0.15)
+		SWIMMING_DASH:
+			swim_dash_cooldown = 110
+			character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.56, 0.15)
+			pass
 	lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 	
 	# handle teleport requests
@@ -1001,9 +1015,14 @@ func enter_state() -> void:
 	if _state != AIR && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
 		last_hit = false
 	
-	if _state != SWIMMING && _state != SWIMMING_IDLE:
+	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH:
+		character_model.rotation_degrees = Vector3(0, -180, 0)
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
+	
+	if _state != SWIMMING_DASH:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendSwimDash/blend_amount", 0.0, 0.2)
 	
 	# tools handling
 	if _state == DEAD || _state == TRIPPED || _state == DUMMY || _state == ROLL:
@@ -1028,6 +1047,8 @@ func enter_state() -> void:
 				physics_material_override.friction = 1
 		RUN:
 			physics_material_override.friction = 0
+			# reset swim dash when on land
+			swim_dash_cooldown = 0
 		AIR:
 			physics_material_override.friction = 0
 			air_time.start()
@@ -1228,6 +1249,20 @@ func enter_state() -> void:
 			change_state_non_authority.rpc(SWIMMING_IDLE)
 			# always get propulsed by rockets when swimming
 			external_propulsion = true
+		SWIMMING_DASH:
+			animator.set("parameters/TimeSeekSwimDash/seek_request", 0.0)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendSwimDash/blend_amount", 1.0, 0.2)
+			# boost
+			var forward : Vector3 = -camera.get_global_transform().basis.z
+			apply_central_impulse(forward * 12)
+			change_state_non_authority.rpc(SWIMMING_DASH)
+			swim_dash_time.start()
+			# stand up after slide timeout
+			await swim_dash_time.timeout
+			# if we are still sliding after waiting, don't intercept states:
+			if _state == SWIMMING_DASH:
+				change_state(SWIMMING)
 		EXIT_SWIMMING:
 			drip_animator.play("drip")
 			gravity_scale = player_grav
@@ -1279,6 +1314,12 @@ func change_state_non_authority(state : int) -> void:
 	if _state != ROLL:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
+	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
+	if _state != SWIMMING_DASH:
+		var tween : Tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(animator, "parameters/BlendSwimDash/blend_amount", 0.0, 0.2)
 	if _state != DEAD:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDead/blend_amount", 0.0, 0.2)
@@ -1340,10 +1381,12 @@ func change_state_non_authority(state : int) -> void:
 		SWIMMING_IDLE:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 0.0, 0.5)
+		SWIMMING_DASH:
+			animator.set("parameters/TimeSeekSwimDash/seek_request", 0.0)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_property(animator, "parameters/BlendSwimDash/blend_amount", 1.0, 0.2)
 		EXIT_SWIMMING:
 			drip_animator.play("drip")
-			var tween : Tween = get_tree().create_tween().set_parallel(true)
-			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
 		IN_SEAT:
 			animator["parameters/BlendSit/blend_amount"] = 1
 		DEAD:

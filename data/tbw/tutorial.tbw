@@ -6,7 +6,7 @@ obj_pine_tree ; global_position:(-7, 50.5, -5) ; global_rotation:(0, 0.392699, 0
 obj_cliff_0 ; global_position:(-10, 50.5, 21) ; global_rotation:(0, -2.356195, 0) ; scale:(1, 1, 1)
 obj_pine_tree ; global_position:(-19, 51.5, 14) ; global_rotation:(0, 0.392699, 0) ; scale:(1, 1, 1)
 obj_sign ; global_position:(-12, 51.5, 13) ; global_rotation:(0, -0.785398, 0) ; scale:(1, 1, 1) ; text:You can perform a slide by pressing SHIFT.\nTry it here!
-obj_sign ; global_position:(-8, 51.5, 28) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 0.999999) ; text:To swim, look in the direction you wish to go and hold W (forward).
+obj_sign ; global_position:(-8, 51.5, 28) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 0.999999) ; text:To swim, look in the direction you wish to go and hold W (forward).\nDash underwater by pressing SHIFT.
 obj_asteroid_0 ; global_position:(-23, 49.5, 56) ; global_rotation:(0, 0.785398, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-24, 49.5, 79) ; global_rotation:(0, -1.963496, 0) ; scale:(1, 1, 1)
 obj_cliff_0 ; global_position:(-43, 49.5, 84) ; global_rotation:(0, -1.570796, 0) ; scale:(1, 1, 1)
