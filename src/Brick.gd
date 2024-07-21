@@ -251,6 +251,7 @@ func get_colour() -> Color:
 # Arg 3: Whether or not to ungroup this brick as well.
 @rpc("call_local")
 func set_glued(new : bool, affect_others : bool = true) -> void:
+	if !is_multiplayer_authority(): return
 	# static brick material cannot be unglued
 	if _material == BrickMaterial.STATIC:
 		return
