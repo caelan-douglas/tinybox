@@ -33,8 +33,6 @@ var last_stepped_by : Node = null
 @rpc("any_peer", "call_local", "reliable")
 func stepped(by_what_node_path : NodePath) -> void:
 	$ButtonAudio.play()
-	# server only
-	if !multiplayer.is_server(): return
 	var by_what : Node = get_node_or_null(by_what_node_path)
 	if by_what != null:
 		if by_what is Node:
@@ -47,7 +45,9 @@ func run_event() -> void:
 		match (event):
 			EventHandler.Event.TELEPORT_PLAYER:
 				if last_stepped_by is RigidPlayer:
-					EventHandler.run_event(event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
+					EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
 			EventHandler.Event.EXPLODE:
-				EventHandler.run_event(event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
-			
+				EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
+			EventHandler.Event.CHANGE_PLAYER_TEAM:
+				if last_stepped_by is RigidPlayer:
+					EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority()])

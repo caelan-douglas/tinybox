@@ -18,13 +18,18 @@ extends Node
 
 enum Event {
 	TELEPORT_PLAYER,
-	EXPLODE
+	EXPLODE,
+	CHANGE_PLAYER_TEAM
 }
 
 # same order as enum
-var event_types_readable : Array[String] = ["Teleport player", "Explode"]
+var event_types_readable : Array[String] = ["Teleport player", "Explode", "Change player team"]
 
+@rpc("any_peer", "call_local", "reliable")
 func run_event(event_type : Event, args : Array) -> void:
+	# only server runs events
+	if !multiplayer.is_server(): return
+	
 	match (event_type):
 		Event.TELEPORT_PLAYER:
 			# get player (1st part of data array)
@@ -39,6 +44,11 @@ func run_event(event_type : Event, args : Array) -> void:
 			explosion_i.set_explosion_owner(Global.get_world().get_node_or_null(str(args[0])).get_multiplayer_authority())
 			explosion_i.global_position = args[1]
 			explosion_i.play_sound()
+		Event.CHANGE_PLAYER_TEAM:
+			# get player (1st part of data array)
+			var player : RigidPlayer = Global.get_world().get_node_or_null(str(args[0]))
+			if player != null:
+				Global.get_world().change_player_team(player)
 		_:
 			err()
 

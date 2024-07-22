@@ -119,9 +119,7 @@ func _update_object_property_team(new_value : Variant, prop_name : String) -> vo
 func _update_object_property_select_brick(prop_name : String, button_from : Button) -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
-		button_from.text = "Choose a brick."
 		var selected_brick : Brick = await editor.select_brick()
-		button_from.text = "Connect button to brick..."
 		if selected_brick != null:
 			update_object_property(str(selected_brick.get_path()), prop_name)
 

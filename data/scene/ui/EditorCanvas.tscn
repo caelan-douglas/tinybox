@@ -102,16 +102,13 @@ layout_mode = 2
 
 [node name="DynamicLabel2" type="Label" parent="EntryScreen/Menu"]
 layout_mode = 2
-text = "Number row to select tools
+text = "Controls are always shown at
+the bottom.
 
-Click to place
-Right click to delete
-
-[ X ] to change object
-[ C ] to change camera zoom
-
-WASD, [ Shift ], [ Ctrl / Cmd ]
-to move"
+Choose to load an existing
+world, or press \"New world\"
+to start with the default
+template."
 script = ExtResource("6_aufvl")
 
 [node name="Spacer2" type="Control" parent="EntryScreen/Menu"]
@@ -496,5 +493,24 @@ vertical_alignment = 1
 script = ExtResource("6_aufvl")
 json_text = "Tinybox %version%"
 raw_format = true
+
+[node name="DynamicLabel2" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -141.0
+offset_top = -24.0
+offset_right = 141.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
+theme_override_constants/outline_size = 6
+text = "[ Number row: Select tools ] [ WASD, Space, Ctrl/Cmd: Move ] [ C: Change zoom ] [ Shift: Speed up ]
+Build tool: [ X: Select new build object ] [ Q / E : Rotate ]"
+horizontal_alignment = 1
+script = ExtResource("6_aufvl")
 
 [editable path="WorldProperties/Menu/WaterHeightAdjuster"]

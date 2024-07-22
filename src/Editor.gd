@@ -332,6 +332,10 @@ func _process(delta : float) -> void:
 	# don't release / unrelease mouse when editing text
 	if Input.is_action_just_pressed("editor_release_mouse") && !Global.is_text_focused:
 		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+			var focused : Control = get_viewport().gui_get_focus_owner()
+			# release focus of any property editor buttons
+			if focused != null:
+				focused.release_focus()
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

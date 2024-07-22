@@ -521,6 +521,7 @@ func update_team(new : String) -> void:
 		$Smoothing/NameLabel.modulate = Color("#fff")
 	else:
 		$Smoothing/NameLabel.modulate = world.get_current_map().get_teams().get_team(new).colour
+	Global.update_player_list_information() 
 
 # Update this player's name with a new name.
 @rpc("call_local")
@@ -533,6 +534,7 @@ func update_name(new : String) -> void:
 	player_list.add_player(self)
 
 # Update peers with new name and team info on join.
+@rpc("call_local", "reliable")
 func update_info(id : int = -1) -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)

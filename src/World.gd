@@ -38,6 +38,17 @@ func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 		spawns.append(Vector3(0, 51, 0))
 	return spawns
 
+func change_player_team(who : RigidPlayer) -> void:
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	var team_idx : int = teams.get_team_index(str(who.team))
+	team_idx += 1
+	if team_idx >= teams.get_team_list().size():
+		team_idx = 0
+	# broadcast updated team to peers
+	who.update_team.rpc(teams.get_team_list()[team_idx].name)
+	# update info on player's client side
+	who.update_info.rpc_id(who.get_multiplayer_authority())
+
 func add_player_to_list(player : RigidPlayer) -> void:
 	if !rigidplayer_list.has(player):
 		rigidplayer_list.append(player)
