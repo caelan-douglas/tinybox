@@ -60,11 +60,11 @@ func _on_body_selected(body : Node3D) -> void:
 			selected_item_properties = property_editor.list_object_properties(selectable_body, self)
 
 func _on_body_deselected(body : Node3D) -> void:
-	var hovering := false
 	# check currently hovering bodies
-	if select_area.has_overlapping_bodies() || select_area.has_overlapping_areas():
-		hovering = true
-	if !hovering:
+	if !select_area.has_overlapping_bodies() && !select_area.has_overlapping_areas():
+		# clear list
+		property_editor.clear_list()
+		# allow any tools to re show their list
 		emit_signal("deselected")
 
 func _on_tbw_loaded() -> void:
@@ -292,7 +292,6 @@ func select_brick() -> Brick:
 	brick_selected = null
 	editor_tool_inventory.set_disabled(true)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	selector.visible = true
 	# Keep track of where player was
 	var camera : Camera = get_viewport().get_camera_3d()
 	var last_pos : Vector3 = camera.controlled_cam_pos
@@ -302,7 +301,6 @@ func select_brick() -> Brick:
 	# Brick has been selected
 	editor_tool_inventory.set_disabled(false, 0.1)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	selector.visible = false
 	camera.controlled_cam_pos = last_pos
 	# allow objects to be selectable again
 	can_select_object = true

@@ -46,7 +46,7 @@ shadow_mesh = SubResource("ArrayMesh_y1yg5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iw3x4"]
 transparency = 1
-albedo_color = Color(0, 0.729412, 0.462745, 0.454902)
+albedo_color = Color(0, 0.729412, 0.462745, 0.133333)
 emission_enabled = true
 emission = Color(0.276499, 0.636238, 0.407413, 1)
 rim_enabled = true
@@ -69,7 +69,6 @@ shape = SubResource("SphereShape3D_su7fl")
 
 [node name="Selector" type="MeshInstance3D" parent="SelectArea"]
 transform = Transform3D(1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0)
-visible = false
 mesh = SubResource("ArrayMesh_hcusj")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_iw3x4")

@@ -21,12 +21,15 @@ func list_object_properties(instance : Node, _properties_from_tool : Node) -> Di
 				add_object_property_entry(prop_name, prop)
 	return selected_item_properties
 
+func clear_list() -> void:
+	for child : Node in editor_props_list.get_children():
+		child.queue_free()
+
 func relist_object_properties(properties : Dictionary) -> void:
 	# set to new property list
 	selected_item_properties = properties
 	# delete current list
-	for child : Node in editor_props_list.get_children():
-		child.queue_free()
+	clear_list()
 	# reload list
 	for property : String in selected_item_properties.keys():
 		add_object_property_entry(property, selected_item_properties[property])
