@@ -1,3 +1,19 @@
+# Tinybox
+# Copyright (C) 2023-present Caelan Douglas
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 # Runs all Editor functions.
 extends Map
 class_name Editor
@@ -39,9 +55,10 @@ func _ready() -> void:
 
 func _on_property_updated(properties : Dictionary) -> void:
 	if property_editor.properties_from_tool == self:
-		if hovered_editable_object is TBWObject || hovered_editable_object is Brick:
-			for property : String in selected_item_properties.keys():
-				hovered_editable_object.set_property(property, selected_item_properties[property])
+		if hovered_editable_object != null:
+			if hovered_editable_object is TBWObject || hovered_editable_object is Brick:
+				for property : String in selected_item_properties.keys():
+					hovered_editable_object.set_property(property, selected_item_properties[property])
 
 func _on_body_selected(body : Node3D) -> void:
 	var selectable_body : Node3D = null
@@ -233,7 +250,7 @@ func enable_player() -> int:
 	while player == null:
 		await get_tree().process_frame
 		player = Global.get_player()
-	player.teleport(Vector3(0, 50, 0))
+	player.go_to_spawn()
 	# grace period for invincibility
 	await get_tree().create_timer(0.15).timeout
 	player.change_state(RigidPlayer.IDLE)
@@ -247,14 +264,17 @@ func enable_player() -> int:
 var test_mode_world_name : String = ""
 func enter_test_mode(world_name : String) -> void:
 	# save in case player makes any changes / destroys things in testing
-	await Global.get_world().save_tbw(str(world_name))
+	var ok : Variant = await Global.get_world().save_tbw(str(world_name))
+	if ok == false:
+		return
 	test_mode_world_name = world_name
 	
 	# load world so that brick groups and joints are generated
 	Global.get_world().load_tbw(str(test_mode_world_name), false, false)
+	while Global.get_world().tbw_loading:
+		await get_tree().process_frame
 	
 	await enable_player()
-	await get_tree().process_frame
 	editor_canvas.visible = false
 	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
 	game_canvas.visible = true

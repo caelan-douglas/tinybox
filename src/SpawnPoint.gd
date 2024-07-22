@@ -14,8 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Label
+extends TBWObject
+class_name SpawnPoint
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta : float) -> void:
-	text = str("Fps: ", Engine.get_frames_per_second())
+@onready var area : Area3D = $Area3D
+var team_name : String = "Default"
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "scale", "team_name"]
+
+func occupied() -> bool:
+	for b in area.get_overlapping_bodies():
+		if b is RigidPlayer:
+			return true
+	return false

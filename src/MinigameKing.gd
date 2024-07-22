@@ -84,7 +84,7 @@ func _ready() -> void:
 	# find hill
 	hill = Global.get_world().get_current_map().get_node("KingsHill")
 	hill_area = Global.get_world().get_current_map().get_node("KingsHill/Area3D")
-	UIHandler.show_alert(str("Hold the hill for ", hill_limit_seconds/60, " minutes to win!"), 10, false, false, true)
+	UIHandler.show_alert(str("Hold the hill for ", hill_limit_seconds/60, " minutes to win!"), 10, false, UIHandler.alert_colour_gold)
 	# 20 minutes
 	game_time = 1200
 	
@@ -186,7 +186,7 @@ func update_player_list(player_name : String, player_score : int) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func new_king_rpc(king_id : int, king_name : String) -> void:
-	UIHandler.show_alert(str(king_name, " is the new king!"), 5, false, false, true)
+	UIHandler.show_alert(str(king_name, " is the new king!"), 5, false, UIHandler.alert_colour_gold)
 
 @rpc("any_peer", "call_local", "reliable")
 func update_king_info_rpc(king_id : int, king_name : String, king_time : int) -> void:

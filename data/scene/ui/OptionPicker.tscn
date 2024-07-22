@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://vq1i85bna55f"]
 
-[node name="EventEditor" type="VBoxContainer"]
+[node name="OptionPicker" type="VBoxContainer"]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 offset_bottom = 30.0
 

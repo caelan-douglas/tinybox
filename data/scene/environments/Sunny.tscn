@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cynk76edejitn"]
+[gd_scene load_steps=9 format=3 uid="uid://cynk76edejitn"]
 
 [ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_5f5qj"]
 [ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="2_h8nah"]
+[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_46jeo"]
 
 [sub_resource type="Gradient" id="Gradient_1gu1d"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
@@ -48,3 +49,5 @@ environment = SubResource("Environment_oa3a3")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, 0.327924, -0.377447, 0, 0.754893, 0.655848, 0.5, -0.567981, 0.653756, 0, 52.7417, 0)
 shadow_enabled = true
+script = ExtResource("3_46jeo")
+visible_on_awful = false

@@ -25,6 +25,18 @@ var rigidplayer_list : Array = []
 
 # active minigame
 var minigame : Minigame = null
+var tbw_loading : bool = false
+
+func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
+	var spawns : Array[Vector3] = []
+	for obj in get_children():
+		if obj is SpawnPoint:
+			if obj.team_name == team_name:
+				spawns.append(obj.global_position)
+	if spawns == []:
+		# default spawn
+		spawns.append(Vector3(0, 51, 0))
+	return spawns
 
 func add_player_to_list(player : RigidPlayer) -> void:
 	if !rigidplayer_list.has(player):
@@ -40,7 +52,6 @@ func teleport_all_players(pos : Vector3) -> void:
 		p.teleport(Vector3(float(pos.x), float(pos.y), float(pos.z)))
 
 func _ready() -> void:
-	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
 	$MultiplayerMapSpawner.connect("spawned", _on_multiplayer_map_spawned)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 
@@ -97,52 +108,6 @@ func start_minigame(map_name : String, win_condition : Lobby.GameWinCondition, f
 		minigame.from_new_peer_connection = true
 	add_child(minigame)
 
-func _on_graphics_preset_changed() -> void:
-	match Global.get_graphics_preset():
-		# COOL
-		0:
-			if $Map.get_children().size() > 0:
-				var loaded_map : Map = $Map.get_child(0)
-				if loaded_map.has_node("WorldEnvironment"):
-					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
-					env.environment.ssao_enabled = true
-					env.environment.ssil_enabled = true
-				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
-				if light:
-					light.shadow_enabled = true
-				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
-				if caff_light:
-					light.shadow_enabled = true
-		# BAD
-		1:
-			if $Map.get_children().size() > 0:
-				var loaded_map : Map = $Map.get_child(0)
-				if loaded_map.has_node("WorldEnvironment"):
-					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
-					env.environment.ssao_enabled = false
-					env.environment.ssil_enabled = false
-				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
-				if light:
-					light.shadow_enabled = true
-				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
-				if caff_light:
-					light.shadow_enabled = true
-		# AWFUL
-		2:
-			if $Map.get_children().size() > 0:
-				var loaded_map : Map = $Map.get_child(0)
-				if loaded_map.has_node("WorldEnvironment"):
-					var env : WorldEnvironment = loaded_map.get_node("WorldEnvironment")
-					env.environment.ssao_enabled = false
-					env.environment.ssil_enabled = false
-				# no shadows on awful graphics
-				var light : Node = loaded_map.get_node_or_null("DirectionalLight3D")
-				if light:
-					light.shadow_enabled = false
-				var caff_light : Node = loaded_map.get_node_or_null("SpotLight3D")
-				if caff_light:
-					light.shadow_enabled = false
-
 # Get the current map.
 func get_current_map() -> Map:
 	return $Map.get_child(0)
@@ -163,8 +128,13 @@ func load_map(map: PackedScene) -> void:
 	$Map.add_child(current_map)
 	emit_signal("map_loaded")
 
-# Save the currently open world as a .tbw file.
-func save_tbw(world_name : String) -> void:
+# Save the currently open world as a .tbw file. Returns false if did not save.
+func save_tbw(world_name : String) -> bool:
+	# don't save worlds that are currently loading
+	if tbw_loading:
+		UIHandler.show_alert("Please wait for the world to load before saving it!", 5, false, UIHandler.alert_colour_error)
+		return false
+	
 	var dir : DirAccess = DirAccess.open("user://world")
 	if !dir:
 		DirAccess.make_dir_absolute("user://world")
@@ -217,7 +187,7 @@ func save_tbw(world_name : String) -> void:
 		await get_tree().process_frame
 		Global.get_player().visible = true
 		get_tree().current_scene.get_node("GameCanvas").visible = true
-	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, false, true)
+	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
 	
 	# Create tbw file.
 	var file := FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
@@ -254,9 +224,15 @@ func save_tbw(world_name : String) -> void:
 					file.store_string(str(" ; ", p , ":", b.get(p)))
 				file.store_line("")
 	file.close()
+	return true
 
 func load_tbw(file_name := "test", switching := false, reset_player_and_cameras := true) -> void:
 	print("Attempting to load ", file_name, ".tbw")
+	
+	# prevent loading multiple files at once
+	if tbw_loading:
+		await tbw_loaded
+		await get_tree().create_timer(0.3).timeout
 	
 	var load_file : FileAccess = null
 	load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
@@ -280,7 +256,7 @@ func load_tbw(file_name := "test", switching := false, reset_player_and_cameras 
 		else:
 			ask_server_to_open_tbw.rpc_id(1, Global.display_name, file_name, lines)
 	else:
-		UIHandler.show_alert("World not found or corrupt!", 8, false, true)
+		UIHandler.show_alert("World not found or corrupt!", 8, false, UIHandler.alert_colour_error)
 
 # server loads tbws
 @rpc("any_peer", "call_local", "reliable")
@@ -296,7 +272,7 @@ func _world_denied(name_from : String, world_name : String) -> void:
 	if !Global.is_paused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# show alert to all users that map was denied
-	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, true)
+	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, UIHandler.alert_colour_error)
 
 func _world_accepted(name_from : String, world_name : String, lines : Array) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
@@ -312,7 +288,7 @@ func show_tbw_switch_alert(name_from : String, world_name : String) -> void:
 # Only to be run as server
 func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
-	
+	tbw_loading = true
 	clear_world()
 	# Load default empty map, unless we are in the editor
 	if !(Global.get_world().get_current_map() is Editor):
@@ -389,6 +365,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	if reset_camera_and_player:
 		reset_player_cameras.rpc()
 		reset_player_positions.rpc()
+	tbw_loading = false
 	# announce we are done loading
 	emit_signal("tbw_loaded")
 
@@ -451,7 +428,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	if line_split_init.size() < 2:
-		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, true, false)
+		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
 		return
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
@@ -506,7 +483,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	# don't place nothing
 	if building_group.size() < 1:
 		printerr("Building: Tried to load building with nothing in it.")
-		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, true, false)
+		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
 		return
 	# change ownership first
 	# wait a bit before checking joints

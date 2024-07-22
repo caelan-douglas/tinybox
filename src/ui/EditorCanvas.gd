@@ -50,7 +50,7 @@ func _on_map_loaded() -> void:
 func _on_test_world_pressed() -> void:
 	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
 	if world_name == "":
-		UIHandler.show_alert("Please enter a world name before testing!", 4, false, true, false)
+		UIHandler.show_alert("Please enter a world name before testing!", 4, false, UIHandler.alert_colour_error)
 	else:
 		var editor : Node3D = Global.get_world().get_current_map()
 		if editor is Editor:
@@ -113,6 +113,6 @@ func _process(delta : float) -> void:
 func _on_save_world_pressed() -> void:
 	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
 	if world_name == "":
-		UIHandler.show_alert("Please enter a world name above!", 4, false, true, false)
+		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
 		Global.get_world().save_tbw(str(world_name))

@@ -24,19 +24,6 @@ class_name Teams
 func get_team_list() -> Array:
 	return team_list
 
-# Get spawn points for a given team index
-func get_team_spawns_by_index(team_index : int) -> Array:
-	var map_team_spawns : Node = get_parent().get_node(str("Spawns/", team_index))
-	var spawns := []
-	for spawn in map_team_spawns.get_children():
-		spawns.append(spawn)
-	return spawns
-
-# Get spawn points for a given team (team is referred to by its name)
-func get_team_spawns(team_name : String) -> Array:
-	var team_index : int = get_team_index(team_name)
-	return get_team_spawns_by_index(team_index)
-
 # Get target spawn point for a team.
 func get_team_target_spawn(team_name : String) -> Node:
 	var team_index : int = get_team_index(team_name)
@@ -58,6 +45,9 @@ func get_players_in_team(team_name : String) -> Array:
 		if team_name == p.team:
 			ret_players.append(p)
 	return ret_players
+
+func get_team_name_by_index(idx : int) -> String:
+	return team_list[idx].name
 
 # Get a team's index in the list. Returns -1 if the team doesn't exist
 func get_team_index(team_name : String) -> int:

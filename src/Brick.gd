@@ -647,13 +647,13 @@ func build() -> void:
 				tool_from.set_building(false)
 		else:
 			if too_far:
-				UIHandler.show_alert("Can't place! Too far away", 2, false, true)
+				UIHandler.show_alert("Can't place! Too far away", 2, false, UIHandler.alert_colour_error)
 			elif cannot_afford:
-				UIHandler.show_alert("Your team can't afford this brick!", 2, false, true)
+				UIHandler.show_alert("Your team can't afford this brick!", 2, false, UIHandler.alert_colour_error)
 			elif too_close_to_target:
-				UIHandler.show_alert("Can't place! Too close to team target!", 2, false, true)
+				UIHandler.show_alert("Can't place! Too close to team target!", 2, false, UIHandler.alert_colour_error)
 			else:
-				UIHandler.show_alert("Can't place! Intersection", 2, false, true)
+				UIHandler.show_alert("Can't place! Intersection", 2, false, UIHandler.alert_colour_error)
 
 # Check joint for any nearby bricks to join to.
 # Arg 1: A set group to put this brick into. Used mainly for spawning prebuilt buildings.

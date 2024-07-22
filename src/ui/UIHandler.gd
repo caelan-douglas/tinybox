@@ -22,6 +22,11 @@ var alert_actions_resource : PackedScene = preload("res://data/scene/ui/AlertAct
 var button : PackedScene = preload("res://data/scene/ui/Button.tscn")
 var lobby_menu : PackedScene = preload("res://data/scene/ui/LobbyMenu.tscn")
 
+var alert_colour_gold : Color = Color(4.0, 3.0, 1.0, 1)
+var alert_colour_error : Color = Color(4.0, 0.2, 0.3, 1)
+var alert_colour_player : Color = Color(1.0, 2.0, 14.0, 1)
+var alert_colour_death : Color = Color(1.8, 0.0, 1.6, 1)
+
 # Show an alert box.
 # Arg 1: The text to show.
 # Arg 2: The timeout. -1 will never timeout.
@@ -29,13 +34,11 @@ var lobby_menu : PackedScene = preload("res://data/scene/ui/LobbyMenu.tscn")
 #        for alerts you only want to show in game, such as
 #        when a host disconnects.
 @rpc("any_peer", "call_local")
-func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool = false, error : bool = false, gold : bool = false) -> void:
+func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool = false, alert_colour : Color = Color("#ffffff")) -> void:
 	var alert : Alert = alert_resource.instantiate()
 	alert.get_node("Content/Label").text = alert_text
-	if error:
-		alert.self_modulate = Color(4.0, 0.2, 0.3, 1)
-	if gold:
-		alert.self_modulate = Color(4.0, 3.0, 1.0, 1)
+	if alert_colour.to_html() != "#ffffff":
+		alert.self_modulate = alert_colour
 	
 	var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Alerts")
 	if show_in_game_canvas:
@@ -65,7 +68,7 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 		c.queue_free()
 	
 	if error:
-		alert.self_modulate = Color(4.0, 0.2, 0.3, 1)
+		alert.self_modulate = alert_colour_error
 	
 	alert_canvas.add_child(alert)
 	var buttons_to_return := []

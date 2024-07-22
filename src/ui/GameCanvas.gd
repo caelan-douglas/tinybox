@@ -92,7 +92,7 @@ func _send_on_change_map_pressed() -> void:
 			UIHandler.show_alert(str("Your request to load \"", map_name, "\" was sent to the host."), 4)
 			client_request_world_timer.start()
 		else:
-			UIHandler.show_alert(str("Wait ", round(client_request_world_timer.time_left), " more seconds before requesting\nto load another world!"), 5, false, true)
+			UIHandler.show_alert(str("Wait ", round(client_request_world_timer.time_left), " more seconds before requesting\nto load another world!"), 5, false, UIHandler.alert_colour_error)
 
 func play_intro_animation(text : String) -> void:
 	# in case player was paused
@@ -111,6 +111,6 @@ func play_outro_animation(text : String) -> void:
 func _on_save_world_pressed() -> void:
 	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
 	if world_name == "":
-		UIHandler.show_alert("Please enter a world name above!", 4, false, true, false)
+		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
 		Global.get_world().save_tbw(str(world_name))

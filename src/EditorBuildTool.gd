@@ -44,6 +44,9 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	if mode == false:
 		if preview_node != null:
 			preview_node.visible = false
+		# deselecting tool, remove any properties from list
+		if property_editor.properties_from_tool == self:
+			property_editor.clear_list()
 	else:
 		if preview_node != null:
 			preview_node.visible = true

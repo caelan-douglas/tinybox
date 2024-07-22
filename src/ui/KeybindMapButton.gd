@@ -78,7 +78,7 @@ func _input(event : InputEvent) -> void:
 						UserPreferences.save_pref(str("keybind_", keybind_for_what), "MMB", "keybinds")
 						return
 			# invalid key
-			UIHandler.show_alert("That key is invalid or reserved (must be 0-9, non-reserved letter, or middle mouse button).", 8, false, true)
+			UIHandler.show_alert("That key is invalid or reserved (must be 0-9, non-reserved letter, or middle mouse button).", 8, false, UIHandler.alert_colour_error)
 			disabled = false
 			var key_as_string : String = OS.get_keycode_string(default_key as int)
 			text = key_as_string

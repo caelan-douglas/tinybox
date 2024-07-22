@@ -196,7 +196,7 @@ func _process(delta : float) -> void:
 					if brick.player_from != null:
 						# can't delete another team's brick
 						if brick.player_from.team != tool_player_owner.team:
-							UIHandler.show_alert("Can't delete! Brick belongs to another team", 2, false, true)
+							UIHandler.show_alert("Can't delete! Brick belongs to another team", 2, false, UIHandler.alert_colour_error)
 							return
 					brick.show_delete_overlay()
 					if Input.is_action_just_pressed("click"):
@@ -289,7 +289,7 @@ func _process(delta : float) -> void:
 					# show everything again
 					Global.get_player().visible = true
 					get_tree().current_scene.get_node("GameCanvas").visible = true
-					UIHandler.show_alert(str("Saved as ", save_name), 4, false, false, true)
+					UIHandler.show_alert(str("Saved as ", save_name), 4, false, UIHandler.alert_colour_gold)
 					
 					var file := FileAccess.open(str("user://building/", save_name, ".txt"), FileAccess.WRITE)
 					for b : Node3D in hovered_group:
@@ -331,10 +331,10 @@ func _process(delta : float) -> void:
 							file_name = load_dir.get_next()
 							# if there is still nothing, the folder is empty
 							if file_name == "":
-								UIHandler.show_alert("You have no saved buildings! Save something first.", 8, false, true)
+								UIHandler.show_alert("You have no saved buildings! Save something first.", 8, false, UIHandler.alert_colour_error)
 						load_mode_name_text.text = str("Selected:\n", file_name.split(".")[0], "\n([ C ] for next)")
 					else:
-						UIHandler.show_alert("You have no saved buildings! Save something first.", 8, false, true)
+						UIHandler.show_alert("You have no saved buildings! Save something first.", 8, false, UIHandler.alert_colour_error)
 					just_entered_load_mode = false
 					
 					# load image
@@ -360,12 +360,12 @@ func _process(delta : float) -> void:
 							else:
 								Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, m_pos_3d)
 						else:
-							UIHandler.show_alert("Building not found or corrupt!", 8, false, true)
+							UIHandler.show_alert("Building not found or corrupt!", 8, false, UIHandler.alert_colour_error)
 					else:
-						UIHandler.show_alert("Wait a bit before trying to load another building!", 5, false, true)
+						UIHandler.show_alert("Wait a bit before trying to load another building!", 5, false, UIHandler.alert_colour_error)
 				elif Input.is_action_just_pressed("delete"):
 					DirAccess.remove_absolute(str("user://building/", file_name))
 					DirAccess.remove_absolute(str("user://building_scr/", file_name.split(".")[0], ".jpg"))
-					UIHandler.show_alert("Building deleted.", 4, false, true)
+					UIHandler.show_alert("Building deleted.", 4, false, UIHandler.alert_colour_error)
 					# load next building
 					just_entered_load_mode = true

@@ -57,7 +57,7 @@ func _ready() -> void:
 		"Floaty":
 			game_time = 780
 			build_time = 120
-	UIHandler.show_alert("Build period started! Defend your target\nwith a base or vehicles!", 14, false, true)
+	UIHandler.show_alert("Build period started! Defend your target\nwith a base or vehicles!", 14, false, UIHandler.alert_colour_error)
 	
 	# adjust ui
 	team_target_hp_ui.visible = true
@@ -154,7 +154,7 @@ func _physics_process(delta : float) -> void:
 
 @rpc("call_local", "reliable")
 func _on_build_timer_timeout() -> void:
-	UIHandler.show_alert("Build period is over! The game starts.", 8, false, true)
+	UIHandler.show_alert("Build period is over! The game starts.", 8, false, UIHandler.alert_colour_error)
 	build_period = false
 	game_timer_ui.max_value = game_timer.time_left
 	Global.get_world().get_current_map().get_node("TeamConfines/collider").disabled = true

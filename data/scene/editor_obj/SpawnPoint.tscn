@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://c715f67itwqrf"]
+
+[ext_resource type="Script" path="res://src/SpawnPoint.gd" id="1_nt8o8"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i6q18"]
+height = 0.1
+radial_segments = 16
+rings = 1
+cap_bottom = false
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5i2os"]
+
+[node name="SpawnPoint" type="StaticBody3D"]
+script = ExtResource("1_nt8o8")
+tbw_object_type = "obj_spawnpoint"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+mesh = SubResource("CylinderMesh_i6q18")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_5i2os")

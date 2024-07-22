@@ -113,9 +113,9 @@ func _ready() -> void:
 	await Signal(self, "intro_completed")
 	if tdm:
 		dm_limit = tdm_limit
-		UIHandler.show_alert(str("First team to ", dm_limit, " wins!"), 10, false, false, true)
+		UIHandler.show_alert(str("First team to ", dm_limit, " wins!"), 10, false, UIHandler.alert_colour_gold)
 	else:
-		UIHandler.show_alert(str("First to ", dm_limit, " wins!"), 10, false, false, true)
+		UIHandler.show_alert(str("First to ", dm_limit, " wins!"), 10, false, UIHandler.alert_colour_gold)
 	# 20 minute deathmatches
 	game_time = 1200
 	
@@ -199,7 +199,7 @@ func dm_new_leader(new_id : int, new_leader_name : String, new_leader_kills : in
 	if new_id != current_leader_id:
 		current_leader_id = new_id
 		winner_name = new_leader_name
-		UIHandler.show_alert(str(new_leader_name, " has taken the lead!"), 7, false, false, true)
+		UIHandler.show_alert(str(new_leader_name, " has taken the lead!"), 7, false, UIHandler.alert_colour_gold)
 	# update anyway for current leader
 	dm_leader_ui.max_value = dm_limit
 	dm_leader_ui.value = new_leader_kills

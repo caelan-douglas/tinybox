@@ -72,6 +72,10 @@ func _ready() -> void:
 	# (re-adds all spawnable objs to the multiplayerspawner)w
 	SpawnableObjects.update_spawnable_scenes()
 	
+	# ask user before quitting (command and Q are buttons that may both
+	# be used at the same time)
+	get_tree().set_auto_accept_quit(false)
+	
 	host_button.connect("pressed", _on_host_pressed)
 	host_public_button.connect("toggled", _on_host_public_toggled)
 	host_public = host_public_button.button_pressed
@@ -93,6 +97,16 @@ func _ready() -> void:
 	get_tree().current_scene.add_child(lan_listener)
 	lan_listener.connect("new_server", _on_new_lan_server)
 	lan_listener.connect("remove_server", _on_remove_lan_server)
+
+# quit request
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		var question : String = "Are you sure you want to quit?"
+		if Global.get_world().get_current_map() is Editor:
+			question = "Are you sure you want to quit? All unsaved\nchanges will be lost!"
+		var actions := UIHandler.show_alert_with_actions(question, ["Quit", "Cancel"], true)
+		actions[0].connect("pressed", get_tree().quit)
 
 func _on_new_lan_server(serverInfo : Dictionary) -> void:
 	var multiplayer_menu : CanvasLayer = get_node_or_null("MultiplayerMenu")
@@ -323,7 +337,7 @@ func _on_tutorial_pressed() -> void:
 func _on_host_disconnect_as_client() -> void:
 	# in case host disconnects while mouse is captured
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	UIHandler.show_alert("Host disconnected :(", 12, false, true)
+	UIHandler.show_alert("Host disconnected :(", 12, false, UIHandler.alert_colour_error)
 	leave_server()
 
 func leave_server() -> void:
@@ -334,13 +348,13 @@ func leave_server() -> void:
 
 # Kick or disconnect from the server with a reason.
 func kick_client(reason : String) -> void:
-	UIHandler.show_alert(str("Connection failure: ", reason), 8, false, true)
+	UIHandler.show_alert(str("Connection failure: ", reason), 8, false, UIHandler.alert_colour_error)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	leave_server()
 	
 @rpc("any_peer", "call_remote", "reliable")
 func announce_player_joined(p_display_name : String) -> void:
-	UIHandler.show_alert(str(p_display_name, " joined."), 4)
+	UIHandler.show_alert(str(p_display_name, " joined."), 4, false, UIHandler.alert_colour_player)
 
 # Adds a player to the server with id & name.
 func add_peer(peer_id : int) -> void:
@@ -404,7 +418,7 @@ func remove_player(peer_id : int) -> void:
 		# don't tell clients that the host disconnected
 		if peer_id != 1:
 			# Tell others that someone left
-			UIHandler.show_alert(str(player.display_name, " left."), 4)
+			UIHandler.show_alert(str(player.display_name, " left."), 4, false, UIHandler.alert_colour_player)
 		# Remove player from World player list.
 		Global.get_world().remove_player_from_list(player)
 		

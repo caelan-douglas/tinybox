@@ -159,7 +159,7 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 				# if we cannot afford item, set to can't afford
 				if minigame.get_team_cash(tool_player_owner.team) < cost:
 					can_afford = false
-					UIHandler.show_alert("Your team can't afford that!", 2, false, true)
+					UIHandler.show_alert("Your team can't afford that!", 2, false, UIHandler.alert_colour_error)
 					# reset cooldown counter (in case the team can now afford it)
 					shot_cooldown_counter = 14
 	if can_afford && (ammo == -1 || ammo > 0):

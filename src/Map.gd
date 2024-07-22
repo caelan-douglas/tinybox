@@ -25,8 +25,6 @@ func get_teams() -> Teams:
 	return get_node("Teams")
 
 func _ready() -> void:
-	#when map is initalized, set graphics on world
-	get_parent().get_parent()._on_graphics_preset_changed()
 	# set song
 	MusicHandler.switch_song(songs)
 	# Modify default gravity

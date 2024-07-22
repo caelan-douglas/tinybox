@@ -230,6 +230,13 @@ layout_mode = 2
 text = "Lamp"
 internal_name = "brick_lamp"
 
+[node name="Button16" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
+layout_mode = 2
+text = "Spawn point"
+icon = ExtResource("6_5wr8i")
+expand_icon = true
+internal_name = "obj_spawnpoint"
+
 [node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
 layout_mode = 2
 text = "Tool pickup"

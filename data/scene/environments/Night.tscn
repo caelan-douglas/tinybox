@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c018ya3k3q2en"]
+[gd_scene load_steps=8 format=3 uid="uid://c018ya3k3q2en"]
 
 [ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_l5xax"]
+[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="2_ndbh2"]
 
 [sub_resource type="Gradient" id="Gradient_5lid8"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
@@ -55,3 +56,6 @@ light_energy = 2.0
 shadow_enabled = true
 shadow_opacity = 0.4
 shadow_blur = 10.0
+script = ExtResource("2_ndbh2")
+visible_on_bad = false
+visible_on_awful = false

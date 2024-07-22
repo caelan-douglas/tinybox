@@ -571,10 +571,7 @@ func _ready() -> void:
 	update_info()
 	# update peers with appearance
 	change_appearance()
-	# find team spawns
-	spawns = world.get_current_map().get_teams().get_team_spawns(team)
-	var spawn : Node3D = spawns[randi() % spawns.size()]
-	global_position = spawn.global_position
+	go_to_spawn()
 	# hide your own name label
 	$Smoothing/NameLabel.visible = false
 	# give spawn protection (no overlay)
@@ -985,7 +982,7 @@ func enter_state() -> void:
 	
 	# DEBUG
 	if debug_menu.visible:
-		UIHandler.show_alert(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3, false, false, true)
+		UIHandler.show_alert(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3, false, Color("#80517e"))
 	
 	# reset external propulsion
 	external_propulsion = false
@@ -1230,7 +1227,7 @@ func enter_state() -> void:
 			respawn_time.start()
 			physics_material_override.friction = 1
 			# display death feed to server
-			UIHandler.show_alert.rpc(death_message, 5)
+			UIHandler.show_alert.rpc(death_message, 5, false, UIHandler.alert_colour_death)
 			# set camera mode to tracking
 			# remember what camera mode we had
 			if camera is Camera:
@@ -1244,7 +1241,7 @@ func enter_state() -> void:
 			for second in respawn_time.wait_time:
 				# in case we instantly changed states
 				if _state == DEAD:
-					UIHandler.show_alert(str("Respawn in ", cur_respawn, "..."), 1, false, true)
+					UIHandler.show_alert(str("Respawn in ", cur_respawn, "..."), 1, false, Color("#c67171"))
 					cur_respawn -= 1
 					await get_tree().create_timer(1).timeout
 			# if we are still dead after timer, don't intercept states:
@@ -1330,9 +1327,10 @@ func enter_state() -> void:
 			return
 
 func go_to_spawn() -> void:
-	spawns = world.get_current_map().get_teams().get_team_spawns(team)
-	await get_tree().process_frame
-	set_global_position(spawns[randi() % spawns.size()].global_position as Vector3)
+	# find team spawns
+	spawns = world.get_spawnpoint_for_team(team)
+	var spawn : Vector3 = spawns[randi() % spawns.size()]
+	teleport(spawn)
 
 # replicates states on non-authority clients, mainly for animation reasons
 @rpc("call_remote", "reliable")

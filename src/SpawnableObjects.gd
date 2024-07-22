@@ -33,6 +33,7 @@ extends Node
 	"obj_lifter": load("res://data/scene/lifter/Lifter.tscn"),
 	"obj_picnic_table": load("res://data/scene/editor_obj/PicnicTable.tscn"),
 	"obj_sign": load("res://data/scene/editor_obj/Sign.tscn"),
+	"obj_spawnpoint": load("res://data/scene/editor_obj/SpawnPoint.tscn"),
 	# ENVIRONMENTS
 	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),

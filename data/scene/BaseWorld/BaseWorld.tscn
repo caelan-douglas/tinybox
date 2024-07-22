@@ -14,20 +14,3 @@ songs = Array[String](["mus1", "floaty", "warp", "frozenfield"])
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_hrmyj")
 team_list = Array[Resource]([ExtResource("4_id4bl"), ExtResource("5_dpts0"), ExtResource("6_0ptro")])
-
-[node name="Spawns" type="Node" parent="."]
-
-[node name="0" type="Node" parent="Spawns"]
-
-[node name="Spawn" type="Node3D" parent="Spawns/0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 51, 0)
-
-[node name="1" type="Node" parent="Spawns"]
-
-[node name="Spawn" type="Node3D" parent="Spawns/1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 51, 0)
-
-[node name="2" type="Node" parent="Spawns"]
-
-[node name="Spawn" type="Node3D" parent="Spawns/2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)

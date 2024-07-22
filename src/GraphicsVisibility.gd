@@ -28,8 +28,17 @@ func _ready() -> void:
 func _on_graphics_preset_changed() -> void:
 	match (Global.get_graphics_preset()):
 		Global.GraphicsPresets.COOL:
-			visible = visible_on_cool
+			if name == "DirectionalLight3D":
+				set("shadow_enabled", visible_on_cool)
+			else:
+				visible = visible_on_cool
 		Global.GraphicsPresets.BAD:
-			visible = visible_on_bad
+			if name == "DirectionalLight3D":
+				set("shadow_enabled", visible_on_bad)
+			else:
+				visible = visible_on_bad
 		Global.GraphicsPresets.AWFUL:
-			visible = visible_on_awful
+			if name == "DirectionalLight3D":
+				set("shadow_enabled", visible_on_awful)
+			else:
+				visible = visible_on_awful
