@@ -17,10 +17,48 @@
 extends TBWObject
 class_name Water
 
+enum WaterType {
+	WATER,
+	SWAMP
+}
+
 @onready var area : Area3D = $WaterArea
 @onready var deep_area : Area3D = $DeepWaterArea
 @onready var splash_sound : PackedScene = preload("res://data/scene/water/Splash.tscn")
 @onready var splash_particles : PackedScene = preload("res://data/scene/water/SplashParticles.tscn")
+@onready var mesh : MeshInstance3D = $mesh
+@onready var damage_timer : Timer = $DamageTimer
+
+@onready var water_material : Material = preload("res://data/materials/water.tres")
+@onready var swamp_water_material : Material = preload("res://data/materials/swamp_water.tres")
+
+var water_type : WaterType = WaterType.WATER
+var water_types_as_strings : Array[String] = ["Water", "Swamp"]
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "scale", "water_type"]
+
+func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
+	if property == "water_type":
+		set_water_type(value as int)
+
+func _on_damage_timer_timeout() -> void:
+	for body in deep_area.get_overlapping_bodies():
+		if body is RigidPlayer && body.get_multiplayer_authority() == multiplayer.get_unique_id():
+			body.reduce_health(4, RigidPlayer.CauseOfDeath.SWAMP_WATER)
+
+func set_water_type(new_type : WaterType) -> void:
+	water_type = new_type
+	match (water_type):
+		WaterType.WATER:
+			mesh.set_surface_override_material(0, water_material)
+			# stop damaging players who enter
+			damage_timer.stop()
+		WaterType.SWAMP:
+			mesh.set_surface_override_material(0, swamp_water_material)
+			# start damaging players who enter
+			damage_timer.start()
 
 func _ready() -> void:
 	# for splash visuals & camera colour
@@ -30,6 +68,8 @@ func _ready() -> void:
 	# for actually sending the water signal
 	deep_area.connect("body_entered", _on_deep_body_entered)
 	deep_area.connect("body_exited", _on_deep_body_exited)
+	
+	damage_timer.connect("timeout", _on_damage_timer_timeout)
 
 func _on_deep_body_entered(body : PhysicsBody3D) -> void:
 	# all objects except player

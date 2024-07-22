@@ -41,3 +41,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -688.6, 0)
 shape = SubResource("BoxShape3D_rl71r")
 
 [node name="Splash" parent="." instance=ExtResource("3_rwimi")]
+
+[node name="DamageTimer" type="Timer" parent="."]

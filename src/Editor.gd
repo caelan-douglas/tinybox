@@ -123,18 +123,31 @@ func _on_item_chosen(item_name_internal : String, item_name_display : String) ->
 func get_object_properties_visible() -> bool:
 	return editor_canvas.get_node("PropertyEditor").visible
 
-var active_water : Node3D = null
+var active_water : Water = null
 var water_height : float = 42
+# in case water is turned off and on again, save the type
+var water_type : int = 0
 @onready var obj_water : PackedScene = preload("res://data/scene/editor_obj/WorldWater.tscn")
 func toggle_water() -> void:
 	if active_water != null:
 		active_water.queue_free()
 		active_water = null
 	else:
-		var water_inst : Node3D = obj_water.instantiate()
+		var water_inst : Water = obj_water.instantiate()
 		Global.get_world().add_child(water_inst, true)
 		water_inst.global_position = Vector3(0, water_height, 0)
 		active_water = water_inst
+		active_water.set_water_type(water_type)
+
+func switch_water_type(update_text_path : String) -> void:
+	if active_water != null:
+		water_type = active_water.water_type
+		water_type += 1
+		if water_type >= Water.WaterType.size():
+			water_type = 0
+		active_water.set_water_type(water_type)
+		if "text" in get_node_or_null(update_text_path):
+			get_node(update_text_path).text = active_water.water_types_as_strings[water_type]
 
 func adjust_water_height(amt : float) -> void:
 	water_height += amt
@@ -238,7 +251,7 @@ func disable_player() -> int:
 	player.teleport(Vector3(0, -1000, 0))
 	player.change_state(RigidPlayer.DUMMY)
 	player.locked = true
-	player.editor_mode = true
+	player.invulnerable = true
 	player.visible = false
 	player.get_tool_inventory().delete_all_tools()
 	player.get_tool_inventory().set_disabled(true)
@@ -255,7 +268,7 @@ func enable_player() -> int:
 	await get_tree().create_timer(0.15).timeout
 	player.change_state(RigidPlayer.IDLE)
 	player.locked = false
-	player.editor_mode = false
+	player.invulnerable = false
 	player.visible = true
 	player.get_tool_inventory().give_all_tools()
 	player.get_tool_inventory().set_disabled(false)

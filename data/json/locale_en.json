@@ -75,6 +75,7 @@
             "property_editor": "Property Editor",
             "free_mouse": "Press R to free / capture mouse.\n(Or click outside this panel to\ncapture it again.)",
             "water": "Water",
+            "water_type": "Water type",
             "environment": "Environment",
             "background": "Background"
         }

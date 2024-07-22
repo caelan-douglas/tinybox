@@ -53,7 +53,8 @@ enum CauseOfDeath {
 	OUT_OF_MAP,
 	FIRE,
 	FLAMETHROWER_EXPLOSION,
-	HIT_BY_BALL
+	HIT_BY_BALL,
+	SWAMP_WATER
 }
 
 var _state : int = IDLE
@@ -74,7 +75,6 @@ var executing_player : Node3D = null
 var death_camera_mode : Camera.CameraMode = Camera.CameraMode.FREE
 var locked := false
 var invulnerable := false
-var editor_mode := false
 var can_enter_seat := true
 var on_fire := false
 var in_air_from_lifter := false
@@ -470,6 +470,12 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 									death_message = str(display_name, " went up in flames!")
 								2:
 									death_message = str(display_name, " is feeling toasty!")
+					CauseOfDeath.SWAMP_WATER:
+						match randi() % 2:
+							0:
+								death_message = str(display_name, " swam in some unhealthy water!")
+							1:
+								death_message = str(display_name, " inhaled some tasty swamp water!")
 			#default death feeds
 			else:
 				match randi() % 3:
@@ -655,7 +661,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		move_direction = get_movement_direction()
 	
-	if !editor_mode:
+	if !invulnerable:
 		if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
 			set_health(0, CauseOfDeath.OUT_OF_MAP)
 	
@@ -961,6 +967,10 @@ func change_state(state : int) -> void:
 	# when respawning, only change state to idle
 	# can't be tripped when swimming
 	if (_state == DEAD && state != RESPAWN && state != DUMMY) || (_state == RESPAWN && state != IDLE) || ((_state == SWIMMING || _state == SWIMMING_IDLE) && state == TRIPPED):
+		return
+	
+	# when in dummy mode ignore changing to these states
+	if (_state == DUMMY) && (state == SWIMMING || state == SWIMMING_DASH || state == SWIMMING_IDLE):
 		return
 	
 	# convert tripped state to idle state when invulnerable
@@ -1527,7 +1537,9 @@ func protect_spawn(time : float = 3.5, overlay := true) -> void:
 	invulnerable = true
 	await get_tree().create_timer(time).timeout
 	
-	invulnerable = false
+	# some dummy states are used for invincibility
+	if _state != DUMMY:
+		invulnerable = false
 	# re-enable tools
 	if get_tool_inventory() != null && _state != DUMMY && _state != ROLL:
 		get_tool_inventory().set_disabled(false)

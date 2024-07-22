@@ -30,6 +30,7 @@ func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
 		$WorldProperties/Menu/Water.connect("pressed", (editor as Editor).toggle_water)
+		$WorldProperties/Menu/WaterType.connect("pressed", (editor as Editor).switch_water_type.bind($WorldProperties/Menu/WaterType.get_path()))
 		$WorldProperties/Menu/WaterHeightAdjuster/DownBig.connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
 		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
 		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", (editor as Editor).adjust_water_height.bind(1))

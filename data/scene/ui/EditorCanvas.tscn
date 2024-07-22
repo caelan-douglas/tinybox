@@ -352,8 +352,19 @@ layout_mode = 2
 [node name="DynamicLabel" parent="WorldProperties/Menu/WaterHeightAdjuster" index="2"]
 text = "Water height: 42"
 
+[node name="DynamicLabel5" type="Label" parent="WorldProperties/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
+text = "Water type"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water_type"
+
+[node name="WaterType" type="Button" parent="WorldProperties/Menu"]
+layout_mode = 2
+text = "Water"
+
 [node name="Spacer2" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
+custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
 [node name="DynamicLabel3" type="Label" parent="WorldProperties/Menu"]
@@ -367,7 +378,7 @@ layout_mode = 2
 text = "Sunny"
 
 [node name="Spacer3" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
+custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
 [node name="DynamicLabel4" type="Label" parent="WorldProperties/Menu"]
