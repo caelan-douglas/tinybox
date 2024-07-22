@@ -16,9 +16,15 @@
 
 extends CanvasLayer
 
+@onready var world_click : Button = $WorldClick
+
 func _ready() -> void:
 	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
+	world_click.connect("pressed", _on_world_click_pressed)
+
+func _on_world_click_pressed() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()

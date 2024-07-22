@@ -2,11 +2,17 @@
 extends Map
 class_name Editor
 signal item_picked
+signal deselected
 
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var editor_tool_inventory : EditorToolInventory = get_node("EditorToolInventory")
-@onready var selector : Node = get_node("CameraTarget/Selector")
-@onready var select_area : Area3D = get_node("CameraTarget/SelectArea")
+@onready var selector : Node = get_node("SelectArea/Selector")
+@onready var select_area : Area3D = get_node("SelectArea")
+@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/PropertyEditor") 
+
+var hovered_editable_object : Node = null
+var can_select_object : bool = true
+var selected_item_properties : Dictionary = {}
 
 func _ready() -> void:
 	super()
@@ -15,6 +21,13 @@ func _ready() -> void:
 	
 	# for when a new .tbw map is loaded
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
+	# for when an editable object is hovered
+	select_area.connect("body_entered", _on_body_selected)
+	select_area.connect("area_entered", _on_body_selected)
+	# for when selection leaves body
+	select_area.connect("body_exited", _on_body_deselected)
+	select_area.connect("area_exited", _on_body_deselected)
+	property_editor.connect("property_updated", _on_property_updated)
 	
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
@@ -23,6 +36,36 @@ func _ready() -> void:
 	
 	# load default world
 	Global.get_world().load_tbw("editor_default", false, false)
+
+func _on_property_updated(properties : Dictionary) -> void:
+	if property_editor.properties_from_tool == self:
+		if hovered_editable_object is TBWObject || hovered_editable_object is Brick:
+			for property : String in selected_item_properties.keys():
+				hovered_editable_object.set_property(property, selected_item_properties[property])
+
+func _on_body_selected(body : Node3D) -> void:
+	var selectable_body : Node3D = null
+	if body is Area3D:
+		if body.owner is TBWObject:
+			if !(body.owner is Water):
+				selectable_body = body.owner
+	else:
+		if body is Brick || body is TBWObject:
+			selectable_body = body
+	
+	if can_select_object:
+		if selectable_body != null:
+			hovered_editable_object = selectable_body
+			# show props for that object
+			selected_item_properties = property_editor.list_object_properties(selectable_body, self)
+
+func _on_body_deselected(body : Node3D) -> void:
+	var hovering := false
+	# check currently hovering bodies
+	if select_area.has_overlapping_bodies() || select_area.has_overlapping_areas():
+		hovering = true
+	if !hovering:
+		emit_signal("deselected")
 
 func _on_tbw_loaded() -> void:
 	# Check if map has water
@@ -61,7 +104,7 @@ func _on_item_chosen(item_name_internal : String, item_name_display : String) ->
 	hide_item_chooser()
 
 func get_object_properties_visible() -> bool:
-	return editor_canvas.get_node("ObjectProperties").visible
+	return editor_canvas.get_node("PropertyEditor").visible
 
 var active_water : Node3D = null
 var water_height : float = 42
@@ -243,6 +286,8 @@ func exit_test_mode() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func select_brick() -> Brick:
+	# Don't show props of bricks that we hover
+	can_select_object = false
 	# Reset selected brick
 	brick_selected = null
 	editor_tool_inventory.set_disabled(true)
@@ -259,6 +304,8 @@ func select_brick() -> Brick:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	selector.visible = false
 	camera.controlled_cam_pos = last_pos
+	# allow objects to be selectable again
+	can_select_object = true
 	
 	return brick_selected
 
@@ -275,3 +322,7 @@ func _process(delta : float) -> void:
 		for body in select_area.get_overlapping_bodies():
 			if body is Brick:
 				brick_selected = body as Brick
+
+func _physics_process(delta : float) -> void:
+	if select_area != null:
+		select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos

@@ -22,14 +22,22 @@ var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
 
 @onready var tool_inventory : EditorToolInventory = get_parent()
+@onready var editor : Editor = Global.get_world().get_current_map()
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
-@onready var editor_props_list : VBoxContainer = get_tree().current_scene.get_node("EditorCanvas/ObjectProperties/Menu") 
+@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/PropertyEditor") 
 @onready var preview_node : Node3D = $PreviewNode
-@onready var preview_delete_area : Area3D = $PreviewNode/DeleteArea
+@onready var preview_area : Area3D = $PreviewNode/Area
 @onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
 
 func _ready() -> void:
 	init("(empty)")
+	var camera : Camera = get_viewport().get_camera_3d()
+	property_editor.connect("property_updated", _on_property_updated)
+	editor.connect("deselected", _on_editor_deselected)
+
+func _on_property_updated(properties : Dictionary) -> void:
+	if property_editor.properties_from_tool == self:
+		selected_item_properties = properties
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
@@ -42,8 +50,13 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 		if selected_item == null:
 			pick_item()
 		# update object property list
-		if selected_item_properties.keys().size() > 0:
-			relist_object_properties()
+		property_editor.relist_object_properties(selected_item_properties)
+
+# when the editor stops hovering over something
+func _on_editor_deselected() -> void:
+	if active:
+		# update object property list
+		property_editor.relist_object_properties(selected_item_properties)
 
 func pick_item() -> void:
 	var editor : Map = Global.get_world().get_current_map()
@@ -65,101 +78,6 @@ func pick_item() -> void:
 		get_parent().set_disabled(false)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func list_object_properties(instance : Node) -> void:
-	# clear properties for new item
-	selected_item_properties = {}
-	
-	for child : Node in editor_props_list.get_children():
-		child.queue_free()
-	var title : Label = Label.new()
-	title.text = str("- Object properties -\n\n")
-	editor_props_list.add_child(title)
-	if instance is Brick || instance is TBWObject:
-		for prop_name : String in instance.properties_to_save:
-			# don't list pos rot or scale
-			if prop_name != "global_position" && prop_name != "global_rotation" && prop_name != "scale":
-				var prop : Variant = instance.get(prop_name)
-				add_object_property_entry(prop_name, prop)
-
-func relist_object_properties() -> void:
-	# delete current list
-	for child : Node in editor_props_list.get_children():
-		child.queue_free()
-	# reload list
-	for property : String in selected_item_properties.keys():
-		add_object_property_entry(property, selected_item_properties[property])
-
-var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn")
-var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
-var text_editor : PackedScene = preload("res://data/scene/ui/TextEditor.tscn")
-var event_editor : PackedScene = preload("res://data/scene/ui/EventEditor.tscn")
-func add_object_property_entry(prop_name : String, prop : Variant) -> void:
-	selected_item_properties[prop_name] = prop
-	var entry : Control = null
-	# Add colour picker
-	if prop is Color:
-		entry = colour_picker.instantiate()
-		entry.get_node("ColorPickerButton").color = prop
-		entry.get_node("ColorPickerButton").connect("color_changed", update_object_property.bind(prop_name))
-		
-	# Add adjuster for floats and ints, event editor for events
-	if prop is float || prop is int:
-		if prop_name == "event":
-			entry = event_editor.instantiate()
-			var event_option_picker : OptionButton = entry.get_node("Event")
-			for event_type : String in EventHandler.event_types_readable:
-				event_option_picker.add_item(event_type)
-				# when a new item is selected, set the option button's index as the
-				# selected event type
-				event_option_picker.connect("item_selected", update_object_property.bind(prop_name))
-			event_option_picker.selected = prop
-		else:
-			entry = adjuster.instantiate()
-			var label : Label = entry.get_node("DynamicLabel")
-			label.text = str(prop_name, ": ", prop)
-			entry.get_node("DownBig").connect("pressed", update_object_property.bind(-10, prop_name, true, label))
-			entry.get_node("Down").connect("pressed", update_object_property.bind(-1, prop_name, true, label))
-			entry.get_node("Up").connect("pressed", update_object_property.bind(1, prop_name, true, label))
-			entry.get_node("UpBig").connect("pressed", update_object_property.bind(10, prop_name, true, label))
-	
-	# Add line editor
-	if prop is String:
-		if prop_name == "connection":
-			entry = Button.new()
-			entry.text = "Connect button to brick..."
-			entry.connect("pressed", _update_object_property_select_brick.bind(prop_name, entry))
-		else:
-			entry = text_editor.instantiate()
-			var text : TextEdit = entry.get_node("TextEdit")
-			var save_button : Button = entry.get_node("Save")
-			save_button.connect("pressed", _update_object_property_from_text_instance.bind(text, prop_name))
-		
-	if entry != null:
-		editor_props_list.add_child(entry)
-
-func _update_object_property_select_brick(prop_name : String, button_from : Button) -> void:
-	var editor : Map = Global.get_world().get_current_map()
-	if editor is Editor:
-		button_from.text = "Choose a brick."
-		var selected_brick : Brick = await editor.select_brick()
-		button_from.text = "Connect button to brick..."
-		if selected_brick != null:
-			update_object_property(str(selected_brick.get_path()), prop_name)
-
-func _update_object_property_from_text_instance(instance : TextEdit, prop_name : String) -> void:
-	var text : String = instance.text
-	update_object_property(text, prop_name)
-
-func update_object_property(new_value : Variant, prop_name : String, increment : bool = false, update_label : Label = null) -> void:
-	if selected_item_properties.has(prop_name):
-		if increment:
-			selected_item_properties[prop_name] += new_value
-		else:
-			selected_item_properties[prop_name] = new_value
-		if update_label:
-			update_label.text = str(prop_name, ": ", selected_item_properties[prop_name])
-	print("Updated object property:\n", selected_item_properties)
-
 func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
 	ui_tool_name = item_name_display
 	ui_partner.text = str(item_name_display)
@@ -170,7 +88,8 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	selected_item_name_internal = item_name_internal
 	# show editable properties
 	var instance : Node3D = selected_item.instantiate()
-	list_object_properties(instance)
+	# clear list
+	selected_item_properties = property_editor.list_object_properties(instance, self)
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water":
@@ -218,15 +137,15 @@ func _physics_process(delta : float) -> void:
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
 			if Input.is_action_pressed("click"):
-				if preview_delete_area != null:
+				if preview_area != null:
 					# if there is something where we are trying to place
 					var valid : bool = true
 					
-					if preview_delete_area.has_overlapping_bodies():
+					if preview_area.has_overlapping_bodies():
 						valid = false
 					
 					# if it's trying to place underwater, that's fine
-					for body in preview_delete_area.get_overlapping_areas():
+					for body in preview_area.get_overlapping_areas():
 						if body.owner is TBWObject:
 							if body.owner.tbw_object_type == "obj_water":
 								valid = true
@@ -255,13 +174,13 @@ func _physics_process(delta : float) -> void:
 			# delete
 			elif Input.is_action_just_pressed("editor_delete"):
 				# Delete the hovered object
-				if preview_delete_area != null:
+				if preview_area != null:
 					# bricks, decor objects
-					for body in preview_delete_area.get_overlapping_bodies():
+					for body in preview_area.get_overlapping_bodies():
 						if body is Brick || body is TBWObject:
 							body.queue_free()
 					# Lifters
-					for area in preview_delete_area.get_overlapping_areas():
+					for area in preview_area.get_overlapping_areas():
 						if area.owner is Water:
 							continue
 						elif area.owner is TBWObject:

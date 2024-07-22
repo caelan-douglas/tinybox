@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=17 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
+[ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
 [ext_resource type="PackedScene" uid="uid://b8s7blprpfw2p" path="res://data/scene/ui/EditorItemButton.tscn" id="3_1mjdq"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_b6w4i"]
 [ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
@@ -11,8 +12,31 @@
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5nvuj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wv0h4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0rfp5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b8ase"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfptg"]
+
 [node name="EditorCanvas" type="CanvasLayer"]
 script = ExtResource("1_4dmeu")
+
+[node name="WorldClick" type="Button" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5nvuj")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_wv0h4")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0rfp5")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_b8ase")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tfptg")
 
 [node name="ToolList" type="HBoxContainer" parent="."]
 anchors_preset = 5
@@ -25,80 +49,7 @@ offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
-[node name="ObjectProperties" type="Control" parent="."]
-custom_minimum_size = Vector2(320, 400)
-layout_mode = 3
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 36.0
-offset_top = -200.0
-offset_right = 396.0
-offset_bottom = 200.0
-grow_vertical = 2
-
-[node name="DynamicLabel2" type="Label" parent="ObjectProperties"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -156.0
-offset_top = -26.0
-offset_right = 156.0
-offset_bottom = -10.0
-grow_horizontal = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
-theme_override_constants/outline_size = 6
-text = "Press R to free / capture mouse."
-horizontal_alignment = 1
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/free_mouse"
-
-[node name="Panel" type="Panel" parent="ObjectProperties"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Menu" type="VBoxContainer" parent="ObjectProperties"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -152.0
-offset_right = 154.0
-offset_bottom = 178.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="DynamicLabel" type="Label" parent="ObjectProperties/Menu"]
-layout_mode = 2
-text = "Adjustable object properties
-will appear here."
-script = ExtResource("6_aufvl")
-
-[node name="DynamicLabel3" type="Label" parent="ObjectProperties"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -156.0
-offset_top = 20.0
-offset_right = 156.0
-offset_bottom = 36.0
-grow_horizontal = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
-theme_override_constants/outline_size = 6
-text = "Property Editor"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/property_editor"
+[node name="PropertyEditor" parent="." instance=ExtResource("2_1yhnn")]
 
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 540)
