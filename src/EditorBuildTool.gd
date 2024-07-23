@@ -54,12 +54,16 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 			pick_item()
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
+		# editing a new object, not a hovered one (show notif)
+		property_editor.editing_hovered = false
 
 # when the editor stops hovering over something
 func _on_editor_deselected() -> void:
 	if active:
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
+		# editing a new object, not a hovered one (show notif)
+		property_editor.editing_hovered = false
 
 func pick_item() -> void:
 	var editor : Map = Global.get_world().get_current_map()
@@ -91,8 +95,8 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	selected_item_name_internal = item_name_internal
 	# show editable properties
 	var instance : Node3D = selected_item.instantiate()
-	# clear list
 	selected_item_properties = property_editor.list_object_properties(instance, self)
+	property_editor.editing_hovered = false
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water":
@@ -119,6 +123,8 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	else:
 		var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
 		preview_mesh.visible = false
+	# clear temp instance
+	instance.queue_free()
 
 func find_item_mesh(array : Array) -> MeshInstance3D:
 	for c : Variant in array:

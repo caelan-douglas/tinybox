@@ -31,9 +31,15 @@ func receive_group_from_authority(brick_name : String) -> void:
 func _physics_process(delta : float) -> void:
 	receive_timeout -= 1
 
+var last_checked_time : int = 0
 var max_proc : int = 64
 var cur_proc : int = 0
 func check_world_groups() -> void:
+	# don't check too frequently
+	var curr_time : int = Time.get_ticks_msec()
+	if curr_time - last_checked_time < 500:
+		return
+	last_checked_time = curr_time
 	groups = {}
 	
 	# reset all groups
@@ -48,7 +54,7 @@ func check_world_groups() -> void:
 				if b.joint_detector.has_overlapping_bodies():
 					for other : Variant in b.joint_detector.get_overlapping_bodies():
 						if other is Brick:
-							if other != b && other.group != b.group:
+							if other != b && other.group != b.group && other.groupable:
 								var other_size := 0
 								var my_size := 0
 								for othergroup : Variant in groups[other.group]:

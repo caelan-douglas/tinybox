@@ -53,6 +53,7 @@ var time_since_moved : float = 0
 var sync_step : int = 0
 # for spawning buildings
 var joinable : bool = true
+var groupable : bool = true
 # for larger bricks
 @export var mass_mult : float = 1
 @export var flammable : bool = true
@@ -273,7 +274,7 @@ func set_glued(new : bool, affect_others : bool = true) -> void:
 							b.glued = new
 							b.freeze = new
 	# wait a bit in case of an explosion (see explode func in Explosion.gd)
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(0.2).timeout
 	check_group_static_neighbours()
 
 func check_group_static_neighbours(include_self : bool = true) -> void:
@@ -364,6 +365,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	set_glued(false)
+	set_non_groupable_for(1)
 	unjoin()
 	var explosion_force := randi_range(80, 200)
 	if explosion_force > 160:
@@ -372,6 +374,12 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	await get_tree().create_timer(0.1).timeout
 	var explosion_dir := explosion_position.direction_to(global_position) * explosion_force
 	apply_impulse(explosion_dir, Vector3(randf_range(0, 0.05), randf_range(0, 0.05), randf_range(0, 0.05)))
+
+func set_non_groupable_for(seconds : float) -> void:
+	# avoid grouping together bricks that just exploded
+	groupable = false
+	await get_tree().create_timer(seconds).timeout
+	groupable = true
 
 # Calls on enter scene
 func _ready() -> void:

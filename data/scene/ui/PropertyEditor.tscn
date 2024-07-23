@@ -80,3 +80,21 @@ theme_override_constants/outline_size = 6
 text = "Property Editor"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/property_editor"
+
+[node name="Editing" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -156.0
+offset_top = 44.0
+offset_right = 156.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.641414, 0.350621, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
+theme_override_constants/outline_size = 6
+text = "Editing hovered object:"
+script = ExtResource("1_ykjux")
+json_text = "ui/editor/editing_hovered"

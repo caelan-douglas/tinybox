@@ -44,9 +44,7 @@ func _ready() -> void:
 	# delete explosion hitbox after 0.1s
 	await get_tree().create_timer(0.1).timeout
 	area.call_deferred("queue_free")
-	# update brick groups after an explosion (wait a bit for any displaced
-	# bricks to fall)
-	await get_tree().create_timer(0.2).timeout
+	# update brick groups after an explosion
 	var brick_groups : BrickGroups = Global.get_world().get_node("BrickGroups")
 	brick_groups.check_world_groups()
 

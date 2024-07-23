@@ -75,12 +75,19 @@ func _on_body_selected(body : Node3D) -> void:
 			hovered_editable_object = selectable_body
 			# show props for that object
 			selected_item_properties = property_editor.list_object_properties(selectable_body, self)
+			var last_pos : Vector3 = select_area.global_position
+			# avoid ui spam when clicking + dragging (wait to be still
+			# to show editing notification )
+			await get_tree().create_timer(0.5).timeout
+			if select_area.global_position == last_pos:
+				property_editor.editing_hovered = true
 
 func _on_body_deselected(_body : Node3D) -> void:
 	# check currently hovering bodies
 	if !select_area.has_overlapping_bodies() && !select_area.has_overlapping_areas():
 		# clear list
 		property_editor.clear_list()
+		property_editor.editing_hovered = false
 		# allow any tools to re show their list
 		emit_signal("deselected")
 
@@ -370,6 +377,7 @@ func _physics_process(delta : float) -> void:
 					body.queue_free()
 					# clear list
 					property_editor.clear_list()
+					property_editor.editing_hovered = false
 					# allow any tools to re show their list
 					emit_signal("deselected")
 			# Lifters
@@ -380,5 +388,6 @@ func _physics_process(delta : float) -> void:
 					area.owner.queue_free()
 					# clear list
 					property_editor.clear_list()
+					property_editor.editing_hovered = false
 					# allow any tools to re show their list
 					emit_signal("deselected")

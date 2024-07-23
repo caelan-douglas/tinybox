@@ -20,6 +20,12 @@ signal property_updated(properties : Dictionary)
 
 var selected_item_properties : Dictionary = {}
 var properties_from_tool : Node = null
+var editing_hovered : bool = false:
+	set(value):
+		$Editing.visible = value
+		editing_hovered = value
+	get:
+		return editing_hovered
 
 @onready var editor_props_list : VBoxContainer = get_node("Menu")
 

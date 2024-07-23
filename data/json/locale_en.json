@@ -73,6 +73,7 @@
             "welcome": "Welcome to the world editor!",
             "world_properties": "World properties",
             "property_editor": "Property Editor",
+            "editing_hovered": "(Editing hovered object)",
             "free_mouse": "Press R to free / capture mouse.\n(Or click outside this panel to\ncapture it again.)",
             "water": "Water",
             "water_type": "Water type",
