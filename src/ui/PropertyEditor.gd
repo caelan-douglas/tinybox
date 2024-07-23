@@ -29,7 +29,7 @@ var editing_hovered : bool = false:
 
 @onready var editor_props_list : VBoxContainer = get_node("Menu")
 
-## Lists an object's properties
+# Lists an object's properties
 func list_object_properties(instance : Node, _properties_from_tool : Node) -> Dictionary:
 	properties_from_tool = _properties_from_tool
 	selected_item_properties = {}
@@ -43,11 +43,14 @@ func list_object_properties(instance : Node, _properties_from_tool : Node) -> Di
 				add_object_property_entry(prop_name, prop)
 	return selected_item_properties
 
+# Clears the property editor panel
 func clear_list() -> void:
 	selected_item_properties = {}
 	for child : Node in editor_props_list.get_children():
 		child.queue_free()
 
+# Relists the existing properties of an given tool. (ie, when one tool is
+# switched to another)
 func relist_object_properties(properties : Dictionary,  _properties_from_tool : Node) -> void:
 	properties_from_tool = _properties_from_tool
 	# delete current list
@@ -62,6 +65,7 @@ var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
 var text_editor : PackedScene = preload("res://data/scene/ui/TextEditor.tscn")
 var option_picker : PackedScene = preload("res://data/scene/ui/OptionPicker.tscn")
+# Adds a corresponding UI entry for a given property.
 func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 	selected_item_properties[prop_name] = prop
 	var entry : Control = null
@@ -119,10 +123,11 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 	if entry != null:
 		editor_props_list.add_child(entry)
 
-# convert team index to team name for saving
+# Convert team index to team name for saving.
 func _update_object_property_team(new_value : Variant, prop_name : String) -> void:
 	update_object_property(Global.get_world().get_current_map().get_teams().get_team_name_by_index(new_value as int), prop_name)
 
+# For connecting buttons.
 func _update_object_property_select_brick(prop_name : String, button_from : Button) -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
@@ -130,6 +135,7 @@ func _update_object_property_select_brick(prop_name : String, button_from : Butt
 		if selected_brick != null:
 			update_object_property(str(selected_brick.get_path()), prop_name)
 
+# For updating text properties from the panel.
 func _update_object_property_from_text_instance(instance : TextEdit, prop_name : String) -> void:
 	var text : String = instance.text
 	update_object_property(text, prop_name)

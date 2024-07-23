@@ -1,10 +1,9 @@
 <br>
 <p align="center"><img src=title.png width="450px"></p>
-Free and open source sandbox game with peer-to-peer multiplayer, gamemodes, world editor (in progress), PvP and a physics-based building system. It is made with Godot 4 using GDScript.<br><br>
+Free and open source sandbox game with peer-to-peer multiplayer, world editor, PvP and a physics-based building system. It is made with Godot 4 using GDScript.<br><br>
 
+Download the latest beta release:<br>
 [![Tinybox](https://img.shields.io/badge/Get%20latest-beta%20version-teal?style=plastic)](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
-[![Godot](https://img.shields.io/badge/Godot%20version-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)
-<br>
 ### License
 
 Tinybox is free software licensed under the GNU Affero General Public License v3 (GNU AGPLv3), located in [`COPYING.txt`](COPYING.txt).
@@ -22,13 +21,23 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
-<img src=.export_exclude/screenshot_1.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
-<img src=.export_exclude/screenshot_2.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
-<img src=.export_exclude/screenshot_3.png width="600px" style="padding: 8px; background-color: white; box-shadow: 0px 10px 20px 4px rgba(0, 0, 0, 0.3);">
+<img src=.export_exclude/screenshot_1.png width="600px">
+<img src=.export_exclude/screenshot_2.png width="600px">
+<img src=.export_exclude/screenshot_3.png width="600px">
 
 ### Game vision
-Tinybox *('tiny + sandbox')* is a sandbox-focused game that promotes creativity and experimentation. Some of the goals as of now are to add new building features that promote more interactions such as ropes or wires to connect things loosely, or buttons and switches that can connect to things and perform actions.
+Tinybox *('tiny + sandbox')* is a sandbox game focused on creativity, experimentation, and destroying your friends with rockets. Bricks allow players to create destructible platforms, bridges, houses, vehicles, etc. The world editor allows players to delve a bit deeper and create their own worlds with custom events and features. As of now, the main goal of feature updates in the project is to expand on this with more included worlds; new features, events, and objects in the editor; and new item types.
 
-Additionally, an open way for players to create their own levels and gamemodes is part of the goal. Ideally, players will be given a powerful toolkit via the world editor that allows them to create complex levels, with some form of visual scripting to create unique features.
+In order to keep PvP aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way (ex. bombs and rockets for ranged weapons, rather than hitscan weapons.)
 
-PvP is an integral part of Tinybox. In order to keep it aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way (ex. bombs and rockets for ranged weapons, rather than hitscan weapons.)
+## Setting up the project
+[![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
+Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. The project's current Godot version is linked above.<br>
+An additional step you will have to take is linking a Blender 3.0+ executeable in your Godot Editor settings. **I recommend you do this before loading the project to avoid import errors.**<br>
+`Editor > Editor Settings > FileSystem > Import > Blender 3 Path`<br>
+If done correctly, you should be able to see the .blend files in the /data/models directory within the Editor filesystem. On macOS, you will have to link the actual executeable within the Blender.app Contents, not Blender.app binary itself. For example, on my macOS install the path I have set is:
+`/Applications/Blender.app/Contents/MacOS`
+
+If you're working on this (or any multiplayer project) and running Windows, I recommend using the app [`clumsy`](https://github.com/jagt/clumsy), which is very helpful for simulating bad network conditions (latency, dropped packets, throttled connection, etc.) when testing.
+
+Tinybox enforces statically typed GDScript - see the static typing guide [`here.`](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/static_typing.html)

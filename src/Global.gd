@@ -167,6 +167,7 @@ func play_kill_sound() -> void:
 	audio.play()
 	audio.connect("finished", audio.queue_free)
 
+# Get an array of all the names of TBW files the user has made.
 func get_user_tbw_names() -> Array:
 	var dir : DirAccess = DirAccess.open("user://world")
 	if dir:
@@ -183,6 +184,7 @@ func get_all_children(in_what : Node) -> Array:
 		all_children.append(child)
 	return all_children
 
+# returns the appropriate data type based on a tbw property name.
 func property_string_to_property(property_name : String, property : String) -> Variant:
 	match(property_name):
 		"global_position", "global_rotation", "scale":
@@ -203,6 +205,8 @@ func property_string_to_property(property_name : String, property : String) -> V
 		_:
 			return int(property)
 
+# sets text focused bool for making sure that input keys don't get pressed
+# when typing
 func _on_gui_focus_changed(control : Control) -> void:
 	if control is LineEdit || control is TextEdit:
 		is_text_focused = true

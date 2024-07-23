@@ -53,6 +53,7 @@ func _ready() -> void:
 	# load default world
 	Global.get_world().load_tbw("editor_default", false, false)
 
+# When a property in the Property Editor is changed.
 func _on_property_updated(properties : Dictionary) -> void:
 	if property_editor.properties_from_tool == self:
 		if hovered_editable_object != null:
@@ -60,6 +61,7 @@ func _on_property_updated(properties : Dictionary) -> void:
 				for property : String in selected_item_properties.keys():
 					hovered_editable_object.set_property(property, selected_item_properties[property])
 
+# When something is hovered with the selector in the editor.
 func _on_body_selected(body : Node3D) -> void:
 	var selectable_body : Node3D = null
 	if body is Area3D:
@@ -249,8 +251,8 @@ func switch_background() -> void:
 		current_bg_name = "(none)"
 	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name
 
+# Hide player and make them invulnerable.
 func disable_player() -> int:
-	# hide player and make them invulnerable
 	var player : RigidPlayer = Global.get_player()
 	while player == null:
 		await get_tree().process_frame
@@ -264,8 +266,8 @@ func disable_player() -> int:
 	player.get_tool_inventory().set_disabled(true)
 	return 0
 
+# show player and game tools.
 func enable_player() -> int:
-	# show player and game tools
 	var player : RigidPlayer = Global.get_player()
 	while player == null:
 		await get_tree().process_frame
@@ -380,7 +382,7 @@ func _physics_process(delta : float) -> void:
 					property_editor.editing_hovered = false
 					# allow any tools to re show their list
 					emit_signal("deselected")
-			# Lifters
+			# Lifters, pickups, etc.
 			for area in select_area.get_overlapping_areas():
 				if area.owner is Water:
 					continue

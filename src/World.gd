@@ -430,7 +430,6 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 	if !multiplayer.is_server(): return
 	_server_load_building(lines, b_position)
 
-# TODO: should do this in a thread
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	

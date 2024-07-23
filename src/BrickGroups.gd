@@ -32,8 +32,7 @@ func _physics_process(delta : float) -> void:
 	receive_timeout -= 1
 
 var last_checked_time : int = 0
-var max_proc : int = 64
-var cur_proc : int = 0
+# Determines the groups for bricks in the world.
 func check_world_groups() -> void:
 	# don't check too frequently
 	var curr_time : int = Time.get_ticks_msec()
