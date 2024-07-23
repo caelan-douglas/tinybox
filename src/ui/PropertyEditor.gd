@@ -42,7 +42,8 @@ func clear_list() -> void:
 	for child : Node in editor_props_list.get_children():
 		child.queue_free()
 
-func relist_object_properties(properties : Dictionary) -> void:
+func relist_object_properties(properties : Dictionary,  _properties_from_tool : Node) -> void:
+	properties_from_tool = _properties_from_tool
 	# delete current list
 	clear_list()
 	# set to new property list
@@ -135,5 +136,4 @@ func update_object_property(new_value : Variant, prop_name : String, increment :
 			selected_item_properties[prop_name] = new_value
 		if update_label:
 			update_label.text = str(prop_name, ": ", selected_item_properties[prop_name])
-	print("Updated object property:\n", selected_item_properties)
 	emit_signal("property_updated", selected_item_properties)

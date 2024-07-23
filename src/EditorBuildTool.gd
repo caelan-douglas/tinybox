@@ -53,13 +53,13 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 		if selected_item == null:
 			pick_item()
 		# update object property list
-		property_editor.relist_object_properties(selected_item_properties)
+		property_editor.relist_object_properties(selected_item_properties, self)
 
 # when the editor stops hovering over something
 func _on_editor_deselected() -> void:
 	if active:
 		# update object property list
-		property_editor.relist_object_properties(selected_item_properties)
+		property_editor.relist_object_properties(selected_item_properties, self)
 
 func pick_item() -> void:
 	var editor : Map = Global.get_world().get_current_map()
@@ -174,19 +174,5 @@ func _physics_process(delta : float) -> void:
 					# and not dragging
 					elif !$InvalidAudio.playing && Input.is_action_just_pressed("click"):
 							$InvalidAudio.play()
-			# delete
-			elif Input.is_action_just_pressed("editor_delete"):
-				# Delete the hovered object
-				if preview_area != null:
-					# bricks, decor objects
-					for body in preview_area.get_overlapping_bodies():
-						if body is Brick || body is TBWObject:
-							body.queue_free()
-					# Lifters
-					for area in preview_area.get_overlapping_areas():
-						if area.owner is Water:
-							continue
-						elif area.owner is TBWObject:
-							area.owner.queue_free()
 			if Input.is_action_just_pressed("editor_select_item"):
 				pick_item()

@@ -76,7 +76,7 @@ func _on_body_selected(body : Node3D) -> void:
 			# show props for that object
 			selected_item_properties = property_editor.list_object_properties(selectable_body, self)
 
-func _on_body_deselected(body : Node3D) -> void:
+func _on_body_deselected(_body : Node3D) -> void:
 	# check currently hovering bodies
 	if !select_area.has_overlapping_bodies() && !select_area.has_overlapping_areas():
 		# clear list
@@ -361,3 +361,24 @@ func _process(delta : float) -> void:
 func _physics_process(delta : float) -> void:
 	if select_area != null:
 		select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
+	if Input.is_action_just_pressed("editor_delete"):
+		# Delete the hovered object
+		if select_area != null:
+			# bricks, decor objects
+			for body in select_area.get_overlapping_bodies():
+				if body is Brick || body is TBWObject:
+					body.queue_free()
+					# clear list
+					property_editor.clear_list()
+					# allow any tools to re show their list
+					emit_signal("deselected")
+			# Lifters
+			for area in select_area.get_overlapping_areas():
+				if area.owner is Water:
+					continue
+				elif area.owner is TBWObject:
+					area.owner.queue_free()
+					# clear list
+					property_editor.clear_list()
+					# allow any tools to re show their list
+					emit_signal("deselected")
