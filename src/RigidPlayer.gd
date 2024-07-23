@@ -752,8 +752,10 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 				change_state(ON_LEDGE)
 		HIGH_JUMP:
-			state.linear_velocity.x = move_direction.x * move_speed
-			state.linear_velocity.z = move_direction.z * move_speed
+			# avoid setting velocity when being pushed by extinguisher
+			if !external_propulsion:
+				state.linear_velocity.x = move_direction.x * move_speed
+				state.linear_velocity.z = move_direction.z * move_speed
 			air_duration += 1
 			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
 				change_state(IDLE)
