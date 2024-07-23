@@ -1,10 +1,9 @@
-[gd_scene load_steps=35 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=34 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
 [ext_resource type="Texture2D" uid="uid://bjtup1e1hqx7a" path="res://data/textures/ui/respawn_overlay.png" id="2_im5qw"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="3_5o4ik"]
-[ext_resource type="Script" path="res://src/ui/DebugMenu.gd" id="3_igmde"]
 [ext_resource type="PackedScene" uid="uid://govhpsie1w5w" path="res://data/scene/ui/PlayerList.tscn" id="4_yb62t"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="5_6v07r"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
@@ -1332,53 +1331,6 @@ script = null
 [node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
-
-[node name="DebugMenu" type="VBoxContainer" parent="."]
-visible = false
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 88.0
-offset_top = -127.0
-offset_right = 615.0
-offset_bottom = 127.0
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 8
-script = ExtResource("3_igmde")
-
-[node name="Label" type="Label" parent="DebugMenu"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
-theme_override_constants/outline_size = 2
-text = "------------- DEBUG MENU -------------- (Press ` to hide)"
-
-[node name="DebugText" type="Label" parent="DebugMenu"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
-theme_override_constants/outline_size = 2
-text = "debug"
-autowrap_mode = 2
-
-[node name="FakePoint" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Host: Give fake point to server"
-script = ExtResource("5_6v07r")
-
-[node name="LockPlayer" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Toggle player locked state"
-script = ExtResource("5_6v07r")
-
-[node name="ResetTools" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Reset player tools"
-script = ExtResource("5_6v07r")
-
-[node name="ChangeTeam" type="Button" parent="DebugMenu"]
-layout_mode = 2
-text = "Change team"
-script = ExtResource("5_6v07r")
 
 [node name="IntroOverlay" type="Control" parent="."]
 visible = false

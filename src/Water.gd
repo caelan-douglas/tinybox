@@ -46,7 +46,7 @@ func set_property(property : StringName, value : Variant) -> void:
 func _on_damage_timer_timeout() -> void:
 	for body in deep_area.get_overlapping_bodies():
 		if body is RigidPlayer && body.get_multiplayer_authority() == multiplayer.get_unique_id():
-			body.reduce_health(4, RigidPlayer.CauseOfDeath.SWAMP_WATER)
+			body.reduce_health(2, RigidPlayer.CauseOfDeath.SWAMP_WATER)
 
 func set_water_type(new_type : WaterType) -> void:
 	water_type = new_type

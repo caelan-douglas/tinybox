@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhj43my7js408"]
+[gd_scene load_steps=9 format=3 uid="uid://bhj43my7js408"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_jgbvu"]
 [ext_resource type="Script" path="res://src/World.gd" id="2_alcqr"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bot4om7nsyg2l" path="res://data/scene/ui/GameCanvas.tscn" id="5_ki5at"]
 [ext_resource type="PackedScene" uid="uid://c5aeyr5rirpm4" path="res://data/scene/MultiplayerMenu.tscn" id="5_ti6c5"]
 [ext_resource type="PackedScene" uid="uid://b4heya8wtwyuo" path="res://data/scene/ui/EditorCanvas.tscn" id="7_c1osm"]
+[ext_resource type="Script" path="res://src/ui/DebugMenu.gd" id="8_cc4qc"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_jgbvu")
@@ -70,3 +71,36 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Loading file...     Bricks: 0"
 horizontal_alignment = 1
+
+[node name="DebugCanvas" type="CanvasLayer" parent="."]
+
+[node name="DebugMenu" type="VBoxContainer" parent="DebugCanvas"]
+visible = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -579.0
+offset_top = -127.0
+offset_right = -52.0
+offset_bottom = 127.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+script = ExtResource("8_cc4qc")
+
+[node name="Label" type="Label" parent="DebugCanvas/DebugMenu"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
+theme_override_constants/outline_size = 2
+text = "------------- DEBUG MENU -------------- (Press ` to hide)"
+
+[node name="DebugText" type="Label" parent="DebugCanvas/DebugMenu"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
+theme_override_constants/outline_size = 2
+text = "debug"
+horizontal_alignment = 2
+autowrap_mode = 2

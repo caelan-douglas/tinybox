@@ -127,7 +127,7 @@ preload("res://data/textures/clothing/cloth_tex_1.png"),
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
 
-@onready var debug_menu : Control = get_tree().current_scene.get_node("GameCanvas/DebugMenu")
+@onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
 
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
@@ -971,8 +971,8 @@ func change_state(state : int) -> void:
 	if (_state == DEAD && state != RESPAWN && state != DUMMY) || (_state == RESPAWN && state != IDLE) || ((_state == SWIMMING || _state == SWIMMING_IDLE) && state == TRIPPED):
 		return
 	
-	# when in dummy mode ignore changing to these states
-	if (_state == DUMMY) && (state == SWIMMING || state == SWIMMING_DASH || state == SWIMMING_IDLE):
+	# dummies can only change to idle default state
+	if (_state == DUMMY) && (state != IDLE):
 		return
 	
 	# convert tripped state to idle state when invulnerable

@@ -18,38 +18,6 @@ extends VBoxContainer
 
 @onready var debug_text : Label = $DebugText
 
-func _ready() -> void:
-	$FakePoint.connect("pressed", _on_fake_point_pressed)
-	$LockPlayer.connect("pressed", _on_lock_player_pressed)
-	$ResetTools.connect("pressed", _on_reset_tools_pressed)
-	$ChangeTeam.connect("pressed", _on_change_team_pressed)
-
-func _on_change_team_pressed() -> void:
-	var player : RigidPlayer = Global.get_player()
-	var teams : Teams = Global.get_world().get_current_map().get_teams()
-	var team_idx : int = teams.get_team_index(str(player.team))
-	team_idx += 1
-	if team_idx >= teams.get_team_list().size():
-		team_idx = 0
-	# broadcast updated team to peers
-	player.update_team.rpc(teams.get_team_list()[team_idx].name)
-	player.update_info()
-
-func _on_fake_point_pressed() -> void:
-	if multiplayer.is_server():
-		Global.get_player().increment_kills()
-
-func _on_lock_player_pressed() -> void:
-	if multiplayer.is_server():
-		if Global.get_player().locked:
-			Global.get_player().unlock()
-		else:
-			Global.get_player().lock()
-
-func _on_reset_tools_pressed() -> void:
-	if Global.get_player() != null:
-		Global.get_player().get_tool_inventory().reset()
-
 func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("debug_menu"):
 		# game canvas should be visible
@@ -61,7 +29,7 @@ func _physics_process(delta : float) -> void:
 		for b : Node in bricks:
 			if b is Brick:
 				brick_count += 1
-		debug_text.text = str("bricks in world: ", str(brick_count), "\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\ngraphics cache contents: ", str(Global.graphics_cache))
+		debug_text.text = str("bricks in world: ", str(brick_count), "\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\nmaterial cache size: ", str(Global.graphics_cache.size()))
 		var player : RigidPlayer = Global.get_player()
 		if player != null:
 			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), 

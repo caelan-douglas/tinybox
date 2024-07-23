@@ -238,7 +238,7 @@ func set_colour(new : Color) -> void:
 			add_material_to_cache = false
 	# Add the material to the graphics cache if we need to.
 	if add_material_to_cache:
-		Global.graphics_cache.append(new_material)
+		Global.add_to_graphics_cache(new_material)
 		new_material.albedo_color = new
 	model_mesh.set_surface_override_material(0, new_material)
 

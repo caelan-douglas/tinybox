@@ -33,6 +33,14 @@ enum GraphicsPresets {
 # A cache of already painted materials that can be re-used. Keeps draw call counts down.
 var graphics_cache : Array[Material] = []
 
+const GRAPHICS_CACHE_MAX = 256
+func add_to_graphics_cache(what : Material) -> void:
+	if graphics_cache.size() < GRAPHICS_CACHE_MAX:
+		graphics_cache.append(what)
+	else:
+		graphics_cache.remove_at(0)
+		graphics_cache.append(what)
+
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
 
