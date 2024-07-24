@@ -69,6 +69,7 @@ var player_grav := 1.4
 var team := "Default"
 var seat_occupying : MotorSeat = null
 var health : int = 20
+var dead : bool = false
 var spawns := []
 var death_message := ""
 var executing_player : Node3D = null
@@ -139,10 +140,11 @@ func teleport(new_pos : Vector3) -> void:
 # Lights this player on fire.
 @rpc("any_peer", "call_local")
 func light_fire(from_who_id : int = -1, initial_damage : int = 1) -> void:
-	if !on_fire and _state != SWIMMING and _state != SWIMMING_IDLE and !invulnerable:
+	if !on_fire && _state != SWIMMING && _state != SWIMMING_IDLE && !invulnerable:
 		on_fire = true
+		# visual fire
 		fire.light()
-		if is_multiplayer_authority():
+		if multiplayer.is_server():
 			# take initial damage
 			reduce_health(initial_damage, CauseOfDeath.FIRE, from_who_id)
 			# 2 damage / s
@@ -153,22 +155,22 @@ func light_fire(from_who_id : int = -1, initial_damage : int = 1) -> void:
 			fire_timer.name = "FireTimer"
 			add_child(fire_timer)
 			fire_timer.start()
-		# extinguish after time
-		await get_tree().create_timer(4).timeout
-		extinguish_fire()
+			# extinguish after time
+			await get_tree().create_timer(4).timeout
+			extinguish_fire.rpc()
 
 # Extinguishes the fire on this player, and deletes the fire timer.
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func extinguish_fire() -> void:
 	if on_fire:
 		on_fire = false
-		if is_multiplayer_authority():
+		if multiplayer.is_server():
 			if has_node("FireTimer"):
 				if $FireTimer.is_connected("timeout", reduce_health):
 					$FireTimer.disconnect("timeout", reduce_health)
 				$FireTimer.stop()
 				$FireTimer.queue_free()
-		fire.extinguish()
+	fire.extinguish()
 
 func _set_can_enter_seat(mode : bool) -> void:
 	can_enter_seat = mode
@@ -227,23 +229,21 @@ func get_tool_inventory() -> Node:
 
 # When this player hits something too hard, trip them.
 func _on_body_entered(body : Node3D) -> void:
-	if (body is RigidBody3D) && (!body is RigidPlayer):
-		if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
-			if _state != STANDING_UP && _state != IN_SEAT:
-				# take damage from metal bricks hitting player
-				if body is Brick:
-					if body._material == Brick.BrickMaterial.METAL:
-						set_health(get_health() - 1, CauseOfDeath.HIT_BY_BRICK)
-				change_state(TRIPPED)
-		if body is Brick:
-			if body.on_fire:
-				light_fire.rpc(-1, 1)
+	if multiplayer.is_server():
+		if (body is RigidBody3D) && (!body is RigidPlayer):
+			if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
+				if _state != STANDING_UP && _state != IN_SEAT:
+					# take damage from metal bricks hitting player
+					if body is Brick:
+						if body._material == Brick.BrickMaterial.METAL:
+							set_health(get_health() - 1, CauseOfDeath.HIT_BY_BRICK)
+					change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
+			if body is Brick:
+				if body.on_fire:
+					light_fire.rpc()
 	# trip other players when my velocity is high
-	elif body is RigidPlayer && linear_velocity.length() > 10:
+	if body is RigidPlayer && linear_velocity.length() > 10:
 		body.trip_by_player.rpc(linear_velocity)
-	elif body is StaticBody3D && body.name == "KillPlane":
-		reduce_health(20, CauseOfDeath.OUT_OF_MAP)
-	
 	# stepped on button
 	if body is ButtonBrick:
 		body.stepped.rpc(get_path())
@@ -279,19 +279,43 @@ func _is_friendly_fire(other_player : RigidPlayer) -> bool:
 	return false
 
 func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
+	# server handles all player health
+	if !multiplayer.is_server(): return
+	# from server: update display for client and all players
 	set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
 
-func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> int:
-	if !invulnerable && _state != DEAD:
+@rpc("any_peer", "call_local", "reliable")
+func receive_server_health(new : int) -> void:
+	if is_multiplayer_authority():
 		# flash health on damage
 		if new < health:
 			health_bar.get_node("AnimationPlayer").play("flash_health")
+		
 		health = new
+		
+		health_bar.value = get_health()
+		# low health colour
+		if health_bar.value < 5:
+			health_bar.self_modulate = Color("#ff4848")
+		else:
+			health_bar.self_modulate = Color("#61a48f")
+	else:
+		health = new
+
+func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
+	# only runs as server
+	if !multiplayer.is_server():
+		return
+	
+	if !invulnerable && !dead:
+		# server will keep track of this
+		health = new
+		# send updated health to clients
+		receive_server_health.rpc(health)
+		
 		if health <= 0:
 			# shorter respawn in sandbox
 			respawn_time.wait_time = 5
-			if Global.get_world().minigame != null:
-				respawn_time.wait_time = 10
 			# death feed handler
 			if potential_cause_of_death != -1:
 				# determine if there is an executing player
@@ -305,7 +329,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 				match potential_cause_of_death:
 					CauseOfDeath.EXPLOSION:
 						if executing_player != null:
-							if potential_executor_id == multiplayer.get_unique_id():
+							if potential_executor_id == get_multiplayer_authority():
 								death_message = str(display_name, " blew themselves up!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
@@ -330,7 +354,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 							death_message = str(display_name, " blew up!")
 					CauseOfDeath.FLAMETHROWER_EXPLOSION:
 						if executing_player != null:
-							if potential_executor_id == multiplayer.get_unique_id():
+							if potential_executor_id == get_multiplayer_authority():
 								death_message = str(display_name, " was involved in a flamethrower accident!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
@@ -372,7 +396,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 							death_message = str(display_name, " was struck by a bat!")
 					CauseOfDeath.HIT_BY_BALL:
 						if executing_player != null:
-							if potential_executor_id == multiplayer.get_unique_id():
+							if potential_executor_id == get_multiplayer_authority():
 								death_message = str(display_name, " hit themselves with a ball!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
@@ -442,7 +466,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 					CauseOfDeath.FIRE:
 						# on fire from explosion or flamethrower
 						if executing_player != null:
-							if potential_executor_id == multiplayer.get_unique_id():
+							if potential_executor_id == get_multiplayer_authority():
 								death_message = str(display_name, " played with fire!")
 							elif executing_player_name != null:
 								# If friendly fire is OFF, don't increment the executor's kills, show special message
@@ -485,16 +509,26 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						death_message = str(display_name, " has met their demise!")
 					2:
 						death_message = str(display_name, " will be back in 10 seconds!")
+			# set server dead flag
+			dead = true
+			# display death feed to server
+			UIHandler.show_alert.rpc(death_message, 5, false, UIHandler.alert_colour_death)
 			# now we set the death message, change the state
-			change_state(DEAD)
-		health_bar.value = get_health()
-		# low health colour
-		if health_bar.value < 5:
-			health_bar.self_modulate = Color("#ff4848")
-		else:
-			health_bar.self_modulate = Color("#61a48f")
-		update_health.rpc(health)
-	return health
+			change_state.rpc_id(get_multiplayer_authority(), DEAD)
+			# start timer, connected to respawn
+			respawn_time.start()
+			var cur_respawn := respawn_time.wait_time
+			for second in respawn_time.wait_time:
+				# in case we instantly changed states
+				UIHandler.show_alert.rpc_id(get_multiplayer_authority(), str("Respawn in ", cur_respawn, "..."), 1, false, Color("#c67171"))
+				cur_respawn -= 1
+				await get_tree().create_timer(1).timeout
+			# if we are still dead after timer, don't intercept states:
+			change_state.rpc_id(get_multiplayer_authority(), RESPAWN)
+			dead = false
+			extinguish_fire.rpc()
+			set_health(20)
+			protect_spawn()
 
 func get_health() -> int:
 	return health
@@ -503,11 +537,6 @@ func get_health() -> int:
 func set_last_hit_by_id(who : int) -> void:
 	last_hit_by_id = who
 	last_hit = true
-
-# Update peers with new health
-@rpc("call_remote")
-func update_health(new : int) -> void:
-	health = new
 
 # Update this player's team with a new team.
 @rpc("any_peer", "call_local", "reliable")
@@ -582,8 +611,9 @@ func _ready() -> void:
 	go_to_spawn()
 	# hide your own name label
 	$Smoothing/NameLabel.visible = false
-	# give spawn protection (no overlay)
-	protect_spawn(3.5, false)
+	if multiplayer.is_server():
+		# give spawn protection (no overlay)
+		protect_spawn(3.5, false)
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -647,6 +677,7 @@ var air_from_jump := false
 var on_wall_cooldown : int = 0
 # Manages movement
 func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
+	# handle movement
 	if !is_multiplayer_authority(): return
 	# executes on owner only
 	var is_on_ground := false
@@ -660,10 +691,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	var move_direction := Vector3.ZERO
 	if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 		move_direction = get_movement_direction()
-	
-	if !invulnerable:
-		if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
-			set_health(0, CauseOfDeath.OUT_OF_MAP)
 	
 	match _state:
 		IDLE:
@@ -927,6 +954,12 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		var t := state.transform
 		t.origin = teleport_pos
 		state.set_transform(t)
+	
+	# handle out of map
+	if multiplayer.is_server():
+		if !invulnerable:
+			if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
+				set_health(0, CauseOfDeath.OUT_OF_MAP)
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
@@ -959,8 +992,12 @@ func trip_by_player(hit_velocity : Vector3) -> void:
 	await get_tree().process_frame
 	linear_velocity = hit_velocity
 
+@rpc("any_peer", "call_local", "reliable")
 func change_state(state : int) -> void:
-	# only execute on yourself
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
+	# only execute on client from here on
 	if !is_multiplayer_authority(): return
 	# reset idle timer
 	idle_time = 0
@@ -1237,11 +1274,7 @@ func enter_state() -> void:
 			# reset gravity in case we were swimming
 			gravity_scale = player_grav
 			linear_damp = 0
-			# start timer, connected to respawn
-			respawn_time.start()
 			physics_material_override.friction = 1
-			# display death feed to server
-			UIHandler.show_alert.rpc(death_message, 5, false, UIHandler.alert_colour_death)
 			# set camera mode to tracking
 			# remember what camera mode we had
 			if camera is Camera:
@@ -1250,21 +1283,8 @@ func enter_state() -> void:
 					camera.set_target(executing_player.target)
 				camera.locked = true
 				camera.set_camera_mode(Camera.CameraMode.TRACK)
-			# show timer
-			var cur_respawn := respawn_time.wait_time
-			for second in respawn_time.wait_time:
-				# in case we instantly changed states
-				if _state == DEAD:
-					UIHandler.show_alert(str("Respawn in ", cur_respawn, "..."), 1, false, Color("#c67171"))
-					cur_respawn -= 1
-					await get_tree().create_timer(1).timeout
-			# if we are still dead after timer, don't intercept states:
-			if _state == DEAD:
-				change_state(RESPAWN)
 		RESPAWN:
 			lock_rotation = true
-			# in case we died from fire
-			extinguish_fire()
 			# reset camera
 			if camera is Camera:
 				camera.locked = false
@@ -1276,13 +1296,10 @@ func enter_state() -> void:
 			go_to_spawn()
 			set_global_rotation(Vector3.ZERO)
 			linear_velocity = Vector3.ZERO
-			set_health(20)
-			protect_spawn()
 			change_state(IDLE)
 		DUMMY:
 			lock_rotation = true
 			linear_velocity = Vector3.ZERO
-			set_health(20)
 			freeze = true
 			change_state_non_authority.rpc(DUMMY)
 			pass
@@ -1495,25 +1512,28 @@ func set_player_collider(new : bool) -> void:
 
 @rpc("any_peer", "call_local")
 func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
-	# only run on authority
-	if !is_multiplayer_authority(): return
+	# only run on server and auth
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	# default death type is explosion
 	var cause_of_death : CauseOfDeath = CauseOfDeath.EXPLOSION
+	# reduce health depending on distance of explosion; notify health handler who it was from
+	var offset_pos : Vector3 = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
+	if multiplayer.is_server():
+		set_health(get_health() - (28 / int(1 + offset_pos.distance_to(explosion_position))), cause_of_death, from_whom)
+		# only trip / light fire if we are not dead
+		if get_health() > 0:
+			change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
+			light_fire.rpc(from_whom)
+	
+	# run on authority (client who exploded)
+	if !is_multiplayer_authority(): return
 	# check if holding flamethrower, if so set proper cause of death
 	var flamethrower : Tool = get_tool_inventory().has_tool_by_name("FlamethrowerTool")
 	if flamethrower != null && get_tool_inventory().tool_just_holding != null:
 		if flamethrower == get_tool_inventory().tool_just_holding:
 			cause_of_death = CauseOfDeath.FLAMETHROWER_EXPLOSION
-	
-	var explosion_force : float = randi_range(20, 30)
-	# reduce health depending on distance of explosion; notify health handler who it was from
-	var offset_pos : Vector3 = Vector3(global_position.x, global_position.y + 0.4, global_position.z)
-	var result_health : int = set_health(get_health() - (28 / int(1 + offset_pos.distance_to(explosion_position))), cause_of_death, from_whom)
-	# only trip / light fire if we are not dead
-	if result_health > 0:
-		change_state(TRIPPED)
-		light_fire.rpc(from_whom)
-	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * explosion_force
+	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * 25
 	apply_impulse(explosion_dir)
 
 @rpc("call_local", "reliable")
@@ -1532,9 +1552,7 @@ func increment_kills() -> void:
 	update_kills.rpc(kills)
 
 func protect_spawn(time : float = 3.5, overlay := true) -> void:
-	play_protect_spawn_animation.rpc()
-	if overlay:
-		respawn_overlay.play("respawn")
+	play_protect_spawn_animation.rpc(overlay)
 	
 	invulnerable = true
 	await get_tree().create_timer(time).timeout
@@ -1546,9 +1564,11 @@ func protect_spawn(time : float = 3.5, overlay := true) -> void:
 	if get_tool_inventory() != null && _state != DUMMY && _state != ROLL:
 		get_tool_inventory().set_disabled(false)
 
-@rpc("call_local", "reliable")
-func play_protect_spawn_animation() -> void:
+@rpc("any_peer", "call_local", "reliable")
+func play_protect_spawn_animation(overlay := true) -> void:
 	$SpawnAnimator.play("spawn")
+	if overlay:
+		respawn_overlay.play("respawn")
 
 func _on_camera_mode_changed() -> void:
 	if !locked:
@@ -1560,7 +1580,8 @@ func _on_camera_mode_changed() -> void:
 func entered_water() -> void:
 	bubble_particles.emitting = true
 	change_state(SWIMMING)
-	extinguish_fire()
+	if multiplayer.is_server():
+		extinguish_fire.rpc()
 
 func exited_water() -> void:
 	bubble_particles.emitting = false

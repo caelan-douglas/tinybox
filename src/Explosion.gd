@@ -66,4 +66,4 @@ func play_sound() -> void:
 
 func explode(body : Node3D) -> void:
 	if body.has_method("explode") && !(body is Explosion) && !(body is Rocket) && !(body is Bomb):
-		body.explode.rpc_id(body.get_multiplayer_authority(), global_position, by_whom)
+		body.explode.rpc(global_position, by_whom)

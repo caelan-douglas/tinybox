@@ -18,6 +18,16 @@ extends VBoxContainer
 
 @onready var debug_text : Label = $DebugText
 
+func _ready() -> void:
+	var add_hp_button : Button = Button.new()
+	add_hp_button.text = "Add fake health (pretend to be server as client)"
+	add_hp_button.connect("pressed", _on_add_fake_health)
+	add_child(add_hp_button)
+
+func _on_add_fake_health() -> void:
+	if !multiplayer.is_server():
+		Global.get_player().receive_server_health(Global.get_player().health + 10)
+
 func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("debug_menu"):
 		# game canvas should be visible

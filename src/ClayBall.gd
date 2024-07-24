@@ -39,10 +39,9 @@ func _on_body_entered(body : Node3D) -> void:
 			body.unjoin()
 	elif body is RigidPlayer:
 		# if we hit a player, set the player's last hit by ID to this one
-		body.set_last_hit_by_id.rpc(get_multiplayer_authority())
-		# and trip them (if we are auth)
-		if body.get_multiplayer_authority() == multiplayer.get_unique_id():
-			body.change_state(RigidPlayer.TRIPPED)
+		if multiplayer.is_server():
+			body.set_last_hit_by_id.rpc(get_multiplayer_authority())
+			body.change_state.rpc(RigidPlayer.TRIPPED)
 			body.reduce_health((randi() % 3) + 1, RigidPlayer.CauseOfDeath.HIT_BY_BALL, get_multiplayer_authority())
 	if is_multiplayer_authority():
 		# stepped on button

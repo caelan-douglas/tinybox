@@ -75,7 +75,6 @@ horizontal_alignment = 1
 [node name="DebugCanvas" type="CanvasLayer" parent="."]
 
 [node name="DebugMenu" type="VBoxContainer" parent="DebugCanvas"]
-visible = false
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5

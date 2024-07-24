@@ -150,7 +150,7 @@ func update_player_list_information() -> void:
 
 # TODO: Maybe this should move to MusicHandler? + MusicHandler could be called AudioHandler?
 var last_kill_time := 0
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func play_kill_sound() -> void:
 	var audio := AudioStreamPlayer.new()
 	audio.volume_db = 1
