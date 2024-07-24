@@ -1,13 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=14 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
-[ext_resource type="PackedScene" uid="uid://b8s7blprpfw2p" path="res://data/scene/ui/EditorItemButton.tscn" id="3_1mjdq"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_b6w4i"]
-[ext_resource type="Texture2D" uid="uid://b0e4hqlnfvg2o" path="res://data/textures/editor_icons/half_brick.png" id="4_drvio"]
-[ext_resource type="Texture2D" uid="uid://b06jqfkgscjul" path="res://data/textures/editor_icons/wheel.png" id="5_a7h3k"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
-[ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="6_5wr8i"]
+[ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_xh0b7"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
@@ -130,161 +127,8 @@ layout_mode = 2
 layout_mode = 2
 text = "New world"
 
-[node name="ItemChooser" type="Control" parent="."]
+[node name="ItemChooser" parent="." instance=ExtResource("5_xh0b7")]
 visible = false
-custom_minimum_size = Vector2(540, 400)
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -355.0
-offset_top = -200.0
-offset_right = 355.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="ItemChooser"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Menu" type="VBoxContainer" parent="ItemChooser"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -52.0
-offset_right = 154.0
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="DynamicLabel" type="Label" parent="ItemChooser/Menu"]
-layout_mode = 2
-text = "Pick item / object..."
-script = ExtResource("6_aufvl")
-
-[node name="Spacer" type="Control" parent="ItemChooser/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="ItemChooser/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 300)
-layout_mode = 2
-follow_focus = true
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
-
-[node name="ItemGrid" type="GridContainer" parent="ItemChooser/Menu/ScrollContainer"]
-layout_mode = 2
-columns = 3
-
-[node name="Button" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-internal_name = "brick"
-
-[node name="Button2" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Half brick"
-icon = ExtResource("4_drvio")
-internal_name = "brick_half"
-
-[node name="Button3" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Wheel"
-icon = ExtResource("5_a7h3k")
-internal_name = "brick_cylinder"
-
-[node name="Button5" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Big wheel"
-icon = ExtResource("5_a7h3k")
-internal_name = "brick_cylinder_large"
-
-[node name="Button4" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Seat"
-internal_name = "brick_motor_seat"
-
-[node name="Button14" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Button"
-internal_name = "brick_button"
-
-[node name="Button15" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Lamp"
-internal_name = "brick_lamp"
-
-[node name="Button16" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Spawn point"
-icon = ExtResource("6_5wr8i")
-expand_icon = true
-internal_name = "obj_spawnpoint"
-
-[node name="Button10" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Tool pickup"
-icon = ExtResource("6_5wr8i")
-expand_icon = true
-internal_name = "obj_pickup"
-
-[node name="Button11" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Lifter"
-icon = ExtResource("6_5wr8i")
-expand_icon = true
-internal_name = "obj_lifter"
-
-[node name="Button6" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Pine tree"
-icon = null
-internal_name = "obj_pine_tree"
-
-[node name="Button7" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Big cliff"
-icon = null
-internal_name = "obj_cliff_0"
-
-[node name="Button8" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Small asteroid"
-icon = null
-internal_name = "obj_asteroid_0"
-
-[node name="Button9" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Big mug"
-icon = null
-internal_name = "obj_mug"
-
-[node name="Button12" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Big picnic table"
-icon = null
-expand_icon = true
-internal_name = "obj_picnic_table"
-
-[node name="Button13" parent="ItemChooser/Menu/ScrollContainer/ItemGrid" instance=ExtResource("3_1mjdq")]
-layout_mode = 2
-text = "Sign"
-icon = null
-expand_icon = true
-internal_name = "obj_sign"
 
 [node name="WorldProperties" type="Control" parent="."]
 visible = false

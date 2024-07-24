@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dolyvsom0bwf3"]
+
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_w5rc4"]
+
+[node name="ItemSet" type="VBoxContainer"]
+
+[node name="Spacer" type="Control" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.778457, 0.174892, 1)
+text = "Set Name"
+script = ExtResource("1_w5rc4")
+
+[node name="ItemGrid" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3

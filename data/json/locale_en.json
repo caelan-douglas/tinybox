@@ -78,7 +78,8 @@
             "water": "Water",
             "water_type": "Water type",
             "environment": "Environment",
-            "background": "Background"
+            "background": "Background",
+            "item_chooser_title": "Select an item or object to assign to this slot."
         }
     },
     "tip": {
@@ -102,6 +103,32 @@
     "appearance": {
         "long_sleeve": "Long sleeve",
         "short_sleeve": "Short sleeve"
+    },
+    "tbw_objects": {
+        "obj_water": "Water",
+        "obj_pine_tree": "Pine tree",
+        "obj_cliff_0": "Big cliff",
+        "obj_asteroid_0": "Asteroid",
+        "obj_mug": "Big mug",
+        "obj_pickup": "Tool pickup",
+        "obj_lifter": "Lifter",
+        "obj_picnic_table": "Big picnic table",
+        "obj_sign": "Sign",
+        "obj_spawnpoint": "Spawnpoint",
+        "env_sunny": "Sunny",
+        "env_sunset": "Sunset",
+        "env_night": "Night",
+        "env_molten": "Molten",
+        "env_warp": "Warp",
+        "bg_frozen_field": "Frozen Field",
+        "bg_warp": "Warp",
+        "brick": "Brick",
+        "brick_half": "Half brick",
+        "brick_cylinder": "Wheel",
+        "brick_cylinder_large": "Big wheel",
+        "brick_motor_seat": "Vehicle seat",
+        "brick_button": "Button",
+        "brick_lamp": "Lamp"
     },
     "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\n\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
 }

@@ -104,28 +104,24 @@ func _on_tbw_loaded() -> void:
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:
-		editor_canvas.get_node("WorldProperties/Menu/Environment").text = env.environment_name
+		editor_canvas.get_node("WorldProperties/Menu/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
 	# Update background text
 	var bg : TBWObject = get_background()
 	if bg != null:
-		editor_canvas.get_node("WorldProperties/Menu/Background").text = bg.tbw_object_type
+		editor_canvas.get_node("WorldProperties/Menu/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
 
 func show_item_chooser() -> void:
 	editor_tool_inventory.set_disabled(true)
 	editor_canvas.get_node("ItemChooser").visible = true
-	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
-		b.connect("pressed", _on_item_chosen.bind(b.internal_name, b.text), 8)
 
 func hide_item_chooser() -> void:
 	editor_tool_inventory.set_disabled(false)
 	editor_canvas.get_node("ItemChooser").visible = false
-	for b in editor_canvas.get_node("ItemChooser/Menu/ScrollContainer/ItemGrid").get_children():
-		b.disconnect("pressed", _on_item_chosen.bind(b.internal_name, b.text))
 
 func get_item_chooser_visible() -> bool:
 	return editor_canvas.get_node("ItemChooser").visible
 
-func _on_item_chosen(item_name_internal : String, item_name_display : String) -> void:
+func on_item_chosen(item_name_internal : String, item_name_display : String) -> void:
 	emit_signal("item_picked", item_name_internal, item_name_display)
 	hide_item_chooser()
 
@@ -215,7 +211,7 @@ func switch_environment() -> void:
 			new_env = SpawnableObjects.objects["env_sunny"].instantiate()
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
-	editor_canvas.get_node("WorldProperties/Menu/Environment").text = current_env_name
+	editor_canvas.get_node("WorldProperties/Menu/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
 
 func switch_background() -> void:
 	var bg : TBWObject = null
@@ -247,9 +243,10 @@ func switch_background() -> void:
 	if new_bg != null:
 		Global.get_world().add_child(new_bg, true)
 		current_bg_name = new_bg.tbw_object_type
+		editor_canvas.get_node("WorldProperties/Menu/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
 	else:
 		current_bg_name = "(none)"
-	editor_canvas.get_node("WorldProperties/Menu/Background").text = current_bg_name
+		editor_canvas.get_node("WorldProperties/Menu/Background").text = "(none)"
 
 # Hide player and make them invulnerable.
 func disable_player() -> int:

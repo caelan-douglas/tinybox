@@ -53,6 +53,16 @@ extends Node
 	"brick_lamp": load("res://data/scene/brick/LampBrick.tscn")
 }
 
+# Returns a list of items spawnable by the Editor.
+func get_editor_spawnable_objects_list() -> Array[String]:
+	var list := objects.keys()
+	var return_list : Array[String] = []
+	for item : String in list:
+		if item.begins_with("obj") || item.begins_with("brick"):
+			if item != "obj_water":
+				return_list.append(item)
+	return return_list
+
 # explosion
 @onready var explosion : PackedScene = load("res://data/scene/explosion/Explosion.tscn")
 
