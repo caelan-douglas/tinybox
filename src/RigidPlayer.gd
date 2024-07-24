@@ -75,7 +75,8 @@ var death_message := ""
 var executing_player : Node3D = null
 var death_camera_mode : Camera.CameraMode = Camera.CameraMode.FREE
 var locked := false
-var invulnerable := false
+# invulnerable on spawn
+var invulnerable := true
 var can_enter_seat := true
 var on_fire := false
 var in_air_from_lifter := false
@@ -138,7 +139,7 @@ func teleport(new_pos : Vector3) -> void:
 	teleport_pos = new_pos
 
 # Lights this player on fire.
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func light_fire(from_who_id : int = -1, initial_damage : int = 1) -> void:
 	if !on_fire && _state != SWIMMING && _state != SWIMMING_IDLE && !invulnerable:
 		on_fire = true
@@ -285,7 +286,7 @@ func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_
 	set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
 
 @rpc("any_peer", "call_local", "reliable")
-func receive_server_health(new : int) -> void:
+func _receive_server_health(new : int) -> void:
 	if is_multiplayer_authority():
 		# flash health on damage
 		if new < health:
@@ -311,7 +312,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 		# server will keep track of this
 		health = new
 		# send updated health to clients
-		receive_server_health.rpc(health)
+		_receive_server_health.rpc(health)
 		
 		if health <= 0:
 			# shorter respawn in sandbox
@@ -592,8 +593,9 @@ func set_camera(new : Camera3D) -> void:
 func _ready() -> void:
 	# execute for everyone
 	Global.get_world().add_player_to_list(self)
-	
 	gravity_scale = player_grav
+	if multiplayer.is_server():
+		protect_spawn(3.5, false)
 	
 	# only execute on yourself
 	if !is_multiplayer_authority():
@@ -603,7 +605,6 @@ func _ready() -> void:
 	connect("body_entered", _on_body_entered)
 	multiplayer.connected_to_server.connect(update_info)
 	multiplayer.peer_connected.connect(update_info)
-	
 	# update peers with name and team
 	update_info()
 	# update peers with appearance
@@ -611,9 +612,9 @@ func _ready() -> void:
 	go_to_spawn()
 	# hide your own name label
 	$Smoothing/NameLabel.visible = false
-	if multiplayer.is_server():
-		# give spawn protection (no overlay)
-		protect_spawn(3.5, false)
+	# in case we were not present on client when server sent
+	# protect spawn call
+	_receive_server_protect_spawn(3.5, false)
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -678,276 +679,276 @@ var on_wall_cooldown : int = 0
 # Manages movement
 func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	# handle movement
-	if !is_multiplayer_authority(): return
-	# executes on owner only
-	var is_on_ground := false
-	if ground_detect.has_overlapping_bodies():
-		is_on_ground = true
-	
-	if camera == null:
-		camera = get_viewport().get_camera_3d()
-	
-	# only captured mouse gets move dir
-	var move_direction := Vector3.ZERO
-	if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-		move_direction = get_movement_direction()
-	
-	match _state:
-		IDLE:
-			state.linear_velocity.x *= decel_multiplier
-			state.linear_velocity.z *= decel_multiplier
-			if is_on_ground and Input.is_action_pressed("jump") && !locked:
-				air_from_jump = true
-				# jump particles
-				play_jump_particles()
-				# high jump, but only if not holding jump
-				if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
-					change_state(HIGH_JUMP)
-				else:
-					apply_central_impulse(Vector3.UP * jump_force)
-					change_state(AIR)
-			elif move_direction.x or move_direction.z:
-				if is_on_ground:
-					change_state(RUN)
-				else:
-					change_state(AIR)
-			elif !is_on_ground:
-				change_state(AIR)
-		RUN:
-			if not move_direction.x and not move_direction.z:
-				change_state(IDLE)
-			elif !is_on_ground:
-				change_state(AIR)
-			elif is_on_ground and Input.is_action_pressed("jump") && !locked:
-				air_from_jump = true
-				# jump particles
-				play_jump_particles()
-				# high jump, but only if not holding jump
-				if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
-					change_state(HIGH_JUMP)
-				else:
-					apply_central_impulse(Vector3.UP * jump_force)
-					change_state(AIR)
-			elif is_on_ground and Input.is_action_just_pressed("shift") && !locked && linear_velocity.length() > 1.1:
-				change_state(SLIDE_BACK)
-			elif !locked:
-				state.linear_velocity.x = move_direction.x * move_speed
-				state.linear_velocity.z = move_direction.z * move_speed
-				# Add particle effect if direction immediately changes
-				# only on authority client
-				# 140deg change
-				if last_move_direction.angle_to(move_direction) > 2.443:
-					var run_particles_i : GPUParticles3D = run_particles.instantiate()
-					# so that rotation does not inherit character's rotation
-					get_tree().current_scene.add_child(run_particles_i)
-					run_particles_i.global_rotation.y = atan2(state.linear_velocity.x, state.linear_velocity.z)
-					run_particles_i.global_position = Vector3(global_position.x, global_position.y + 0.2, global_position.z)
-					run_particles_i.emitting = true
-				last_move_direction = move_direction
-			else:
-				# change to idle when locked
-				change_state(IDLE)
-		AIR:
-			# avoid setting velocity when being pushed by extinguisher
-			if !external_propulsion:
-				state.linear_velocity.x = move_direction.x * move_speed
-				state.linear_velocity.z = move_direction.z * move_speed
-			air_duration += 1
-			if on_wall_cooldown > 0:
-				on_wall_cooldown -= 1
-			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
-				# when landing from 1st jump, a second well-timed jump can do a high jump
-				if air_from_jump == true:
-					high_jump_time.start()
-				change_state(IDLE)
-			# when the player holds jump, do a longer jump
-			# extra jump force / air duration to make a more parabolic jump
-			if (Input.is_action_pressed("jump") && !locked && air_duration < 20 && air_duration > 0) || (air_from_jump && air_duration > 0 && air_duration < 5):
-				apply_central_impulse(Vector3.UP * (extra_jump_force / (air_duration + 1 * 0.333)))
-			# jump grace period
-			if Input.is_action_just_pressed("jump") && !locked && air_duration < 5:
-				apply_central_impulse(Vector3.UP * jump_force)
-				# jump particles
-				play_jump_particles()
-			# dive if jump is pressed again mid-air and we have space to dive
-			elif Input.is_action_just_pressed("jump") && !locked && air_duration > 8 && !forward_detect.has_overlapping_bodies():
-				change_state(DIVE)
-			# wall jump detect
-			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-				change_state(ON_WALL)
-			# ledge detect
-			elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-				change_state(ON_LEDGE)
-		HIGH_JUMP:
-			# avoid setting velocity when being pushed by extinguisher
-			if !external_propulsion:
-				state.linear_velocity.x = move_direction.x * move_speed
-				state.linear_velocity.z = move_direction.z * move_speed
-			air_duration += 1
-			if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
-				change_state(IDLE)
-			# wall jump detect
-			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-				change_state(ON_WALL)
-			# ledge detect
-			elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-				change_state(ON_LEDGE)
-		DIVE:
-			# high velocity into roll
-			if Input.is_action_just_pressed("jump") && !locked && lateral_velocity.length() > 10:
-				apply_central_impulse(Vector3.UP * 4)
-				change_state(ROLL)
-			if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-				change_state(ON_WALL)
-		ON_WALL:
-			# align with wall
-			if forward_ray.is_colliding():
-				var normal : Vector3 = -forward_ray.get_collision_normal()
-				# angle to wall normal
-				var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
-				# rotate smoothly
-				if abs(diff) > 0.05:
-					rotate_y(diff * 0.2)
-			# if no longer on wall
-			if (!forward_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
-				change_state(IDLE)
-			linear_velocity = Vector3(0, -0.5, 0)
-			# jump / move off wall
-			if Input.is_action_just_pressed("jump") && !locked:
-				rotate_object_local(Vector3.UP, deg_to_rad(180))
-				change_state(DIVE)
-				var forward : Vector3 = -camera.get_global_transform().basis.z
-				apply_central_impulse(forward * 5)
-				apply_central_impulse(Vector3.UP * 9)
-			elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
-				on_wall_cooldown = 20
-				rotate_object_local(Vector3.UP, deg_to_rad(180))
-				change_state(AIR)
-		ON_LEDGE:
-			# align with wall
-			if forward_ray.is_colliding():
-				var normal : Vector3 = -forward_ray.get_collision_normal()
-				# angle to wall normal
-				var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
-				# rotate smoothly
-				if abs(diff) > 0.05:
-					rotate_y(diff * 0.2)
-			# align with ledge
-			var top := ledge_ray.get_collision_point()
-			var offset := 1.45
-			var diff := (global_position.y + offset) - top.y
-			if abs(diff) > 0.01:
-				linear_velocity = Vector3(0, -diff * 5, 0)
-			linear_velocity = linear_velocity.clamp(Vector3(0, -5, 0), Vector3(0, 5, 0))
-			# if no longer on ledge
-			if (!forward_detect.has_overlapping_bodies() || ledge_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
-				change_state(IDLE)
-			# jump / move off wall
-			if Input.is_action_just_pressed("jump") && !locked:
-				air_from_jump = true
-				on_wall_cooldown = 20
-				apply_central_impulse(Vector3.UP * 4)
-				change_state(AIR)
-				# also start ledge time to avoid 'double jump' from jumping on
-				# surface we just went up to
-				ledge_time.start()
-			elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
-				on_wall_cooldown = 20
-				rotate_object_local(Vector3.UP, deg_to_rad(180))
-				change_state(AIR)
-		SLIDE:
-			if is_on_ground:
-				if int(slide_time.time_left * 10) % 2 == 0:
+	if is_multiplayer_authority():
+		# executes on owner only
+		var is_on_ground := false
+		if ground_detect.has_overlapping_bodies():
+			is_on_ground = true
+		
+		if camera == null:
+			camera = get_viewport().get_camera_3d()
+		
+		# only captured mouse gets move dir
+		var move_direction := Vector3.ZERO
+		if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+			move_direction = get_movement_direction()
+		
+		match _state:
+			IDLE:
+				state.linear_velocity.x *= decel_multiplier
+				state.linear_velocity.z *= decel_multiplier
+				if is_on_ground and Input.is_action_pressed("jump") && !locked:
+					air_from_jump = true
+					# jump particles
 					play_jump_particles()
-				# jump if pressed or going too slow
-				if (Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5) || linear_velocity.length() < 1:
+					# high jump, but only if not holding jump
+					if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+						change_state(HIGH_JUMP)
+					else:
+						apply_central_impulse(Vector3.UP * jump_force)
+						change_state(AIR)
+				elif move_direction.x or move_direction.z:
+					if is_on_ground:
+						change_state(RUN)
+					else:
+						change_state(AIR)
+				elif !is_on_ground:
+					change_state(AIR)
+			RUN:
+				if not move_direction.x and not move_direction.z:
+					change_state(IDLE)
+				elif !is_on_ground:
+					change_state(AIR)
+				elif is_on_ground and Input.is_action_pressed("jump") && !locked:
+					air_from_jump = true
+					# jump particles
+					play_jump_particles()
+					# high jump, but only if not holding jump
+					if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+						change_state(HIGH_JUMP)
+					else:
+						apply_central_impulse(Vector3.UP * jump_force)
+						change_state(AIR)
+				elif is_on_ground and Input.is_action_just_pressed("shift") && !locked && linear_velocity.length() > 1.1:
+					change_state(SLIDE_BACK)
+				elif !locked:
+					state.linear_velocity.x = move_direction.x * move_speed
+					state.linear_velocity.z = move_direction.z * move_speed
+					# Add particle effect if direction immediately changes
+					# only on authority client
+					# 140deg change
+					if last_move_direction.angle_to(move_direction) > 2.443:
+						var run_particles_i : GPUParticles3D = run_particles.instantiate()
+						# so that rotation does not inherit character's rotation
+						get_tree().current_scene.add_child(run_particles_i)
+						run_particles_i.global_rotation.y = atan2(state.linear_velocity.x, state.linear_velocity.z)
+						run_particles_i.global_position = Vector3(global_position.x, global_position.y + 0.2, global_position.z)
+						run_particles_i.emitting = true
+					last_move_direction = move_direction
+				else:
+					# change to idle when locked
+					change_state(IDLE)
+			AIR:
+				# avoid setting velocity when being pushed by extinguisher
+				if !external_propulsion:
+					state.linear_velocity.x = move_direction.x * move_speed
+					state.linear_velocity.z = move_direction.z * move_speed
+				air_duration += 1
+				if on_wall_cooldown > 0:
+					on_wall_cooldown -= 1
+				if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
+					# when landing from 1st jump, a second well-timed jump can do a high jump
+					if air_from_jump == true:
+						high_jump_time.start()
+					change_state(IDLE)
+				# when the player holds jump, do a longer jump
+				# extra jump force / air duration to make a more parabolic jump
+				if (Input.is_action_pressed("jump") && !locked && air_duration < 20 && air_duration > 0) || (air_from_jump && air_duration > 0 && air_duration < 5):
+					apply_central_impulse(Vector3.UP * (extra_jump_force / (air_duration + 1 * 0.333)))
+				# jump grace period
+				if Input.is_action_just_pressed("jump") && !locked && air_duration < 5:
+					apply_central_impulse(Vector3.UP * jump_force)
+					# jump particles
+					play_jump_particles()
+				# dive if jump is pressed again mid-air and we have space to dive
+				elif Input.is_action_just_pressed("jump") && !locked && air_duration > 8 && !forward_detect.has_overlapping_bodies():
+					change_state(DIVE)
+				# wall jump detect
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_WALL)
+				# ledge detect
+				elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_LEDGE)
+			HIGH_JUMP:
+				# avoid setting velocity when being pushed by extinguisher
+				if !external_propulsion:
+					state.linear_velocity.x = move_direction.x * move_speed
+					state.linear_velocity.z = move_direction.z * move_speed
+				air_duration += 1
+				if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
+					change_state(IDLE)
+				# wall jump detect
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_WALL)
+				# ledge detect
+				elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_LEDGE)
+			DIVE:
+				# high velocity into roll
+				if Input.is_action_just_pressed("jump") && !locked && lateral_velocity.length() > 10:
+					apply_central_impulse(Vector3.UP * 4)
+					change_state(ROLL)
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_WALL)
+			ON_WALL:
+				# align with wall
+				if forward_ray.is_colliding():
+					var normal : Vector3 = -forward_ray.get_collision_normal()
+					# angle to wall normal
+					var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
+					# rotate smoothly
+					if abs(diff) > 0.05:
+						rotate_y(diff * 0.2)
+				# if no longer on wall
+				if (!forward_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
+					change_state(IDLE)
+				linear_velocity = Vector3(0, -0.5, 0)
+				# jump / move off wall
+				if Input.is_action_just_pressed("jump") && !locked:
+					rotate_object_local(Vector3.UP, deg_to_rad(180))
+					change_state(DIVE)
+					var forward : Vector3 = -camera.get_global_transform().basis.z
+					apply_central_impulse(forward * 5)
+					apply_central_impulse(Vector3.UP * 9)
+				elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
+					on_wall_cooldown = 20
+					rotate_object_local(Vector3.UP, deg_to_rad(180))
+					change_state(AIR)
+			ON_LEDGE:
+				# align with wall
+				if forward_ray.is_colliding():
+					var normal : Vector3 = -forward_ray.get_collision_normal()
+					# angle to wall normal
+					var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
+					# rotate smoothly
+					if abs(diff) > 0.05:
+						rotate_y(diff * 0.2)
+				# align with ledge
+				var top := ledge_ray.get_collision_point()
+				var offset := 1.45
+				var diff := (global_position.y + offset) - top.y
+				if abs(diff) > 0.01:
+					linear_velocity = Vector3(0, -diff * 5, 0)
+				linear_velocity = linear_velocity.clamp(Vector3(0, -5, 0), Vector3(0, 5, 0))
+				# if no longer on ledge
+				if (!forward_detect.has_overlapping_bodies() || ledge_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
+					change_state(IDLE)
+				# jump / move off wall
+				if Input.is_action_just_pressed("jump") && !locked:
+					air_from_jump = true
+					on_wall_cooldown = 20
+					apply_central_impulse(Vector3.UP * 4)
+					change_state(AIR)
+					# also start ledge time to avoid 'double jump' from jumping on
+					# surface we just went up to
+					ledge_time.start()
+				elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
+					on_wall_cooldown = 20
+					rotate_object_local(Vector3.UP, deg_to_rad(180))
+					change_state(AIR)
+			SLIDE:
+				if is_on_ground:
+					if int(slide_time.time_left * 10) % 2 == 0:
+						play_jump_particles()
+					# jump if pressed or going too slow
+					if (Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5) || linear_velocity.length() < 1:
+						air_from_jump = true
+						apply_central_impulse(Vector3.UP * jump_force)
+						change_state(AIR)
+				# somewhat controllable when sliding
+				var dir : Vector3 = -camera.get_global_transform().basis.z
+				dir.y = 0
+				dir = dir.normalized()
+				apply_force(dir * 7, Vector3.ZERO)
+			SLIDE_BACK:
+				if is_on_ground:
+					if int(slide_time.time_left * 10) % 2 == 0:
+						play_jump_particles()
+					# jump if pressed or going too slow
+					if Input.is_action_pressed("jump") && !locked:
+						#apply_central_impulse(Vector3.UP * jump_force)
+						change_state(ROLL)
+					if linear_velocity.length() < 2:
+						change_state(IDLE)
+				# somewhat controllable when sliding
+				var dir : Vector3 = -camera.get_global_transform().basis.z
+				dir.y = 0
+				dir = dir.normalized()
+				apply_force(dir * 10, Vector3.ZERO)
+			ROLL:
+				if is_on_ground:
+					if int(roll_time.time_left * 10) % 2 == 0:
+						play_jump_particles()
+					if (Input.is_action_pressed("jump") && !locked && roll_time.time_left < 0.5) || roll_time.is_stopped():
+						change_state(SLIDE)
+				# if going too slow
+				if linear_velocity.length() < 1:
 					air_from_jump = true
 					apply_central_impulse(Vector3.UP * jump_force)
 					change_state(AIR)
-			# somewhat controllable when sliding
-			var dir : Vector3 = -camera.get_global_transform().basis.z
-			dir.y = 0
-			dir = dir.normalized()
-			apply_force(dir * 7, Vector3.ZERO)
-		SLIDE_BACK:
-			if is_on_ground:
-				if int(slide_time.time_left * 10) % 2 == 0:
-					play_jump_particles()
-				# jump if pressed or going too slow
-				if Input.is_action_pressed("jump") && !locked:
-					#apply_central_impulse(Vector3.UP * jump_force)
-					change_state(ROLL)
-				if linear_velocity.length() < 2:
-					change_state(IDLE)
-			# somewhat controllable when sliding
-			var dir : Vector3 = -camera.get_global_transform().basis.z
-			dir.y = 0
-			dir = dir.normalized()
-			apply_force(dir * 10, Vector3.ZERO)
-		ROLL:
-			if is_on_ground:
-				if int(roll_time.time_left * 10) % 2 == 0:
-					play_jump_particles()
-				if (Input.is_action_pressed("jump") && !locked && roll_time.time_left < 0.5) || roll_time.is_stopped():
-					change_state(SLIDE)
-			# if going too slow
-			if linear_velocity.length() < 1:
-				air_from_jump = true
-				apply_central_impulse(Vector3.UP * jump_force)
-				change_state(AIR)
-			var dir : Vector3 = -camera.get_global_transform().basis.z
-			dir.y = 0
-			dir = dir.normalized()
-			# cap velocity
-			var max_speed : float = 15
-			# basis of camera minus vertical component
-			var cam_horiz_basis : Vector3 = camera.get_global_transform().basis.z
-			cam_horiz_basis.y = 0
-			# basis of player minus vertical component
-			var horiz_basis : Vector3 = get_global_transform().basis.z
-			horiz_basis.y = 0
-			var cam_align : float = cam_horiz_basis.angle_to(horiz_basis)
-			var mult : float = (1/(cam_align/3.14159))
-			# limit speed unless we are facing a different direction for turning
-			if state.linear_velocity.length() < max_speed * mult:
-				apply_force(dir * 25, Vector3.ZERO)
-		TRIPPED:	
-			pass
-		IN_SEAT:
-			if seat_occupying is MotorSeat && !locked:
-				var dir_forward : float = Input.get_action_strength("forward") - Input.get_action_strength("back")
-				var dir_steer : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-				seat_occupying.drive.rpc(dir_forward, dir_steer)
-				state.linear_velocity = Vector3.ZERO
-			if Input.is_action_just_pressed("exit_vehicle") && !locked:
-				change_state(EXIT_SEAT)
-		STANDING_UP:
-			pass
-		DEAD:
-			pass
-		SWIMMING, SWIMMING_IDLE:
-			if swim_dash_cooldown > 0:
-				swim_dash_cooldown -= 1
-			var force_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
-			var force_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-			var dir : Vector3 = camera.get_global_transform().basis.z * (move_speed * 0.8 * force_forward)
-			dir += camera.get_global_transform().basis.x * (move_speed * 0.8 * force_sideways)
-			apply_force(dir, Vector3.ZERO)
-			if dir.length() >= 1 && _state != SWIMMING:
-				change_state(SWIMMING)
-			elif dir.length() < 1 && _state != SWIMMING_IDLE:
-				change_state(SWIMMING_IDLE)
-			if Input.is_action_just_pressed("shift") && swim_dash_cooldown < 1:
-				change_state(SWIMMING_DASH)
-			# rotate model in direction of swimming
-			# arctan between y vel and total horizontal vel
-			character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.26, 0.15)
-		SWIMMING_DASH:
-			swim_dash_cooldown = 110
-			character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.56, 0.15)
-			pass
-	lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
-	
+				var dir : Vector3 = -camera.get_global_transform().basis.z
+				dir.y = 0
+				dir = dir.normalized()
+				# cap velocity
+				var max_speed : float = 15
+				# basis of camera minus vertical component
+				var cam_horiz_basis : Vector3 = camera.get_global_transform().basis.z
+				cam_horiz_basis.y = 0
+				# basis of player minus vertical component
+				var horiz_basis : Vector3 = get_global_transform().basis.z
+				horiz_basis.y = 0
+				var cam_align : float = cam_horiz_basis.angle_to(horiz_basis)
+				var mult : float = (1/(cam_align/3.14159))
+				# limit speed unless we are facing a different direction for turning
+				if state.linear_velocity.length() < max_speed * mult:
+					apply_force(dir * 25, Vector3.ZERO)
+			TRIPPED:	
+				pass
+			IN_SEAT:
+				if seat_occupying is MotorSeat && !locked:
+					var dir_forward : float = Input.get_action_strength("forward") - Input.get_action_strength("back")
+					var dir_steer : float = Input.get_action_strength("right") - Input.get_action_strength("left")
+					seat_occupying.drive.rpc(dir_forward, dir_steer)
+					state.linear_velocity = Vector3.ZERO
+				if Input.is_action_just_pressed("exit_vehicle") && !locked:
+					change_state(EXIT_SEAT)
+			STANDING_UP:
+				pass
+			DEAD:
+				pass
+			SWIMMING, SWIMMING_IDLE:
+				if swim_dash_cooldown > 0:
+					swim_dash_cooldown -= 1
+				var force_forward : float = Input.get_action_strength("back") - Input.get_action_strength("forward")
+				var force_sideways : float = Input.get_action_strength("right") - Input.get_action_strength("left")
+				var dir : Vector3 = camera.get_global_transform().basis.z * (move_speed * 0.8 * force_forward)
+				dir += camera.get_global_transform().basis.x * (move_speed * 0.8 * force_sideways)
+				apply_force(dir, Vector3.ZERO)
+				if dir.length() >= 1 && _state != SWIMMING:
+					change_state(SWIMMING)
+				elif dir.length() < 1 && _state != SWIMMING_IDLE:
+					change_state(SWIMMING_IDLE)
+				if Input.is_action_just_pressed("shift") && swim_dash_cooldown < 1:
+					change_state(SWIMMING_DASH)
+				# rotate model in direction of swimming
+				# arctan between y vel and total horizontal vel
+				character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.26, 0.15)
+			SWIMMING_DASH:
+				swim_dash_cooldown = 110
+				character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.56, 0.15)
+				pass
+		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
+		
 	# handle teleport requests
 	if teleport_requested:
 		teleport_requested = false
@@ -955,7 +956,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		t.origin = teleport_pos
 		state.set_transform(t)
 	
-	# handle out of map
+	# handle out of map ( runs outside auth check )
 	if multiplayer.is_server():
 		if !invulnerable:
 			if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
@@ -1552,23 +1553,27 @@ func increment_kills() -> void:
 	update_kills.rpc(kills)
 
 func protect_spawn(time : float = 3.5, overlay := true) -> void:
-	play_protect_spawn_animation.rpc(overlay)
-	
+	_receive_server_protect_spawn.rpc(time, overlay)
 	invulnerable = true
 	await get_tree().create_timer(time).timeout
-	
+	# some dummy states are used for invincibility
+	if _state != DUMMY:
+		invulnerable = false
+
+@rpc("any_peer", "call_local", "reliable")
+func _receive_server_protect_spawn(time : float = 3.5, overlay := true) -> void:
+	invulnerable = true
+	$SpawnAnimator.play("spawn")
+	if overlay && is_multiplayer_authority():
+		respawn_overlay.play("respawn")
+	await get_tree().create_timer(time).timeout
 	# some dummy states are used for invincibility
 	if _state != DUMMY:
 		invulnerable = false
 	# re-enable tools
-	if get_tool_inventory() != null && _state != DUMMY && _state != ROLL:
-		get_tool_inventory().set_disabled(false)
-
-@rpc("any_peer", "call_local", "reliable")
-func play_protect_spawn_animation(overlay := true) -> void:
-	$SpawnAnimator.play("spawn")
-	if overlay:
-		respawn_overlay.play("respawn")
+	if is_multiplayer_authority():
+		if get_tool_inventory() != null && _state != DUMMY && _state != ROLL:
+			get_tool_inventory().set_disabled(false)
 
 func _on_camera_mode_changed() -> void:
 	if !locked:

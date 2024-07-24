@@ -22,7 +22,7 @@ class_name Map
 
 # Return the teams node for this map
 func get_teams() -> Teams:
-	return get_node("Teams")
+	return get_node_or_null("Teams")
 
 func _ready() -> void:
 	# set song

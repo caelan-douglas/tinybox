@@ -366,7 +366,7 @@ func add_peer(peer_id : int) -> void:
 		else:
 			var player : RigidPlayer = Player.instantiate()
 			player.name = str(peer_id)
-			$World.add_child(player)
+			$World.add_child(player, true)
 			Global.connected_to_server = true
 
 # first request sent out to the joining client from the server
