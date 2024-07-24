@@ -228,8 +228,33 @@ func get_all_info() -> Array:
 func get_tool_inventory() -> Node:
 	return $Tools
 
+@rpc("any_peer", "call_local", "reliable")
+func _server_receive_on_body_entered_from_client(path_to_body : String) -> void:
+	# only run on server, and make sure this request is from owner client
+	if !multiplayer.is_server() || multiplayer.get_remote_sender_id() != get_multiplayer_authority(): return
+	
+	var node : Node3D = get_node_or_null(path_to_body)
+	if node != null:
+		_on_body_entered(node)
+
 # When this player hits something too hard, trip them.
 func _on_body_entered(body : Node3D) -> void:
+	# run on host client
+	if is_multiplayer_authority():
+		# if we just dived, and hit something, set the animation to normal trip animation
+		# as dive uses the jump animation
+		if _state == DIVE && !(body is MotorSeat):
+			# on ground
+			if slide_detect.has_overlapping_bodies():
+				change_state(SLIDE)
+		# stepped on button
+		if body is ButtonBrick:
+			body.stepped.rpc(get_path())
+		if _state == ROLL:
+			if body is RigidPlayer:
+				body.trip_by_player.rpc(15)
+	
+	# stuff handled by the server
 	if multiplayer.is_server():
 		if (body is RigidBody3D) && (!body is RigidPlayer):
 			if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
@@ -242,29 +267,8 @@ func _on_body_entered(body : Node3D) -> void:
 			if body is Brick:
 				if body.on_fire:
 					light_fire.rpc()
-	# trip other players when my velocity is high
-	if body is RigidPlayer && linear_velocity.length() > 10:
-		body.trip_by_player.rpc(linear_velocity)
-	# stepped on button
-	if body is ButtonBrick:
-		body.stepped.rpc(get_path())
-	
-	# if we just dived, and hit something, set the animation to normal trip animation
-	# as dive uses the jump animation
-	if _state == DIVE && !(body is MotorSeat):
-		# on ground
-		if slide_detect.has_overlapping_bodies():
-			change_state(SLIDE)
-	
-	if _state == ROLL:
-		# trip other players when rolling into them
-		if body is RigidPlayer:
-			body.trip_by_player.rpc(linear_velocity)
-		# if running into a wall
-		elif forward_detect.has_overlapping_bodies():
-			if body is Brick:
-				change_state(TRIPPED)
-				reduce_health(5)
+	else:
+		_server_receive_on_body_entered_from_client.rpc_id(1, body.get_path())
 
 # Set this player's authority to its client.
 func _enter_tree() -> void:
@@ -987,6 +991,9 @@ func seat_destroyed(offset := false) -> void:
 
 @rpc("any_peer", "call_remote")
 func trip_by_player(hit_velocity : Vector3) -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	change_state(TRIPPED)

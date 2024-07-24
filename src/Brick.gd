@@ -474,12 +474,10 @@ func _on_peer_connected(id : int) -> void:
 # When hit by something else.
 func _on_body_entered(body : PhysicsBody3D) -> void:
 	# only execute on yourself
-	if !is_multiplayer_authority(): return
+	if multiplayer.is_server(): return
 	var total_velocity : float = linear_velocity.length()
-	
 	if body is RigidBody3D && !(body is ClayBall):
 		total_velocity += body.linear_velocity.length()
-	
 	# Light other bricks or players on fire.
 	if on_fire:
 		if body is Brick:
@@ -496,11 +494,6 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 			# Unjoin this brick from its group if it is hit too hard.
 			if total_velocity > body.unjoin_velocity:
 				body.unjoin()
-		
-	# trip other players when my velocity is high
-	if body is RigidPlayer && linear_velocity.length() > 2 && !(self is MotorSeat):
-		body.trip_by_player.rpc(linear_velocity * 2)
-	
 	# Play sounds
 	if total_velocity > 7:
 		if !(body is Brick) && (_state != States.BUILD) && (_state != States.DUMMY_BUILD):
