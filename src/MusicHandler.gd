@@ -86,7 +86,7 @@ func set_master_setting(new : float) -> void:
 	master_setting = new
 	if new == 0:
 		AudioServer.set_bus_mute(0, true)
-	else:
+	elif !Global.dedicated_server:
 		AudioServer.set_bus_mute(0, false)
 	AudioServer.set_bus_volume_db(0, (-min_db + (min_db * new)))
 	emit_signal("master_setting_changed")

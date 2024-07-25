@@ -49,7 +49,7 @@ func _ready() -> void:
 	brick_groups.check_world_groups()
 
 func play_sound() -> void:
-	var camera : Camera = get_viewport().get_camera_3d()
+	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera == null:
 		return
 	if global_position.distance_to(camera.global_position) > 100:

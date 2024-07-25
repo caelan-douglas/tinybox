@@ -3,11 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="1_e8bic"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scmp3"]
-transparency = 1
 blend_mode = 1
 shading_mode = 0
 specular_mode = 2
 disable_ambient_light = true
+disable_fog = true
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_e8bic")
 billboard_mode = 3

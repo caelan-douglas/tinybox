@@ -35,24 +35,30 @@ var alert_colour_death : Color = Color(1.8, 0.0, 1.6, 1)
 #        when a host disconnects.
 @rpc("any_peer", "call_local")
 func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool = false, alert_colour : Color = Color("#ffffff")) -> void:
-	var alert : Alert = alert_resource.instantiate()
-	alert.get_node("Content/Label").text = alert_text
-	if alert_colour.to_html() != "#ffffff":
-		alert.self_modulate = alert_colour
-	
-	var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Alerts")
-	if show_in_game_canvas:
-		alert_canvas = get_tree().root.get_node("Main/GameCanvas")
-	
-	# make sure that we haven't been disconnected
-	if alert_canvas != null:
-		alert_canvas.add_child(alert)
-	
-	if timeout > 0:
-		await get_tree().create_timer(timeout).timeout
-		# make sure alert hasnt already been destroyed
-		if alert != null:
-			alert.timeout()
+	# if in dedicated server mode
+	if multiplayer.is_server() && Global.dedicated_server:
+		# show a chat instead
+		CommandHandler.submit_command.rpc("ALERT FROM WORLD", alert_text, 1)
+	# normal alert
+	else:
+		var alert : Alert = alert_resource.instantiate()
+		alert.get_node("Content/Label").text = alert_text
+		if alert_colour.to_html() != "#ffffff":
+			alert.self_modulate = alert_colour
+		
+		var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Alerts")
+		if show_in_game_canvas:
+			alert_canvas = get_tree().root.get_node("Main/GameCanvas")
+		
+		# make sure that we haven't been disconnected
+		if alert_canvas != null:
+			alert_canvas.add_child(alert)
+		
+		if timeout > 0:
+			await get_tree().create_timer(timeout).timeout
+			# make sure alert hasnt already been destroyed
+			if alert != null:
+				alert.timeout()
 
 # Show an alert with actions
 # Arg 1: The text to show.

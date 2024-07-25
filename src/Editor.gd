@@ -195,20 +195,17 @@ func switch_environment() -> void:
 	# delete old environment
 	delete_environment()
 	
-	var new_env : Node = null
-	match (current_env_name):
-		# switch from > to
-		"env_sunny":
-			new_env = SpawnableObjects.objects["env_sunset"].instantiate()
-		"env_sunset":
-			new_env = SpawnableObjects.objects["env_night"].instantiate()
-		"env_night":
-			new_env = SpawnableObjects.objects["env_molten"].instantiate()
-		"env_molten":
-			new_env = SpawnableObjects.objects["env_warp"].instantiate()
-		# default load sunny
-		_:
-			new_env = SpawnableObjects.objects["env_sunny"].instantiate()
+	# get list of envs
+	var env_list : Array[String] = []
+	for obj : String in SpawnableObjects.objects.keys():
+		if obj.begins_with("env_"):
+			env_list.append(obj)
+	var current_idx : int = env_list.find(current_env_name)
+	current_idx += 1
+	if current_idx >= env_list.size():
+		current_idx = 0
+	var new_env : Node = SpawnableObjects.objects[env_list[current_idx]].instantiate()
+	
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
 	editor_canvas.get_node("WorldProperties/Menu/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
@@ -225,21 +222,20 @@ func switch_background() -> void:
 	# delete old
 	delete_background()
 	
-	var new_bg : TBWObject = null
-	match (current_bg_name):
-		# switch from frozen field -> warp
-		"bg_frozen_field":
-			# we deleted the environment so just end here
-			new_bg = SpawnableObjects.objects["bg_warp"].instantiate()
-			pass
-		# switch from warp -> none
-		"bg_warp":
-			new_bg = null
-			pass
-		# switch from none
-		_:
-			new_bg = SpawnableObjects.objects["bg_frozen_field"].instantiate()
-			pass
+	# get list of envs
+	var bg_list : Array[String] = []
+	for obj : String in SpawnableObjects.objects.keys():
+		if obj.begins_with("bg_"):
+			bg_list.append(obj)
+	var current_idx : int = bg_list.find(current_bg_name)
+	current_idx += 1
+	if current_idx >= bg_list.size():
+		# for "none" background
+		current_idx = -1
+	var new_bg : Node = null
+	if current_idx > -1:
+		new_bg = SpawnableObjects.objects[bg_list[current_idx]].instantiate()
+	
 	if new_bg != null:
 		Global.get_world().add_child(new_bg, true)
 		current_bg_name = new_bg.tbw_object_type

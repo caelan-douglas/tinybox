@@ -82,6 +82,7 @@ blend_mode = 1
 shading_mode = 0
 specular_mode = 2
 disable_ambient_light = true
+disable_fog = true
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("2_1bkqn")
 billboard_mode = 3

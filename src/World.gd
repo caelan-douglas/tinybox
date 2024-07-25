@@ -280,14 +280,14 @@ func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Arr
 
 func _world_denied(name_from : String, world_name : String) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
-	if !Global.is_paused:
+	if !Global.is_paused && !Global.dedicated_server:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# show alert to all users that map was denied
 	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, UIHandler.alert_colour_error)
 
 func _world_accepted(name_from : String, world_name : String, lines : Array) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
-	if !Global.is_paused:
+	if !Global.is_paused && !Global.dedicated_server:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_parse_and_open_tbw(lines)
 	# show alert to all users that map was switched
@@ -392,13 +392,16 @@ func reset_player_cameras() -> void:
 	# refind node
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
-		Global.get_player().set_camera(camera)
+		var player : RigidPlayer = Global.get_player()
+		if player != null:
+			player.set_camera(camera)
 
 @rpc("any_peer", "call_local", "reliable")
 func reset_player_positions() -> void:
 	var player : RigidPlayer = Global.get_player()
-	player.change_state(RigidPlayer.IDLE)
-	player.go_to_spawn()
+	if player != null:
+		player.change_state(RigidPlayer.IDLE)
+		player.go_to_spawn()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_world() -> void:

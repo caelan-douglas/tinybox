@@ -21,64 +21,83 @@ extends Control
 # TODO: Implement this in a better way, commands 
 # should be something that Global or World runs, not Chat.
 
-@onready var chat_list : Control = $VBoxContainer/ChatList
+@onready var scroll_box : ScrollContainer = $VBoxContainer/ScrollContainer
+@onready var chat_list : Control = $VBoxContainer/ScrollContainer/ChatList
 @onready var line_edit : Control = $VBoxContainer/LineEdit
-
 @onready var chat_entry : PackedScene = preload("res://data/scene/ui/ChatEntry.tscn")
+var tween : Tween = null
+var chat_last_opened_time : int = 0
+
+@export var cli_mode : bool = false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	line_edit.connect("text_submitted", _on_chat_submitted)
 	line_edit.connect("focus_entered", _on_line_edit_focus_entered)
 	line_edit.connect("focus_exited", _on_line_edit_focus_exited)
+	CommandHandler.connect("command_response", _on_command_response)
 
 func _on_line_edit_focus_entered() -> void:
-	Global.get_player().locked = true
+	chat_last_opened_time = Time.get_ticks_msec()
+	if Global.get_player() != null:
+		Global.get_player().locked = true
+	# transparency effect for ingame
+	if !cli_mode:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		if tween:
+			tween.kill()
+			tween = null
+		modulate = Color("#ffffffff")
+		# show old entries
+		for entry in chat_list.get_children():
+			entry.visible = true
+		await get_tree().process_frame
+		# scroll to bottom
+		scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _on_line_edit_focus_exited() -> void:
-	Global.get_player().locked = false
+	if Global.get_player() != null:
+		Global.get_player().locked = false
+	# transparency effect for ingame
+	if !cli_mode && !Global.dedicated_server:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		tween = get_tree().create_tween().set_parallel(true)
+		tween.tween_property(self, "modulate", Color("#ffffff5e"), 2)
+		# hide old entries
+		for entry in chat_list.get_children():
+			if Time.get_ticks_msec() - entry.age > entry.hide_age:
+				entry.visible = false
 
 func _unhandled_input(event : InputEvent) -> void:
 	if (event is InputEventKey):
-		if event.pressed and event.keycode == KEY_QUOTELEFT:
+		if event.pressed and event.keycode == KEY_TAB:
 			line_edit.grab_focus()
 
 func _on_chat_submitted(text : String) -> void:
-	submit_chat.rpc(text, Global.display_name)
+	CommandHandler.submit_command.rpc(Global.display_name, text)
 	line_edit.text = ""
-	line_edit.release_focus()
+	# only release focus ingame
+	if !cli_mode:
+		line_edit.release_focus()
 
-# Creates a chat entry.
-# Arg 1: The ID who sent this command.
-# Arg 2: The text to display.
-# Arg 3: The time before the message disappears.
-func create_chat_entry(sender : String, text : String, timeout : float = 10) -> void:
-	var ce_i : Control = chat_entry.instantiate()
-	chat_list.add_child(ce_i)
-	ce_i.get_node("HBoxContainer/ChatLabel").text = str(text)
-	ce_i.get_node("HBoxContainer/PlayerLabel").text = str(sender)
-	get_tree().create_timer(timeout).connect("timeout", ce_i.queue_free)
+func _on_command_response(sender : String, text : String, timeout : int = 10) -> void:
+	var entry : Control = chat_entry.instantiate()
+	chat_list.add_child(entry)
+	entry.age = Time.get_ticks_msec()
+	entry.hide_age = timeout*1000
+	entry.get_node("Margin/HBoxContainer/ChatLabel").text = str(text)
+	entry.get_node("Margin/HBoxContainer/PlayerLabel").text = str(sender)
+	
+	# cli mode doesnt time out
+	if !cli_mode:
+		get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry, Time.get_ticks_msec()))
+	await get_tree().process_frame
+	# scroll to bottom
+	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
-# Send the chat to all clients.
-@rpc("any_peer", "call_local")
-func submit_chat(text : String, display_name : String) -> void:
-	var split_text : Array = text.split(" ")
-	if text == "?":
-		create_chat_entry("Server says: ", "Command list:")
-		create_chat_entry("$speed", "ex. $speed 12 - sets player speed to 12. Default is 5.")
+func _on_entry_timeout(entry : Node, time : int) -> void:
+	# don't hide entries if chat is open
+	if line_edit.has_focus():
 		return
-	# Move All command
-	if split_text[0] == "$speed":
-		if split_text.size() == 2:
-			# Move to X spawn
-			var x := int(str(split_text[1]))
-			# Get this player and give them the speed.
-			var player : RigidPlayer = Global.get_player()
-			if player != null:
-				player.move_speed = x
-			return
-		else:
-			create_chat_entry("Server says: ", str(display_name, ": Invalid use of $speed. Correct syntax example: $moveall 7"))
-			return
-	# no command, just send the chat
-	create_chat_entry(display_name, text)
+	entry.visible = false

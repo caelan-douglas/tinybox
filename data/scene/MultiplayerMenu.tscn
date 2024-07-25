@@ -249,7 +249,7 @@ custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [node name="HostPanel" type="Panel" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(2.08165e-12, 200)
+custom_minimum_size = Vector2(2.08165e-12, 240)
 layout_mode = 2
 
 [node name="HostPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/HostPanel"]
@@ -283,7 +283,15 @@ text = "UPNP setting"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_public_settings/off"
 
+[node name="Dedicated" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "Dedicated server: No"
+script = ExtResource("2_o48rt")
+json_text = "ui/dedicated_server/off"
+
 [node name="Host" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+self_modulate = Color(5, 3, 5, 1)
 layout_mode = 2
 text = "Host Server"
 script = ExtResource("2_o48rt")
@@ -325,6 +333,7 @@ caret_blink = true
 caret_blink_interval = 0.5
 
 [node name="Join" type="Button" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+self_modulate = Color(5, 3, 5, 1)
 layout_mode = 2
 text = "Join Server"
 script = ExtResource("2_o48rt")

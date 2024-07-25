@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://src/Chat.gd" id="1_udn37"]
 
 [node name="Chat" type="Control"]
-modulate = Color(1, 1, 1, 0.301961)
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 3
 anchors_preset = 2
@@ -25,12 +24,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ChatList" type="VBoxContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ChatList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 2
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Press ` to chat or run command."
+placeholder_text = "[ TAB ] for chat or command (? for help)"
 max_length = 200

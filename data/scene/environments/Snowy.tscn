@@ -1,0 +1,64 @@
+[gd_scene load_steps=11 format=3 uid="uid://fm6lgsauxibh"]
+
+[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
+[ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="2_5ipcy"]
+[ext_resource type="Script" path="res://src/SnowParticles.gd" id="3_0bclg"]
+[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
+
+[sub_resource type="Gradient" id="Gradient_yngdy"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p2o20"]
+gradient = SubResource("Gradient_yngdy")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hd50p"]
+load_path = "res://.godot/imported/kloppenheim_03_puresky_4k.hdr-74835c8ba4c351309f2b6bb37015d258.bptc.ctex"
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bo2xc"]
+panorama = SubResource("CompressedTexture2D_hd50p")
+
+[sub_resource type="Sky" id="Sky_irb7e"]
+sky_material = SubResource("PanoramaSkyMaterial_bo2xc")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_00u0a"]
+background_mode = 2
+background_energy_multiplier = 0.8
+sky = SubResource("Sky_irb7e")
+sky_rotation = Vector3(0, 2.34049, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.592544, 0.674771, 0.81831, 1)
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.589681, 0.627994, 0.658686, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.015
+fog_sky_affect = 0.8
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_p2o20")
+
+[node name="Environment" type="Node"]
+script = ExtResource("1_kavvl")
+environment_name = "env_snowy"
+
+[node name="SnowParticles" parent="." instance=ExtResource("2_5ipcy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 53.1094, -1.18)
+script = ExtResource("3_0bclg")
+visible_on_awful = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_00u0a")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.327925, -0.377446, 0.433013, -0.114439, 0.894094, 0.250001, -0.937747, -0.241103, 0, 52.7417, 0)
+shadow_enabled = true
+shadow_blur = 3.5
+script = ExtResource("3_vxxw6")
+visible_on_awful = false

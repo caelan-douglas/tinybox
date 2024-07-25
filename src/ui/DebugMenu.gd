@@ -56,6 +56,7 @@ func _physics_process(delta : float) -> void:
 			"\nPlayer state: ", player.states_as_names[player._state], 
 			"\nPlayer air from jump?: ", player.air_from_jump, 
 			"\nPlayer air duration: ", player.air_duration, 
+			"\nPlayer last hit by: ", player.last_hit_by_id,
 			"\nPlayer occupying seat: ", player.seat_occupying)
 		debug_text.text += str("\n---------- WORLD TEAMS INFO -------------\n")
 		debug_text.text += str("World Teams Node list:\n")

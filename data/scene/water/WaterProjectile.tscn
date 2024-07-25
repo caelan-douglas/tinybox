@@ -58,6 +58,7 @@ color_ramp = SubResource("GradientTexture1D_dnoau")
 blend_mode = 1
 shading_mode = 0
 specular_mode = 2
+disable_fog = true
 albedo_color = Color(0.739746, 0.78792, 0.821501, 1)
 albedo_texture = ExtResource("3_f0wog")
 billboard_mode = 3

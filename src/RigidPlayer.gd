@@ -74,7 +74,12 @@ var spawns := []
 var death_message := ""
 var executing_player : Node3D = null
 var death_camera_mode : Camera.CameraMode = Camera.CameraMode.FREE
-var locked := false
+var locked := false:
+	get:
+		return locked
+	set(v):
+		locked = v
+		get_tool_inventory().set_disabled(v)
 # invulnerable on spawn
 var invulnerable := true
 var can_enter_seat := true
@@ -82,7 +87,6 @@ var on_fire := false
 var in_air_from_lifter := false
 var external_propulsion := false
 var swim_dash_cooldown : int = 0
-
 var lateral_velocity := Vector3.ZERO
 
 var last_hit_by_id : int = -1
@@ -119,9 +123,11 @@ var deaths : int = 0
 @onready var collider : CollisionShape3D = $collider
 @onready var lifter_particles : GPUParticles3D = $LifterParticles
 @onready var health_bar : ProgressBar = get_tree().current_scene.get_node("GameCanvas/HealthBar")
+@onready var health_bar_text : Label = get_tree().current_scene.get_node("GameCanvas/HealthBar/Label")
 @onready var respawn_overlay : AnimationPlayer = get_tree().current_scene.get_node("GameCanvas/RespawnOverlay/AnimationPlayer")
 @onready var jump_particles : PackedScene = preload("res://data/scene/character/JumpParticles.tscn")
 @onready var run_particles : PackedScene = preload("res://data/scene/character/RunParticles.tscn")
+@onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
 
 @onready var shirt_textures : Array = [preload("res://data/models/character/textures/fabric.jpg"), 
 preload("res://data/textures/clothing/cloth_tex_0.png"), 
@@ -129,12 +135,13 @@ preload("res://data/textures/clothing/cloth_tex_1.png"),
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
 
-@onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
-
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
 @rpc("any_peer", "call_local", "reliable")
 func teleport(new_pos : Vector3) -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	teleport_requested = true
 	teleport_pos = new_pos
 
@@ -220,10 +227,6 @@ func update_appearance(shirt : int, shirt_texture : int, hair : int, shirt_colou
 				armature.get_node("hair_short").visible = false
 				armature.get_node("hair_ponytail").visible = false
 
-# returns id, name, team
-func get_all_info() -> Array:
-	return [get_multiplayer_authority(), display_name, team]
-
 # Returns this player's tool inventory.
 func get_tool_inventory() -> Node:
 	return $Tools
@@ -290,15 +293,22 @@ func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_
 	set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
 
 @rpc("any_peer", "call_local", "reliable")
-func _receive_server_health(new : int) -> void:
+func _receive_server_health(new : int, potential_executor_id : int = -1) -> void:
 	if is_multiplayer_authority():
 		# flash health on damage
 		if new < health:
 			health_bar.get_node("AnimationPlayer").play("flash_health")
 		
 		health = new
+		if potential_executor_id != -1:
+			# set executing player (for camera lockon)
+			executing_player = Global.get_world().get_node_or_null(str(potential_executor_id))
+		else:
+			executing_player = null
 		
+		# set visual health
 		health_bar.value = get_health()
+		health_bar_text.text = str(JsonHandler.find_entry_in_file("ui/health"), ": ", get_health())
 		# low health colour
 		if health_bar.value < 5:
 			health_bar.self_modulate = Color("#ff4848")
@@ -313,10 +323,10 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 		return
 	
 	if !invulnerable && !dead:
+		# send updated health to clients
+		_receive_server_health.rpc(new, potential_executor_id)
 		# server will keep track of this
 		health = new
-		# send updated health to clients
-		_receive_server_health.rpc(health)
 		
 		if health <= 0:
 			# shorter respawn in sandbox
@@ -430,7 +440,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 							var last_hit_executing_player : RigidPlayer = Global.get_world().get_node_or_null(str(last_hit_by_id))
 							var last_hit_executing_player_name : String = last_hit_executing_player.display_name
 							# self
-							if last_hit_by_id == multiplayer.get_unique_id():
+							if last_hit_by_id == get_multiplayer_authority():
 								death_message = str(display_name, " hit themselves away!")
 							# don't increment kills for friendly fire
 							elif _is_friendly_fire(last_hit_executing_player):
@@ -581,11 +591,6 @@ func update_info(id : int = -1) -> void:
 	change_appearance()
 	update_kills.rpc(kills)
 	update_deaths.rpc(deaths)
-
-func lock() -> void:
-	locked = true
-func unlock() -> void:
-	locked = false
 
 func set_camera(new : Camera3D) -> void:
 	camera = new
@@ -1554,7 +1559,7 @@ func update_deaths(rpc_deaths : int) -> void:
 	deaths = rpc_deaths
 	Global.update_player_list_information()
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func increment_kills() -> void:
 	kills += 1
 	update_kills.rpc(kills)
@@ -1598,3 +1603,9 @@ func entered_water() -> void:
 func exited_water() -> void:
 	bubble_particles.emitting = false
 	change_state(EXIT_SWIMMING)
+
+@rpc("any_peer", "call_local", "reliable")
+func set_move_speed(new : int) -> void:
+	# if this change state request is not from the server
+	if multiplayer.get_remote_sender_id() != 1: return
+	move_speed = new

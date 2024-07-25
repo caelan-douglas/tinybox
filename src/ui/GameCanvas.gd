@@ -38,7 +38,8 @@ func hide_pause_menu() -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:
 		$PauseMenu.visible = false
-		Global.get_player().locked = false
+		if Global.get_player() != null:
+			Global.get_player().locked = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
@@ -52,7 +53,8 @@ func show_pause_menu() -> void:
 		$TestModePauseMenu/Menu/ReturnToEditor.connect("pressed", editor.exit_test_mode)
 	else:
 		$PauseMenu.visible = true
-		Global.get_player().locked = true
+		if Global.get_player() != null:
+			Global.get_player().locked = true
 		if Global.get_world().minigame != null:
 			$PauseMenu/Menu/Title.json_text = "ui/minigame_mode"
 			$PauseMenu/Menu/ChangeMap.disabled = true

@@ -21,6 +21,7 @@ signal player_list_information_update
 
 var display_name : String = ""
 var connected_to_server := false
+var dedicated_server := false
 var is_text_focused := false
 var is_paused := false
 
@@ -127,6 +128,14 @@ func get_player() -> RigidPlayer:
 	if connected_to_server:
 		return get_world().get_node_or_null(str(multiplayer.get_unique_id()))
 	else: return null
+
+# Returns player by name.
+func get_player_by_name(what : String) -> RigidPlayer:
+	if connected_to_server:
+		for p : RigidPlayer in get_world().rigidplayer_list:
+			if str(p.display_name).to_lower() == str(what).to_lower():
+				return p
+	return null
 
 # Gets the current graphics
 func get_graphics_preset() -> GraphicsPresets:

@@ -1,3 +1,4 @@
+# meta-default: true
 # Tinybox
 # Copyright (C) 2023-present Caelan Douglas
 #
@@ -14,22 +15,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node3D
-class_name Map
-
-@export var gravity_scale := 1.0
-@export var songs : Array[String] = ["mus1"]
-
-# Return the teams node for this map
-func get_teams() -> Teams:
-	return get_node_or_null("Teams")
+extends Node
 
 func _ready() -> void:
-	# set song
-	# wait for music / server setting to load if on main menu
-	if name == "MultiplayerMenuMap":
-		await get_tree().create_timer(0.2).timeout
-	MusicHandler.switch_song(songs)
-	# Modify default gravity
-	if !self is Editor:
-		PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * gravity_scale)
+	pass
+
+func _physics_process(delta : float) -> void:
+	pass

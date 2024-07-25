@@ -69,7 +69,7 @@ func explode(from_whom_id : int, peer_position : Variant) -> void:
 	if guided && is_multiplayer_authority():
 		if camera != null:
 			camera.set_target_wait_to_player(null, 1)
-		player_from.unlock()
+		player_from.locked = false
 		if tool_overlay != null:
 			tool_overlay.visible = false
 	queue_free()
@@ -104,7 +104,7 @@ func spawn_projectile(auth : int, shot_speed : float = 15) -> void:
 		world.connect("map_deleted", connect_explosion)
 		if camera is Camera:
 			camera.set_target($Smoothing/target, false)
-			player_from.lock()
+			player_from.locked = true
 			if is_multiplayer_authority():
 				tool_overlay = get_tree().current_scene.get_node_or_null("GameCanvas/ToolOverlay/MissileTool")
 				if tool_overlay != null:

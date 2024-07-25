@@ -25,6 +25,7 @@ const PORT = 30814
 var thread : Thread = null
 var upnp : UPNP = null
 var host_public := true
+var host_dedicated := false
 var upnp_err : int = -1
 var enet_peer := ENetMultiplayerPeer.new()
 # For LAN servers
@@ -50,6 +51,7 @@ var display_version := "beta 10.2pre"
 
 @onready var host_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Host
 @onready var host_public_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/HostPublic
+@onready var host_dedicated_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Dedicated
 @onready var join_button : Button = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Join
 @onready var display_name_field : LineEdit = $MultiplayerMenu/MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/DisplayName
 @onready var join_address : LineEdit = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Address
@@ -58,12 +60,6 @@ var display_version := "beta 10.2pre"
 @onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Tutorial
 
 func _ready() -> void:
-	# fullscreen if not in debug mode
-	if !OS.has_feature("editor") && !OS.get_name() == "macOS":
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
-	elif !OS.has_feature("editor") && OS.get_name() == "macOS":
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	# reset paused state
 	Global.is_paused = false
 	# Clear the graphics cache when entering the main menu.
@@ -78,10 +74,16 @@ func _ready() -> void:
 	
 	host_button.connect("pressed", _on_host_pressed)
 	host_public_button.connect("toggled", _on_host_public_toggled)
+	host_dedicated_button.connect("toggled", _on_host_dedicated_toggled)
 	host_public = host_public_button.button_pressed
 	join_button.connect("pressed", _on_join_pressed)
 	editor_button.connect("pressed", _on_editor_pressed)
 	tutorial_button.connect("pressed", _on_tutorial_pressed)
+	
+	# Scan for LAN servers.
+	get_tree().current_scene.add_child(lan_listener)
+	lan_listener.connect("new_server", _on_new_lan_server)
+	lan_listener.connect("remove_server", _on_remove_lan_server)
 	
 	# Load display name from prefs.
 	var display_pref : Variant = UserPreferences.load_pref("display_name")
@@ -93,10 +95,19 @@ func _ready() -> void:
 	if address != null:
 		join_address.text = str(address)
 	
-	# Scan for LAN servers.
-	get_tree().current_scene.add_child(lan_listener)
-	lan_listener.connect("new_server", _on_new_lan_server)
-	lan_listener.connect("remove_server", _on_remove_lan_server)
+	# check if running in server mode
+	var args := OS.get_cmdline_args()
+	for arg : String in args:
+		if arg == "-server":
+			host_dedicated = true
+			_on_host_pressed()
+	
+	# fullscreen if not in debug mode
+	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !host_dedicated:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
+	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !host_dedicated:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 # quit request
 func _notification(what : int) -> void:
@@ -196,32 +207,38 @@ func _on_host_public_toggled(mode : bool) -> void:
 	else:
 		host_public_button.set_text_to_json("ui/host_public_settings/off")
 
+func _on_host_dedicated_toggled(mode : bool) -> void:
+	host_dedicated = mode
+	if mode:
+		host_dedicated_button.set_text_to_json("ui/dedicated_server/on")
+	else:
+		host_dedicated_button.set_text_to_json("ui/dedicated_server/off")
+
 func _on_host_pressed() -> void:
+	var no_display_name : bool = false
 	if get_display_name_from_field() == null:
-		return
-	Global.display_name = get_display_name_from_field()
-	
+		if !host_dedicated:
+			return
+		else:
+			# Just use "Server" as default if display name is invalid
+			Global.display_name = "Server"
+			no_display_name = true
+	else:
+		Global.display_name = get_display_name_from_field()
 	# Change button text to notify user server is starting.
 	host_button.text = "Starting server..."
 	host_button.disabled = true
-	
 	# only port forward public servers
 	if host_public:
 		thread = Thread.new()
 		thread.start(_upnp_setup.bind(PORT))
-		
 		await Signal(self, "upnp_completed")
-		
 		if upnp_err != -1:
 			host_button.text = "Host server"
 			host_button.disabled = false
 			return
-	
-	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
-	get_tree().current_scene.get_node("GameCanvas").visible = true
 	# Get the host's selected map from the dropdown.
 	var selected_map : String = host_map_selector.get_item_text(host_map_selector.selected)
-	
 	# Create the server.
 	enet_peer.create_server(PORT)
 	# Set the current multiplayer peer to the server.
@@ -231,21 +248,44 @@ func _on_host_pressed() -> void:
 	multiplayer.peer_disconnected.connect(remove_player)
 	# Load the world using the multiplayerspawner spawn method.
 	var world : World = $World
+	
+	if host_dedicated:
+		# Go to windowed mode
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		get_window().title = "Tinybox Server"
+		# Set 'low processor mode', so that the screen does not redraw if
+		# nothing changes
+		OS.low_processor_usage_mode = true
+		# Disable audio and no camera for dedicated servers
+		AudioServer.set_bus_mute(0, true)
+		get_tree().current_scene.get_node("ServerCanvas").visible = true
+		get_window().size = Vector2i(700, 700)
+		Global.dedicated_server = true
+		UIHandler.show_alert(str("Started with arguments: ", OS.get_cmdline_args()))
+		await get_tree().create_timer(0.3).timeout
+		CommandHandler.submit_command.rpc("Info", "Your dedicated server has started! Type '?' in the command box for a list of commands. Alerts will show in this chat list. Player's chats will also appear here.")
+		await get_tree().create_timer(0.3).timeout
+		CommandHandler.submit_command.rpc("Info", "To stop the server and quit the app type '$end'.")
+		if no_display_name:
+			await get_tree().create_timer(0.3).timeout
+			CommandHandler.submit_command.rpc("Alert", "You have no saved display name so the default name 'Server' was used.")
+	else:
+		# add camera
+		var camera_inst : Node3D = CAMERA.instantiate()
+		world.add_child(camera_inst, true)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		get_tree().current_scene.get_node("GameCanvas").visible = true
+	
 	# remove ".tbw"
 	world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
 	await Signal(world, "map_loaded")
-	# add camera
-	var camera_inst : Node3D = CAMERA.instantiate()
-	world.add_child(camera_inst, true)
-	
 	add_peer(multiplayer.get_unique_id())
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
 	# Create the LAN advertiser.
 	lan_advertiser = ServerAdvertiser.new()
 	get_tree().current_scene.add_child(lan_advertiser)
 	lan_advertiser.serverInfo["name"] = str(display_name_field.text, "'s Server")
 	lan_advertiser.broadcast_interval = 3
+	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 
 # Only runs for client
 func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
@@ -256,7 +296,7 @@ func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 		UserPreferences.save_pref("join_address", str(address))
 	
 	# debug name
-	if display_name_field.text == "Merle":
+	if OS.has_feature("editor"):
 		var names := ["Test1", "Test2", "Dog man", "Dog", "Extra Long Name Very Long"]
 		Global.display_name = names.pick_random()
 	else:
@@ -364,9 +404,11 @@ func add_peer(peer_id : int) -> void:
 			rpc_id(peer_id, "client_info_request_from_server")
 		# for the server just add them
 		else:
-			var player : RigidPlayer = Player.instantiate()
-			player.name = str(peer_id)
-			$World.add_child(player, true)
+			# if joining as a player
+			if !host_dedicated:
+				var player : RigidPlayer = Player.instantiate()
+				player.name = str(peer_id)
+				$World.add_child(player, true)
 			Global.connected_to_server = true
 
 # first request sent out to the joining client from the server

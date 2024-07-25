@@ -59,6 +59,10 @@
             "on": "Port-forward w/ uPnP: Yes",
             "off": "Port-forward w/ uPnP: No"
         },
+        "dedicated_server": {
+            "on": "Dedicated server: Yes",
+            "off": "Dedicated server: No"
+        },
         "tool_overlay": {
             "build_tool": "[ T ]:          Change type\n[ M ]:    Change material\n[ R ]: Rotate horizontally\n[ F ]:    Rotate vertically\n[ X ]:          Swap modes\n[ Shift ]:          Height up\n[ Ctrl/Cmd ]: Height down",
             "paintbrush": "[ R ]:          Next colour\n[ F ]:     Previous colour",
@@ -118,6 +122,7 @@
         "env_sunny": "Sunny",
         "env_sunset": "Sunset",
         "env_night": "Night",
+        "env_snowy": "Snowy",
         "env_molten": "Molten",
         "env_warp": "Warp",
         "bg_frozen_field": "Frozen Field",

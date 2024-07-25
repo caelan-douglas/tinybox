@@ -51,6 +51,7 @@ amount = 512
 lifetime = 5.0
 speed_scale = 2.3
 fixed_fps = 0
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_t4lqj")
 draw_pass_1 = SubResource("QuadMesh_eeqkv")
 script = ExtResource("2_rsxal")
