@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://dovtmna702no8"]
+
+[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kpopq"]
+[ext_resource type="PackedScene" uid="uid://bdeq6bmhjenve" path="res://data/scene/CloudsParticles.tscn" id="4_xri4f"]
+
+[sub_resource type="Gradient" id="Gradient_51eee"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ruqie"]
+gradient = SubResource("Gradient_51eee")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="Environment" id="Environment_dd7d4"]
+background_mode = 1
+background_color = Color(0.560784, 0.356863, 0.427451, 1)
+background_energy_multiplier = 2.0
+sky_rotation = Vector3(3.48787e-16, 3.48787e-16, 3.48787e-16)
+ambient_light_source = 2
+ambient_light_color = Color(0.825561, 0.677683, 0.820771, 1)
+ambient_light_sky_contribution = 0.4
+ambient_light_energy = 0.75
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.560784, 0.356863, 0.427451, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.0
+fog_height = 40.0
+fog_height_density = 0.15
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_ruqie")
+
+[node name="Environment" type="Node"]
+script = ExtResource("1_kpopq")
+environment_name = "env_clouds"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dd7d4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.866025, 0.5, 0, -0.5, -0.866025, 0, 52.7417, 0)
+light_color = Color(0.76498, 0.564853, 0.486061, 1)
+light_energy = 3.0
+shadow_enabled = true
+shadow_opacity = 0.65
+shadow_blur = 5.0
+
+[node name="Clouds" parent="." instance=ExtResource("4_xri4f")]
+visible_on_bad = false

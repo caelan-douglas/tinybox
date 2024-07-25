@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://fm6lgsauxibh"]
+[gd_scene load_steps=10 format=3 uid="uid://fm6lgsauxibh"]
 
 [ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
 [ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="2_5ipcy"]
-[ext_resource type="Script" path="res://src/SnowParticles.gd" id="3_0bclg"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
 
 [sub_resource type="Gradient" id="Gradient_yngdy"]
@@ -39,7 +38,7 @@ glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.589681, 0.627994, 0.658686, 1)
 fog_sun_scatter = 0.03
-fog_density = 0.015
+fog_density = 0.008
 fog_sky_affect = 0.8
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture2D_p2o20")
@@ -50,7 +49,6 @@ environment_name = "env_snowy"
 
 [node name="SnowParticles" parent="." instance=ExtResource("2_5ipcy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 53.1094, -1.18)
-script = ExtResource("3_0bclg")
 visible_on_awful = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
