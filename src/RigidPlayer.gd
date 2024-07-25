@@ -135,6 +135,8 @@ preload("res://data/textures/clothing/cloth_tex_1.png"),
 preload("res://data/textures/clothing/cloth_tex_2.png"), 
 preload("res://data/textures/clothing/cloth_tex_3.png")]
 
+@export var spawn_as_dummy : bool = false
+
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
 @rpc("any_peer", "call_local", "reliable")
@@ -600,30 +602,38 @@ func set_camera(new : Camera3D) -> void:
 		camera.set_target(target, false)
 
 func _ready() -> void:
-	# execute for everyone
-	Global.get_world().add_player_to_list(self)
-	gravity_scale = player_grav
-	if multiplayer.is_server():
-		protect_spawn(3.5, false)
-	
-	# only execute on yourself
-	if !is_multiplayer_authority():
+	# used for main menu preview
+	if spawn_as_dummy:
+		change_state(DUMMY)
+		invulnerable = true
 		freeze = true
-		return
-	set_camera(get_viewport().get_camera_3d())
-	connect("body_entered", _on_body_entered)
-	multiplayer.connected_to_server.connect(update_info)
-	multiplayer.peer_connected.connect(update_info)
-	# update peers with name and team
-	update_info()
-	# update peers with appearance
-	change_appearance()
-	go_to_spawn()
-	# hide your own name label
-	$Smoothing/NameLabel.visible = false
-	# in case we were not present on client when server sent
-	# protect spawn call
-	_receive_server_protect_spawn(3.5, false)
+		# update appearance
+		change_appearance()
+		$Smoothing/NameLabel.visible = false
+	# execute for everyone
+	else:
+		Global.get_world().add_player_to_list(self)
+		gravity_scale = player_grav
+		if multiplayer.is_server():
+			protect_spawn(3.5, false)
+		# only execute on yourself
+		if !is_multiplayer_authority():
+			freeze = true
+			return
+		set_camera(get_viewport().get_camera_3d())
+		connect("body_entered", _on_body_entered)
+		multiplayer.connected_to_server.connect(update_info)
+		multiplayer.peer_connected.connect(update_info)
+		# update peers with name and team
+		update_info()
+		# update peers with appearance
+		change_appearance()
+		go_to_spawn()
+		# hide your own name label
+		$Smoothing/NameLabel.visible = false
+		# in case we were not present on client when server sent
+		# protect spawn call
+		_receive_server_protect_spawn(3.5, false)
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -632,6 +642,7 @@ func set_lifter_particles(mode : bool) -> void:
 func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	# Idle animations
+	# (Also do dummy for main menu preview)
 	if _state == IDLE:
 		check_idle()
 	# If in the air from a lifter, show indication

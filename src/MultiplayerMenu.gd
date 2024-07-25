@@ -17,12 +17,14 @@
 extends CanvasLayer
 class_name MultiplayerMenu
 
+@onready var preview_player : RigidPlayer = Global.get_world().get_current_map().get_node("Camera3D/RigidPlayer")
+
 func _ready() -> void:
-	
+	Global.connect("appearance_changed", preview_player.change_appearance)
 	$SettingsMenu/Graphics.connect("pressed", toggle_graphics_presets)
 	$MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/Appearance.connect("pressed", show_appearance_settings)
 	# play hair swing animation on new hair selected
-	$AppearanceMenu/HairPanel/HairPanelContainer/Picker.connect("item_selected", play_preview_character_appearance_animation)
+	#$AppearanceMenu/HairPanel/HairPanelContainer/Picker.connect("item_selected", play_preview_character_appearance_animation)
 	$AppearanceMenu/HBoxContainer/Back.connect("pressed", hide_appearance_settings)
 	$MainMenu/LeftColumn/Settings.connect("pressed", show_settings)
 	$SettingsMenu/Keybinds.connect("pressed", show_keybinds)
@@ -85,25 +87,13 @@ func toggle_graphics_presets() -> void:
 func show_appearance_settings() -> void:
 	$MainMenu.visible = false
 	$AppearanceMenu.visible = true
-	Global.get_world().get_current_map().get_node("Camera3D/character_model").visible = true
-	play_preview_character_appearance_animation()
-
-func play_preview_character_appearance_animation(selected_hair : int = -1) -> void:
-	var animator : AnimationPlayer = Global.get_world().get_current_map().get_node("Camera3D/character_model/AnimationPlayer")
-	# don't play animation again if it's already playing
-	if animator.get_current_animation() != "appearance_idle" && animator.get_current_animation() != "appearance_turnaround":
-		animator.play("appearance_idle")
-		animator.speed_scale = 1
-		await get_tree().create_timer(3.3).timeout
-		# animator could become null if menu is exited during timer
-		if animator != null:
-			animator.play("idle")
-			animator.speed_scale = 0.3
+	preview_player.change_appearance()
+	preview_player.visible = true
 
 func hide_appearance_settings() -> void:
 	$MainMenu.visible = true
 	$AppearanceMenu.visible = false
-	Global.get_world().get_current_map().get_node("Camera3D/character_model").visible = false
+	preview_player.visible = false
 	# Save appearance on back
 	Global.save_appearance()
 
