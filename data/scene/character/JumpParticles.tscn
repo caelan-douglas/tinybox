@@ -47,6 +47,7 @@ alpha_antialiasing_mode = 0
 blend_mode = 1
 shading_mode = 0
 disable_ambient_light = true
+disable_fog = true
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.447059, 0.447059, 0.447059, 1)
 albedo_texture = ExtResource("1_7e2ge")

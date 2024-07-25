@@ -648,7 +648,7 @@ func _physics_process(delta : float) -> void:
 		if camera is Camera:
 			if camera.get_camera_mode() == Camera.CameraMode.FREE:
 				if hor_linear_velocity.length () > 0.01:
-					rotation.y = lerp_angle(rotation.y, atan2(linear_velocity.x, linear_velocity.z), delta * 15)
+					rotation.y = lerp_angle(rotation.y, atan2(linear_velocity.x, linear_velocity.z), delta * 12)
 			elif camera.get_camera_mode() == Camera.CameraMode.AIM:
 				rotation.y = camera.rotation.y + PI
 	
