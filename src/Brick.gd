@@ -641,6 +641,8 @@ func build() -> void:
 						floaty_i.get_node("Label").text = str("-$", cost)
 						floaty_i.global_position = Vector3(global_position.x, global_position.y + 0.5, global_position.z)
 						Global.get_world().add_child(floaty_i)
+			# in case the brick was still moving to new spot, snap to grid
+			global_position = snapped_pos
 			change_state.rpc(States.PLACED)
 			# If this brick was built by a tool, inform the tool it can
 			# now build again.

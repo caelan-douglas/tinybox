@@ -73,9 +73,10 @@ func set_controlling_player(player_id : int) -> void:
 # Drives this seat's motors based on user input.
 @rpc("any_peer", "call_local")
 func drive(input_forward : float, input_steer : float) -> void:
-	for motor_brick : MotorBrick in attached_motors:
+	for motor_brick : Variant in attached_motors:
 		if motor_brick != null:
-			motor_brick.receive_input(input_forward, input_steer)
+			if motor_brick is MotorBrick:
+				motor_brick.receive_input(input_forward, input_steer)
 		else:
 			attached_motors.erase(motor_brick)
 
