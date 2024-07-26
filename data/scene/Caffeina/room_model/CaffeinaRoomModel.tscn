@@ -32,13 +32,14 @@ roughness = 0.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hnogh"]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.533333, 0.615686, 0.776471, 1)
+albedo_color = Color(0.487927, 0.447929, 0.40136, 1)
 albedo_texture = ExtResource("7_bdbl6")
 metallic_specular = 0.1
 roughness = 0.45
 roughness_texture = ExtResource("9_my5kl")
 roughness_texture_channel = 4
 normal_enabled = true
+normal_scale = 0.2
 normal_texture = ExtResource("8_ftk40")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15ype"]
@@ -64,9 +65,11 @@ emission_energy_multiplier = 6.28
 [node name="caffeina" parent="." instance=ExtResource("1_o6j45")]
 
 [node name="Room" parent="caffeina" index="0"]
+cast_shadow = 2
 surface_material_override/0 = ExtResource("2_7n5j1")
 
 [node name="Ceiling" parent="caffeina/Room" index="1"]
+cast_shadow = 2
 surface_material_override/0 = ExtResource("3_38yjx")
 
 [node name="Floor" parent="caffeina/Room" index="2"]

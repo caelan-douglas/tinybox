@@ -108,9 +108,6 @@ func _ready() -> void:
 	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
 	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !host_dedicated:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	
-	# save version, in case we want to compare against it in a newer version
-	UserPreferences.save_pref("version", server_version)
 
 # quit request
 func _notification(what : int) -> void:

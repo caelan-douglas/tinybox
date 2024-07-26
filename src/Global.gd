@@ -45,6 +45,8 @@ func add_to_graphics_cache(what : Material) -> void:
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
 
+var brick_materials_as_names : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Immovable"]
+
 # Appearance settings
 var shirt : int = 0
 var shirt_texture : int = 0
@@ -85,6 +87,8 @@ func set_skin_colour(new : Color) -> void:
 func _ready() -> void:
 	load_appearance()
 	get_viewport().connect("gui_focus_changed", _on_gui_focus_changed)
+	# save version once on launch, in case we want to compare against it in a newer version
+	UserPreferences.save_pref("version", get_tree().current_scene.server_version)
 
 func save_appearance() -> void:
 	UserPreferences.save_pref("shirt", shirt)

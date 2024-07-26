@@ -33,10 +33,10 @@ func _physics_process(delta : float) -> void:
 
 var last_checked_time : int = 0
 # Determines the groups for bricks in the world.
-func check_world_groups() -> void:
+func check_world_groups(override : bool = false) -> void:
 	# don't check too frequently
 	var curr_time : int = Time.get_ticks_msec()
-	if curr_time - last_checked_time < 500:
+	if curr_time - last_checked_time < 500 && !override:
 		return
 	last_checked_time = curr_time
 	groups = {}

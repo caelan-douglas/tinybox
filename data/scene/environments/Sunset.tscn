@@ -48,9 +48,10 @@ environment_name = "env_sunset"
 environment = SubResource("Environment_oe2ii")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.306186, -0.312798, 0.899115, -0.25, 0.937747, 0.241103, -0.918559, -0.150957, -0.365325, 0, 52.7417, 0)
+transform = Transform3D(-0.306186, -0.312798, 0.899115, -0.25, 0.937747, 0.241102, -0.918559, -0.150957, -0.365324, 0, 52.7417, 0)
 light_color = Color(0.717911, 0.5223, 0.428367, 1)
 light_energy = 5.0
 shadow_enabled = true
+directional_shadow_max_distance = 400.0
 script = ExtResource("3_tll4i")
 visible_on_awful = false

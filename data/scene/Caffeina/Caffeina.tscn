@@ -1,14 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://bwff01cm8q6qi"]
+[gd_scene load_steps=24 format=3 uid="uid://bwff01cm8q6qi"]
 
 [ext_resource type="Script" path="res://src/Teams.gd" id="1_f1b66"]
 [ext_resource type="Script" path="res://src/Map.gd" id="1_g1pl0"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="2_qqdtv"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="3_x35ei"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="4_a80vb"]
-[ext_resource type="PackedScene" uid="uid://b6cq0dtxgowj5" path="res://data/models/dining_table/dining_table.blend" id="5_a7caw"]
-[ext_resource type="Texture2D" uid="uid://dcvo4y6ejsxgr" path="res://data/textures/wood_tex.jpg" id="7_14440"]
-[ext_resource type="Texture2D" uid="uid://ctgjf8684lvi4" path="res://data/textures/wood_tex_normal.jpg" id="8_axbiq"]
-[ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="9_iga28"]
+[ext_resource type="PackedScene" uid="uid://nvxgtxxnjk2f" path="res://data/scene/editor_obj/DiningTable.tscn" id="7_3csa2"]
 [ext_resource type="PackedScene" uid="uid://w5ui4ll1jtgn" path="res://data/scene/chair/Chair.tscn" id="10_8if20"]
 [ext_resource type="PackedScene" uid="uid://bqsd8rt5norqj" path="res://data/scene/editor_obj/Mug.tscn" id="12_wl7xv"]
 [ext_resource type="PackedScene" uid="uid://1sqf4570yn2c" path="res://data/scene/Caffeina/room_model/CaffeinaRoomModel.tscn" id="14_ij330"]
@@ -39,21 +36,6 @@ ssil_enabled = true
 fog_density = 0.1
 volumetric_fog_albedo = Color(0.701961, 0.815686, 0.835294, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_7ofiv"]
-size = Vector3(91.55, 3.11, 45.578)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pfxlp"]
-resource_name = "vincent.jacket"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.8, 0.8, 0.8, 1)
-albedo_texture = ExtResource("7_14440")
-roughness_texture = ExtResource("9_iga28")
-roughness_texture_channel = 4
-normal_enabled = true
-normal_texture = ExtResource("8_axbiq")
-uv1_scale = Vector3(0.875, 1.61, 1)
-uv1_offset = Vector3(0.475, 0, 0)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_voudb"]
 size = Vector3(238, 11, 183)
 
@@ -82,17 +64,7 @@ environment = SubResource("Environment_go7qq")
 script = ExtResource("1_f1b66")
 team_list = Array[Resource]([ExtResource("2_qqdtv"), ExtResource("4_a80vb"), ExtResource("3_x35ei")])
 
-[node name="table" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.06972, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="table"]
-shape = SubResource("BoxShape3D_7ofiv")
-
-[node name="dining_table" parent="table" instance=ExtResource("5_a7caw")]
-transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
-
-[node name="table" parent="table/dining_table" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_pfxlp")
+[node name="table" parent="." instance=ExtResource("7_3csa2")]
 
 [node name="Chair" parent="." instance=ExtResource("10_8if20")]
 transform = Transform3D(48.2963, 0, 12.941, 0, 50, 0, -12.941, 0, 48.2963, 17, -36, 28)
@@ -375,5 +347,3 @@ mesh = ExtResource("17_cltu3")
 
 [node name="OutroSpot" type="Marker3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 21)
-
-[editable path="table/dining_table"]

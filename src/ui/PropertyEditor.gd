@@ -75,16 +75,25 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		entry.get_node("ColorPickerButton").color = prop
 		entry.get_node("ColorPickerButton").connect("color_changed", update_object_property.bind(prop_name))
 		
-	# Add adjuster for floats and ints, event editor for events
+	# Add adjuster for floats and ints
 	if prop is float || prop is int:
-		if prop_name == "event":
+		if prop_name == "_material":
+			entry = option_picker.instantiate()
+			entry.get_node("Label").text = "Brick material"
+			var mat_option_picker : OptionButton = entry.get_node("Event")
+			for brick_name : String in Global.brick_materials_as_names:
+				mat_option_picker.add_item(brick_name)
+			# brick mat is an int so we can just use selected option as the new prop value
+			mat_option_picker.connect("item_selected", update_object_property.bind(prop_name))
+			mat_option_picker.selected = prop
+		elif prop_name == "event":
 			entry = option_picker.instantiate()
 			var event_option_picker : OptionButton = entry.get_node("Event")
 			for event_type : String in EventHandler.event_types_readable:
 				event_option_picker.add_item(event_type)
 				# when a new item is selected, set the option button's index as the
 				# selected event type
-				event_option_picker.connect("item_selected", update_object_property.bind(prop_name))
+			event_option_picker.connect("item_selected", update_object_property.bind(prop_name))
 			event_option_picker.selected = prop
 		else:
 			entry = adjuster.instantiate()

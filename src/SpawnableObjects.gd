@@ -34,6 +34,7 @@ extends Node
 	"obj_picnic_table": load("res://data/scene/editor_obj/PicnicTable.tscn"),
 	"obj_sign": load("res://data/scene/editor_obj/Sign.tscn"),
 	"obj_spawnpoint": load("res://data/scene/editor_obj/SpawnPoint.tscn"),
+	"obj_dining_table": load("res://data/scene/editor_obj/DiningTable.tscn"),
 	# ENVIRONMENTS
 	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),
@@ -45,6 +46,7 @@ extends Node
 	# BACKGROUNDS
 	"bg_frozen_field": load("res://data/scene/backgrounds/FrozenField.tscn"),
 	"bg_warp": load("res://data/scene/backgrounds/Warp.tscn"),
+	"bg_dining_room": load("res://data/scene/backgrounds/DiningRoom.tscn"),
 	# BRICKS
 	"brick": load("res://data/scene/brick/Brick.tscn"),
 	"brick_half": load("res://data/scene/brick/HalfBrick.tscn"),

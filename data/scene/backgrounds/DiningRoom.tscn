@@ -1,0 +1,97 @@
+[gd_scene load_steps=5 format=3 uid="uid://oolh72sbwp1a"]
+
+[ext_resource type="Script" path="res://src/TBWObject.gd" id="1_eqocu"]
+[ext_resource type="PackedScene" uid="uid://1sqf4570yn2c" path="res://data/scene/Caffeina/room_model/CaffeinaRoomModel.tscn" id="2_1jqrs"]
+[ext_resource type="ArrayMesh" uid="uid://b7aj46221lehd" path="res://data/models/tree/pine_tree_0_mesh.res" id="3_xp6s4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_scluf"]
+size = Vector3(238, 11, 183)
+
+[node name="bg_dining_room" type="Node3D"]
+script = ExtResource("1_eqocu")
+tbw_object_type = "bg_dining_room"
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3, 47.5, 3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.523, 0)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 126.177, 0)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -107, 29.977, 0)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 103, 40.977, 0)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, 1.09673e-05, 34.977, 80)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -1.09673e-05, 35.977, -80)
+shape = SubResource("BoxShape3D_scluf")
+
+[node name="CaffeinaRoomModel" parent="." instance=ExtResource("2_1jqrs")]
+transform = Transform3D(-50, 0, -4.37114e-06, 0, 50, 0, 4.37114e-06, 0, -50, 2.08165e-12, 48.5, 2.08165e-12)
+
+[node name="PineTree0Mesh" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, -0.971, -10.5)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh10" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.51849, 0, -0.855084, 0, 1, 0, 0.855084, 0, 0.51849, -6.44, -0.971, -12.08)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh11" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(-0.315158, 0.051504, -0.94764, 0.0139003, 0.99867, 0.0496546, 0.948938, 0.00247654, -0.315454, 4.92862, -0.973805, -16.2556)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh4" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.999242, 0.038911, 0, -0.038911, 0.999242, 0, 0, 0, 1, -7.41794, -2.3926, -8.84334)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh5" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.999242, 0.038911, 0, -0.038911, 0.999242, 0, 0, 0, 1, 0.522064, -1.65466, -5.61304)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh6" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.228314, 0.00889066, 0.973548, 0.0783088, 0.99655, -0.0274656, -0.970434, 0.082508, 0.22683, 6.18678, -1.66034, -3.15996)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh8" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.228314, 0.00889066, 0.973548, -0.0630742, 0.997992, 0.0056781, -0.971542, -0.0627022, 0.228416, 12.828, -1.65729, -11.1203)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh9" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(-0.95021, -0.0583128, -0.306104, -0.0849978, 0.993586, 0.0745726, 0.299792, 0.0968778, -0.949072, 9.56328, -1.66659, -11.7218)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh7" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(0.499622, 0.0194555, -0.866026, 0.0501882, 0.997418, 0.0513616, 0.864788, -0.0691256, 0.497354, -9.00588, -1.65851, -3.47974)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh2" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(-0.777666, 0.021693, 0.777666, 0.0153393, 1.09979, -0.0153393, -0.777818, 1.84402e-08, -0.777818, -1.79425, -0.760551, -12.88)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
+
+[node name="PineTree0Mesh3" type="MeshInstance3D" parent="CaffeinaRoomModel"]
+transform = Transform3D(1.09961, 0.02927, -0.00051506, -0.0292744, 1.0995, -0.015331, 0.000106926, 0.0153393, 1.09989, 1.98173, -1.18115, -11.5876)
+mesh = ExtResource("3_xp6s4")
+skeleton = NodePath("../..")
