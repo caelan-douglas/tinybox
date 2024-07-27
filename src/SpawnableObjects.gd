@@ -28,6 +28,7 @@ extends Node
 	"obj_pine_tree": load("res://data/scene/editor_obj/PineTree.tscn"),
 	"obj_cliff_0": load("res://data/scene/editor_obj/Cliff_0.tscn"),
 	"obj_asteroid_0": load("res://data/scene/editor_obj/Asteroid_0.tscn"),
+	"obj_asteroid_1": load("res://data/scene/editor_obj/Asteroid_1.tscn"),
 	"obj_mug": load("res://data/scene/editor_obj/Mug.tscn"),
 	"obj_pickup": load("res://data/scene/pickup/Pickup.tscn"),
 	"obj_lifter": load("res://data/scene/lifter/Lifter.tscn"),

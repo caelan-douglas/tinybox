@@ -113,11 +113,16 @@ func sit(player : RigidPlayer) -> void:
 					# set the motorbricks parent seat to this one
 					b.set_parent_seat(self.get_path())
 	
+	update_weight.rpc(vehicle_weight)
 	var player_id : int = player.get_multiplayer_authority()
 	player.entered_seat.rpc_id(player_id, self.get_path())
 	# unfreeze group so that the body that has
 	# these motors is released.
 	unfreeze_entire_group()
+
+@rpc("any_peer", "call_local", "reliable")
+func update_weight(new : float) -> void:
+	vehicle_weight = new
 
 @rpc("call_remote")
 func _sync_velocity(rpc_velocity : Vector3) -> void:
