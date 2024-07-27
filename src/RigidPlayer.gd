@@ -837,7 +837,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				if Input.is_action_just_pressed("jump") && !locked:
 					rotate_object_local(Vector3.UP, deg_to_rad(180))
 					change_state(DIVE)
-					var forward : Vector3 = -camera.get_global_transform().basis.z
+					var forward : Vector3 = get_global_transform().basis.z
 					apply_central_impulse(forward * 5)
 					apply_central_impulse(Vector3.UP * 9)
 				elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
