@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dymvpfgekyq2c"]
+[gd_scene load_steps=7 format=3 uid="uid://dymvpfgekyq2c"]
 
 [ext_resource type="Script" path="res://src/TBWObject.gd" id="1_8ejil"]
 [ext_resource type="Material" uid="uid://bubb0lf6e6w74" path="res://data/materials/track.tres" id="2_3ok0f"]
@@ -40,6 +40,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_r4qj7")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_5qea1"]
+size = Vector3(25, 1, 25)
+
 [node name="TrackDivided" type="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 script = ExtResource("1_8ejil")
@@ -56,3 +59,12 @@ shape = SubResource("BoxShape3D_fgrx0")
 [node name="DividedPiece" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_q4avx")
 skeleton = NodePath("")
+
+[node name="SelectorArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.5, 0)
+collision_layer = 256
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SelectorArea"]
+shape = SubResource("BoxShape3D_5qea1")
