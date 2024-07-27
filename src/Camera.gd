@@ -161,7 +161,7 @@ func _process(delta : float) -> void:
 			controlled_cam_delay.z = 0
 		if Input.is_action_just_pressed("left") || Input.is_action_just_pressed("right"):
 			controlled_cam_delay.x = 0
-		if Input.is_action_just_pressed("jump") || Input.is_action_just_pressed("control"):
+		if Input.is_action_just_pressed("jump") || Input.is_action_just_pressed("alt"):
 			controlled_cam_delay.y = 0
 		
 		var move_forward : float = 0
@@ -194,7 +194,7 @@ func _process(delta : float) -> void:
 					controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME
 		var move_vertical : float = 0
 		if controlled_cam_delay.y <= 0 && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			move_vertical = Input.get_action_strength("jump") - Input.get_action_strength("control")
+			move_vertical = Input.get_action_strength("jump") - Input.get_action_strength("alt")
 			if held_key_time > 6:
 				if Input.is_action_pressed("shift"):
 					controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME_SHIFT
@@ -220,26 +220,16 @@ func _process(delta : float) -> void:
 			controlled_cam_delay.z -= 60 * delta
 		
 		# shorter control time if holding key
-		if Input.is_action_pressed("forward") || Input.is_action_pressed("back") || Input.is_action_pressed("right") || Input.is_action_pressed("left") || Input.is_action_pressed("jump") || Input.is_action_pressed("control"):
+		if Input.is_action_pressed("forward") || Input.is_action_pressed("back") || Input.is_action_pressed("right") || Input.is_action_pressed("left") || Input.is_action_pressed("jump") || Input.is_action_pressed("alt"):
 			held_key_time += delta * 400
 		else:
 			held_key_time = 0
 		
 		# swap camera zoom
-		if Input.is_action_just_pressed("editor_camera_zoom") && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			match (int(target_dist)):
-				5:
-					target_dist = 10
-				10:
-					target_dist = 15
-				15:
-					target_dist = 25
-				25:
-					target_dist = 50
-				50:
-					target_dist = 100
-				_:
-					target_dist = 5
+		if Input.is_action_just_pressed("zoom_in") && Input.is_action_pressed("control"):
+			target_dist = clamp(target_dist - 3, 3, max_dist)
+		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
+			target_dist = clamp(target_dist + 3, 3, max_dist)
 		
 		_control_camera_rotation(delta)
 	

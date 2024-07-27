@@ -21,17 +21,15 @@ var disabled := false
 var last_held_tool : EditorTool = null
 
 func _process(delta : float) -> void:
-	if !disabled && (Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
+	if !disabled && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED && (Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")) && !Input.is_action_pressed("control"):
 		var active_tool : EditorTool = get_active_tool()
 		if active_tool == null:
-			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_left"):
 				get_tools()[get_tools().size() - 1].set_tool_active(true)
 			else:
 				get_tools()[0].set_tool_active(true)
 		else:
 			var active_tool_idx : int = get_index_of_tool(active_tool)
-			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_right"):
 				active_tool_idx += 1
 				if active_tool_idx >= get_tools().size():

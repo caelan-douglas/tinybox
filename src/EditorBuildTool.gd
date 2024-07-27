@@ -24,7 +24,7 @@ var item_offset := Vector3(0, 0, 0)
 @onready var tool_inventory : EditorToolInventory = get_parent()
 @onready var editor : Editor = Global.get_world().get_current_map()
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
-@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/PropertyEditor") 
+@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor") 
 @onready var preview_node : Node3D = $PreviewNode
 @onready var preview_area : Area3D = $PreviewNode/Area
 @onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
@@ -42,16 +42,19 @@ func _on_property_updated(properties : Dictionary) -> void:
 func set_tool_active(mode : bool, from_click : bool = false) -> void:
 	super(mode, from_click)
 	if mode == false:
+		editor.hide_item_chooser()
+		if editor.is_connected("item_picked", _on_item_picked):
+			editor.disconnect("item_picked", _on_item_picked)
 		if preview_node != null:
 			preview_node.visible = false
 		# deselecting tool, remove any properties from list
 		if property_editor.properties_from_tool == self:
 			property_editor.clear_list()
 	else:
+		editor.show_item_chooser()
+		editor.connect("item_picked", _on_item_picked)
 		if preview_node != null:
 			preview_node.visible = true
-		if selected_item == null:
-			pick_item()
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
 		# editing a new object, not a hovered one (show notif)
@@ -64,26 +67,6 @@ func _on_editor_deselected() -> void:
 		property_editor.relist_object_properties(selected_item_properties, self)
 		# editing a new object, not a hovered one (show notif)
 		property_editor.editing_hovered = false
-
-func pick_item() -> void:
-	var editor : Map = Global.get_world().get_current_map()
-	if editor is Editor:
-		if !editor.get_item_chooser_visible() && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			get_parent().set_disabled(true)
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			editor.show_item_chooser()
-			editor.connect("item_picked", _on_item_picked, 8)
-			await Signal(editor, "item_picked")
-			editor.disconnect("item_picked", _on_item_picked)
-			get_parent().set_disabled(false)
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
-			get_parent().set_disabled(false)
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			editor.hide_item_chooser()
-	else:
-		get_parent().set_disabled(false)
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
 	ui_tool_name = item_name_display
@@ -179,6 +162,9 @@ func _physics_process(delta : float) -> void:
 					# if trying to spawn a brick in an invalid location
 					# and not dragging
 					elif !$InvalidAudio.playing && Input.is_action_just_pressed("click"):
-							$InvalidAudio.play()
-			if Input.is_action_just_pressed("editor_select_item"):
-				pick_item()
+						$InvalidAudio.play()
+						# show alert that nothing is selected
+						if selected_item == null:
+							UIHandler.show_alert("Select something to place from the left.\n(Press R to free your mouse.)", 3, false, UIHandler.alert_colour_error)
+						else:
+							UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)

@@ -3,63 +3,41 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_k718s"]
 [ext_resource type="Script" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
 
-[node name="ItemChooser" type="Control"]
-custom_minimum_size = Vector2(710, 548)
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -355.0
-offset_top = -200.0
-offset_right = 355.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ItemChooser" type="MarginContainer"]
+offset_right = 356.0
+offset_bottom = 202.0
 script = ExtResource("1_p7u7r")
 
 [node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
-[node name="Menu" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -52.0
-offset_right = 154.0
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="Menu" type="VBoxContainer" parent="Margin"]
+custom_minimum_size = Vector2(308, 2.08165e-12)
+layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="Menu"]
+[node name="Title" type="Label" parent="Margin/Menu"]
 layout_mode = 2
-text = "Select an item or object to assign to this slot."
+text = "Item Picker"
+autowrap_mode = 2
 script = ExtResource("1_k718s")
 json_text = "ui/editor/item_chooser_title"
 
-[node name="Spacer" type="Control" parent="Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
+[node name="ScrollContainer" type="ScrollContainer" parent="Margin/Menu"]
+custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Menu"]
-custom_minimum_size = Vector2(616, 428)
-layout_mode = 2
+size_flags_vertical = 3
 follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="Menu/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="Margin/Menu/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3

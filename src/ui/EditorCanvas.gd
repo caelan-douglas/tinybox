@@ -19,7 +19,7 @@ extends CanvasLayer
 @onready var world_click : Button = $WorldClick
 
 func _ready() -> void:
-	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
+	$PauseMenu/TabContainer/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
 	world_click.connect("pressed", _on_world_click_pressed)
 
@@ -29,19 +29,19 @@ func _on_world_click_pressed() -> void:
 func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
-		$WorldProperties/Menu/Water.connect("pressed", (editor as Editor).toggle_water)
-		$WorldProperties/Menu/WaterType.connect("pressed", (editor as Editor).switch_water_type.bind($WorldProperties/Menu/WaterType.get_path()))
-		$WorldProperties/Menu/WaterHeightAdjuster/DownBig.connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
-		$WorldProperties/Menu/WaterHeightAdjuster/Down.connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
-		$WorldProperties/Menu/WaterHeightAdjuster/Up.connect("pressed", (editor as Editor).adjust_water_height.bind(1))
-		$WorldProperties/Menu/WaterHeightAdjuster/UpBig.connect("pressed", (editor as Editor).adjust_water_height.bind(10))
-		$WorldProperties/Menu/Environment.connect("pressed", (editor as Editor).switch_environment)
-		$WorldProperties/Menu/Background.connect("pressed", (editor as Editor).switch_background)
+		$"PauseMenu/TabContainer/World Properties/Water".connect("pressed", (editor as Editor).toggle_water)
+		$"PauseMenu/TabContainer/World Properties/WaterType".connect("pressed", (editor as Editor).switch_water_type.bind($"PauseMenu/TabContainer/World Properties/WaterType".get_path()))
+		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/DownBig".connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
+		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/Down".connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
+		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/Up".connect("pressed", (editor as Editor).adjust_water_height.bind(1))
+		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/UpBig".connect("pressed", (editor as Editor).adjust_water_height.bind(10))
+		$"PauseMenu/TabContainer/World Properties/Environment".connect("pressed", (editor as Editor).switch_environment)
+		$"PauseMenu/TabContainer/World Properties/Background".connect("pressed", (editor as Editor).switch_background)
 		
 		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Menu/MapSelection))
-		$PauseMenu/Menu/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/Menu/MapSelection, true))
-		$PauseMenu/Menu/TestWorld.connect("pressed", _on_test_world_pressed)
+		$PauseMenu/TabContainer/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/TabContainer/Editor/MapSelection, true))
+		$PauseMenu/TabContainer/Editor/TestWorld.connect("pressed", _on_test_world_pressed)
 		
 		$EntryScreen/Menu/New.grab_focus()
 		
@@ -49,7 +49,7 @@ func _on_map_loaded() -> void:
 		editor.editor_tool_inventory.set_disabled(true)
 
 func _on_test_world_pressed() -> void:
-	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
+	var world_name : String = $PauseMenu/TabContainer/Editor/SaveWorldName.text
 	if world_name == "":
 		UIHandler.show_alert("Please enter a world name before testing!", 4, false, UIHandler.alert_colour_error)
 	else:
@@ -112,7 +112,7 @@ func _process(delta : float) -> void:
 			show_pause_menu()
 
 func _on_save_world_pressed() -> void:
-	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
+	var world_name : String = $PauseMenu/TabContainer/Editor/SaveWorldName.text
 	if world_name == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:

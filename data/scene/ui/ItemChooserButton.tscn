@@ -3,6 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://bed4pahj3ao4t" path="res://data/textures/editor_icons/brick.png" id="1_yt745"]
 
 [node name="Button" type="Button"]
-custom_minimum_size = Vector2(200, 64)
+custom_minimum_size = Vector2(120, 48)
+offset_right = 120.0
+offset_bottom = 64.0
+size_flags_horizontal = 3
 text = "Brick"
 icon = ExtResource("1_yt745")
+text_overrun_behavior = 1

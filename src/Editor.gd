@@ -24,7 +24,8 @@ signal deselected
 @onready var editor_tool_inventory : EditorToolInventory = get_node("EditorToolInventory")
 @onready var selector : Node = get_node("SelectArea/Selector")
 @onready var select_area : Area3D = get_node("SelectArea")
-@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/PropertyEditor") 
+@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor")
+@onready var item_chooser_list : Control =  get_tree().current_scene.get_node("EditorCanvas/LeftPanel/ItemChooser/Margin/Menu/ScrollContainer/ItemList")
 
 var hovered_editable_object : Node = null
 var can_select_object : bool = true
@@ -104,26 +105,23 @@ func _on_tbw_loaded() -> void:
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:
-		editor_canvas.get_node("WorldProperties/Menu/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
+		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
 	# Update background text
 	var bg : TBWObject = get_background()
 	if bg != null:
-		editor_canvas.get_node("WorldProperties/Menu/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
+		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
 
 func show_item_chooser() -> void:
-	editor_tool_inventory.set_disabled(true)
-	editor_canvas.get_node("ItemChooser").visible = true
+	item_chooser_list.visible = true
 
 func hide_item_chooser() -> void:
-	editor_tool_inventory.set_disabled(false)
-	editor_canvas.get_node("ItemChooser").visible = false
+	item_chooser_list.visible = false
 
 func get_item_chooser_visible() -> bool:
-	return editor_canvas.get_node("ItemChooser").visible
+	return item_chooser_list.visible
 
 func on_item_chosen(item_name_internal : String, item_name_display : String) -> void:
 	emit_signal("item_picked", item_name_internal, item_name_display)
-	hide_item_chooser()
 
 func get_object_properties_visible() -> bool:
 	return editor_canvas.get_node("PropertyEditor").visible
@@ -158,7 +156,7 @@ func adjust_water_height(amt : float) -> void:
 	water_height += amt
 	if active_water != null:
 		active_water.global_position.y = water_height
-	editor_canvas.get_node("WorldProperties/Menu/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
+	editor_canvas.get_node("PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
 
 func delete_environment() -> void:
 	for obj in Global.get_world().get_children():
@@ -208,7 +206,7 @@ func switch_environment() -> void:
 	
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
-	editor_canvas.get_node("WorldProperties/Menu/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
+	editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
 
 func switch_background() -> void:
 	var bg : TBWObject = null
@@ -239,10 +237,10 @@ func switch_background() -> void:
 	if new_bg != null:
 		Global.get_world().add_child(new_bg, true)
 		current_bg_name = new_bg.tbw_object_type
-		editor_canvas.get_node("WorldProperties/Menu/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
+		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
 	else:
 		current_bg_name = "(none)"
-		editor_canvas.get_node("WorldProperties/Menu/Background").text = "(none)"
+		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = "(none)"
 
 # Hide player and make them invulnerable.
 func disable_player() -> int:

@@ -16,4 +16,4 @@ script = ExtResource("1_w5rc4")
 
 [node name="ItemGrid" type="GridContainer" parent="."]
 layout_mode = 2
-columns = 3
+columns = 2

@@ -20,7 +20,7 @@ class_name ItemChooser
 @onready var item_names_list : Array[String] = SpawnableObjects.get_editor_spawnable_objects_list()
 @onready var item_chooser_button : PackedScene = preload("res://data/scene/ui/ItemChooserButton.tscn")
 @onready var item_chooser_set : PackedScene = preload("res://data/scene/ui/ItemChooserSet.tscn")
-@onready var list : VBoxContainer = $Menu/ScrollContainer/ItemList
+@onready var list : VBoxContainer = $Margin/Menu/ScrollContainer/ItemList
 
 func create_set(set_name : String) -> void:
 	var set_i : Control = item_chooser_set.instantiate()

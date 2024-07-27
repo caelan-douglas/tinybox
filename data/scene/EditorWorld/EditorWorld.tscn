@@ -1,10 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=13 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/EditorToolInventory.gd" id="2_eevk4"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="3_jjyfp"]
 [ext_resource type="PackedScene" uid="uid://dj387li7w0abc" path="res://data/scene/tool/EditorBuildTool.tscn" id="3_nojya"]
-[ext_resource type="Script" path="res://src/EditorPropertiesTool.gd" id="4_ga27o"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_qkc34"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_iwwdy"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_xvfrp"]
@@ -86,8 +85,7 @@ script = ExtResource("2_eevk4")
 
 [node name="EditorBuildTool5" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 
-[node name="EditorPropertiesTool" type="Node" parent="EditorToolInventory"]
-script = ExtResource("4_ga27o")
+[node name="EditorBuildTool6" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 
 [node name="CameraTarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 50, 2.08165e-12)

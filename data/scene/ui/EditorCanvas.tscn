@@ -1,12 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=13 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_b6w4i"]
+[ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_noy30"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
-[ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_xh0b7"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
-[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="11_j8mfy"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5nvuj"]
@@ -45,8 +44,6 @@ offset_right = 92.5
 offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
-
-[node name="PropertyEditor" parent="." instance=ExtResource("2_1yhnn")]
 
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 540)
@@ -127,113 +124,23 @@ layout_mode = 2
 layout_mode = 2
 text = "New world"
 
-[node name="ItemChooser" parent="." instance=ExtResource("5_xh0b7")]
-visible = false
-
-[node name="WorldProperties" type="Control" parent="."]
-visible = false
-custom_minimum_size = Vector2(540, 400)
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -270.0
-offset_top = -200.0
-offset_right = 270.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="WorldProperties"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+[node name="LeftPanel" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(360, 2.08165e-12)
+anchors_preset = 9
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = 16.0
+offset_top = 86.0
+offset_right = 376.0
+offset_bottom = -16.0
 grow_vertical = 2
+theme_override_constants/separation = 16
 
-[node name="Menu" type="VBoxContainer" parent="WorldProperties"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -52.0
-offset_right = 154.0
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="DynamicLabel" type="Label" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "World properties"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/world_properties"
-
-[node name="Spacer" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
+[node name="PropertyEditor" parent="LeftPanel" instance=ExtResource("2_1yhnn")]
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="WorldProperties/Menu"]
+[node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
 layout_mode = 2
-text = "Water"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/water"
-
-[node name="Water" type="Button" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "Toggle water"
-
-[node name="WaterHeightAdjuster" parent="WorldProperties/Menu" instance=ExtResource("5_umgt3")]
-layout_mode = 2
-
-[node name="DynamicLabel" parent="WorldProperties/Menu/WaterHeightAdjuster" index="2"]
-text = "Water height: 42"
-
-[node name="DynamicLabel5" type="Label" parent="WorldProperties/Menu"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
-text = "Water type"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/water_type"
-
-[node name="WaterType" type="Button" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "Water"
-
-[node name="Spacer2" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
-layout_mode = 2
-
-[node name="DynamicLabel3" type="Label" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "Environment"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/environment"
-
-[node name="Environment" type="Button" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "Sunny"
-
-[node name="Spacer3" type="Control" parent="WorldProperties/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
-layout_mode = 2
-
-[node name="DynamicLabel4" type="Label" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "Background"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/background"
-
-[node name="Background" type="Button" parent="WorldProperties/Menu"]
-layout_mode = 2
-text = "(none)"
+size_flags_vertical = 3
 
 [node name="PauseMenu" type="Control" parent="."]
 visible = false
@@ -245,17 +152,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.227451, 0.133333, 0.231373, 0.701961)
-
-[node name="Menu" type="VBoxContainer" parent="PauseMenu"]
-custom_minimum_size = Vector2(308, 0)
+[node name="TabContainer" type="TabContainer" parent="PauseMenu"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -263,72 +160,129 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -154.0
-offset_top = -264.0
+offset_top = -238.0
 offset_right = 154.0
-offset_bottom = 264.0
+offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
+tab_alignment = 1
+
+[node name="Editor" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="PauseMenu/Menu"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
-theme_override_constants/line_spacing = -20
-theme_override_fonts/font = ExtResource("11_j8mfy")
-theme_override_font_sizes/font_size = 50
-text = "Editor"
-script = ExtResource("6_aufvl")
-
-[node name="Spacer" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer" type="Control" parent="PauseMenu/TabContainer/Editor"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("12_nulw5")]
+[node name="LeaveButton" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("12_nulw5")]
 layout_mode = 2
 text = "Leave Editor"
 editor_leave_text = true
 
-[node name="Spacer3" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Editor"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="DynamicLabel" type="Label" parent="PauseMenu/Menu"]
+[node name="DynamicLabel" type="Label" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2
 text = "Save world"
 script = ExtResource("6_aufvl")
 
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/Menu"]
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2
 placeholder_text = "World name..."
 
-[node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
+[node name="SaveWorld" type="Button" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2
 text = "Save world"
 
-[node name="TestWorld" type="Button" parent="PauseMenu/Menu"]
+[node name="TestWorld" type="Button" parent="PauseMenu/TabContainer/Editor"]
 self_modulate = Color(1, 2.702, 1, 1)
 layout_mode = 2
 text = "Save & test world"
 
-[node name="Spacer4" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Editor"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/Menu"]
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2
 text = "Load world"
 script = ExtResource("6_aufvl")
 
-[node name="MapSelection" parent="PauseMenu/Menu" instance=ExtResource("3_b6w4i")]
+[node name="MapSelection" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("3_b6w4i")]
 layout_mode = 2
 
-[node name="Load" type="Button" parent="PauseMenu/Menu"]
+[node name="Load" type="Button" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2
 text = "Load world"
 
-[node name="Spacer5" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer5" type="Control" parent="PauseMenu/TabContainer/Editor"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+
+[node name="World Properties" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Water"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water"
+
+[node name="Water" type="Button" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Toggle water"
+
+[node name="WaterHeightAdjuster" parent="PauseMenu/TabContainer/World Properties" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="PauseMenu/TabContainer/World Properties/WaterHeightAdjuster" index="2"]
+text = "Water height: 42"
+
+[node name="DynamicLabel5" type="Label" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
+text = "Water type"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water_type"
+
+[node name="WaterType" type="Button" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Water"
+
+[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Environment"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/environment"
+
+[node name="Environment" type="Button" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Sunny"
+
+[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel4" type="Label" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "Background"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/background"
+
+[node name="Background" type="Button" parent="PauseMenu/TabContainer/World Properties"]
+layout_mode = 2
+text = "(none)"
 
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1
@@ -363,9 +317,9 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
 theme_override_constants/outline_size = 6
-text = "[ Number row: Select tools ] [ WASD, Space, Ctrl/Cmd: Move ] [ C: Change zoom ] [ Shift: Speed up ]
-Build tool: [ X: Select new build object ] [ Q / E : Rotate ]"
+text = "[ Number row: Select tools ] [ WASD, Space, Alt/Opt: Move ] [ (Ctrl/Cmd) + Scroll: Change zoom ] [ Shift: Speed up ]
+Build tool: [ Click: Place ] [ Right click: Delete ] [ Q / E : Rotate ]"
 horizontal_alignment = 1
 script = ExtResource("6_aufvl")
 
-[editable path="WorldProperties/Menu/WaterHeightAdjuster"]
+[editable path="PauseMenu/TabContainer/World Properties/WaterHeightAdjuster"]
