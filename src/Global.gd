@@ -225,4 +225,3 @@ func _on_gui_focus_changed(control : Control) -> void:
 		is_text_focused = true
 	else:
 		is_text_focused = false
-	

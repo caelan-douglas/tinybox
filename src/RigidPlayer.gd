@@ -890,6 +890,10 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				dir.y = 0
 				dir = dir.normalized()
 				apply_force(dir * 7, Vector3.ZERO)
+				# align to ground normal
+				if state.get_contact_count() > 0:
+					var ground_normal := state.get_contact_local_normal(0)
+					align_character_model_normal(ground_normal)
 			SLIDE_BACK:
 				if is_on_ground:
 					if int(slide_time.time_left * 10) % 2 == 0:
@@ -905,6 +909,10 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				dir.y = 0
 				dir = dir.normalized()
 				apply_force(dir * 10, Vector3.ZERO)
+				# align to ground normal
+				if state.get_contact_count() > 0:
+					var ground_normal := state.get_contact_local_normal(0)
+					align_character_model_normal(ground_normal)
 			ROLL:
 				if is_on_ground:
 					if int(roll_time.time_left * 10) % 2 == 0:
@@ -945,7 +953,10 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			STANDING_UP:
 				pass
 			DEAD:
-				pass
+				# align to ground normal
+				if state.get_contact_count() > 0:
+					var ground_normal := state.get_contact_local_normal(0)
+					align_character_model_normal(ground_normal)
 			SWIMMING, SWIMMING_IDLE:
 				if swim_dash_cooldown > 0:
 					swim_dash_cooldown -= 1
@@ -1122,8 +1133,12 @@ func enter_state() -> void:
 	if _state != AIR && _state != HIGH_JUMP && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
 		last_hit = false
 	
-	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH:
+	# reset from states that change the character's model rotation
+	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH && _state != SLIDE && _state != SLIDE_BACK:
 		character_model.rotation_degrees = Vector3(0, -180, 0)
+	
+	# reset swimming animation
+	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSwim/blend_amount", -1.0, 0.5)
 	
@@ -1620,3 +1635,11 @@ func set_move_speed(new : int) -> void:
 	# if this change state request is not from the server
 	if multiplayer.get_remote_sender_id() != 1: return
 	move_speed = new
+
+func align_character_model_normal(ground_normal : Vector3) -> void:
+	# make sure we only align model in supported states
+	if _state == SLIDE || _state == SLIDE_BACK || _state == DEAD:
+		# from: https://kidscancode.org/godot_recipes/3.x/3d/3d_align_surface/index.html
+		character_model.global_transform.basis.y = ground_normal
+		character_model.global_transform.basis.x = -character_model.global_transform.basis.z.cross(ground_normal)
+		character_model.global_transform.basis = character_model.global_transform.basis.orthonormalized()

@@ -29,4 +29,7 @@ func _ready() -> void:
 func update_time() -> void:
 	if get_parent().visible:
 		var dict := Time.get_datetime_dict_from_system()
-		text = str(dict["hour"], ":", dict["minute"])
+		# add leading zeroes
+		var hour : String = ("%02d" % dict["hour"])
+		var min : String = ("%02d" % dict["minute"])
+		text = str(hour, ":", min)
