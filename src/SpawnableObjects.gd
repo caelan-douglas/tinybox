@@ -35,6 +35,10 @@ extends Node
 	"obj_sign": load("res://data/scene/editor_obj/Sign.tscn"),
 	"obj_spawnpoint": load("res://data/scene/editor_obj/SpawnPoint.tscn"),
 	"obj_dining_table": load("res://data/scene/editor_obj/DiningTable.tscn"),
+	# TRACK PIECES
+	"obj_track_straight": load("res://data/scene/editor_obj/track/TrackStraight.tscn"),
+	"obj_track_slope": load("res://data/scene/editor_obj/track/TrackSlope.tscn"),
+	"obj_track_turn": load("res://data/scene/editor_obj/track/TrackTurn.tscn"),
 	# ENVIRONMENTS
 	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),

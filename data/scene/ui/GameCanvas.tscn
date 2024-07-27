@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=36 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
 [ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="7_svln6"]
 [ext_resource type="Texture2D" uid="uid://cupojq83o6gc3" path="res://data/textures/ui/question.png" id="9_8oa63"]
+[ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
@@ -871,6 +872,23 @@ script = ExtResource("6_qxctu")
 json_text = "Tinybox %version%"
 raw_format = true
 
+[node name="RealTime" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -478.0
+offset_top = 8.0
+offset_right = -386.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "00:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_0plxg")
+
 [node name="Ping" type="Label" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -1160,6 +1178,7 @@ layout_mode = 2
 [node name="MapSelection" type="OptionButton" parent="PauseMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
+text_overrun_behavior = 4
 script = ExtResource("16_oucrq")
 
 [node name="ChangeMap" type="Button" parent="PauseMenu/Menu"]

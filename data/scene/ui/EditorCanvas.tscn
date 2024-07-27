@@ -111,6 +111,7 @@ layout_mode = 2
 
 [node name="MapSelection" parent="EntryScreen/Menu" instance=ExtResource("3_b6w4i")]
 layout_mode = 2
+text_overrun_behavior = 4
 
 [node name="Load" type="Button" parent="EntryScreen/Menu"]
 layout_mode = 2
@@ -214,6 +215,7 @@ script = ExtResource("6_aufvl")
 
 [node name="MapSelection" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("3_b6w4i")]
 layout_mode = 2
+text_overrun_behavior = 4
 
 [node name="Load" type="Button" parent="PauseMenu/TabContainer/Editor"]
 layout_mode = 2

@@ -21,9 +21,11 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
+Showing various things made in-game and with the world editor.<br><br>
 <img src=.export_exclude/screenshot_1.png width="600px">
 <img src=.export_exclude/screenshot_2.png width="600px">
 <img src=.export_exclude/screenshot_3.png width="600px">
+<img src=.export_exclude/screenshot_4.png width="600px">
 
 ### Game vision
 Tinybox *('tiny + sandbox')* is a sandbox game focused on creativity, experimentation, and destroying your friends with rockets. Bricks allow players to create destructible platforms, bridges, houses, vehicles, etc. The world editor allows players to delve a bit deeper and create their own worlds with custom events and features. As of now, the main goal of feature updates in the project is to expand on this with more included worlds; new features, events, and objects in the editor; and new item types.

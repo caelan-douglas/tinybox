@@ -149,6 +149,7 @@ transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
 attributes = SubResource("CameraAttributesPractical_m42ml")
 fov = 55.0
+near = 0.1
 script = ExtResource("1")
 
 [node name="WaterOverlay" type="MeshInstance3D" parent="Camera"]

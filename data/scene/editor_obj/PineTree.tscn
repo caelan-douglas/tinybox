@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdqera2bkfsvq"]
+[gd_scene load_steps=6 format=3 uid="uid://cdqera2bkfsvq"]
 
 [ext_resource type="Script" path="res://src/TBWObject.gd" id="1_iqmx7"]
 [ext_resource type="PackedScene" uid="uid://clod7x8gh18hu" path="res://data/models/tree/pine_tree_0.blend" id="2_omn3v"]
+[ext_resource type="Material" uid="uid://dlucy31mxb5ya" path="res://data/materials/wood_picnic.tres" id="3_ymcu2"]
+[ext_resource type="Material" uid="uid://duvfkls14fi4w" path="res://data/materials/stylized_pine_leaf.tres" id="4_xiqgl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6kjfr"]
 height = 6.0
@@ -13,6 +15,10 @@ tbw_object_type = "obj_pine_tree"
 
 [node name="pine_tree_0" parent="." instance=ExtResource("2_omn3v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="stylized_pine_tree_large_001" parent="pine_tree_0" index="0"]
+surface_material_override/0 = ExtResource("3_ymcu2")
+surface_material_override/1 = ExtResource("4_xiqgl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)

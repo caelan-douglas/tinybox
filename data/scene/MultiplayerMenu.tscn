@@ -275,6 +275,7 @@ json_text = "ui/host_panel"
 [node name="MapSelection" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer" instance=ExtResource("5_mmcxg")]
 custom_minimum_size = Vector2(2.08165e-12, 78)
 layout_mode = 2
+text_overrun_behavior = 4
 
 [node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
 layout_mode = 2

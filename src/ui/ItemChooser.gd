@@ -43,6 +43,7 @@ func _ready() -> void:
 	# create sets
 	create_set("Basic bricks")
 	create_set("Objects")
+	create_set("Track pieces")
 	create_set("Special")
 	for item in item_names_list:
 		var item_button : Button = item_chooser_button.instantiate()
@@ -55,6 +56,8 @@ func _ready() -> void:
 		
 		if item.begins_with("brick") && item != "brick_button":
 			add_to_set("Basic bricks", item_button)
+		elif item.begins_with("obj_track"):
+			add_to_set("Track pieces", item_button)
 		elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "brick_button":
 			add_to_set("Special", item_button)
 		else:
