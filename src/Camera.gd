@@ -227,9 +227,9 @@ func _process(delta : float) -> void:
 		
 		# swap camera zoom
 		if Input.is_action_just_pressed("zoom_in") && Input.is_action_pressed("control"):
-			target_dist = clamp(target_dist - 3, 3, max_dist)
+			target_dist = clamp(target_dist - (target_dist * 0.15), 3, max_dist)
 		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
-			target_dist = clamp(target_dist + 3, 3, max_dist)
+			target_dist = clamp(target_dist + (target_dist * 0.15), 3, max_dist)
 		
 		_control_camera_rotation(delta)
 	

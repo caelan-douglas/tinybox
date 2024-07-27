@@ -1,13 +1,9 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cxc8732wn77sj"]
-
-[ext_resource type="Texture2D" uid="uid://fcce6nsnj7qq" path="res://data/textures/caution.png" id="1_101lp"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cxc8732wn77sj"]
 
 [resource]
-transparency = 2
-alpha_scissor_threshold = 0.629
-alpha_antialiasing_mode = 0
-albedo_color = Color(0, 0.662952, 0.945079, 1)
-albedo_texture = ExtResource("1_101lp")
+transparency = 1
+depth_draw_mode = 1
+albedo_color = Color(0, 0.662745, 0.945098, 0.156863)
 emission_enabled = true
 emission = Color(0, 0.568627, 0.941176, 1)
 rim_enabled = true

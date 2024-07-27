@@ -58,7 +58,7 @@ surface_material_override/1 = SubResource("StandardMaterial3D_1q31d")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Smoothing"]
 light_color = Color(0.898039, 0.6, 0.47451, 1)
-light_energy = 3.0
+light_energy = 6.0
 light_volumetric_fog_energy = 0.0
 distance_fade_enabled = true
 distance_fade_begin = 25.0
