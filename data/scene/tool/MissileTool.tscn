@@ -6,7 +6,7 @@
 script = ExtResource("1_cotb6")
 tool_name = "Missiles"
 _shoot_type = 6
-shot_speed = 11
+shot_speed = 18
 shot_cooldown = 1300
 explosion_size = 2.0
 show_cooldown_on_ui_partner = true
