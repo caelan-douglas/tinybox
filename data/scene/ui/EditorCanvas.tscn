@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=15 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_noy30"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
+[ext_resource type="Script" path="res://src/ui/ChatEntry.gd" id="8_kp7x3"]
+[ext_resource type="StyleBox" uid="uid://dabhh11fbgqey" path="res://data/materials/theme_elements/stylebox_purple.tres" id="9_pkgum"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5nvuj"]
@@ -46,6 +48,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="EntryScreen" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 8
@@ -144,7 +147,6 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PauseMenu" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -154,6 +156,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="PauseMenu"]
+custom_minimum_size = Vector2(420, 2.08165e-12)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -167,8 +170,10 @@ offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
+current_tab = 2
 
 [node name="Editor" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
@@ -285,6 +290,101 @@ json_text = "ui/editor/background"
 [node name="Background" type="Button" parent="PauseMenu/TabContainer/World Properties"]
 layout_mode = 2
 text = "(none)"
+
+[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DynamicLabel5" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Load existing preset..."
+script = ExtResource("6_aufvl")
+
+[node name="PresetSelection" parent="PauseMenu/TabContainer/Gamemodes" instance=ExtResource("3_b6w4i")]
+layout_mode = 2
+text_overrun_behavior = 4
+script = null
+
+[node name="Panel" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+script = ExtResource("8_kp7x3")
+
+[node name="Panel" type="Panel" parent="PauseMenu/TabContainer/Gamemodes/Panel"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("9_pkgum")
+
+[node name="Margin" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DynamicLabel6" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.818319, 0.606094, 0.394879, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Gamemode Settings"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+layout_mode = 2
+text = "When started..."
+script = ExtResource("6_aufvl")
+
+[node name="StartEventList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+layout_mode = 2
+text = "Watch for..."
+script = ExtResource("6_aufvl")
+
+[node name="WatcherList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DynamicLabel4" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+layout_mode = 2
+text = "Once watched condition is met..."
+script = ExtResource("6_aufvl")
+
+[node name="EndEventList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="SavePreset" type="Button" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+self_modulate = Color(0, 0.764706, 0.980392, 1)
+layout_mode = 2
+text = "Save these settings as preset"
+
+[node name="AddToWorldGamemodes" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+self_modulate = Color(1, 2.703, 1, 1)
+layout_mode = 2
+text = "Add to world gamemodes"
 
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1

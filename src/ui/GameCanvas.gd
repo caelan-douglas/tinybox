@@ -26,9 +26,8 @@ extends CanvasLayer
 const NUM_OF_TIPS = 12
 
 func _ready() -> void:
-	$PauseMenu/Menu/StartGame.connect("pressed", Global.get_world().send_start_lobby)
-	$PauseMenu/Menu/ChangeMap.connect("pressed", _send_on_change_map_pressed)
-	$PauseMenu/Menu/SaveWorld.connect("pressed", _on_save_world_pressed)
+	$PauseMenu/TabContainer/Pause/ChangeMap.connect("pressed", _send_on_change_map_pressed)
+	$PauseMenu/TabContainer/Pause/SaveWorld.connect("pressed", _on_save_world_pressed)
 
 func hide_pause_menu() -> void:
 	Global.is_paused = false
@@ -55,13 +54,6 @@ func show_pause_menu() -> void:
 		$PauseMenu.visible = true
 		if Global.get_player() != null:
 			Global.get_player().locked = true
-		if Global.get_world().minigame != null:
-			$PauseMenu/Menu/Title.json_text = "ui/minigame_mode"
-			$PauseMenu/Menu/ChangeMap.disabled = true
-		else:
-			$PauseMenu/Menu/Title.json_text = "ui/sandbox_mode"
-			$PauseMenu/Menu/ChangeMap.disabled = false
-		$PauseMenu/Menu/Title.update_text()
 		# show tip on pause screen
 		var tipnum : int = randi() % NUM_OF_TIPS
 		pause_tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
@@ -82,7 +74,7 @@ func _process(delta : float) -> void:
 		
 
 func _send_on_change_map_pressed() -> void:
-	var map_selector : OptionButton = $PauseMenu/Menu/MapSelection
+	var map_selector : OptionButton = $PauseMenu/TabContainer/Pause/MapSelection
 	var map_name : String = map_selector.get_item_text(map_selector.selected)
 	# load tbw with switching flag
 	# clients must wait 15s between loading worlds to avoid spam
@@ -111,7 +103,7 @@ func play_outro_animation(text : String) -> void:
 	intro_animator.play("outro")
 
 func _on_save_world_pressed() -> void:
-	var world_name : String = $PauseMenu/Menu/SaveWorldName.text
+	var world_name : String = $PauseMenu/TabContainer/Pause/SaveWorldName.text
 	if world_name == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:

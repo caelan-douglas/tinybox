@@ -200,19 +200,6 @@ func _process(delta : float) -> void:
 							return
 					brick.show_delete_overlay()
 					if Input.is_action_just_pressed("click"):
-						var minigame : Object = Global.get_world().minigame
-						if minigame != null:
-							# only base defense has costs
-							if minigame is MinigameBaseDefense:
-								if minigame.playing_team_names.has(tool_player_owner.team):
-									# refund brick
-									var cost : int = 2
-									# minigame costs
-									if brick._material == Brick.BrickMaterial.METAL:
-										cost = 8
-									elif brick._material == Brick.BrickMaterial.RUBBER:
-										cost = 7
-									minigame.set_team_cash(tool_player_owner.team, cost)
 						# despawn brick
 						brick.despawn.rpc()
 		

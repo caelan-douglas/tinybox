@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends RestrictedNode3D
+extends TBWObject
 
 @onready var area : Area3D = $Area3D
 @export var destinations : Array[Node3D]
@@ -22,9 +22,7 @@ extends RestrictedNode3D
 @onready var particles : PackedScene = preload("res://data/scene/teleporter/TeleportParticles.tscn")
 
 func _ready() -> void:
-	super()
-	if !scheduled_for_deletion:
-		$Area3D.connect("body_entered", _on_body_entered)
+	$Area3D.connect("body_entered", _on_body_entered)
 
 func _on_body_entered(body : Node3D) -> void:
 	if (body is RigidPlayer || body is Bomb || body is ClayBall) && destinations.size() > 0:

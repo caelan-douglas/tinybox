@@ -14,27 +14,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Map
-class_name Lobby
+extends Object
+class_name Gamemode
 
-enum GameWinCondition {
-	BASE_DEFENSE,
-	DEATHMATCH,
-	TEAM_DEATHMATCH,
-	KINGS
+var name := "Gamemode"
+var start_events : Dictionary = {
+	0 : []
+}
+var watchers : Dictionary = {
+	0 : []
+}
+var end_events : Dictionary = {
+	0 : []
 }
 
-func _ready() -> void:
-	var camera : Camera3D = get_viewport().get_camera_3d()
-	camera.locked = true
-	camera.global_position = Vector3(0, 52, 4)
-	camera.global_rotation_degrees = Vector3(-10, 0, 0)
-	super()
-	# when map is initalized, set graphics on world
-	get_parent().get_parent()._on_graphics_preset_changed()
-	# move players when lobby is initialized
-	var player : RigidPlayer = Global.get_player()
-	if player:
-		player.change_state(RigidPlayer.DUMMY)
-	UIHandler.show_lobby_menu()
-	Global.get_world().clear_world()
+func _init(g_name : String, g_start_events : Dictionary, g_watchers : Dictionary, g_end_events : Dictionary) -> void:
+	name = g_name
+	watchers = g_watchers
+	g_end_events = g_end_events
+
+func start() -> void:
+	pass
+	# run start events
+	# setup watchers
+	# connect watchers to 'end' func
+
+func end() -> void:
+	pass
+	# run end events
+	# cleanup

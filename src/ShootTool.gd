@@ -138,30 +138,9 @@ func increase_ammo() -> void:
 # Arg 2: The shot speed of this projectile.
 @rpc("call_local")
 func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootType) -> void:
-	var minigame : Object = Global.get_world().minigame
 	# minigame costs
 	var cost : int = 1
 	var can_afford := true
-	if minigame != null:
-		# only base defense has costs and placement limits
-		if minigame is MinigameBaseDefense:
-			# cost per item
-			match shoot_type_rpc:
-				ShootType.MISSILE:
-					cost = 25
-				ShootType.ROCKET:
-					cost = 10
-				ShootType.BOMB:
-					cost = 5
-				ShootType.WATER, ShootType.FIRE:
-					cost = 0
-			if minigame.playing_team_names.has(tool_player_owner.team):
-				# if we cannot afford item, set to can't afford
-				if minigame.get_team_cash(tool_player_owner.team) < cost:
-					can_afford = false
-					UIHandler.show_alert("Your team can't afford that!", 2, false, UIHandler.alert_colour_error)
-					# reset cooldown counter (in case the team can now afford it)
-					shot_cooldown_counter = 14
 	if can_afford && (ammo == -1 || ammo > 0):
 		var p : Node = null
 		match shoot_type_rpc:
@@ -195,19 +174,6 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 					p.spawn_projectile.rpc(id, shot_speed_rpc, true)
 			# Reduce ammo for client (this function is run as server).
 			reduce_ammo.rpc_id(get_multiplayer_authority())
-			# pay for item
-			if minigame != null:
-				# only base defense has costs
-				if minigame is MinigameBaseDefense && cost != 0:
-					minigame.set_team_cash.rpc(tool_player_owner.team, -cost)
-					# shows the floaty cost for the client, because this
-					# func is run as server.
-					
-					# we are server, no need to rpc
-					if id == 1:
-						show_floaty_cost_client(cost)
-					else:
-						show_floaty_cost_client.rpc_id(id, cost)
 
 @rpc("any_peer", "call_remote", "reliable")
 func show_floaty_cost_client(cost : int) -> void:

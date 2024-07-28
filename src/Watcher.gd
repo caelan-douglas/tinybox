@@ -14,13 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Character
-class_name MinigameTarget
-
-var minigame : Minigame = null
-
-func set_health(new : int) -> int:
-	if minigame:
-		if !minigame.build_period:
-			super(new)
-	return health
+extends Node
+class_name Watcher
+signal condition_met

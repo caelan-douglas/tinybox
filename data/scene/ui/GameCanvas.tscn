@@ -1109,110 +1109,111 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.227451, 0.133333, 0.231373, 0.701961)
-
-[node name="Menu" type="VBoxContainer" parent="PauseMenu"]
-custom_minimum_size = Vector2(308, 0)
+[node name="TabContainer" type="TabContainer" parent="PauseMenu"]
+custom_minimum_size = Vector2(420, 2.08165e-12)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -360.5
-offset_right = 154.0
-offset_bottom = 360.5
+offset_left = -210.0
+offset_top = -238.0
+offset_right = 210.0
+offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
+tab_alignment = 1
+
+[node name="Pause" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="PauseMenu/Menu"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
-theme_override_constants/line_spacing = -20
-theme_override_fonts/font = ExtResource("7_svln6")
-theme_override_font_sizes/font_size = 50
-text = "Paused -
-Sandbox"
-script = ExtResource("6_qxctu")
-json_text = "ui/sandbox_mode"
-
-[node name="Spacer" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="LeaveButton" parent="PauseMenu/Menu" instance=ExtResource("3_5o4ik")]
+[node name="LeaveButton" parent="PauseMenu/TabContainer/Pause" instance=ExtResource("3_5o4ik")]
 self_modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 
-[node name="StartGame" type="Button" parent="PauseMenu/Menu"]
-layout_mode = 2
-disabled = true
-text = "Start Minigame Lobby"
-script = ExtResource("5_6v07r")
-json_text = "ui/start_game"
-
-[node name="Spacer4" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 15)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PauseMenu/Menu"]
+[node name="Label" type="Label" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Switch Maps"
 script = ExtResource("6_qxctu")
 json_text = "ui/switch_maps"
 
-[node name="Spacer6" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer6" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="MapSelection" type="OptionButton" parent="PauseMenu/Menu"]
+[node name="MapSelection" type="OptionButton" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 4
 script = ExtResource("16_oucrq")
 
-[node name="ChangeMap" type="Button" parent="PauseMenu/Menu"]
+[node name="ChangeMap" type="Button" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
 
-[node name="Spacer8" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer8" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 
-[node name="DynamicLabel" type="Label" parent="PauseMenu/Menu"]
+[node name="DynamicLabel" type="Label" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 text = "Save a copy of this world"
 script = ExtResource("6_qxctu")
 
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/Menu"]
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 placeholder_text = "World name..."
 
-[node name="SaveWorld" type="Button" parent="PauseMenu/Menu"]
+[node name="SaveWorld" type="Button" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 text = "Save a copy"
 
-[node name="Spacer7" type="Control" parent="PauseMenu/Menu"]
+[node name="Spacer7" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 
-[node name="VolumePanel" type="Panel" parent="PauseMenu/Menu"]
+[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="MapSelection" type="OptionButton" parent="PauseMenu/TabContainer/Gamemodes"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 4
+
+[node name="ChangeMap" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+layout_mode = 2
+text = "Start gamemode"
+script = ExtResource("5_6v07r")
+json_text = "ui/switch_maps_button"
+
+[node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="VolumePanel" type="Panel" parent="PauseMenu/TabContainer/Settings"]
 custom_minimum_size = Vector2(2.08165e-12, 240)
 layout_mode = 2
 
-[node name="VolumePanelContainer" type="VBoxContainer" parent="PauseMenu/Menu/VolumePanel"]
+[node name="VolumePanelContainer" type="VBoxContainer" parent="PauseMenu/TabContainer/Settings/VolumePanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1225,32 +1226,32 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label3" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="Label3" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Master Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/master_volume"
 
-[node name="MasterVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="MasterVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
 value = 1.0
 script = ExtResource("16_da6k8")
 
-[node name="Spacer8" type="Control" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="Spacer8" type="Control" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="Label4" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Music Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/music_volume"
 
-[node name="MusicVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="MusicVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -1258,18 +1259,18 @@ value = 1.0
 script = ExtResource("16_da6k8")
 bus = 1
 
-[node name="Spacer9" type="Control" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="Spacer9" type="Control" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="Label5" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "SFX Volume"
 script = ExtResource("6_qxctu")
 json_text = "ui/sfx_volume"
 
-[node name="SFXVol" type="HSlider" parent="PauseMenu/Menu/VolumePanel/VolumePanelContainer"]
+[node name="SFXVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -1279,15 +1280,15 @@ bus = 2
 
 [node name="Tip" type="Label" parent="PauseMenu"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.838
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.838
 offset_left = -316.0
-offset_top = -54.0
+offset_top = 22.64
 offset_right = 316.0
-offset_bottom = -38.0
+offset_bottom = 38.64
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)

@@ -16,7 +16,7 @@
 
 
 # A group of bricks that form a premade asset, like a car, house, etc.
-extends RestrictedNode3D
+extends TBWObject
 class_name Building
 
 var place_on_spawn := true
@@ -31,8 +31,7 @@ func _ready() -> void:
 		# If not the server, delete self
 		queue_free()
 		return
-	super()
-	if !scheduled_for_deletion && place_on_spawn:
+	if place_on_spawn:
 		print("Attempting to load ", txt_name, ".txt")
 		var load_file := FileAccess.open(str("res://data/building/", txt_name, ".txt"), FileAccess.READ)
 		if load_file != null:

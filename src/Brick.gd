@@ -182,7 +182,7 @@ func set_material(new : BrickMaterial) -> void:
 			unjoin_velocity = 35
 			
 			# set physics material properties for brick.
-			set_physics_material_properties(1, 0.8)
+			set_physics_material_properties(1, 0.6)
 			
 			flammable = false
 		# Static
@@ -571,9 +571,7 @@ func build() -> void:
 	just_spawned_from_tool = false
 	
 	# placement range
-	var too_far : bool = global_position.distance_to(player_from.global_position as Vector3) > placement_range
-	if Global.get_world().minigame == null:
-		too_far = global_position.distance_to(player_from.global_position as Vector3) > sandbox_placement_range
+	var too_far : bool = global_position.distance_to(player_from.global_position as Vector3) > sandbox_placement_range
 	var valid := true
 	if intersect_d != null:
 		for body in intersect_d.get_overlapping_bodies():
@@ -599,28 +597,8 @@ func build() -> void:
 	# if there is an active minigame
 	var cannot_afford := false
 	var too_close_to_target := false
-	var minigame : Object = Global.get_world().minigame
 	# minigame costs
 	var cost := 2
-	if minigame != null:
-		# only base defense has costs and placement limits
-		if minigame is MinigameBaseDefense:
-			# minigame costs
-			if _material == BrickMaterial.METAL:
-				cost = 8
-			elif _material == BrickMaterial.RUBBER:
-				cost = 7
-			if minigame.playing_team_names.has(player_from.team):
-				# if we cannot afford brick, set to invalid
-				if minigame.get_team_cash(player_from.team) < cost:
-					valid = false
-					cannot_afford = true
-			# can't place directly next to target
-			for target : MinigameTarget in minigame.team_targets:
-				if target.team == player_from.team:
-					if global_position.distance_to(target.global_position) < 5:
-						valid = false
-						too_close_to_target = true
 	
 	# if the type of brick is changing, this may be null during the change
 	if model_mesh != null:
@@ -633,17 +611,6 @@ func build() -> void:
 	# place brick
 	if Input.is_action_just_pressed("click"):
 		if valid:
-			if minigame != null:
-				# only base defense has costs
-				if minigame is MinigameBaseDefense:
-					if minigame.playing_team_names.has(player_from.team):
-						# pay for brick
-						minigame.set_team_cash.rpc(player_from.team, -cost)
-						# floaty cost text
-						var floaty_i : Node3D = floaty_text.instantiate()
-						floaty_i.get_node("Label").text = str("-$", cost)
-						floaty_i.global_position = Vector3(global_position.x, global_position.y + 0.5, global_position.z)
-						Global.get_world().add_child(floaty_i)
 			# in case the brick was still moving to new spot, snap to grid
 			global_position = snapped_pos
 			change_state.rpc(States.PLACED)

@@ -14,16 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends RestrictedNode3D
+extends TBWObject
 
 @onready var area : Area3D = $Area3D
 var lift_force : float = 21
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "lift_force"]
-
-func _ready() -> void:
-	super()
 
 func _physics_process(delta : float) -> void:
 	for body in area.get_overlapping_bodies():

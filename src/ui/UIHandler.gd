@@ -20,7 +20,6 @@ extends Node
 var alert_resource : PackedScene = preload("res://data/scene/ui/Alert.tscn")
 var alert_actions_resource : PackedScene = preload("res://data/scene/ui/AlertActions.tscn")
 var button : PackedScene = preload("res://data/scene/ui/Button.tscn")
-var lobby_menu : PackedScene = preload("res://data/scene/ui/LobbyMenu.tscn")
 
 var alert_colour_gold : Color = Color(4.0, 3.0, 1.0, 1)
 var alert_colour_error : Color = Color(4.0, 0.2, 0.3, 1)
@@ -88,16 +87,3 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 		b.connect("pressed", alert.timeout)
 	
 	return buttons_to_return
-
-func show_lobby_menu() -> void:
-	var main : Node = get_tree().current_scene
-	var lobby_menu_i : Node = lobby_menu.instantiate()
-	main.get_node("GameCanvas").visible = false
-	main.add_child(lobby_menu_i)
-
-func hide_lobby_menu() -> void:
-	var main : Node = get_tree().current_scene
-	var lobby_menu : Node = main.get_node_or_null("LobbyMenu")
-	if lobby_menu != null:
-		lobby_menu.queue_free()
-	main.get_node("GameCanvas").visible = true

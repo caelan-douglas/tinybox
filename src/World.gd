@@ -23,8 +23,6 @@ signal tbw_loaded
 var rigidplayer_list : Array = []
 @onready var loading_canvas : CanvasLayer = get_tree().current_scene.get_node("LoadingCanvas")
 
-# active minigame
-var minigame : Minigame = null
 var tbw_loading : bool = false
 
 func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
@@ -71,16 +69,6 @@ func _on_peer_connected(id : int) -> void:
 	
 	print("peer connected on world: ", str(id))
 	
-	if minigame != null:
-		var connected_win_cond : Lobby.GameWinCondition = Lobby.GameWinCondition.BASE_DEFENSE
-		if minigame is MinigameDM:
-			connected_win_cond = Lobby.GameWinCondition.DEATHMATCH
-			if minigame.tdm:
-				connected_win_cond = Lobby.GameWinCondition.TEAM_DEATHMATCH
-		elif minigame is MinigameKing:
-			connected_win_cond = Lobby.GameWinCondition.KINGS
-		start_minigame.rpc_id(id, "", connected_win_cond, true)
-	
 	# sync tbw objects
 	for obj : Node in get_children():
 		if obj is TBWObject:
@@ -89,35 +77,6 @@ func _on_peer_connected(id : int) -> void:
 
 func _on_multiplayer_map_spawned(map : Map) -> void:
 	emit_signal("map_loaded")
-
-# Starts a new minigame with the scene's map name and a win condition.
-@rpc("any_peer", "call_local", "reliable")
-func start_minigame(map_name : String, win_condition : Lobby.GameWinCondition, from_new_peer_connection := false) -> void:
-	minigame = null
-	match (win_condition):
-		Lobby.GameWinCondition.DEATHMATCH:
-			minigame = MinigameDM.new(false)
-		Lobby.GameWinCondition.TEAM_DEATHMATCH:
-			minigame = MinigameDM.new(true)
-		Lobby.GameWinCondition.KINGS:
-			minigame = MinigameKing.new()
-		_:
-			minigame = MinigameBaseDefense.new()
-	
-	# load intended map
-	clear_world()
-	# only load if a name was actually given
-	if map_name != "":
-		load_map(load(str("res://data/scene/", map_name, "/", map_name, ".tscn")) as PackedScene)
-	
-	# create minigame
-	var teams : Array = get_current_map().get_teams().get_team_list()
-	minigame.playing_team_names = [teams[1].name, teams[2].name]
-	minigame.name = "Minigame"
-	# if a player has joined midway, sync some properties from server
-	if from_new_peer_connection:
-		minigame.from_new_peer_connection = true
-	add_child(minigame)
 
 # Get the current map.
 func get_current_map() -> Map:
@@ -417,15 +376,6 @@ func clear_bricks() -> void:
 		if b is Brick:
 			# despawn and don't check world groups
 			b.despawn(false)
-
-func send_start_lobby() -> void:
-	if has_node("Minigame"):
-		$Minigame.delete.rpc()
-	start_lobby.rpc_id(1)
-
-@rpc("any_peer", "call_local", "reliable")
-func start_lobby() -> void:
-	load_map(load("res://data/scene/Lobby/Lobby.tscn") as PackedScene)
 
 # server places bricks
 @rpc("any_peer", "call_local", "reliable")

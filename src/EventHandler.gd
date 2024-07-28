@@ -22,8 +22,16 @@ enum Event {
 	CHANGE_PLAYER_TEAM
 }
 
+enum WatcherType {
+	PLAYER_KILLS_EXCEEDS,
+	PLAYER_CUSTOM_VARIABLE_EXCEEDS,
+	TEAM_KILLS_EXCEEDS
+}
+
 # same order as enum
 var event_types_readable : Array[String] = ["Teleport player", "Explode", "Change player team"]
+# same order as enum
+var watcher_types_readable : Array[String] = ["Player kills exceed", "Player custom var exceeds", "Team kills exceed"]
 
 @rpc("any_peer", "call_local", "reliable")
 func run_event(event_type : Event, args : Array) -> void:
@@ -51,6 +59,14 @@ func run_event(event_type : Event, args : Array) -> void:
 				Global.get_world().change_player_team(player)
 		_:
 			err()
+
+@rpc("any_peer", "call_local", "reliable")
+func create_watcher(watcher_type : WatcherType, args : Array) -> Watcher:
+	# only server creates watchers
+	if !multiplayer.is_server(): return
+	# create watcher
+	# return watcher for connecting
+	return Watcher.new()
 
 func err() -> void:
 	printerr("Failed to run event because the event type is not valid.")

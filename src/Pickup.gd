@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends RestrictedNode3D
+extends TBWObject
 
 @onready var area : Area3D = $Area3D
 var pickup_available := true
@@ -61,13 +61,11 @@ func set_property(property : StringName, value : Variant) -> void:
 		set_mesh()
 
 func _ready() -> void:
-	super()
-	if !scheduled_for_deletion:
-		respawn_timer.wait_time = respawn_time
-		$Area3D.connect("body_entered", _on_body_entered)
-		set_available_text()
-		
-		set_mesh()
+	respawn_timer.wait_time = respawn_time
+	$Area3D.connect("body_entered", _on_body_entered)
+	set_available_text()
+	
+	set_mesh()
 
 func set_mesh() -> void:
 	for c : Node in $MeshParent.get_children():
