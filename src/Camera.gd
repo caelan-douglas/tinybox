@@ -37,6 +37,7 @@ var max_dist : float = 40
 var _camera_mode : CameraMode = CameraMode.FREE
 var mode_locked := false
 var locked := false
+var player_requested_aim_mode := false
 # don't interpolate from spawn point
 var do_interpolate := false
 @onready var speed_trails : GPUParticles3D = $SpeedTrails
@@ -280,8 +281,11 @@ func _process(delta : float) -> void:
 			match _camera_mode:
 				CameraMode.FREE:
 					set_camera_mode(CameraMode.AIM)
+					player_requested_aim_mode = true
+					UIHandler.show_toast("Locked camera to aim mode. (RMB to unlock)", 2)
 				CameraMode.AIM:
 					set_camera_mode(CameraMode.FREE)
+					player_requested_aim_mode = false
 	elif _camera_mode == CameraMode.TRACK && target != null:
 		look_at(target.global_position as Vector3)
 		var far_dist : float = clamp(global_position.distance_to(target.global_position as Vector3), 0, 40)

@@ -87,3 +87,28 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 		b.connect("pressed", alert.timeout)
 	
 	return buttons_to_return
+
+# Show a small non-actionable alert.
+@rpc("any_peer", "call_local")
+func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color("#ffffff")) -> void:
+	# if in dedicated server mode
+	if multiplayer.is_server() && Global.dedicated_server:
+		# show a chat instead
+		CommandHandler.submit_command.rpc("TOAST FROM WORLD", alert_text, 1)
+	# normal toast
+	else:
+		var toast : Label = Label.new()
+		toast.text = alert_text
+		if alert_colour.to_html() != "#ffffff":
+			toast.self_modulate = alert_colour
+		toast.set("theme_override_constants/outline_size", 6)
+		toast.set("theme_override_colors/font_outline_color", Color("#00000062"))
+		
+		var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Toasts")
+		# make sure that we haven't been disconnected
+		if alert_canvas != null:
+			alert_canvas.add_child(toast)
+		await get_tree().create_timer(timeout).timeout
+		# make sure alert hasnt already been destroyed
+		if toast != null:
+			toast.queue_free()

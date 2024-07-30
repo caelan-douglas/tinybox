@@ -234,13 +234,14 @@ func _process(delta : float) -> void:
 					var brick : Brick = m_3d["collider"].owner
 					var group : String = brick.group
 					# show save appearance on all bricks
-					for b : Variant in brick_groups.groups[str(group)]:
-						if b != null:
-							b = b as Brick
-							if !Input.is_action_just_pressed("click"):
-								b.show_save_overlay()
-							if !hovered_group.has(b):
-								hovered_group.append(b)
+					if brick_groups.groups.has(str(group)):
+						for b : Variant in brick_groups.groups[str(group)]:
+							if b != null:
+								b = b as Brick
+								if !Input.is_action_just_pressed("click"):
+									b.show_save_overlay()
+								if !hovered_group.has(b):
+									hovered_group.append(b)
 				
 				if Input.is_action_just_pressed("click") && hovered_group.size() > 0:
 					var dir := DirAccess.open("user://building")

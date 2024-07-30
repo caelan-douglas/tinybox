@@ -97,8 +97,10 @@
         "7": "Tip: Jumping while in a dive will send you into a roll if you are going fast enough.",
         "8": "Tip: The guided Missiles are good for long-range. But be careful, they leave your character out in the open whilst you're controlling the missile.",
         "9": "Tip: You can control your rolls and slides by aiming the camera in the direction you want to go.",
-        "10": "Tip: When underwater, aim the camera in the direction you want to swim.",
-        "11": "Tip: You can jump to cancel a slide or roll."
+        "10": "Tip: When underwater, aim the camera in the direction you want to swim; press [ Shift or ( B ) ] to dash.",
+        "11": "Tip: You can jump to cancel a slide or roll.",
+        "12": "Tip: Plastic is light and non-flammable. However, it falls apart very easily when hit by bouncyballs or other bricks.",
+        "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles. Maybe try making a flail?"
     },
     "common": {
         "yes": "Yes",
@@ -142,7 +144,7 @@
         "brick_half": "Half brick",
         "brick_cylinder": "Wheel",
         "brick_cylinder_large": "Big wheel",
-        "brick_motor_seat": "Vehicle seat",
+        "brick_motor_seat": "Motor seat",
         "brick_button": "Button",
         "brick_lamp": "Lamp"
     },

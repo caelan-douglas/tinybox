@@ -151,7 +151,12 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 			if lock_camera_to_aim:
 				camera.set_mode_locked(true, Camera.CameraMode.AIM)
 			else:
-				camera.set_mode_locked(false, Camera.CameraMode.FREE)
+				# if the player specifically requested aim mode with right click
+				# don't switch to free when the tool is deselected
+				if camera.player_requested_aim_mode:
+					camera.set_mode_locked(false, Camera.CameraMode.AIM)
+				else:
+					camera.set_mode_locked(false, Camera.CameraMode.FREE)
 		# disable other tools
 		for t : Tool in tool_player_owner.get_tool_inventory().get_tools():
 			if t != self:
@@ -165,7 +170,12 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 			show_tool_visual.rpc(true)
 	else:
 		if lock_camera_to_aim && free_camera_on_inactive && camera is Camera:
-			camera.set_mode_locked(false, Camera.CameraMode.FREE)
+			# if the player specifically requested aim mode with right click
+			# don't switch to free when the tool is deselected
+			if camera.player_requested_aim_mode:
+				camera.set_mode_locked(false, Camera.CameraMode.AIM)
+			else:
+				camera.set_mode_locked(false, Camera.CameraMode.FREE)
 		if !from_click:
 			ui_partner.button_pressed = false
 		show_tool_visual.rpc(false)
