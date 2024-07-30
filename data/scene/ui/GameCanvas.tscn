@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="16_da6k8"]
 [ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
+[ext_resource type="Script" path="res://src/ui/GamemodeMenu.gd" id="18_n6mrs"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
 length = 0.001
@@ -1130,10 +1131,6 @@ custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="Spacer" type="Control" parent="PauseMenu/TabContainer/Pause"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
 [node name="LeaveButton" parent="PauseMenu/TabContainer/Pause" instance=ExtResource("3_5o4ik")]
 self_modulate = Color(1, 0, 0, 1)
 layout_mode = 2
@@ -1191,17 +1188,17 @@ visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
+script = ExtResource("18_n6mrs")
 
-[node name="MapSelection" type="OptionButton" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="GamemodeSelector" type="OptionButton" parent="PauseMenu/TabContainer/Gamemodes"]
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 4
 
-[node name="ChangeMap" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="StartGamemode" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
 layout_mode = 2
 text = "Start gamemode"
 script = ExtResource("5_6v07r")
-json_text = "ui/switch_maps_button"
 
 [node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer"]
 visible = false

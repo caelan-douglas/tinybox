@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=17 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -7,7 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="Script" path="res://src/ui/ChatEntry.gd" id="8_kp7x3"]
+[ext_resource type="Script" path="res://src/ui/GamemodeEditorMenu.gd" id="8_stfvy"]
 [ext_resource type="StyleBox" uid="uid://dabhh11fbgqey" path="res://data/materials/theme_elements/stylebox_purple.tres" id="9_pkgum"]
+[ext_resource type="PackedScene" uid="uid://oujpbtog7ni" path="res://data/scene/ui/EventListEditor.tscn" id="11_ukkc0"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5nvuj"]
@@ -48,7 +50,6 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="EntryScreen" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 8
@@ -147,6 +148,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PauseMenu" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -156,7 +158,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="PauseMenu"]
-custom_minimum_size = Vector2(420, 2.08165e-12)
+custom_minimum_size = Vector2(600, 600)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -170,10 +172,8 @@ offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 2
 
 [node name="Editor" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
@@ -183,6 +183,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="LeaveButton" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("12_nulw5")]
+self_modulate = Color(0.917678, 0.110667, 5.12117e-07, 1)
 layout_mode = 2
 text = "Leave Editor"
 editor_leave_text = true
@@ -292,11 +293,13 @@ layout_mode = 2
 text = "(none)"
 
 [node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
+script = ExtResource("8_stfvy")
 
-[node name="DynamicLabel5" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="LoadPresetTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -325,58 +328,54 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin"]
-custom_minimum_size = Vector2(308, 0)
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin"]
+custom_minimum_size = Vector2(2.08165e-12, 260)
 layout_mode = 2
+
+[node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 alignment = 1
 
-[node name="DynamicLabel6" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="SettingsTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.818319, 0.606094, 0.394879, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
-text = "Gamemode Settings"
+text = "Custom Gamemode Settings"
 script = ExtResource("6_aufvl")
 
-[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="GamemodeName" type="LineEdit" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+layout_mode = 2
+placeholder_text = "Enter a name for the custom mode..."
+
+[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="StartEventPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
 layout_mode = 2
-text = "When started..."
-script = ExtResource("6_aufvl")
 
-[node name="StartEventList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
-custom_minimum_size = Vector2(308, 0)
+[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
-alignment = 1
 
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="WatcherPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
 layout_mode = 2
-text = "Watch for..."
-script = ExtResource("6_aufvl")
+list_type = 1
 
-[node name="WatcherList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
-custom_minimum_size = Vector2(308, 0)
+[node name="Spacer5" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
-alignment = 1
 
-[node name="DynamicLabel4" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="EndEventPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
 layout_mode = 2
-text = "Once watched condition is met..."
-script = ExtResource("6_aufvl")
 
-[node name="EndEventList" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="SavePreset" type="Button" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/Gamemodes"]
+[node name="SavePreset" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
 self_modulate = Color(0, 0.764706, 0.980392, 1)
 layout_mode = 2
 text = "Save these settings as preset"
@@ -384,7 +383,43 @@ text = "Save these settings as preset"
 [node name="AddToWorldGamemodes" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
 self_modulate = Color(1, 2.703, 1, 1)
 layout_mode = 2
-text = "Add to world gamemodes"
+text = "+ Add to world gamemodes"
+
+[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="WorldGamemodesTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Gamemodes in this world:"
+script = ExtResource("6_aufvl")
+
+[node name="WorldGamemodesPanel" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+script = ExtResource("8_kp7x3")
+
+[node name="Panel" type="Panel" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("9_pkgum")
+
+[node name="Margin" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel/Margin"]
+custom_minimum_size = Vector2(2.08165e-12, 100)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel/Margin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1

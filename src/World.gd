@@ -36,14 +36,9 @@ func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 		spawns.append(Vector3(0, 51, 0))
 	return spawns
 
-func change_player_team(who : RigidPlayer) -> void:
-	var teams : Teams = Global.get_world().get_current_map().get_teams()
-	var team_idx : int = teams.get_team_index(str(who.team))
-	team_idx += 1
-	if team_idx >= teams.get_team_list().size():
-		team_idx = 0
+func change_player_team(who : RigidPlayer, what_team : Team) -> void:
 	# broadcast updated team to peers
-	who.update_team.rpc(teams.get_team_list()[team_idx].name)
+	who.update_team.rpc(what_team.name)
 	# update info on player's client side
 	who.update_info.rpc_id(who.get_multiplayer_authority())
 
@@ -173,6 +168,9 @@ func save_tbw(world_name : String) -> bool:
 					var value : Variant = obj.get(p)
 					if obj.get(p) is String:
 						value = value.c_escape()
+					# stringify some properties
+					if p == "start_events" || p == "watchers" || p == "end_events":
+						value = JSON.stringify(value)
 					# store property inline
 					file.store_string(str(" ; ", p , ":", value))
 				file.store_line("")
@@ -255,6 +253,15 @@ func _world_accepted(name_from : String, world_name : String, lines : Array) -> 
 func show_tbw_switch_alert(name_from : String, world_name : String) -> void:
 	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\ncreated by ", name_from), 7)
 
+@rpc("authority", "call_local", "reliable")
+func set_loading_canvas_visiblity(mode : bool) -> void:
+	loading_canvas.visible = mode
+
+@rpc("authority", "call_local", "reliable")
+func set_loading_canvas_text(text : String) -> void:
+	var loading_text : Label = loading_canvas.get_node("Label")
+	loading_text.text = str(text)
+
 # Only to be run as server
 func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
@@ -265,9 +272,8 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")) as PackedScene)
 	
 	# BIG file, show loading visual
-	var loading_text : Label = loading_canvas.get_node("Label")
 	if lines.size() > 100:
-		loading_canvas.visible = true
+		set_loading_canvas_visiblity.rpc(true)
 	
 	var current_step := "none"
 	var count : int = 0
@@ -282,12 +288,12 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 			await get_tree().process_frame
 			cur_proc = 0
 			if loading_canvas.visible:
-				loading_text.text = str("Loading .tbw file...     Objects: ", count)
+				set_loading_canvas_text.rpc(str("Loading .tbw file...     Objects: ", count))
 		if line != "":
 			# final step, place building
 			if str(line) == "[building]":
 				# disable loading canvas if we used it
-				loading_canvas.visible = false
+				set_loading_canvas_visiblity.rpc(false)
 				# load building portion, use global pos
 				_server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
@@ -336,8 +342,53 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 		reset_player_cameras.rpc()
 		reset_player_positions.rpc()
 	tbw_loading = false
+	await get_tree().process_frame
+	load_default_gamemodes()
 	# announce we are done loading
 	emit_signal("tbw_loaded")
+
+# Loads default Gamemodes into the world, which are defined here.
+func load_default_gamemodes() -> void:
+	## Deathmatch
+	var dm : Gamemode = Gamemode.new()
+	dm.create("Deathmatch",\
+	# Start events
+	[\
+	["CLEAR_LEADERBOARD", []],\
+	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
+	],\
+	# Watchers
+	[\
+	["PLAYER_KILLS_EXCEEDS", [15]]\
+	],\
+	# End events
+	[\
+	["CLEAR_LEADERBOARD", []],\
+	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
+	])
+	dm.built_in = true
+	Global.get_world().add_child(dm)
+	
+	## Team Deathmatch
+	var tdm : Gamemode = Gamemode.new()
+	tdm.create("Team Deathmatch",\
+	# Start events
+	[\
+	["CLEAR_LEADERBOARD", []],\
+	["BALANCE_TEAMS", []],\
+	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
+	],\
+	# Watchers
+	[\
+	["TEAM_KILLS_EXCEEDS", [15]]\
+	],\
+	# End events
+	[\
+	["CLEAR_LEADERBOARD", []],\
+	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
+	])
+	tdm.built_in = true
+	Global.get_world().add_child(tdm)
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:
@@ -400,9 +451,8 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 		offset_pos = building_pos as Vector3
 	
 	# BIG file, show loading visual
-	var loading_text : Label = loading_canvas.get_node("Label")
 	if lines.size() > 100:
-		loading_canvas.visible = true
+		set_loading_canvas_visiblity.rpc(true)
 	
 	### Reading file
 	# amount of lines to read in a frame
@@ -418,7 +468,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			await get_tree().process_frame
 			cur_proc = 0
 			if loading_canvas.visible:
-				loading_text.text = str("Loading file...     Bricks: ", total_proc)
+				set_loading_canvas_text.rpc(str("Loading file...     Bricks: ", total_proc))
 		if line != "":
 			var line_split := line.split(" ; ")
 			if SpawnableObjects.objects.has(line_split[0]):
@@ -496,7 +546,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	print(str("Done loading building, checking groups. ", Time.get_ticks_msec()))
 	# Update the brick groups.
 	get_node("BrickGroups").check_world_groups(true)
-	loading_canvas.visible = false
+	set_loading_canvas_visiblity.rpc(false)
 
 var first_brick_pos : Vector3 = Vector3.ZERO
 func _pos_sort(a : Node3D, b : Node3D) -> bool:
@@ -509,3 +559,11 @@ func get_tbw_image(tbw_name : String) -> Image:
 		var image := Image.load_from_file(str("user://world_scr/", tbw_name, ".jpg"))
 		return image
 	return null
+
+# Returns the loaded world's gamemodes.
+func get_tbw_gamemodes() -> Array[Gamemode]:
+	var arr : Array[Gamemode] = []
+	for child in get_children():
+		if child is Gamemode:
+			arr.append(child as Gamemode)
+	return arr

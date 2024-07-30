@@ -146,5 +146,20 @@
         "brick_button": "Button",
         "brick_lamp": "Lamp"
     },
+    "enum": {
+        "event_type": {
+            "TELEPORT_ALL_PLAYERS": "Teleport all to...",
+            "LOCK_PLAYER_STATES": "Lock players to...",
+            "MOVE_ALL_PLAYERS_TO_SPAWN": "Move all to team spawns",
+            "BALANCE_TEAMS": "Balance teams",
+            "CLEAR_LEADERBOARD": "Clear leaderboard"
+        },
+        "watcher_type": {
+            "PLAYER_KILLS_EXCEEDS": "Anyone's kills exceed...",
+            "PLAYER_CUSTOM_VARIABLE_EXCEEDS": "Anyone's VAR exceeds...",
+            "TEAM_KILLS_EXCEEDS": "Any team's kills exceed...",
+            "TIMER_EXCEEDS": "Timer exceeds (sec)..."
+        }
+    },
     "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\n\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
 }

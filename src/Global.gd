@@ -201,10 +201,7 @@ func get_all_children(in_what : Node) -> Array:
 func property_string_to_property(property_name : String, property : String) -> Variant:
 	match(property_name):
 		"global_position", "global_rotation", "scale":
-			property = property.erase(0)
-			property = property.erase(property.length())
-			var property_split := property.split(", ")
-			return Vector3(float(property_split[0]), float(property_split[1]), float(property_split[2]))
+			return Global.string_to_vec3(property)
 		"_material", "_state":
 			return int(property)
 		"_colour":
@@ -212,9 +209,13 @@ func property_string_to_property(property_name : String, property : String) -> V
 			property = property.erase(property.length())
 			var property_split := property.split(", ")
 			return Color(float(property_split[0]), float(property_split[1]), float(property_split[2]), float(property_split[3]))
-		"text", "team_name", "connection":
+		"text", "team_name", "connection", "gamemode_name":
 			# unescape strings because strings are stored inline with \n
 			return str(property.c_unescape())
+		# for gamemodes
+		"start_events", "watchers", "end_events":
+			var arrays : Array = JSON.parse_string(property)
+			return arrays
 		_:
 			return int(property)
 
@@ -225,3 +226,14 @@ func _on_gui_focus_changed(control : Control) -> void:
 		is_text_focused = true
 	else:
 		is_text_focused = false
+
+# helper func
+func string_to_vec3(what : String) -> Vector3:
+	what = what.erase(0)
+	what = what.erase(what.length())
+	var what_split := what.split(", ")
+	if what_split.size() > 2:
+		return Vector3(float(what_split[0]), float(what_split[1]), float(what_split[2]))
+	else:
+		# default spawn point
+		return Vector3(0, 51, 0)

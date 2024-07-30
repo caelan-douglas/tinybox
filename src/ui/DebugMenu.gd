@@ -28,6 +28,11 @@ func _ready() -> void:
 	add_button.text = "Add fake spawn protection (pretend to be server as client)"
 	add_button.connect("pressed", _on_add_fake_spawnprot)
 	add_child(add_button)
+	
+	add_button = Button.new()
+	add_button.text = "Add fake kills"
+	add_button.connect("pressed", _on_add_fake_kills)
+	add_child(add_button)
 
 func _on_add_fake_spawnprot() -> void:
 	if !multiplayer.is_server():
@@ -37,6 +42,9 @@ func _on_add_fake_health() -> void:
 	if !multiplayer.is_server():
 		Global.get_player()._receive_server_health(Global.get_player().health + 10)
 
+func _on_add_fake_kills() -> void:
+	Global.get_player().increment_kills()
+		
 func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("debug_menu"):
 		# game canvas should be visible

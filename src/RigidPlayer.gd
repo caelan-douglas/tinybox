@@ -1396,7 +1396,11 @@ func enter_state() -> void:
 			set_global_rotation(Vector3.ZERO)
 			return
 
+@rpc("any_peer", "call_local", "reliable")
 func go_to_spawn() -> void:
+	# if this go to spawn request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	# find team spawns
 	spawns = world.get_spawnpoint_for_team(team)
 	var spawn : Vector3 = spawns[randi() % spawns.size()]

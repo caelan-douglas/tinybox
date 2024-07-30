@@ -65,6 +65,7 @@ var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
 var text_editor : PackedScene = preload("res://data/scene/ui/TextEditor.tscn")
 var option_picker : PackedScene = preload("res://data/scene/ui/OptionPicker.tscn")
+var event_list_editor : PackedScene = preload("res://data/scene/ui/EventListEditor.tscn")
 # Adds a corresponding UI entry for a given property.
 func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 	selected_item_properties[prop_name] = prop
@@ -86,23 +87,12 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			# brick mat is an int so we can just use selected option as the new prop value
 			mat_option_picker.connect("item_selected", update_object_property.bind(prop_name))
 			mat_option_picker.selected = prop
-		elif prop_name == "event":
-			entry = option_picker.instantiate()
-			var event_option_picker : OptionButton = entry.get_node("Event")
-			for event_type : String in EventHandler.event_types_readable:
-				event_option_picker.add_item(event_type)
-				# when a new item is selected, set the option button's index as the
-				# selected event type
-			event_option_picker.connect("item_selected", update_object_property.bind(prop_name))
-			event_option_picker.selected = prop
 		else:
 			entry = adjuster.instantiate()
 			var label : Label = entry.get_node("DynamicLabel")
 			label.text = str(prop_name, ": ", prop)
-			entry.get_node("DownBig").connect("pressed", update_object_property.bind(-10, prop_name, true, label))
-			entry.get_node("Down").connect("pressed", update_object_property.bind(-1, prop_name, true, label))
-			entry.get_node("Up").connect("pressed", update_object_property.bind(1, prop_name, true, label))
-			entry.get_node("UpBig").connect("pressed", update_object_property.bind(10, prop_name, true, label))
+			entry.val = prop as int
+			entry.connect("value_changed", update_object_property.bind(prop_name, false, label))
 	
 	# Add line editor
 	if prop is String:
@@ -118,10 +108,10 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 				team_option_picker.connect("item_selected", _update_object_property_team.bind(prop_name))
 			# get index of team in world and set the selected option to that
 			team_option_picker.selected = Global.get_world().get_current_map().get_teams().get_team_index(str(prop))
-		elif prop_name == "connection":
-			entry = Button.new()
-			entry.text = "Connect button to brick..."
-			entry.connect("pressed", _update_object_property_select_brick.bind(prop_name, entry))
+		elif prop_name == "events":
+			entry = event_list_editor.instantiate()
+			event_list_editor.load_from_prop(JSON.parse_string(str(prop)) as Array)
+			event_list_editor.connect("event_list_updated", update_object_property.bind(prop_name))
 		else:
 			entry = text_editor.instantiate()
 			var text : TextEdit = entry.get_node("TextEdit")
