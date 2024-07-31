@@ -24,7 +24,9 @@ enum EventType {
 	# base
 	MOVE_ALL_PLAYERS_TO_SPAWN,
 	BALANCE_TEAMS,
-	CLEAR_LEADERBOARD
+	CLEAR_LEADERBOARD,
+	SHOW_PODIUM,
+	END_ACTIVE_GAMEMODE
 }
 
 var event_type : EventType = EventType.TELEPORT_ALL_PLAYERS
@@ -34,13 +36,13 @@ func _init(e_event_type : EventType, e_args : Array) -> void:
 	event_type = e_event_type
 	args = e_args
 
-func start() -> void:
+func start() -> int:
 	# add self to tree
 	Global.get_world().add_child(self)
 	# only server runs events
 	if !multiplayer.is_server():
 		queue_free()
-		return
+		return -1
 	
 	match (event_type):
 		EventType.TELEPORT_ALL_PLAYERS:
@@ -66,7 +68,28 @@ func start() -> void:
 			for player : RigidPlayer in Global.get_world().rigidplayer_list:
 				player.update_kills.rpc(0)
 				player.update_deaths.rpc(0)
+		EventType.END_ACTIVE_GAMEMODE:
+			for gamemode : Gamemode in Global.get_world().get_tbw_gamemodes():
+				if gamemode.running:
+					gamemode.end([])
+		EventType.SHOW_PODIUM:
+			# arg 0: player 1 id
+			var players : Array = Global.get_world().rigidplayer_list
+			for player : RigidPlayer in players:
+				if player.name == str(args[0]):
+					player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
+					player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(0, 350, 0))
+					# show animation
+					var camera : Camera = get_viewport().get_camera_3d()
+					if camera is Camera:
+						camera.play_podium_animation.rpc(str(args[0]).to_int())
+						UIHandler.show_alert.rpc(str(player.display_name, " wins!"), 8, false, UIHandler.alert_colour_gold)
+					
+					# show podium for 8s
+					await get_tree().create_timer(8).timeout
+					player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
 		_:
 			printerr("Failed to run event because the event type is not valid.")
 	
 	queue_free()
+	return 0

@@ -23,6 +23,31 @@ var team_name : String = "Default"
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "team_name"]
 
+# set colour of spawns to team colour
+func set_property(property : StringName, value : Variant) -> void:
+	match(property):
+		"team_name":
+			team_name = str(value)
+			var mat := StandardMaterial3D.new()
+			var team : Team = Global.get_world().get_current_map().get_teams().get_team(team_name)
+			mat.albedo_color = team.colour
+			
+			var add_material_to_cache := true
+			# Check over the graphics cache to make sure we don't already have the same material created.
+			for cached_material : Material in Global.graphics_cache:
+				# If the material texture and colour matches (that's all that really matters):
+				if (cached_material.albedo_color == team.colour):
+					# Instead of using the duplicate material we created, use the cached material.
+					mat = cached_material
+					# Don't add this material to cache, since we're pulling it from the cache already.
+					add_material_to_cache = false
+			# Add the material to the graphics cache if we need to.
+			if add_material_to_cache:
+				Global.add_to_graphics_cache(mat)
+			$MeshInstance3D.set_surface_override_material(0, mat)
+		_:
+			set(property, value)
+
 func occupied() -> bool:
 	for b in area.get_overlapping_bodies():
 		if b is RigidPlayer:

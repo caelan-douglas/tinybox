@@ -213,7 +213,7 @@ func property_string_to_property(property_name : String, property : String) -> V
 			# unescape strings because strings are stored inline with \n
 			return str(property.c_unescape())
 		# for gamemodes
-		"start_events", "watchers", "end_events":
+		"start_events", "watchers":
 			var arrays : Array = JSON.parse_string(property)
 			return arrays
 		_:

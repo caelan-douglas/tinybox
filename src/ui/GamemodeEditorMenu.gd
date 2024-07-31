@@ -18,17 +18,14 @@ extends Node
 
 var curr_start_events : Array = []
 var curr_watchers : Array = []
-var curr_end_events : Array = []
 var curr_name : String = ""
 
 # for custom gamemode maker
 @onready var add_start_event_title := $Panel/Margin/ScrollContainer/Settings/StartEventPropertyEditor/Title
 @onready var add_watcher_title := $Panel/Margin/ScrollContainer/Settings/WatcherPropertyEditor/Title
-@onready var add_end_event_title := $Panel/Margin/ScrollContainer/Settings/EndEventPropertyEditor/Title
 
 @onready var start_event_list := $Panel/Margin/ScrollContainer/Settings/StartEventPropertyEditor
 @onready var watcher_list := $Panel/Margin/ScrollContainer/Settings/WatcherPropertyEditor
-@onready var end_event_list := $Panel/Margin/ScrollContainer/Settings/EndEventPropertyEditor
 @onready var gamemode_name := $Panel/Margin/ScrollContainer/Settings/GamemodeName
 
 # for list of world gamemodes
@@ -36,12 +33,10 @@ var curr_name : String = ""
 @onready var world_gamemodes_list := $WorldGamemodesPanel/Margin/ScrollContainer/VBoxContainer
 
 func _ready() -> void:
-	add_watcher_title.get_node("Label").text = "Watch for..."
-	add_end_event_title.get_node("Label").text = "When a watched\ncondition is met..."
+	add_watcher_title.get_node("Label").text = "Watch for conditions..."
 	
 	start_event_list.connect("event_list_changed", _on_start_event_list_changed)
 	watcher_list.connect("event_list_changed", _on_watcher_list_changed)
-	end_event_list.connect("event_list_changed", _on_end_event_list_changed)
 	gamemode_name.connect("text_changed", _on_gamemode_name_text_changed)
 	add_to_world_button.connect("pressed", _on_add_to_world_pressed)
 	
@@ -56,9 +51,6 @@ func _on_add_to_world_pressed() -> void:
 	if curr_watchers.size() < 1:
 		UIHandler.show_alert("You need at least one condition to watch!", 4, false, UIHandler.alert_colour_error)
 		return
-	if curr_end_events.size() < 1:
-		UIHandler.show_alert("You need at least one ending event!", 4, false, UIHandler.alert_colour_error)
-		return
 	if curr_name == "":
 		UIHandler.show_alert("Please enter a name for the gamemode!", 4, false, UIHandler.alert_colour_error)
 		return
@@ -68,7 +60,7 @@ func _on_add_to_world_pressed() -> void:
 	
 	# success, add to world for saving
 	var gm : Gamemode = Gamemode.new()
-	gm.create(curr_name, curr_start_events, curr_watchers, curr_end_events)
+	gm.create(curr_name, curr_start_events, curr_watchers)
 	Global.get_world().add_child(gm)
 	update_world_gamemodes_list()
 	# alert user of success
@@ -82,9 +74,6 @@ func _on_start_event_list_changed(new_list : Array) -> void:
 
 func _on_watcher_list_changed(new_list : Array) -> void:
 	curr_watchers = new_list
-
-func _on_end_event_list_changed(new_list : Array) -> void:
-	curr_end_events = new_list
 
 func update_world_gamemodes_list() -> void:
 	# clear ui list

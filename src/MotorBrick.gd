@@ -64,7 +64,6 @@ func despawn(check_world_groups : bool = true) -> void:
 	super()
 
 # Receive input from a player (motor seat).
-@rpc("any_peer", "call_local")
 func receive_input(input_forward : float, input_steer : float) -> void:
 	speed = input_forward
 	steer = input_steer

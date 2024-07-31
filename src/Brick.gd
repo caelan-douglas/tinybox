@@ -182,7 +182,7 @@ func set_material(new : BrickMaterial) -> void:
 			unjoin_velocity = 35
 			
 			# set physics material properties for brick.
-			set_physics_material_properties(1, 0.6)
+			set_physics_material_properties(0.9, 0.6)
 			
 			flammable = false
 		# Static

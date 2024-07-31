@@ -1,15 +1,38 @@
-brick_half;1.00000023841858,49.9267082214355,5;-0,0,0;0;1;fefefe
-brick_half;2,49.9182281494141,5;-0,0,0;0;1;fefefe
-brick_half;0.00000015943243,49.9342308044434,5;-0,0,0;0;1;fefefe
-brick_half;0.9999994635582,49.9397888183594,4;-0,0,0;0;1;fefefe
-brick_half;0.9999994635582,49.9397888183594,3;-0,0,0;0;1;fefefe
-brick_half;0.9999994635582,49.9397888183594,2;-0,0,0;0;1;fefefe
-brick_half;0.9999994635582,49.9397888183594,1;-0,0,0;0;1;fefefe
-brick_half;0.9999994635582,49.9397888183594,0;-0,0,0;0;1;fefefe
-brick_half;1.99999940395355,49.9635620117188,-0.00000053143077;-0,0,0;0;1;fefefe
-brick_half;0.00000000038764,49.9705085754395,-0.00000000038742;-0,0,0;0;1;fefefe
-brick_cylinder;-1,49.9730911254883,0;-0,1.57079637050629,0;0;1;fefefe
-brick_cylinder;3,49.9546508789062,-0.00000001425739;-0,1.57079637050629,0;0;1;fefefe
-brick_cylinder;3,49.9152069091797,5;-0,1.57079637050629,0;0;1;fefefe
-brick_cylinder;-1,49.9467163085938,5;-0,1.57079637050629,0;0;1;fefefe
-brick_motor_seat;0.9999994635582,50.9397888183594,2;-0,-3.14159250259399,0;0;1;fefefe
+brick_half ; global_position:(13.03344, 51, 11.7318) ; global_rotation:(1.570796, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick ; global_position:(14.03344, 51, 11.7318) ; global_rotation:(0, -1.570796, -1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(15.03344, 51, 11.7318) ; global_rotation:(0, 3.141592, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(15.03344, 51, 12.7318) ; global_rotation:(0, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(15.03344, 51, 10.7318) ; global_rotation:(0, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 51, 10.7318) ; global_rotation:(0, 1.570796, 1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 51, 12.7318) ; global_rotation:(0, 1.570796, -1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 51, 11.7318) ; global_rotation:(0, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 52, 10.7318) ; global_rotation:(-0.000001, 1.570796, 1.570797) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 52, 12.7318) ; global_rotation:(0.000001, 1.570796, -1.570798) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_motor_seat ; global_position:(16.03344, 52, 11.7318) ; global_rotation:(0.000001, 1.570797, 0) ; _material:0 ; _colour:(0.5451, 0, 0, 1)
+brick_cylinder_large ; global_position:(14.03344, 51, 13.7318) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(0.8, 0.6471, 0.5922, 1)
+brick_cylinder_large ; global_position:(14.03344, 51, 9.731799) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(0.8, 0.6471, 0.5922, 1)
+brick_half ; global_position:(17.03344, 51, 11.7318) ; global_rotation:(0, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(17.03344, 51, 10.7318) ; global_rotation:(0, 1.570796, 1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(17.03344, 52, 10.7318) ; global_rotation:(-0.000001, 1.570796, 1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(17.03344, 51, 12.7318) ; global_rotation:(0, 1.570796, -1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(17.03344, 52, 12.7318) ; global_rotation:(0.000001, 1.570796, -1.570795) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 51, 11.7318) ; global_rotation:(0, 1.570796, 0.000001) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 51, 10.7318) ; global_rotation:(0, 1.570796, 0.000001) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 51, 12.7318) ; global_rotation:(0, 1.570796, 0.000001) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 52, 10.7318) ; global_rotation:(1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 52, 12.7318) ; global_rotation:(-1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_cylinder_large ; global_position:(18.03344, 51, 9.731799) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(0.8, 0.6471, 0.5922, 1)
+brick_cylinder_large ; global_position:(18.03344, 51, 13.7318) ; global_rotation:(0, 0, 0) ; _material:0 ; _colour:(0.8, 0.6471, 0.5922, 1)
+brick ; global_position:(19.03344, 51, 11.7318) ; global_rotation:(0, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 52, 11.7318) ; global_rotation:(1.570796, 1.570796, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 53, 10.7318) ; global_rotation:(0, 1.570796, 1.570796) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 53, 12.7318) ; global_rotation:(-1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(18.03344, 53, 11.7318) ; global_rotation:(0, 1.570797, -0.000002) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(17.03344, 53, 11.7318) ; global_rotation:(0, 1.570797, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(16.03344, 53, 11.7318) ; global_rotation:(0, 1.570797, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(14.03344, 52, 11.7318) ; global_rotation:(0, 1.570797, -0.000002) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(13.03344, 52, 11.7318) ; global_rotation:(-0.000001, 3.141592, 1.570795) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(14.03344, 51, 10.7318) ; global_rotation:(1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(14.03344, 52, 10.7318) ; global_rotation:(1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(14.03344, 51, 12.7318) ; global_rotation:(-1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)
+brick_half ; global_position:(14.03344, 52, 12.7318) ; global_rotation:(-1.570796, 0, 0) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1)

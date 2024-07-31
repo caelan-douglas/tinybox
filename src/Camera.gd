@@ -291,7 +291,6 @@ func _process(delta : float) -> void:
 		var far_dist : float = clamp(global_position.distance_to(target.global_position as Vector3), 0, 40)
 		fov = 55 - far_dist
 
-@rpc("call_local")
 func get_mouse_pos_3d() -> Dictionary:
 	if get_world_3d():
 		var space_state := get_world_3d().direct_space_state
@@ -317,3 +316,25 @@ func exited_water() -> void:
 	# disables low pass effect
 	AudioServer.set_bus_effect_enabled(2, 0, false)
 	AudioServer.set_bus_effect_enabled(2, 1, false)
+
+@rpc("any_peer", "call_local", "reliable")
+func play_podium_animation(focus_player_id : int) -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
+	await get_tree().create_timer(0.1).timeout
+	set_camera_mode(CameraMode.FREE)
+	locked = true
+	fov = 25
+	# get player
+	var focus_player : RigidPlayer = Global.get_world().get_node_or_null(str(focus_player_id))
+	if focus_player != null:
+		focus_player.animator["parameters/BlendOutroPose/blend_amount"] = 1
+		# move camera
+		global_position = Vector3(focus_player.global_position.x + 1, focus_player.global_position.y + 1, focus_player.global_position.z + 3)
+		look_at(Vector3(focus_player.global_position.x, focus_player.global_position.y + 1, focus_player.global_position.z))
+		await get_tree().create_timer(8).timeout
+		focus_player.animator["parameters/BlendOutroPose/blend_amount"] = 0
+	fov = 55
+	set_camera_mode(CameraMode.FREE)
+	locked = false

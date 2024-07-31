@@ -160,6 +160,10 @@ func save_tbw(world_name : String) -> bool:
 	for obj in get_children():
 		if obj != null:
 			if obj is TBWObject:
+				if obj is Gamemode:
+					# don't save built-in gamemodes
+					if obj.built_in:
+						continue
 				var type : String = obj.tbw_object_type
 				file.store_string(str(type))
 				for p : String in obj.properties_to_save:
@@ -350,7 +354,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 # Loads default Gamemodes into the world, which are defined here.
 func load_default_gamemodes() -> void:
 	## Deathmatch
-	var dm : Gamemode = Gamemode.new()
+	var dm : Gamemode = SpawnableObjects.objects["gamemode"].instantiate()
 	dm.create("Deathmatch",\
 	# Start events
 	[\
@@ -359,36 +363,36 @@ func load_default_gamemodes() -> void:
 	],\
 	# Watchers
 	[\
-	["PLAYER_KILLS_EXCEEDS", [15]]\
-	],\
-	# End events
-	[\
-	["CLEAR_LEADERBOARD", []],\
-	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
-	])
+	["PLAYER_KILLS_EXCEEDS", [15], [\
+		["CLEAR_LEADERBOARD", []],\
+		["SHOW_PODIUM", []],\
+		["MOVE_ALL_PLAYERS_TO_SPAWN", []],\
+		["END_ACTIVE_GAMEMODE", []]\
+		]
+	]]\
+	)
 	dm.built_in = true
-	Global.get_world().add_child(dm)
+	Global.get_world().add_child(dm, true)
 	
 	## Team Deathmatch
-	var tdm : Gamemode = Gamemode.new()
+	var tdm : Gamemode = SpawnableObjects.objects["gamemode"].instantiate()
 	tdm.create("Team Deathmatch",\
 	# Start events
 	[\
 	["CLEAR_LEADERBOARD", []],\
-	["BALANCE_TEAMS", []],\
 	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
 	],\
 	# Watchers
 	[\
-	["TEAM_KILLS_EXCEEDS", [15]]\
-	],\
-	# End events
-	[\
-	["CLEAR_LEADERBOARD", []],\
-	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
-	])
+	["TEAM_KILLS_EXCEEDS", [15], [\
+		["CLEAR_LEADERBOARD", []],\
+		["MOVE_ALL_PLAYERS_TO_SPAWN", []],\
+		["END_ACTIVE_GAMEMODE", []]\
+		]
+	]]\
+	)
 	tdm.built_in = true
-	Global.get_world().add_child(tdm)
+	Global.get_world().add_child(tdm, true)
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:
@@ -413,14 +417,12 @@ func reset_player_positions() -> void:
 		player.change_state(RigidPlayer.IDLE)
 		player.go_to_spawn()
 
-@rpc("any_peer", "call_local", "reliable")
 func clear_world() -> void:
 	clear_bricks()
 	for node in get_children():
 		if node is TBWObject || node is TBWEnvironment:
 			node.queue_free()
 
-@rpc("any_peer", "call_local", "reliable")
 func clear_bricks() -> void:
 	# remove all existing bricks
 	for b in get_children():

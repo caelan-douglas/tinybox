@@ -41,7 +41,7 @@ func _ready() -> void:
 func _add_base_ui() -> HBoxContainer:
 	# set up base button
 	var hbox := HBoxContainer.new()
-	$List.add_child(hbox)
+	hbox.name = "OuterHbox"
 	var opt := OptionButton.new()
 	opt.name = "Selector"
 	hbox.add_child(opt)
@@ -51,11 +51,10 @@ func _add_base_ui() -> HBoxContainer:
 	inner_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(inner_hbox)
 	var del_button := Button.new()
+	del_button.name = "DelButton"
 	del_button.text = "X"
 	del_button.self_modulate = Color.RED
 	hbox.add_child(del_button)
-	# hook delete button
-	del_button.connect("pressed", _remove_event_list_item.bind(hbox))
 	return hbox
 
 func add_event(event_type : Event.EventType, args : Array) -> void:
@@ -64,6 +63,10 @@ func add_event(event_type : Event.EventType, args : Array) -> void:
 		return
 	# set up base button
 	var hbox := _add_base_ui()
+	# hook delete button
+	hbox.get_node("DelButton").connect("pressed", _remove_event_list_item.bind(hbox))
+	# add to main list
+	$List.add_child(hbox)
 	var selector : OptionButton = hbox.get_node("Selector")
 	# add events to opt list
 	for e : String in Event.EventType.keys():
@@ -78,17 +81,33 @@ func add_watcher(watcher_type : Watcher.WatcherType, args : Array) -> void:
 	if event_list.size() >= max_events:
 		UIHandler.show_alert("Max watchers reached.", 3, false, UIHandler.alert_colour_error)
 		return
-	# set up base button
+	# set up inner base button
 	var hbox := _add_base_ui()
 	var selector : OptionButton = hbox.get_node("Selector")
-	# add events to opt list
+	# set up outer box
+	var vbox := VBoxContainer.new()
+	vbox.add_child(hbox)
+	# hook delete button
+	hbox.get_node("DelButton").connect("pressed", _remove_event_list_item.bind(vbox))
+	# add to main list
+	$List.add_child(vbox)
+	# add event list editor for watcher end events
+	# don't preload this to avoid recursion
+	var list_editor : Control = (load("res://data/scene/ui/EventListEditor.tscn") as PackedScene).instantiate()
+	# end events for watcher
+	list_editor.list_type = ListType.EVENT
+	list_editor.get_node("Title/Label").text = "When this condition is met, do..."
+	list_editor.modulate = Color("#b5adff")
+	list_editor.size_flags_horizontal = Control.SIZE_SHRINK_END
+	vbox.add_child(list_editor)
+	# add watchers to opt list
 	for w : String in Watcher.WatcherType.keys():
 		selector.add_item(str(JsonHandler.find_entry_in_file(str("enum/watcher_type/", w))))
 	selector.selected = watcher_type
-	selector.connect("item_selected", _set_list_watcher_type.bind(hbox))
+	selector.connect("item_selected", _set_list_watcher_type.bind(vbox, list_editor))
 	# add unique elements
 	event_list.append([watcher_type, args])
-	_set_list_watcher_type(watcher_type, hbox)
+	_set_list_watcher_type(watcher_type, vbox, list_editor)
 
 func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer) -> void:
 	var my_idx : int = event_ui.get_index()
@@ -96,7 +115,12 @@ func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer
 	for c : Control in inner_hbox.get_children():
 		c.queue_free()
 	match (event_type):
-		Event.EventType.CLEAR_LEADERBOARD, Event.EventType.BALANCE_TEAMS, Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN:
+		# 0 arg events
+		Event.EventType.CLEAR_LEADERBOARD,\
+		Event.EventType.BALANCE_TEAMS,\
+		Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN,\
+		Event.EventType.END_ACTIVE_GAMEMODE,\
+		Event.EventType.SHOW_PODIUM:
 			# get text value of enum from int, ie 2 -> "BALANCE_TEAMS"
 			_update_event_list(event_ui, [Event.EventType.keys()[event_type], []])
 		Event.EventType.TELEPORT_ALL_PLAYERS:
@@ -107,9 +131,9 @@ func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer
 			inner_hbox.add_child(label)
 
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
-func _set_list_watcher_type(watcher_type : Watcher.WatcherType, watcher_ui : HBoxContainer) -> void:
+func _set_list_watcher_type(watcher_type : Watcher.WatcherType, watcher_ui : Control, watcher_end_event_list : Control) -> void:
 	var my_idx : int = watcher_ui.get_index()
-	var inner_hbox := watcher_ui.get_node("InnerHbox")
+	var inner_hbox := watcher_ui.get_node("OuterHbox/InnerHbox")
 	for c : Control in inner_hbox.get_children():
 		c.queue_free()
 	match (watcher_type):
@@ -120,13 +144,16 @@ func _set_list_watcher_type(watcher_type : Watcher.WatcherType, watcher_ui : HBo
 			# create ui
 			var adjuster_i : Adjuster = adjuster.instantiate()
 			inner_hbox.add_child(adjuster_i)
-			adjuster_i.value_changed.connect(func(new_val : int) -> void: _update_event_list(watcher_ui, [Watcher.WatcherType.keys()[watcher_type], [new_val]]))
+			# connect the resulting value from value changed to the args part of the function using a lambda
+			#                                                                               > watcher    type                                       args       end events
+			adjuster_i.value_changed.connect(func(new_val : int) -> void: _update_event_list(watcher_ui, [Watcher.WatcherType.keys()[watcher_type], [new_val], watcher_end_event_list.event_list]))
 
-func _remove_event_list_item(event_ui : HBoxContainer) -> void:
+
+func _remove_event_list_item(event_ui : Control) -> void:
 	event_list.remove_at(event_ui.get_index())
 	event_ui.queue_free()
 	emit_signal("event_list_changed", event_list)
 
-func _update_event_list(event_ui : HBoxContainer, event : Array, remove := false) -> void:
+func _update_event_list(event_ui : Control, event : Array, remove := false) -> void:
 	event_list[event_ui.get_index()] = event
 	emit_signal("event_list_changed", event_list)

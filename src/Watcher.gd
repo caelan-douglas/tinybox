@@ -16,7 +16,6 @@
 
 extends Node
 class_name Watcher
-signal condition_met(condition_args : Array)
 
 enum WatcherType {
 	# 1 var
@@ -29,10 +28,13 @@ enum WatcherType {
 var watcher_type : WatcherType = WatcherType.PLAYER_KILLS_EXCEEDS
 var args : Array = []
 var started := false
+# list of events (serialized) to run when this watcher's condition is met
+var end_events : Array = []
 
-func _init(w_watcher_type : WatcherType, w_args : Array) -> void:
+func _init(w_watcher_type : WatcherType, w_args : Array, w_end_events : Array) -> void:
 	watcher_type = w_watcher_type
 	args = w_args
+	end_events = w_end_events
 
 func start() -> void:
 	# add self to tree
@@ -69,7 +71,19 @@ func _physics_process(delta : float) -> void:
 						end([team.name])
 
 func end(args : Array = []) -> void:
-	emit_signal("condition_met", args)
-	print("Watcher ended with args: ", args)
 	started = false
+	# run end events
+	for event : Array in end_events:
+		if Event.EventType.get(event[0]) is int:
+			# set to watcher end args for some event types
+			if Event.EventType.get(event[0]) == Event.EventType.SHOW_PODIUM:
+				# event[1] is args (2nd array)
+				event[1] = args
+			# create and run event
+			var created_event : Event = Event.new(Event.EventType.get(event[0]) as int, event[1] as Array)
+			# for any events that have delays, like showing the podium or intro screen
+			await created_event.start()
+		else:
+			UIHandler.show_alert("Could not run watcher end event: invalid event type", 4, false, UIHandler.alert_colour_error)
+	
 	queue_free()

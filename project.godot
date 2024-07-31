@@ -48,6 +48,7 @@ file_logging/image="res://data/textures/load_text.png"
 
 window/size/viewport_width=1200
 window/size/viewport_height=720
+window/size/window_width_override=850
 window/dpi/allow_hidpi=false
 
 [editor]

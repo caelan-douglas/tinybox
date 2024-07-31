@@ -50,6 +50,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 0
 
 [node name="EntryScreen" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 8
@@ -148,7 +149,6 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PauseMenu" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -172,8 +172,10 @@ offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
+current_tab = 2
 
 [node name="Editor" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
@@ -293,7 +295,6 @@ layout_mode = 2
 text = "(none)"
 
 [node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
@@ -366,13 +367,6 @@ list_type = 1
 
 [node name="Spacer5" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
 custom_minimum_size = Vector2(2.08165e-12, 8)
-layout_mode = 2
-
-[node name="EndEventPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
-layout_mode = 2
-
-[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="SavePreset" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]

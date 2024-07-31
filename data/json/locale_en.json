@@ -100,7 +100,8 @@
         "10": "Tip: When underwater, aim the camera in the direction you want to swim; press [ Shift or ( B ) ] to dash.",
         "11": "Tip: You can jump to cancel a slide or roll.",
         "12": "Tip: Plastic is light and non-flammable. However, it falls apart very easily when hit by bouncyballs or other bricks.",
-        "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles. Maybe try making a flail?"
+        "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles.",
+        "14": "Tip: If you're having trouble with your vehicles flipping over, try giving them a lower center of gravity with some metal bricks."
     },
     "common": {
         "yes": "Yes",
@@ -154,7 +155,9 @@
             "LOCK_PLAYER_STATES": "Lock players to...",
             "MOVE_ALL_PLAYERS_TO_SPAWN": "Move all to team spawns",
             "BALANCE_TEAMS": "Balance teams",
-            "CLEAR_LEADERBOARD": "Clear leaderboard"
+            "CLEAR_LEADERBOARD": "Clear leaderboard",
+            "SHOW_PODIUM": "Show podium",
+            "END_ACTIVE_GAMEMODE": "[End gamemode]"
         },
         "watcher_type": {
             "PLAYER_KILLS_EXCEEDS": "Anyone's kills exceed...",

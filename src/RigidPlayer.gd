@@ -878,7 +878,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					change_state(AIR)
 			SLIDE:
 				if is_on_ground:
-					if int(slide_time.time_left * 10) % 2 == 0:
+					if Time.get_ticks_msec() % 2 == 0:
 						play_jump_particles()
 					# jump if pressed or going too slow
 					if (Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5) || linear_velocity.length() < 1:
@@ -889,21 +889,23 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
 				dir = dir.normalized()
-				apply_force(dir * 7, Vector3.ZERO)
+				apply_force(dir * 10, Vector3.ZERO)
 				# align to ground normal
 				if state.get_contact_count() > 0:
 					var ground_normal := state.get_contact_local_normal(0)
 					align_character_model_normal(ground_normal)
 			SLIDE_BACK:
 				if is_on_ground:
-					if int(slide_time.time_left * 10) % 2 == 0:
+					if Time.get_ticks_msec() % 2 == 0:
 						play_jump_particles()
 					# jump if pressed or going too slow
 					if Input.is_action_pressed("jump") && !locked:
 						#apply_central_impulse(Vector3.UP * jump_force)
 						change_state(ROLL)
 					if linear_velocity.length() < 2:
-						change_state(IDLE)
+						air_from_jump = true
+						apply_central_impulse(Vector3.UP * jump_force)
+						change_state(AIR)
 				# somewhat controllable when sliding
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
@@ -990,7 +992,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	# handle out of map ( runs outside auth check )
 	if multiplayer.is_server():
 		if !invulnerable:
-			if global_position.y < 20 || abs(global_position.x) > 400 || abs(global_position.z) > 400 || global_position.y > 350:
+			if global_position.y < 20 || global_position.y > 400:
 				set_health(0, CauseOfDeath.OUT_OF_MAP)
 
 # When the player enters a seat
@@ -1207,11 +1209,6 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE)
-			# stand up after slide timeout
-			await slide_time.timeout
-			# if we are still sliding after waiting, don't intercept states:
-			if _state == SLIDE:
-				change_state(IDLE)
 		SLIDE_BACK:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
@@ -1223,11 +1220,6 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE_BACK)
-			# stand up after slide timeout
-			await slide_time.timeout
-			# if we are still sliding after waiting, don't intercept states:
-			if _state == SLIDE:
-				change_state(IDLE)
 		ROLL:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
