@@ -49,7 +49,7 @@ var brick_materials_as_names : Array[String] = ["Wooden", "Wooden (charred)", "M
 
 # Appearance settings
 var shirt : int = 0
-var shirt_texture : int = 0
+var shirt_texture : String = ""
 var hair : int = 0
 var shirt_colour := Color("#ffffff")
 var pants_colour := Color("#1a203d")
@@ -59,14 +59,31 @@ var skin_colour := Color("d29185")
 var beep_low : AudioStream = preload("res://data/audio/beep/beep_low.ogg")
 var beep_fifths : AudioStream = preload("res://data/audio/beep/beep_fifths.ogg")
 
+func upload_shirt_texture() -> void:
+	var picker := FileDialog.new()
+	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	picker.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
+	get_viewport().add_child(picker)
+	picker.size = Vector2(500, 400)
+	picker.popup_centered()
+	picker.set_filters(["*.png, *.jpg, *.jpeg"])
+	var path : String = await picker.file_selected
+	print(path)
+	var file := load(path)
+	if file is CompressedTexture2D:
+		var img : Image = file.get_image()
+		img.resize(128, 128)
+		var new_base64 : String = Marshalls.raw_to_base64(img.save_jpg_to_buffer())
+		if new_base64 != null:
+			set_shirt_texture(new_base64)
+	else:
+		UIHandler.show_alert("File unsupported. Please upload a .png,\n.jpeg, or .jpg file (preferably square)!", 8, false, UIHandler.alert_colour_error)
+
 func set_shirt(new : int) -> void:
 	shirt = new
 	emit_signal("appearance_changed")
-func set_shirt_texture(new : int) -> void:
-	shirt_texture = new
-	# TODO: better way to handle this
-	if shirt_texture == 2 && get_tree().current_scene.get_node("MultiplayerMenu/AppearanceMenu").visible == true:
-		UIHandler.show_alert("This shirt design is best used with a white shirt.", 5)
+func set_shirt_texture(new_base64 : String = "") -> void:
+	shirt_texture = new_base64
 	emit_signal("appearance_changed")
 func set_hair(new : int) -> void:
 	hair = new
@@ -105,7 +122,7 @@ func load_appearance() -> void:
 		set_shirt(loaded_shirt as int)
 	var loaded_shirt_texture : Variant = UserPreferences.load_pref("shirt_texture")
 	if loaded_shirt_texture != null:
-		set_shirt_texture(loaded_shirt_texture as int)
+		set_shirt_texture(str(loaded_shirt_texture))
 	var loaded_hair : Variant = UserPreferences.load_pref("hair")
 	if loaded_hair != null:
 		set_hair(loaded_hair as int)

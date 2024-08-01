@@ -137,12 +137,6 @@ var velocity : float:
 @onready var run_particles : PackedScene = preload("res://data/scene/character/RunParticles.tscn")
 @onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
 
-@onready var shirt_textures : Array = [preload("res://data/models/character/textures/fabric.jpg"), 
-preload("res://data/textures/clothing/cloth_tex_0.png"), 
-preload("res://data/textures/clothing/cloth_tex_1.png"), 
-preload("res://data/textures/clothing/cloth_tex_2.png"), 
-preload("res://data/textures/clothing/cloth_tex_3.png")]
-
 @export var spawn_as_dummy : bool = false
 
 var teleport_requested : bool = false
@@ -197,7 +191,7 @@ func change_appearance() -> void:
 	update_appearance.rpc(Global.shirt, Global.shirt_texture, Global.hair, Global.shirt_colour, Global.pants_colour, Global.hair_colour, Global.skin_colour)
 
 @rpc ("call_local")
-func update_appearance(shirt : int, shirt_texture : int, hair : int, shirt_colour : Color, pants_colour : Color, hair_colour : Color, skin_colour : Color) -> void:
+func update_appearance(shirt : int, shirt_texture_base64 : String, hair : int, shirt_colour : Color, pants_colour : Color, hair_colour : Color, skin_colour : Color) -> void:
 	var armature : Skeleton3D = get_node("Smoothing/character_model/character/Skeleton3D")
 	var hair_material : Material = armature.get_node("hair_short/hair_short").get_surface_override_material(0)
 	var shirt_material : Material = armature.get_node("shirt_shortsleeve").get_surface_override_material(0)
@@ -220,8 +214,13 @@ func update_appearance(shirt : int, shirt_texture : int, hair : int, shirt_colou
 			1:
 				armature.get_node("shirt_jacket").visible = true
 				armature.get_node("shirt_shortsleeve").visible = false
-	if shirt_texture != null:
-		shirt_material.albedo_texture = shirt_textures[shirt_texture]
+	if shirt_texture_base64 != null:
+		# set shirt to base64 image
+		var image : Image = Image.new()
+		image.load_jpg_from_buffer(Marshalls.base64_to_raw(shirt_texture_base64))
+		if image != null:
+			if image is Image:
+				shirt_material.albedo_texture = ImageTexture.new().create_from_image(image)
 	if hair != null:
 		match hair:
 			# short

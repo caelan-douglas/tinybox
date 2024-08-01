@@ -504,21 +504,10 @@ theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Design"
 script = ExtResource("3_yuqno")
 
-[node name="TexturePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
+[node name="UploadButton" type="Button" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 5
-selected = 0
-popup/item_0/text = "Fabric"
-popup/item_0/id = 0
-popup/item_1/text = "Knitty"
-popup/item_1/id = 1
-popup/item_2/text = "Emergency"
-popup/item_2/id = 2
-popup/item_3/text = "Art"
-popup/item_3/id = 3
-popup/item_4/text = "Stripes"
-popup/item_4/id = 4
+text = "Upload image..."
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
 layout_mode = 2
