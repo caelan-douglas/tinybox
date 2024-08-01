@@ -17,6 +17,7 @@
 extends CanvasLayer
 
 @onready var world_click : Button = $WorldClick
+@onready var world_name : LineEdit = $PauseMenu/TabContainer/Editor/SaveWorldName
 
 func _ready() -> void:
 	$PauseMenu/TabContainer/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
@@ -80,11 +81,13 @@ func _load_world(map_selector : OptionButton) -> void:
 	if editor is Editor:
 		(editor as Editor).delete_environment()
 	# load file
-	var world_name : String = map_selector.get_item_text(map_selector.selected)
+	var world_name_load : String = map_selector.get_item_text(map_selector.selected)
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# remove ".tbw" from string
-	Global.get_world().load_tbw(world_name.split(".")[0], false, false)
+	Global.get_world().load_tbw(world_name_load.split(".")[0], false, false)
+	# set save field name to loaded world name
+	world_name.text = str(world_name_load.split(".")[0])
 
 func hide_pause_menu() -> void:
 	Global.is_paused = false
@@ -92,7 +95,7 @@ func hide_pause_menu() -> void:
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(false)
 	$PauseMenu.visible = false
-	Global.get_player().locked = false
+	#Global.get_player().locked = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func show_pause_menu() -> void:
@@ -101,7 +104,7 @@ func show_pause_menu() -> void:
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(true)
 	$PauseMenu.visible = true
-	Global.get_player().locked = true
+	#Global.get_player().locked = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _process(delta : float) -> void:
@@ -112,8 +115,7 @@ func _process(delta : float) -> void:
 			show_pause_menu()
 
 func _on_save_world_pressed() -> void:
-	var world_name : String = $PauseMenu/TabContainer/Editor/SaveWorldName.text
-	if world_name == "":
+	if world_name.text == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
-		Global.get_world().save_tbw(str(world_name))
+		Global.get_world().save_tbw(str(world_name.text))

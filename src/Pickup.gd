@@ -150,6 +150,8 @@ func _take_pickup(body : RigidPlayer) -> void:
 				else:
 					var tool : Tool = extinguisher_tool.instantiate()
 					tool.ammo = ammo
+					# don't restore extinguisher foam
+					tool.restore_ammo = false
 					tool_inv.add_child(tool)
 			PickupType.MISSILE:
 				# if we already have it, just add ammo

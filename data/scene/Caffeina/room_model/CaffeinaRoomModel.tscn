@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://1sqf4570yn2c"]
+[gd_scene load_steps=18 format=3 uid="uid://1sqf4570yn2c"]
 
 [ext_resource type="PackedScene" uid="uid://c5gyfesce8gyc" path="res://data/scene/Caffeina/room_model/caffeina.blend" id="1_o6j45"]
 [ext_resource type="Material" uid="uid://6bsit8841els" path="res://data/scene/Caffeina/room_model/wall_tex.tres" id="2_7n5j1"]
@@ -24,23 +24,6 @@ roughness_texture_channel = 4
 normal_enabled = true
 normal_texture = ExtResource("8_ftk40")
 uv1_scale = Vector3(2, 2, 2)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cltku"]
-albedo_color = Color(0.658824, 0.27451, 0.27451, 1)
-roughness = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hnogh"]
-resource_name = "vincent.jacket"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.487927, 0.447929, 0.40136, 1)
-albedo_texture = ExtResource("7_bdbl6")
-metallic_specular = 0.1
-roughness = 0.45
-roughness_texture = ExtResource("9_my5kl")
-roughness_texture_channel = 4
-normal_enabled = true
-normal_scale = 0.2
-normal_texture = ExtResource("8_ftk40")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15ype"]
 albedo_color = Color(0, 0, 0, 1)
@@ -87,27 +70,21 @@ surface_material_override/1 = ExtResource("7_ivvvd")
 [node name="Window_R" parent="caffeina/Window_Group/WindowFrame" index="1"]
 surface_material_override/1 = ExtResource("7_ivvvd")
 
-[node name="Lamp_base" parent="caffeina" index="3"]
-surface_material_override/0 = SubResource("StandardMaterial3D_cltku")
-
 [node name="Window_L_001" parent="caffeina/Window_Group_001/WindowFrame_001" index="0"]
 surface_material_override/1 = ExtResource("7_ivvvd")
 
 [node name="Window_R_001" parent="caffeina/Window_Group_001/WindowFrame_001" index="1"]
 surface_material_override/1 = ExtResource("7_ivvvd")
 
-[node name="stylish_bookshelf" parent="caffeina" index="5"]
-surface_material_override/0 = SubResource("StandardMaterial3D_hnogh")
-
-[node name="wallart_002" parent="caffeina" index="6"]
+[node name="wallart_002" parent="caffeina" index="4"]
 surface_material_override/0 = SubResource("StandardMaterial3D_15ype")
 surface_material_override/2 = SubResource("StandardMaterial3D_xbhte")
 
-[node name="wallart_003" parent="caffeina" index="7"]
+[node name="wallart_003" parent="caffeina" index="5"]
 surface_material_override/0 = SubResource("StandardMaterial3D_15ype")
 surface_material_override/2 = SubResource("StandardMaterial3D_xthua")
 
-[node name="Cube" parent="caffeina" index="8"]
+[node name="Cube" parent="caffeina" index="6"]
 surface_material_override/0 = SubResource("StandardMaterial3D_1p4dv")
 surface_material_override/1 = SubResource("StandardMaterial3D_ks11q")
 

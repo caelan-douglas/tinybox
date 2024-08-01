@@ -1200,6 +1200,16 @@ layout_mode = 2
 text = "Start gamemode"
 script = ExtResource("5_6v07r")
 
+[node name="Spacer7" type="Control" parent="PauseMenu/TabContainer/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="EndGamemode" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+layout_mode = 2
+disabled = true
+text = "End active gamemode"
+script = ExtResource("5_6v07r")
+
 [node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer"]
 visible = false
 custom_minimum_size = Vector2(308, 0)

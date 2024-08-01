@@ -14,7 +14,6 @@ script = ExtResource("1_iqmx7")
 tbw_object_type = "obj_pine_tree"
 
 [node name="pine_tree_0" parent="." instance=ExtResource("2_omn3v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="stylized_pine_tree_large_001" parent="pine_tree_0" index="0"]
 surface_material_override/0 = ExtResource("3_ymcu2")

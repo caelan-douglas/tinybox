@@ -132,12 +132,9 @@ func give_all_tools() -> void:
 	for at : PackedScene in all_tools:
 		add_tool(at.instantiate() as Tool)
 
-# give build, bat, ball, and extinguisher
-func give_minigame_tools() -> void:
-	add_tool(all_tools[0].instantiate() as Tool)
+func give_base_tools() -> void:
 	add_tool(all_tools[1].instantiate() as Tool)
 	add_tool(all_tools[2].instantiate() as Tool)
-	add_tool(all_tools[3].instantiate() as Tool)
 
 # resets inventory to default (sandbox) state (all tools in def. states)
 func reset() -> void:

@@ -50,15 +50,18 @@ func _ready() -> void:
 		# node name is internal name
 		item_button.name = item
 		item_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", item))
+		item_button.tooltip_text = JsonHandler.find_entry_in_file(str("tbw_objects/tooltips/", item))
 		# remove brick icon for non bricks
-		if !item.begins_with("brick"):
+		if item.begins_with("obj_camera"):
+			item_button.set_button_icon(load("res://data/textures/editor_icons/camera.png") as Texture2D)
+		elif !item.begins_with("brick"):
 			item_button.icon = null
 		
 		if item.begins_with("brick") && item != "brick_button":
 			add_to_set("Basic bricks", item_button)
 		elif item.begins_with("obj_track"):
 			add_to_set("Track pieces", item_button)
-		elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "brick_button":
+		elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "brick_button" || item == "obj_camera_preview_point":
 			add_to_set("Special", item_button)
 		else:
 			add_to_set("Objects", item_button)

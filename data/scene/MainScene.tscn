@@ -28,7 +28,7 @@ spawn_path = NodePath("..")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/Frozen Field/Frozen Field.tscn", "res://data/scene/Caffeina/Caffeina.tscn", "res://data/scene/Grasslands/Grasslands.tscn", "res://data/scene/Lobby/Lobby.tscn", "res://data/scene/Calm Creek/Calm Creek.tscn", "res://data/scene/Floaty/Floaty.tscn", "res://data/scene/Warp/Warp.tscn", "res://data/scene/BaseWorld/BaseWorld.tscn")
+_spawnable_scenes = PackedStringArray("res://data/scene/Frozen Field/Frozen Field.tscn", "res://data/scene/Caffeina/Caffeina.tscn", "res://data/scene/Grasslands/Grasslands.tscn", "res://data/scene/Calm Creek/Calm Creek.tscn", "res://data/scene/Floaty/Floaty.tscn", "res://data/scene/Warp/Warp.tscn", "res://data/scene/BaseWorld/BaseWorld.tscn")
 spawn_path = NodePath("../Map")
 spawn_limit = 1
 

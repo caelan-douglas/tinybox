@@ -95,6 +95,14 @@ var last_hit := false
 var kills : int = 0
 var deaths : int = 0
 
+# property access for gamemodes
+var height : float:
+	get:
+		return global_position.y
+var velocity : float:
+	get:
+		return round(linear_velocity.length())
+
 @onready var fire : Fire = $Fire
 @onready var bubble_particles : GPUParticles3D = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
 @onready var character_model : Node3D = $Smoothing/character_model
@@ -230,7 +238,7 @@ func update_appearance(shirt : int, shirt_texture : int, hair : int, shirt_colou
 				armature.get_node("hair_ponytail").visible = false
 
 # Returns this player's tool inventory.
-func get_tool_inventory() -> Node:
+func get_tool_inventory() -> ToolInventory:
 	return $Tools
 
 @rpc("any_peer", "call_local", "reliable")
@@ -598,7 +606,8 @@ func set_camera(new : Camera3D) -> void:
 	camera = new
 	if !camera.is_connected("camera_mode_changed", _on_camera_mode_changed):
 		camera.connect("camera_mode_changed", _on_camera_mode_changed)
-	if camera.has_method("set_target"):
+	if camera is Camera:
+		camera.set_camera_mode(Camera.CameraMode.FREE)
 		camera.set_target(target, false)
 
 func _ready() -> void:
@@ -1639,3 +1648,9 @@ func align_character_model_normal(ground_normal : Vector3) -> void:
 		character_model.global_transform.basis.y = ground_normal
 		character_model.global_transform.basis.x = -character_model.global_transform.basis.z.cross(ground_normal)
 		character_model.global_transform.basis = character_model.global_transform.basis.orthonormalized()
+
+# for removing player from world
+func despawn() -> void:
+	get_tool_inventory().delete_all_tools()
+	Global.get_world().remove_player_from_list(self)
+	queue_free()

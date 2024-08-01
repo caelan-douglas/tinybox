@@ -82,7 +82,7 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	property_editor.editing_hovered = false
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
-		if item_name_internal != "obj_water":
+		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
 			item_offset = Vector3(0, -0.5, 0)
 		
 		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(instance) as Array)
@@ -90,8 +90,9 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 			var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
 			preview_mesh.mesh = new_mesh.mesh
 			# match any mesh position, rotation, scale settings
-			preview_mesh.position = new_mesh.position
-			preview_mesh.scale = new_mesh.scale
+			# offset slightly to avoid z-fighting
+			preview_mesh.position = new_mesh.position + Vector3.UP * 0.004
+			preview_mesh.scale = new_mesh.scale * 1.004
 			preview_mesh.rotation = new_mesh.rotation
 			# apply construction material
 			for i in range(preview_mesh.get_surface_override_material_count()):
@@ -133,9 +134,6 @@ func _physics_process(delta : float) -> void:
 					# if there is something where we are trying to place
 					var valid : bool = true
 					
-					if preview_area.has_overlapping_bodies():
-						valid = false
-					
 					# if it's trying to place underwater, that's fine
 					for body in preview_area.get_overlapping_areas():
 						if body.owner is TBWObject:
@@ -148,6 +146,10 @@ func _physics_process(delta : float) -> void:
 							valid = false
 							break
 					
+					# however if there are any overlapping bodies it's no longer valid
+					if preview_area.has_overlapping_bodies():
+						valid = false
+					
 					# place if valid
 					if valid && selected_item != null:
 						var inst : Node3D = selected_item.instantiate()
@@ -156,6 +158,10 @@ func _physics_process(delta : float) -> void:
 						inst.global_rotation = preview_node.global_rotation
 						if !(inst is Brick):
 							inst.scale = preview_node.scale
+						# rotate wheels because they have different rotation direction than
+						# facing direction
+						if inst is MotorBrick:
+							inst.rotate_object_local(Vector3.UP, -PI/2)
 						if inst is TBWObject || inst is Brick:
 							for property : String in selected_item_properties.keys():
 								inst.set_property(property, selected_item_properties[property])

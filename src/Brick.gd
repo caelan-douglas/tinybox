@@ -300,6 +300,11 @@ func get_glued() -> bool:
 # Unfreezes this brick and the entire group that it belongs to.
 @rpc("call_local")
 func unfreeze_entire_group() -> void:
+	# don't unfreeze in the editor
+	if Global.get_world().get_current_map() is Editor:
+		var editor : Editor = Global.get_world().get_current_map() as Editor
+		if !editor.test_mode:
+			return
 	if _material != BrickMaterial.STATIC:
 		glued = false
 		freeze = false

@@ -19,13 +19,13 @@ class_name Watcher
 
 enum WatcherType {
 	# 1 var
-	PLAYER_KILLS_EXCEEDS,
-	PLAYER_CUSTOM_VARIABLE_EXCEEDS,
+	PLAYER_PROPERTY_EXCEEDS,
+	PLAYER_PROPERTY_FALLS_BELOW,
 	TEAM_KILLS_EXCEEDS,
 	TIMER_EXCEEDS
 }
 
-var watcher_type : WatcherType = WatcherType.PLAYER_KILLS_EXCEEDS
+var watcher_type : WatcherType = WatcherType.PLAYER_PROPERTY_EXCEEDS
 var args : Array = []
 var started := false
 # list of events (serialized) to run when this watcher's condition is met
@@ -57,9 +57,13 @@ func _physics_process(delta : float) -> void:
 	if started:
 		# constantly checked variables
 		match (watcher_type):
-			WatcherType.PLAYER_KILLS_EXCEEDS:
+			WatcherType.PLAYER_PROPERTY_EXCEEDS:
 				for player : RigidPlayer in Global.get_world().rigidplayer_list:
-					if player.kills > str(args[0]).to_int():
+					if player.get(str(args[0])) > str(args[1]).to_int():
+						end([player.get_multiplayer_authority()])
+			WatcherType.PLAYER_PROPERTY_FALLS_BELOW:
+				for player : RigidPlayer in Global.get_world().rigidplayer_list:
+					if player.get(str(args[0])) < str(args[1]).to_int():
 						end([player.get_multiplayer_authority()])
 			WatcherType.TEAM_KILLS_EXCEEDS:
 				for team : Team in Global.get_world().get_current_map().get_teams().get_team_list():

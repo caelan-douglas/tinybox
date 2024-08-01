@@ -90,7 +90,7 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 
 # Show a small non-actionable alert.
 @rpc("any_peer", "call_local")
-func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color("#ffffff")) -> void:
+func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color("#ffffff"), font_size : int = 16) -> void:
 	# if in dedicated server mode
 	if multiplayer.is_server() && Global.dedicated_server:
 		# show a chat instead
@@ -101,8 +101,9 @@ func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color(
 		toast.text = alert_text
 		if alert_colour.to_html() != "#ffffff":
 			toast.self_modulate = alert_colour
-		toast.set("theme_override_constants/outline_size", 6)
+		toast.set("theme_override_constants/outline_size", 6 * (font_size / 16))
 		toast.set("theme_override_colors/font_outline_color", Color("#00000062"))
+		toast.set("theme_override_font_sizes/font_size", font_size)
 		
 		var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Toasts")
 		# make sure that we haven't been disconnected
@@ -112,3 +113,13 @@ func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color(
 		# make sure alert hasnt already been destroyed
 		if toast != null:
 			toast.queue_free()
+
+func fade_black_transition(duration : float = 0.5) -> void:
+	var fade : ColorRect = get_tree().root.get_node("PersistentScene/FadeCanvas/Fade")
+	fade.visible = true
+	var tween : Tween = get_tree().create_tween().set_parallel(false)
+	# hold black for a short while
+	tween.tween_property(fade, "modulate", Color(1, 1, 1, 1), duration/2)
+	tween.tween_property(fade, "modulate", Color(1, 1, 1, 0), duration/2)
+	await get_tree().create_timer(duration).timeout
+	fade.visible = false

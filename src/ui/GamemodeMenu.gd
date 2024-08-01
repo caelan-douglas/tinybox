@@ -18,6 +18,7 @@ extends Node
 
 @onready var selector : OptionButton = $GamemodeSelector
 @onready var button : Button = $StartGamemode
+@onready var end_button : Button = $EndGamemode
 
 var gamemode_list : Array[Gamemode] = []
 
@@ -25,17 +26,25 @@ func _ready() -> void:
 	# automatically populate gamemode list based on map
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 	button.connect("pressed", _on_start_gamemode_pressed)
+	end_button.connect("pressed", _on_end_gamemode_pressed)
 
 func _on_start_gamemode_pressed() -> void:
 	var idx : int = selector.selected
 	gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
 	button.disabled = true
+	end_button.disabled = false
 	gamemode_list[idx].start()
+
+func _on_end_gamemode_pressed() -> void:
+	if !multiplayer.is_server(): return
+	var e : Event = Event.new(Event.EventType.END_ACTIVE_GAMEMODE, [])
+	e.start()
 
 func _on_gamemode_ended(idx : int) -> void:
 	if gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
 		gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
 	button.disabled = false
+	end_button.disabled = true
 
 func _on_tbw_loaded() -> void:
 	gamemode_list = []

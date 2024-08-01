@@ -156,7 +156,8 @@ var controlled_cam_pos := Vector3(0, 50, 0)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta : float) -> void:
 	if _camera_mode == CameraMode.CONTROLLED:
-		target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
+		if target != null:
+			target.global_position = lerp(target.global_position, controlled_cam_pos, 0.1)
 		
 		if Input.is_action_just_pressed("forward") || Input.is_action_just_pressed("back"):
 			controlled_cam_delay.z = 0
@@ -335,6 +336,47 @@ func play_podium_animation(focus_player_id : int) -> void:
 		look_at(Vector3(focus_player.global_position.x, focus_player.global_position.y + 1, focus_player.global_position.z))
 		await get_tree().create_timer(8).timeout
 		focus_player.animator["parameters/BlendOutroPose/blend_amount"] = 0
+	fov = 55
+	set_camera_mode(CameraMode.FREE)
+	locked = false
+
+@rpc("any_peer", "call_local", "reliable")
+func play_preview_animation(time : float = 10) -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
+	
+	var points : Array[CameraPreviewPoint] = []
+	# get points
+	for c : Node in Global.get_world().get_children():
+		if c is CameraPreviewPoint:
+			points.append(c as CameraPreviewPoint)
+	
+	# show transition
+	UIHandler.fade_black_transition(1)
+	# wait for full black
+	await get_tree().create_timer(0.5).timeout
+	
+	if points.size() > 0:
+		set_camera_mode(CameraMode.FREE)
+		locked = true
+		fov = 35
+		# show spots
+		for i in range(3):
+			var point : CameraPreviewPoint = points.pick_random()
+			# don't reuse if possible
+			if points.size() - 1 > 0:
+				points.erase(point)
+			var tween : Tween = get_tree().create_tween().set_parallel(true)
+			tween.tween_method(set_global_position, point.global_position, point.global_position + (Vector3.UP * 2), time/3)
+			tween.tween_method(set_global_rotation, point.global_rotation, point.global_rotation + Vector3(0, PI/16, 0), time/3)
+			# time - 1 to account for waiting for intro and 3 changes
+			await get_tree().create_timer((time - 2)/3).timeout
+			UIHandler.fade_black_transition(1)
+			# wait for full black
+			await get_tree().create_timer(0.5).timeout
+	
+	# reset cam
 	fov = 55
 	set_camera_mode(CameraMode.FREE)
 	locked = false

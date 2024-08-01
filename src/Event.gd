@@ -26,6 +26,7 @@ enum EventType {
 	BALANCE_TEAMS,
 	CLEAR_LEADERBOARD,
 	SHOW_PODIUM,
+	SHOW_WORLD_PREVIEW,
 	END_ACTIVE_GAMEMODE
 }
 
@@ -73,21 +74,29 @@ func start() -> int:
 				if gamemode.running:
 					gamemode.end([])
 		EventType.SHOW_PODIUM:
-			# arg 0: player 1 id
-			var players : Array = Global.get_world().rigidplayer_list
-			for player : RigidPlayer in players:
-				if player.name == str(args[0]):
-					player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
-					player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(0, 350, 0))
-					# show animation
-					var camera : Camera = get_viewport().get_camera_3d()
-					if camera is Camera:
-						camera.play_podium_animation.rpc(str(args[0]).to_int())
-						UIHandler.show_alert.rpc(str(player.display_name, " wins!"), 8, false, UIHandler.alert_colour_gold)
-					
-					# show podium for 8s
-					await get_tree().create_timer(8).timeout
-					player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
+			if args.size() > 0:
+				# arg 0: player 1 id
+				var players : Array = Global.get_world().rigidplayer_list
+				for player : RigidPlayer in players:
+					if player.name == str(args[0]):
+						player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
+						player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(0, 350, 0))
+						# show animation
+						var camera : Camera = get_viewport().get_camera_3d()
+						if camera is Camera:
+							camera.play_podium_animation.rpc(str(args[0]).to_int())
+							UIHandler.show_alert.rpc(str(player.display_name, " wins!"), 8, false, UIHandler.alert_colour_gold)
+						
+						# show podium for 8s
+						await get_tree().create_timer(8).timeout
+						player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
+		EventType.SHOW_WORLD_PREVIEW:
+			# show animation
+			var camera : Camera = get_viewport().get_camera_3d()
+			if camera is Camera:
+				camera.play_preview_animation.rpc()
+				# wait for animation to finish before running next events
+				await get_tree().create_timer(10).timeout
 		_:
 			printerr("Failed to run event because the event type is not valid.")
 	

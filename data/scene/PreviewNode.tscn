@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cb1sikepc8br0"]
+[gd_scene load_steps=9 format=3 uid="uid://cb1sikepc8br0"]
 
 [ext_resource type="Material" uid="uid://cxc8732wn77sj" path="res://data/materials/editor_placement_material.tres" id="1_jh7ek"]
+[ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_0rvj5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_10uf0"]
 
@@ -73,6 +74,12 @@ radius = 0.25
 mesh = SubResource("ArrayMesh_4sx2j")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("1_jh7ek")
+
+[node name="Sprite3D" type="Sprite3D" parent="Cube"]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 2.08165e-12, 0.01, -0.7)
+pixel_size = 0.003
+alpha_cut = 1
+texture = ExtResource("2_0rvj5")
 
 [node name="ObjPreview" type="MeshInstance3D" parent="."]
 visible = false

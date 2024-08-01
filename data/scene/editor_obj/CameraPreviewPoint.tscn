@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bjhwg6c4kxm5n"]
+
+[ext_resource type="Script" path="res://src/CameraPreviewPoint.gd" id="1_k8gqa"]
+[ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_vsu3r"]
+[ext_resource type="FontFile" uid="uid://crmv21pdqwcyf" path="res://data/font/cd12x6.ttf" id="3_4dyrq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lopqb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oqs4l"]
+transparency = 1
+depth_draw_mode = 1
+shading_mode = 0
+albedo_color = Color(0.701961, 0.345098, 0.694118, 0.380392)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yyi4s"]
+material = SubResource("StandardMaterial3D_oqs4l")
+radial_segments = 16
+rings = 8
+
+[node name="CameraPreviewPoint" type="Node3D"]
+script = ExtResource("1_k8gqa")
+tbw_object_type = "obj_camera_preview_point"
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_lopqb")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_yyi4s")
+
+[node name="Label3D" type="Label3D" parent="Mesh"]
+billboard = 1
+alpha_cut = 1
+text = "Camera
+Preview Point"
+font = ExtResource("3_4dyrq")
+
+[node name="Sprite3D" type="Sprite3D" parent="Mesh"]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 2.08165e-12, 0.01, -0.7)
+pixel_size = 0.003
+alpha_cut = 1
+texture = ExtResource("2_vsu3r")

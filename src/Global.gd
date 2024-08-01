@@ -180,13 +180,48 @@ func play_kill_sound() -> void:
 	audio.play()
 	audio.connect("finished", audio.queue_free)
 
-# Get an array of all the names of TBW files the user has made.
+# Get an array of all the names of TBW files the user has made, with extension.
 func get_user_tbw_names() -> Array:
 	var dir : DirAccess = DirAccess.open("user://world")
 	if dir:
 		return dir.get_files()
 	else:
 		return []
+
+func get_internal_tbw_names() -> Array:
+	var dir : DirAccess = DirAccess.open("res://data/tbw")
+	if dir:
+		return dir.get_files()
+	else:
+		return []
+
+func get_tbw_image(file_name : String) -> Image:
+	var lines := get_tbw_lines(file_name)
+	var image_base64 : String = ""
+	for line : String in lines:
+		if line.begins_with("image ; "):
+			image_base64 = line.split(" ; ")[1]
+	if image_base64 != "":
+		var image : Image = Image.new()
+		image.load_jpg_from_buffer(Marshalls.base64_to_raw(image_base64))
+		return image
+	return null
+
+func get_tbw_lines(file_name : String) -> Array:
+	var load_file : FileAccess = null
+	load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
+	# if file does not exist, check internal
+	if load_file == null:
+		# check internal
+		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+	if load_file != null:
+		# load building
+		var lines := []
+		while not load_file.eof_reached():
+			var line := load_file.get_line()
+			lines.append(str(line))
+		return lines
+	return []
 
 # gets children recursively
 func get_all_children(in_what : Node) -> Array:

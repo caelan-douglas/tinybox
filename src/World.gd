@@ -100,6 +100,12 @@ func save_tbw(world_name : String) -> bool:
 		UIHandler.show_alert("Please wait for the world to load before saving it!", 5, false, UIHandler.alert_colour_error)
 		return false
 	
+	for map : String in Global.get_internal_tbw_names():
+		var internal_name : String = map.split(".")[0]
+		if internal_name == world_name:
+			UIHandler.show_alert(str("That world name (", world_name, ") is\nalready used by a built-in map! Please pick another."), 5, false, UIHandler.alert_colour_error)
+			return false
+	
 	var dir : DirAccess = DirAccess.open("user://world")
 	if !dir:
 		DirAccess.make_dir_absolute("user://world")
@@ -118,44 +124,45 @@ func save_tbw(world_name : String) -> bool:
 		print("An error occurred when trying to access the path.")
 	var save_name : String = str(world_name)
 	
-	# get frame image and save it
+	var img : Image = null
+	# get frame image and save it as raw->base64 on first line
 	# hide everything
 	if get_current_map() is Editor:
 		# only hide editor ui
 		get_tree().current_scene.get_node("EditorCanvas").visible = false
+		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
+		var editor : Editor = get_current_map()
+		editor.select_area.visible = false
 		# wait 1 frame so we can get screenshot
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var img := get_viewport().get_texture().get_image()
+		img = get_viewport().get_texture().get_image()
 		img.shrink_x2()
-		var scrdir := DirAccess.open("user://world_scr")
-		if !scrdir:
-			DirAccess.make_dir_absolute("user://world_scr")
-		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
-		# wait 1 frame
-		await get_tree().process_frame
 		get_tree().current_scene.get_node("EditorCanvas").visible = true
+		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
+		editor.select_area.visible = true
 	else:
 		Global.get_player().visible = false
 		get_tree().current_scene.get_node("GameCanvas").visible = false
+		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
 		# wait a bit so we can get screenshot
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var img := get_viewport().get_texture().get_image()
+		img = get_viewport().get_texture().get_image()
 		img.shrink_x2()
-		var scrdir := DirAccess.open("user://world_scr")
-		if !scrdir:
-			DirAccess.make_dir_absolute("user://world_scr")
-		img.save_jpg(str("user://world_scr/", save_name, ".jpg"))
 		# show everything again
-		# wait 1 frame
-		await get_tree().process_frame
 		Global.get_player().visible = true
 		get_tree().current_scene.get_node("GameCanvas").visible = true
+		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
 	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
 	
 	# Create tbw file.
 	var file := FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
+	# Save image first
+	file.store_line("[tbw]")
+	# store image data as base64 inside file
+	file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
+	file.store_line("[objects]")
 	# Save objects before bricks
 	for obj in get_children():
 		if obj != null:
@@ -198,26 +205,15 @@ func save_tbw(world_name : String) -> bool:
 	file.close()
 	return true
 
-func load_tbw(file_name := "test", switching := false, reset_player_and_cameras := true) -> void:
+func load_tbw(file_name : String, switching := false, reset_player_and_cameras := true) -> void:
 	print("Attempting to load ", file_name, ".tbw")
-	
 	# prevent loading multiple files at once
 	if tbw_loading:
 		await tbw_loaded
 		await get_tree().create_timer(0.3).timeout
-	
-	var load_file : FileAccess = null
-	load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
-	# if file does not exist, check internal
-	if load_file == null:
-		# check internal
-		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
-	if load_file != null:
-		# load building
-		var lines := []
-		while not load_file.eof_reached():
-			var line := load_file.get_line()
-			lines.append(str(line))
+	# get lines of file
+	var lines : Array = Global.get_tbw_lines(file_name)
+	if lines.size() > 0:
 		# if we are server
 		if multiplayer.is_server():
 			# switching from pause menu, show "map switching" alert to users
@@ -358,12 +354,13 @@ func load_default_gamemodes() -> void:
 	dm.create("Deathmatch",\
 	# Start events
 	[\
+	["SHOW_WORLD_PREVIEW", []],\
 	["CLEAR_LEADERBOARD", []],\
 	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
 	],\
 	# Watchers
 	[\
-	["PLAYER_KILLS_EXCEEDS", [15], [\
+	["PLAYER_PROPERTY_EXCEEDS", ["kills", 15], [\
 		["CLEAR_LEADERBOARD", []],\
 		["SHOW_PODIUM", []],\
 		["MOVE_ALL_PLAYERS_TO_SPAWN", []],\
@@ -379,7 +376,9 @@ func load_default_gamemodes() -> void:
 	tdm.create("Team Deathmatch",\
 	# Start events
 	[\
+	["SHOW_WORLD_PREVIEW", []],\
 	["CLEAR_LEADERBOARD", []],\
+	["BALANCE_TEAMS", []],\
 	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
 	],\
 	# Watchers
@@ -553,14 +552,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 var first_brick_pos : Vector3 = Vector3.ZERO
 func _pos_sort(a : Node3D, b : Node3D) -> bool:
 	return a.global_position.distance_to(first_brick_pos) < b.global_position.distance_to(first_brick_pos)
-
-func get_tbw_image(tbw_name : String) -> Image:
-	# load image
-	var scrdir := DirAccess.open("user://world_scr")
-	if scrdir:
-		var image := Image.load_from_file(str("user://world_scr/", tbw_name, ".jpg"))
-		return image
-	return null
 
 # Returns the loaded world's gamemodes.
 func get_tbw_gamemodes() -> Array[Gamemode]:

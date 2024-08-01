@@ -30,6 +30,7 @@ signal deselected
 var hovered_editable_object : Node = null
 var can_select_object : bool = true
 var selected_item_properties : Dictionary = {}
+var test_mode : bool = false
 
 func _ready() -> void:
 	super()
@@ -248,34 +249,25 @@ func disable_player() -> int:
 	while player == null:
 		await get_tree().process_frame
 		player = Global.get_player()
-	player.teleport(Vector3(0, -1000, 0))
-	player.change_state(RigidPlayer.DUMMY)
-	player.locked = true
-	player.invulnerable = true
-	player.visible = false
-	player.get_tool_inventory().delete_all_tools()
-	player.get_tool_inventory().set_disabled(true)
+	player.despawn()
+	await get_tree().process_frame
 	return 0
 
+const PLAYER : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
 # show player and game tools.
 func enable_player() -> int:
-	var player : RigidPlayer = Global.get_player()
-	while player == null:
-		await get_tree().process_frame
-		player = Global.get_player()
-	player.go_to_spawn()
+	var player : RigidPlayer = PLAYER.instantiate()
+	player.name = str(1)
+	Global.get_world().add_child(player, true)
 	# grace period for invincibility
 	await get_tree().create_timer(0.15).timeout
 	player.change_state(RigidPlayer.IDLE)
-	player.locked = false
-	player.invulnerable = false
-	player.visible = true
-	player.get_tool_inventory().give_all_tools()
-	player.get_tool_inventory().set_disabled(false)
+	await get_tree().process_frame
 	return 0
 
 var test_mode_world_name : String = ""
 func enter_test_mode(world_name : String) -> void:
+	test_mode = true
 	# save in case player makes any changes / destroys things in testing
 	var ok : Variant = await Global.get_world().save_tbw(str(world_name))
 	if ok == false:
@@ -291,16 +283,12 @@ func enter_test_mode(world_name : String) -> void:
 	editor_canvas.visible = false
 	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
 	game_canvas.visible = true
-	var camera : Camera3D = get_viewport().get_camera_3d()
-	var player : RigidPlayer = Global.get_player()
-	if camera is Camera:
-		camera.set_camera_mode(Camera.CameraMode.FREE)
-		camera.set_target(player.target)
 	game_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	UIHandler.show_alert("Changes you make in testing mode will not be saved.\nPause to return to the editor.", 10)
 
 func exit_test_mode() -> void:
+	test_mode = false
 	# don't reset player and cameras
 	Global.get_world().load_tbw(str(test_mode_world_name), false, false)
 	
@@ -315,6 +303,8 @@ func exit_test_mode() -> void:
 	if camera is Camera:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+		# reset fov in case we died
+		camera.fov = 55
 	editor_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

@@ -32,18 +32,15 @@ func set_material(new : Brick.BrickMaterial) -> void:
 	super(new)
 
 	match(new):
-		# Metal
-		BrickMaterial.METAL:
-			target_speed = 46
 		# Plastic
 		BrickMaterial.PLASTIC:
-			target_speed = 36
+			target_speed = 54
 		# Rubber
 		BrickMaterial.RUBBER:
-			target_speed = 44
-		# Wood, Charred Wood
+			target_speed = 66
+		# Wood, Charred Wood, Metalw
 		_:
-			target_speed = 40
+			target_speed = 60
 
 @rpc("any_peer", "call_local")
 func set_parent_seat(seat_as_path : NodePath) -> void:
@@ -87,7 +84,7 @@ func _physics_process(delta : float) -> void:
 	var to_velocity : Vector3 = transform.basis.z * speed * target_speed * straight_mult
 	
 	if to_velocity.length() > angular_velocity.length():
-		angular_velocity = lerp(angular_velocity, to_velocity, 0.025)
+		angular_velocity = lerp(angular_velocity, to_velocity, 0.015)
 	# faster decel
 	elif angular_velocity.length() != 0:
 		angular_velocity = lerp(angular_velocity, to_velocity, 1/angular_velocity.length() * 0.5)

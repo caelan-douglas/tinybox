@@ -36,6 +36,8 @@ extends Node
 	"obj_sign": load("res://data/scene/editor_obj/Sign.tscn"),
 	"obj_spawnpoint": load("res://data/scene/editor_obj/SpawnPoint.tscn"),
 	"obj_dining_table": load("res://data/scene/editor_obj/DiningTable.tscn"),
+	# UTILITY
+	"obj_camera_preview_point": load("res://data/scene/editor_obj/CameraPreviewPoint.tscn"),
 	# TRACK PIECES
 	"obj_track_straight": load("res://data/scene/editor_obj/track/TrackStraight.tscn"),
 	"obj_track_slope": load("res://data/scene/editor_obj/track/TrackSlope.tscn"),

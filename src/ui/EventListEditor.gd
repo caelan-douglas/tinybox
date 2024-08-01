@@ -120,7 +120,8 @@ func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer
 		Event.EventType.BALANCE_TEAMS,\
 		Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN,\
 		Event.EventType.END_ACTIVE_GAMEMODE,\
-		Event.EventType.SHOW_PODIUM:
+		Event.EventType.SHOW_PODIUM,\
+		Event.EventType.SHOW_WORLD_PREVIEW:
 			# get text value of enum from int, ie 2 -> "BALANCE_TEAMS"
 			_update_event_list(event_ui, [Event.EventType.keys()[event_type], []])
 		Event.EventType.TELEPORT_ALL_PLAYERS:
@@ -137,6 +138,24 @@ func _set_list_watcher_type(watcher_type : Watcher.WatcherType, watcher_ui : Con
 	for c : Control in inner_hbox.get_children():
 		c.queue_free()
 	match (watcher_type):
+		Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
+		Watcher.WatcherType.PLAYER_PROPERTY_FALLS_BELOW:
+			_update_event_list(watcher_ui, [Watcher.WatcherType.keys()[watcher_type], ["kills", 0]])
+			# create options for property name
+			var prop_chooser : OptionButton = OptionButton.new()
+			prop_chooser.add_item("kills")
+			prop_chooser.add_item("deaths")
+			prop_chooser.add_item("height")
+			prop_chooser.add_item("health")
+			prop_chooser.add_item("velocity")
+			inner_hbox.add_child(prop_chooser)
+			# create adjuster for property value
+			var adjuster_i : Adjuster = adjuster.instantiate()
+			inner_hbox.add_child(adjuster_i)
+			# connect the resulting value from value changed to the args part of the function using a lambda
+			#                                                                               > watcher    type                                       arg 1 prop   arg 2 val   end events
+			adjuster_i.value_changed.connect(func(new_val : int) -> void: _update_event_list(watcher_ui, [Watcher.WatcherType.keys()[watcher_type], [prop_chooser.get_item_text(prop_chooser.selected), new_val], watcher_end_event_list.event_list]))
+			prop_chooser.item_selected.connect(func(new_prop_name : String) -> void: _update_event_list(watcher_ui, [Watcher.WatcherType.keys()[watcher_type], [prop_chooser.get_item_text(prop_chooser.selected), adjuster_i.val], watcher_end_event_list.event_list]))
 		_:
 			# set default val
 			# get text value of enum from int, ie 2 -> "PLAYER_CUSTOM_VARIABLE_EXCEEDS"
