@@ -186,9 +186,11 @@ func set_property(property : StringName, value : Variant) -> void:
 				# make new shape to avoid changing all of them
 				collider.shape = collider.shape.duplicate()
 				joint_collider.shape = joint_collider.shape.duplicate()
+				cam_collider.shape = cam_collider.shape.duplicate()
 				if collider.shape is BoxShape3D:
 					collider.shape.size = scale_new
 					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
+					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
 					resize_mesh(scale_new)
 				elif collider.shape is CylinderShape3D:
@@ -200,8 +202,10 @@ func set_property(property : StringName, value : Variant) -> void:
 					collider.shape.height = (scale_new).x
 					collider.shape.radius = (scale_new).y * 0.5
 					# different scale arrangement for model
-					model_mesh.scale = Vector3(scale_new.z, scale_new.x, scale_new.y)
+					model_mesh.scale = Vector3(scale_new.y, scale_new.x, scale_new.y)
 					joint_collider.shape.size = Vector3(scale_new.x, scale_new.x, scale_new.x) + Vector3(0.3, 0.3, 0.3)
+					cam_collider.shape.height = (scale_new).x + 0.4
+					cam_collider.shape.radius = ((scale_new).y * 0.5) + 0.2
 	else:
 		set(property, value)
 
@@ -573,12 +577,12 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 		if body.group != self.group:
 			# don't unglue bricks bigger than ourselves
 			if mass_mult > body.mass_mult:
-				total_velocity += mass
+				total_velocity *= (mass * 0.1)
 				if total_velocity > 24:
 					body.set_glued(false, true, mass_mult)
 				# Unjoin this brick from its group if it is hit too hard.
 				if total_velocity > body.unjoin_velocity:
-					var impact_region : float = total_velocity * 0.04
+					var impact_region : float = mass_mult * 0.5
 					impact_region = clamp(impact_region, 0, 12)
 					if brick_groups.groups.has(str(body.group)):
 						for brick : Variant in brick_groups.groups[str(body.group)]:
@@ -652,7 +656,7 @@ func build() -> void:
 		if m_3d["collider"].owner is Brick:
 			var m_3d_normal : Vector3 = m_3d["normal"] as Vector3
 			# we can get normal from the camera's mouse collision ray
-			snapped_pos = m_3d["collider"].owner.global_position + m_3d_normal
+			snapped_pos = (m_3d["collider"].owner.global_position + m_3d_normal).round()
 	# offset Y pos from tool's offset value
 	if tool_from != null:
 		snapped_pos.y += tool_from.build_offset_y
