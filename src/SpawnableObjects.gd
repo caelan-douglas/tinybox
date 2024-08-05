@@ -62,7 +62,6 @@ extends Node
 	"brick": load("res://data/scene/brick/Brick.tscn"),
 	"brick_half": load("res://data/scene/brick/HalfBrick.tscn"),
 	"brick_cylinder": load("res://data/scene/brick/CylinderBrick.tscn"),
-	"brick_cylinder_large": load("res://data/scene/brick/LargeCylinderBrick.tscn"),
 	"brick_motor_seat": load("res://data/scene/brick/MotorSeat.tscn"),
 	"brick_button": load("res://data/scene/brick/ButtonBrick.tscn"),
 	"brick_lamp": load("res://data/scene/brick/LampBrick.tscn"),

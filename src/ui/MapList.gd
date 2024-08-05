@@ -23,14 +23,15 @@ func add_map(file_name : String) -> void:
 		var tex : ImageTexture = ImageTexture.create_from_image(image as Image)
 		add_icon_item(tex, file_name)
 	else:
-		add_item(file_name)
+		image = load("res://data/textures/tbw_placeholder.jpg")
+		var tex : ImageTexture = ImageTexture.create_from_image(image as Image)
+		add_icon_item(tex, file_name)
 
 func _ready() -> void:
 	# add built-in worlds
 	add_separator("Built-in worlds")
 	add_map("Frozen Field")
 	add_map("Steep Swamp")
-	add_map("Dining Room")
 	# add user worlds to list
 	add_separator("Your worlds")
 	for map : String in Global.get_user_tbw_names():

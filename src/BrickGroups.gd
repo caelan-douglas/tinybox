@@ -71,7 +71,6 @@ func check_world_groups(override : bool = false) -> void:
 									smaller_group_name = b.group
 								
 								# for clearing later
-								var group_to_be_cleared : String = smaller_group_name
 								for smaller_group_brick : Brick in groups[smaller_group_name]:
 									# join to larger group
 									set_brick_group(smaller_group_brick, larger_group_name)

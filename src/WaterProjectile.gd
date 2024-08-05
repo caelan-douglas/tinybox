@@ -58,8 +58,12 @@ func spawn_projectile(auth : int, shot_speed := 30) -> void:
 			global_position = player_from.seat_occupying.global_position
 			linear_velocity = direction
 	else:
+		var addl_power : int = 0
+		# more power when sliding
+		if player_from._state == RigidPlayer.SLIDE || player_from._state == RigidPlayer.SLIDE_BACK:
+			addl_power = 14
 		# propel player
 		player_from.external_propulsion = true
-		player_from.apply_force(Vector3((direction.x * 35), (35), (direction.z * 35)))
+		player_from.apply_force(Vector3((direction.x * (35 + addl_power)), (35), (direction.z * (35 + addl_power))))
 		# set own velocity
 		linear_velocity = -direction * shot_speed

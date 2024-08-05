@@ -3,22 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="1_8xvhs"]
 [ext_resource type="Texture2D" uid="uid://btvbc36o37put" path="res://data/textures/coffee_tex.png" id="2_7refn"]
 
-[sub_resource type="Animation" id="Animation_pshl0"]
-resource_name = "pulse"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 1.2, 0), Vector3(0, 0.8, 0), Vector3(0, 1.2, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_4onwx"]
 length = 0.001
 tracks/0/type = "value"
@@ -32,6 +16,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_pshl0"]
+resource_name = "pulse"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(2.08165e-12, 0.7, 2.08165e-12), Vector3(2.08165e-12, 0.3, 2.08165e-12), Vector3(2.08165e-12, 0.7, 2.08165e-12)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_halfk"]
@@ -67,5 +67,5 @@ libraries = {
 autoplay = "pulse"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0305313, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.469469, 0)
 mesh = SubResource("QuadMesh_yrmtl")

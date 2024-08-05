@@ -24,6 +24,18 @@ var attached_motors := []
 # Vehicle weight determined by weight of all bricks combined.
 var vehicle_weight : float = 0
 @onready var sit_area : Area3D = $SitArea
+@onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
+
+# Set a custom property
+func set_property(property : StringName, value : Variant) -> void:
+	if property == "brick_scale":
+		if value is Vector3:
+			# scale up sit area for seats
+			var scale_new : Vector3 = (value as Vector3).round()
+			if scale_new != Vector3(1, 1, 1):
+				sit_collider.shape = sit_collider.shape.duplicate()
+				sit_collider.shape.size = scale_new + Vector3(0.1, 0.1, 0.1)
+	super(property, value)
 
 # Lights this brick on fire.
 @rpc("any_peer", "call_local")
@@ -109,7 +121,8 @@ func sit(player : RigidPlayer) -> void:
 				b = b as Brick
 				vehicle_weight += b.mass
 				if b is MotorBrick:
-					attached_motors.append(b)
+					if !attached_motors.has(b):
+						attached_motors.append(b)
 					# set the motorbricks parent seat to this one
 					b.set_parent_seat(self.get_path())
 	

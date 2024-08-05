@@ -87,9 +87,9 @@ func get_active_tool() -> EditorTool:
 			return t
 	return null
 
-func has_tool_by_name(name : String) -> EditorTool:
+func has_tool_by_name(t_name : String) -> EditorTool:
 	for t : EditorTool in get_tools():
-		if t.name == name:
+		if t.name == t_name:
 			return t
 	return null
 

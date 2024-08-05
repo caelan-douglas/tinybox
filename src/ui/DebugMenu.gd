@@ -56,12 +56,18 @@ func _physics_process(delta : float) -> void:
 		for b : Node in bricks:
 			if b is Brick:
 				brick_count += 1
-		debug_text.text = str("bricks in world: ", str(brick_count), "\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), "\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), "\nmaterial cache size: ", str(Global.graphics_cache.size()))
+		debug_text.text = str("bricks in world: ", str(brick_count),
+		"\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
+		"\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001),
+		"mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"\nmaterial cache size: ", str(Global.graphics_cache.size()), " / 256",
+		"\nmesh cache size: ", str(Global.mesh_cache.size()), " / 128")
 		var player : RigidPlayer = Global.get_player()
 		if player != null:
 			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), 
 			"\nPlayer position (global): ", round(player.global_position), 
-			"\nPlayer state: ", player.states_as_names[player._state], 
+			"\nPlayer state: ", player.states_as_names[player._state],
+			"\nPlayer friction: ", player.physics_material_override.friction,
 			"\nPlayer air from jump?: ", player.air_from_jump, 
 			"\nPlayer air duration: ", player.air_duration, 
 			"\nPlayer last hit by: ", player.last_hit_by_id,

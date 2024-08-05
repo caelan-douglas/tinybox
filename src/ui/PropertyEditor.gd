@@ -27,7 +27,19 @@ var editing_hovered : bool = false:
 	get:
 		return editing_hovered
 
+var copied_properties : Dictionary = {}
+
 @onready var editor_props_list : VBoxContainer = get_node("Menu")
+@onready var copy_button : Button = get_node("Copy")
+
+func _ready() -> void:
+	copy_button.connect("pressed", _on_copy_pressed)
+
+func _on_copy_pressed() -> void:
+	copied_properties = selected_item_properties
+	copy_button.text = JsonHandler.find_entry_in_file("ui/editor/copied")
+	await get_tree().create_timer(1).timeout
+	copy_button.text = JsonHandler.find_entry_in_file("ui/editor/copy_properties")
 
 # Lists an object's properties
 func list_object_properties(instance : Node, _properties_from_tool : Node) -> Dictionary:
@@ -48,6 +60,7 @@ func clear_list() -> void:
 	selected_item_properties = {}
 	for child : Node in editor_props_list.get_children():
 		child.queue_free()
+	copy_button.disabled = true
 
 # Relists the existing properties of an given tool. (ie, when one tool is
 # switched to another)
@@ -121,6 +134,7 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		
 	if entry != null:
 		editor_props_list.add_child(entry)
+	copy_button.disabled = false
 
 # Convert team index to team name for saving.
 func _update_object_property_team(new_value : Variant, prop_name : String) -> void:

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8fewbxafd5xt"]
+[gd_scene load_steps=4 format=3 uid="uid://b8fewbxafd5xt"]
 
 [ext_resource type="Script" path="res://src/ui/PropertyEditor.gd" id="1_lg4wx"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_ykjux"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="3_obx5f"]
 
 [node name="PropertyEditor" type="Control"]
 custom_minimum_size = Vector2(320, 400)
@@ -52,9 +53,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -154.0
-offset_top = -152.0
+offset_top = -131.0
 offset_right = 154.0
-offset_bottom = 178.0
+offset_bottom = 144.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -82,7 +83,6 @@ script = ExtResource("1_ykjux")
 json_text = "ui/editor/property_editor"
 
 [node name="Editing" type="Label" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -98,3 +98,20 @@ theme_override_constants/outline_size = 6
 text = "Editing hovered object:"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/editing_hovered"
+
+[node name="Copy" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -46.0
+offset_right = 160.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Copy properties to active tool"
+script = ExtResource("3_obx5f")
+json_text = "ui/editor/copy_properties"

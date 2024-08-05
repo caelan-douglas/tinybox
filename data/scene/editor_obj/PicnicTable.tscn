@@ -65,7 +65,6 @@ size = Vector3(105.3, 2, 46.5)
 size = Vector3(105.3, 2, 14)
 
 [node name="PicnicTable" type="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 script = ExtResource("1_uoyed")
 tbw_object_type = "obj_picnic_table"
 

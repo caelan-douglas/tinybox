@@ -25,6 +25,7 @@ var rigidplayer_list : Array = []
 
 var tbw_loading : bool = false
 
+
 func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 	var spawns : Array[Vector3] = []
 	for obj in get_children():
@@ -275,7 +276,6 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	if lines.size() > 100:
 		set_loading_canvas_visiblity.rpc(true)
 	
-	var current_step := "none"
 	var count : int = 0
 	# amount of lines to read in a frame
 	var max_proc := 32
@@ -433,13 +433,14 @@ func clear_bricks() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3) -> void:
 	if !multiplayer.is_server(): return
+	if Global.dedicated_server:
+		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
 	_server_load_building(lines, b_position)
 
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	
 	var building_group := []
-	var first_brick_pos := Vector3.ZERO
 	
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	if line_split_init.size() < 2:
@@ -507,10 +508,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var building_group_extras := []
 	# sort array by position
 	building_group.sort_custom(_pos_sort)
-	# first make all basic brick colliders disabled
-	for b : Brick in building_group:
-		b.joinable = false
-		b.model_mesh.visible = false
 	# now move all extra bricks (motorseat, motorbrick) to building_group_extras
 	for b : Brick in building_group:
 		if b is MotorBrick || b is MotorSeat:
@@ -523,8 +520,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	# 2. check neighbours
 	var count : int = 0
 	for b : Brick in building_group:
-		b.joinable = true
-		b.model_mesh.visible = true
 		b.check_joints()
 		if count == 1:
 			# recheck first brick in array on second brick check
@@ -538,8 +533,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	await get_tree().process_frame
 	count = 0
 	for b : Brick in building_group_extras:
-		b.joinable = true
-		b.model_mesh.visible = true
 		b.check_joints()
 		count += 1
 		b.sync_properties.rpc(b.properties_as_dict())

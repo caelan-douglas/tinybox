@@ -78,12 +78,16 @@
             "world_properties": "World properties",
             "property_editor": "Property Editor",
             "editing_hovered": "(Editing hovered object)",
-            "free_mouse": "Press R to free / capture mouse.\n(Or click outside this panel to\ncapture it again.)",
+            "free_mouse": "Press ESC to free your mouse.\nYou can click outside this panel\nto capture it again.",
             "water": "Water",
             "water_type": "Water type",
             "environment": "Environment",
             "background": "Background",
-            "item_chooser_title": "Select an item or object to assign to this slot."
+            "item_chooser_title": "Select an item or object to assign to this slot.",
+            "copy_properties": "Copy properties to active tool",
+            "copied": "Copied to tool!",
+            "options_button": "Options, Test, Gamemodes, Pause...",
+            "options_button_hide": "Hide Options menu"
         }
     },
     "tip": {
@@ -101,7 +105,7 @@
         "11": "Tip: You can jump to cancel a slide or roll.",
         "12": "Tip: Plastic is light and non-flammable. However, it falls apart very easily when hit by bouncyballs or other bricks.",
         "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles.",
-        "14": "Tip: If you're having trouble with your vehicles flipping over, try giving them a lower center of gravity with some metal bricks."
+        "14": "Tip: Larger bricks are better at destroying other objects."
     },
     "common": {
         "yes": "Yes",
@@ -145,7 +149,6 @@
         "brick": "Brick",
         "brick_half": "Half brick",
         "brick_cylinder": "Wheel",
-        "brick_cylinder_large": "Big wheel",
         "brick_motor_seat": "Motor seat",
         "brick_button": "Button",
         "brick_lamp": "Lamp",
@@ -180,10 +183,9 @@
             "bg_frozen_field": "Frozen Field",
             "bg_warp": "Warp",
             "bg_dining_room": "Dining Room",
-            "brick": "Regular (1 x 1 x 1) brick with no special features.",
-            "brick_half": "Half-sized ( 1 x 0.5 x 1 ) brick.",
-            "brick_cylinder": "Regular (1 x 1 x 1) motor. Spins when attached to bricks and controlled via a seat. Can be used as a wheel for vehicles.",
-            "brick_cylinder_large": "Big (1 x 3 x 3) motor. Spins when attached to bricks and controlled via a seat. Can be used as a wheel for vehicles.",
+            "brick": "Regular brick with no special features.",
+            "brick_half": "Half-sized brick.",
+            "brick_cylinder": "Regular motor. Spins when attached to bricks and controlled via a seat. Can be used as a wheel for vehicles.",
             "brick_motor_seat": "Controls any motors that are attached to this brick group when a player sits down in it.",
             "brick_button": "Button with customizable parameters.",
             "brick_lamp": "Lamp that provides light. Will shut off if displaced."

@@ -83,7 +83,7 @@ func _unhandled_input(event : InputEvent) -> void:
 				set_tool_active(!get_tool_active())
 
 func get_tool_active() -> bool:
-	if !is_multiplayer_authority(): false
+	if !is_multiplayer_authority(): return false
 	return active
 
 func set_tool_active(mode : bool, from_click : bool = false) -> void:

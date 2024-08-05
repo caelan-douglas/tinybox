@@ -104,6 +104,7 @@ func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color(
 		toast.set("theme_override_constants/outline_size", 6 * (font_size / 16))
 		toast.set("theme_override_colors/font_outline_color", Color("#00000062"))
 		toast.set("theme_override_font_sizes/font_size", font_size)
+		toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		
 		var alert_canvas : Node = get_tree().root.get_node("PersistentScene/AlertCanvas/Toasts")
 		# make sure that we haven't been disconnected

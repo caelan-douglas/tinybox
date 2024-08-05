@@ -18,6 +18,8 @@ extends CanvasLayer
 
 @onready var world_click : Button = $WorldClick
 @onready var world_name : LineEdit = $PauseMenu/TabContainer/Editor/SaveWorldName
+@onready var pause_menu : Control = $PauseMenu
+@onready var options_button : Button = $OptionsButton
 
 func _ready() -> void:
 	$PauseMenu/TabContainer/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
@@ -46,17 +48,18 @@ func _on_map_loaded() -> void:
 		
 		$EntryScreen/Menu/New.grab_focus()
 		
+		options_button.connect("pressed", toggle_pause_menu)
+		
 		# disable tools for entry screen
 		editor.editor_tool_inventory.set_disabled(true)
 
 func _on_test_world_pressed() -> void:
-	var world_name : String = $PauseMenu/TabContainer/Editor/SaveWorldName.text
-	if world_name == "":
+	if world_name.text == "":
 		UIHandler.show_alert("Please enter a world name before testing!", 4, false, UIHandler.alert_colour_error)
 	else:
 		var editor : Node3D = Global.get_world().get_current_map()
 		if editor is Editor:
-			editor.enter_test_mode(str(world_name))
+			editor.enter_test_mode(str(world_name.text))
 
 func _on_new_world_pressed() -> void:
 	var editor : Node3D = Global.get_world().get_current_map()
@@ -89,6 +92,15 @@ func _load_world(map_selector : OptionButton) -> void:
 	# set save field name to loaded world name
 	world_name.text = str(world_name_load.split(".")[0])
 
+func toggle_pause_menu() -> void:
+	# only do this in editor mode
+	if visible:
+		if pause_menu.visible:
+			# hide if visible
+			hide_pause_menu()
+		else:
+			show_pause_menu()
+
 func hide_pause_menu() -> void:
 	Global.is_paused = false
 	var editor : Node3D = Global.get_world().get_current_map()
@@ -97,6 +109,7 @@ func hide_pause_menu() -> void:
 	$PauseMenu.visible = false
 	#Global.get_player().locked = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button")
 
 func show_pause_menu() -> void:
 	Global.is_paused = true
@@ -106,13 +119,7 @@ func show_pause_menu() -> void:
 	$PauseMenu.visible = true
 	#Global.get_player().locked = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-func _process(delta : float) -> void:
-	if Input.is_action_just_pressed("pause") && visible:
-		if $PauseMenu.visible:
-			hide_pause_menu()
-		else:
-			show_pause_menu()
+	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button_hide")
 
 func _on_save_world_pressed() -> void:
 	if world_name.text == "":

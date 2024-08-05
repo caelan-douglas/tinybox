@@ -33,14 +33,23 @@ enum GraphicsPresets {
 
 # A cache of already painted materials that can be re-used. Keeps draw call counts down.
 var graphics_cache : Array[Material] = []
+# Cache of already made meshes to avoid re-making meshes for bricks.
+var mesh_cache : Array[Mesh] = []
 
 const GRAPHICS_CACHE_MAX = 256
+const MESH_CACHE_MAX = 128
 func add_to_graphics_cache(what : Material) -> void:
 	if graphics_cache.size() < GRAPHICS_CACHE_MAX:
 		graphics_cache.append(what)
 	else:
 		graphics_cache.remove_at(0)
 		graphics_cache.append(what)
+func add_to_mesh_cache(what : Mesh) -> void:
+	if mesh_cache.size() < MESH_CACHE_MAX:
+		mesh_cache.append(what)
+	else:
+		mesh_cache.remove_at(0)
+		mesh_cache.append(what)
 
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
@@ -62,16 +71,16 @@ var beep_fifths : AudioStream = preload("res://data/audio/beep/beep_fifths.ogg")
 func upload_shirt_texture() -> void:
 	var picker := FileDialog.new()
 	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	picker.access = FileDialog.ACCESS_FILESYSTEM
 	picker.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
 	get_viewport().add_child(picker)
 	picker.size = Vector2(500, 400)
 	picker.popup_centered()
 	picker.set_filters(["*.png, *.jpg, *.jpeg"])
 	var path : String = await picker.file_selected
-	print(path)
-	var file := load(path)
-	if file is CompressedTexture2D:
-		var img : Image = file.get_image()
+	var img : Image = Image.new()
+	img.load(path)
+	if img != null:
 		img.resize(128, 128)
 		var new_base64 : String = Marshalls.raw_to_base64(img.save_jpg_to_buffer())
 		if new_base64 != null:
@@ -252,7 +261,7 @@ func get_all_children(in_what : Node) -> Array:
 # returns the appropriate data type based on a tbw property name.
 func property_string_to_property(property_name : String, property : String) -> Variant:
 	match(property_name):
-		"global_position", "global_rotation", "scale":
+		"global_position", "global_rotation", "scale", "brick_scale":
 			return Global.string_to_vec3(property)
 		"_material", "_state":
 			return int(property)

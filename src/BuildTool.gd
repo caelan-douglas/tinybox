@@ -54,7 +54,6 @@ func _ready() -> void:
 	brick_types = [SpawnableObjects.objects["brick"], 
 	SpawnableObjects.objects["brick_half"], 
 	SpawnableObjects.objects["brick_cylinder"], 
-	SpawnableObjects.objects["brick_cylinder_large"], 
 	SpawnableObjects.objects["brick_motor_seat"],
 	SpawnableObjects.objects["brick_lamp"]]
 	# The materials of bricks this can use. Corresponds to the enums in
@@ -297,14 +296,12 @@ func _process(delta : float) -> void:
 			# we must check if the mouse's ray is not hitting anything
 			if m_3d:
 				# if it is hitting something
-				m_pos_3d = m_3d["position"] as Vector3
+				m_pos_3d = (m_3d["position"] as Vector3).ceil()
 				# load arrow visual
 				if spawned_load_arrow == null:
 					spawned_load_arrow = load_arrow.instantiate()
 					Global.get_world().add_child(spawned_load_arrow)
-				spawned_load_arrow.global_position = m_pos_3d
-				# avoid loading buildings in the ground
-				m_pos_3d.y += 0.5
+				spawned_load_arrow.global_position = lerp(spawned_load_arrow.global_position, m_pos_3d, 0.7)
 			if m_3d:
 				if Input.is_action_just_pressed("load_next_building") || just_entered_load_mode:
 					if !load_dir:

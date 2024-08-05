@@ -26,7 +26,6 @@ var item_offset := Vector3(0, 0, 0)
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor") 
 @onready var preview_node : Node3D = $PreviewNode
-@onready var preview_area : Area3D = $PreviewNode/Area
 @onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
 
 func _ready() -> void:
@@ -63,6 +62,13 @@ func set_tool_active(mode : bool, from_click : bool = false) -> void:
 # when the editor stops hovering over something
 func _on_editor_deselected() -> void:
 	if active:
+		# if there are copied properties, copy them over now
+		if property_editor.copied_properties.size() > 0:
+			# copy each property over, if the paste destination (our selected obj) has it
+			for property : String in property_editor.copied_properties.keys():
+				if selected_item_properties.has(property):
+					selected_item_properties[property] = property_editor.copied_properties[property]
+			property_editor.copied_properties = {}
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
 		# editing a new object, not a hovered one (show notif)
@@ -80,6 +86,9 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	var instance : Node3D = selected_item.instantiate()
 	selected_item_properties = property_editor.list_object_properties(instance, self)
 	property_editor.editing_hovered = false
+	# only bricks can have scale, reset if not a brick
+	if !item_name_internal.begins_with("brick") || selected_item_name_internal == "brick_motor_seat":
+		preview_node.scale = Vector3(1, 1, 1)
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
@@ -119,23 +128,43 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 	return null
 
 func _physics_process(delta : float) -> void:
+	var camera := get_viewport().get_camera_3d()
 	if preview_node != null:
-		preview_node.global_position = get_viewport().get_camera_3d().controlled_cam_pos
+		preview_node.global_position = camera.controlled_cam_pos
 		# rotation
-		if Input.is_action_just_pressed("editor_rotate_left"):
-			preview_node.rotate_y(deg_to_rad(-22.5))
+		if Input.is_action_just_pressed("editor_rotate_reset"):
+			preview_node.rotation = Vector3.ZERO
+		elif Input.is_action_just_pressed("editor_rotate_left"):
+			preview_node.rotate(Vector3.UP, deg_to_rad(22.5))
 		elif Input.is_action_just_pressed("editor_rotate_right"):
-			preview_node.rotate_y(deg_to_rad(22.5))
+			preview_node.rotate(Vector3.UP, deg_to_rad(-22.5))
+		elif Input.is_action_just_pressed("editor_rotate_up"):
+			preview_node.rotate(camera.basis.x.round(), deg_to_rad(-22.5))
+		elif Input.is_action_just_pressed("editor_rotate_down"):
+			preview_node.rotate(camera.basis.x.round(), deg_to_rad(22.5))
+		preview_node.rotation = Vector3(snapped(preview_node.rotation.x, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.y, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.z, deg_to_rad(22.5)) as float)
+		# scale
+		if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat":
+			if Input.is_action_just_pressed("editor_scale_up"):
+				# flip on vertical
+				var cam_basis := camera.basis.y.round()
+				cam_basis = Vector3(abs(cam_basis.x) as float, abs(cam_basis.y) as float, abs(cam_basis.z) as float)
+				preview_node.scale += cam_basis * 2
+			elif Input.is_action_just_pressed("editor_scale_down"):
+				var cam_basis := camera.basis.y.round()
+				cam_basis = Vector3(abs(cam_basis.x) as float, abs(cam_basis.y) as float, abs(cam_basis.z) as float)
+				preview_node.scale -= cam_basis * 2
+		preview_node.scale = preview_node.scale.clamp(Vector3(1, 1, 1), Vector3(31, 31, 31))
 	if active:
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
 			if Input.is_action_pressed("click"):
-				if preview_area != null:
+				if editor.select_area != null:
 					# if there is something where we are trying to place
 					var valid : bool = true
 					
 					# if it's trying to place underwater, that's fine
-					for body in preview_area.get_overlapping_areas():
+					for body in editor.select_area.get_overlapping_areas():
 						if body.owner is TBWObject:
 							if body.owner.tbw_object_type == "obj_water":
 								valid = true
@@ -147,17 +176,19 @@ func _physics_process(delta : float) -> void:
 							break
 					
 					# however if there are any overlapping bodies it's no longer valid
-					if preview_area.has_overlapping_bodies():
+					if editor.select_area.has_overlapping_bodies():
 						valid = false
 					
 					# place if valid
 					if valid && selected_item != null:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
-						inst.global_position = get_viewport().get_camera_3d().controlled_cam_pos + item_offset
+						inst.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 						inst.global_rotation = preview_node.global_rotation
-						if !(inst is Brick):
-							inst.scale = preview_node.scale
+						
+						inst.translate_object_local(item_offset)
+						if inst is Brick:
+							inst.set_property("brick_scale", preview_node.scale)
 						# rotate wheels because they have different rotation direction than
 						# facing direction
 						if inst is MotorBrick:
@@ -171,6 +202,6 @@ func _physics_process(delta : float) -> void:
 						$InvalidAudio.play()
 						# show alert that nothing is selected
 						if selected_item == null:
-							UIHandler.show_alert("Select something to place from the left.\n(Press R to free your mouse.)", 3, false, UIHandler.alert_colour_error)
+							UIHandler.show_alert("Select something to place from the left.\n(Press ESC to free your mouse.)", 3, false, UIHandler.alert_colour_error)
 						else:
 							UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)

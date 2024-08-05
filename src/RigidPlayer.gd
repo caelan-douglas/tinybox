@@ -253,12 +253,6 @@ func _server_receive_on_body_entered_from_client(path_to_body : String) -> void:
 func _on_body_entered(body : Node3D) -> void:
 	# run on host client
 	if is_multiplayer_authority():
-		# if we just dived, and hit something, set the animation to normal trip animation
-		# as dive uses the jump animation
-		if _state == DIVE && !(body is MotorSeat):
-			# on ground
-			if slide_detect.has_overlapping_bodies():
-				change_state(SLIDE)
 		# stepped on button
 		if body is ButtonBrick:
 			body.stepped.rpc(get_path())
@@ -274,7 +268,7 @@ func _on_body_entered(body : Node3D) -> void:
 					# take damage from metal bricks hitting player
 					if body is Brick:
 						if body._material == Brick.BrickMaterial.METAL:
-							set_health(get_health() - 1, CauseOfDeath.HIT_BY_BRICK)
+							set_health(get_health() - body.mass_mult as int, CauseOfDeath.HIT_BY_BRICK)
 					change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
 			if body is Brick:
 				if body.on_fire:
@@ -594,7 +588,7 @@ func update_name(new : String) -> void:
 
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
-func update_info(id : int = -1) -> void:
+func update_info() -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)
 	change_appearance()
@@ -828,6 +822,12 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					change_state(ROLL)
 				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 					change_state(ON_WALL)
+				# if we just dived, and hit something
+				for body in get_colliding_bodies():
+					if !(body is MotorSeat):
+						# on ground
+						if slide_detect.has_overlapping_bodies():
+							change_state(SLIDE)
 			ON_WALL:
 				# align with wall
 				if forward_ray.is_colliding():
@@ -897,7 +897,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
 				dir = dir.normalized()
-				apply_force(dir * 10, Vector3.ZERO)
+				apply_force(dir * 3, Vector3.ZERO)
 				# align to ground normal
 				if state.get_contact_count() > 0:
 					var ground_normal := state.get_contact_local_normal(0)
@@ -918,7 +918,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
 				dir = dir.normalized()
-				apply_force(dir * 10, Vector3.ZERO)
+				apply_force(dir * 3, Vector3.ZERO)
 				# align to ground normal
 				if state.get_contact_count() > 0:
 					var ground_normal := state.get_contact_local_normal(0)
@@ -1010,6 +1010,12 @@ func entered_seat(path_to_seat : String) -> void:
 	if can_enter_seat and (_state == IDLE || _state == AIR || _state == RUN || _state == DIVE || _state == SLIDE || _state == SLIDE_BACK || _state == SWIMMING || _state == SWIMMING_IDLE):
 		change_state(IN_SEAT)
 		seat_occupying = get_node(path_to_seat)
+		# DEBUG
+		if debug_menu.visible:
+			var wheel_list_formatted : String = ""
+			for wheel : Node in seat_occupying.attached_motors:
+				wheel_list_formatted += str(wheel.name, "\n")
+			UIHandler.show_toast(str("Vehicle information:\nVehicle weight:", seat_occupying.vehicle_weight, "\nVehicle wheels:", wheel_list_formatted), 20)
 		UIHandler.show_alert("Press [ Jump ] to stop driving!", 6)
 	# don't enter seat if in special state, tell seat that we could not enter
 	else:
@@ -1211,7 +1217,7 @@ func enter_state() -> void:
 			set_player_collider.call_deferred(true)
 			slide_time.start()
 			lock_rotation = true
-			physics_material_override.friction = 1
+			physics_material_override.friction = 0.5
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -1222,7 +1228,7 @@ func enter_state() -> void:
 			set_player_collider.call_deferred(true)
 			slide_time.start()
 			lock_rotation = true
-			physics_material_override.friction = 1
+			physics_material_override.friction = 0.5
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * 6)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)

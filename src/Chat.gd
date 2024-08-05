@@ -91,12 +91,12 @@ func _on_command_response(sender : String, text : String, timeout : int = 10) ->
 	
 	# cli mode doesnt time out
 	if !cli_mode:
-		get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry, Time.get_ticks_msec()))
+		get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry))
 	await get_tree().process_frame
 	# scroll to bottom
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
-func _on_entry_timeout(entry : Node, time : int) -> void:
+func _on_entry_timeout(entry : Node) -> void:
 	# don't hide entries if chat is open
 	if line_edit.has_focus():
 		return

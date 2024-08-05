@@ -258,6 +258,7 @@ const PLAYER : PackedScene = preload("res://data/scene/character/RigidPlayer.tsc
 func enable_player() -> int:
 	var player : RigidPlayer = PLAYER.instantiate()
 	player.name = str(1)
+	player.global_position = Vector3(0, 100, 0)
 	Global.get_world().add_child(player, true)
 	# grace period for invincibility
 	await get_tree().create_timer(0.15).timeout
@@ -333,8 +334,12 @@ func select_brick() -> Brick:
 var brick_selected : Brick = null
 func _process(delta : float) -> void:
 	# don't release / unrelease mouse when editing text
-	if Input.is_action_just_pressed("editor_release_mouse") && !Global.is_text_focused:
-		if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+	if Input.is_action_just_pressed("pause") && !Global.is_text_focused:
+		# if pause menu is shown hide that first
+		if editor_canvas.pause_menu.visible:
+			editor_canvas.hide_pause_menu()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		elif Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 			var focused : Control = get_viewport().gui_get_focus_owner()
 			# release focus of any property editor buttons
 			if focused != null:
@@ -351,7 +356,7 @@ func _process(delta : float) -> void:
 func _physics_process(delta : float) -> void:
 	if select_area != null:
 		select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
-	if Input.is_action_just_pressed("editor_delete"):
+	if Input.is_action_pressed("editor_delete"):
 		# Delete the hovered object
 		if select_area != null:
 			# bricks, decor objects

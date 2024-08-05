@@ -25,7 +25,7 @@ func set_colour(new : Color) -> void:
 		light.set("light_color", new)
 
 @rpc("call_local")
-func set_glued(new : bool, affect_others : bool = true) -> void:
-	super(new, affect_others)
+func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:
+	super(new, affect_others, addl_radius)
 	if light != null:
 		light.visible = false

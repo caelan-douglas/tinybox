@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cb1sikepc8br0"]
+[gd_scene load_steps=8 format=3 uid="uid://cb1sikepc8br0"]
 
 [ext_resource type="Material" uid="uid://cxc8732wn77sj" path="res://data/materials/editor_placement_material.tres" id="1_jh7ek"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_0rvj5"]
@@ -65,9 +65,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_4sew5")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_51elq"]
-radius = 0.25
-
 [node name="PreviewNode" type="Node3D"]
 
 [node name="Cube" type="MeshInstance3D" parent="."]
@@ -81,14 +78,14 @@ pixel_size = 0.003
 alpha_cut = 1
 texture = ExtResource("2_0rvj5")
 
+[node name="Sprite3D2" type="Sprite3D" parent="Cube"]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 8.74228e-08, 1, -1.06581e-14, 3.82137e-15, -1.06581e-14, -1, 2.08165e-12, 0.31, 0)
+modulate = Color(1, 1, 1, 0.505882)
+pixel_size = 0.003
+alpha_cut = 1
+texture = ExtResource("2_0rvj5")
+
 [node name="ObjPreview" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("ArrayMesh_lvrdo")
 skeleton = NodePath("")
-
-[node name="Area" type="Area3D" parent="."]
-collision_layer = 16
-collision_mask = 291
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area"]
-shape = SubResource("SphereShape3D_51elq")

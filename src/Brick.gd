@@ -35,7 +35,7 @@ enum BrickMaterial {
 	STATIC
 }
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "_material", "_colour"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -61,6 +61,7 @@ var on_fire : bool = false
 var charred : bool = false
 @export var glued : bool = true
 var has_static_neighbour : bool = false
+var brick_scale : Vector3 = Vector3(1, 1, 1)
 
 @onready var group : String = name
 @onready var world : World = Global.get_world()
@@ -91,6 +92,7 @@ var has_static_neighbour : bool = false
 
 @onready var joint_scn : PackedScene = preload("res://data/scene/brick/BrickJoint.tscn")
 @onready var joint_detector : Area3D = $"JointDetector"
+@onready var joint_collider : CollisionShape3D = $JointDetector/collider
 
 @onready var inactivity_timer : Timer = $InactivityTimer
 
@@ -116,12 +118,90 @@ var tool_from : Tool
 # is used in the build function.
 var just_spawned_from_tool : bool = true
 
+func resize_mesh(scale_new : Vector3) -> void:
+	var mesh_verticies : Array = model_mesh.mesh.surface_get_arrays(0)
+	var new_mesh := ArrayMesh.new()
+	var add_mesh_to_cache := true
+	# We have to make the mesh first to check it.
+	# scale mesh but keep bevels
+	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_verticies)
+	var mdt := MeshDataTool.new()
+	mdt.create_from_surface(new_mesh, 0)
+	var count : int = 0
+	# amount of verticies to read in a frame
+	var max_proc := 32
+	var cur_proc := 0
+	for i in range(mdt.get_vertex_count()):
+		cur_proc += 1
+		# wait a frame if we have read max lines for this frame
+		if cur_proc > max_proc:
+			await get_tree().process_frame
+			cur_proc = 0
+		var vertex := mdt.get_vertex(i)
+		# move, instead of scaling, beveled edges to correct points
+		if vertex.y > 0:
+			vertex.y += (scale_new.y - 1) * 0.5
+		if vertex.y < 0:
+			vertex.y -= (scale_new.y - 1) * 0.5
+		
+		if vertex.x > 0:
+			vertex.x += (scale_new.x - 1) * 0.5
+		if vertex.x < 0:
+			vertex.x -= (scale_new.x - 1) * 0.5
+		
+		if vertex.z > 0:
+			vertex.z += (scale_new.z - 1) * 0.5
+		if vertex.z < 0:
+			vertex.z -= (scale_new.z - 1) * 0.5
+		# Save the mesh change
+		mdt.set_vertex(i, vertex)
+	new_mesh.clear_surfaces()
+	mdt.commit_to_surface(new_mesh)
+	# mesh cache
+	for cached_mesh : Mesh in Global.mesh_cache:
+		if cached_mesh.surface_get_arrays(0) == new_mesh.surface_get_arrays(0):
+			new_mesh = cached_mesh
+			add_mesh_to_cache = false
+	if add_mesh_to_cache:
+		Global.add_to_mesh_cache(new_mesh)
+	model_mesh.mesh = new_mesh
+
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
 	if property == "_colour":
 		set_colour(value as Color)
 	elif property == "_material":
 		set_material(value as Brick.BrickMaterial)
+	elif property == "brick_scale":
+		if value is Vector3:
+			# bricks can only have integer as scales
+			var scale_new : Vector3 = (value as Vector3).round()
+			if scale_new != Vector3(1, 1, 1):
+				# set property for saving
+				brick_scale = scale_new
+				# set mass multiplication using length of 1, 1, 1 as base
+				# ex. 1, 1, 1 would be mass_mult 1
+				# 2, 2, 2 would be mass_mult 2
+				mass_mult = scale_new.length() / Vector3(1, 1, 1).length()
+				# make new shape to avoid changing all of them
+				collider.shape = collider.shape.duplicate()
+				joint_collider.shape = joint_collider.shape.duplicate()
+				if collider.shape is BoxShape3D:
+					collider.shape.size = scale_new
+					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
+					# Scaling mesh
+					resize_mesh(scale_new)
+				elif collider.shape is CylinderShape3D:
+					# can't have oddly shaped wheels
+					if scale_new.z > scale_new.y:
+						scale_new.y = scale_new.z
+					else:
+						scale_new.z = scale_new.y
+					collider.shape.height = (scale_new).x
+					collider.shape.radius = (scale_new).y * 0.5
+					# different scale arrangement for model
+					model_mesh.scale = Vector3(scale_new.z, scale_new.x, scale_new.y)
+					joint_collider.shape.size = Vector3(scale_new.x, scale_new.x, scale_new.x) + Vector3(0.3, 0.3, 0.3)
 	else:
 		set(property, value)
 
@@ -134,7 +214,7 @@ func set_material(new : BrickMaterial) -> void:
 		0:
 			_material = BrickMaterial.WOODEN
 			model_mesh.set_surface_override_material(0, wood_material)
-			mass = 10 * mass_mult
+			mass = 5 * mass_mult
 			unjoin_velocity = 30
 			
 			# set physics material properties for brick.
@@ -145,7 +225,7 @@ func set_material(new : BrickMaterial) -> void:
 		1:
 			_material = BrickMaterial.WOODEN_CHARRED
 			model_mesh.set_surface_override_material(0, wood_charred_material)
-			mass = 10 * mass_mult
+			mass = 5 * mass_mult
 			unjoin_velocity = 30
 			
 			# set physics material properties for brick.
@@ -156,7 +236,7 @@ func set_material(new : BrickMaterial) -> void:
 		2:
 			_material = BrickMaterial.METAL
 			model_mesh.set_surface_override_material(0, metal_material)
-			mass = 70 * mass_mult
+			mass = 10 * mass_mult
 			unjoin_velocity = 55
 			
 			# set physics material properties for brick.
@@ -167,7 +247,7 @@ func set_material(new : BrickMaterial) -> void:
 		3:
 			_material = BrickMaterial.PLASTIC
 			model_mesh.set_surface_override_material(0, plastic_material)
-			mass = 5 * mass_mult
+			mass = 3 * mass_mult
 			unjoin_velocity = 15
 			
 			# set physics material properties for brick.
@@ -178,7 +258,7 @@ func set_material(new : BrickMaterial) -> void:
 		4:
 			_material = BrickMaterial.RUBBER
 			model_mesh.set_surface_override_material(0, rubber_material)
-			mass = 30 * mass_mult
+			mass = 5 * mass_mult
 			unjoin_velocity = 35
 			
 			# set physics material properties for brick.
@@ -189,7 +269,7 @@ func set_material(new : BrickMaterial) -> void:
 		5:
 			_material = BrickMaterial.STATIC
 			model_mesh.set_surface_override_material(0, static_material)
-			mass = 99
+			mass = 999
 			unjoin_velocity = 9999
 			
 			# set physics material properties for brick.
@@ -251,7 +331,7 @@ func get_colour() -> Color:
 # Arg 2: Whether or not this brick being deglued will affect its group memebers.
 # Arg 3: Whether or not to ungroup this brick as well.
 @rpc("call_local")
-func set_glued(new : bool, affect_others : bool = true) -> void:
+func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:
 	if !is_multiplayer_authority(): return
 	# static brick material cannot be unglued
 	if _material == BrickMaterial.STATIC:
@@ -266,7 +346,7 @@ func set_glued(new : bool, affect_others : bool = true) -> void:
 					if b._material != BrickMaterial.STATIC:
 						if new == false:
 						# only deglue inside the deglue radius
-							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius:
+							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius + addl_radius:
 								b.glued = new
 								b.freeze = new
 								b.has_static_neighbour = false
@@ -372,7 +452,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
-	var explosion_force := randi_range(80, 200)
+	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 4)
 	if explosion_force > 160:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
@@ -491,17 +571,25 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 	# Bricks hit by other bricks within the same group will not displace.
 	if body is Brick:
 		if body.group != self.group:
-			# metal displaces other bricks more easily
-			if _material == BrickMaterial.METAL:
-				total_velocity += 18
-			if total_velocity > 24:
-				body.set_glued(false)
-			# Unjoin this brick from its group if it is hit too hard.
-			if total_velocity > body.unjoin_velocity:
-				body.unjoin()
-			# stepped on button
-			if body is ButtonBrick:
-				body.stepped.rpc(get_path())
+			# don't unglue bricks bigger than ourselves
+			if mass_mult > body.mass_mult:
+				total_velocity += mass
+				if total_velocity > 24:
+					body.set_glued(false, true, mass_mult)
+				# Unjoin this brick from its group if it is hit too hard.
+				if total_velocity > body.unjoin_velocity:
+					var impact_region : float = total_velocity * 0.04
+					impact_region = clamp(impact_region, 0, 12)
+					if brick_groups.groups.has(str(body.group)):
+						for brick : Variant in brick_groups.groups[str(body.group)]:
+							if brick != null:
+								if brick is Brick:
+									if brick.global_position.distance_to(body.global_position) < impact_region:
+										brick.unjoin()
+					body.unjoin()
+				# stepped on button
+				if body is ButtonBrick:
+					body.stepped.rpc(get_path())
 	# Play sounds
 	if total_velocity > 7:
 		if !(body is Brick) && !(self is MotorBrick) && (_state != States.BUILD) && (_state != States.DUMMY_BUILD):
@@ -646,12 +734,10 @@ func check_joints(set_group : String = "") -> void:
 			# don't join with self
 			if body is Brick && body != self:
 				found_brick = true
-				if body.joinable && _material != BrickMaterial.STATIC:
-					# Don't let wheels join with each other
-					if body is MotorBrick && self is MotorBrick:
-						pass
+				# Don't let things join to wheels (can prevent rotation)
+				if body.joinable && _material != BrickMaterial.STATIC && !(body is MotorBrick):
 					# Don't let wheels join with seats
-					elif (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
+					if (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
 						pass
 					else:
 						join(body.get_path(), set_group)
@@ -680,6 +766,9 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	# wheels have no z angular limit
 	if self is MotorBrick:
 		joint.set("angular_limit_z/enabled", false)
+	else:
+		# set position of joint to midpoint of two objects (unless it's a wheel)
+		joint.global_position = global_position.lerp(get_node(path_to_brick).global_position as Vector3, 0.5)
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
 

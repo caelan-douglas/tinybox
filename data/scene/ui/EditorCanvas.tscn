@@ -32,11 +32,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5nvuj")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_wv0h4")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_0rfp5")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_b8ase")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tfptg")
+button_mask = 3
 
 [node name="ToolList" type="HBoxContainer" parent="."]
 anchors_preset = 5
@@ -49,26 +51,41 @@ offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
+[node name="LeftPanel" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(360, 2.08165e-12)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 86.0
+offset_right = 376.0
+offset_bottom = -16.0
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="PropertyEditor" parent="LeftPanel" instance=ExtResource("2_1yhnn")]
+layout_mode = 2
+
+[node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="EntryScreen"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -270.0
-offset_top = -200.0
-offset_right = 270.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="EntryScreen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -100,10 +117,7 @@ layout_mode = 2
 
 [node name="DynamicLabel2" type="Label" parent="EntryScreen/Menu"]
 layout_mode = 2
-text = "Controls are always shown at
-the bottom.
-
-Choose to load an existing
+text = "Choose to load an existing
 world, or press \"New world\"
 to start with the default
 template."
@@ -128,24 +142,6 @@ layout_mode = 2
 [node name="New" type="Button" parent="EntryScreen/Menu"]
 layout_mode = 2
 text = "New world"
-
-[node name="LeftPanel" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(360, 2.08165e-12)
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 86.0
-offset_right = 376.0
-offset_bottom = -16.0
-grow_vertical = 2
-theme_override_constants/separation = 16
-
-[node name="PropertyEditor" parent="LeftPanel" instance=ExtResource("2_1yhnn")]
-layout_mode = 2
-
-[node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
-layout_mode = 2
-size_flags_vertical = 3
 
 [node name="PauseMenu" type="Control" parent="."]
 visible = false
@@ -433,23 +429,52 @@ script = ExtResource("6_aufvl")
 json_text = "Tinybox %version%"
 raw_format = true
 
-[node name="DynamicLabel2" type="Label" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -141.0
-offset_top = -24.0
-offset_right = 141.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Controls" type="RichTextLabel" parent="."]
+clip_contents = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -343.0
+offset_top = -49.0
+offset_right = -16.0
+offset_bottom = 49.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
+theme_override_constants/line_separation = 5
 theme_override_constants/outline_size = 6
-text = "[ ESC: Options ] [ Number row: Select tools ] [ WASD, Space, Alt/Opt: Move ] [ (Ctrl/Cmd) + Scroll: Change zoom ] [ Shift: Speed up ]
-Build tool: [ Click: Place ] [ Right click: Delete ] [ Q / E : Rotate ]"
-horizontal_alignment = 1
-script = ExtResource("6_aufvl")
+bbcode_enabled = true
+text = "[color=yellow]Editor Controls[/color]
+
+[ Esc ]					Free / capture mouse
+[ Number row ]		Select tools (1 - 6)
+[ Q / E ]				Rotate object ← / →
+[ R / F ] 				Rotate object ↑ / ↓
+						[color=#ffffff90](in facing direction)[/color]
+[ T / G ]				Scale object
+[ Ctrl/Cmd + R ]		Reset object rotation
+[ Click ]				Place object
+[ Right click ]			Delete object
+
+[ WASD ] 				Move
+[ Shift ]				Hold: Move faster
+[ Alt/Option ]			Descend
+[ Space ]				Ascend
+[ Ctrl/Cmd + Scroll ]	Zoom camera
+"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+tab_size = 7
+shortcut_keys_enabled = false
+
+[node name="OptionsButton" type="Button" parent="."]
+offset_left = 392.0
+offset_top = 86.0
+offset_right = 752.0
+offset_bottom = 116.0
+text = "Options, Test, Gamemodes, Pause..."
 
 [editable path="PauseMenu/TabContainer/World Properties/WaterHeightAdjuster"]

@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://dundtbux7bih0"
+path="res://.godot/imported/tbw_placeholder.jpg-f06ac2bac57775f5893462891b34d14e.image"
+
+[deps]
+
+source_file="res://data/textures/tbw_placeholder.jpg"
+dest_files=["res://.godot/imported/tbw_placeholder.jpg-f06ac2bac57775f5893462891b34d14e.image"]
+
+[params]
+

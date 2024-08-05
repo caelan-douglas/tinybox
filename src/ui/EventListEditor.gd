@@ -110,7 +110,6 @@ func add_watcher(watcher_type : Watcher.WatcherType, args : Array) -> void:
 	_set_list_watcher_type(watcher_type, vbox, list_editor)
 
 func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer) -> void:
-	var my_idx : int = event_ui.get_index()
 	var inner_hbox := event_ui.get_node("InnerHbox")
 	for c : Control in inner_hbox.get_children():
 		c.queue_free()
@@ -133,7 +132,6 @@ func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer
 
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
 func _set_list_watcher_type(watcher_type : Watcher.WatcherType, watcher_ui : Control, watcher_end_event_list : Control) -> void:
-	var my_idx : int = watcher_ui.get_index()
 	var inner_hbox := watcher_ui.get_node("OuterHbox/InnerHbox")
 	for c : Control in inner_hbox.get_children():
 		c.queue_free()
@@ -173,6 +171,6 @@ func _remove_event_list_item(event_ui : Control) -> void:
 	event_ui.queue_free()
 	emit_signal("event_list_changed", event_list)
 
-func _update_event_list(event_ui : Control, event : Array, remove := false) -> void:
+func _update_event_list(event_ui : Control, event : Array) -> void:
 	event_list[event_ui.get_index()] = event
 	emit_signal("event_list_changed", event_list)

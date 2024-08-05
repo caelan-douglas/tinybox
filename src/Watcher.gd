@@ -74,7 +74,7 @@ func _physics_process(delta : float) -> void:
 					if total_team_kills > str(args[0]).to_int():
 						end([team.name])
 
-func end(args : Array = []) -> void:
+func end(end_args : Array = []) -> void:
 	started = false
 	# run end events
 	for event : Array in end_events:
@@ -82,7 +82,7 @@ func end(args : Array = []) -> void:
 			# set to watcher end args for some event types
 			if Event.EventType.get(event[0]) == Event.EventType.SHOW_PODIUM:
 				# event[1] is args (2nd array)
-				event[1] = args
+				event[1] = end_args
 			# create and run event
 			var created_event : Event = Event.new(Event.EventType.get(event[0]) as int, event[1] as Array)
 			# for any events that have delays, like showing the podium or intro screen

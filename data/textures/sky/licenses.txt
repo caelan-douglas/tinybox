@@ -1,0 +1,5 @@
+Attributions for /data/textures/sky:
+
+	kloppenheim_03_puresky_4k.hdr:
+	by Greg Zaal and Jarod Guest; licensed under Creative Commons 0
+	https://polyhaven.com/a/kloppenheim_03_puresky
