@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene load_steps=12 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_o48rt"]
+[ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="2_ylpqp"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_yuqno"]
-[ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="5_6abn7"]
+[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="4_hqrcr"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="5_mmcxg"]
-[ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="6_m42ur"]
+[ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="6_j7jhb"]
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
 length = 0.001
@@ -25,22 +26,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MainMenu:modulate")
+tracks/1/path = NodePath("Attributions:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Attributions:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -65,22 +54,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MainMenu:modulate")
+tracks/1/path = NodePath("Attributions:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Attributions:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -110,300 +87,328 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="MainMenu" type="HBoxContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -332.0
-offset_top = -191.0
-offset_right = 332.0
-offset_bottom = 191.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 48
-
-[node name="LeftColumn" type="VBoxContainer" parent="MainMenu"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-
-[node name="Title" type="TextureRect" parent="MainMenu/LeftColumn"]
-layout_mode = 2
-texture = ExtResource("2_5iqxy")
-expand_mode = 5
-stretch_mode = 5
-
-[node name="DynamicLabel" type="Label" parent="MainMenu/LeftColumn/Title"]
-layout_mode = 1
-offset_left = 178.0
-offset_top = 63.0
-offset_right = 280.0
-offset_bottom = 79.0
-text = "beta"
-script = ExtResource("3_yuqno")
-json_text = "%version%"
-raw_format = true
-
-[node name="Control5" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Control6" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(2.08165e-12, 51)
-layout_mode = 2
-
-[node name="Settings" type="Button" parent="MainMenu/LeftColumn"]
-layout_mode = 2
-text = "Settings"
-script = ExtResource("2_o48rt")
-json_text = "ui/settings"
-
-[node name="Editor" type="Button" parent="MainMenu/LeftColumn"]
-self_modulate = Color(0, 1.2, 0.592, 1)
-layout_mode = 2
-text = "World editor"
-script = ExtResource("2_o48rt")
-json_text = "ui/world_editor"
-
-[node name="Tutorial" type="Button" parent="MainMenu/LeftColumn"]
-self_modulate = Color(0, 1.1, 1.5, 1)
-layout_mode = 2
-text = "Tutorial"
-script = ExtResource("2_o48rt")
-json_text = "ui/tutorial"
-
-[node name="Control3" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
-
-[node name="MultiplayerSettings" type="Panel" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-
-[node name="MultiplayerSettingsContainer" type="VBoxContainer" parent="MainMenu/LeftColumn/MultiplayerSettings"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 10.0
-offset_right = -15.0
-offset_bottom = -6.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label2" type="Label" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Multiplayer Preferences"
-script = ExtResource("3_yuqno")
-json_text = "ui/multiplayer_prefs"
-
-[node name="DisplayName" type="LineEdit" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
-layout_mode = 2
+[node name="DisplayName" type="LineEdit" parent="."]
+anchors_preset = -1
+anchor_left = 0.282
+anchor_top = 0.233
+anchor_right = 0.282
+anchor_bottom = 0.233
+offset_left = -138.4
+offset_top = -29.76
+offset_right = 138.6
+offset_bottom = 0.239993
 placeholder_text = "display name"
 max_length = 35
 caret_blink = true
 caret_blink_interval = 0.5
 
-[node name="Appearance" type="Button" parent="MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer"]
+[node name="MainMenu" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(308, 0)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = -255.0
+offset_right = -176.0
+offset_bottom = 255.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_ylpqp")
+
+[node name="Title" type="TextureRect" parent="MainMenu"]
+layout_mode = 2
+texture = ExtResource("2_5iqxy")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="DynamicLabel" type="Label" parent="MainMenu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
+text = "beta"
+horizontal_alignment = 2
+script = ExtResource("3_yuqno")
+json_text = "%version%"
+raw_format = true
+
+[node name="Control6" type="Control" parent="MainMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Play" type="Button" parent="MainMenu"]
+self_modulate = Color(0.761, 1.622, 1, 1)
+custom_minimum_size = Vector2(2.08165e-12, 120)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Play"
+script = ExtResource("2_o48rt")
+json_text = "ui/play"
+
+[node name="Editor" type="Button" parent="MainMenu"]
+self_modulate = Color(1, 2.162, 2.162, 1)
+custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Editor"
+script = ExtResource("2_o48rt")
+json_text = "ui/world_editor"
+
+[node name="Settings" type="Button" parent="MainMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 60)
+layout_mode = 2
+text = "Settings"
+script = ExtResource("2_o48rt")
+json_text = "ui/settings"
+
+[node name="Appearance" type="Button" parent="MainMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 60)
+layout_mode = 2
 text = "Player Appearance..."
 script = ExtResource("2_o48rt")
 json_text = "ui/appearance_button"
 
-[node name="Control4" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 15)
+[node name="Tutorial" type="Button" parent="MainMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
+text = "Tutorial"
+script = ExtResource("2_o48rt")
+json_text = "ui/tutorial"
 
-[node name="Control7" type="Control" parent="MainMenu/LeftColumn"]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
-
-[node name="Quit" type="Button" parent="MainMenu/LeftColumn"]
+[node name="Quit" type="Button" parent="MainMenu"]
 self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Quit to desktop"
+text = "Quit"
 script = ExtResource("2_o48rt")
 json_text = "ui/quit"
 
-[node name="RightColumn" type="VBoxContainer" parent="MainMenu"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-
-[node name="TopSpacer" type="Control" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(2.08165e-12, 110)
-layout_mode = 2
-
-[node name="DynamicLabel" type="Label" parent="MainMenu/RightColumn"]
-layout_mode = 2
-text = "Host or Join"
-script = ExtResource("3_yuqno")
-json_text = "ui/host_or_join"
-
-[node name="Control6" type="Control" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="HostPanel" type="Panel" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(2.08165e-12, 240)
-layout_mode = 2
-
-[node name="HostPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/HostPanel"]
-layout_mode = 1
-anchors_preset = 15
+[node name="PlayMenu" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(308, 2.08165e-12)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -15.0
-offset_bottom = -12.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = -255.0
+offset_right = -176.0
+offset_bottom = 255.0
+grow_horizontal = 0
 grow_vertical = 2
-alignment = 1
+script = ExtResource("2_ylpqp")
 
-[node name="Label" type="Label" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+[node name="DynamicLabel" type="Label" parent="PlayMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
-size_flags_horizontal = 0
-text = "Host a Server"
+theme_override_fonts/font = ExtResource("4_hqrcr")
+theme_override_font_sizes/font_size = 64
+text = "Play"
 script = ExtResource("3_yuqno")
-json_text = "ui/host_panel"
+json_text = "ui/play"
 
-[node name="MapSelection" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer" instance=ExtResource("5_mmcxg")]
+[node name="Spacer" type="Control" parent="PlayMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="HostHbox" type="HBoxContainer" parent="PlayMenu"]
+layout_mode = 2
+
+[node name="Host" type="Button" parent="PlayMenu/HostHbox"]
+self_modulate = Color(0.761, 1.622, 1, 1)
+custom_minimum_size = Vector2(2.08165e-12, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Host"
+script = ExtResource("2_o48rt")
+json_text = "ui/host"
+
+[node name="Edit" type="Button" parent="PlayMenu/HostHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "+"
+script = ExtResource("2_o48rt")
+
+[node name="JoinHbox" type="HBoxContainer" parent="PlayMenu"]
+layout_mode = 2
+
+[node name="Join" type="Button" parent="PlayMenu/JoinHbox"]
+self_modulate = Color(0.761, 1.081, 1.081, 1)
+custom_minimum_size = Vector2(2.08165e-12, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Join"
+script = ExtResource("2_o48rt")
+json_text = "ui/join"
+
+[node name="Edit" type="Button" parent="PlayMenu/JoinHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "+"
+script = ExtResource("2_o48rt")
+
+[node name="Spacer4" type="Control" parent="PlayMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="PlayMenu"]
+self_modulate = Color(1, 0.529412, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 40)
+layout_mode = 2
+text = "Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back"
+
+[node name="HostSettingsMenu" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(308, 2.08165e-12)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = -255.0
+offset_right = -176.0
+offset_bottom = 255.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_ylpqp")
+
+[node name="DynamicLabel" type="Label" parent="HostSettingsMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_hqrcr")
+theme_override_font_sizes/font_size = 64
+text = "Host"
+script = ExtResource("3_yuqno")
+json_text = "ui/play"
+
+[node name="Spacer" type="Control" parent="HostSettingsMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="MapSelection" parent="HostSettingsMenu" instance=ExtResource("5_mmcxg")]
 custom_minimum_size = Vector2(2.08165e-12, 78)
 layout_mode = 2
 text_overrun_behavior = 4
 
-[node name="HostPublic" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+[node name="HostPublic" type="Button" parent="HostSettingsMenu"]
 layout_mode = 2
 toggle_mode = true
 text = "UPNP setting"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_public_settings/off"
 
-[node name="Dedicated" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
+[node name="Dedicated" type="Button" parent="HostSettingsMenu"]
 layout_mode = 2
 toggle_mode = true
-text = "Dedicated server: No"
+text = "Server mode: Yes"
 script = ExtResource("2_o48rt")
 json_text = "ui/dedicated_server/off"
 
-[node name="Host" type="Button" parent="MainMenu/RightColumn/HostPanel/HostPanelContainer"]
-self_modulate = Color(5, 3, 5, 1)
+[node name="Spacer5" type="Control" parent="HostSettingsMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
-text = "Host Server"
+
+[node name="Back" type="Button" parent="HostSettingsMenu"]
+self_modulate = Color(1, 0.529412, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 40)
+layout_mode = 2
+text = "Back"
 script = ExtResource("2_o48rt")
-json_text = "ui/host"
-grab_initial_focus = true
+json_text = "ui/back"
 
-[node name="Spacer2" type="Control" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="JoinPanel" type="Panel" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-
-[node name="JoinPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/JoinPanel"]
-layout_mode = 1
-anchors_preset = 15
+[node name="JoinSettingsMenu" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(308, 2.08165e-12)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -16.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = -255.0
+offset_right = -176.0
+offset_bottom = 255.0
+grow_horizontal = 0
 grow_vertical = 2
-alignment = 1
+script = ExtResource("2_ylpqp")
 
-[node name="Label" type="Label" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+[node name="DynamicLabel" type="Label" parent="JoinSettingsMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
-size_flags_horizontal = 0
-text = "Join a server via IP"
+theme_override_fonts/font = ExtResource("4_hqrcr")
+theme_override_font_sizes/font_size = 64
+text = "Join"
 script = ExtResource("3_yuqno")
-json_text = "ui/join_panel"
+json_text = "ui/join"
 
-[node name="Address" type="LineEdit" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
+[node name="Spacer" type="Control" parent="JoinSettingsMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Address" type="LineEdit" parent="JoinSettingsMenu"]
 layout_mode = 2
 placeholder_text = "address"
 caret_blink = true
 caret_blink_interval = 0.5
 
-[node name="Join" type="Button" parent="MainMenu/RightColumn/JoinPanel/JoinPanelContainer"]
-self_modulate = Color(5, 3, 5, 1)
+[node name="LANPanelContainer" type="VBoxContainer" parent="JoinSettingsMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Join Server"
-script = ExtResource("2_o48rt")
-json_text = "ui/join"
-
-[node name="Spacer3" type="Control" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="LANPanel" type="Panel" parent="MainMenu/RightColumn"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-
-[node name="LANPanelContainer" type="VBoxContainer" parent="MainMenu/RightColumn/LANPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="MainMenu/RightColumn/LANPanel/LANPanelContainer"]
+[node name="Label" type="Label" parent="JoinSettingsMenu/LANPanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Searching for LAN servers..."
 script = ExtResource("3_yuqno")
 
+[node name="Spacer6" type="Control" parent="JoinSettingsMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="JoinSettingsMenu"]
+self_modulate = Color(1, 0.529412, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 40)
+layout_mode = 2
+text = "Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back"
+
 [node name="AppearanceMenu" type="VBoxContainer" parent="."]
 visible = false
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 119.0
-offset_top = -198.0
-offset_right = 427.0
-offset_bottom = 199.0
-grow_horizontal = 2
+offset_left = -484.0
+offset_top = -262.0
+offset_right = -176.0
+offset_bottom = 262.0
+grow_horizontal = 0
 grow_vertical = 2
+script = ExtResource("2_ylpqp")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AppearanceMenu"]
+[node name="DynamicLabel2" type="Label" parent="AppearanceMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
-
-[node name="Back" type="Button" parent="AppearanceMenu/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "<<< Back"
-script = ExtResource("2_o48rt")
-json_text = "ui/back_save"
-grab_initial_focus = true
-
-[node name="DynamicLabel" type="Label" parent="AppearanceMenu/HBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
-text = "Player Appearance"
-horizontal_alignment = 2
+theme_override_fonts/font = ExtResource("4_hqrcr")
+theme_override_font_sizes/font_size = 32
+text = "Appearance"
 script = ExtResource("3_yuqno")
 json_text = "ui/appearance"
 
 [node name="Spacer" type="Control" parent="AppearanceMenu"]
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="HairPanel" type="Panel" parent="AppearanceMenu"]
@@ -508,6 +513,8 @@ script = ExtResource("3_yuqno")
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Upload image..."
+script = ExtResource("2_o48rt")
+json_text = "ui/upload_image"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
 layout_mode = 2
@@ -580,24 +587,12 @@ text = "..."
 color = Color(1, 1, 1, 1)
 edit_alpha = false
 
-[node name="SettingsMenu" type="VBoxContainer" parent="."]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -198.5
-offset_right = 154.0
-offset_bottom = 198.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="SettingsMenu"]
+[node name="Spacer5" type="Control" parent="AppearanceMenu"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Back" type="Button" parent="SettingsMenu/HBoxContainer"]
+[node name="Back" type="Button" parent="AppearanceMenu"]
+modulate = Color(1, 0.529412, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "<<< Back"
@@ -605,339 +600,25 @@ script = ExtResource("2_o48rt")
 json_text = "ui/back_save"
 grab_initial_focus = true
 
-[node name="DynamicLabel" type="Label" parent="SettingsMenu/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
-text = "Settings"
-horizontal_alignment = 2
-script = ExtResource("3_yuqno")
-json_text = "ui/settings"
-
-[node name="Spacer" type="Control" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Graphics" type="Button" parent="SettingsMenu"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Graffix: COOL"
-
-[node name="Keybinds" type="Button" parent="SettingsMenu"]
-layout_mode = 2
-text = "Keybinds"
-script = ExtResource("2_o48rt")
-json_text = "ui/keybinds"
-
-[node name="Spacer2" type="Control" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="Label3" type="Label" parent="SettingsMenu"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Master Volume"
-script = ExtResource("3_yuqno")
-json_text = "ui/master_volume"
-
-[node name="MasterVol" type="HSlider" parent="SettingsMenu"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("5_6abn7")
-
-[node name="Spacer3" type="Control" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Label4" type="Label" parent="SettingsMenu"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Music Volume"
-script = ExtResource("3_yuqno")
-json_text = "ui/music_volume"
-
-[node name="MusicVol" type="HSlider" parent="SettingsMenu"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("5_6abn7")
-bus = 1
-
-[node name="Spacer4" type="Control" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Label5" type="Label" parent="SettingsMenu"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "SFX Volume"
-script = ExtResource("3_yuqno")
-json_text = "ui/sfx_volume"
-
-[node name="SFXVol" type="HSlider" parent="SettingsMenu"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("5_6abn7")
-bus = 2
-
-[node name="Spacer5" type="Control" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="KeybindsMenu" type="VBoxContainer" parent="."]
+[node name="SettingsMenu" parent="." instance=ExtResource("6_j7jhb")]
 visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -291.0
-offset_right = 154.0
-offset_bottom = 291.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Back" type="Button" parent="KeybindsMenu/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "<<< Back"
-script = ExtResource("2_o48rt")
-json_text = "ui/back_save"
-grab_initial_focus = true
-
-[node name="DynamicLabel" type="Label" parent="KeybindsMenu/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
-text = "Keybinds"
-horizontal_alignment = 2
-script = ExtResource("3_yuqno")
-json_text = "ui/keybinds"
-
-[node name="Spacer" type="Control" parent="KeybindsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="Label3" type="Label" parent="KeybindsMenu"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Auto keybinds will assign a
-number to a tool depending on
-its order of pickup.
-
-Custom keybinds allow you to
-set a key that always applies
-to a given tool."
-script = ExtResource("3_yuqno")
-
-[node name="Spacer2" type="Control" parent="KeybindsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="DefaultsButton" type="Button" parent="KeybindsMenu"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Enable Custom Keybinds"
-script = ExtResource("2_o48rt")
-
-[node name="Spacer4" type="Control" parent="KeybindsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="KeybindContainerBuildTool" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBuildTool"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Build Tool"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBuildTool"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-
-[node name="KeybindContainerBouncyball" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBouncyball"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Bouncyball"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBouncyball"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 50
-keybind_for_what = "BouncyballTool"
-
-[node name="KeybindContainerBat" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBat"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Bat"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBat"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 51
-keybind_for_what = "BatTool"
-
-[node name="KeybindContainerExtinguisher" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerExtinguisher"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Extinguisher"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerExtinguisher"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 52
-keybind_for_what = "ExtinguisherTool"
-
-[node name="KeybindContainerRocket" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerRocket"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Rocket"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerRocket"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 53
-keybind_for_what = "RocketTool"
-
-[node name="KeybindContainerBomb" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerBomb"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Bomb"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerBomb"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 54
-keybind_for_what = "BombTool"
-
-[node name="KeybindContainerFlamethrower" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerFlamethrower"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Flamethrower"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerFlamethrower"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 55
-keybind_for_what = "FlamethrowerTool"
-
-[node name="KeybindContainerMissile" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerMissile"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Missiles"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerMissile"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 56
-keybind_for_what = "MissileTool"
-
-[node name="KeybindContainerPaintbrush" type="HBoxContainer" parent="KeybindsMenu"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="KeybindsMenu/KeybindContainerPaintbrush"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
-text = "Paintbrush"
-script = ExtResource("3_yuqno")
-
-[node name="TypePicker" type="Button" parent="KeybindsMenu/KeybindContainerPaintbrush"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "1"
-script = ExtResource("6_m42ur")
-default_key = 57
-keybind_for_what = "PaintbrushTool"
-
-[node name="Spacer3" type="Control" parent="KeybindsMenu"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
 
 [node name="Attributions" type="Label" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -384.0
+offset_left = -950.0
 offset_top = -32.0
-offset_right = 390.0
+offset_right = -176.0
 offset_bottom = -16.0
-grow_horizontal = 2
+grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
 theme_override_constants/line_spacing = -1
 text = "..."
-horizontal_alignment = 1
+horizontal_alignment = 2
 script = ExtResource("3_yuqno")
 json_text = "attributions"

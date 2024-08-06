@@ -86,9 +86,6 @@ func _on_item_picked(item_name_internal : String, item_name_display : String) ->
 	var instance : Node3D = selected_item.instantiate()
 	selected_item_properties = property_editor.list_object_properties(instance, self)
 	property_editor.editing_hovered = false
-	# only bricks can have scale, reset if not a brick
-	if !item_name_internal.begins_with("brick") || selected_item_name_internal == "brick_motor_seat":
-		preview_node.scale = Vector3(1, 1, 1)
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
@@ -127,6 +124,15 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 			return find_item_mesh(c as Array)
 	return null
 
+func selected_item_is_scalable() -> bool:
+	if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat":
+		return true
+	else: return false
+
+var drag_start_point : Vector3 = Vector3.ZERO
+var b_scale : Vector3 = Vector3.ZERO
+var drag_end_point : Vector3 = Vector3.ZERO
+
 func _physics_process(delta : float) -> void:
 	var camera := get_viewport().get_camera_3d()
 	if preview_node != null:
@@ -143,22 +149,29 @@ func _physics_process(delta : float) -> void:
 		elif Input.is_action_just_pressed("editor_rotate_down"):
 			preview_node.rotate(camera.basis.x.round(), deg_to_rad(22.5))
 		preview_node.rotation = Vector3(snapped(preview_node.rotation.x, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.y, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.z, deg_to_rad(22.5)) as float)
-		# scale
-		if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat":
-			if Input.is_action_just_pressed("editor_scale_up"):
-				# flip on vertical
-				var cam_basis := camera.basis.y.round()
-				cam_basis = Vector3(abs(cam_basis.x) as float, abs(cam_basis.y) as float, abs(cam_basis.z) as float)
-				preview_node.scale += cam_basis * 2
-			elif Input.is_action_just_pressed("editor_scale_down"):
-				var cam_basis := camera.basis.y.round()
-				cam_basis = Vector3(abs(cam_basis.x) as float, abs(cam_basis.y) as float, abs(cam_basis.z) as float)
-				preview_node.scale -= cam_basis * 2
-		preview_node.scale = preview_node.scale.clamp(Vector3(1, 1, 1), Vector3(31, 31, 31))
 	if active:
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
+			if Input.is_action_just_pressed("click"):
+				drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 			if Input.is_action_pressed("click"):
+				if selected_item_is_scalable():
+					# Click and drag to scale bricks
+					drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
+					b_scale = abs(drag_end_point - drag_start_point) + Vector3(1, 1, 1)
+					b_scale = b_scale.clamp(Vector3(1, 1, 1), Vector3(2000, 2000, 2000))
+					preview_node.scale = Vector3(1, 1, 1)
+					preview_node.global_scale(b_scale)
+					preview_node.global_position = drag_start_point.lerp(drag_end_point, 0.5)
+					if b_scale != Vector3(1, 1, 1):
+						editor_canvas.scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
+			if Input.is_action_just_released("click"):
+				editor_canvas.scale_tooltip.text = ""
+				# if the selected item isn't scalable, ignore drag and just place
+				# at the same place as the end point
+				if !selected_item_is_scalable():
+					drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
+				drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
 				if editor.select_area != null:
 					# if there is something where we are trying to place
 					var valid : bool = true
@@ -183,12 +196,12 @@ func _physics_process(delta : float) -> void:
 					if valid && selected_item != null:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
-						inst.global_position = get_viewport().get_camera_3d().controlled_cam_pos
+						inst.global_position = drag_start_point.lerp(drag_end_point, 0.5)
 						inst.global_rotation = preview_node.global_rotation
-						
 						inst.translate_object_local(item_offset)
-						if inst is Brick:
-							inst.set_property("brick_scale", preview_node.scale)
+						if selected_item_is_scalable():
+							if selected_item_properties.has("brick_scale"):
+								selected_item_properties["brick_scale"] = b_scale
 						# rotate wheels because they have different rotation direction than
 						# facing direction
 						if inst is MotorBrick:
@@ -198,10 +211,12 @@ func _physics_process(delta : float) -> void:
 								inst.set_property(property, selected_item_properties[property])
 					# if trying to spawn a brick in an invalid location
 					# and not dragging
-					elif !$InvalidAudio.playing && Input.is_action_just_pressed("click"):
+					elif !$InvalidAudio.playing && Input.is_action_just_released("click"):
 						$InvalidAudio.play()
 						# show alert that nothing is selected
 						if selected_item == null:
 							UIHandler.show_alert("Select something to place from the left.\n(Press ESC to free your mouse.)", 3, false, UIHandler.alert_colour_error)
 						else:
 							UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)
+				preview_node.scale = Vector3(1, 1, 1)
+				preview_node.global_position = Vector3.ZERO

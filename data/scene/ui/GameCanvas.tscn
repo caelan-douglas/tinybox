@@ -17,9 +17,9 @@
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
-[ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="16_da6k8"]
 [ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
 [ext_resource type="Script" path="res://src/ui/GamemodeMenu.gd" id="18_n6mrs"]
+[ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="19_w8eqc"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
 length = 0.001
@@ -1119,12 +1119,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -210.0
-offset_top = -238.0
+offset_top = -306.0
 offset_right = 210.0
-offset_bottom = 238.0
+offset_bottom = 306.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
+use_hidden_tabs_for_min_size = true
 
 [node name="Pause" type="VBoxContainer" parent="PauseMenu/TabContainer"]
 custom_minimum_size = Vector2(308, 0)
@@ -1178,6 +1179,8 @@ placeholder_text = "World name..."
 [node name="SaveWorld" type="Button" parent="PauseMenu/TabContainer/Pause"]
 layout_mode = 2
 text = "Save a copy"
+script = ExtResource("5_6v07r")
+json_text = "ui/save_copy"
 
 [node name="Spacer7" type="Control" parent="PauseMenu/TabContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 30)
@@ -1210,80 +1213,10 @@ disabled = true
 text = "End active gamemode"
 script = ExtResource("5_6v07r")
 
-[node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer"]
+[node name="Settings" parent="PauseMenu/TabContainer" instance=ExtResource("19_w8eqc")]
 visible = false
-custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
-alignment = 1
-
-[node name="VolumePanel" type="Panel" parent="PauseMenu/TabContainer/Settings"]
-custom_minimum_size = Vector2(2.08165e-12, 240)
-layout_mode = 2
-
-[node name="VolumePanelContainer" type="VBoxContainer" parent="PauseMenu/TabContainer/Settings/VolumePanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -15.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="Label3" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Master Volume"
-script = ExtResource("6_qxctu")
-json_text = "ui/master_volume"
-
-[node name="MasterVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("16_da6k8")
-
-[node name="Spacer8" type="Control" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Label4" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Music Volume"
-script = ExtResource("6_qxctu")
-json_text = "ui/music_volume"
-
-[node name="MusicVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("16_da6k8")
-bus = 1
-
-[node name="Spacer9" type="Control" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-
-[node name="Label5" type="Label" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "SFX Volume"
-script = ExtResource("6_qxctu")
-json_text = "ui/sfx_volume"
-
-[node name="SFXVol" type="HSlider" parent="PauseMenu/TabContainer/Settings/VolumePanel/VolumePanelContainer"]
-layout_mode = 2
-max_value = 1.0
-step = 0.1
-value = 1.0
-script = ExtResource("16_da6k8")
-bus = 2
+show_save_button = false
 
 [node name="Tip" type="Label" parent="PauseMenu"]
 layout_mode = 1

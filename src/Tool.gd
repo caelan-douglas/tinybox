@@ -54,6 +54,7 @@ func init(tool_name : String, player_owner : RigidPlayer) -> void:
 	# Add tool to UI list.
 	add_ui_partner()
 	ui_partner.connect("pressed", set_tool_active.bind(true, true))
+	Global.connect("keybinds_changed", update_tool_number)
 	update_tool_number()
 
 func add_ui_partner() -> void:

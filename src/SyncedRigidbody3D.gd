@@ -66,12 +66,10 @@ func _player_left(id : int) -> void:
 func entered_water() -> void:
 	gravity_scale = -0.05
 	linear_damp = 0.8
-	angular_damp = 0.5
 
 func exited_water() -> void:
 	gravity_scale = 1
 	linear_damp = 0
-	angular_damp = 0.3
 
 @rpc("any_peer", "call_local", "reliable")
 func deflect(player_facing : Vector3) -> void:

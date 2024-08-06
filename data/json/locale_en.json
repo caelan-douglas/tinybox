@@ -3,19 +3,22 @@
         "close": "Close",
         "cancel": "Cancel",
         "quit": "Quit to desktop",
+        "play": "Play",
         "back": "<<< Back",
         "back_save": "<<< Save",
+        "upload_image": "Upload image...",
         "save": "Save",
+        "save_copy": "Save a copy",
         "host_or_join": "Host or Join",
-        "host": "Host server",
-        "join": "Join server",
+        "host": "Host",
+        "join": "Join",
         "leave": "Leave server",
         "tutorial": "Tutorial",
         "start_game": "Start minigame lobby",
         "lobby": "Lobby Settings",
         "participants": "Participants",
         "appearance_button": "Player Appearance...",
-        "appearance": "Player Appearance",
+        "appearance": "Appearance",
         "settings": "Settings",
         "keybinds": "Keybinds",
         "defaults": "Reset to defaults",
@@ -25,16 +28,16 @@
         "colour": "Colour",
         "news": "New in this build",
         "host_clicked": "Starting server...",
-        "join_clicked": "Trying to join...",
+        "join_clicked": "Connecting",
         "map_selection": "Choose a map:",
         "switch_maps": "Switch Maps",
         "switch_maps_button": "Request to load this map",
         "custom_maps": "Custom Maps",
-        "world_editor": "World editor",
+        "world_editor": "Editor",
         "map_vote": "Map Vote",
         "multiplayer_prefs": "Multiplayer Preferences",
         "host_panel": "Host a server",
-        "join_panel": "Join a server via IP",
+        "join_panel": "Join via IP",
         "health": "Health",
         "sandbox_mode": "Paused -\nSandbox",
         "minigame_mode": "Paused -\nMinigame",
@@ -56,12 +59,12 @@
             "off": "Show tutorial in-game: No"
         },
         "host_public_settings": {
-            "on": "Port-forward w/ uPnP: Yes",
-            "off": "Port-forward w/ uPnP: No"
+            "on": "uPnP: Yes",
+            "off": "uPnP: No"
         },
         "dedicated_server": {
-            "on": "Dedicated server: Yes",
-            "off": "Dedicated server: No"
+            "on": "Server mode: Yes",
+            "off": "Server mode: No"
         },
         "tool_overlay": {
             "build_tool": "[ T ]:          Change type\n[ M ]:    Change material\n[ R ]: Rotate horizontally\n[ F ]:    Rotate vertically\n[ X ]:          Swap modes\n[ Shift ]:          Height up\n[ Ctrl/Cmd ]: Height down",
@@ -210,5 +213,5 @@
             "TIMER_EXCEEDS": "Timer exceeds (sec)..."
         }
     },
-    "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\n\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
+    "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
 }

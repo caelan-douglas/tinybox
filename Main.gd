@@ -49,15 +49,15 @@ var server_version : int = 11000
 # add 'pre' at end for pre-release
 var display_version := "beta 11.0pre"
 
-@onready var host_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Host
-@onready var host_public_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/HostPublic
-@onready var host_dedicated_button : Button = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/Dedicated
-@onready var join_button : Button = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Join
-@onready var display_name_field : LineEdit = $MultiplayerMenu/MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/DisplayName
-@onready var join_address : LineEdit = $MultiplayerMenu/MainMenu/RightColumn/JoinPanel/JoinPanelContainer/Address
-@onready var host_map_selector : OptionButton = $MultiplayerMenu/MainMenu/RightColumn/HostPanel/HostPanelContainer/MapSelection
-@onready var editor_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Editor
-@onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/LeftColumn/Tutorial
+@onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
+@onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
+@onready var host_dedicated_button : Button = $MultiplayerMenu/HostSettingsMenu/Dedicated
+@onready var join_button : Button = $MultiplayerMenu/PlayMenu/JoinHbox/Join
+@onready var display_name_field : LineEdit = $MultiplayerMenu/DisplayName
+@onready var join_address : LineEdit = $MultiplayerMenu/JoinSettingsMenu/Address
+@onready var host_map_selector : OptionButton = $MultiplayerMenu/HostSettingsMenu/MapSelection
+@onready var editor_button : Button = $MultiplayerMenu/MainMenu/Editor
+@onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/Tutorial
 
 func _ready() -> void:
 	# reset paused state
@@ -124,8 +124,8 @@ func _on_new_lan_server(serverInfo : Dictionary) -> void:
 	var lan_entry : PackedScene = load("res://data/scene/ui/LANEntry.tscn")
 	if multiplayer_menu:
 		var new_lan_entry : Control = lan_entry.instantiate()
-		get_node("MultiplayerMenu/MainMenu/RightColumn/LANPanel/LANPanelContainer/Label").text = "Join a server via LAN"
-		multiplayer_menu.get_node("MainMenu/RightColumn/LANPanel/LANPanelContainer").add_child(new_lan_entry)
+		get_node("MultiplayerMenu/JoinSettingsMenu/LANPanelContainer/Label").text = "Join a server via LAN"
+		multiplayer_menu.get_node("JoinSettingsMenu/LANPanelContainer").add_child(new_lan_entry)
 		new_lan_entry.get_node("Name").text = str(serverInfo.name)
 		new_lan_entry.get_node("Join").connect("pressed", _on_join_pressed.bind(serverInfo.ip, true))
 		new_lan_entry.entry_server_ip = serverInfo.ip
@@ -138,7 +138,7 @@ func _on_remove_lan_server(serverIp : String) -> void:
 				lan_entries.erase(entry)
 				entry.queue_free()
 				if lan_entries.size() < 1:
-					get_node("MultiplayerMenu/MainMenu/RightColumn/LANPanel/LANPanelContainer/Label").text = "Searching for LAN servers..."
+					get_node("MultiplayerMenu/JoinSettingsMenu/LANPanelContainer/Label").text = "Searching for LAN servers..."
 
 func verify_display_name(check_string : String) -> Variant:
 	var regex := RegEx.new()
@@ -151,7 +151,7 @@ func get_display_name_from_field() -> Variant:
 	var t_display_name : String = display_name_field.text
 	# User must have a display name.
 	if t_display_name == "" || t_display_name == null:
-		UIHandler.show_alert("Please enter a display name", 4)
+		UIHandler.show_alert("Please enter a display name on the left.", 4, false, UIHandler.alert_colour_error)
 		display_name_field.text = ""
 		return null
 	# Users can't have a display name that's only whitespace.
@@ -291,6 +291,9 @@ func _on_host_pressed() -> void:
 func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 	if address == null:
 		address = join_address.text
+		if join_address.text == "" && !is_lan:
+			UIHandler.show_alert("Enter an IP or domain to join in the '+' section\nto the right of the Join button.", 8, false, UIHandler.alert_colour_error)
+			return
 	# Save address for join (only if not LAN.)
 	if !is_lan:
 		UserPreferences.save_pref("join_address", str(address))
@@ -305,7 +308,7 @@ func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 		Global.display_name = get_display_name_from_field()
 		
 	# Change button text to notify user we are joining.
-	join_button.text = "Trying to join..."
+	join_button.text = JsonHandler.find_entry_in_file("ui/join_clicked")
 	
 	# Create the client.
 	enet_peer.create_client(str(address), PORT)

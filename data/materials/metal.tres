@@ -13,6 +13,6 @@ roughness_texture_channel = 4
 rim_enabled = true
 rim = 0.3
 rim_tint = 0.8
-uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_scale = Vector3(0.125, 0.125, 0.125)
 uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 uv1_triplanar = true

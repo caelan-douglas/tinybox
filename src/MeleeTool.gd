@@ -78,7 +78,7 @@ func on_hit(body : Node3D) -> void:
 		# don't take damage from our own tool
 		if multiplayer.is_server():
 			if (body._state != RigidPlayer.TRIPPED) && (body.get_multiplayer_authority() != get_multiplayer_authority()):
-				body.set_health(body.get_health() - damage, RigidPlayer.CauseOfDeath.MELEE, get_multiplayer_authority())
+				body.reduce_health(damage, RigidPlayer.CauseOfDeath.MELEE, get_multiplayer_authority())
 				body.change_state.rpc_id(body.get_multiplayer_authority(), RigidPlayer.TRIPPED)
 		# only run this on the authority of who was hit (not necessarily
 		# the authority of the tool)

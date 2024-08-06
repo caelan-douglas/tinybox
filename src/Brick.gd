@@ -32,10 +32,10 @@ enum BrickMaterial {
 	METAL,
 	PLASTIC,
 	RUBBER,
-	STATIC
+	GRASS
 }
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -54,6 +54,7 @@ var sync_step : int = 0
 # for spawning buildings
 var joinable : bool = true
 var groupable : bool = true
+var immovable : bool = false
 # for larger bricks
 @export var mass_mult : float = 1
 @export var flammable : bool = true
@@ -78,7 +79,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @onready var metal_material : Material = preload("res://data/materials/metal.tres")
 @onready var plastic_material : Material = preload("res://data/materials/plastic.tres")
 @onready var rubber_material : Material = preload("res://data/materials/rubber.tres")
-@onready var static_material : Material = preload("res://data/materials/static.tres")
+@onready var grass_material : Material = preload("res://data/materials/grass.tres")
 
 # for showing cost in minigame
 @onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
@@ -118,52 +119,44 @@ var tool_from : Tool
 # is used in the build function.
 var just_spawned_from_tool : bool = true
 
-func resize_mesh(scale_new : Vector3) -> void:
+func resize_mesh() -> void:
 	var mesh_verticies : Array = model_mesh.mesh.surface_get_arrays(0)
 	var new_mesh := ArrayMesh.new()
 	var add_mesh_to_cache := true
-	# We have to make the mesh first to check it.
-	# scale mesh but keep bevels
-	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_verticies)
-	var mdt := MeshDataTool.new()
-	mdt.create_from_surface(new_mesh, 0)
-	var count : int = 0
-	# amount of verticies to read in a frame
-	var max_proc := 32
-	var cur_proc := 0
-	for i in range(mdt.get_vertex_count()):
-		cur_proc += 1
-		# wait a frame if we have read max lines for this frame
-		if cur_proc > max_proc:
-			await get_tree().process_frame
-			cur_proc = 0
-		var vertex := mdt.get_vertex(i)
-		# move, instead of scaling, beveled edges to correct points
-		if vertex.y > 0:
-			vertex.y += (scale_new.y - 1) * 0.5
-		if vertex.y < 0:
-			vertex.y -= (scale_new.y - 1) * 0.5
-		
-		if vertex.x > 0:
-			vertex.x += (scale_new.x - 1) * 0.5
-		if vertex.x < 0:
-			vertex.x -= (scale_new.x - 1) * 0.5
-		
-		if vertex.z > 0:
-			vertex.z += (scale_new.z - 1) * 0.5
-		if vertex.z < 0:
-			vertex.z -= (scale_new.z - 1) * 0.5
-		# Save the mesh change
-		mdt.set_vertex(i, vertex)
-	new_mesh.clear_surfaces()
-	mdt.commit_to_surface(new_mesh)
 	# mesh cache
-	for cached_mesh : Mesh in Global.mesh_cache:
-		if cached_mesh.surface_get_arrays(0) == new_mesh.surface_get_arrays(0):
-			new_mesh = cached_mesh
-			add_mesh_to_cache = false
+	for cached_mesh : Array in Global.mesh_cache:
+		if cached_mesh[0] == brick_scale:
+			if cached_mesh[1] == _brick_spawnable_type:
+				new_mesh = cached_mesh[2]
+				add_mesh_to_cache = false
 	if add_mesh_to_cache:
-		Global.add_to_mesh_cache(new_mesh)
+		# We have to make the mesh
+		# scale mesh but keep bevels
+		new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_verticies)
+		var mdt := MeshDataTool.new()
+		mdt.create_from_surface(new_mesh, 0)
+		for i in range(mdt.get_vertex_count()):
+			var vertex := mdt.get_vertex(i)
+			# move, instead of scaling, beveled edges to correct points
+			if vertex.y > 0:
+				vertex.y += (brick_scale.y - 1) * 0.5
+			if vertex.y < 0:
+				vertex.y -= (brick_scale.y - 1) * 0.5
+			
+			if vertex.x > 0:
+				vertex.x += (brick_scale.x - 1) * 0.5
+			if vertex.x < 0:
+				vertex.x -= (brick_scale.x - 1) * 0.5
+			
+			if vertex.z > 0:
+				vertex.z += (brick_scale.z - 1) * 0.5
+			if vertex.z < 0:
+				vertex.z -= (brick_scale.z - 1) * 0.5
+			# Save the mesh change
+			mdt.set_vertex(i, vertex)
+		new_mesh.clear_surfaces()
+		mdt.commit_to_surface(new_mesh)
+		Global.add_to_mesh_cache([brick_scale, _brick_spawnable_type, new_mesh])
 	model_mesh.mesh = new_mesh
 
 # Set a custom property
@@ -172,11 +165,13 @@ func set_property(property : StringName, value : Variant) -> void:
 		set_colour(value as Color)
 	elif property == "_material":
 		set_material(value as Brick.BrickMaterial)
+	elif property == "immovable":
+		immovable = value as bool
 	elif property == "brick_scale":
 		if value is Vector3:
 			# bricks can only have integer as scales
 			var scale_new : Vector3 = (value as Vector3).round()
-			if scale_new != Vector3(1, 1, 1):
+			if scale_new != Vector3(1, 1, 1) && scale_new != brick_scale:
 				# set property for saving
 				brick_scale = scale_new
 				# set mass multiplication using length of 1, 1, 1 as base
@@ -192,7 +187,7 @@ func set_property(property : StringName, value : Variant) -> void:
 					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
 					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
-					resize_mesh(scale_new)
+					resize_mesh()
 				elif collider.shape is CylinderShape3D:
 					# can't have oddly shaped wheels
 					if scale_new.z > scale_new.y:
@@ -206,6 +201,11 @@ func set_property(property : StringName, value : Variant) -> void:
 					joint_collider.shape.size = Vector3(scale_new.x, scale_new.x, scale_new.x) + Vector3(0.3, 0.3, 0.3)
 					cam_collider.shape.height = (scale_new).x + 0.4
 					cam_collider.shape.radius = ((scale_new).y * 0.5) + 0.2
+					
+					var joint_spot_left : Node3D = $JointSpotLeft
+					var joint_spot_right : Node3D = $JointSpotRight
+					joint_spot_left.position.z = scale_new.x * 0.5
+					joint_spot_right.position.z = -scale_new.x * 0.5
 	else:
 		set(property, value)
 
@@ -269,15 +269,15 @@ func set_material(new : BrickMaterial) -> void:
 			set_physics_material_properties(0.9, 0.6)
 			
 			flammable = false
-		# Static
+		# Grass
 		5:
-			_material = BrickMaterial.STATIC
-			model_mesh.set_surface_override_material(0, static_material)
-			mass = 999
-			unjoin_velocity = 9999
+			_material = BrickMaterial.GRASS
+			model_mesh.set_surface_override_material(0, grass_material)
+			mass = 3 * mass_mult
+			unjoin_velocity = 15
 			
 			# set physics material properties for brick.
-			set_physics_material_properties(1, 0)
+			set_physics_material_properties(0.7, 0)
 			
 			flammable = false
 	mesh_material = model_mesh.get_surface_override_material(0)
@@ -338,7 +338,7 @@ func get_colour() -> Color:
 func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:
 	if !is_multiplayer_authority(): return
 	# static brick material cannot be unglued
-	if _material == BrickMaterial.STATIC:
+	if immovable:
 		return
 	# iterate through all bricks in group. Do not run this on dummy bricks.
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
@@ -347,7 +347,7 @@ func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0)
 				# do not unglue static neighbours
 				if b != null:
 					b = b as Brick
-					if b._material != BrickMaterial.STATIC:
+					if !b.immovable:
 						if new == false:
 						# only deglue inside the deglue radius
 							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius + addl_radius:
@@ -389,14 +389,14 @@ func unfreeze_entire_group() -> void:
 		var editor : Editor = Global.get_world().get_current_map() as Editor
 		if !editor.test_mode:
 			return
-	if _material != BrickMaterial.STATIC:
+	if !immovable:
 		glued = false
 		freeze = false
 	if brick_groups.groups.has(str(group)):
 		for b : Variant in brick_groups.groups[str(group)]:
 			if b != null:
 				b = b as Brick
-				if b._material != BrickMaterial.STATIC:
+				if !b.immovable:
 					b.glued = false
 					b.freeze = false
 
@@ -453,6 +453,7 @@ func extinguish_fire() -> void:
 func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
+	if immovable: return
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
@@ -565,8 +566,6 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 	# only execute on server
 	if !multiplayer.is_server(): return
 	var total_velocity : float = linear_velocity.length()
-	if body is RigidBody3D && !(body is ClayBall):
-		total_velocity += body.linear_velocity.length()
 	# Light other bricks on fire.
 	if on_fire:
 		if body is Brick:
@@ -577,7 +576,7 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 		if body.group != self.group:
 			# don't unglue bricks bigger than ourselves
 			if mass_mult > body.mass_mult:
-				total_velocity *= (mass * 0.1)
+				total_velocity *= (mass * 0.25)
 				if total_velocity > 24:
 					body.set_glued(false, true, mass_mult)
 				# Unjoin this brick from its group if it is hit too hard.
@@ -737,12 +736,17 @@ func check_joints(set_group : String = "") -> void:
 		for body in joint_detector.get_overlapping_bodies():
 			# don't join with self
 			if body is Brick && body != self:
+				if body.immovable:
+					has_static_neighbour = true
 				found_brick = true
 				# Don't let things join to wheels (can prevent rotation)
-				if body.joinable && _material != BrickMaterial.STATIC && !(body is MotorBrick):
+				if body.joinable && !immovable && !body.immovable:
+					# don't let normal bricks join to motor bricks; 
+					if body is MotorBrick && !(self is MotorBrick):
+						continue
 					# Don't let wheels join with seats
 					if (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
-						pass
+						continue
 					else:
 						join(body.get_path(), set_group)
 			elif body is StaticBody3D:
@@ -770,9 +774,16 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	# wheels have no z angular limit
 	if self is MotorBrick:
 		joint.set("angular_limit_z/enabled", false)
-	else:
-		# set position of joint to midpoint of two objects (unless it's a wheel)
-		joint.global_position = global_position.lerp(get_node(path_to_brick).global_position as Vector3, 0.5)
+		# find closest joint spot
+		var joint_spot_left : Node3D = $JointSpotLeft
+		var joint_spot_right : Node3D = $JointSpotRight
+		var joining_to_pos : Vector3 = get_node(path_to_brick).global_position as Vector3
+		var left_closer : bool = true
+		if joint_spot_left.global_position.distance_to(joining_to_pos) > joint_spot_right.global_position.distance_to(joining_to_pos):
+			left_closer = false
+		if left_closer:
+			joint.global_position = joint_spot_left.global_position
+		else: joint.global_position = joint_spot_right.global_position
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
 

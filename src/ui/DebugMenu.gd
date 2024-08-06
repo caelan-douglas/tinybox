@@ -33,6 +33,11 @@ func _ready() -> void:
 	add_button.text = "Add fake kills"
 	add_button.connect("pressed", _on_add_fake_kills)
 	add_child(add_button)
+	
+	Global.connect("debug_toggled", _on_debug_toggled)
+
+func _on_debug_toggled(mode : bool) -> void:
+	visible = mode
 
 func _on_add_fake_spawnprot() -> void:
 	if !multiplayer.is_server():
@@ -46,10 +51,6 @@ func _on_add_fake_kills() -> void:
 	Global.get_player().increment_kills()
 		
 func _physics_process(delta : float) -> void:
-	if Input.is_action_just_pressed("debug_menu"):
-		# game canvas should be visible
-		if get_parent().visible:
-			visible = !visible
 	if visible:
 		var brick_count : int = 0
 		var bricks : Array = Global.get_world().get_children()
@@ -68,6 +69,7 @@ func _physics_process(delta : float) -> void:
 			"\nPlayer position (global): ", round(player.global_position), 
 			"\nPlayer state: ", player.states_as_names[player._state],
 			"\nPlayer friction: ", player.physics_material_override.friction,
+			"\nPlayer linear damp: ", player.linear_damp,
 			"\nPlayer air from jump?: ", player.air_from_jump, 
 			"\nPlayer air duration: ", player.air_duration, 
 			"\nPlayer last hit by: ", player.last_hit_by_id,

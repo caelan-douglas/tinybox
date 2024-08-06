@@ -267,8 +267,7 @@ func _on_body_entered(body : Node3D) -> void:
 				if _state != STANDING_UP && _state != IN_SEAT:
 					# take damage from metal bricks hitting player
 					if body is Brick:
-						if body._material == Brick.BrickMaterial.METAL:
-							set_health(get_health() - body.mass_mult as int, CauseOfDeath.HIT_BY_BRICK)
+						reduce_health(body.mass_mult as int, CauseOfDeath.HIT_BY_BRICK)
 					change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
 			if body is Brick:
 				if body.on_fire:
@@ -289,11 +288,15 @@ func _is_friendly_fire(other_player : RigidPlayer) -> bool:
 			return true
 	return false
 
+var time_last_reduced_health : int = 0
 func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
 	# server handles all player health
 	if !multiplayer.is_server(): return
-	# from server: update display for client and all players
-	set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
+	# invincibility period
+	if Time.get_ticks_msec() - time_last_reduced_health > 499:
+		# from server: update display for client and all players
+		set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
+		time_last_reduced_health = Time.get_ticks_msec()
 
 @rpc("any_peer", "call_local", "reliable")
 func _receive_server_health(new : int, potential_executor_id : int = -1) -> void:
@@ -480,7 +483,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 							0:
 								death_message = str(display_name, " was flattened!")
 							1:
-								death_message = str(display_name, " discovered that metal is heavy!")
+								death_message = str(display_name, " got squashed!")
 					CauseOfDeath.FIRE:
 						# on fire from explosion or flamethrower
 						if executing_player != null:
@@ -588,7 +591,7 @@ func update_name(new : String) -> void:
 
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
-func update_info() -> void:
+func update_info(_who : int) -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)
 	change_appearance()
@@ -627,7 +630,7 @@ func _ready() -> void:
 		multiplayer.connected_to_server.connect(update_info)
 		multiplayer.peer_connected.connect(update_info)
 		# update peers with name and team
-		update_info()
+		update_info(get_multiplayer_authority())
 		# update peers with appearance
 		change_appearance()
 		go_to_spawn()
@@ -642,6 +645,10 @@ func set_lifter_particles(mode : bool) -> void:
 	lifter_particles.emitting = mode
 
 func _physics_process(delta : float) -> void:
+	# spawned dummies check idle (for menu animation)
+	if spawn_as_dummy:
+		check_idle()
+	
 	if !is_multiplayer_authority(): return
 	# Idle animations
 	# (Also do dummy for main menu preview)
@@ -1067,7 +1074,7 @@ func change_state(state : int) -> void:
 	if (state == TRIPPED && invulnerable == true):
 		state = IDLE
 	
-	if (_state == TRIPPED && (state == SWIMMING || state == SWIMMING_IDLE)):
+	if _state != TRIPPED || (_state == TRIPPED && (state == SWIMMING || state == SWIMMING_IDLE)):
 		lock_rotation = true
 		# disable dizzy stars visual effect
 		$Smoothing/dizzy_stars.visible = false
@@ -1084,7 +1091,7 @@ func enter_state() -> void:
 	
 	# DEBUG
 	if debug_menu.visible:
-		UIHandler.show_alert(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3, false, Color("#80517e"))
+		UIHandler.show_toast(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3)
 	
 	# reset external propulsion
 	external_propulsion = false
@@ -1216,7 +1223,6 @@ func enter_state() -> void:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
 			slide_time.start()
-			lock_rotation = true
 			physics_material_override.friction = 0.5
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward)
@@ -1227,7 +1233,6 @@ func enter_state() -> void:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
 			slide_time.start()
-			lock_rotation = true
 			physics_material_override.friction = 0.5
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * 6)
@@ -1238,7 +1243,6 @@ func enter_state() -> void:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
 			roll_time.start()
-			lock_rotation = true
 			physics_material_override.friction = 0.5
 			var forward : Vector3 = get_global_transform().basis.z
 			apply_central_impulse(forward * linear_velocity.length() * 0.5)
@@ -1264,7 +1268,6 @@ func enter_state() -> void:
 			if _state == TRIPPED:
 				change_state(STANDING_UP)
 		STANDING_UP:
-			lock_rotation = true
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
@@ -1279,7 +1282,6 @@ func enter_state() -> void:
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
-			lock_rotation = true
 			physics_material_override.friction = 1
 			animator["parameters/BlendSit/blend_amount"] = 1
 			change_state_non_authority.rpc(IN_SEAT)
@@ -1294,7 +1296,6 @@ func enter_state() -> void:
 			set_global_rotation(Vector3.ZERO)
 			# re-enable collider
 			set_player_collider.call_deferred(true)
-			lock_rotation = true
 			# take linear velocity of chair if it is moving fast
 			if seat_occupying.linear_velocity.length() > 5:
 				change_state(DIVE)
@@ -1309,7 +1310,6 @@ func enter_state() -> void:
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
-			lock_rotation = true
 			var tween : Tween = create_tween()
 			tween.tween_property(self, "rotation", Vector3(0, rotation.y, 0), 0.2)
 			tween.tween_property(animator, "parameters/BlendDead/blend_amount", 1.0, 0.3)
@@ -1329,7 +1329,6 @@ func enter_state() -> void:
 				camera.locked = true
 				camera.set_camera_mode(Camera.CameraMode.TRACK)
 		RESPAWN:
-			lock_rotation = true
 			# reset camera
 			if camera is Camera:
 				camera.locked = false
@@ -1343,7 +1342,6 @@ func enter_state() -> void:
 			linear_velocity = Vector3.ZERO
 			change_state(IDLE)
 		DUMMY:
-			lock_rotation = true
 			linear_velocity = Vector3.ZERO
 			freeze = true
 			change_state_non_authority.rpc(DUMMY)

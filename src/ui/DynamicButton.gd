@@ -24,6 +24,19 @@ func _ready() -> void:
 	set_text_to_json(json_text)
 	if is_visible_in_tree() && grab_initial_focus:
 		grab_focus()
+	
+	connect("mouse_entered", _on_mouse_entered)
+	connect("mouse_exited", _on_mouse_exited)
+
+func _on_mouse_entered() -> void:
+	# pivot center
+	pivot_offset = Vector2(size.x / 2, size.y / 2)
+	var tween : Tween = get_tree().create_tween().set_parallel(true)
+	tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1)
+
+func _on_mouse_exited() -> void:
+	var tween : Tween = get_tree().create_tween().set_parallel(true)
+	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.3)
 
 func set_text_to_json(json : String) -> void:
 	json_text = json

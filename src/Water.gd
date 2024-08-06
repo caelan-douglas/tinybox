@@ -66,6 +66,9 @@ func _ready() -> void:
 	area.connect("body_entered", _on_body_entered)
 	area.connect("body_exited", _on_body_exited)
 	
+	area.connect("area_entered", _on_area_entered)
+	area.connect("area_exited", _on_area_exited)
+	
 	# for actually sending the water signal
 	deep_area.connect("body_entered", _on_deep_body_entered)
 	deep_area.connect("body_exited", _on_deep_body_exited)
@@ -92,15 +95,21 @@ func _on_body_entered(body : Node3D) -> void:
 			return
 	else:
 		splash(body.global_position)
-	# camera colour
-	if body.get_parent() != null:
-		if body.get_parent() is Camera:
-			body.get_parent().entered_water()
 
 func _on_body_exited(body : Node3D) -> void:
-	if body.get_parent() != null:
-		if body.get_parent() is Camera:
-			body.get_parent().exited_water()
+	pass
+
+func _on_area_entered(area : Node3D) -> void:
+	# camera colour
+	if area.get_parent() != null:
+		if area.get_parent() is Camera:
+			area.get_parent().entered_water()
+			splash(area.global_position)
+
+func _on_area_exited(area : Node3D) -> void:
+	if area.get_parent() != null:
+		if area.get_parent() is Camera:
+			area.get_parent().exited_water()
 
 func splash(pos : Vector3) -> void:
 	var audio : AudioStreamPlayer3D = splash_sound.instantiate()

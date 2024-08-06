@@ -16,14 +16,17 @@
 
 extends Node
 signal graphics_preset_changed
+signal keybinds_changed
 signal appearance_changed
 signal player_list_information_update
+signal debug_toggled(mode : bool)
 
 var display_name : String = ""
 var connected_to_server := false
 var dedicated_server := false
 var is_text_focused := false
 var is_paused := false
+var debug := false
 
 enum GraphicsPresets {
 	COOL,
@@ -34,7 +37,10 @@ enum GraphicsPresets {
 # A cache of already painted materials that can be re-used. Keeps draw call counts down.
 var graphics_cache : Array[Material] = []
 # Cache of already made meshes to avoid re-making meshes for bricks.
-var mesh_cache : Array[Mesh] = []
+# 1: scale as vector3
+# 2: brick type
+# 3: mesh
+var mesh_cache : Array = []
 
 const GRAPHICS_CACHE_MAX = 256
 const MESH_CACHE_MAX = 128
@@ -44,7 +50,7 @@ func add_to_graphics_cache(what : Material) -> void:
 	else:
 		graphics_cache.remove_at(0)
 		graphics_cache.append(what)
-func add_to_mesh_cache(what : Mesh) -> void:
+func add_to_mesh_cache(what : Array) -> void:
 	if mesh_cache.size() < MESH_CACHE_MAX:
 		mesh_cache.append(what)
 	else:
@@ -54,7 +60,7 @@ func add_to_mesh_cache(what : Mesh) -> void:
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
 
-var brick_materials_as_names : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Immovable"]
+var brick_materials_as_names : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
 
 # Appearance settings
 var shirt : int = 0
@@ -278,7 +284,12 @@ func property_string_to_property(property_name : String, property : String) -> V
 			var arrays : Array = JSON.parse_string(property)
 			return arrays
 		_:
-			return int(property)
+			var parse_attempt : Variant = JSON.parse_string(property)
+			if parse_attempt != null:
+				return parse_attempt
+			else: 
+				print("JSON parse for unknown property ", property_name, " failed, returning property as int.")
+				return int(property)
 
 # sets text focused bool for making sure that input keys don't get pressed
 # when typing
@@ -298,3 +309,25 @@ func string_to_vec3(what : String) -> Vector3:
 	else:
 		# default spawn point
 		return Vector3(0, 51, 0)
+
+func _unhandled_input(event : InputEvent) -> void:
+	if (event is InputEventKey):
+		if event.pressed and event.keycode == KEY_QUOTELEFT:
+			debug = !debug
+			# Show/hide debug collision shapes.
+			# https://github.com/godotengine/godot-proposals/issues/2072
+			var tree := get_tree()
+			tree.debug_collisions_hint = debug
+			var node_stack: Array[Node] = [tree.get_root()]
+			while not node_stack.is_empty():
+				var node: Node = node_stack.pop_back()
+				if is_instance_valid(node):
+					if node is CollisionShape3D or node is CollisionPolygon3D:
+						var parent: Node = node.get_parent()
+						if parent:
+							# "redraw"
+							parent.remove_child(node)
+							parent.add_child(node)
+					node_stack.append_array(node.get_children())
+			# let other debug scripts know that debug has changed
+			emit_signal("debug_toggled", debug)

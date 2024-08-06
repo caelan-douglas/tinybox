@@ -20,6 +20,7 @@ extends CanvasLayer
 @onready var world_name : LineEdit = $PauseMenu/TabContainer/Editor/SaveWorldName
 @onready var pause_menu : Control = $PauseMenu
 @onready var options_button : Button = $OptionsButton
+@onready var scale_tooltip : Label = $ScaleTooltip
 
 func _ready() -> void:
 	$PauseMenu/TabContainer/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)

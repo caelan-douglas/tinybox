@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cwymj2xlxiri4"]
+[gd_scene load_steps=15 format=3 uid="uid://cwymj2xlxiri4"]
 
 [ext_resource type="Script" path="res://src/MotorBrick.gd" id="1_ap5pn"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_xgxvc"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="3_fh6f0"]
 [ext_resource type="PackedScene" uid="uid://con3wop6sjd4q" path="res://data/models/brick/cylinder.blend" id="3_wv0jl"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="4_wcl78"]
+[ext_resource type="Script" path="res://src/DebugVisibility.gd" id="6_mjmfm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n1hir"]
 
@@ -29,6 +30,17 @@ radius = 0.7
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w63pj"]
 size = Vector3(1.3, 1.3, 1.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tegbv"]
+no_depth_test = true
+albedo_color = Color(0, 0.653378, 0.674492, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_oj212"]
+material = SubResource("StandardMaterial3D_tegbv")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
 
 [node name="Brick" type="RigidBody3D"]
 collision_mask = 11
@@ -96,3 +108,20 @@ transform = Transform3D(1.31134e-07, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, 1.
 pixel_size = 0.006
 no_depth_test = true
 texture = ExtResource("4_wcl78")
+
+[node name="JointSpotLeft" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotLeft"]
+visible = false
+mesh = SubResource("SphereMesh_oj212")
+script = ExtResource("6_mjmfm")
+
+[node name="JointSpotRight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotRight"]
+visible = false
+mesh = SubResource("SphereMesh_oj212")
+skeleton = NodePath("../../JointSpotLeft")
+script = ExtResource("6_mjmfm")

@@ -1,4 +1,17 @@
-[gd_scene format=3 uid="uid://bhil8lbbf6ucm"]
+[gd_scene load_steps=4 format=3 uid="uid://bhil8lbbf6ucm"]
+
+[ext_resource type="Script" path="res://src/DebugVisibility.gd" id="1_8pou7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oke3i"]
+no_depth_test = true
+albedo_color = Color(1, 0.267273, 0.111045, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_nbvt3"]
+material = SubResource("StandardMaterial3D_oke3i")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
 
 [node name="Joint" type="Generic6DOFJoint3D"]
 linear_limit_x/softness = 1.5
@@ -10,3 +23,8 @@ angular_limit_y/softness = 1.0
 angular_limit_y/restitution = 0.05
 angular_limit_z/softness = 1.0
 angular_limit_z/restitution = 0.05
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_nbvt3")
+script = ExtResource("1_8pou7")

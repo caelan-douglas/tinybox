@@ -88,7 +88,14 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		entry = colour_picker.instantiate()
 		entry.get_node("ColorPickerButton").color = prop
 		entry.get_node("ColorPickerButton").connect("color_changed", update_object_property.bind(prop_name))
-		
+	
+	# add checkbox
+	if prop is bool:
+		entry = CheckBox.new()
+		entry.text = prop_name.capitalize()
+		entry.button_pressed = prop as bool
+		entry.connect("toggled", update_object_property.bind(prop_name))
+	
 	# Add adjuster for floats and ints
 	if prop is float || prop is int:
 		if prop_name == "_material":

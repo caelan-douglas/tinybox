@@ -17,20 +17,22 @@
 extends CanvasLayer
 class_name MultiplayerMenu
 
-@onready var preview_player : RigidPlayer = Global.get_world().get_current_map().get_node("Camera3D/RigidPlayer")
+@onready var preview_player : RigidPlayer = Global.get_world().get_current_map().get_node("RigidPlayer")
 
 func _ready() -> void:
 	Global.connect("appearance_changed", preview_player.change_appearance)
-	$SettingsMenu/Graphics.connect("pressed", toggle_graphics_presets)
-	$MainMenu/LeftColumn/MultiplayerSettings/MultiplayerSettingsContainer/Appearance.connect("pressed", show_appearance_settings)
+	$MainMenu/Appearance.connect("pressed", show_appearance_settings)
 	# play hair swing animation on new hair selected
 	#$AppearanceMenu/HairPanel/HairPanelContainer/Picker.connect("item_selected", play_preview_character_appearance_animation)
-	$AppearanceMenu/HBoxContainer/Back.connect("pressed", hide_appearance_settings)
-	$MainMenu/LeftColumn/Settings.connect("pressed", show_settings)
-	$SettingsMenu/Keybinds.connect("pressed", show_keybinds)
-	$MainMenu/LeftColumn/Quit.connect("pressed", quit)
-	$SettingsMenu/HBoxContainer/Back.connect("pressed", hide_settings)
-	$KeybindsMenu/HBoxContainer/Back.connect("pressed", hide_keybinds)
+	$AppearanceMenu/Back.connect("pressed", hide_appearance_settings)
+	$MainMenu/Play.connect("pressed", show_hide.bind("PlayMenu", "MainMenu"))
+	$PlayMenu/Back.connect("pressed", show_hide.bind("MainMenu", "PlayMenu"))
+	$PlayMenu/HostHbox/Edit.connect("pressed", show_hide.bind("HostSettingsMenu", "PlayMenu"))
+	$PlayMenu/JoinHbox/Edit.connect("pressed", show_hide.bind("JoinSettingsMenu", "PlayMenu"))
+	$HostSettingsMenu/Back.connect("pressed", show_hide.bind("PlayMenu", "HostSettingsMenu"))
+	$JoinSettingsMenu/Back.connect("pressed", show_hide.bind("PlayMenu", "JoinSettingsMenu"))
+	$MainMenu/Settings.connect("pressed", show_settings)
+	$MainMenu/Quit.connect("pressed", quit)
 	
 	# Appearance settings
 	var hair_colour_picker : Control = $AppearanceMenu/HairPanel/HairPanelContainer/ColorPickerButton
@@ -55,62 +57,24 @@ func _ready() -> void:
 	skin_colour_picker.color = Global.skin_colour
 	hair_picker.selected = Global.hair
 	shirt_picker.selected = Global.shirt
-	
-	var current_preset : int = Global.load_graphics_preset()
-	match current_preset:
-		0:
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/cool")
-		1:
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/bad")
-		2:
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/awful")
-
-# Toggles the graphics presets via Global and saves the setting.
-func toggle_graphics_presets() -> void:
-	var current_preset : int = Global.get_graphics_preset()
-	match current_preset:
-		0:
-			# set to BAD as we pressed button on COOL
-			Global.set_graphics_preset(Global.GraphicsPresets.BAD)
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/bad")
-		1:
-			# set to AWFUL
-			Global.set_graphics_preset(Global.GraphicsPresets.AWFUL)
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/awful")
-		2:
-			# set to COOL
-			Global.set_graphics_preset(Global.GraphicsPresets.COOL)
-			$SettingsMenu/Graphics.text = JsonHandler.find_entry_in_file("ui/graphics_settings/cool")
-	UserPreferences.save_pref("graphics_preset", Global.get_graphics_preset())
 
 func show_appearance_settings() -> void:
 	$MainMenu.visible = false
 	$AppearanceMenu.visible = true
 	preview_player.change_appearance()
-	preview_player.visible = true
 
 func hide_appearance_settings() -> void:
 	$MainMenu.visible = true
 	$AppearanceMenu.visible = false
-	preview_player.visible = false
 	# Save appearance on back
 	Global.save_appearance()
 
+func show_hide(a : String, b : String) -> void:
+	get_node(a).visible = true
+	get_node(b).visible = false
+
 func show_settings() -> void:
-	$MainMenu.visible = false
 	$SettingsMenu.visible = true
-
-func hide_settings() -> void:
-	$MainMenu.visible = true
-	$SettingsMenu.visible = false
-
-func show_keybinds() -> void:
-	$SettingsMenu.visible = false
-	$KeybindsMenu.visible = true
-
-func hide_keybinds() -> void:
-	$SettingsMenu.visible = true
-	$KeybindsMenu.visible = false
 
 func quit() -> void:
 	get_tree().quit()

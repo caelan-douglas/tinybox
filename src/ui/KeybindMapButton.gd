@@ -69,6 +69,7 @@ func _input(event : InputEvent) -> void:
 						disabled = false
 						# save pref
 						UserPreferences.save_pref(str("keybind_", keybind_for_what), key_as_string, "keybinds")
+						Global.emit_signal("keybinds_changed")
 						return
 				elif event is InputEventMouseButton:
 					if event.button_index == MOUSE_BUTTON_MIDDLE:
@@ -76,6 +77,7 @@ func _input(event : InputEvent) -> void:
 						text = "MMB"
 						disabled = false
 						UserPreferences.save_pref(str("keybind_", keybind_for_what), "MMB", "keybinds")
+						Global.emit_signal("keybinds_changed")
 						return
 			# invalid key
 			UIHandler.show_alert("That key is invalid or reserved (must be 0-9, non-reserved letter, or middle mouse button).", 8, false, UIHandler.alert_colour_error)
@@ -91,12 +93,12 @@ func _on_defaults_pressed() -> void:
 		var key_as_string : String = OS.get_keycode_string(default_key as int)
 		text = key_as_string
 		UserPreferences.save_pref(str("keybind_", keybind_for_what), key_as_string, "keybinds")
-		
+		Global.emit_signal("keybinds_changed")
 		defaults_button.text = "Enable Auto Keybinds"
 	# if setting back to auto
 	else:
 		UserPreferences.delete_pref("keybinds", str("keybind_", keybind_for_what))
 		text = "(Auto)"
 		disabled = true
-		
+		Global.emit_signal("keybinds_changed")
 		defaults_button.text = "Enable Custom Keybinds"

@@ -441,7 +441,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	if !multiplayer.is_server(): return
 	
 	var building_group := []
-	
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	if line_split_init.size() < 2:
 		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
@@ -492,9 +491,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 							property = property - offset_pos + b_position
 						# set the property
 						b.set_property(property_name, property)
-	
-	### Placing bricks
-	
+	### Joining bricks
 	# don't place nothing
 	if building_group.size() < 1:
 		printerr("Building: Tried to load building with nothing in it.")
