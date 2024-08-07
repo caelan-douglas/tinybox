@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://fm6lgsauxibh"]
+[gd_scene load_steps=8 format=3 uid="uid://fm6lgsauxibh"]
 
 [ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
 [ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="2_5ipcy"]
+[ext_resource type="Sky" uid="uid://qbldbv6nh5ve" path="res://data/materials/skybox/cloudy_skybox.tres" id="3_hhohi"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
 
 [sub_resource type="Gradient" id="Gradient_yngdy"]
@@ -11,24 +12,14 @@ colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
 gradient = SubResource("Gradient_yngdy")
 fill_from = Vector2(0, 0.175214)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hd50p"]
-load_path = "res://.godot/imported/kloppenheim_03_puresky_4k.hdr-74835c8ba4c351309f2b6bb37015d258.bptc.ctex"
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bo2xc"]
-panorama = SubResource("CompressedTexture2D_hd50p")
-
-[sub_resource type="Sky" id="Sky_irb7e"]
-sky_material = SubResource("PanoramaSkyMaterial_bo2xc")
-radiance_size = 2
-
 [sub_resource type="Environment" id="Environment_00u0a"]
 background_mode = 2
 background_energy_multiplier = 0.8
-sky = SubResource("Sky_irb7e")
+sky = ExtResource("3_hhohi")
 sky_rotation = Vector3(0, 2.34049, 0)
 ambient_light_source = 3
 ambient_light_color = Color(0.592544, 0.674771, 0.81831, 1)
-ambient_light_sky_contribution = 0.5
+ambient_light_sky_contribution = 0.3
 tonemap_mode = 3
 ssao_enabled = true
 ssao_radius = 2.0

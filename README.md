@@ -21,10 +21,9 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
-Showing various things made in-game and with the world editor.<br><br>
 <img src=.export_exclude/screenshot_1.png width="600px">
-<img src=.export_exclude/screenshot_2.png width="600px">
 <img src=.export_exclude/screenshot_3.png width="600px">
+<img src=.export_exclude/screenshot_2.png width="600px">
 <img src=.export_exclude/screenshot_4.png width="600px">
 
 ### Game vision

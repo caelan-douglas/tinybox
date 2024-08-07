@@ -31,7 +31,7 @@ func _ready() -> void:
 	reset()
 
 func _process(delta : float) -> void:
-	if !disabled && get_tools().size() > 0 &&(Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
+	if !disabled && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED && get_tools().size() > 0 &&(Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
 		var active_tool : Tool = get_active_tool()
 		if active_tool == null:
 			# shift-scroll zooms camera

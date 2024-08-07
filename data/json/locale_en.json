@@ -4,8 +4,7 @@
         "cancel": "Cancel",
         "quit": "Quit to desktop",
         "play": "Play",
-        "back": "<<< Back",
-        "back_save": "<<< Save",
+        "back": "Back",
         "upload_image": "Upload image...",
         "save": "Save",
         "save_copy": "Save a copy",
@@ -17,7 +16,7 @@
         "start_game": "Start minigame lobby",
         "lobby": "Lobby Settings",
         "participants": "Participants",
-        "appearance_button": "Player Appearance...",
+        "appearance_button": "Player Appearance",
         "appearance": "Appearance",
         "settings": "Settings",
         "keybinds": "Keybinds",
@@ -39,8 +38,8 @@
         "host_panel": "Host a server",
         "join_panel": "Join via IP",
         "health": "Health",
-        "sandbox_mode": "Paused -\nSandbox",
-        "minigame_mode": "Paused -\nMinigame",
+        "paused": "Paused",
+        "contributors": "Contributors",
         "graphics_settings": {
             "cool": "Graffix: COOL",
             "bad": "Graffix: BAD",
@@ -77,7 +76,7 @@
             }
         },
         "editor": {
-            "welcome": "Welcome to the world editor!",
+            "welcome": "Welcome to the World Editor!",
             "world_properties": "World properties",
             "property_editor": "Property Editor",
             "editing_hovered": "(Editing hovered object)",
@@ -86,7 +85,7 @@
             "water_type": "Water type",
             "environment": "Environment",
             "background": "Background",
-            "item_chooser_title": "Select an item or object to assign to this slot.",
+            "item_chooser_title": "Select Brick or Object",
             "copy_properties": "Copy properties to active tool",
             "copied": "Copied to tool!",
             "options_button": "Options, Test, Gamemodes, Pause...",
@@ -213,5 +212,5 @@
             "TIMER_EXCEEDS": "Timer exceeds (sec)..."
         }
     },
-    "attributions": "Tinybox (c) 2023-present Caelan Douglas\nMusic by Matthew Tzavelas\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code available at\nhttps://github.com/caelan-douglas/tinybox"
+    "attributions": "Tinybox (c) 2023-present Caelan Douglas • Music by Matthew Tzavelas\nTinybox is free software licensed under the GNU Affero General Public License v3\nMusic, textures, sounds, etc. are under multiple different licenses\nSee details & source code at: https://github.com/caelan-douglas/tinybox"
 }

@@ -14,16 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Control
+extends AnimatedList
 
-@onready var graphics_button : Button = $TabContainer/General/Graphics
+@onready var graphics_button : Button = $Graphics
 @onready var save_button : Button = $SaveButton
 @export var show_save_button : bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super()
 	graphics_button.connect("pressed", toggle_graphics_presets)
-	save_button.connect("pressed", self.set_visible.bind(false))
 	if !show_save_button:
 		save_button.visible = false
 	var current_preset : int = Global.load_graphics_preset()

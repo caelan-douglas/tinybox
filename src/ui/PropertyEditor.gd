@@ -22,15 +22,15 @@ var selected_item_properties : Dictionary = {}
 var properties_from_tool : Node = null
 var editing_hovered : bool = false:
 	set(value):
-		$Editing.visible = value
+		$Panel/Editing.visible = value
 		editing_hovered = value
 	get:
 		return editing_hovered
 
 var copied_properties : Dictionary = {}
 
-@onready var editor_props_list : VBoxContainer = get_node("Menu")
-@onready var copy_button : Button = get_node("Copy")
+@onready var editor_props_list : VBoxContainer = get_node("Panel/Menu")
+@onready var copy_button : Button = get_node("Panel/Copy")
 
 func _ready() -> void:
 	copy_button.connect("pressed", _on_copy_pressed)

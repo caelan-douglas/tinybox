@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://1704itv20xrn"]
+[gd_scene load_steps=4 format=3 uid="uid://1704itv20xrn"]
 
 [ext_resource type="Script" path="res://src/Sign.gd" id="1_3pn5f"]
 [ext_resource type="PackedScene" uid="uid://bs2fw01jbmd55" path="res://data/models/sign/sign.blend" id="2_sw52x"]
-[ext_resource type="FontFile" uid="uid://crmv21pdqwcyf" path="res://data/font/cd12x6.ttf" id="3_7n3sg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yactn"]
 size = Vector3(3.6, 2.4, 0.3)
@@ -20,10 +19,9 @@ text = "Lots of text on this sign
 Lots of text on this sign
 You can write whatever you want
 On this sign"
-font = ExtResource("3_7n3sg")
 font_size = 48
 horizontal_alignment = 0
-line_spacing = 16.0
+line_spacing = -2.0
 autowrap_mode = 2
 width = 660.0
 

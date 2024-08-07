@@ -4,9 +4,8 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_ykjux"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="3_obx5f"]
 
-[node name="PropertyEditor" type="Control"]
+[node name="PropertyEditor" type="PanelContainer"]
 custom_minimum_size = Vector2(320, 400)
-layout_mode = 3
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -17,81 +16,19 @@ offset_bottom = 200.0
 grow_vertical = 2
 script = ExtResource("1_lg4wx")
 
-[node name="DynamicLabel2" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -156.0
-offset_top = -65.0
-offset_right = 156.0
-offset_bottom = -11.0
-grow_horizontal = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
-theme_override_constants/outline_size = 6
-text = "Press R to free / capture mouse.
-(Or click outside this panel to
-capture it again.)"
-horizontal_alignment = 1
-script = ExtResource("1_ykjux")
-json_text = "ui/editor/free_mouse"
-
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Menu" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -131.0
-offset_right = 154.0
-offset_bottom = 144.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="DynamicLabel" type="Label" parent="Menu"]
+[node name="Panel" type="VBoxContainer" parent="."]
 layout_mode = 2
-text = "Adjustable object properties
-will appear here."
-script = ExtResource("1_ykjux")
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -156.0
-offset_top = 20.0
-offset_right = 156.0
-offset_bottom = 36.0
-grow_horizontal = 2
+[node name="Title" type="Label" parent="Panel"]
+layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
 theme_override_constants/outline_size = 6
 text = "Property Editor"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/property_editor"
 
-[node name="Editing" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -156.0
-offset_top = 44.0
-offset_right = 156.0
-offset_bottom = 60.0
-grow_horizontal = 2
+[node name="Editing" type="Label" parent="Panel"]
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.641414, 0.350621, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
 theme_override_constants/outline_size = 6
@@ -99,19 +36,20 @@ text = "Editing hovered object:"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/editing_hovered"
 
-[node name="Copy" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -46.0
-offset_right = 160.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Menu" type="VBoxContainer" parent="Panel"]
+custom_minimum_size = Vector2(308, 0)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="DynamicLabel" type="Label" parent="Panel/Menu"]
+layout_mode = 2
+text = "Adjustable object properties
+will appear here."
+script = ExtResource("1_ykjux")
+
+[node name="Copy" type="Button" parent="Panel"]
+layout_mode = 2
 text = "Copy properties to active tool"
 script = ExtResource("3_obx5f")
 json_text = "ui/editor/copy_properties"

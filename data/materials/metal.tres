@@ -5,14 +5,14 @@
 [resource]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_vfk17")
-metallic = 0.5
+metallic = 1.0
 metallic_specular = 1.0
 roughness_texture = ExtResource("1_vfk17")
 roughness_texture_channel = 4
+normal_texture = ExtResource("1_vfk17")
 rim_enabled = true
 rim = 0.3
 rim_tint = 0.8
-uv1_scale = Vector3(0.125, 0.125, 0.125)
+uv1_scale = Vector3(0.25, 0.25, 0.25)
 uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 uv1_triplanar = true

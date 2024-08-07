@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
+extends AnimatedList
 
 @onready var selector : OptionButton = $GamemodeSelector
 @onready var button : Button = $StartGamemode
@@ -23,6 +23,7 @@ extends Node
 var gamemode_list : Array[Gamemode] = []
 
 func _ready() -> void:
+	super()
 	# automatically populate gamemode list based on map
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 	button.connect("pressed", _on_start_gamemode_pressed)

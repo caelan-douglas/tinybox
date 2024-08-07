@@ -3,8 +3,8 @@
 [ext_resource type="AnimationLibrary" uid="uid://htgaatcuovr2" path="res://data/animation/ui_alert/alert_anim_library.res" id="1_cx6ty"]
 [ext_resource type="Script" path="res://src/ui/Alert.gd" id="1_yc1hw"]
 
-[node name="Alert" type="Panel"]
-custom_minimum_size = Vector2(496, 104)
+[node name="Alert" type="PanelContainer"]
+custom_minimum_size = Vector2(496, 140)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -23,16 +23,7 @@ script = ExtResource("1_yc1hw")
 
 [node name="Content" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="Label" type="Label" parent="Content"]
 layout_mode = 2

@@ -1,6 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf7qurmijub4y"]
-
-[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="1_qf7f3"]
+[gd_scene format=3 uid="uid://bf7qurmijub4y"]
 
 [node name="ToolButton" type="Button"]
 custom_minimum_size = Vector2(160, 48)
@@ -11,11 +9,12 @@ text = "texttexttext"
 clip_text = true
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-self_modulate = Color(0.380392, 0.643137, 0.560784, 1)
+self_modulate = Color(0.3, 2.1, 0.6, 1)
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 14.0
+offset_bottom = 32.0
 grow_horizontal = 2
 mouse_filter = 2
 show_percentage = false
@@ -23,10 +22,9 @@ show_percentage = false
 [node name="NumberLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 7.0
-offset_top = -14.0
+offset_top = -15.0
 offset_right = 47.0
-offset_bottom = 64.0
+offset_bottom = 69.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
-theme_override_fonts/font = ExtResource("1_qf7f3")
 theme_override_font_sizes/font_size = 64
 text = "1"

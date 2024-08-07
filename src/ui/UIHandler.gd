@@ -22,7 +22,7 @@ var alert_actions_resource : PackedScene = preload("res://data/scene/ui/AlertAct
 var button : PackedScene = preload("res://data/scene/ui/Button.tscn")
 
 var alert_colour_gold : Color = Color(4.0, 3.0, 1.0, 1)
-var alert_colour_error : Color = Color(4.0, 0.2, 0.3, 1)
+var alert_colour_error : Color = Color("ff655a")
 var alert_colour_player : Color = Color(1.0, 2.0, 14.0, 1)
 var alert_colour_death : Color = Color(1.8, 0.0, 1.6, 1)
 

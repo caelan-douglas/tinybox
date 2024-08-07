@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://da61xyvkih0q"]
+[gd_scene load_steps=17 format=3 uid="uid://da61xyvkih0q"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
-[ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="5_xxi81"]
+[ext_resource type="Animation" uid="uid://cpbmua5aa3x2j" path="res://data/animation/main_menu/appearance_in.res" id="5_1xpc5"]
+[ext_resource type="Animation" uid="uid://bv8140eakwmkm" path="res://data/animation/main_menu/appearance_out.res" id="6_eed1v"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="9_ykrt6"]
 
@@ -11,57 +12,198 @@ dof_blur_far_distance = 300.0
 dof_blur_far_transition = 180.0
 dof_blur_amount = 0.08
 
-[sub_resource type="Gradient" id="Gradient_f1ai1"]
+[sub_resource type="Gradient" id="Gradient_eflra"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_0l2xg"]
-gradient = SubResource("Gradient_f1ai1")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y3nqn"]
+gradient = SubResource("Gradient_eflra")
 fill_from = Vector2(0, 0.175214)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_nogvs"]
-panorama = ExtResource("5_xxi81")
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_riy7k"]
 
-[sub_resource type="Sky" id="Sky_6nyd1"]
-sky_material = SubResource("PanoramaSkyMaterial_nogvs")
+[sub_resource type="Sky" id="Sky_s27lj"]
+sky_material = SubResource("ProceduralSkyMaterial_riy7k")
 radiance_size = 2
 
-[sub_resource type="Environment" id="Environment_oe2ii"]
+[sub_resource type="Environment" id="Environment_buwk3"]
 background_mode = 2
 background_energy_multiplier = 0.8
-sky = SubResource("Sky_6nyd1")
+sky = SubResource("Sky_s27lj")
 sky_rotation = Vector3(0, 2.34049, 0)
 ambient_light_source = 3
-ambient_light_color = Color(0.338358, 0.430332, 0.593269, 1)
-ambient_light_sky_contribution = 0.5
+ambient_light_color = Color(0.380391, 0.475998, 0.645027, 1)
+ambient_light_sky_contribution = 0.34
 tonemap_mode = 3
 ssao_enabled = true
 ssao_radius = 2.0
 ssao_intensity = 3.0
 ssil_enabled = true
 glow_enabled = true
-fog_enabled = true
 fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
 fog_sun_scatter = 0.03
 fog_density = 0.001
 fog_sky_affect = 0.787
 adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture2D_0l2xg")
+adjustment_color_correction = SubResource("GradientTexture2D_y3nqn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kht"]
 cull_mode = 1
 albedo_color = Color(0.235604, 0.359053, 0.323467, 1)
+roughness = 0.55
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_gk5ne"]
 material = SubResource("StandardMaterial3D_e1kht")
 radius = 6.382
 height = 85.459
 
+[sub_resource type="Animation" id="Animation_ce657"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RigidPlayer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.905372, -1.52259, -2.68341)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RigidPlayer:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-7.21934e-09, 0.397097, -9.07914e-09)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WorldEnvironment:environment:ambient_light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DirectionalLight3D:light_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DirectionalLight3D2:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AppearanceLight:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AppearanceLight:light_energy")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AppearanceLight2:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("AppearanceLight3:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("AppearanceLight2:light_energy")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("AppearanceLight3:light_energy")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kgx20"]
+_data = {
+"RESET": SubResource("Animation_ce657"),
+"appearance_in": ExtResource("5_1xpc5"),
+"appearance_out": ExtResource("6_eed1v")
+}
+
 [node name="MultiplayerMenuMap" type="Node3D"]
 script = ExtResource("1_uutk4")
 songs = Array[String](["mus1", "floaty", "warp", "frozenfield"])
 
 [node name="RigidPlayer" parent="." instance=ExtResource("2_pa7kw")]
-transform = Transform3D(0.922187, 3.65095e-08, 0.386743, -9.07914e-09, 1, -7.27918e-08, -0.386743, -2.31397e-08, 0.922187, -0.905372, -1.52259, -2.68341)
+transform = Transform3D(0.922187, 5.58064e-09, 0.386743, -9.07914e-09, 1, 7.21934e-09, -0.386743, -1.01689e-08, 0.922187, -0.905372, -1.52259, -2.68341)
 spawn_as_dummy = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -73,7 +215,7 @@ fov = 35.0
 script = ExtResource("9_ykrt6")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_oe2ii")
+environment = SubResource("Environment_buwk3")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.586745, -0.516408, 0.62374, -0.120871, 0.705786, 0.698038, -0.8007, -0.484963, 0.351697, 0, 0, 0)
@@ -81,7 +223,7 @@ light_color = Color(0.677523, 0.539286, 0.471757, 1)
 light_energy = 3.0
 shadow_enabled = true
 shadow_blur = 2.391
-directional_shadow_max_distance = 400.0
+directional_shadow_max_distance = 63.5
 script = ExtResource("6_oxx4f")
 visible_on_awful = false
 
@@ -91,10 +233,37 @@ light_color = Color(0.66729, 0.519686, 0.596753, 1)
 light_energy = 2.0
 shadow_enabled = true
 shadow_blur = 2.391
-directional_shadow_max_distance = 400.0
+directional_shadow_max_distance = 12.3
 script = ExtResource("6_oxx4f")
 visible_on_awful = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 4.79804, -1.63165)
 mesh = SubResource("CapsuleMesh_gk5ne")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_kgx20")
+}
+
+[node name="AppearanceLight" type="SpotLight3D" parent="."]
+transform = Transform3D(0.97303, 0.0150188, -0.230189, 0.205391, 0.397846, 0.894166, 0.105009, -0.917329, 0.384032, -0.997865, 2.61603, -1.14583)
+visible = false
+light_energy = 0.0
+spot_range = 50.0
+spot_angle = 15.0
+spot_angle_attenuation = 0.148651
+
+[node name="AppearanceLight2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.334476, 0.308241, -4.16382)
+visible = false
+light_color = Color(0.947246, 0.837649, 0.808637, 1)
+light_energy = 0.0
+light_specular = 0.0
+
+[node name="AppearanceLight3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21915, 0.308241, -0.239671)
+visible = false
+light_color = Color(0.857099, 0.61032, 0.54578, 1)
+light_energy = 0.0
+light_specular = 0.0

@@ -30,6 +30,8 @@ func _ready() -> void:
 	load_settings()
 	# when the gamecanvas is shown or hidden
 	connect("visibility_changed", load_settings)
+	# don't change value with scrollwheel
+	scrollable = false
 
 func load_settings() -> void:
 	match(bus):

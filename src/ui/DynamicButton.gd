@@ -25,6 +25,10 @@ func _ready() -> void:
 	if is_visible_in_tree() && grab_initial_focus:
 		grab_focus()
 	
+	# green save buttons
+	if json_text == "ui/save":
+		self_modulate = Color(1, 3.2, 1, 1)
+	
 	connect("mouse_entered", _on_mouse_entered)
 	connect("mouse_exited", _on_mouse_exited)
 

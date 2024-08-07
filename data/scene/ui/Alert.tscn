@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://src/ui/Alert.gd" id="1_ucase"]
 [ext_resource type="AnimationLibrary" uid="uid://htgaatcuovr2" path="res://data/animation/ui_alert/alert_anim_library.res" id="2_s56u3"]
 
-[node name="Alert" type="Panel"]
-custom_minimum_size = Vector2(496, 50)
+[node name="Alert" type="PanelContainer"]
+custom_minimum_size = Vector2(496, 70)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -23,19 +23,16 @@ script = ExtResource("1_ucase")
 
 [node name="Content" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Content"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="Content"]
-layout_mode = 2
-offset_top = 1.0
-offset_right = 496.0
-offset_bottom = 49.0
 text = "Alert text..."
 horizontal_alignment = 1
 vertical_alignment = 1

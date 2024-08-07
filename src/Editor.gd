@@ -25,7 +25,7 @@ signal deselected
 @onready var selector : Node = get_node("SelectArea/Selector")
 @onready var select_area : Area3D = get_node("SelectArea")
 @onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor")
-@onready var item_chooser_list : Control =  get_tree().current_scene.get_node("EditorCanvas/LeftPanel/ItemChooser/Margin/Menu/ScrollContainer/ItemList")
+@onready var item_chooser_list : Control =  get_tree().current_scene.get_node("EditorCanvas/LeftPanel/ItemChooser/Menu/ScrollContainer/ItemList")
 
 var hovered_editable_object : Node = null
 var can_select_object : bool = true
@@ -106,11 +106,11 @@ func _on_tbw_loaded() -> void:
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:
-		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
+		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
 	# Update background text
 	var bg : TBWObject = get_background()
 	if bg != null:
-		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
+		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
 
 func show_item_chooser() -> void:
 	item_chooser_list.visible = true
@@ -157,7 +157,7 @@ func adjust_water_height(amt : float) -> void:
 	water_height += amt
 	if active_water != null:
 		active_water.global_position.y = water_height
-	editor_canvas.get_node("PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
+	editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
 
 func delete_environment() -> void:
 	for obj in Global.get_world().get_children():
@@ -207,7 +207,7 @@ func switch_environment() -> void:
 	
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
-	editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
+	editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
 
 func switch_background() -> void:
 	var bg : TBWObject = null
@@ -238,10 +238,10 @@ func switch_background() -> void:
 	if new_bg != null:
 		Global.get_world().add_child(new_bg, true)
 		current_bg_name = new_bg.tbw_object_type
-		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
+		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
 	else:
 		current_bg_name = "(none)"
-		editor_canvas.get_node("PauseMenu/TabContainer/World Properties/Background").text = "(none)"
+		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = "(none)"
 
 # Hide player and make them invulnerable.
 func disable_player() -> int:

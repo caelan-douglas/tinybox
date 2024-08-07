@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjhwg6c4kxm5n"]
+[gd_scene load_steps=6 format=3 uid="uid://bjhwg6c4kxm5n"]
 
 [ext_resource type="Script" path="res://src/CameraPreviewPoint.gd" id="1_k8gqa"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_vsu3r"]
-[ext_resource type="FontFile" uid="uid://crmv21pdqwcyf" path="res://data/font/cd12x6.ttf" id="3_4dyrq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lopqb"]
 
@@ -36,7 +35,6 @@ billboard = 1
 alpha_cut = 1
 text = "Camera
 Preview Point"
-font = ExtResource("3_4dyrq")
 
 [node name="Sprite3D" type="Sprite3D" parent="Mesh"]
 transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 2.08165e-12, 0.01, -0.7)

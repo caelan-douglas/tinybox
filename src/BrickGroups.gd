@@ -53,7 +53,7 @@ func check_world_groups(override : bool = false) -> void:
 				if b.joint_detector.has_overlapping_bodies():
 					for other : Variant in b.joint_detector.get_overlapping_bodies():
 						if other is Brick:
-							if other != b && other.group != b.group && other.groupable:
+							if other != b && other.group != b.group && other.groupable && (!b.immovable && !other.immovable):
 								var other_size := 0
 								var my_size := 0
 								for othergroup : Variant in groups[other.group]:

@@ -1,14 +1,17 @@
-[gd_scene load_steps=17 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=22 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_b6w4i"]
+[ext_resource type="Script" path="res://src/ui/AnimatedPanelContainer.gd" id="4_gqbks"]
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_noy30"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
+[ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="6_5yhmg"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
+[ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="6_i5rxj"]
 [ext_resource type="Script" path="res://src/ui/ChatEntry.gd" id="8_kp7x3"]
 [ext_resource type="Script" path="res://src/ui/GamemodeEditorMenu.gd" id="8_stfvy"]
-[ext_resource type="StyleBox" uid="uid://dabhh11fbgqey" path="res://data/materials/theme_elements/stylebox_purple.tres" id="9_pkgum"]
+[ext_resource type="StyleBox" uid="uid://dabhh11fbgqey" path="res://data/theme_elements/stylebox_purple.tres" id="9_pkgum"]
 [ext_resource type="PackedScene" uid="uid://oujpbtog7ni" path="res://data/scene/ui/EventListEditor.tscn" id="11_ukkc0"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 
@@ -21,6 +24,15 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b8ase"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfptg"]
+
+[sub_resource type="Gradient" id="Gradient_22hil"]
+offsets = PackedFloat32Array(0, 0.281065)
+colors = PackedColorArray(0, 0, 0, 0, 0.118789, 0.104957, 0.187448, 0.745098)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mw3a6"]
+gradient = SubResource("Gradient_22hil")
+width = 128
+height = 1
 
 [node name="EditorCanvas" type="CanvasLayer"]
 script = ExtResource("1_4dmeu")
@@ -49,7 +61,7 @@ offset_top = 8.0
 offset_right = 92.5
 offset_bottom = 56.0
 grow_horizontal = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 2
 
 [node name="LeftPanel" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(360, 2.08165e-12)
@@ -78,356 +90,65 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="EntryScreen"]
-custom_minimum_size = Vector2(400, 400)
+[node name="Panel" type="PanelContainer" parent="EntryScreen"]
+self_modulate = Color(0, 1.6, 0.8, 1)
+custom_minimum_size = Vector2(320, 400)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_gqbks")
 
-[node name="Menu" type="VBoxContainer" parent="EntryScreen"]
+[node name="Menu" type="VBoxContainer" parent="EntryScreen/Panel"]
 custom_minimum_size = Vector2(308, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -52.0
-offset_right = 154.0
-offset_bottom = 52.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 alignment = 1
 
-[node name="DynamicLabel" type="Label" parent="EntryScreen/Menu"]
+[node name="Title" type="Label" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
-text = "Welcome to the world editor!"
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
+theme_override_constants/outline_size = 6
+text = "Welcome to the World Editor"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/welcome"
 
-[node name="Spacer" type="Control" parent="EntryScreen/Menu"]
+[node name="Spacer" type="Control" parent="EntryScreen/Panel/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="EntryScreen/Menu"]
+[node name="DynamicLabel2" type="Label" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
-text = "Choose to load an existing
-world, or press \"New world\"
-to start with the default
-template."
+text = "Choose to load an existing world, or press \"New world\" to start with the default template."
+autowrap_mode = 2
 script = ExtResource("6_aufvl")
 
-[node name="Spacer2" type="Control" parent="EntryScreen/Menu"]
+[node name="Spacer2" type="Control" parent="EntryScreen/Panel/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="MapSelection" parent="EntryScreen/Menu" instance=ExtResource("3_b6w4i")]
+[node name="MapSelection" parent="EntryScreen/Panel/Menu" instance=ExtResource("3_b6w4i")]
 layout_mode = 2
 text_overrun_behavior = 4
 
-[node name="Load" type="Button" parent="EntryScreen/Menu"]
+[node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
 text = "Load existing world"
 
-[node name="Spacer3" type="Control" parent="EntryScreen/Menu"]
+[node name="Spacer3" type="Control" parent="EntryScreen/Panel/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="New" type="Button" parent="EntryScreen/Menu"]
+[node name="New" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
 text = "New world"
-
-[node name="PauseMenu" type="Control" parent="."]
-visible = false
-custom_minimum_size = Vector2(540, 540)
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TabContainer" type="TabContainer" parent="PauseMenu"]
-custom_minimum_size = Vector2(600, 600)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -154.0
-offset_top = -238.0
-offset_right = 154.0
-offset_bottom = 238.0
-grow_horizontal = 2
-grow_vertical = 2
-tab_alignment = 1
-
-[node name="Editor" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="Spacer" type="Control" parent="PauseMenu/TabContainer/Editor"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="LeaveButton" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("12_nulw5")]
-self_modulate = Color(0.917678, 0.110667, 5.12117e-07, 1)
-layout_mode = 2
-text = "Leave Editor"
-editor_leave_text = true
-
-[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/Editor"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="DynamicLabel" type="Label" parent="PauseMenu/TabContainer/Editor"]
-layout_mode = 2
-text = "Save world"
-script = ExtResource("6_aufvl")
-
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/TabContainer/Editor"]
-layout_mode = 2
-placeholder_text = "World name..."
-
-[node name="SaveWorld" type="Button" parent="PauseMenu/TabContainer/Editor"]
-layout_mode = 2
-text = "Save world"
-
-[node name="TestWorld" type="Button" parent="PauseMenu/TabContainer/Editor"]
-self_modulate = Color(1, 2.702, 1, 1)
-layout_mode = 2
-text = "Save & test world"
-
-[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Editor"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/Editor"]
-layout_mode = 2
-text = "Load world"
-script = ExtResource("6_aufvl")
-
-[node name="MapSelection" parent="PauseMenu/TabContainer/Editor" instance=ExtResource("3_b6w4i")]
-layout_mode = 2
-text_overrun_behavior = 4
-
-[node name="Load" type="Button" parent="PauseMenu/TabContainer/Editor"]
-layout_mode = 2
-text = "Load world"
-
-[node name="Spacer5" type="Control" parent="PauseMenu/TabContainer/Editor"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="World Properties" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-visible = false
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Water"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/water"
-
-[node name="Water" type="Button" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Toggle water"
-
-[node name="WaterHeightAdjuster" parent="PauseMenu/TabContainer/World Properties" instance=ExtResource("5_umgt3")]
-layout_mode = 2
-
-[node name="DynamicLabel" parent="PauseMenu/TabContainer/World Properties/WaterHeightAdjuster" index="2"]
-text = "Water height: 42"
-
-[node name="DynamicLabel5" type="Label" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
-text = "Water type"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/water_type"
-
-[node name="WaterType" type="Button" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Water"
-
-[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/World Properties"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
-layout_mode = 2
-
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Environment"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/environment"
-
-[node name="Environment" type="Button" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Sunny"
-
-[node name="Spacer3" type="Control" parent="PauseMenu/TabContainer/World Properties"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
-layout_mode = 2
-
-[node name="DynamicLabel4" type="Label" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "Background"
-script = ExtResource("6_aufvl")
-json_text = "ui/editor/background"
-
-[node name="Background" type="Button" parent="PauseMenu/TabContainer/World Properties"]
-layout_mode = 2
-text = "(none)"
-
-[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-visible = false
-custom_minimum_size = Vector2(308, 0)
-layout_mode = 2
-alignment = 1
-script = ExtResource("8_stfvy")
-
-[node name="LoadPresetTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "Load existing preset..."
-script = ExtResource("6_aufvl")
-
-[node name="PresetSelection" parent="PauseMenu/TabContainer/Gamemodes" instance=ExtResource("3_b6w4i")]
-layout_mode = 2
-text_overrun_behavior = 4
-script = null
-
-[node name="Panel" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes"]
-custom_minimum_size = Vector2(0, 27)
-layout_mode = 2
-script = ExtResource("8_kp7x3")
-
-[node name="Panel" type="Panel" parent="PauseMenu/TabContainer/Gamemodes/Panel"]
-layout_mode = 2
-theme_override_styles/panel = ExtResource("9_pkgum")
-
-[node name="Margin" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel"]
-layout_mode = 2
-theme_override_constants/margin_left = 13
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin"]
-custom_minimum_size = Vector2(2.08165e-12, 260)
-layout_mode = 2
-
-[node name="Settings" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="SettingsTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.818319, 0.606094, 0.394879, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "Custom Gamemode Settings"
-script = ExtResource("6_aufvl")
-
-[node name="GamemodeName" type="LineEdit" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-layout_mode = 2
-placeholder_text = "Enter a name for the custom mode..."
-
-[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="StartEventPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
-layout_mode = 2
-
-[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-custom_minimum_size = Vector2(2.08165e-12, 8)
-layout_mode = 2
-
-[node name="WatcherPropertyEditor" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
-layout_mode = 2
-list_type = 1
-
-[node name="Spacer5" type="Control" parent="PauseMenu/TabContainer/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
-custom_minimum_size = Vector2(2.08165e-12, 8)
-layout_mode = 2
-
-[node name="SavePreset" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
-self_modulate = Color(0, 0.764706, 0.980392, 1)
-layout_mode = 2
-text = "Save these settings as preset"
-
-[node name="AddToWorldGamemodes" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
-self_modulate = Color(1, 2.703, 1, 1)
-layout_mode = 2
-text = "+ Add to world gamemodes"
-
-[node name="Spacer2" type="Control" parent="PauseMenu/TabContainer/Gamemodes"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="WorldGamemodesTitle" type="Label" parent="PauseMenu/TabContainer/Gamemodes"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-text = "Gamemodes in this world:"
-script = ExtResource("6_aufvl")
-
-[node name="WorldGamemodesPanel" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes"]
-custom_minimum_size = Vector2(0, 27)
-layout_mode = 2
-script = ExtResource("8_kp7x3")
-
-[node name="Panel" type="Panel" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel"]
-layout_mode = 2
-theme_override_styles/panel = ExtResource("9_pkgum")
-
-[node name="Margin" type="MarginContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 13
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel/Margin"]
-custom_minimum_size = Vector2(2.08165e-12, 100)
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/TabContainer/Gamemodes/WorldGamemodesPanel/Margin/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VersionLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -88.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "Tinybox beta 00.0.0"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("6_aufvl")
-json_text = "Tinybox %version%"
-raw_format = true
 
 [node name="Controls" type="RichTextLabel" parent="."]
 clip_contents = false
@@ -436,10 +157,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -343.0
-offset_top = -49.0
+offset_left = -406.0
+offset_top = -218.5
 offset_right = -16.0
-offset_bottom = 49.0
+offset_bottom = 218.5
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
@@ -469,11 +190,355 @@ autowrap_mode = 0
 tab_size = 7
 shortcut_keys_enabled = false
 
+[node name="VersionLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -178.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 30.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Tinybox beta 00.0.0"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("6_aufvl")
+json_text = "Tinybox %version%"
+raw_format = true
+
+[node name="PauseMenu" type="Control" parent="."]
+visible = false
+custom_minimum_size = Vector2(540, 540)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Gradient" type="TextureRect" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -832.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_mw3a6")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu"]
+clip_contents = false
+custom_minimum_size = Vector2(808, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -984.0
+offset_top = 128.0
+offset_right = -144.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 2
+follow_focus = true
+
+[node name="Sections" type="VBoxContainer" parent="PauseMenu/ScrollContainer"]
+custom_minimum_size = Vector2(308, 2.08165e-12)
+layout_mode = 2
+script = ExtResource("6_i5rxj")
+
+[node name="Editor" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+custom_minimum_size = Vector2(346, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_5yhmg")
+theme_override_font_sizes/font_size = 64
+text = "Editor"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Sections/Editor" instance=ExtResource("12_nulw5")]
+self_modulate = Color(0.917678, 0.110667, 5.12117e-07, 1)
+layout_mode = 2
+text = "Leave Editor"
+editor_leave_text = true
+
+[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+layout_mode = 2
+text = "Save world"
+script = ExtResource("6_aufvl")
+
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+layout_mode = 2
+placeholder_text = "World name..."
+
+[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+layout_mode = 2
+text = "Save world"
+
+[node name="TestWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+self_modulate = Color(1, 2.702, 1, 1)
+layout_mode = 2
+text = "Save & test world"
+
+[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+layout_mode = 2
+text = "Load world"
+script = ExtResource("6_aufvl")
+
+[node name="MapSelection" parent="PauseMenu/ScrollContainer/Sections/Editor" instance=ExtResource("3_b6w4i")]
+layout_mode = 2
+text_overrun_behavior = 4
+
+[node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+layout_mode = 2
+text = "Load world"
+
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+custom_minimum_size = Vector2(2.08165e-12, 70)
+layout_mode = 2
+
+[node name="World Properties" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+custom_minimum_size = Vector2(346, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="DynamicLabel6" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_5yhmg")
+theme_override_font_sizes/font_size = 64
+text = "World"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Water"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water"
+
+[node name="Water" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Toggle water"
+
+[node name="WaterHeightAdjuster" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster" index="2"]
+text = "Water height: 42"
+
+[node name="DynamicLabel5" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
+text = "Water type"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/water_type"
+
+[node name="WaterType" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Water"
+
+[node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Environment"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/environment"
+
+[node name="Environment" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Sunny"
+
+[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Background"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/background"
+
+[node name="Background" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "(none)"
+
+[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+custom_minimum_size = Vector2(808, 2.08165e-12)
+layout_mode = 2
+alignment = 1
+script = ExtResource("8_stfvy")
+
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 70)
+layout_mode = 2
+
+[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+self_modulate = Color(1, 1, 1, 0.447059)
+custom_minimum_size = Vector2(346, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_fonts/font = ExtResource("6_5yhmg")
+theme_override_font_sizes/font_size = 64
+text = "Modes"
+script = ExtResource("6_aufvl")
+
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="LoadPresetTitle" type="Label" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Load existing preset..."
+script = ExtResource("6_aufvl")
+
+[node name="PresetSelection" parent="PauseMenu/ScrollContainer/Sections/Gamemodes" instance=ExtResource("3_b6w4i")]
+layout_mode = 2
+text_overrun_behavior = 4
+script = null
+
+[node name="Panel" type="MarginContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+script = ExtResource("8_kp7x3")
+
+[node name="Panel" type="Panel" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("9_pkgum")
+
+[node name="Margin" type="MarginContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin"]
+custom_minimum_size = Vector2(2.08165e-12, 260)
+layout_mode = 2
+
+[node name="Settings" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="SettingsTitle" type="Label" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.818319, 0.606094, 0.394879, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Custom Gamemode Settings"
+script = ExtResource("6_aufvl")
+
+[node name="GamemodeName" type="LineEdit" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+layout_mode = 2
+placeholder_text = "Enter a name for the custom mode..."
+
+[node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="StartEventPropertyEditor" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
+layout_mode = 2
+
+[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="WatcherPropertyEditor" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings" instance=ExtResource("11_ukkc0")]
+layout_mode = 2
+list_type = 1
+
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/Panel/Margin/ScrollContainer/Settings"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="SavePreset" type="Button" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+self_modulate = Color(0, 0.764706, 0.980392, 1)
+layout_mode = 2
+text = "Save these settings as preset"
+
+[node name="AddToWorldGamemodes" type="Button" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+self_modulate = Color(1, 2.703, 1, 1)
+layout_mode = 2
+text = "+ Add to world gamemodes"
+
+[node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="WorldGamemodesTitle" type="Label" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.06532e-05, 0.763709, 0.978867, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "Gamemodes in this world:"
+script = ExtResource("6_aufvl")
+
+[node name="WorldGamemodesPanel" type="MarginContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+script = ExtResource("8_kp7x3")
+
+[node name="Panel" type="Panel" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/WorldGamemodesPanel"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("9_pkgum")
+
+[node name="Margin" type="MarginContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/WorldGamemodesPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/WorldGamemodesPanel/Margin"]
+custom_minimum_size = Vector2(2.08165e-12, 100)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections/Gamemodes/WorldGamemodesPanel/Margin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="OptionsButton" type="Button" parent="."]
-offset_left = 392.0
-offset_top = 86.0
-offset_right = 752.0
-offset_bottom = 116.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -385.0
+offset_top = 35.0
+offset_right = -25.0
+offset_bottom = 73.0
+grow_horizontal = 0
 text = "Options, Test, Gamemodes, Pause..."
 
 [node name="ScaleTooltip" type="Label" parent="."]
@@ -492,4 +557,4 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
 theme_override_constants/outline_size = 5
 script = ExtResource("6_aufvl")
 
-[editable path="PauseMenu/TabContainer/World Properties/WaterHeightAdjuster"]
+[editable path="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"]

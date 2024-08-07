@@ -18,6 +18,7 @@ extends CanvasLayer
 class_name MultiplayerMenu
 
 @onready var preview_player : RigidPlayer = Global.get_world().get_current_map().get_node("RigidPlayer")
+@onready var nametag : LineEdit = $DisplayName
 
 func _ready() -> void:
 	Global.connect("appearance_changed", preview_player.change_appearance)
@@ -31,7 +32,10 @@ func _ready() -> void:
 	$PlayMenu/JoinHbox/Edit.connect("pressed", show_hide.bind("JoinSettingsMenu", "PlayMenu"))
 	$HostSettingsMenu/Back.connect("pressed", show_hide.bind("PlayMenu", "HostSettingsMenu"))
 	$JoinSettingsMenu/Back.connect("pressed", show_hide.bind("PlayMenu", "JoinSettingsMenu"))
-	$MainMenu/Settings.connect("pressed", show_settings)
+	$MainMenu/Settings.connect("pressed", show_hide.bind("SettingsScroll", "MainMenu"))
+	$MainMenu/Credits.connect("pressed", show_hide.bind("CreditsMenu", "MainMenu"))
+	$CreditsMenu/Back.connect("pressed", show_hide.bind("MainMenu", "CreditsMenu"))
+	$SettingsScroll/SettingsMenu/SaveButton.connect("pressed", show_hide.bind("MainMenu", "SettingsScroll"))
 	$MainMenu/Quit.connect("pressed", quit)
 	
 	# Appearance settings
@@ -61,11 +65,17 @@ func _ready() -> void:
 func show_appearance_settings() -> void:
 	$MainMenu.visible = false
 	$AppearanceMenu.visible = true
+	var map : Node3D = Global.get_world().get_current_map()
+	if map.has_node("AnimationPlayer"):
+		map.get_node("AnimationPlayer").play("appearance_in")
 	preview_player.change_appearance()
 
 func hide_appearance_settings() -> void:
 	$MainMenu.visible = true
 	$AppearanceMenu.visible = false
+	var map : Node3D = Global.get_world().get_current_map()
+	if map.has_node("AnimationPlayer"):
+		map.get_node("AnimationPlayer").play("appearance_out")
 	# Save appearance on back
 	Global.save_appearance()
 
@@ -73,8 +83,15 @@ func show_hide(a : String, b : String) -> void:
 	get_node(a).visible = true
 	get_node(b).visible = false
 
-func show_settings() -> void:
-	$SettingsMenu.visible = true
-
 func quit() -> void:
 	get_tree().quit()
+
+func _process(delta : float) -> void:
+	if visible:
+		var camera : Camera3D = get_viewport().get_camera_3d()
+		# align nametag above player head
+		if preview_player != null && camera != null:
+			nametag.position = camera.unproject_position(preview_player.global_position + Vector3.UP*1.8)
+			nametag.position.x -= nametag.size.x/2
+		if $AppearanceMenu.visible:
+			preview_player.global_rotation.y = (get_viewport().get_mouse_position().x / get_viewport().size.x) * PI * 2 + (PI*-1.5)

@@ -1,0 +1,14 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://ckx3gh6vh6t5e"]
+
+[ext_resource type="FontFile" uid="uid://dbo1qqcd7oxkn" path="res://data/font/Nunito/Nunito-VariableFont_wght.ttf" id="1_icgt0"]
+
+[resource]
+base_font = ExtResource("1_icgt0")
+variation_opentype = {
+2003265652: 1000
+}
+opentype_features = {
+1667329140: 0
+}
+spacing_top = -2
+spacing_bottom = -2

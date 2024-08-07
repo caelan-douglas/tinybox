@@ -1,0 +1,14 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://qaem8tptsp6l"]
+
+[ext_resource type="FontFile" uid="uid://dbo1qqcd7oxkn" path="res://data/font/Nunito/Nunito-VariableFont_wght.ttf" id="1_qm22t"]
+
+[resource]
+base_font = ExtResource("1_qm22t")
+variation_opentype = {
+2003265652: 800
+}
+opentype_features = {
+1667329140: 0
+}
+spacing_top = -2
+spacing_bottom = -2

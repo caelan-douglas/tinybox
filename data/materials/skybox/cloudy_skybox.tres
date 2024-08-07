@@ -1,0 +1,16 @@
+[gd_resource type="Sky" load_steps=3 format=3 uid="uid://qbldbv6nh5ve"]
+
+[ext_resource type="Texture2D" uid="uid://cj1otog15h7v2" path="res://data/textures/sky/clouds.png" id="1_23bfk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wjvi7"]
+sky_top_color = Color(0.237478, 0.397297, 0.613146, 1)
+sky_horizon_color = Color(0.565376, 0.664098, 0.793616, 1)
+sky_cover = ExtResource("1_23bfk")
+sky_cover_modulate = Color(0.288518, 0.288518, 0.288517, 1)
+ground_bottom_color = Color(0.195981, 0.278932, 0.388616, 1)
+ground_horizon_color = Color(0.564706, 0.662745, 0.792157, 1)
+sun_angle_max = 0.0
+
+[resource]
+sky_material = SubResource("ProceduralSkyMaterial_wjvi7")
+radiance_size = 1

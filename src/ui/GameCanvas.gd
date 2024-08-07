@@ -17,17 +17,14 @@
 extends CanvasLayer
 
 @onready var intro_animator : AnimationPlayer = $IntroOverlay/AnimationPlayer
-@onready var intro_overlay : Control = $IntroOverlay
-@onready var intro_text : Label = $IntroOverlay/TitleText
-@onready var tip_text : Label = $IntroOverlay/Tip
-@onready var pause_tip_text : Label = $PauseMenu/Tip
+@onready var pause_tip_text : Label = $PauseMenu/ScrollContainer/Pause/Tip
 @onready var client_request_world_timer : Timer = $RequestWorldTimer
 
 const NUM_OF_TIPS = 15
 
 func _ready() -> void:
-	$PauseMenu/TabContainer/Pause/ChangeMap.connect("pressed", _send_on_change_map_pressed)
-	$PauseMenu/TabContainer/Pause/SaveWorld.connect("pressed", _on_save_world_pressed)
+	$PauseMenu/ScrollContainer/Pause/ChangeMap.connect("pressed", _send_on_change_map_pressed)
+	$PauseMenu/ScrollContainer/Pause/SaveWorld.connect("pressed", _on_save_world_pressed)
 
 func hide_pause_menu() -> void:
 	Global.is_paused = false
@@ -74,7 +71,7 @@ func _process(delta : float) -> void:
 		
 
 func _send_on_change_map_pressed() -> void:
-	var map_selector : OptionButton = $PauseMenu/TabContainer/Pause/MapSelection
+	var map_selector : OptionButton = $PauseMenu/ScrollContainer/Pause/MapSelection
 	var map_name : String = map_selector.get_item_text(map_selector.selected)
 	# load tbw with switching flag
 	# clients must wait 15s between loading worlds to avoid spam
@@ -88,22 +85,8 @@ func _send_on_change_map_pressed() -> void:
 		else:
 			UIHandler.show_alert(str("Wait ", round(client_request_world_timer.time_left), " more seconds before requesting\nto load another world!"), 5, false, UIHandler.alert_colour_error)
 
-func play_intro_animation(text : String) -> void:
-	# in case player was paused
-	hide_pause_menu()
-	intro_text.text = text
-	intro_animator.play("intro")
-	var tipnum : int = randi() % NUM_OF_TIPS
-	tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
-
-func play_outro_animation(text : String) -> void:
-	# in case player was paused
-	hide_pause_menu()
-	intro_text.text = text
-	intro_animator.play("outro")
-
 func _on_save_world_pressed() -> void:
-	var world_name : String = $PauseMenu/TabContainer/Pause/SaveWorldName.text
+	var world_name : String = $PauseMenu/ScrollContainer/Pause/SaveWorldName.text
 	if world_name == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:

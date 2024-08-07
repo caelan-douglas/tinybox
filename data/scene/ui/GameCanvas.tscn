@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=36 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -9,17 +9,18 @@
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="5_6v07r"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
-[ext_resource type="FontFile" uid="uid://d3edp6w16f4ut" path="res://data/font/Arvo-BoldItalic.ttf" id="7_svln6"]
 [ext_resource type="Texture2D" uid="uid://cupojq83o6gc3" path="res://data/textures/ui/question.png" id="9_8oa63"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
+[ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="15_0571l"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
+[ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="16_hdnsf"]
 [ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
 [ext_resource type="Script" path="res://src/ui/GamemodeMenu.gd" id="18_n6mrs"]
-[ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="19_w8eqc"]
+[ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="20_eusui"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
 length = 0.001
@@ -218,275 +219,14 @@ _data = {
 "flash_controls": SubResource("Animation_815sr")
 }
 
-[sub_resource type="Animation" id="Animation_220ys"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TitleText:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../ToolList:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../PlayerList:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../HealthBar:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Tip:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
+[sub_resource type="Gradient" id="Gradient_t4xug"]
+offsets = PackedFloat32Array(0, 0.281065)
+colors = PackedColorArray(0, 0, 0, 0, 0.118789, 0.104957, 0.187448, 0.745098)
 
-[sub_resource type="Animation" id="Animation_7ofof"]
-resource_name = "intro"
-length = 11.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 1.2, 8, 9.7, 10.2, 11),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TitleText:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.9, 8, 9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 11),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../HealthBar:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../PlayerList:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../ToolList:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Tip:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.9, 7.5, 7.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_h5oyg"]
-resource_name = "outro"
-length = 11.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 1.2, 8, 9.7, 10.2, 11),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TitleText:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.9, 8, 9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 11),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../HealthBar:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../PlayerList:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../ToolList:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 10.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Tip:modulate")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ogfxc"]
-_data = {
-"RESET": SubResource("Animation_220ys"),
-"intro": SubResource("Animation_7ofof"),
-"outro": SubResource("Animation_h5oyg")
-}
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fmpot"]
+gradient = SubResource("Gradient_t4xug")
+width = 128
+height = 1
 
 [node name="GameCanvas" type="CanvasLayer"]
 script = ExtResource("1_5vqc6")
@@ -852,7 +592,7 @@ offset_left = 8.0
 offset_top = 8.0
 offset_right = 251.0
 offset_bottom = 56.0
-theme_override_constants/separation = 0
+theme_override_constants/separation = 2
 
 [node name="VersionLabel" type="Label" parent="."]
 anchors_preset = 1
@@ -926,7 +666,7 @@ script = ExtResource("10_x8dyc")
 
 [node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
 offset_left = -224.0
-offset_top = 64.0
+offset_top = 73.0
 offset_right = -8.0
 offset_bottom = -13.0
 show_team_names = false
@@ -939,7 +679,7 @@ anchor_right = 1.0
 offset_left = -224.0
 offset_top = 32.0
 offset_right = -8.0
-offset_bottom = 53.0
+offset_bottom = 66.0
 grow_horizontal = 0
 pivot_offset = Vector2(216, 0)
 max_value = 20.0
@@ -954,10 +694,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -29.5
-offset_top = -6.5
-offset_right = 29.5
-offset_bottom = 12.5
+offset_left = -45.0
+offset_top = -10.0
+offset_right = 45.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Health: 20"
@@ -1110,132 +850,150 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TabContainer" type="TabContainer" parent="PauseMenu"]
-custom_minimum_size = Vector2(420, 2.08165e-12)
+[node name="Gradient" type="TextureRect" parent="PauseMenu"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -306.0
-offset_right = 210.0
-offset_bottom = 306.0
-grow_horizontal = 2
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -832.0
+grow_horizontal = 0
 grow_vertical = 2
-tab_alignment = 1
-use_hidden_tabs_for_min_size = true
+texture = SubResource("GradientTexture2D_fmpot")
 
-[node name="Pause" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-custom_minimum_size = Vector2(308, 0)
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu"]
+clip_contents = false
+custom_minimum_size = Vector2(308, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -484.0
+offset_top = 128.0
+offset_right = -144.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 2
+follow_focus = true
+
+[node name="Pause" type="VBoxContainer" parent="PauseMenu/ScrollContainer"]
+custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
-alignment = 1
+script = ExtResource("18_n6mrs")
 
-[node name="LeaveButton" parent="PauseMenu/TabContainer/Pause" instance=ExtResource("3_5o4ik")]
+[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("16_hdnsf")
+theme_override_font_sizes/font_size = 64
+text = "Paused"
+script = ExtResource("6_qxctu")
+json_text = "ui/paused"
+
+[node name="Tip" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
+theme_override_constants/outline_size = 8
+text = "Tip: (uninitialized)"
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("3_5o4ik")]
 self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 80)
 layout_mode = 2
 
-[node name="Spacer4" type="Control" parent="PauseMenu/TabContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 15)
+[node name="Spacer9" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PauseMenu/TabContainer/Pause"]
+[node name="Label" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Switch Maps"
+theme_override_font_sizes/font_size = 0
+text = "Maps"
 script = ExtResource("6_qxctu")
 json_text = "ui/switch_maps"
 
-[node name="Spacer6" type="Control" parent="PauseMenu/TabContainer/Pause"]
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="MapSelection" type="OptionButton" parent="PauseMenu/TabContainer/Pause"]
+[node name="MapSelection" type="OptionButton" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 4
 script = ExtResource("16_oucrq")
 
-[node name="ChangeMap" type="Button" parent="PauseMenu/TabContainer/Pause"]
+[node name="ChangeMap" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
 
-[node name="Spacer8" type="Control" parent="PauseMenu/TabContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 30)
+[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel" type="Label" parent="PauseMenu/TabContainer/Pause"]
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 text = "Save a copy of this world"
 script = ExtResource("6_qxctu")
 
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/TabContainer/Pause"]
+[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 placeholder_text = "World name..."
 
-[node name="SaveWorld" type="Button" parent="PauseMenu/TabContainer/Pause"]
+[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 text = "Save a copy"
 script = ExtResource("5_6v07r")
 json_text = "ui/save_copy"
 
-[node name="Spacer7" type="Control" parent="PauseMenu/TabContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 30)
+[node name="Spacer11" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/TabContainer"]
-visible = false
-custom_minimum_size = Vector2(308, 0)
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
-alignment = 1
-script = ExtResource("18_n6mrs")
+text = "Gamemodes"
+script = ExtResource("6_qxctu")
 
-[node name="GamemodeSelector" type="OptionButton" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="GamemodeSelector" type="OptionButton" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 4
 
-[node name="StartGamemode" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="StartGamemode" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 text = "Start gamemode"
 script = ExtResource("5_6v07r")
 
-[node name="Spacer7" type="Control" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="EndGamemode" type="Button" parent="PauseMenu/TabContainer/Gamemodes"]
+[node name="EndGamemode" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 disabled = true
 text = "End active gamemode"
 script = ExtResource("5_6v07r")
 
-[node name="Settings" parent="PauseMenu/TabContainer" instance=ExtResource("19_w8eqc")]
-visible = false
+[node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("20_eusui")]
 layout_mode = 2
 show_save_button = false
-
-[node name="Tip" type="Label" parent="PauseMenu"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.838
-anchor_right = 0.5
-anchor_bottom = 0.838
-offset_left = -316.0
-offset_top = 22.64
-offset_right = 316.0
-offset_bottom = 38.64
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
-theme_override_constants/outline_size = 8
-text = "Tip: (uninitialized)"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="TestModePauseMenu" type="Control" parent="."]
 visible = false
@@ -1247,42 +1005,43 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="TestModePauseMenu"]
+[node name="Gradient" type="TextureRect" parent="TestModePauseMenu"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = -832.0
+grow_horizontal = 0
 grow_vertical = 2
-color = Color(0.227451, 0.133333, 0.231373, 0.701961)
+texture = SubResource("GradientTexture2D_fmpot")
 
 [node name="Menu" type="VBoxContainer" parent="TestModePauseMenu"]
-custom_minimum_size = Vector2(308, 0)
+custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 6
+anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -145.0
-offset_top = -263.5
-offset_right = 163.0
-offset_bottom = 264.5
-grow_horizontal = 2
+offset_left = -484.0
+offset_top = -232.0
+offset_right = -176.0
+offset_bottom = -72.0
+grow_horizontal = 0
 grow_vertical = 2
-alignment = 1
+script = ExtResource("15_0571l")
 
-[node name="Title" type="Label" parent="TestModePauseMenu/Menu"]
+[node name="DynamicLabel" type="Label" parent="TestModePauseMenu/Menu"]
+self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
-theme_override_constants/line_spacing = -20
-theme_override_fonts/font = ExtResource("7_svln6")
-theme_override_font_sizes/font_size = 50
-text = "Paused -
-Testing"
+theme_override_fonts/font = ExtResource("16_hdnsf")
+theme_override_font_sizes/font_size = 64
+text = "Paused"
 script = ExtResource("6_qxctu")
+json_text = "ui/paused"
 
-[node name="Spacer" type="Control" parent="TestModePauseMenu/Menu"]
+[node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
@@ -1290,74 +1049,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Return to editor"
 script = null
-
-[node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu"]
-custom_minimum_size = Vector2(2.08165e-12, 120)
-layout_mode = 2
-
-[node name="IntroOverlay" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ColorRect" type="ColorRect" parent="IntroOverlay"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="IntroOverlay"]
-libraries = {
-"": SubResource("AnimationLibrary_ogfxc")
-}
-
-[node name="TitleText" type="Label" parent="IntroOverlay"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -316.0
-offset_top = -44.0
-offset_right = 316.0
-offset_bottom = 44.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("7_svln6")
-theme_override_font_sizes/font_size = 72
-text = "Map Name Here"
-horizontal_alignment = 1
-
-[node name="Tip" type="Label" parent="IntroOverlay"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -316.0
-offset_top = 80.0
-offset_right = 316.0
-offset_bottom = 168.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
-theme_override_constants/outline_size = 8
-text = "Tip: (uninitialized)"
-horizontal_alignment = 1
-autowrap_mode = 3
 
 [node name="RequestWorldTimer" type="Timer" parent="."]
 wait_time = 15.0

@@ -3,34 +3,25 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_k718s"]
 [ext_resource type="Script" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
 
-[node name="ItemChooser" type="MarginContainer"]
+[node name="ItemChooser" type="PanelContainer"]
 offset_right = 356.0
 offset_bottom = 202.0
 script = ExtResource("1_p7u7r")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 2
-
-[node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 16
-
-[node name="Menu" type="VBoxContainer" parent="Margin"]
+[node name="Menu" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="Margin/Menu"]
+[node name="Title" type="Label" parent="Menu"]
 layout_mode = 2
-text = "Item Picker"
-autowrap_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
+theme_override_constants/outline_size = 6
+text = "Select Brick or Object"
 script = ExtResource("1_k718s")
 json_text = "ui/editor/item_chooser_title"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Margin/Menu"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -38,6 +29,6 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="Margin/Menu/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="Menu/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3

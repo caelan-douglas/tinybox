@@ -201,7 +201,8 @@ func _physics_process(delta : float) -> void:
 						inst.translate_object_local(item_offset)
 						if selected_item_is_scalable():
 							if selected_item_properties.has("brick_scale"):
-								selected_item_properties["brick_scale"] = b_scale
+								# use preview node scale to account for rotation
+								selected_item_properties["brick_scale"] = preview_node.scale
 						# rotate wheels because they have different rotation direction than
 						# facing direction
 						if inst is MotorBrick:

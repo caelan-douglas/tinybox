@@ -17,13 +17,13 @@
 extends CanvasLayer
 
 @onready var world_click : Button = $WorldClick
-@onready var world_name : LineEdit = $PauseMenu/TabContainer/Editor/SaveWorldName
+@onready var world_name : LineEdit = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorldName
 @onready var pause_menu : Control = $PauseMenu
 @onready var options_button : Button = $OptionsButton
 @onready var scale_tooltip : Label = $ScaleTooltip
 
 func _ready() -> void:
-	$PauseMenu/TabContainer/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
+	$PauseMenu/ScrollContainer/Sections/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
 	world_click.connect("pressed", _on_world_click_pressed)
 
@@ -33,21 +33,21 @@ func _on_world_click_pressed() -> void:
 func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
-		$"PauseMenu/TabContainer/World Properties/Water".connect("pressed", (editor as Editor).toggle_water)
-		$"PauseMenu/TabContainer/World Properties/WaterType".connect("pressed", (editor as Editor).switch_water_type.bind($"PauseMenu/TabContainer/World Properties/WaterType".get_path()))
-		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/DownBig".connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
-		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/Down".connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
-		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/Up".connect("pressed", (editor as Editor).adjust_water_height.bind(1))
-		$"PauseMenu/TabContainer/World Properties/WaterHeightAdjuster/UpBig".connect("pressed", (editor as Editor).adjust_water_height.bind(10))
-		$"PauseMenu/TabContainer/World Properties/Environment".connect("pressed", (editor as Editor).switch_environment)
-		$"PauseMenu/TabContainer/World Properties/Background".connect("pressed", (editor as Editor).switch_background)
+		$"PauseMenu/ScrollContainer/Sections/World Properties/Water".connect("pressed", (editor as Editor).toggle_water)
+		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterType".connect("pressed", (editor as Editor).switch_water_type.bind($"PauseMenu/ScrollContainer/Sections/World Properties/WaterType".get_path()))
+		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/DownBig".connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
+		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/Down".connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
+		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/Up".connect("pressed", (editor as Editor).adjust_water_height.bind(1))
+		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/UpBig".connect("pressed", (editor as Editor).adjust_water_height.bind(10))
+		$"PauseMenu/ScrollContainer/Sections/World Properties/Environment".connect("pressed", (editor as Editor).switch_environment)
+		$"PauseMenu/ScrollContainer/Sections/World Properties/Background".connect("pressed", (editor as Editor).switch_background)
 		
-		$EntryScreen/Menu/New.connect("pressed", _on_new_world_pressed)
-		$EntryScreen/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Menu/MapSelection))
-		$PauseMenu/TabContainer/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/TabContainer/Editor/MapSelection, true))
-		$PauseMenu/TabContainer/Editor/TestWorld.connect("pressed", _on_test_world_pressed)
+		$EntryScreen/Panel/Menu/New.connect("pressed", _on_new_world_pressed)
+		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapSelection))
+		$PauseMenu/ScrollContainer/Sections/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/ScrollContainer/Sections/Editor/MapSelection, true))
+		$PauseMenu/ScrollContainer/Sections/Editor/TestWorld.connect("pressed", _on_test_world_pressed)
 		
-		$EntryScreen/Menu/New.grab_focus()
+		$EntryScreen/Panel/Menu/New.grab_focus()
 		
 		options_button.connect("pressed", toggle_pause_menu)
 		
@@ -108,7 +108,7 @@ func hide_pause_menu() -> void:
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(false)
 	$PauseMenu.visible = false
-	#Global.get_player().locked = false
+	$Controls.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button")
 
@@ -118,7 +118,7 @@ func show_pause_menu() -> void:
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(true)
 	$PauseMenu.visible = true
-	#Global.get_player().locked = true
+	$Controls.visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button_hide")
 

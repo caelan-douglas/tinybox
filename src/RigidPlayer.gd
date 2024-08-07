@@ -690,7 +690,11 @@ func check_idle() -> void:
 	if idle_time > idle_max:
 		play_idle_animation.rpc()
 		idle_time = 0
-		idle_max = randi_range(300, 800)
+		if _state == IDLE:
+			idle_max = randi_range(300, 800)
+		else:
+			# longer idle for dummy
+			idle_max = randi_range(900, 1600)
 
 @rpc("call_local")
 func play_idle_animation() -> void:

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Button
+extends DynamicButton
 
 @export var default_key : int = KEY_1
 @export var keybind_for_what := "BuildTool"
@@ -26,6 +26,7 @@ var allowed_keys : Array = [KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super()
 	connect("pressed", _on_pressed)
 	# if there is a defaults button
 	if defaults_button != null:
