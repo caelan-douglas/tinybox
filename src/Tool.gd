@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node3D
+extends Node
 class_name Tool
 
 var ui_partner : Control = null

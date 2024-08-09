@@ -778,7 +778,6 @@ func check_joints(specific_body : Node3D = null) -> void:
 					if self.flip_motor_side:
 						motor_pos = $JointSpotRight.global_position
 						joint_pos = $JointSpotLeft.global_position
-					print(body.global_position.distance_to(joint_pos), " ; ", body.global_position.distance_to(motor_pos))
 					# add a bit of bias towards the non-motor side so that
 					# bricks that are placed on the outer edge of a wheel
 					# will attach to it

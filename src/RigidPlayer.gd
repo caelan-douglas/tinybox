@@ -88,6 +88,7 @@ var in_air_from_lifter := false
 var external_propulsion := false
 var swim_dash_cooldown : int = 0
 var lateral_velocity := Vector3.ZERO
+var standing_on_object : Node3D = null
 
 var last_hit_by_id : int = -1
 var last_hit := false
@@ -143,7 +144,7 @@ var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
 @rpc("any_peer", "call_local", "reliable")
 func teleport(new_pos : Vector3) -> void:
-	# if this change state request is not from the server or the owner client, return
+	# if this change state request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	teleport_requested = true
@@ -262,11 +263,18 @@ func _on_body_entered(body : Node3D) -> void:
 	
 	# stuff handled by the server
 	if multiplayer.is_server():
-		if (body is RigidBody3D) && (!body is RigidPlayer):
+		# trip when hit by something fast, unless we're standing on it
+		if (body is RigidBody3D) && !(body is RigidPlayer):
 			if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
 				if _state != STANDING_UP && _state != IN_SEAT:
-					# take damage from metal bricks hitting player
+					if body == standing_on_object:
+						return
+					# take damage from fast bricks hitting player
+					# unless they are part of the group the player is standing on
 					if body is Brick:
+						if standing_on_object is Brick:
+							if body.group == standing_on_object.group:
+								return
 						reduce_health(body.mass_mult as int, CauseOfDeath.HIT_BY_BRICK)
 					change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
 			if body is Brick:
@@ -623,7 +631,7 @@ func _ready() -> void:
 			protect_spawn(3.5, false)
 		# only execute on yourself
 		if !is_multiplayer_authority():
-			freeze = true
+			#freeze = true
 			return
 		set_camera(get_viewport().get_camera_3d())
 		connect("body_entered", _on_body_entered)
@@ -709,6 +717,7 @@ var air_duration : float = 0
 var last_move_direction := Vector3.ZERO
 var air_from_jump := false
 var on_wall_cooldown : int = 0
+var standing_on_object_last_pos : Vector3 = Vector3.ZERO
 # Manages movement
 func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	# handle movement
@@ -1001,8 +1010,27 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				pass
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 		
+		# check if standing on something
+		if ground_detect.has_overlapping_bodies():
+			for body in ground_detect.get_overlapping_bodies():
+				if standing_on_object != body:
+					if !multiplayer.is_server():
+						print("Now standing on: ", body)
+					standing_on_object_last_pos = body.global_position
+				set_standing_on_object_rpc.rpc(body.get_path())
+		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
+			set_standing_on_object_rpc.rpc("null")
+		
+		# move if standing on something
+		if standing_on_object != null:
+			if !multiplayer.is_server():
+				print("Moving from stand: ", standing_on_object)
+			global_position += standing_on_object.global_position - standing_on_object_last_pos
+			standing_on_object_last_pos = standing_on_object.global_position
+		
 	# handle teleport requests
 	if teleport_requested:
+		standing_on_object = null
 		teleport_requested = false
 		var t := state.transform
 		t.origin = teleport_pos
@@ -1013,6 +1041,17 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		if !invulnerable:
 			if global_position.y < 20 || global_position.y > 400:
 				set_health(0, CauseOfDeath.OUT_OF_MAP)
+
+@rpc("any_peer", "call_local", "reliable")
+func set_standing_on_object_rpc(what_path : String) -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
+	
+	if what_path == "null":
+		standing_on_object = null
+	else:
+		standing_on_object = get_node(what_path)
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
@@ -1045,7 +1084,7 @@ func seat_destroyed(offset := false) -> void:
 
 @rpc("any_peer", "call_remote")
 func trip_by_player(hit_velocity : Vector3) -> void:
-	# if this change state request is not from the server or the owner client, return
+	# if this change state request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	# only execute on yourself
@@ -1056,7 +1095,7 @@ func trip_by_player(hit_velocity : Vector3) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func change_state(state : int) -> void:
-	# if this change state request is not from the server or the owner client, return
+	# if this change state request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	# only execute on client from here on
@@ -1406,7 +1445,7 @@ func enter_state() -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func go_to_spawn() -> void:
-	# if this go to spawn request is not from the server or the owner client, return
+	# if this go to spawn request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	# find team spawns

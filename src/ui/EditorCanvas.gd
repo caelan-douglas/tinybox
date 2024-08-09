@@ -21,6 +21,7 @@ extends CanvasLayer
 @onready var pause_menu : Control = $PauseMenu
 @onready var options_button : Button = $OptionsButton
 @onready var scale_tooltip : Label = $ScaleTooltip
+var mouse_just_captured : bool = false
 
 func _ready() -> void:
 	$PauseMenu/ScrollContainer/Sections/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
@@ -28,7 +29,11 @@ func _ready() -> void:
 	world_click.connect("pressed", _on_world_click_pressed)
 
 func _on_world_click_pressed() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		mouse_just_captured = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		await get_tree().create_timer(0.1).timeout
+		mouse_just_captured = false
 
 func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()
