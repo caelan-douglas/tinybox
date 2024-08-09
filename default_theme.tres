@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=25 format=3 uid="uid://6c22jhpmjxt5"]
+[gd_resource type="Theme" load_steps=26 format=3 uid="uid://6c22jhpmjxt5"]
 
 [ext_resource type="StyleBox" uid="uid://bokej48131wgh" path="res://data/theme_elements/stylebox_disabled_button.tres" id="1_q4w54"]
 [ext_resource type="StyleBox" uid="uid://b8fdwk3iumwvk" path="res://data/theme_elements/focused_stylebox.tres" id="2_1ge5j"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bjncd80bidiyq" path="res://data/textures/ui/check_off.png" id="5_ggwyj"]
 [ext_resource type="Texture2D" uid="uid://h6cygu8oww2e" path="res://data/textures/ui/grab_handle.png" id="6_nbbp5"]
 [ext_resource type="StyleBox" uid="uid://dc0n473dfwc83" path="res://data/theme_elements/stylebox_dots.tres" id="8_15qjp"]
+[ext_resource type="Texture2D" uid="uid://1x7bn31fne4g" path="res://data/textures/ui/grab_handle_focused.png" id="8_6730p"]
 [ext_resource type="StyleBox" uid="uid://b6glpcr3bxolf" path="res://data/theme_elements/progress_fill.tres" id="8_dp108"]
 [ext_resource type="StyleBox" uid="uid://dfky4i22n6rkp" path="res://data/theme_elements/seperator.tres" id="9_mr10g"]
 [ext_resource type="StyleBox" uid="uid://bokred2fb76ji" path="res://data/theme_elements/tabs/tab_unselected.tres" id="10_o5rup"]
@@ -103,7 +104,7 @@ CheckButton/styles/normal = SubResource("StyleBoxEmpty_u7r31")
 CheckButton/styles/pressed = SubResource("StyleBoxEmpty_82xyo")
 HSlider/icons/grabber = ExtResource("6_nbbp5")
 HSlider/icons/grabber_disabled = ExtResource("6_nbbp5")
-HSlider/icons/grabber_highlight = ExtResource("6_nbbp5")
+HSlider/icons/grabber_highlight = ExtResource("8_6730p")
 HSlider/styles/grabber_area = ExtResource("8_dp108")
 HSlider/styles/grabber_area_highlight = ExtResource("8_dp108")
 HSlider/styles/slider = ExtResource("3_vixmh")

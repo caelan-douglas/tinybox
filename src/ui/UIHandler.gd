@@ -85,6 +85,7 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 		buttons_to_return.append(b)
 		# close the alert once a button's pressed
 		b.connect("pressed", alert.timeout)
+		b.grab_focus()
 	
 	return buttons_to_return
 

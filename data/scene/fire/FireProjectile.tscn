@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjkvftq5sd13"]
+[gd_scene load_steps=11 format=3 uid="uid://bjkvftq5sd13"]
 
 [ext_resource type="Script" path="res://src/FireProjectile.gd" id="1_sp1hs"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_3qv8n"]
-[ext_resource type="PlaneMesh" uid="uid://b13qst208r6f6" path="res://data/materials/fire/fire_material.tres" id="3_hku55"]
+[ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_hku55"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
 friction = 0.2
@@ -26,8 +26,14 @@ emission_sphere_radius = 1.0
 direction = Vector3(0, 0, 0)
 angular_velocity_min = 61.28
 angular_velocity_max = 61.28
+radial_velocity_max = 1.0
 gravity = Vector3(0, 0, 0)
 color_ramp = SubResource("GradientTexture1D_a6m0y")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7nk1e"]
+material = ExtResource("3_hku55")
+size = Vector2(1.5, 1.5)
+orientation = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
 properties/0/path = NodePath(".:position")
@@ -58,11 +64,10 @@ script = ExtResource("2_3qv8n")
 
 [node name="splash_particles" type="GPUParticles3D" parent="Smoothing/Node3D"]
 amount = 16
-speed_scale = 3.0
-fixed_fps = 24
+speed_scale = 1.5
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_wirjr")
-draw_pass_1 = ExtResource("3_hku55")
+draw_pass_1 = SubResource("PlaneMesh_7nk1e")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.04

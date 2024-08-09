@@ -79,8 +79,9 @@ func upload_shirt_texture() -> void:
 	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	picker.access = FileDialog.ACCESS_FILESYSTEM
 	picker.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
+	picker.title = "Make a shirt"
 	get_viewport().add_child(picker)
-	picker.size = Vector2(500, 400)
+	picker.size = Vector2(800, 400)
 	picker.popup_centered()
 	picker.set_filters(["*.png, *.jpg, *.jpeg"])
 	var path : String = await picker.file_selected

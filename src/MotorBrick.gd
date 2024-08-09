@@ -20,9 +20,20 @@ class_name MotorBrick
 var speed : float = 0
 var target_speed : float = 20
 var steer : float = 0
+var flip_motor_side : bool = false
 
 var parent_seat : MotorSeat = null
 var in_water := false
+
+# Set a custom property
+func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
+	if property == "flip_motor_side":
+		flip_motor_side = value as bool
+		if !flip_motor_side:
+			$Smoothing/MotorMesh.position.z = brick_scale.x * 0.5
+		else:
+			$Smoothing/MotorMesh.position.z = -brick_scale.x * 0.5
 
 # Set the material of this brick to a different one, 
 # and update any related properties.
@@ -38,13 +49,16 @@ func set_material(new : Brick.BrickMaterial) -> void:
 		# Rubber
 		BrickMaterial.RUBBER:
 			target_speed = 90
-		# Wood, Charred Wood, Metalw
+		# Wood, Charred Wood, Metal
 		_:
 			target_speed = 85
 
 @rpc("any_peer", "call_local")
 func set_parent_seat(seat_as_path : NodePath) -> void:
 	parent_seat = get_node(seat_as_path)
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "flip_motor_side"]
 
 func _ready() -> void:
 	super()
@@ -72,7 +86,12 @@ func enter_state() -> void:
 		States.BUILD:
 			$DirectionArrow.visible = true
 		_:
-			$DirectionArrow.visible = false
+			if Global.get_world().get_current_map() is Editor:
+				var editor : Editor = Global.get_world().get_current_map() as Editor
+				if editor.test_mode:
+					$DirectionArrow.visible = false
+			else:
+				$DirectionArrow.visible = false
 
 func _physics_process(delta : float) -> void:
 	super(delta)

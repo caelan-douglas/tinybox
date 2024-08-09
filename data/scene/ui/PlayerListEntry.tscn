@@ -4,14 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://bejiqw1x2idqs" path="res://data/textures/ui/you.png" id="2_il5sq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gynkv"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
 bg_color = Color(1, 1, 1, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 corner_detail = 4
 
-[node name="PlayerListEntry" type="Panel"]
+[node name="PlayerListEntry" type="PanelContainer"]
 self_modulate = Color(0.470588, 0.45098, 1, 1)
 custom_minimum_size = Vector2(0, 27)
 offset_right = 210.0
@@ -19,14 +23,7 @@ offset_bottom = 27.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gynkv")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_right = -6.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="Crown" type="TextureRect" parent="HBoxContainer"]
 visible = false

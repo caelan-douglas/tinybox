@@ -20,13 +20,15 @@ var selected_item : PackedScene = null
 var selected_item_name_internal : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
+var item_offset_rotation := Vector3(0, 0, 0)
 
 @onready var tool_inventory : EditorToolInventory = get_parent()
 @onready var editor : Editor = Global.get_world().get_current_map()
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor") 
 @onready var preview_node : Node3D = $PreviewNode
-@onready var preview_cube : MeshInstance3D = $PreviewNode/Cube
+@onready var preview_mesh : Node3D = $PreviewNode/Mesh
+@onready var preview_cube : MeshInstance3D = $PreviewNode/Keep/Cube
 
 func _ready() -> void:
 	init("(empty)")
@@ -74,47 +76,47 @@ func _on_editor_deselected() -> void:
 		# editing a new object, not a hovered one (show notif)
 		property_editor.editing_hovered = false
 
-func _on_item_picked(item_name_internal : String, item_name_display : String) -> void:
+func _on_item_picked(item_name_internal : String, item_name_display : String = "", relist_properties : bool = true) -> void:
 	ui_tool_name = item_name_display
-	ui_partner.text = str(item_name_display)
+	if item_name_display != "":
+		ui_partner.text = str(item_name_display)
+	preview_mesh.position = Vector3.ZERO
+	preview_mesh.rotation = Vector3.ZERO
+	preview_mesh.scale = Vector3(1, 1, 1)
 	item_offset = Vector3.ZERO
+	item_offset_rotation = Vector3.ZERO
 	if !SpawnableObjects.objects.has(item_name_internal):
 		return
 	selected_item = SpawnableObjects.objects[item_name_internal]
 	selected_item_name_internal = item_name_internal
 	# show editable properties
-	var instance : Node3D = selected_item.instantiate()
-	selected_item_properties = property_editor.list_object_properties(instance, self)
+	var preview_instance : Node3D = selected_item.instantiate()
+	preview_node.add_child(preview_instance)
+	preview_instance.global_position = preview_mesh.global_position
+	if relist_properties:
+		selected_item_properties = property_editor.list_object_properties(preview_instance, self)
 	property_editor.editing_hovered = false
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
 			item_offset = Vector3(0, -0.5, 0)
-		
-		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(instance) as Array)
-		if new_mesh is MeshInstance3D:
-			var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
-			preview_mesh.mesh = new_mesh.mesh
-			# match any mesh position, rotation, scale settings
-			# offset slightly to avoid z-fighting
-			preview_mesh.position = new_mesh.position + Vector3.UP * 0.004
-			preview_mesh.scale = new_mesh.scale * 1.004
-			preview_mesh.rotation = new_mesh.rotation
-			# apply construction material
-			for i in range(preview_mesh.get_surface_override_material_count()):
-				preview_mesh.set_surface_override_material(i, preview_cube.get_surface_override_material(0))
-			# offset preview to account for item offset
-			preview_mesh.position += item_offset
-			preview_mesh.visible = true
-			return
-		else:
-			preview_node.get_node("ObjPreview").visible = false
-	# if switching to non-obj (ex. a brick) don't show any preview
-	else:
-		var preview_mesh : MeshInstance3D = preview_node.get_node("ObjPreview")
-		preview_mesh.visible = false
-	# clear temp instance
-	instance.queue_free()
+	if item_name_internal == "brick_cylinder":
+		item_offset_rotation = Vector3(0, -PI/2, 0)
+	var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(preview_instance) as Array)
+	var old_trans : Transform3D = new_mesh.global_transform
+	new_mesh = new_mesh.duplicate()
+	for c : Node in preview_mesh.get_children():
+		c.queue_free()
+	# apply construction material
+	for i in range(new_mesh.get_surface_override_material_count()):
+		new_mesh.set_surface_override_material(i, preview_cube.get_surface_override_material(0))
+	new_mesh.name = "ObjPreview"
+	preview_mesh.add_child(new_mesh)
+	new_mesh.global_transform = old_trans
+	preview_mesh.global_position += item_offset
+	preview_mesh.rotation += item_offset_rotation
+	# we have the mesh, now remove the instance
+	preview_node.remove_child(preview_instance)
 
 func find_item_mesh(array : Array) -> MeshInstance3D:
 	for c : Variant in array:
@@ -124,8 +126,13 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 			return find_item_mesh(c as Array)
 	return null
 
-func selected_item_is_scalable() -> bool:
+func selected_item_is_draggable() -> bool:
 	if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat":
+		return true
+	else: return false
+
+func selected_item_is_scalable() -> bool:
+	if selected_item_name_internal.begins_with("obj"):
 		return true
 	else: return false
 
@@ -135,41 +142,49 @@ var drag_end_point : Vector3 = Vector3.ZERO
 
 func _physics_process(delta : float) -> void:
 	var camera := get_viewport().get_camera_3d()
-	if preview_node != null:
-		preview_node.global_position = camera.controlled_cam_pos
-		# rotation
-		if Input.is_action_just_pressed("editor_rotate_reset"):
-			preview_node.rotation = Vector3.ZERO
-		elif Input.is_action_just_pressed("editor_rotate_left"):
-			preview_node.rotate(Vector3.UP, deg_to_rad(22.5))
-		elif Input.is_action_just_pressed("editor_rotate_right"):
-			preview_node.rotate(Vector3.UP, deg_to_rad(-22.5))
-		elif Input.is_action_just_pressed("editor_rotate_up"):
-			preview_node.rotate(camera.basis.x.round(), deg_to_rad(-22.5))
-		elif Input.is_action_just_pressed("editor_rotate_down"):
-			preview_node.rotate(camera.basis.x.round(), deg_to_rad(22.5))
-		preview_node.rotation = Vector3(snapped(preview_node.rotation.x, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.y, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.z, deg_to_rad(22.5)) as float)
 	if active:
+		if preview_node != null:
+			preview_node.global_position = camera.controlled_cam_pos
+			# rotation
+			if Input.is_action_just_pressed("editor_rotate_reset"):
+				preview_node.rotation = Vector3.ZERO
+			elif Input.is_action_just_pressed("editor_rotate_left"):
+				preview_node.rotate(Vector3.UP, deg_to_rad(22.5))
+			elif Input.is_action_just_pressed("editor_rotate_right"):
+				preview_node.rotate(Vector3.UP, deg_to_rad(-22.5))
+			elif Input.is_action_just_pressed("editor_rotate_up"):
+				preview_node.rotate(camera.basis.x.round(), deg_to_rad(-22.5))
+			elif Input.is_action_just_pressed("editor_rotate_down"):
+				preview_node.rotate(camera.basis.x.round(), deg_to_rad(22.5))
+			elif Input.is_action_just_pressed("editor_scale_up"):
+				if selected_item_is_scalable():
+					preview_mesh.scale += Vector3(1, 1, 1)
+					preview_mesh.scale = clamp(preview_mesh.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+			elif Input.is_action_just_pressed("editor_scale_down"):
+				if selected_item_is_scalable():
+					preview_mesh.scale -= Vector3(1, 1, 1)
+					preview_mesh.scale = clamp(preview_mesh.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+			preview_node.rotation = Vector3(snapped(preview_node.rotation.x, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.y, deg_to_rad(22.5)) as float, snapped(preview_node.rotation.z, deg_to_rad(22.5)) as float)
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			# place
 			if Input.is_action_just_pressed("click"):
 				drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 			if Input.is_action_pressed("click"):
-				if selected_item_is_scalable():
+				if selected_item_is_draggable():
 					# Click and drag to scale bricks
 					drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
 					b_scale = abs(drag_end_point - drag_start_point) + Vector3(1, 1, 1)
 					b_scale = b_scale.clamp(Vector3(1, 1, 1), Vector3(2000, 2000, 2000))
-					preview_node.scale = Vector3(1, 1, 1)
-					preview_node.global_scale(b_scale)
-					preview_node.global_position = drag_start_point.lerp(drag_end_point, 0.5)
+					preview_mesh.scale = Vector3(1, 1, 1)
+					preview_mesh.global_scale(b_scale)
+					preview_mesh.global_position = drag_start_point.lerp(drag_end_point, 0.5)
 					if b_scale != Vector3(1, 1, 1):
 						editor_canvas.scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
 			if Input.is_action_just_released("click"):
 				editor_canvas.scale_tooltip.text = ""
 				# if the selected item isn't scalable, ignore drag and just place
 				# at the same place as the end point
-				if !selected_item_is_scalable():
+				if !selected_item_is_draggable():
 					drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 				drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
 				if editor.select_area != null:
@@ -197,16 +212,18 @@ func _physics_process(delta : float) -> void:
 						var inst : Node3D = selected_item.instantiate()
 						Global.get_world().add_child(inst, true)
 						inst.global_position = drag_start_point.lerp(drag_end_point, 0.5)
-						inst.global_rotation = preview_node.global_rotation
-						inst.translate_object_local(item_offset)
-						if selected_item_is_scalable():
+						inst.global_rotation = preview_mesh.global_rotation
+						if selected_item_is_draggable():
 							if selected_item_properties.has("brick_scale"):
-								# use preview node scale to account for rotation
-								selected_item_properties["brick_scale"] = preview_node.scale
-						# rotate wheels because they have different rotation direction than
-						# facing direction
-						if inst is MotorBrick:
-							inst.rotate_object_local(Vector3.UP, -PI/2)
+								if selected_item_name_internal == "brick_cylinder":
+									# x is forward on wheels
+									selected_item_properties["brick_scale"] = Vector3(preview_mesh.scale.z, preview_mesh.scale.y, preview_mesh.scale.x)
+								else:
+									selected_item_properties["brick_scale"] = preview_mesh.scale
+								print(preview_mesh.scale)
+						elif selected_item_is_scalable():
+							inst.scale = preview_mesh.scale
+						inst.global_position += item_offset
 						if inst is TBWObject || inst is Brick:
 							for property : String in selected_item_properties.keys():
 								inst.set_property(property, selected_item_properties[property])
@@ -219,5 +236,6 @@ func _physics_process(delta : float) -> void:
 							UIHandler.show_alert("Select something to place from the left.\n(Press ESC to free your mouse.)", 3, false, UIHandler.alert_colour_error)
 						else:
 							UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)
-				preview_node.scale = Vector3(1, 1, 1)
-				preview_node.global_position = Vector3.ZERO
+				# regenerate after placement
+				if selected_item_is_draggable():
+					_on_item_picked(selected_item_name_internal, "", false)

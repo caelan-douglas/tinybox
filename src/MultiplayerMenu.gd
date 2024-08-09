@@ -93,5 +93,6 @@ func _process(delta : float) -> void:
 		if preview_player != null && camera != null:
 			nametag.position = camera.unproject_position(preview_player.global_position + Vector3.UP*1.8)
 			nametag.position.x -= nametag.size.x/2
-		if $AppearanceMenu.visible:
-			preview_player.global_rotation.y = (get_viewport().get_mouse_position().x / get_viewport().size.x) * PI * 2 + (PI*-1.5)
+		# rotate character when mouse is outside of panel area
+		if $AppearanceMenu.visible && (get_viewport().get_mouse_position().x / get_viewport().size.x < 0.7):
+			preview_player.global_rotation.y = (get_viewport().get_mouse_position().x / get_viewport().size.x) * PI * 2 + (PI*-1.3)

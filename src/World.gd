@@ -448,8 +448,33 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:
-		var building_pos : Variant = Global.property_string_to_property("global_position", line_split_init[1].split(":")[1])
-		offset_pos = building_pos as Vector3
+		var lowest_pos : Vector3 = Vector3(0, 99999, 0)
+		# find lowest brick as spawn point
+		for line : String in lines:
+			if line != "":
+				var line_split := line.split(" ; ")
+				var prop_list := line_split.slice(1)
+				var this_pos : Vector3 = Vector3.ZERO
+				for p : String in prop_list:
+					var property_split := p.split(":")
+					# name is first half
+					var property_name := property_split[0]
+					# don't use state yet
+					if property_name == "global_position":
+						var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+						this_pos = property as Vector3
+						if this_pos.y < lowest_pos.y:
+							lowest_pos = this_pos
+					# Account for scale in lowest point to avoid
+					# spawning large bricks in the ground.
+					if property_name == "brick_scale":
+						var property : Variant = Global.property_string_to_property(property_name, property_split[1])
+						var this_scale : Vector3 = property as Vector3
+						this_pos.y -= (this_scale.y * 0.5) - 0.5
+						if this_pos.y < lowest_pos.y:
+							lowest_pos = this_pos
+		var building_pos : Vector3 = Global.property_string_to_property("global_position", line_split_init[1].split(":")[1])
+		offset_pos = Vector3(building_pos.x, lowest_pos.y, building_pos.z)
 	
 	# BIG file, show loading visual
 	if lines.size() > 100:
@@ -476,7 +501,6 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 				var b : Brick = SpawnableObjects.objects[line_split[0]].instantiate()
 				add_child(b, true)
 				building_group.append(b)
-				b.change_state.rpc(Brick.States.PLACED)
 				var prop_list := line_split.slice(1)
 				for p : String in prop_list:
 					var property_split := p.split(":")
@@ -517,7 +541,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	# 2. check neighbours
 	var count : int = 0
 	for b : Brick in building_group:
-		b.check_joints()
+		b.change_state.rpc(Brick.States.PLACED)
 		if count == 1:
 			# recheck first brick in array on second brick check
 			# (never gets chance to join)
@@ -530,7 +554,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	await get_tree().process_frame
 	count = 0
 	for b : Brick in building_group_extras:
-		b.check_joints()
+		b.change_state.rpc(Brick.States.PLACED)
 		count += 1
 		b.sync_properties.rpc(b.properties_as_dict())
 	

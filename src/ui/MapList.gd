@@ -31,7 +31,9 @@ func _ready() -> void:
 	# add built-in worlds
 	add_separator("Built-in worlds")
 	add_map("Frozen Field")
+	add_map("Castle")
 	add_map("Steep Swamp")
+	add_map("Grasslands")
 	# add user worlds to list
 	add_separator("Your worlds")
 	for map : String in Global.get_user_tbw_names():

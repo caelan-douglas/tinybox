@@ -72,7 +72,7 @@ _data = {
 
 [node name="ExtinguisherTool" type="Node3D"]
 script = ExtResource("1_lnwkt")
-tool_name = "Extinguish"
+tool_name = "Extngshr"
 _shoot_type = 4
 shot_speed = 8
 explosion_size = 1.0

@@ -68,9 +68,19 @@ Attributions for /data/audio:
 	invalid.ogg:
 		by philRacoIndie; licensed under Creative Commons 0
 		https://freesound.org/people/philRacoIndie/sounds/551543/
+	
 	throw.ogg:
 		by denao270; licensed under Creative Commons 0
 		https://freesound.org/people/denao270/sounds/346373/
-
-	button_click
 	
+	ui_button.ogg:
+		by kickhat; licensed under Creative Commons 0
+		https://freesound.org/people/kickhat/sounds/264446/
+
+	ui_button_click.ogg:
+		by el_boss; licensed under Creative Commons 0
+		https://freesound.org/people/el_boss/sounds/677861/
+
+	spotlight.ogg:
+		by reidmangan; licensed under Creative Commons 0
+		https://freesound.org/people/reidmangan/sounds/49023/

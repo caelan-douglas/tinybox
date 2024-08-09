@@ -71,7 +71,7 @@ func set_camera_mode(new : CameraMode) -> void:
 		# longer zoom in controlled (editor) mode
 		if new == CameraMode.CONTROLLED:
 			target_dist = 10
-			max_dist = 150
+			max_dist = 300
 		emit_signal("camera_mode_changed")
 
 func set_target(new_target : Node, interpolate := true) -> void:

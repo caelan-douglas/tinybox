@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://qabpabfggsdp"]
+[gd_resource type="Resource" script_class="Team" load_steps=2 format=3 uid="uid://qabpabfggsdp"]
 
 [ext_resource type="Script" path="res://src/Team.gd" id="1_iov8e"]
 
@@ -6,6 +6,5 @@
 script = ExtResource("1_iov8e")
 name = "Default"
 members = []
-colour = Color(0.427451, 0.427451, 0.427451, 1)
-friendly_fire = true
-valid_for_minigame = true
+colour = Color(0.0509804, 0.109804, 0.168627, 1)
+cash = 700

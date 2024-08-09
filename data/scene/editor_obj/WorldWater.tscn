@@ -6,15 +6,15 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_gsv0s"]
 material = ExtResource("2_eb4lj")
-size = Vector2(2000, 2000)
+size = Vector2(4000, 4000)
 subdivide_width = 32
 subdivide_depth = 32
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8ft4g"]
-size = Vector3(2000, 1370, 2000)
+size = Vector3(4000, 1370, 4000)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rl71r"]
-size = Vector3(2000, 1391, 2000)
+size = Vector3(4000, 1391, 4000)
 
 [node name="Water" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)

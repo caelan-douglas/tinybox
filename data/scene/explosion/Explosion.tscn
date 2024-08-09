@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bh1utiu8ireoo"]
+[gd_scene load_steps=14 format=3 uid="uid://bh1utiu8ireoo"]
 
 [ext_resource type="Script" path="res://src/Explosion.gd" id="1_bvuci"]
-[ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="2_1bkqn"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="2_o4cne"]
+[ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_nruka"]
 
 [sub_resource type="Animation" id="Animation_b6t8b"]
 length = 0.001
@@ -76,22 +76,8 @@ turbulence_noise_speed = Vector3(1, 0, 1)
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gh5qw"]
-transparency = 1
-blend_mode = 1
-shading_mode = 0
-specular_mode = 2
-disable_ambient_light = true
-disable_fog = true
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("2_1bkqn")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_8vyer"]
-material = SubResource("StandardMaterial3D_gh5qw")
+material = ExtResource("3_nruka")
 size = Vector2(2.5, 2.5)
 orientation = 2
 
@@ -125,7 +111,6 @@ lifetime = 10.0
 one_shot = true
 speed_scale = 4.0
 explosiveness = 0.9
-fixed_fps = 20
 process_material = SubResource("ParticleProcessMaterial_rfa4g")
 draw_passes = 2
 draw_pass_1 = SubResource("PlaneMesh_8vyer")

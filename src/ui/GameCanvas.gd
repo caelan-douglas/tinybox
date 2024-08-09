@@ -16,7 +16,6 @@
 
 extends CanvasLayer
 
-@onready var intro_animator : AnimationPlayer = $IntroOverlay/AnimationPlayer
 @onready var pause_tip_text : Label = $PauseMenu/ScrollContainer/Pause/Tip
 @onready var client_request_world_timer : Timer = $RequestWorldTimer
 

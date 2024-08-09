@@ -8,6 +8,9 @@
         "upload_image": "Upload image...",
         "save": "Save",
         "save_copy": "Save a copy",
+        "save_world": "Save world",
+        "save_and_test": "Save & test world",
+        "load_world": "Load world",
         "host_or_join": "Host or Join",
         "host": "Host",
         "join": "Join",
@@ -24,6 +27,7 @@
         "master_volume": "Master Volume",
         "music_volume": "Music Volume",
         "sfx_volume": "SFX Volume",
+        "ui_volume": "Interface Volume",
         "colour": "Colour",
         "news": "New in this build",
         "host_clicked": "Starting server...",
@@ -89,7 +93,10 @@
             "copy_properties": "Copy properties to active tool",
             "copied": "Copied to tool!",
             "options_button": "Options, Test, Gamemodes, Pause...",
-            "options_button_hide": "Hide Options menu"
+            "options_button_hide": "Hide Options menu",
+
+            "gamemode_save_preset": "Save these settings as preset",
+            "gamemode_add": "+ Add to world gamemodes"
         }
     },
     "tip": {
@@ -187,7 +194,7 @@
             "bg_dining_room": "Dining Room",
             "brick": "Regular brick with no special features.",
             "brick_half": "Half-sized brick.",
-            "brick_cylinder": "Regular motor. Spins when attached to bricks and controlled via a seat. Can be used as a wheel for vehicles.",
+            "brick_cylinder": "Regular motor.\nWill spin freely around where the motor (grey circle) is attached;\nanything attached to the other side will be anchored to the motor and follow its rotation.\nWhen making vehicles, attach the motor side to the body of the vehicle (think of\nthe motor like an axle.)\nYou can use Flip Motor Side in the property editor to change the attachment side.",
             "brick_motor_seat": "Controls any motors that are attached to this brick group when a player sits down in it.",
             "brick_button": "Button with customizable parameters.",
             "brick_lamp": "Lamp that provides light. Will shut off if displaced."

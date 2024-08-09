@@ -17,6 +17,13 @@
 extends Node3D
 class_name Fire
 
+@onready var particles : GPUParticles3D = $GPUParticles3D
+
+func set_particle_scale(size : Vector2 = Vector2(1, 1)) -> void:
+	var new := particles.draw_pass_1.duplicate()
+	new.size = size
+	particles.draw_pass_1 = new
+
 func light() -> void:
 	$GPUParticles3D.emitting = true
 	$AudioStreamPlayer3D.play(randi_range(0, 4))

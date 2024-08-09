@@ -3,25 +3,26 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqiuxri68qqr2"
-path="res://.godot/imported/watercolour.png-1cceaca81af545dc3e3a3c7f2a9902ff.ctex"
+path.s3tc="res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://data/models/track/textures/watercolour.png"
-dest_files=["res://.godot/imported/watercolour.png-1cceaca81af545dc3e3a3c7f2a9902ff.ctex"]
+source_file="res://data/textures/watercolour.png"
+dest_files=["res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -31,4 +32,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

@@ -1,9 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://dq4jgcqroudj7"]
+[gd_scene load_steps=16 format=3 uid="uid://dq4jgcqroudj7"]
 
 [ext_resource type="Script" path="res://src/Rocket.gd" id="1_a6qbv"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_m2crw"]
 [ext_resource type="AudioStream" uid="uid://vtp8j8bjaigv" path="res://data/audio/beep/missile_beep.ogg" id="3_12qq6"]
-[ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="3_pdgie"]
+[ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_fog8y"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="4_x22qc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b7orn"]
@@ -26,7 +26,7 @@ properties/3/replication_mode = 2
 
 [sub_resource type="Gradient" id="Gradient_llghf"]
 offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 1, 1, 1, 0.313726, 0.313726, 0.313726, 0)
+colors = PackedColorArray(0.922123, 0, 0.161738, 0, 1, 0.324878, 0.0442922, 1, 0.089331, 0.0447418, 0.0165941, 1, 0.313726, 0.313726, 0.313726, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g6j2x"]
 gradient = SubResource("Gradient_llghf")
@@ -49,27 +49,8 @@ turbulence_noise_speed = Vector3(1, 0, 1)
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scmp3"]
-transparency = 1
-blend_mode = 1
-shading_mode = 2
-disable_ambient_light = true
-disable_fog = true
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("3_pdgie")
-metallic_specular = 0.0
-emission_enabled = true
-emission = Color(0.937255, 0.517647, 0.266667, 1)
-emission_energy_multiplier = 5.0
-emission_operator = 1
-emission_texture = ExtResource("3_pdgie")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_82njc"]
-material = SubResource("StandardMaterial3D_scmp3")
+material = ExtResource("3_fog8y")
 size = Vector2(0.6, 0.6)
 orientation = 2
 

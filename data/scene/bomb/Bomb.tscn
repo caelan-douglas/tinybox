@@ -1,54 +1,37 @@
-[gd_scene load_steps=25 format=3 uid="uid://cd3af1twwe58l"]
+[gd_scene load_steps=24 format=3 uid="uid://cd3af1twwe58l"]
 
 [ext_resource type="Script" path="res://src/Bomb.gd" id="1_3qcbp"]
-[ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="2_rmm7k"]
 [ext_resource type="AudioStream" uid="uid://btxcjaqcrlqro" path="res://data/audio/beep/beep.ogg" id="2_xnhk2"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="3_dxvq6"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="3_ky8so"]
+[ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_rloq1"]
 [ext_resource type="Texture2D" uid="uid://d2yj122mqtsxk" path="res://data/textures/sharp_noise_tex.png" id="4_a0734"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="7_7cjlw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nsclt"]
 bounce = 0.1
 
-[sub_resource type="Gradient" id="Gradient_66m8f"]
-offsets = PackedFloat32Array(0, 0.135965, 0.729258, 0.899563, 1)
-colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 1, 0.489035, 0.276674, 1, 0.133196, 0.133196, 0.133196, 1, 0.313726, 0.313726, 0.313726, 0)
+[sub_resource type="Gradient" id="Gradient_ou2w2"]
+offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 0.324878, 0.0442922, 1, 0.854066, 0.417514, 0, 1, 0.313726, 0.313726, 0.313726, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_dnoau"]
-gradient = SubResource("Gradient_66m8f")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_blc3m"]
+gradient = SubResource("Gradient_ou2w2")
 width = 128
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t7hvn"]
-lifetime_randomness = 0.7
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ptir8"]
+emission_shape_scale = Vector3(0.1, 0.1, 0.1)
 emission_shape = 1
-emission_sphere_radius = 0.1
+emission_sphere_radius = 1.0
 direction = Vector3(0, 0, 0)
-angular_velocity_min = 0.43
-angular_velocity_max = 101.84
-gravity = Vector3(0, 0.5, 0)
-color_ramp = SubResource("GradientTexture1D_dnoau")
+angular_velocity_min = 61.28
+angular_velocity_max = 61.28
+gravity = Vector3(2.08165e-12, 0.4, 2.08165e-12)
+color_ramp = SubResource("GradientTexture1D_blc3m")
 turbulence_enabled = true
-turbulence_noise_strength = 0.2
-turbulence_noise_scale = 10.0
-turbulence_noise_speed = Vector3(1, 0, 1)
-turbulence_influence_min = 0.0
-turbulence_influence_max = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gh5qw"]
-transparency = 1
-blend_mode = 1
-shading_mode = 0
-disable_ambient_light = true
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("2_rmm7k")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_clwto"]
-material = SubResource("StandardMaterial3D_gh5qw")
+material = ExtResource("3_rloq1")
 size = Vector2(0.3, 0.3)
 orientation = 2
 
@@ -262,7 +245,7 @@ amount = 48
 lifetime = 2.5
 randomness = 1.0
 fixed_fps = 13
-process_material = SubResource("ParticleProcessMaterial_t7hvn")
+process_material = SubResource("ParticleProcessMaterial_ptir8")
 draw_pass_1 = SubResource("PlaneMesh_clwto")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

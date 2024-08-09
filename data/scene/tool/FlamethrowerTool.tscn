@@ -72,7 +72,7 @@ _data = {
 
 [node name="FlamethrowerTool" type="Node3D"]
 script = ExtResource("1_k2tpg")
-tool_name = "Flmethrwr"
+tool_name = "Flmthrwr"
 _shoot_type = 5
 shot_speed = 8
 explosion_size = 0.3

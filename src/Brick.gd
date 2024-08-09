@@ -35,7 +35,7 @@ enum BrickMaterial {
 	GRASS
 }
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -167,6 +167,8 @@ func set_property(property : StringName, value : Variant) -> void:
 		set_material(value as Brick.BrickMaterial)
 	elif property == "immovable":
 		immovable = value as bool
+	elif property == "joinable":
+		joinable = value as bool
 	elif property == "brick_scale":
 		if value is Vector3:
 			# bricks can only have integer as scales
@@ -182,6 +184,11 @@ func set_property(property : StringName, value : Variant) -> void:
 				collider.shape = collider.shape.duplicate()
 				joint_collider.shape = joint_collider.shape.duplicate()
 				cam_collider.shape = cam_collider.shape.duplicate()
+				var fire_size : float = scale_new.length() * 0.5
+				fire.scale = brick_scale
+				# scale actual fire plane mesh
+				if fire_size > 1.5:
+					fire.set_particle_scale(Vector2(fire_size, fire_size))
 				if collider.shape is BoxShape3D:
 					collider.shape.size = scale_new
 					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
@@ -198,14 +205,18 @@ func set_property(property : StringName, value : Variant) -> void:
 					collider.shape.radius = (scale_new).y * 0.5
 					# different scale arrangement for model
 					model_mesh.scale = Vector3(scale_new.y, scale_new.x, scale_new.y)
-					joint_collider.shape.size = Vector3(scale_new.x, scale_new.x, scale_new.x) + Vector3(0.3, 0.3, 0.3)
-					cam_collider.shape.height = (scale_new).x + 0.4
-					cam_collider.shape.radius = ((scale_new).y * 0.5) + 0.2
+					joint_collider.shape.height = scale_new.x + 0.3
+					joint_collider.shape.radius = (scale_new.y * 0.5) + 0.3
+					cam_collider.shape.height = scale_new.x + 0.4
+					cam_collider.shape.radius = (scale_new.y * 0.5) + 0.2
 					
 					var joint_spot_left : Node3D = $JointSpotLeft
 					var joint_spot_right : Node3D = $JointSpotRight
+					var motor_mesh : Node3D = $Smoothing/MotorMesh
 					joint_spot_left.position.z = scale_new.x * 0.5
 					joint_spot_right.position.z = -scale_new.x * 0.5
+					motor_mesh.position.z = scale_new.x * 0.5
+					motor_mesh.scale = Vector3(scale_new.y * 0.8, 0.25, scale_new.y * 0.8)
 	else:
 		set(property, value)
 
@@ -457,7 +468,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
-	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 4)
+	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 8)
 	if explosion_force > 160:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
@@ -474,13 +485,13 @@ func set_non_groupable_for(seconds : float) -> void:
 # Calls on enter scene
 func _ready() -> void:
 	super()
+	
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	connect("body_entered", _on_body_entered)
 	connect("sleeping_state_changed", _on_sleeping_state_changed)
 	inactivity_timer.connect("timeout", _inactivity_despawn)
 	# set material to spawn material
 	set_material(_material)
-	await get_tree().process_frame
 
 # Spawns this brick, usually from a tool. Called reliably so that a client
 # does not miss their brick being spawned.
@@ -726,31 +737,55 @@ func build() -> void:
 
 # Check joint for any nearby bricks to join to.
 # Arg 1: A set group to put this brick into. Used mainly for spawning prebuilt buildings.
-func check_joints(set_group : String = "") -> void:
+func check_joints(specific_body : Node3D = null) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
-	if joint_detector.has_overlapping_bodies():
-		# update our child Joint
-		var found_brick := false
-		# join bricks that are adjacent
-		for body in joint_detector.get_overlapping_bodies():
-			# don't join with self
-			if body is Brick && body != self:
-				if body.immovable:
-					has_static_neighbour = true
-				found_brick = true
-				# Don't let things join to wheels (can prevent rotation)
-				if body.joinable && !immovable && !body.immovable:
-					# don't let normal bricks join to motor bricks; 
-					if body is MotorBrick && !(self is MotorBrick):
-						continue
-					# Don't let wheels join with seats
-					if (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
-						continue
-					else:
-						join(body.get_path(), set_group)
-			elif body is StaticBody3D:
+	# update our child Joint
+	var found_brick := false
+	
+	var bodies_to_check : Array[Node3D] = []
+	if specific_body != null:
+		bodies_to_check.append(specific_body)
+	# join bricks that are adjacent
+	for body in joint_detector.get_overlapping_bodies():
+		if !bodies_to_check.has(body):
+			bodies_to_check.append(body)
+	
+	for body in bodies_to_check:
+		# don't join with self
+		if body is Brick && body != self:
+			if body.immovable:
 				has_static_neighbour = true
+			found_brick = true
+			# Don't let things join to wheels (can prevent rotation)
+			if body.joinable:
+				# don't let normal bricks join to motor bricks; 
+				if body is MotorBrick && !(self is MotorBrick):
+					# in case motor brick did not check for this brick
+					body.check_joints(self)
+					continue
+				# Don't let wheels join with seats
+				if (body is MotorBrick && self is MotorSeat) || (body is MotorSeat && self is MotorBrick):
+					continue
+				
+				join(body.get_path())
+				# if the motor detector doesn't have the body, it is
+				# joined on the non-motor side, so join the body to
+				# us as well
+				if self is MotorBrick:
+					var motor_pos : Vector3 = $JointSpotLeft.global_position
+					var joint_pos : Vector3 = $JointSpotRight.global_position
+					if self.flip_motor_side:
+						motor_pos = $JointSpotRight.global_position
+						joint_pos = $JointSpotLeft.global_position
+					print(body.global_position.distance_to(joint_pos), " ; ", body.global_position.distance_to(motor_pos))
+					# add a bit of bias towards the non-motor side so that
+					# bricks that are placed on the outer edge of a wheel
+					# will attach to it
+					if body.global_position.distance_to(joint_pos) < body.global_position.distance_to(motor_pos) + 0.02:
+						body.join(self.get_path())
+		elif body is StaticBody3D:
+			has_static_neighbour = true
 
 # Join with another brick.
 # Arg 1: The other brick to join to, as a NodePath.

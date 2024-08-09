@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=23 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -14,6 +14,7 @@
 [ext_resource type="StyleBox" uid="uid://dabhh11fbgqey" path="res://data/theme_elements/stylebox_purple.tres" id="9_pkgum"]
 [ext_resource type="PackedScene" uid="uid://oujpbtog7ni" path="res://data/scene/ui/EventListEditor.tscn" id="11_ukkc0"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="15_32mo6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5nvuj"]
 
@@ -56,10 +57,10 @@ button_mask = 3
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -92.5
+offset_left = -92.0
 offset_top = 8.0
-offset_right = 92.5
-offset_bottom = 56.0
+offset_right = 93.0
+offset_bottom = 8.0
 grow_horizontal = 2
 theme_override_constants/separation = 2
 
@@ -141,6 +142,7 @@ text_overrun_behavior = 4
 [node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
 text = "Load existing world"
+script = ExtResource("15_32mo6")
 
 [node name="Spacer3" type="Control" parent="EntryScreen/Panel/Menu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -149,6 +151,7 @@ layout_mode = 2
 [node name="New" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
 text = "New world"
+script = ExtResource("15_32mo6")
 
 [node name="Controls" type="RichTextLabel" parent="."]
 clip_contents = false
@@ -157,10 +160,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -406.0
-offset_top = -218.5
+offset_left = -371.0
+offset_top = -218.0
 offset_right = -16.0
-offset_bottom = 218.5
+offset_bottom = 219.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
@@ -169,19 +172,19 @@ theme_override_constants/outline_size = 6
 bbcode_enabled = true
 text = "[color=yellow]Editor Controls[/color]
 
-[ Esc ]					Free / capture mouse
+[ Esc ]				Free / capture mouse
 [ Number row ]		Select tools (1 - 6)
 [ Q / E ]				Rotate object ← / →
 [ R / F ] 				Rotate object ↑ / ↓
-						[color=#ffffff90](in facing direction)[/color]
+					[color=#ffffff90](in facing direction)[/color]
 [ Ctrl/Cmd + R ]		Reset object rotation
-[ Click (& drag) ]		Place object
-[ Right click ]			Delete object
+[ Click (& drag) ]	Place object
+[ Right click ]		Delete object
 
-[ WASD ] 				Move
+[ WASD ] 			Move
 [ Shift ]				Hold: Move faster
-[ Alt/Option ]			Descend
-[ Space ]				Ascend
+[ Alt/Option ]		Descend
+[ Space ]			Ascend
 [ Ctrl/Cmd + Scroll ]	Zoom camera
 "
 fit_content = true
@@ -291,11 +294,15 @@ placeholder_text = "World name..."
 [node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 layout_mode = 2
 text = "Save world"
+script = ExtResource("15_32mo6")
+json_text = "ui/save_world"
 
 [node name="TestWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 self_modulate = Color(1, 2.702, 1, 1)
 layout_mode = 2
 text = "Save & test world"
+script = ExtResource("15_32mo6")
+json_text = "ui/save_and_test"
 
 [node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 custom_minimum_size = Vector2(0, 30)
@@ -313,6 +320,8 @@ text_overrun_behavior = 4
 [node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 layout_mode = 2
 text = "Load world"
+script = ExtResource("15_32mo6")
+json_text = "ui/load_world"
 
 [node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 custom_minimum_size = Vector2(2.08165e-12, 70)
@@ -345,6 +354,7 @@ json_text = "ui/editor/water"
 [node name="Water" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 layout_mode = 2
 text = "Toggle water"
+script = ExtResource("15_32mo6")
 
 [node name="WaterHeightAdjuster" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
 layout_mode = 2
@@ -362,6 +372,7 @@ json_text = "ui/editor/water_type"
 [node name="WaterType" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 layout_mode = 2
 text = "Water"
+script = ExtResource("15_32mo6")
 
 [node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
@@ -376,6 +387,7 @@ json_text = "ui/editor/environment"
 [node name="Environment" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 layout_mode = 2
 text = "Sunny"
+script = ExtResource("15_32mo6")
 
 [node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
@@ -390,6 +402,7 @@ json_text = "ui/editor/background"
 [node name="Background" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 layout_mode = 2
 text = "(none)"
+script = ExtResource("15_32mo6")
 
 [node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
 custom_minimum_size = Vector2(808, 2.08165e-12)
@@ -488,11 +501,15 @@ layout_mode = 2
 self_modulate = Color(0, 0.764706, 0.980392, 1)
 layout_mode = 2
 text = "Save these settings as preset"
+script = ExtResource("15_32mo6")
+json_text = "ui/editor/gamemode_save_preset"
 
 [node name="AddToWorldGamemodes" type="Button" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
 self_modulate = Color(1, 2.703, 1, 1)
 layout_mode = 2
 text = "+ Add to world gamemodes"
+script = ExtResource("15_32mo6")
+json_text = "ui/editor/gamemode_add"
 
 [node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/Gamemodes"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -540,6 +557,7 @@ offset_right = -25.0
 offset_bottom = 73.0
 grow_horizontal = 0
 text = "Options, Test, Gamemodes, Pause..."
+script = ExtResource("15_32mo6")
 
 [node name="ScaleTooltip" type="Label" parent="."]
 anchors_preset = 8

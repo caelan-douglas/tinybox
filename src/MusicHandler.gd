@@ -18,10 +18,12 @@ extends Node
 signal master_setting_changed
 signal music_setting_changed
 signal sfx_setting_changed
+signal ui_setting_changed
 
 var master_setting := 1.0
 var music_setting := 0.6
 var sfx_setting := 1.0
+var ui_setting := 1.0
 var min_db : float = 30
 var current_song_name := ""
 var song_list : Array[String] = [""]
@@ -33,6 +35,7 @@ func _ready() -> void:
 	master_setting = MusicHandler.load_master_setting()
 	music_setting = MusicHandler.load_music_setting()
 	sfx_setting = MusicHandler.load_sfx_setting()
+	ui_setting = MusicHandler.load_ui_setting()
 
 func switch_song(new_song_names : Array[String], overwrite_song_list := true) -> void:
 	if overwrite_song_list:
@@ -132,3 +135,21 @@ func load_sfx_setting() -> float:
 	if loaded_preset != null:
 		set_sfx_setting(loaded_preset as float)
 	return sfx_setting
+
+func get_ui_setting() -> float:
+	return ui_setting
+
+func set_ui_setting(new : float) -> void:
+	ui_setting = new
+	if new == 0:
+		AudioServer.set_bus_mute(3, true)
+	else:
+		AudioServer.set_bus_mute(3, false)
+	AudioServer.set_bus_volume_db(3, (-min_db + (min_db * new)))
+	emit_signal("ui_setting_changed")
+
+func load_ui_setting() -> float:
+	var loaded_preset : Variant = UserPreferences.load_pref("ui_vol_setting")
+	if loaded_preset != null:
+		set_ui_setting(loaded_preset as float)
+	return ui_setting

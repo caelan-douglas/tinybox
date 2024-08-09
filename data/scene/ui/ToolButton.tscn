@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://bf7qurmijub4y"]
 
 [node name="ToolButton" type="Button"]
-custom_minimum_size = Vector2(160, 48)
+custom_minimum_size = Vector2(160, 32)
+offset_right = 160.0
+offset_bottom = 38.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 toggle_mode = true
@@ -12,19 +14,20 @@ clip_text = true
 self_modulate = Color(0.3, 2.1, 0.6, 1)
 show_behind_parent = true
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 32.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 show_percentage = false
 
 [node name="NumberLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 7.0
-offset_top = -15.0
-offset_right = 47.0
-offset_bottom = 69.0
+offset_left = 8.0
+offset_top = -14.0
+offset_right = 48.0
+offset_bottom = 70.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 53
 text = "1"

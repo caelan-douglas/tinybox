@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4pf0l65ojqcw"]
+[gd_scene load_steps=8 format=3 uid="uid://c4pf0l65ojqcw"]
 
 [ext_resource type="Script" path="res://src/ui/SettingsMenu.gd" id="1_khwxh"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_qejdm"]
@@ -6,6 +6,12 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_r1aba"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="4_mugbr"]
 [ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="5_es3m5"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_exarq"]
+color = Color(1, 1, 1, 0.356863)
+grow_begin = 16.0
+grow_end = 16.0
+thickness = 2
 
 [node name="SettingsMenu" type="VBoxContainer"]
 custom_minimum_size = Vector2(308, 2.08165e-12)
@@ -31,6 +37,7 @@ layout_mode = 2
 text = "Save"
 script = ExtResource("2_qejdm")
 json_text = "ui/save"
+grab_initial_focus = true
 
 [node name="Graphics" type="Button" parent="."]
 layout_mode = 2
@@ -63,6 +70,19 @@ max_value = 1.0
 step = 0.1
 value = 1.0
 script = ExtResource("4_mugbr")
+bus = null
+
+[node name="Spacer11" type="Control" parent="VolumePanel/VolumePanelContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VolumePanel/VolumePanelContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxLine_exarq")
+
+[node name="Spacer12" type="Control" parent="VolumePanel/VolumePanelContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
 
 [node name="Label4" type="Label" parent="VolumePanel/VolumePanelContainer"]
 layout_mode = 2
@@ -97,6 +117,25 @@ step = 0.1
 value = 1.0
 script = ExtResource("4_mugbr")
 bus = 2
+
+[node name="Spacer10" type="Control" parent="VolumePanel/VolumePanelContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="VolumePanel/VolumePanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Interface Volume"
+script = ExtResource("3_r1aba")
+json_text = "ui/ui_volume"
+
+[node name="SFXVol2" type="HSlider" parent="VolumePanel/VolumePanelContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+script = ExtResource("4_mugbr")
+bus = 3
 
 [node name="Spacer9" type="Control" parent="."]
 custom_minimum_size = Vector2(2.08165e-12, 32)

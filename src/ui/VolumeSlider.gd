@@ -19,7 +19,8 @@ extends HSlider
 enum AudioBus {
 	MASTER,
 	MUSIC,
-	SFX
+	SFX,
+	UI
 }
 
 @export var bus : AudioBus = AudioBus.MASTER
@@ -47,6 +48,10 @@ func load_settings() -> void:
 			var current := MusicHandler.load_sfx_setting()
 			if current != null:
 				value = current
+		AudioBus.UI:
+			var current := MusicHandler.load_ui_setting()
+			if current != null:
+				value = current
 
 # Toggle music on/off and save the setting.
 func set_volume(new : float) -> void:
@@ -60,3 +65,6 @@ func set_volume(new : float) -> void:
 		AudioBus.SFX:
 			MusicHandler.set_sfx_setting(new)
 			UserPreferences.save_pref("sfx_setting", MusicHandler.get_sfx_setting())
+		AudioBus.UI:
+			MusicHandler.set_ui_setting(new)
+			UserPreferences.save_pref("ui_vol_setting", MusicHandler.get_ui_setting())

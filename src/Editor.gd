@@ -83,8 +83,9 @@ func _on_body_selected(body : Node3D) -> void:
 			# avoid ui spam when clicking + dragging (wait to be still
 			# to show editing notification )
 			await get_tree().create_timer(0.5).timeout
-			if select_area.global_position == last_pos:
-				property_editor.editing_hovered = true
+			if selectable_body != null:
+				if select_area.global_position == last_pos:
+					property_editor.editing_hovered = true
 
 func _on_body_deselected(_body : Node3D) -> void:
 	# check currently hovering bodies

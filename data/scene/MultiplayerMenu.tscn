@@ -72,9 +72,11 @@ _data = {
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xr4ut"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+bg_color = Color(0, 0, 0, 0.156863)
 border_width_bottom = 4
 border_color = Color(0.380392, 0.643137, 0.560784, 0.482353)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
@@ -154,6 +156,7 @@ theme_override_font_sizes/font_size = 32
 text = "Play"
 script = ExtResource("2_o48rt")
 json_text = "ui/play"
+grab_initial_focus = true
 
 [node name="Editor" type="Button" parent="MainMenu"]
 self_modulate = Color(1, 2.162, 2.162, 1)
@@ -250,6 +253,7 @@ theme_override_font_sizes/font_size = 32
 text = "Host"
 script = ExtResource("2_o48rt")
 json_text = "ui/host"
+grab_initial_focus = true
 
 [node name="Edit" type="Button" parent="PlayMenu/HostHbox"]
 layout_mode = 2
@@ -349,6 +353,7 @@ layout_mode = 2
 text = "Back"
 script = ExtResource("2_o48rt")
 json_text = "ui/back"
+grab_initial_focus = true
 
 [node name="JoinSettingsMenu" type="VBoxContainer" parent="."]
 visible = false
@@ -407,6 +412,7 @@ layout_mode = 2
 text = "Back"
 script = ExtResource("2_o48rt")
 json_text = "ui/back"
+grab_initial_focus = true
 
 [node name="AppearanceMenu" type="VBoxContainer" parent="."]
 visible = false
@@ -632,6 +638,7 @@ layout_mode = 2
 text = "Back"
 script = ExtResource("2_o48rt")
 json_text = "ui/back"
+grab_initial_focus = true
 
 [node name="SettingsScroll" type="ScrollContainer" parent="."]
 visible = false
@@ -648,6 +655,7 @@ offset_right = -144.0
 offset_bottom = 304.0
 grow_horizontal = 0
 grow_vertical = 2
+follow_focus = true
 
 [node name="SettingsMenu" parent="SettingsScroll" instance=ExtResource("6_j7jhb")]
 layout_mode = 2

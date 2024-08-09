@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://da61xyvkih0q"]
+[gd_scene load_steps=18 format=3 uid="uid://da61xyvkih0q"]
 
 [ext_resource type="Script" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
 [ext_resource type="Animation" uid="uid://cpbmua5aa3x2j" path="res://data/animation/main_menu/appearance_in.res" id="5_1xpc5"]
 [ext_resource type="Animation" uid="uid://bv8140eakwmkm" path="res://data/animation/main_menu/appearance_out.res" id="6_eed1v"]
 [ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
+[ext_resource type="AudioStream" uid="uid://c0gcn31iumd17" path="res://data/audio/spotlight.ogg" id="7_2nw57"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="9_ykrt6"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_v6w6k"]
@@ -43,6 +44,10 @@ fog_light_color = Color(0.529412, 0.568627, 0.6, 1)
 fog_sun_scatter = 0.03
 fog_density = 0.001
 fog_sky_affect = 0.787
+volumetric_fog_density = 0.1
+volumetric_fog_albedo = Color(0.646129, 0.747318, 0.802423, 1)
+volumetric_fog_anisotropy = -0.2
+volumetric_fog_length = 6.0
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture2D_y3nqn")
 
@@ -190,6 +195,18 @@ tracks/10/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("AudioStreamPlayer:playing")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kgx20"]
 _data = {
@@ -231,7 +248,6 @@ visible_on_awful = false
 transform = Transform3D(0.342807, 0.154125, -0.926676, 0.535724, -0.842394, 0.0580744, -0.771676, -0.516351, -0.371347, 0, 0, 0)
 light_color = Color(0.66729, 0.519686, 0.596753, 1)
 light_energy = 2.0
-shadow_enabled = true
 shadow_blur = 2.391
 directional_shadow_max_distance = 12.3
 script = ExtResource("6_oxx4f")
@@ -247,9 +263,10 @@ libraries = {
 }
 
 [node name="AppearanceLight" type="SpotLight3D" parent="."]
-transform = Transform3D(0.97303, 0.0150188, -0.230189, 0.205391, 0.397846, 0.894166, 0.105009, -0.917329, 0.384032, -0.997865, 2.61603, -1.14583)
+transform = Transform3D(0.97303, -0.0542225, -0.224215, 0.205391, 0.64611, 0.73509, 0.105009, -0.761316, 0.639821, -1.25889, 2.61603, 0.345815)
 visible = false
 light_energy = 0.0
+shadow_enabled = true
 spot_range = 50.0
 spot_angle = 15.0
 spot_angle_attenuation = 0.148651
@@ -267,3 +284,8 @@ visible = false
 light_color = Color(0.857099, 0.61032, 0.54578, 1)
 light_energy = 0.0
 light_specular = 0.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_2nw57")
+volume_db = -12.0
+bus = &"SFX"
