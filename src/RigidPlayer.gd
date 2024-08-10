@@ -78,8 +78,12 @@ var locked := false:
 	get:
 		return locked
 	set(v):
-		locked = v
-		get_tool_inventory().set_disabled(v)
+		if high_priority_lock == true:
+			locked = true
+		else:
+			locked = v
+		#get_tool_inventory().set_disabled(v)
+var high_priority_lock := false
 # invulnerable on spawn
 var invulnerable := true
 var can_enter_seat := true
@@ -627,6 +631,7 @@ func _ready() -> void:
 	else:
 		Global.get_world().add_player_to_list(self)
 		gravity_scale = player_grav
+		get_tool_inventory().reset()
 		if multiplayer.is_server():
 			protect_spawn(3.5, false)
 		# only execute on yourself
@@ -1014,8 +1019,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		if ground_detect.has_overlapping_bodies():
 			for body in ground_detect.get_overlapping_bodies():
 				if standing_on_object != body:
-					if !multiplayer.is_server():
-						print("Now standing on: ", body)
 					standing_on_object_last_pos = body.global_position
 				set_standing_on_object_rpc.rpc(body.get_path())
 		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
@@ -1023,8 +1026,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		
 		# move if standing on something
 		if standing_on_object != null:
-			if !multiplayer.is_server():
-				print("Moving from stand: ", standing_on_object)
 			global_position += standing_on_object.global_position - standing_on_object_last_pos
 			standing_on_object_last_pos = standing_on_object.global_position
 		
@@ -1668,7 +1669,7 @@ func _on_camera_mode_changed() -> void:
 	if !locked:
 		if camera.get_camera_mode() == Camera.CameraMode.FREE:
 			camera.set_target(target)
-		else:
+		elif camera.get_camera_mode() == Camera.CameraMode.AIM:
 			camera.set_target(aim_target)
 
 func entered_water() -> void:

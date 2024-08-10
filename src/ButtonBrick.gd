@@ -19,10 +19,9 @@ class_name ButtonBrick
 
 @onready var explosion : PackedScene = SpawnableObjects.explosion
 @onready var button_audio : AudioStreamPlayer3D = $ButtonAudio
-var events : Event.EventType = Event.EventType.TELEPORT_ALL_PLAYERS
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "_material", "_colour", "event", "connection"]
+	properties_to_save = ["global_position", "global_rotation", "_material", "_colour"]
 
 func _ready() -> void:
 	super()
@@ -31,22 +30,8 @@ var last_stepped_by : Node = null
 # Button stepped on.
 @rpc("any_peer", "call_local", "reliable")
 func stepped(by_what_node_path : NodePath) -> void:
-	$ButtonAudio.play()
+	button_audio.play()
 	var by_what : Node = get_node_or_null(by_what_node_path)
 	if by_what != null:
 		if by_what is Node:
 			last_stepped_by = by_what
-		run_event()
-
-func run_event() -> void:
-	# format any strings
-	pass
-		#match (event):
-			#Event.EventType.TELEPORT_PLAYER:
-				#if last_stepped_by is RigidPlayer:
-					#EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
-			#Event.EventType.Event.EXPLODE:
-				#EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority(), get_node(connection).global_position])
-			#Event.EventType.Event.CHANGE_PLAYER_TEAM:
-				#if last_stepped_by is RigidPlayer:
-					#EventHandler.run_event.rpc_id(1, event, [last_stepped_by.get_multiplayer_authority()])

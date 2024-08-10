@@ -18,6 +18,19 @@ extends Brick
 
 @onready var light : OmniLight3D = $Smoothing/OmniLight3D
 
+func _ready() -> void:
+	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
+	_on_graphics_preset_changed()
+
+func _on_graphics_preset_changed() -> void:
+	match (Global.get_graphics_preset()):
+		Global.GraphicsPresets.COOL:
+			light.distance_fade_begin = 40
+		Global.GraphicsPresets.BAD:
+			light.distance_fade_begin = 30
+		Global.GraphicsPresets.AWFUL:
+			light.distance_fade_begin = 20
+
 @rpc("any_peer", "call_local", "reliable")
 func set_colour(new : Color) -> void:
 	super(new)

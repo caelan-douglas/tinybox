@@ -64,6 +64,7 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	var tween : Tween = get_tree().create_tween().set_parallel(true)
 	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.3)
+	release_focus()
 
 func play_audio_hover() -> void:
 	await get_tree().process_frame

@@ -468,7 +468,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
-	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 8)
+	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 4)
 	if explosion_force > 160:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin

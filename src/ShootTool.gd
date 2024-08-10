@@ -201,11 +201,7 @@ func _physics_process(delta : float) -> void:
 	# if this tool is selected
 	if get_tool_active():
 		if shot_cooldown_counter <= 0 && (ammo > 0 || ammo == -1):
-			var player_is_locked := false
-			if tool_player_owner != null:
-				if tool_player_owner.locked:
-					player_is_locked = true
-			if Input.is_action_pressed("click") && !player_is_locked:
+			if Input.is_action_pressed("click") && !tool_player_owner.locked:
 				# For single-click shots
 				if !charged_shot:
 					# Limit the speed at which we can fire.
@@ -229,7 +225,7 @@ func _physics_process(delta : float) -> void:
 						# just increased above
 						if charged_shot_amt >= charged_shot_amt_max:
 							power_meter_anim.play("power_max")
-			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !player_is_locked:
+			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !tool_player_owner.locked:
 				# Limit the speed at which we can fire.
 				shot_cooldown_counter = shot_cooldown
 				

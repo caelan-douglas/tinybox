@@ -9,7 +9,6 @@
 [node name="BaseWorld" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 script = ExtResource("1_t851o")
-songs = Array[String](["mus1", "floaty", "warp", "frozenfield"])
 
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_hrmyj")

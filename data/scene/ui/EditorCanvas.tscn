@@ -213,7 +213,6 @@ json_text = "Tinybox %version%"
 raw_format = true
 
 [node name="PauseMenu" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -403,6 +402,25 @@ json_text = "ui/editor/background"
 layout_mode = 2
 text = "(none)"
 script = ExtResource("15_32mo6")
+
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Songs"
+script = ExtResource("6_aufvl")
+json_text = "ui/editor/songs"
+
+[node name="SongList" type="PanelContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+
+[node name="List" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList"]
+layout_mode = 2
+
+[node name="CheckBox" type="CheckBox" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList/List"]
+layout_mode = 2
 
 [node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
 custom_minimum_size = Vector2(808, 2.08165e-12)

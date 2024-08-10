@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
+extends Node3D
 class_name Tool
 
 var ui_partner : Control = null
@@ -25,10 +25,17 @@ var ui_button : PackedScene = preload("res://data/scene/ui/ToolButton.tscn")
 var disabled := false
 var active := false
 var deleting := false
+var tool_inventory : ToolInventory = null
+
+enum ToolType {
+	PLAYER,
+	EDITOR
+}
 
 var visual_mesh : PackedScene = null
 @export var visual_mesh_name := ""
 @export var lock_camera_to_aim := false
+@export var type : ToolType = ToolType.PLAYER
 var tool_visual : Node3D = null
 var visual_mesh_instance : Node3D = null
 
@@ -37,16 +44,21 @@ var tool_overlay : Control = null
 	
 # Function for initializing this tool.
 # Arg 1: The name of this tool.
-# Arg 2: The player who owns this tool.
-func init(tool_name : String, player_owner : RigidPlayer) -> void:
-	set_multiplayer_authority(player_owner.get_multiplayer_authority())
+# Arg 2: The player who owns this tool. If null, will be considered an editor
+# tool.
+func init(tool_name : String, player_owner : RigidPlayer = null) -> void:
+	if player_owner != null:
+		set_multiplayer_authority(player_owner.get_multiplayer_authority())
+		tool_player_owner = player_owner
+		tool_visual = tool_player_owner.get_node("Smoothing/character_model/character/Skeleton3D/ToolVisual")
+		if visual_mesh_name != "":
+			visual_mesh = load(str("res://data/scene/tool/visual_mesh/", visual_mesh_name, ".tscn"))
+		tool_inventory = tool_player_owner.get_tool_inventory()
+	else:
+		type = ToolType.EDITOR
+		tool_inventory = get_parent()
 	# set the name of the tool for the ui
 	ui_tool_name = tool_name
-	tool_player_owner = player_owner
-	tool_visual = tool_player_owner.get_node("Smoothing/character_model/character/Skeleton3D/ToolVisual")
-	if visual_mesh_name != "":
-		visual_mesh = load(str("res://data/scene/tool/visual_mesh/", visual_mesh_name, ".tscn"))
-	
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	# Spawn new button for owner of this tool.
@@ -58,7 +70,10 @@ func init(tool_name : String, player_owner : RigidPlayer) -> void:
 	update_tool_number()
 
 func add_ui_partner() -> void:
-	get_tree().current_scene.get_node("GameCanvas/ToolList").add_child(ui_partner)
+	if type == ToolType.PLAYER:
+		get_tree().current_scene.get_node("GameCanvas/ToolList").add_child(ui_partner)
+	else:
+		get_tree().current_scene.get_node("EditorCanvas/ToolList").add_child(ui_partner)
 	ui_partner.text = str(ui_tool_name)
 
 func update_tool_number() -> void:
@@ -75,7 +90,7 @@ func update_tool_number() -> void:
 			ui_shortcut = OS.find_keycode_from_string(loaded_key)
 		ui_partner.get_node("NumberLabel").text = loaded_key
 	else:
-		var tool_inv_index : int = tool_player_owner.get_tool_inventory().get_index_of_tool(self)
+		var tool_inv_index : int = tool_inventory.get_index_of_tool(self)
 		ui_partner.get_node("NumberLabel").text = str(((tool_inv_index + 1) % 10))
 		match(tool_inv_index):
 			0:
@@ -99,7 +114,7 @@ func update_tool_number() -> void:
 			9:
 				ui_shortcut = KEY_0
 	# re-arrange tool list
-	tool_player_owner.get_tool_inventory().arrange_tools()
+	tool_inventory.arrange_tools()
 
 # Handle the UI and tool selection.
 func _unhandled_input(event : InputEvent) -> void:
@@ -141,45 +156,47 @@ func get_tool_active() -> bool:
 
 func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
 	if !is_multiplayer_authority(): return
-	
 	active = mode
-	# Enable/disable tool helper UI.
-	if tool_overlay != null:
-		tool_overlay.visible = mode
+	if type == ToolType.PLAYER:
+		# Enable/disable tool helper UI.
+		if tool_overlay != null:
+			tool_overlay.visible = mode
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if mode == true:
-		if camera is Camera:
-			if lock_camera_to_aim:
-				camera.set_mode_locked(true, Camera.CameraMode.AIM)
-			else:
+		# disable other tools
+		for t : Tool in tool_inventory.get_tools():
+			if t != self:
+				if t.get_tool_active() == true:
+					t.set_tool_active(false, false, false)
+		if !from_click:
+			if ui_partner != null:
+				ui_partner.button_pressed = true
+		# Player tool specifics
+		if type == ToolType.PLAYER:
+			if camera is Camera:
+				if lock_camera_to_aim:
+					camera.set_mode_locked(true, Camera.CameraMode.AIM)
+				else:
+					# if the player specifically requested aim mode with right click
+					# don't switch to free when the tool is deselected
+					if camera.player_requested_aim_mode:
+						camera.set_mode_locked(false, Camera.CameraMode.AIM)
+					else:
+						camera.set_mode_locked(false, Camera.CameraMode.FREE)
+			if visual_mesh != null:
+				show_tool_visual.rpc(true)
+	else:
+		if type == ToolType.PLAYER:
+			if lock_camera_to_aim && free_camera_on_inactive && camera is Camera:
 				# if the player specifically requested aim mode with right click
 				# don't switch to free when the tool is deselected
 				if camera.player_requested_aim_mode:
 					camera.set_mode_locked(false, Camera.CameraMode.AIM)
 				else:
 					camera.set_mode_locked(false, Camera.CameraMode.FREE)
-		# disable other tools
-		for t : Tool in tool_player_owner.get_tool_inventory().get_tools():
-			if t != self:
-				if t.get_tool_active() == true:
-					t.set_tool_active(false, false, false)
-		
-		if !from_click:
-			if ui_partner != null:
-				ui_partner.button_pressed = true
-		if visual_mesh != null:
-			show_tool_visual.rpc(true)
-	else:
-		if lock_camera_to_aim && free_camera_on_inactive && camera is Camera:
-			# if the player specifically requested aim mode with right click
-			# don't switch to free when the tool is deselected
-			if camera.player_requested_aim_mode:
-				camera.set_mode_locked(false, Camera.CameraMode.AIM)
-			else:
-				camera.set_mode_locked(false, Camera.CameraMode.FREE)
+			show_tool_visual.rpc(false)
 		if !from_click:
 			ui_partner.button_pressed = false
-		show_tool_visual.rpc(false)
 
 func set_disabled(new : bool) -> void:
 	if !is_multiplayer_authority(): return
@@ -190,7 +207,7 @@ func set_disabled(new : bool) -> void:
 		set_tool_active(false)
 
 func delete() -> void:
-	if !is_multiplayer_authority(): return
+	if !is_multiplayer_authority() || type == ToolType.EDITOR: return
 	
 	if !deleting:
 		deleting = true

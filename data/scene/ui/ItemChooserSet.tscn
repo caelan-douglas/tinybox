@@ -12,6 +12,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.778457, 0.174892, 1)
 text = "Set Name"
+autowrap_mode = 2
 script = ExtResource("1_w5rc4")
 
 [node name="ItemGrid" type="GridContainer" parent="."]

@@ -17,18 +17,11 @@
 # Runs all Editor functions.
 extends Map
 class_name Editor
-signal item_picked
-signal deselected
 
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
-@onready var editor_tool_inventory : EditorToolInventory = get_node("EditorToolInventory")
-@onready var selector : Node = get_node("SelectArea/Selector")
-@onready var select_area : Area3D = get_node("SelectArea")
+@onready var editor_tool_inventory : ToolInventory = get_node("EditorToolInventory")
 @onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor")
-@onready var item_chooser_list : Control =  get_tree().current_scene.get_node("EditorCanvas/LeftPanel/ItemChooser/Menu/ScrollContainer/ItemList")
 
-var hovered_editable_object : Node = null
-var can_select_object : bool = true
 var selected_item_properties : Dictionary = {}
 var test_mode : bool = false
 
@@ -39,13 +32,6 @@ func _ready() -> void:
 	
 	# for when a new .tbw map is loaded
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
-	# for when an editable object is hovered
-	select_area.connect("body_entered", _on_body_selected)
-	select_area.connect("area_entered", _on_body_selected)
-	# for when selection leaves body
-	select_area.connect("body_exited", _on_body_deselected)
-	select_area.connect("area_exited", _on_body_deselected)
-	property_editor.connect("property_updated", _on_property_updated)
 	
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
@@ -54,47 +40,6 @@ func _ready() -> void:
 	
 	# load default world
 	Global.get_world().load_tbw("editor_default", false, false)
-
-# When a property in the Property Editor is changed.
-func _on_property_updated(properties : Dictionary) -> void:
-	if property_editor.properties_from_tool == self:
-		if hovered_editable_object != null:
-			if hovered_editable_object is TBWObject || hovered_editable_object is Brick:
-				for property : String in selected_item_properties.keys():
-					hovered_editable_object.set_property(property, selected_item_properties[property])
-
-# When something is hovered with the selector in the editor.
-func _on_body_selected(body : Node3D) -> void:
-	var selectable_body : Node3D = null
-	if body is Area3D:
-		if body.owner is TBWObject:
-			if !(body.owner is Water):
-				selectable_body = body.owner
-	else:
-		if body is Brick || body is TBWObject:
-			selectable_body = body
-	
-	if can_select_object:
-		if selectable_body != null:
-			hovered_editable_object = selectable_body
-			# show props for that object
-			selected_item_properties = property_editor.list_object_properties(selectable_body, self)
-			var last_pos : Vector3 = select_area.global_position
-			# avoid ui spam when clicking + dragging (wait to be still
-			# to show editing notification )
-			await get_tree().create_timer(0.5).timeout
-			if selectable_body != null:
-				if select_area.global_position == last_pos:
-					property_editor.editing_hovered = true
-
-func _on_body_deselected(_body : Node3D) -> void:
-	# check currently hovering bodies
-	if !select_area.has_overlapping_bodies() && !select_area.has_overlapping_areas():
-		# clear list
-		property_editor.clear_list()
-		property_editor.editing_hovered = false
-		# allow any tools to re show their list
-		emit_signal("deselected")
 
 func _on_tbw_loaded() -> void:
 	# Check if map has water
@@ -112,18 +57,22 @@ func _on_tbw_loaded() -> void:
 	var bg : TBWObject = get_background()
 	if bg != null:
 		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
-
-func show_item_chooser() -> void:
-	item_chooser_list.visible = true
-
-func hide_item_chooser() -> void:
-	item_chooser_list.visible = false
-
-func get_item_chooser_visible() -> bool:
-	return item_chooser_list.visible
-
-func on_item_chosen(item_name_internal : String, item_name_display : String) -> void:
-	emit_signal("item_picked", item_name_internal, item_name_display)
+	# Update song list
+	var song_list : VBoxContainer = editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/SongList/List")
+	for old_entry : Node in song_list.get_children():
+		old_entry.queue_free()
+	for song : String in MusicHandler.ALL_SONGS_LIST:
+		var check := CheckBox.new()
+		# display name
+		check.text = str(JsonHandler.find_entry_in_file(str("songs/", song)))
+		# internal name, ex. mus1 mus2
+		check.name = song
+		# if loaded map has the song, check it
+		if songs.has(song):
+			check.button_pressed = true
+		song_list.add_child(check)
+		check.connect("toggled", set_song.bind(song))
+	MusicHandler.switch_song(songs)
 
 func get_object_properties_visible() -> bool:
 	return editor_canvas.get_node("PropertyEditor").visible
@@ -310,28 +259,6 @@ func exit_test_mode() -> void:
 	editor_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func select_brick() -> Brick:
-	# Don't show props of bricks that we hover
-	can_select_object = false
-	# Reset selected brick
-	brick_selected = null
-	editor_tool_inventory.set_disabled(true)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	# Keep track of where player was
-	var camera : Camera = get_viewport().get_camera_3d()
-	var last_pos : Vector3 = camera.controlled_cam_pos
-	# Wait for brick to be selected
-	while (brick_selected == null):
-		await get_tree().process_frame
-	# Brick has been selected
-	editor_tool_inventory.set_disabled(false, 0.1)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	camera.controlled_cam_pos = last_pos
-	# allow objects to be selectable again
-	can_select_object = true
-	
-	return brick_selected
-
 var brick_selected : Brick = null
 func _process(delta : float) -> void:
 	# don't release / unrelease mouse when editing text
@@ -348,35 +275,4 @@ func _process(delta : float) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
-	if Input.is_action_just_pressed("click"):
-		for body in select_area.get_overlapping_bodies():
-			if body is Brick:
-				brick_selected = body as Brick
 
-func _physics_process(delta : float) -> void:
-	if select_area != null:
-		select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
-	if Input.is_action_pressed("editor_delete"):
-		# Delete the hovered object
-		if select_area != null:
-			# bricks, decor objects
-			for body in select_area.get_overlapping_bodies():
-				if body is Brick || body is TBWObject:
-					body.queue_free()
-					# clear list
-					property_editor.clear_list()
-					property_editor.editing_hovered = false
-					# allow any tools to re show their list
-					emit_signal("deselected")
-			# Lifters, pickups, etc.
-			for area in select_area.get_overlapping_areas():
-				if area.owner is Water:
-					continue
-				elif area.owner is TBWObject:
-					area.owner.queue_free()
-					# clear list
-					property_editor.clear_list()
-					property_editor.editing_hovered = false
-					# allow any tools to re show their list
-					emit_signal("deselected")

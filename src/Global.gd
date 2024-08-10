@@ -80,6 +80,7 @@ func upload_shirt_texture() -> void:
 	picker.access = FileDialog.ACCESS_FILESYSTEM
 	picker.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
 	picker.title = "Make a shirt"
+	picker.use_native_dialog = true
 	get_viewport().add_child(picker)
 	picker.size = Vector2(800, 400)
 	picker.popup_centered()

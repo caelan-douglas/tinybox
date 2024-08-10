@@ -14,17 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends EditorTool
+extends Tool
 
+@onready var editor : Editor
+@onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
+@onready var select_area : Area3D = $SelectArea
+var hovered_editable_object : Node = null
+var hovered_item_properties : Dictionary = {}
+var can_select_object : bool = true
 var selected_item : PackedScene = null
 var selected_item_name_internal : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
 
-@onready var tool_inventory : EditorToolInventory = get_parent()
-@onready var editor : Editor = Global.get_world().get_current_map()
-@onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
-@onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor") 
+@onready var property_editor : PropertyEditor
+@onready var item_chooser : ItemChooser
 @onready var preview_node : Node3D = $PreviewNode
 var active_preview_instance : Node3D = null
 var drag_start_point : Vector3 = Vector3.ZERO
@@ -33,35 +37,130 @@ var drag_end_point : Vector3 = Vector3.ZERO
 var last_rotation : Vector3 = Vector3.ZERO
 
 func _ready() -> void:
-	init("(empty)")
+	if type == ToolType.EDITOR:
+		init("(empty)", null)
+		property_editor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor") 
+		item_chooser = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/ItemChooser") 
+		editor = Global.get_world().get_current_map()
+	else:
+		init("Build Tool", get_parent().get_parent() as RigidPlayer)
+		tool_overlay = get_tree().current_scene.get_node_or_null("GameCanvas/ToolOverlay/BuildTool")
+		property_editor = get_tree().current_scene.get_node("GameCanvas/ToolOverlay/BuildTool/LeftPanel/PropertyEditor")
+		item_chooser = get_tree().current_scene.get_node("GameCanvas/ToolOverlay/BuildTool/LeftPanel/ItemChooser")
+	
+	# for when an editable object is hovered
+	select_area.connect("body_entered", _on_body_selected)
+	select_area.connect("area_entered", _on_body_selected)
+	# for when selection leaves body
+	select_area.connect("body_exited", _on_body_deselected)
+	select_area.connect("area_exited", _on_body_deselected)
+	
 	var camera : Camera = get_viewport().get_camera_3d()
 	property_editor.connect("property_updated", _on_property_updated)
-	editor.connect("deselected", _on_editor_deselected)
+
+# When something is hovered with the selector in the editor.
+func _on_body_selected(body : Node3D) -> void:
+	var selectable_body : Node3D = null
+	if body is Area3D:
+		if body.owner is TBWObject:
+			if !(body.owner is Water):
+				selectable_body = body.owner
+	else:
+		if body is Brick || body is TBWObject:
+			selectable_body = body
+	
+	if can_select_object:
+		if selectable_body != null:
+			hovered_editable_object = selectable_body
+			# show props for that object
+			hovered_item_properties = property_editor.list_object_properties(selectable_body, self)
+			var last_pos : Vector3 = select_area.global_position
+			# avoid ui spam when clicking + dragging (wait to be still
+			# to show editing notification )
+			await get_tree().create_timer(0.5).timeout
+			if selectable_body != null:
+				if select_area.global_position == last_pos:
+					property_editor.editing_hovered = true
+
+func _on_body_deselected(_body : Node3D) -> void:
+	var hovering_nothing := true
+	for body : Node3D in select_area.get_overlapping_bodies():
+		if body != active_preview_instance && body.owner != active_preview_instance:
+			hovering_nothing = false
+	for area : Node3D in select_area.get_overlapping_areas():
+		if area != active_preview_instance && area.owner != active_preview_instance:
+			hovering_nothing = false
+	# check currently hovering bodies
+	if hovering_nothing:
+		# clear list
+		property_editor.clear_list()
+		property_editor.editing_hovered = false
+		hovered_editable_object = null
+		# allow any tools to re show their list
+		_on_editor_deselected()
 
 func _on_property_updated(properties : Dictionary) -> void:
 	if property_editor.properties_from_tool == self:
-		selected_item_properties = properties
+	# When a property in the Property Editor is changed.
+		if hovered_editable_object != null:
+			if hovered_editable_object is TBWObject || hovered_editable_object is Brick:
+				for property : String in hovered_item_properties.keys():
+					hovered_editable_object.set_property(property, hovered_item_properties[property])
+					
+					if type == ToolType.PLAYER:
+						hovered_editable_object.sync_properties.rpc(hovered_editable_object.properties_as_dict())
+		else:
+			selected_item_properties = properties
+			# regen preview
+			_on_item_picked(selected_item_name_internal, "", false)
 
-func set_tool_active(mode : bool, from_click : bool = false) -> void:
+func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
 	super(mode, from_click)
 	if mode == false:
-		editor.hide_item_chooser()
-		if editor.is_connected("item_picked", _on_item_picked):
-			editor.disconnect("item_picked", _on_item_picked)
+		item_chooser.hide_item_chooser()
+		if item_chooser.is_connected("item_picked", _on_item_picked):
+			item_chooser.disconnect("item_picked", _on_item_picked)
 		if preview_node != null:
 			preview_node.visible = false
 		# deselecting tool, remove any properties from list
 		if property_editor.properties_from_tool == self:
 			property_editor.clear_list()
+		set_select_area_visible.rpc(false)
+		# player specific
+		if type == ToolType.PLAYER:
+			tool_player_owner.high_priority_lock = false
+			tool_player_owner.locked = false
+			tool_player_owner.set_camera(get_viewport().get_camera_3d())
+			var camera : Camera3D = get_viewport().get_camera_3d()
+			if camera is Camera:
+				camera.set_target(tool_player_owner.target)
+				camera.set_camera_mode(Camera.CameraMode.FREE)
 	else:
-		editor.show_item_chooser()
-		editor.connect("item_picked", _on_item_picked)
+		item_chooser.show_item_chooser()
+		item_chooser.connect("item_picked", _on_item_picked)
 		if preview_node != null:
 			preview_node.visible = true
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
 		# editing a new object, not a hovered one (show notif)
 		property_editor.editing_hovered = false
+		set_select_area_visible.rpc(true)
+		
+		# player specific
+		if type == ToolType.PLAYER:
+			tool_player_owner.high_priority_lock = true
+			tool_player_owner.locked = true
+			var camera : Camera3D = get_viewport().get_camera_3d()
+			if camera is Camera:
+				camera.set_target(null)
+				camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+				camera.controlled_cam_pos = (tool_player_owner.global_position + Vector3(0, 3, 0)).round()
+
+@rpc("any_peer", "call_local", "reliable")
+func set_select_area_visible(mode : bool) -> void:
+	select_area.visible = mode
+	if select_area.has_node("NameLabel"):
+		select_area.get_node("NameLabel").text = str(tool_player_owner.display_name, "'s Build Tool")
 
 # when the editor stops hovering over something
 func _on_editor_deselected() -> void:
@@ -92,21 +191,24 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 	# relist properties while instance has script
 	if relist_properties:
 		selected_item_properties = property_editor.list_object_properties(inst, self)
+	# set preview motor side
+	if inst is MotorBrick:
+		if selected_item_properties.has("flip_motor_side"):
+			inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
 	# disable script
 	inst.set_script(null)
-	for c : Node in preview_node.get_children():
-		if c.name != "Display":
-			c.queue_free()
-	# add instance as preview
-	preview_node.add_child(inst)
-	inst.global_position -= item_offset
-	inst.rotation = last_rotation
-	active_preview_instance = inst
-	property_editor.editing_hovered = false
 	# offset objects down a bit, also update preview
 	if item_name_internal.begins_with("obj"):
 		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
 			item_offset = Vector3(0, -0.5, 0)
+	for c : Node in preview_node.get_children():
+		c.queue_free()
+	# add instance as preview
+	preview_node.add_child(inst)
+	inst.position += item_offset
+	inst.rotation = last_rotation
+	active_preview_instance = inst
+	property_editor.editing_hovered = false
 	var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(inst) as Array)
 	if new_mesh != null:
 		# apply construction material
@@ -122,7 +224,7 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 	return null
 
 func selected_item_is_draggable() -> bool:
-	if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat":
+	if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat" && selected_item_name_internal != "brick_button":
 		return true
 	else: return false
 
@@ -132,8 +234,43 @@ func selected_item_is_scalable() -> bool:
 	else: return false
 
 func _physics_process(delta : float) -> void:
+	if !is_multiplayer_authority(): return
+	
 	var camera := get_viewport().get_camera_3d()
 	if active:
+		if select_area != null:
+			select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
+			if Input.is_action_pressed("editor_delete"):
+				# Delete the hovered object
+				if select_area != null:
+					# bricks, decor objects
+					for body in select_area.get_overlapping_bodies():
+						if body is Brick || body is TBWObject:
+							# sync despawns in multiplayer
+							if type == ToolType.PLAYER && body is Brick:
+								body.despawn.rpc()
+							if type == ToolType.PLAYER && body is TBWObject:
+								return
+							body.queue_free()
+							# clear list
+							property_editor.clear_list()
+							property_editor.editing_hovered = false
+							# allow any tools to re show their list
+							_on_editor_deselected()
+					# Lifters, pickups, etc.
+					for area in select_area.get_overlapping_areas():
+						if type == ToolType.PLAYER:
+							return
+						if area.owner is Water:
+							continue
+						elif area.owner is TBWObject:
+							area.owner.queue_free()
+							# clear list
+							property_editor.clear_list()
+							property_editor.editing_hovered = false
+							# allow any tools to re show their list
+							_on_editor_deselected()
+		
 		if preview_node != null:
 			preview_node.global_position = camera.controlled_cam_pos
 			var rot_amount : float = 22.5
@@ -178,20 +315,21 @@ func _physics_process(delta : float) -> void:
 						editor_canvas.scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
 			if Input.is_action_just_released("click"):
 				# when recapturing mouse with click
-				if editor.editor_canvas.mouse_just_captured:
-					return
+				if editor != null:
+					if editor.editor_canvas.mouse_just_captured:
+						return
 				editor_canvas.scale_tooltip.text = ""
 				# if the selected item isn't scalable, ignore drag and just place
 				# at the same place as the end point
 				if !selected_item_is_draggable():
 					drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 				drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
-				if editor.select_area != null:
+				if select_area != null:
 					# if there is something where we are trying to place
 					var valid : bool = true
 					
 					# if it's trying to place underwater, that's fine
-					for body in editor.select_area.get_overlapping_areas():
+					for body in select_area.get_overlapping_areas():
 						if body.owner is TBWObject:
 							if body.owner.tbw_object_type == "obj_water":
 								valid = true
@@ -203,7 +341,7 @@ func _physics_process(delta : float) -> void:
 							break
 					
 					# however if there are any overlapping bodies it's no longer valid
-					for body in editor.select_area.get_overlapping_bodies():
+					for body in select_area.get_overlapping_bodies():
 						if body != active_preview_instance:
 							valid = false
 					
@@ -223,10 +361,20 @@ func _physics_process(delta : float) -> void:
 						else:
 							# match global transform for objects
 							inst.global_transform = active_preview_instance.global_transform
-						#inst.global_position += item_offset
+						
 						if inst is TBWObject || inst is Brick:
 							for property : String in selected_item_properties.keys():
 								inst.set_property(property, selected_item_properties[property])
+						
+						# player specific
+						if inst is Brick && type == ToolType.PLAYER:
+							var line : String = ""
+							var type : String = inst._brick_spawnable_type
+							line += str(type)
+							for p : String in inst.properties_to_save:
+								line += str(" ; ", p , ":", inst.get(p))
+							Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, [line], Vector3.ZERO, true)
+							inst.queue_free()
 					# if trying to spawn a brick in an invalid location
 					# and not dragging
 					elif !$InvalidAudio.playing && Input.is_action_just_released("click"):
@@ -237,5 +385,4 @@ func _physics_process(delta : float) -> void:
 						else:
 							UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)
 				# regenerate after placement
-				if selected_item_is_draggable():
-					_on_item_picked(selected_item_name_internal, "", false)
+				_on_item_picked(selected_item_name_internal, "", false)

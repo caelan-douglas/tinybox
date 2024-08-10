@@ -16,6 +16,10 @@
 
 extends Control
 class_name ItemChooser
+signal item_picked
+
+# more options in editor mode
+@export var editor_mode : bool = true
 
 @onready var item_names_list : Array[String] = SpawnableObjects.get_editor_spawnable_objects_list()
 @onready var item_chooser_button : PackedScene = preload("res://data/scene/ui/ItemChooserButton.tscn")
@@ -38,36 +42,46 @@ func add_to_set(set_name : String, what : Button) -> void:
 			var grid : Control = item_set.get_node_or_null("ItemGrid")
 			if grid != null:
 				grid.add_child(what)
+	what.connect("pressed", _on_item_chosen.bind(what.name, what.text))
 
 func _ready() -> void:
 	# create sets
 	create_set("Basic bricks")
-	create_set("Objects")
-	create_set("Track pieces")
-	create_set("Special")
+	if editor_mode:
+		create_set("Objects")
+		create_set("Track pieces")
+		create_set("Special")
+	else:
+		create_set("More object types are available in the World Editor.")
 	for item in item_names_list:
 		var item_button : Button = item_chooser_button.instantiate()
 		# node name is internal name
 		item_button.name = item
 		item_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", item))
 		item_button.tooltip_text = JsonHandler.find_entry_in_file(str("tbw_objects/tooltips/", item))
-		# remove brick icon for non bricks
-		if item.begins_with("obj_camera"):
-			item_button.set_button_icon(load("res://data/textures/editor_icons/camera.png") as Texture2D)
-		elif !item.begins_with("brick"):
-			item_button.icon = null
-		
-		if item.begins_with("brick") && item != "brick_button":
+		if item.begins_with("brick"):
 			add_to_set("Basic bricks", item_button)
-		elif item.begins_with("obj_track"):
-			add_to_set("Track pieces", item_button)
-		elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "brick_button" || item == "obj_camera_preview_point":
-			add_to_set("Special", item_button)
-		else:
-			add_to_set("Objects", item_button)
-		item_button.connect("pressed", _on_item_chosen.bind(item_button.name, item_button.text))
+		if editor_mode:
+			# remove brick icon for non bricks
+			if item.begins_with("obj_camera"):
+				item_button.set_button_icon(load("res://data/textures/editor_icons/camera.png") as Texture2D)
+			elif !item.begins_with("brick"):
+				item_button.icon = null
+			if item.begins_with("obj_track"):
+				add_to_set("Track pieces", item_button)
+			elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "obj_camera_preview_point":
+				add_to_set("Special", item_button)
+			else:
+				add_to_set("Objects", item_button)
 
 func _on_item_chosen(internal_name : String, display_name : String) -> void:
-	var editor : Node = Global.get_world().get_current_map()
-	if editor is Editor:
-		editor.on_item_chosen(internal_name, display_name)
+	emit_signal("item_picked", internal_name, display_name)
+
+func show_item_chooser() -> void:
+	list.visible = true
+
+func hide_item_chooser() -> void:
+	list.visible = false
+
+func get_item_chooser_visible() -> bool:
+	return list.visible

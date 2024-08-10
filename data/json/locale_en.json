@@ -94,6 +94,7 @@
             "copied": "Copied to tool!",
             "options_button": "Options, Test, Gamemodes, Pause...",
             "options_button_hide": "Hide Options menu",
+            "songs": "Songs",
 
             "gamemode_save_preset": "Save these settings as preset",
             "gamemode_add": "+ Add to world gamemodes"
@@ -199,6 +200,12 @@
             "brick_button": "Button with customizable parameters.",
             "brick_lamp": "Lamp that provides light. Will shut off if displaced."
         }
+    },
+    "songs": {
+        "mus1": "Tinybox",
+        "mus2": "Floaty",
+        "mus3": "Frozen Field",
+        "mus4": "Warp"
     },
     "enum": {
         "event_type": {

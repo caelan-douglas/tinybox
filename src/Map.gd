@@ -18,7 +18,17 @@ extends Node3D
 class_name Map
 
 @export var gravity_scale := 1.0
-@export var songs : Array[String] = ["mus1"]
+var songs : Array = MusicHandler.ALL_SONGS_LIST
+
+func set_song(mode : bool, song_name : String) -> void:
+	if mode == true:
+		if !songs.has(song_name):
+			songs.append(song_name)
+			MusicHandler.switch_song(songs)
+	else:
+		if songs.has(song_name):
+			songs.erase(song_name)
+			MusicHandler.switch_song(songs)
 
 # Return the teams node for this map
 func get_teams() -> Teams:
@@ -27,8 +37,7 @@ func get_teams() -> Teams:
 func _ready() -> void:
 	# set song
 	# wait for music / server setting to load if on main menu
-	if name == "MultiplayerMenuMap":
-		await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.2).timeout
 	MusicHandler.switch_song(songs)
 	# Modify default gravity
 	if !self is Editor:

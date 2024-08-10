@@ -22,13 +22,17 @@ var last_held_tool : Tool = null
 var tool_just_holding : Tool = null
 var disabled := false
 
-var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"), preload("res://data/scene/tool/BouncyballTool.tscn"), preload("res://data/scene/tool/BatTool.tscn"), preload("res://data/scene/tool/ExtinguisherTool.tscn"), preload("res://data/scene/tool/RocketTool.tscn"), preload("res://data/scene/tool/BombTool.tscn"), preload("res://data/scene/tool/FlamethrowerTool.tscn"), preload("res://data/scene/tool/MissileTool.tscn"), preload("res://data/scene/tool/PaintbrushTool.tscn")]
+var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"),\
+preload("res://data/scene/tool/BouncyballTool.tscn"),\
+preload("res://data/scene/tool/BatTool.tscn"),\
+preload("res://data/scene/tool/ExtinguisherTool.tscn"),\
+preload("res://data/scene/tool/RocketTool.tscn"),\
+preload("res://data/scene/tool/BombTool.tscn"),\
+preload("res://data/scene/tool/FlamethrowerTool.tscn"),\
+preload("res://data/scene/tool/MissileTool.tscn"),\
+preload("res://data/scene/tool/PaintbrushTool.tscn")]
 
 var hold_timer := 0
-
-# initialize default tools
-func _ready() -> void:
-	reset()
 
 func _process(delta : float) -> void:
 	if !disabled && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED && get_tools().size() > 0 &&(Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
@@ -59,7 +63,9 @@ func _process(delta : float) -> void:
 		if hold_timer < 1:
 			tool_just_holding = null
 
-func set_disabled(new : bool) -> void:
+func set_disabled(new : bool, delay : float = -1) -> void:
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
 	if disabled != new:
 		disabled = new
 		# if setting disabled, take note of the active tool
@@ -112,7 +118,7 @@ func has_tool_by_name(name : String) -> Tool:
 # Add a new tool to this tool inventory.
 func add_tool(tool : Tool) -> void:
 	if !get_tools().has(tool):
-		add_child(tool)
+		add_child(tool, true)
 
 # get the index of a tool in a list.
 func get_index_of_tool(tool : Tool) -> int:

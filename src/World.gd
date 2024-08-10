@@ -133,7 +133,6 @@ func save_tbw(world_name : String) -> bool:
 		get_tree().current_scene.get_node("EditorCanvas").visible = false
 		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
 		var editor : Editor = get_current_map()
-		editor.select_area.visible = false
 		# wait 1 frame so we can get screenshot
 		await get_tree().process_frame
 		await get_tree().process_frame
@@ -141,7 +140,6 @@ func save_tbw(world_name : String) -> bool:
 		img.shrink_x2()
 		get_tree().current_scene.get_node("EditorCanvas").visible = true
 		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
-		editor.select_area.visible = true
 	else:
 		Global.get_player().visible = false
 		get_tree().current_scene.get_node("GameCanvas").visible = false
@@ -163,6 +161,9 @@ func save_tbw(world_name : String) -> bool:
 	file.store_line("[tbw]")
 	# store image data as base64 inside file
 	file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
+	# Save song list
+	file.store_line(str("songs ; ", JSON.stringify(Global.get_world().get_current_map().songs)))
+	# TBW object list
 	file.store_line("[objects]")
 	# Save objects before bricks
 	for obj in get_children():
@@ -260,7 +261,7 @@ func set_loading_canvas_visiblity(mode : bool) -> void:
 
 @rpc("authority", "call_local", "reliable")
 func set_loading_canvas_text(text : String) -> void:
-	var loading_text : Label = loading_canvas.get_node("Label")
+	var loading_text : Label = loading_canvas.get_node("Panel/Label")
 	loading_text.text = str(text)
 
 # Only to be run as server
@@ -290,6 +291,9 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 			if loading_canvas.visible:
 				set_loading_canvas_text.rpc(str("Loading .tbw file...     Objects: ", count))
 		if line != "":
+			# songs
+			if str(line).begins_with("songs ;"):
+				get_current_map().songs = JSON.parse_string(str(line).split(" ; ")[1])
 			# final step, place building
 			if str(line) == "[building]":
 				# disable loading canvas if we used it
@@ -431,11 +435,11 @@ func clear_bricks() -> void:
 
 # server places bricks
 @rpc("any_peer", "call_local", "reliable")
-func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3) -> void:
+func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	if Global.dedicated_server:
 		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
-	_server_load_building(lines, b_position)
+	_server_load_building(lines, b_position, use_global_position)
 
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return

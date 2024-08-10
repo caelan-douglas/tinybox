@@ -26,6 +26,12 @@ var properties_to_save : Array[String] = ["global_position", "global_rotation", 
 func set_property(property : StringName, value : Variant) -> void:
 	set(property, value)
 
+@rpc("any_peer", "call_remote", "reliable")
+func sync_properties(props : Dictionary) -> void:
+	for prop : String in props.keys():
+		if prop != "script":
+			set_property(prop, props[prop])
+
 func properties_as_dict() -> Dictionary:
 	var dict : Dictionary = {}
 	for p : String in properties_to_save:

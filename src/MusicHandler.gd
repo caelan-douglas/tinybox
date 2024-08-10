@@ -26,7 +26,8 @@ var sfx_setting := 1.0
 var ui_setting := 1.0
 var min_db : float = 30
 var current_song_name := ""
-var song_list : Array[String] = [""]
+var song_list : Array = [""]
+const ALL_SONGS_LIST : Array = ["mus1", "mus2", "mus3", "mus4"]
 
 @onready var music_player : AudioStreamPlayer = $AudioStreamPlayer
 @onready var music_animator : AnimationPlayer = $AudioStreamPlayer/AnimationPlayer
@@ -37,11 +38,13 @@ func _ready() -> void:
 	sfx_setting = MusicHandler.load_sfx_setting()
 	ui_setting = MusicHandler.load_ui_setting()
 
-func switch_song(new_song_names : Array[String], overwrite_song_list := true) -> void:
+func switch_song(new_song_names : Array, overwrite_song_list := true) -> void:
 	if overwrite_song_list:
 		song_list = new_song_names
 	#print("Switching songs to: ", str(new_song_names), " ;;; Total song list: ", str(song_list))
-	var new_song_name : String = new_song_names.pick_random()
+	var new_song_name : String = ""
+	if new_song_names.size() > 0:
+		new_song_name = str(new_song_names.pick_random())
 	# blank song name stops the music
 	if new_song_name == "":
 		current_song_name = new_song_name
@@ -75,7 +78,7 @@ func switch_song(new_song_names : Array[String], overwrite_song_list := true) ->
 func _physics_process(delta : float) -> void:
 	if !music_player.playing && song_list != [""]:
 		# don't play the same song again if there is more than one song
-		var songs_minus_current : Array[String] = song_list.duplicate()
+		var songs_minus_current : Array = song_list.duplicate()
 		if song_list.size() > 1:
 			if songs_minus_current.has(current_song_name):
 				songs_minus_current.erase(current_song_name)
