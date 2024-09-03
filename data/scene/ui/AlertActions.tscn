@@ -22,7 +22,6 @@ mouse_filter = 2
 script = ExtResource("1_yc1hw")
 
 [node name="Content" type="VBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Content"]

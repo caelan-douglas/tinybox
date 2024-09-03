@@ -20,7 +20,8 @@ extends CanvasLayer
 @onready var world_name : LineEdit = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorldName
 @onready var pause_menu : Control = $PauseMenu
 @onready var options_button : Button = $OptionsButton
-@onready var scale_tooltip : Label = $ScaleTooltip
+@onready var coordinates_tooltip : Label = $Coordinates
+@onready var toggle_player_visual_button : Button = $TogglePlayerVisual
 var mouse_just_captured : bool = false
 
 func _ready() -> void:

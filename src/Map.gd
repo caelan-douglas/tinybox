@@ -18,7 +18,7 @@ extends Node3D
 class_name Map
 
 @export var gravity_scale := 1.0
-var songs : Array = MusicHandler.ALL_SONGS_LIST
+var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
 
 func set_song(mode : bool, song_name : String) -> void:
 	if mode == true:

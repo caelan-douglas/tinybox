@@ -25,6 +25,8 @@ enum WatcherType {
 	TIMER_EXCEEDS
 }
 
+# Watcher types that cannot be used in the editor gamemode creation tool.
+const EDITOR_DISALLOWED_TYPES : Array[String] = []
 var watcher_type : WatcherType = WatcherType.PLAYER_PROPERTY_EXCEEDS
 var args : Array = []
 var started := false

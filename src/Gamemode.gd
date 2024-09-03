@@ -60,8 +60,9 @@ func start() -> void:
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.get_tool_inventory().delete_all_tools()
 		p.get_tool_inventory().give_base_tools()
-	# show gamemode name as toast
-	UIHandler.show_toast.rpc(gamemode_name, 10, Color.ROYAL_BLUE, 64)
+	# run preview event
+	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name])
+	await preview_event.start()
 	# run start events
 	for event : Array in start_events:
 		if Event.EventType.get(event[0]) is int:

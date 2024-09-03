@@ -5,4 +5,4 @@ transparency = 1
 blend_mode = 3
 no_depth_test = true
 shading_mode = 0
-albedo_color = Color(0.541176, 0.752941, 1, 1)
+albedo_color = Color(0.298048, 0.632786, 0.999993, 1)

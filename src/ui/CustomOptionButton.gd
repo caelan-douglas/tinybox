@@ -14,11 +14,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends TBWObject
-class_name CameraPreviewPoint
+# OptionButton with a signal to pass the selected item's ID instead of idx.
+extends OptionButton
+class_name CustomOptionButton
+signal item_selected_with_id(id : int)
 
 func _ready() -> void:
-	if Global.get_world().get_current_map() is Editor:
-		$Mesh.visible = true
-	else:
-		$Mesh.visible = false
+	self.connect("item_selected", _on_item_selected)
+
+# Like "item_selected" but with ID instead of index.
+func _on_item_selected(item_index : int) -> void:
+	emit_signal("item_selected_with_id", get_item_id(item_index))

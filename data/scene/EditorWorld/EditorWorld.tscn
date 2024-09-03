@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://46bsl4nq14py"]
+[gd_scene load_steps=9 format=3 uid="uid://46bsl4nq14py"]
 
 [ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
 [ext_resource type="Script" path="res://src/ToolInventory.gd" id="2_stlqh"]
 [ext_resource type="Script" path="res://src/Teams.gd" id="3_jjyfp"]
 [ext_resource type="PackedScene" uid="uid://dj387li7w0abc" path="res://data/scene/tool/EditorBuildTool.tscn" id="3_nojya"]
+[ext_resource type="PackedScene" uid="uid://cbks1seqvjwkh" path="res://data/models/character/character_model.blend" id="4_8lbmw"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_qkc34"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_iwwdy"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_xvfrp"]
@@ -30,6 +31,19 @@ script = ExtResource("2_stlqh")
 [node name="CameraTarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 50, 2.08165e-12)
 
+[node name="PlayerVisual" parent="CameraTarget" instance=ExtResource("4_8lbmw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.5, 0)
+visible = false
+
+[node name="hair_short" parent="CameraTarget/PlayerVisual/character/Skeleton3D" index="0"]
+transform = Transform3D(0.945, 3.72822e-09, 7.86809e-08, -9.63277e-09, 0.942326, 0.0710435, -7.8178e-08, -0.0710435, 0.942326, 1.27431e-08, 1.60076, 0.0254257)
+
+[node name="hair_ponytail" parent="CameraTarget/PlayerVisual/character/Skeleton3D" index="5"]
+visible = false
+
+[node name="shirt_shortsleeve" parent="CameraTarget/PlayerVisual/character/Skeleton3D" index="8"]
+visible = false
+
 [node name="Teams" type="Node" parent="."]
 script = ExtResource("3_jjyfp")
 team_list = Array[Resource]([ExtResource("4_qkc34"), ExtResource("5_iwwdy"), ExtResource("6_xvfrp")])
@@ -50,3 +64,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 51, 0)
 
 [node name="Spawn" type="Node3D" parent="Spawns/2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 51, 0)
+
+[editable path="CameraTarget/PlayerVisual"]

@@ -19,6 +19,7 @@ extends Tool
 @onready var editor : Editor
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var select_area : Area3D = $SelectArea
+@onready var scale_tooltip : Label = get_node("/root/PersistentScene/PersistentCanvas/ScaleTooltip")
 var hovered_editable_object : Node = null
 var hovered_item_properties : Dictionary = {}
 var can_select_object : bool = true
@@ -126,6 +127,8 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 		if property_editor.properties_from_tool == self:
 			property_editor.clear_list()
 		set_select_area_visible.rpc(false)
+		for c : Node in preview_node.get_children():
+			c.queue_free()
 		# player specific
 		if type == ToolType.PLAYER:
 			tool_player_owner.high_priority_lock = false
@@ -142,6 +145,8 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 			preview_node.visible = true
 		# update object property list
 		property_editor.relist_object_properties(selected_item_properties, self)
+		# regenerate preview
+		_on_item_picked(selected_item_name_internal, "", false)
 		# editing a new object, not a hovered one (show notif)
 		property_editor.editing_hovered = false
 		set_select_area_visible.rpc(true)
@@ -312,13 +317,13 @@ func _physics_process(delta : float) -> void:
 					active_preview_instance.scale = Vector3(1, 1, 1)
 					active_preview_instance.global_scale(b_scale)
 					if b_scale != Vector3(1, 1, 1):
-						editor_canvas.scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
+						scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
 			if Input.is_action_just_released("click"):
 				# when recapturing mouse with click
 				if editor != null:
 					if editor.editor_canvas.mouse_just_captured:
 						return
-				editor_canvas.scale_tooltip.text = ""
+				scale_tooltip.text = ""
 				# if the selected item isn't scalable, ignore drag and just place
 				# at the same place as the end point
 				if !selected_item_is_draggable():

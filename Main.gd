@@ -116,7 +116,7 @@ func _notification(what : int) -> void:
 		var question : String = "Are you sure you want to quit?"
 		if Global.get_world().get_current_map() is Editor:
 			question = "Are you sure you want to quit? All unsaved\nchanges will be lost!"
-		var actions := UIHandler.show_alert_with_actions(question, ["Quit", "Cancel"], true)
+		var actions := UIHandler.show_alert_with_actions(question, ["Quit game", "Cancel"], true)
 		actions[0].connect("pressed", get_tree().quit)
 
 func _on_new_lan_server(serverInfo : Dictionary) -> void:

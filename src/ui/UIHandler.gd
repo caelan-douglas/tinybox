@@ -41,7 +41,7 @@ func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool =
 	# normal alert
 	else:
 		var alert : Alert = alert_resource.instantiate()
-		alert.get_node("Content/Label").text = alert_text
+		alert.get_node("Content").text = alert_text
 		if alert_colour.to_html() != "#ffffff":
 			alert.self_modulate = alert_colour
 		
@@ -117,7 +117,7 @@ func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color(
 			toast.queue_free()
 
 func fade_black_transition(duration : float = 0.5) -> void:
-	var fade : ColorRect = get_tree().root.get_node("PersistentScene/FadeCanvas/Fade")
+	var fade : ColorRect = get_tree().root.get_node("PersistentScene/PersistentCanvas/Fade")
 	fade.visible = true
 	var tween : Tween = get_tree().create_tween().set_parallel(false)
 	# hold black for a short while
@@ -125,3 +125,11 @@ func fade_black_transition(duration : float = 0.5) -> void:
 	tween.tween_property(fade, "modulate", Color(1, 1, 1, 0), duration/2)
 	await get_tree().create_timer(duration).timeout
 	fade.visible = false
+
+@rpc("any_peer", "call_local")
+func play_preview_animation_overlay(title : String) -> void:
+	# play preview animation
+	var anim : AnimationPlayer = PersistentScene.get_node("PersistentCanvas/Preview/AnimationPlayer")
+	var label : Label = PersistentScene.get_node("PersistentCanvas/Preview/Title")
+	label.text = title
+	anim.play("preview")

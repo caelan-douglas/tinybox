@@ -74,6 +74,13 @@ var skin_colour := Color("d29185")
 var beep_low : AudioStream = preload("res://data/audio/beep/beep_low.ogg")
 var beep_fifths : AudioStream = preload("res://data/audio/beep/beep_fifths.ogg")
 
+func reset_shirt_texture() -> void:
+	var actions := UIHandler.show_alert_with_actions("Are you sure? You will lose your\ncurrent shirt.", ["Reset shirt", "Nevermind"], true)
+	actions[0].connect("pressed", _reset_shirt_texture_pressed)
+
+func _reset_shirt_texture_pressed() -> void:
+	set_shirt_texture("")
+
 func upload_shirt_texture() -> void:
 	var picker := FileDialog.new()
 	picker.file_mode = FileDialog.FILE_MODE_OPEN_FILE
@@ -89,12 +96,18 @@ func upload_shirt_texture() -> void:
 	var img : Image = Image.new()
 	img.load(path)
 	if img != null:
-		img.resize(128, 128)
-		var new_base64 : String = Marshalls.raw_to_base64(img.save_jpg_to_buffer())
-		if new_base64 != null:
-			set_shirt_texture(new_base64)
+		if img.is_empty():
+			show_shirt_texture_error()
+		else:
+			img.resize(128, 128)
+			var new_base64 : String = Marshalls.raw_to_base64(img.save_jpg_to_buffer())
+			if new_base64 != null:
+				set_shirt_texture(new_base64)
 	else:
-		UIHandler.show_alert("File unsupported. Please upload a .png,\n.jpeg, or .jpg file (preferably square)!", 8, false, UIHandler.alert_colour_error)
+		show_shirt_texture_error()
+
+func show_shirt_texture_error() -> void:
+	UIHandler.show_alert("File unsupported. Please upload a .png,\n.jpeg, or .jpg file (preferably square)!", 8, false, UIHandler.alert_colour_error)
 
 func set_shirt(new : int) -> void:
 	shirt = new

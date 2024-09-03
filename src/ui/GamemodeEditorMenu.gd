@@ -21,19 +21,19 @@ var curr_watchers : Array = []
 var curr_name : String = ""
 
 # for custom gamemode maker
-@onready var add_start_event_title := $Panel/Margin/ScrollContainer/Settings/StartEventPropertyEditor/Title
-@onready var add_watcher_title := $Panel/Margin/ScrollContainer/Settings/WatcherPropertyEditor/Title
+@onready var add_start_event_title := $Panel/ScrollContainer/Settings/StartEventPropertyEditor/List/Title
+@onready var add_watcher_title := $Panel/ScrollContainer/Settings/WatcherPropertyEditor/List/Title
 
-@onready var start_event_list := $Panel/Margin/ScrollContainer/Settings/StartEventPropertyEditor
-@onready var watcher_list := $Panel/Margin/ScrollContainer/Settings/WatcherPropertyEditor
-@onready var gamemode_name := $Panel/Margin/ScrollContainer/Settings/GamemodeName
+@onready var start_event_list := $Panel/ScrollContainer/Settings/StartEventPropertyEditor
+@onready var watcher_list := $Panel/ScrollContainer/Settings/WatcherPropertyEditor
+@onready var gamemode_name := $Panel/ScrollContainer/Settings/GamemodeName
 
 # for list of world gamemodes
 @onready var add_to_world_button := $AddToWorldGamemodes
-@onready var world_gamemodes_list := $WorldGamemodesPanel/Margin/ScrollContainer/VBoxContainer
+@onready var world_gamemodes_list := $WorldGamemodesPanel/ScrollContainer/VBoxContainer
 
 func _ready() -> void:
-	add_watcher_title.get_node("Label").text = "Watch for conditions..."
+	add_watcher_title.get_node("Label").text = "Once started, watch for conditions..."
 	
 	start_event_list.connect("event_list_changed", _on_start_event_list_changed)
 	watcher_list.connect("event_list_changed", _on_watcher_list_changed)
@@ -56,6 +56,14 @@ func _on_add_to_world_pressed() -> void:
 		return
 	if world_has_gamemode_with_name(curr_name):
 		UIHandler.show_alert("This world already has a gamemode\nwith that name!", 4, false, UIHandler.alert_colour_error)
+		return
+	var no_previews := true
+	for obj in Global.get_world().get_children():
+		if obj is CameraPreviewPoint:
+			no_previews = false
+			break
+	if no_previews:
+		UIHandler.show_alert("You need at least one\nCamera Preview Point in the world!\n(Check the 'Special' section in the object selector.)", 8, false, UIHandler.alert_colour_error)
 		return
 	
 	# success, add to world for saving

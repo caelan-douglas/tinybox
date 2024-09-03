@@ -25,6 +25,9 @@ class_name Editor
 var selected_item_properties : Dictionary = {}
 var test_mode : bool = false
 
+func toggle_player_visual() -> void:
+	$CameraTarget/PlayerVisual.visible = !$CameraTarget/PlayerVisual.visible
+
 func _ready() -> void:
 	super()
 	
@@ -37,6 +40,8 @@ func _ready() -> void:
 	if camera is Camera:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
+	
+	editor_canvas.toggle_player_visual_button.connect("pressed", toggle_player_visual)
 	
 	# load default world
 	Global.get_world().load_tbw("editor_default", false, false)
@@ -275,4 +280,8 @@ func _process(delta : float) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	var camera := get_viewport().get_camera_3d()
+	if camera is Camera:
+		editor_canvas.coordinates_tooltip.text =\
+			str("x", camera.controlled_cam_pos.x, " y", camera.controlled_cam_pos.y, " z", camera.controlled_cam_pos.z)
 

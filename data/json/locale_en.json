@@ -6,6 +6,8 @@
         "play": "Play",
         "back": "Back",
         "upload_image": "Upload image...",
+        "reset_image": "Reset image",
+        "update_available": "Update available: ",
         "save": "Save",
         "save_copy": "Save a copy",
         "save_world": "Save world",
@@ -97,7 +99,9 @@
             "songs": "Songs",
 
             "gamemode_save_preset": "Save these settings as preset",
-            "gamemode_add": "+ Add to world gamemodes"
+            "gamemode_add": "+ Add to world gamemodes",
+            "gamemode_options": "General options",
+            "gamemode_event_show_countdown": "Show countdown"
         }
     },
     "tip": {
@@ -205,18 +209,20 @@
         "mus1": "Tinybox",
         "mus2": "Floaty",
         "mus3": "Frozen Field",
-        "mus4": "Warp"
+        "mus4": "Warp",
+        "mus5": "The Final Day"
     },
     "enum": {
         "event_type": {
             "TELEPORT_ALL_PLAYERS": "Teleport all to...",
             "LOCK_PLAYER_STATES": "Lock players to...",
+            "WAIT_FOR_SECONDS": "Wait [...] seconds...",
             "MOVE_ALL_PLAYERS_TO_SPAWN": "Move all to team spawns",
             "BALANCE_TEAMS": "Balance teams",
             "CLEAR_LEADERBOARD": "Clear leaderboard",
-            "SHOW_PODIUM": "Show podium",
+            "SHOW_PODIUM": "Show podium with winner(s)",
             "SHOW_WORLD_PREVIEW": "Show preview of world",
-            "END_ACTIVE_GAMEMODE": "[End gamemode]"
+            "END_ACTIVE_GAMEMODE": "[ End gamemode ]"
         },
         "watcher_type": {
             "PLAYER_PROPERTY_EXCEEDS": "Anyone's [...] exceeds",

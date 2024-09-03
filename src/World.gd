@@ -358,7 +358,6 @@ func load_default_gamemodes() -> void:
 	dm.create("Deathmatch",\
 	# Start events
 	[\
-	["SHOW_WORLD_PREVIEW", []],\
 	["CLEAR_LEADERBOARD", []],\
 	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
 	],\
@@ -380,7 +379,6 @@ func load_default_gamemodes() -> void:
 	tdm.create("Team Deathmatch",\
 	# Start events
 	[\
-	["SHOW_WORLD_PREVIEW", []],\
 	["CLEAR_LEADERBOARD", []],\
 	["BALANCE_TEAMS", []],\
 	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\

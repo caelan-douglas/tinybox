@@ -53,6 +53,8 @@ func _ready() -> void:
 	shirt_picker.connect("item_selected", Global.set_shirt)
 	var shirt_tex_picker : Button = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer/UploadButton
 	shirt_tex_picker.connect("pressed", Global.upload_shirt_texture)
+	var shirt_reset : Button = $AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureResetContainer/ResetButton
+	shirt_reset.connect("pressed", Global.reset_shirt_texture)
 	
 	# Set to loaded settings
 	hair_colour_picker.color = Global.hair_colour

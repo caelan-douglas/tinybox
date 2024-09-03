@@ -21,6 +21,7 @@ enum EventType {
 	# 1 additonal arg
 	TELEPORT_ALL_PLAYERS,
 	LOCK_PLAYER_STATES,
+	WAIT_FOR_SECONDS,
 	# base
 	MOVE_ALL_PLAYERS_TO_SPAWN,
 	BALANCE_TEAMS,
@@ -30,6 +31,10 @@ enum EventType {
 	END_ACTIVE_GAMEMODE
 }
 
+# Event types that cannot be used in the editor gamemode creation tool.
+const EDITOR_DISALLOWED_TYPES : Array[String] = ["SHOW_WORLD_PREVIEW"]
+# Event types that can only be run as event events of watchers.
+const WATCHER_END_ONLY_TYPES : Array[String] = ["SHOW_PODIUM", "END_ACTIVE_GAMEMODE"]
 var event_type : EventType = EventType.TELEPORT_ALL_PLAYERS
 var args : Array = []
 
@@ -64,7 +69,7 @@ func start() -> int:
 				else:
 					participants[i].update_team.rpc(teams.get_team_list()[2].name)
 				# update info on player's client side
-				participants[i].update_info.rpc_id(participants[i].get_multiplayer_authority())
+				participants[i].update_info.rpc_id(participants[i].get_multiplayer_authority(), participants[i].get_multiplayer_authority())
 		EventType.CLEAR_LEADERBOARD:
 			for player : RigidPlayer in Global.get_world().rigidplayer_list:
 				player.update_kills.rpc(0)
@@ -90,13 +95,31 @@ func start() -> int:
 						# show podium for 8s
 						await get_tree().create_timer(8).timeout
 						player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
+		EventType.WAIT_FOR_SECONDS:
+			if args.size() > 0:
+				# arg 0: time to wait
+				await get_tree().create_timer(args[0] as float).timeout
 		EventType.SHOW_WORLD_PREVIEW:
+			# arg 0: gamemode name
 			# show animation
-			var camera : Camera = get_viewport().get_camera_3d()
-			if camera is Camera:
-				camera.play_preview_animation.rpc()
-				# wait for animation to finish before running next events
-				await get_tree().create_timer(10).timeout
+			var has_previews : bool = false
+			for obj in Global.get_world().get_children():
+				if obj is CameraPreviewPoint:
+					has_previews = true
+			if has_previews:
+				var camera : Camera = get_viewport().get_camera_3d()
+				if camera is Camera:
+					# camera movements
+					camera.play_preview_animation.rpc()
+					# play preview overlay
+					if args.size() < 1:
+						# don't show name if there is none
+						args[0] = ""
+					UIHandler.play_preview_animation_overlay.rpc(str(args[0]))
+					get_tree().current_scene.get_node("GameCanvas").visible = false
+					# wait for animation to finish before running next events
+					await get_tree().create_timer(10).timeout
+					get_tree().current_scene.get_node("GameCanvas").visible = true
 		_:
 			printerr("Failed to run event because the event type is not valid.")
 	

@@ -4,27 +4,32 @@
 [ext_resource type="Script" path="res://src/ui/EventListEditor.gd" id="1_wk3al"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_wjbpj"]
 
-[node name="EventListEditor" type="VBoxContainer"]
+[node name="EventListEditor" type="PanelContainer"]
+offset_right = 340.0
+offset_bottom = 74.0
 script = ExtResource("1_wk3al")
 
-[node name="Title" type="HBoxContainer" parent="."]
+[node name="List" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="HBoxContainer" parent="List"]
 custom_minimum_size = Vector2(2.08165e-12, 35)
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="Title"]
+[node name="Label" type="Label" parent="List/Title"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "When started..."
 script = ExtResource("1_8uf3q")
 
-[node name="Button" type="Button" parent="Title"]
+[node name="Button" type="Button" parent="List/Title"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "+ Add event"
 script = ExtResource("2_wjbpj")
 
-[node name="List" type="VBoxContainer" parent="."]
+[node name="EventList" type="VBoxContainer" parent="List"]
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
