@@ -15,12 +15,16 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Node
+class_name Main
 
 signal upnp_completed(error : Object)
 
 const Player : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
 const CAMERA : PackedScene = preload("res://data/scene/camera/Camera.tscn")
-const PORT = 30814
+const PORT = 30815
+const SERVER_INFO_PORT = 30816
+# for server info
+var udp_server : UDPServer = UDPServer.new()
 # thread for UPNP connection
 var thread : Thread = null
 var upnp : UPNP = null
@@ -246,6 +250,8 @@ func _on_host_pressed() -> void:
 	# When a new player connects, add them with their id.
 	multiplayer.peer_connected.connect(add_peer)
 	multiplayer.peer_disconnected.connect(remove_player)
+	# Server info ping listener
+	start_udp_listener()
 	# Load the world using the multiplayerspawner spawn method.
 	var world : World = $World
 	
@@ -286,6 +292,17 @@ func _on_host_pressed() -> void:
 	lan_advertiser.serverInfo["name"] = str(display_name_field.text, "'s Server")
 	lan_advertiser.broadcast_interval = 3
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
+
+func start_udp_listener() -> void:
+	udp_server.listen(SERVER_INFO_PORT)
+
+# Listen on the udp server.
+func _process(delta : float) -> void:
+	udp_server.poll()
+	if udp_server.is_connection_available():
+		var peer : PacketPeerUDP = udp_server.take_connection()
+		# Reply
+		peer.put_packet("0".to_utf8_buffer())
 
 # Only runs for client
 func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
@@ -386,6 +403,7 @@ func _on_host_disconnect_as_client() -> void:
 func leave_server() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	enet_peer.close()
+	udp_server.stop()
 	Global.connected_to_server = false
 	get_tree().change_scene_to_file("res://data/scene/MainScene.tscn")
 

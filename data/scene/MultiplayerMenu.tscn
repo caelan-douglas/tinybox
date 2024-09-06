@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene load_steps=16 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="5_mmcxg"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="6_j7jhb"]
 [ext_resource type="Script" path="res://src/ui/CreditsMenu.gd" id="8_5c1i6"]
+[ext_resource type="Script" path="res://src/ui/ServerList.gd" id="8_7bulb"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="8_labno"]
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
@@ -251,26 +252,62 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 64
-text = "Play"
+text = "Servers
+"
 script = ExtResource("3_yuqno")
-json_text = "ui/play"
+json_text = "ui/servers"
+
+[node name="Back" type="Button" parent="PlayMenu"]
+self_modulate = Color(1, 0.529412, 0, 1)
+custom_minimum_size = Vector2(2.08165e-12, 40)
+layout_mode = 2
+text = "Back"
+script = ExtResource("2_o48rt")
+json_text = "ui/back"
 
 [node name="Spacer" type="Control" parent="PlayMenu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
+
+[node name="ServerList" type="PanelContainer" parent="PlayMenu"]
+custom_minimum_size = Vector2(420, 27)
+layout_mode = 2
+script = ExtResource("8_7bulb")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PlayMenu/ServerList"]
+custom_minimum_size = Vector2(2.08165e-12, 350)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="PlayMenu/ServerList/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Spacer4" type="Control" parent="PlayMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="DynamicLabel2" type="Label" parent="PlayMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_labno")
+theme_override_font_sizes/font_size = 32
+text = "Direct / LAN"
+script = ExtResource("3_yuqno")
+json_text = "ui/direct"
 
 [node name="HostHbox" type="HBoxContainer" parent="PlayMenu"]
 layout_mode = 2
 
 [node name="Host" type="Button" parent="PlayMenu/HostHbox"]
 self_modulate = Color(0.761, 1.622, 1, 1)
-custom_minimum_size = Vector2(2.08165e-12, 120)
+custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
-text = "Host"
+text = "Host direct"
 script = ExtResource("2_o48rt")
-json_text = "ui/host"
+json_text = "ui/host_direct"
 grab_initial_focus = true
 
 [node name="Edit" type="Button" parent="PlayMenu/HostHbox"]
@@ -285,13 +322,12 @@ layout_mode = 2
 
 [node name="Join" type="Button" parent="PlayMenu/JoinHbox"]
 self_modulate = Color(0.761, 1.081, 1.081, 1)
-custom_minimum_size = Vector2(2.08165e-12, 120)
+custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
-text = "Join"
+text = "Join direct"
 script = ExtResource("2_o48rt")
-json_text = "ui/join"
+json_text = "ui/join_direct"
 
 [node name="Edit" type="Button" parent="PlayMenu/JoinHbox"]
 layout_mode = 2
@@ -299,18 +335,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
 text = "+"
 script = ExtResource("2_o48rt")
-
-[node name="Spacer4" type="Control" parent="PlayMenu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="Back" type="Button" parent="PlayMenu"]
-self_modulate = Color(1, 0.529412, 0, 1)
-custom_minimum_size = Vector2(2.08165e-12, 40)
-layout_mode = 2
-text = "Back"
-script = ExtResource("2_o48rt")
-json_text = "ui/back"
 
 [node name="HostSettingsMenu" type="VBoxContainer" parent="."]
 visible = false
