@@ -16,8 +16,6 @@
 
 extends Node
 
-const file_name = "tb_user_prefs"
-
 # Saves a preference to the disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
 func save_pref(key : String, value: Variant, section := "preferences") -> void:
 	var config := ConfigFile.new()

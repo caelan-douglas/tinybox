@@ -397,7 +397,7 @@ func _on_tutorial_pressed() -> void:
 func _on_host_disconnect_as_client() -> void:
 	# in case host disconnects while mouse is captured
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	UIHandler.show_alert("Host disconnected :(", 12, false, UIHandler.alert_colour_error)
+	UIHandler.show_alert("Connection lost :(", 12, false, UIHandler.alert_colour_error)
 	leave_server()
 
 func leave_server() -> void:
@@ -440,26 +440,35 @@ func client_info_request_from_server() -> void:
 # first response from the joining client; check validity here
 @rpc("any_peer", "call_remote", "reliable")
 func info_response_from_client(id : int, client_server_version : int, client_name : String) -> void:
+	# check if ip banned
+	var remote_ip := enet_peer.get_peer(multiplayer.get_remote_sender_id()).get_remote_address()
+	if Global.server_banned_ips.has(remote_ip):
+		# kick new client with code 3 (banned)
+		response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 3)
+		await get_tree().create_timer(0.35).timeout
+		enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
+		return
+	
 	if client_server_version != server_version:
 		# kick new client with code 1 (mismatch version)
-		response_from_server_joined.rpc_id(id, 1)
+		response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 1)
 		# wait for a bit before kicking to get message to client sent
 		await get_tree().create_timer(0.35).timeout
-		enet_peer.disconnect_peer(id)
+		enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
 		return
 	for i in Global.get_world().get_children():
 		if i is RigidPlayer:
 			if i.display_name == client_name:
 				# kick new client with code 2 (name taken)
-				response_from_server_joined.rpc_id(id, 2)
+				response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
 				# wait for a bit before kicking to get message to client sent
 				await get_tree().create_timer(0.35).timeout
-				enet_peer.disconnect_peer(id)
+				enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
 				return
 	# nothing wrong
-	response_from_server_joined.rpc_id(id, 0)
+	response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 0)
 	var player : RigidPlayer = Player.instantiate()
-	player.name = str(id)
+	player.name = str(multiplayer.get_remote_sender_id())
 	$World.add_child(player)
 
 # second response from server to client
@@ -469,6 +478,8 @@ func response_from_server_joined(response_code : int) -> void:
 		kick_client("Version mismatch (your version does not match host version)")
 	elif response_code == 2:
 		kick_client("Display name already in use")
+	elif response_code == 3:
+		kick_client("You are banned from this server")
 	elif response_code == 0:
 		# announce to other clients, from the joined client
 		announce_player_joined.rpc(Global.display_name)

@@ -40,6 +40,7 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$tpall", "ex. $tpall Playername - teleports all players to a given player.", id_from)
 		_send_response("$promote", "ex. $promote Playername - promotes player to admin. Be careful, this allows them to use all commands except $end, $promote, and $demote.", id_from)
 		_send_response("$demote", "ex. $demote Playername - demotes player from admin.", id_from)
+		_send_response("$ban", "ex. $ban Playername - bans a player from the current session.", id_from)
 		_send_response("$list", "List of connected players.", id_from)
 		_send_response("$loadmap", "ex. $loadmap Steep Swamp - Load an internal or saved map. (Exclude the .tbw extension.)", id_from)
 		_send_response("$end", "End the server as host.", id_from)
@@ -165,8 +166,26 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 				actions[0].connect("pressed", get_tree().quit)
 			else:
 				_send_response("Info", "You don't have permission to do that!", id_from)
-		else:
-			_send_response("Info", "Unknown command, type '?' for help.", id_from)
+		elif split_text[0] == "$ban":
+			if id_from == 1:
+				if split_text.size() > 1:
+					var ban_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
+					if ban_player != null:
+						var main : Main = get_tree().current_scene
+						var player_ip : String = main.enet_peer.get_peer(ban_player.get_multiplayer_authority()).get_remote_address()
+						var player_id : int = ban_player.get_multiplayer_authority()
+						main.enet_peer.disconnect_peer(player_id)
+						# add to banned ip lists
+						if !Global.server_banned_ips.has(player_ip):
+							Global.server_banned_ips.append(player_ip)
+						_send_response("Info", str("Banned ", split_text[1]))
+					else:
+						_send_response("Info", "Player to ban not found", id_from)
+				else:
+					_send_response("Info", "Invalid use of $ban. Correct syntax example: $ban PLAYERNAME", id_from)
+					return
+			else:
+				_send_response("Info", "You don't have permission to do that!", id_from)
 	else:
 		# no command, just send the chat
 		_send_response(str(display_name), str(text), only_show_to_id)
