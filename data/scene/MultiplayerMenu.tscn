@@ -234,15 +234,15 @@ json_text = "ui/quit"
 [node name="PlayMenu" type="VBoxContainer" parent="."]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
-anchors_preset = 6
+anchors_preset = -1
 anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 0.267
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -484.0
-offset_top = -255.0
+anchor_bottom = 0.711
+offset_left = -596.0
+offset_top = -175.24
 offset_right = -176.0
-offset_bottom = 255.0
+offset_bottom = 192.08
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_ylpqp")
@@ -272,6 +272,7 @@ layout_mode = 2
 [node name="ServerList" type="PanelContainer" parent="PlayMenu"]
 custom_minimum_size = Vector2(420, 27)
 layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("8_7bulb")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PlayMenu/ServerList"]

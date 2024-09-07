@@ -46,10 +46,19 @@ autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
 [node name="Hosts" type="Label" parent="HBox/ServerInfo"]
+modulate = Color(0, 0.698729, 0.64734, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -8
 text = "Server Hosts"
+autowrap_mode = 2
+script = ExtResource("2_ftirw")
+
+[node name="Version" type="Label" parent="HBox/ServerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = -8
+text = "Server Version"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
