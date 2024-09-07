@@ -93,7 +93,7 @@ func drive(input_forward : float, input_steer : float) -> void:
 			attached_motors.erase(motor_brick)
 
 # Remove this brick
-@rpc("call_local")
+@rpc("any_peer", "call_local")
 func despawn(check_world_groups : bool = true) -> void:
 	if controlling_player != null:
 		controlling_player.seat_destroyed.rpc_id(controlling_player.get_multiplayer_authority())

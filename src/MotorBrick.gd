@@ -67,7 +67,7 @@ func _ready() -> void:
 		$DirectionArrow.visible = false
 
 # Remove this brick
-@rpc("call_local")
+@rpc("any_peer", "call_local")
 func despawn(check_world_groups : bool = true) -> void:
 	if parent_seat:
 		if parent_seat.attached_motors.has(self):
