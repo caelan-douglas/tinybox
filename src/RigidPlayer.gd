@@ -1160,6 +1160,12 @@ func enter_state() -> void:
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.3)
 	
+	# reset collider height
+	if _state != SLIDE && _state != SLIDE_BACK && _state != ROLL:
+		set_collider_short(false)
+	else:
+		set_collider_short(true)
+	
 	if _state != AIR && _state != HIGH_JUMP:
 		air_duration = 0
 	
@@ -1174,7 +1180,7 @@ func enter_state() -> void:
 	if _state != SLIDE_BACK:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 0.0, 0.2)
-		
+	
 	if _state != ROLL:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
@@ -1600,6 +1606,14 @@ func set_player_collider(new : bool) -> void:
 		collider.set_disabled(true)
 	else:
 		collider.set_disabled(false)
+
+func set_collider_short(mode : bool) -> void:
+	if mode == false:
+		collider.shape.height = 1.628
+		collider.position.y = 0.809
+	else:
+		collider.shape.height = 0.814
+		collider.position.y = 0.405
 
 @rpc("any_peer", "call_local")
 func explode(explosion_position : Vector3, from_whom : int = 1) -> void:

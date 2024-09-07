@@ -37,16 +37,18 @@ func set_info(s_name : String, s_address: String, s_hosts : String) -> void:
 	var main : Main = get_tree().current_scene
 	join_button.connect("pressed", main._on_join_pressed.bind(s_address, false))
 
-func update_server_status_label(mode : bool) -> void:
+func update_server_status_label(mode : bool, player_count : String = "0") -> void:
 	var status_label : Label = $HBox/ServerInfo/Status
 	if mode == false:
 		status_label.text = "Offline"
 		status_label.self_modulate = Color("#ff2360")
 	else:
-		status_label.text = "Online"
+		if player_count == "1":
+			status_label.text = str("Online - ", player_count, " player")
+		else:
+			status_label.text = str("Online - ", player_count, " players")
 		status_label.self_modulate = Color("#00f88f")
 
-var last_packet_count : int = 0
 func ping_server(address : String) -> void:
 	var ip := IP.resolve_hostname(address, IP.TYPE_IPV4)
 	var main : Main = get_tree().current_scene
@@ -55,10 +57,10 @@ func ping_server(address : String) -> void:
 	while true:
 		# Try to contact server
 		udp.put_packet("0".to_utf8_buffer())
-		if udp.get_available_packet_count() > last_packet_count:
-			last_packet_count = udp.get_available_packet_count()
+		if udp.get_available_packet_count() > 0:
+			var packet : String = udp.get_packet().get_string_from_utf8()
 			# server is available, show visually
-			update_server_status_label(true)
+			update_server_status_label(true, packet)
 		else:
 			update_server_status_label(false)
 		# check every 2s

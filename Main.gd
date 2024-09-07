@@ -301,8 +301,8 @@ func _process(delta : float) -> void:
 	udp_server.poll()
 	if udp_server.is_connection_available():
 		var peer : PacketPeerUDP = udp_server.take_connection()
-		# Reply
-		peer.put_packet("0".to_utf8_buffer())
+		# Reply w/ player count
+		peer.put_packet(str(Global.get_world().rigidplayer_list.size()).to_utf8_buffer())
 
 # Only runs for client
 func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
