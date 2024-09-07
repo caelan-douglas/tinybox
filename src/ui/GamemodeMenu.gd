@@ -28,6 +28,8 @@ func _ready() -> void:
 	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 	button.connect("pressed", _on_start_gamemode_pressed)
 	end_button.connect("pressed", _on_end_gamemode_pressed)
+	if !multiplayer.is_server():
+		button.disabled = true
 
 func _on_start_gamemode_pressed() -> void:
 	var idx : int = selector.selected
@@ -44,13 +46,15 @@ func _on_end_gamemode_pressed() -> void:
 func _on_gamemode_ended(idx : int) -> void:
 	if gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
 		gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
-	button.disabled = false
+	if multiplayer.is_server():
+		button.disabled = false
 	end_button.disabled = true
 
 func _on_tbw_loaded() -> void:
 	gamemode_list = []
 	# clear button disabled state
-	button.disabled = false
+	if multiplayer.is_server():
+		button.disabled = false
 	# clear old selector list
 	selector.clear()
 	for gamemode : Gamemode in Global.get_world().get_tbw_gamemodes():

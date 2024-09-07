@@ -640,6 +640,7 @@ text_overrun_behavior = 4
 
 [node name="StartGamemode" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
+disabled = true
 text = "Start gamemode"
 script = ExtResource("5_6v07r")
 
