@@ -45,6 +45,7 @@ func _process(delta : float) -> void:
 				get_tools()[0].set_tool_active(true)
 		else:
 			var active_tool_idx : int = get_index_of_tool(active_tool)
+			var last_active_tool_idx : int = active_tool_idx
 			# shift-scroll zooms camera
 			if Input.is_action_just_pressed("switch_tool_right") && !Input.is_action_pressed("control"):
 				active_tool_idx += 1
@@ -56,7 +57,9 @@ func _process(delta : float) -> void:
 				if active_tool_idx < 0:
 					get_active_tool().set_tool_active(false)
 					return
-			get_tools()[active_tool_idx].set_tool_active(true)
+			# don't reactivate active tool if it didn't change (i.e. ctrl was pressed)
+			if active_tool_idx != last_active_tool_idx:
+				get_tools()[active_tool_idx].set_tool_active(true)
 	if hold_timer > 0:
 		hold_timer -= 1
 		# when holdtimer reaches 0, reset tool just holding
