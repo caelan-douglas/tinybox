@@ -58,8 +58,8 @@ func start() -> void:
 	print("Started gamemode: ", gamemode_name)
 	# clear player inventories
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().delete_all_tools()
-		p.get_tool_inventory().give_base_tools()
+		p.get_tool_inventory().delete_all_tools.rpc()
+		p.get_tool_inventory().give_base_tools.rpc()
 	# run preview event
 	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name])
 	await preview_event.start()
@@ -96,7 +96,7 @@ func end(params : Array) -> void:
 	print("Ended gamemode: ", gamemode_name)
 	# cleanup and run any final stuff
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().reset()
+		p.get_tool_inventory().reset.rpc()
 	# never free gamemodes because they are saved as part of the world
 	emit_signal("gamemode_ended")
 	running = false

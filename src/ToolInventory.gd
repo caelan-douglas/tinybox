@@ -133,19 +133,35 @@ func get_index_of_tool(tool : Tool) -> int:
 	# tool is not in this inventory
 	return -1
 
+@rpc("any_peer", "call_local", "reliable")
 func delete_all_tools() -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	for t : Tool in get_tools():
 		t.delete()
 
+@rpc("any_peer", "call_local", "reliable")
 func give_all_tools() -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	for at : PackedScene in all_tools:
 		add_tool(at.instantiate() as Tool)
 
+@rpc("any_peer", "call_local", "reliable")
 func give_base_tools() -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	add_tool(all_tools[1].instantiate() as Tool)
 	add_tool(all_tools[2].instantiate() as Tool)
 
 # resets inventory to default (sandbox) state (all tools in def. states)
+@rpc("any_peer", "call_local", "reliable")
 func reset() -> void:
+	# if this change state request is not from the server or the owner client, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
 	delete_all_tools()
 	give_all_tools()

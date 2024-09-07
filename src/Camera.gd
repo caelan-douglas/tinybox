@@ -345,6 +345,7 @@ func play_preview_animation(time : float = 10) -> void:
 	# if this change state request is not from the server or the owner client, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
+	get_tree().current_scene.get_node("GameCanvas").visible = false
 	
 	var points : Array[CameraPreviewPoint] = []
 	# get points
@@ -380,3 +381,4 @@ func play_preview_animation(time : float = 10) -> void:
 	fov = 55
 	set_camera_mode(CameraMode.FREE)
 	locked = false
+	get_tree().current_scene.get_node("GameCanvas").visible = true

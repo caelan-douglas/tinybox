@@ -156,7 +156,11 @@ func _set_list_event_type(event_type : Event.EventType, event_ui : HBoxContainer
 			# connect the resulting value from value changed to the args part of the function using a lambda
 			adjuster_i.value_changed.connect(\
 				func(new_val : int) -> void:\
-					_update_event_list(event_ui, [Event.EventType.keys()[event_type], [new_val]]))
+					_update_event_list(event_ui, [Event.EventType.keys()[event_type], [new_val, checkbox_i.button_pressed]]))
+			# connect when checkbox changed
+			checkbox_i.pressed.connect(\
+				func() -> void:\
+					_update_event_list(event_ui, [Event.EventType.keys()[event_type], [adjuster_i.val, checkbox_i.button_pressed]]))
 		_:
 			var label := Label.new()
 			label.text = "(Not implemented)"

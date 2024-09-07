@@ -96,9 +96,15 @@ func start() -> int:
 						await get_tree().create_timer(8).timeout
 						player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
 		EventType.WAIT_FOR_SECONDS:
+			# arg 0: seconds to wait
+			# arg 1: whether or not to show countdown
 			if args.size() > 0:
-				# arg 0: time to wait
-				await get_tree().create_timer(args[0] as float).timeout
+				for i : int in range(args[0]):
+					# if showing countdown
+					if args[1] as bool:
+						UIHandler.show_toast.rpc(str(args[0] as int - i), 1, Color.DARK_ORANGE, 72)
+					await get_tree().create_timer(1).timeout
+			UIHandler.show_toast.rpc("GO!", 1, Color.LIME_GREEN, 72)
 		EventType.SHOW_WORLD_PREVIEW:
 			# arg 0: gamemode name
 			# show animation
@@ -116,10 +122,8 @@ func start() -> int:
 						# don't show name if there is none
 						args[0] = ""
 					UIHandler.play_preview_animation_overlay.rpc(str(args[0]))
-					get_tree().current_scene.get_node("GameCanvas").visible = false
 					# wait for animation to finish before running next events
 					await get_tree().create_timer(10).timeout
-					get_tree().current_scene.get_node("GameCanvas").visible = true
 		_:
 			printerr("Failed to run event because the event type is not valid.")
 	

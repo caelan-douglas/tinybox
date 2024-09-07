@@ -424,7 +424,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 										1:
 											death_message = str(executing_player_name, " hit ", display_name, " one too many times!")
 										2:
-											death_message = str(display_name, " was hit by, ", display_name, " was struck by, ", executing_player_name, "!")
+											death_message = str(executing_player_name, " hit a home run on ", display_name, "!")
 						else:
 							death_message = str(display_name, " was struck by a bat!")
 					CauseOfDeath.HIT_BY_BALL:
