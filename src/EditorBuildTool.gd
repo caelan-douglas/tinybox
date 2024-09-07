@@ -61,6 +61,9 @@ func _ready() -> void:
 
 # When something is hovered with the selector in the editor.
 func _on_body_selected(body : Node3D) -> void:
+	# if we are not the authority of this object
+	if !is_multiplayer_authority(): return
+	
 	var selectable_body : Node3D = null
 	if body is Area3D:
 		if body.owner is TBWObject:
@@ -84,6 +87,9 @@ func _on_body_selected(body : Node3D) -> void:
 					property_editor.editing_hovered = true
 
 func _on_body_deselected(_body : Node3D) -> void:
+	# if we are not the authority of this object
+	if !is_multiplayer_authority(): return
+	
 	var hovering_nothing := true
 	for body : Node3D in select_area.get_overlapping_bodies():
 		if body != active_preview_instance && body.owner != active_preview_instance:
