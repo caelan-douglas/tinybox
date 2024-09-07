@@ -210,11 +210,11 @@
         }
     },
     "songs": {
-        "mus1": "Tinybox",
-        "mus2": "Floaty",
-        "mus3": "Frozen Field",
-        "mus4": "Warp",
-        "mus5": "The Final Day"
+        "mus1": "Lavender",
+        "mus2": "Afloat",
+        "mus3": "Autumn",
+        "mus4": "New Heights",
+        "mus5": "Final Day"
     },
     "enum": {
         "event_type": {
