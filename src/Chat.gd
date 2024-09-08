@@ -42,7 +42,7 @@ func _ready() -> void:
 		cli_thread.start(_process_input)
 
 func _exit_tree() -> void:
-	if cli_thread.is_started():
+	if cli_thread != null:
 		cli_thread.wait_to_finish()
 
 func _process_input() -> void:
