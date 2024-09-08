@@ -37,6 +37,7 @@ func _ready() -> void:
 	line_edit.connect("focus_entered", _on_line_edit_focus_entered)
 	line_edit.connect("focus_exited", _on_line_edit_focus_exited)
 	CommandHandler.connect("command_response", _on_command_response)
+	
 
 func _on_line_edit_focus_entered() -> void:
 	chat_last_opened_time = Time.get_ticks_msec()
@@ -92,6 +93,9 @@ func _on_command_response(sender : String, text : String, timeout : int = 10) ->
 	# cli mode doesnt time out
 	if !cli_mode:
 		get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry))
+	# cli mode also print
+	else:
+		print(str(sender, " >> ", text))
 	await get_tree().process_frame
 	# scroll to bottom
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value

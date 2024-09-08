@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
+extends Control
 class_name ServerListEntry
 
 # UDP ping for each server
@@ -57,15 +57,17 @@ func ping_server(address : String) -> void:
 	udp.connect_to_host(str(ip), main.SERVER_INFO_PORT)
 	
 	while true:
-		# Try to contact server
-		udp.put_packet("0".to_utf8_buffer())
-		if udp.get_available_packet_count() > 0:
-			var packet : String = udp.get_packet().get_string_from_utf8()
-			var packet_split : Array = packet.split(";")
-			if packet_split.size() > 1:
-				# server is available, show visually
-				update_server_status_label(true, str(packet_split[0]), str(packet_split[1]))
-		else:
-			update_server_status_label(false)
+		# don't check when server list is not visible
+		if is_visible_in_tree():
+			# Try to contact server
+			udp.put_packet("0".to_utf8_buffer())
+			if udp.get_available_packet_count() > 0:
+				var packet : String = udp.get_packet().get_string_from_utf8()
+				var packet_split : Array = packet.split(";")
+				if packet_split.size() > 1:
+					# server is available, show visually
+					update_server_status_label(true, str(packet_split[0]), str(packet_split[1]))
+			else:
+				update_server_status_label(false)
 		# check every 2s
 		await get_tree().create_timer(2).timeout
