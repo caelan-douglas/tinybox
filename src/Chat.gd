@@ -37,7 +37,7 @@ func _ready() -> void:
 	line_edit.connect("focus_entered", _on_line_edit_focus_entered)
 	line_edit.connect("focus_exited", _on_line_edit_focus_exited)
 	CommandHandler.connect("command_response", _on_command_response)
-	if cli_mode:
+	if Global.dedicated_server:
 		cli_thread = Thread.new()
 		cli_thread.start(_process_input)
 
