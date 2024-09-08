@@ -319,14 +319,9 @@ func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
 	if !is_lan:
 		UserPreferences.save_pref("join_address", str(address))
 	
-	# debug name
-	if OS.has_feature("editor"):
-		var names := ["Test1", "Test2", "Dog man", "Dog", "Extra Long Name Very Long"]
-		Global.display_name = names.pick_random()
-	else:
-		if get_display_name_from_field() == null:
-			return
-		Global.display_name = get_display_name_from_field()
+	if get_display_name_from_field() == null:
+		return
+	Global.display_name = get_display_name_from_field()
 		
 	# Change button text to notify user we are joining.
 	join_button.text = JsonHandler.find_entry_in_file("ui/join_clicked")
@@ -464,11 +459,14 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 		if i is RigidPlayer:
 			if i.display_name == client_name:
 				# kick new client with code 2 (name taken)
-				response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
-				# wait for a bit before kicking to get message to client sent
-				await get_tree().create_timer(0.35).timeout
-				enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
-				return
+				# UNLESS we are running a debug server (server is running
+				# in editor)
+				if !OS.has_feature("editor"):
+					response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
+					# wait for a bit before kicking to get message to client sent
+					await get_tree().create_timer(0.35).timeout
+					enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
+					return
 	# nothing wrong
 	response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 0)
 	var player : RigidPlayer = Player.instantiate()

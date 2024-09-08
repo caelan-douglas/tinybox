@@ -29,7 +29,7 @@ var tween : Tween = null
 var chat_last_opened_time : int = 0
 
 @export var cli_mode : bool = false
-
+var cli_thread : Thread
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -37,7 +37,24 @@ func _ready() -> void:
 	line_edit.connect("focus_entered", _on_line_edit_focus_entered)
 	line_edit.connect("focus_exited", _on_line_edit_focus_exited)
 	CommandHandler.connect("command_response", _on_command_response)
-	
+	if cli_mode:
+		cli_thread = Thread.new()
+		cli_thread.start(_process_input)
+
+func _exit_tree() -> void:
+	cli_thread.wait_to_finish()
+
+func _process_input() -> void:
+	var read : String = ""
+	while read != "quit":
+		printraw("[ Console ] $: ")
+		read = OS.read_string_from_stdin().strip_edges()
+		submit_cli_input.call_deferred(read)
+	# quit when user types 'quit'
+	get_tree().quit()
+
+func submit_cli_input(read : String) -> void:
+	_on_chat_submitted(read)
 
 func _on_line_edit_focus_entered() -> void:
 	chat_last_opened_time = Time.get_ticks_msec()
