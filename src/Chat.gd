@@ -42,7 +42,8 @@ func _ready() -> void:
 		cli_thread.start(_process_input)
 
 func _exit_tree() -> void:
-	cli_thread.wait_to_finish()
+	if cli_thread.is_started():
+		cli_thread.wait_to_finish()
 
 func _process_input() -> void:
 	var read : String = ""
