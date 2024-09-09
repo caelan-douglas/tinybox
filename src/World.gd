@@ -239,14 +239,14 @@ func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Arr
 
 func _world_denied(name_from : String, world_name : String) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
-	if !Global.is_paused && !Global.dedicated_server:
+	if !Global.is_paused && !Global.server_mode():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# show alert to all users that map was denied
 	UIHandler.show_alert.rpc(str("Server denied loading world \"", world_name, ".tbw\"\ncreated by ", name_from), 7, false, UIHandler.alert_colour_error)
 
 func _world_accepted(name_from : String, world_name : String, lines : Array) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
-	if !Global.is_paused && !Global.dedicated_server:
+	if !Global.is_paused && !Global.server_mode():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_parse_and_open_tbw(lines)
 	# show alert to all users that map was switched
@@ -435,7 +435,7 @@ func clear_bricks() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
-	if Global.dedicated_server:
+	if Global.server_mode():
 		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
 	_server_load_building(lines, b_position, use_global_position)
 

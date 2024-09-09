@@ -23,9 +23,9 @@ signal debug_toggled(mode : bool)
 
 var display_name : String = ""
 var connected_to_server := false
-
-var dedicated_server := false
 var server_banned_ips : Array[String] = []
+func server_mode() -> bool:
+	return DisplayServer.get_name() == "headless"
 
 var is_text_focused := false
 var is_paused := false

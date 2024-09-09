@@ -29,7 +29,6 @@ var udp_server : UDPServer = UDPServer.new()
 var thread : Thread = null
 var upnp : UPNP = null
 var host_public := true
-var host_dedicated := false
 var upnp_err : int = -1
 var enet_peer := ENetMultiplayerPeer.new()
 # For LAN servers
@@ -55,7 +54,6 @@ var display_version := "beta 11.0pre"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
-@onready var host_dedicated_button : Button = $MultiplayerMenu/HostSettingsMenu/Dedicated
 @onready var join_button : Button = $MultiplayerMenu/PlayMenu/JoinHbox/Join
 @onready var display_name_field : LineEdit = $MultiplayerMenu/DisplayName
 @onready var join_address : LineEdit = $MultiplayerMenu/JoinSettingsMenu/Address
@@ -69,7 +67,7 @@ func _ready() -> void:
 	# Clear the graphics cache when entering the main menu.
 	Global.graphics_cache = []
 	# Update the spawnable scenes in case the player left a server.
-	# (re-adds all spawnable objs to the multiplayerspawner)w
+	# (re-adds all spawnable objs to the multiplayerspawner)
 	SpawnableObjects.update_spawnable_scenes()
 	
 	# ask user before quitting (command and Q are buttons that may both
@@ -78,7 +76,6 @@ func _ready() -> void:
 	
 	host_button.connect("pressed", _on_host_pressed)
 	host_public_button.connect("toggled", _on_host_public_toggled)
-	host_dedicated_button.connect("toggled", _on_host_dedicated_toggled)
 	host_public = host_public_button.button_pressed
 	join_button.connect("pressed", _on_join_pressed)
 	editor_button.connect("pressed", _on_editor_pressed)
@@ -100,17 +97,14 @@ func _ready() -> void:
 		join_address.text = str(address)
 	
 	# check if running in server mode
-	var args := OS.get_cmdline_args()
-	for arg : String in args:
-		if arg == "-server":
-			host_dedicated = true
-			_on_host_pressed()
+	if Global.server_mode():
+		_on_host_pressed()
 	
 	# fullscreen if not in debug mode
-	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !host_dedicated:
+	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !Global.server_mode():
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
-	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !host_dedicated:
+	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !Global.server_mode():
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
 	if display_version.contains("pre"):
@@ -215,17 +209,10 @@ func _on_host_public_toggled(mode : bool) -> void:
 	else:
 		host_public_button.set_text_to_json("ui/host_public_settings/off")
 
-func _on_host_dedicated_toggled(mode : bool) -> void:
-	host_dedicated = mode
-	if mode:
-		host_dedicated_button.set_text_to_json("ui/dedicated_server/on")
-	else:
-		host_dedicated_button.set_text_to_json("ui/dedicated_server/off")
-
 func _on_host_pressed() -> void:
 	var no_display_name : bool = false
 	if get_display_name_from_field() == null:
-		if !host_dedicated:
+		if !Global.server_mode():
 			return
 		else:
 			# Just use "Server" as default if display name is invalid
@@ -259,7 +246,7 @@ func _on_host_pressed() -> void:
 	# Load the world using the multiplayerspawner spawn method.
 	var world : World = $World
 	
-	if host_dedicated:
+	if Global.server_mode():
 		# Go to windowed mode
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		get_window().title = "Tinybox Server"
@@ -268,9 +255,8 @@ func _on_host_pressed() -> void:
 		OS.low_processor_usage_mode = true
 		# Disable audio and no camera for dedicated servers
 		AudioServer.set_bus_mute(0, true)
-		get_tree().current_scene.get_node("ServerCanvas").visible = true
+		get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 		get_window().size = Vector2i(700, 700)
-		Global.dedicated_server = true
 		UIHandler.show_alert(str("Started with arguments: ", OS.get_cmdline_args()))
 		await get_tree().create_timer(0.3).timeout
 		CommandHandler.submit_command.rpc("Info", "Your dedicated server has started! Type '?' in the command box for a list of commands. Alerts will show in this chat list. Player's chats will also appear here.")
@@ -309,20 +295,24 @@ func _process(delta : float) -> void:
 		peer.put_packet(str(Global.get_world().rigidplayer_list.size(), ";", display_version).to_utf8_buffer())
 
 # Only runs for client
-func _on_join_pressed(address : Variant = null, is_lan := false) -> void:
+func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
 	if address == null:
 		address = join_address.text
-		if join_address.text == "" && !is_lan:
+		if join_address.text == "" && !is_from_list:
 			UIHandler.show_alert("Enter an IP or domain to join in the '+' section\nto the right of the Join button.", 8, false, UIHandler.alert_colour_error)
 			return
-	# Save address for join (only if not LAN.)
-	if !is_lan:
+	# Save address for join (only if not LAN or server browser.)
+	if !is_from_list:
 		UserPreferences.save_pref("join_address", str(address))
 	
-	if get_display_name_from_field() == null:
-		return
-	Global.display_name = get_display_name_from_field()
-		
+	# editor debug names
+	if OS.has_feature("editor"):
+		Global.display_name = str("Editor Client ", randi_range(0, 99))
+	else:
+		if get_display_name_from_field() == null:
+			return
+		Global.display_name = get_display_name_from_field()
+	
 	# Change button text to notify user we are joining.
 	join_button.text = JsonHandler.find_entry_in_file("ui/join_clicked")
 	
@@ -425,7 +415,7 @@ func add_peer(peer_id : int) -> void:
 		# for the server just add them
 		else:
 			# if joining as a player
-			if !host_dedicated:
+			if !Global.server_mode():
 				var player : RigidPlayer = Player.instantiate()
 				player.name = str(peer_id)
 				$World.add_child(player, true)
@@ -459,14 +449,11 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 		if i is RigidPlayer:
 			if i.display_name == client_name:
 				# kick new client with code 2 (name taken)
-				# UNLESS we are running a debug server (server is running
-				# in editor)
-				if !OS.has_feature("editor"):
-					response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
-					# wait for a bit before kicking to get message to client sent
-					await get_tree().create_timer(0.35).timeout
-					enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
-					return
+				response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
+				# wait for a bit before kicking to get message to client sent
+				await get_tree().create_timer(0.35).timeout
+				enet_peer.disconnect_peer(multiplayer.get_remote_sender_id())
+				return
 	# nothing wrong
 	response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 0)
 	var player : RigidPlayer = Player.instantiate()
@@ -497,5 +484,10 @@ func remove_player(peer_id : int) -> void:
 			UIHandler.show_alert(str(player.display_name, " left."), 4, false, UIHandler.alert_colour_player)
 		# Remove player from World player list.
 		Global.get_world().remove_player_from_list(player)
+		# if server, demote player
+		if multiplayer.is_server():
+			if CommandHandler.admins.has(peer_id):
+				CommandHandler.admins.erase(peer_id)
+				CommandHandler._send_response("Info", str("Demoted ", player.display_name, " because they left."))
 		
 		player.queue_free()

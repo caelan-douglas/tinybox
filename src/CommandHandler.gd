@@ -19,6 +19,29 @@ signal command_response(sender : String, text : String)
 
 var admins : Array[int] = [1]
 
+var cli_thread : Thread
+
+func _ready() -> void:
+	if Global.server_mode():
+		cli_thread = Thread.new()
+		cli_thread.start(_process_input)
+
+func _exit_tree() -> void:
+	if cli_thread != null:
+		cli_thread.wait_to_finish()
+
+func _process_input() -> void:
+	var read : String = ""
+	while read != "$quit":
+		printraw("[ Console ] $: ")
+		read = OS.read_string_from_stdin().strip_edges()
+		submit_cli_input.call_deferred(read)
+	# quit when user types 'quit'
+	get_tree().quit()
+
+func submit_cli_input(read : String) -> void:
+	submit_command("Server", read)
+
 # Send the chat to all clients.
 @rpc("any_peer", "call_local")
 func submit_command(display_name : String, text : String, only_show_to_id : int = -1) -> void:
@@ -42,8 +65,10 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$demote", "ex. $demote Playername - demotes player from admin.", id_from)
 		_send_response("$ban", "ex. $ban Playername - bans a player from the current session.", id_from)
 		_send_response("$list", "List of connected players.", id_from)
+		_send_response("$admins", "List of server admins.", id_from)
 		_send_response("$loadmap", "ex. $loadmap Steep Swamp - Load an internal or saved map. (Exclude the .tbw extension.)", id_from)
 		_send_response("$end", "End the server as host.", id_from)
+		_send_response("$exit", "End the application (headless server mode only.)", id_from)
 		return
 	if text.begins_with("$"):
 		if split_text[0] == "$speed":
@@ -150,6 +175,11 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 				_send_response("Info", str(player_names))
 			else:
 				_send_response("Info", "Nobody is here.")
+		elif split_text[0] == "$admins":
+			if admins.size() > 0:
+				_send_response("Info", str("Server admins: ", admins))
+			else:
+				_send_response("Info", "Nobody is admin.")
 		elif split_text[0] == "$loadmap":
 			if admins.has(id_from):
 				if split_text.size() > 1:
@@ -193,6 +223,8 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 @rpc("call_local", "reliable")
 func _response(sender : String, text : String) -> void:
 	emit_signal("command_response", sender, text)
+	if Global.server_mode() && multiplayer.is_server():
+		print(sender, " >> ", text)
 
 func _send_response(sender : String, text : String, only_to_id : int = -1) -> void:
 	if only_to_id == -1:

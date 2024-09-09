@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bhj43my7js408"]
+[gd_scene load_steps=10 format=3 uid="uid://bhj43my7js408"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_jgbvu"]
 [ext_resource type="Script" path="res://src/World.gd" id="2_alcqr"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c5aeyr5rirpm4" path="res://data/scene/MultiplayerMenu.tscn" id="5_ti6c5"]
 [ext_resource type="PackedScene" uid="uid://b4heya8wtwyuo" path="res://data/scene/ui/EditorCanvas.tscn" id="7_c1osm"]
 [ext_resource type="Script" path="res://src/ui/DebugMenu.gd" id="8_cc4qc"]
-[ext_resource type="PackedScene" uid="uid://ba2xodl3dk4qe" path="res://data/scene/ui/Chat.tscn" id="8_efx2r"]
 [ext_resource type="Script" path="res://src/ui/AnimatedPanelContainer.gd" id="9_macom"]
 
 [node name="Main" type="Node"]
@@ -43,27 +42,6 @@ visible = false
 
 [node name="EditorCanvas" parent="." instance=ExtResource("7_c1osm")]
 visible = false
-
-[node name="ServerCanvas" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="Background" type="ColorRect" parent="ServerCanvas"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.135583, 0.0767901, 0.157547, 1)
-
-[node name="Chat" parent="ServerCanvas" instance=ExtResource("8_efx2r")]
-anchors_preset = 12
-anchor_right = 1.0
-offset_left = 16.0
-offset_top = -704.0
-offset_right = -16.0
-offset_bottom = -16.0
-grow_horizontal = 2
-cli_mode = true
 
 [node name="LoadingCanvas" type="CanvasLayer" parent="."]
 visible = false

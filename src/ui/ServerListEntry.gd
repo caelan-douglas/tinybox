@@ -31,11 +31,10 @@ func set_info(s_name : String, s_address: String, s_hosts : String) -> void:
 	address_label.text = s_address
 	hosts_label.text = str("Hosted by: ", s_hosts)
 	
-	update_server_status_label(false)
 	ping_server(s_address)
 	
 	var main : Main = get_tree().current_scene
-	join_button.connect("pressed", main._on_join_pressed.bind(s_address, false))
+	join_button.connect("pressed", main._on_join_pressed.bind(s_address, true))
 
 func update_server_status_label(mode : bool, player_count : String = "0", server_version : String = "unknown") -> void:
 	var status_label : Label = $HBox/ServerInfo/Status
@@ -56,18 +55,26 @@ func ping_server(address : String) -> void:
 	var main : Main = get_tree().current_scene
 	udp.connect_to_host(str(ip), main.SERVER_INFO_PORT)
 	
+	# Try to contact server; first packet
+	udp.put_packet("0".to_utf8_buffer())
+	# First check (show online servers before list is loaded)
+	await get_tree().create_timer(0.5).timeout
+	check_server_status()
 	while true:
 		# don't check when server list is not visible
 		if is_visible_in_tree():
-			# Try to contact server
-			udp.put_packet("0".to_utf8_buffer())
-			if udp.get_available_packet_count() > 0:
-				var packet : String = udp.get_packet().get_string_from_utf8()
-				var packet_split : Array = packet.split(";")
-				if packet_split.size() > 1:
-					# server is available, show visually
-					update_server_status_label(true, str(packet_split[0]), str(packet_split[1]))
-			else:
-				update_server_status_label(false)
+			check_server_status()
 		# check every 2s
 		await get_tree().create_timer(2).timeout
+
+func check_server_status() -> void:
+	# Try to contact server
+	udp.put_packet("0".to_utf8_buffer())
+	if udp.get_available_packet_count() > 0:
+		var packet : String = udp.get_packet().get_string_from_utf8()
+		var packet_split : Array = packet.split(";")
+		if packet_split.size() > 1:
+			# server is available, show visually
+			update_server_status_label(true, str(packet_split[0]), str(packet_split[1]))
+	else:
+		update_server_status_label(false)

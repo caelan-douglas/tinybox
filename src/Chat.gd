@@ -28,65 +28,41 @@ extends Control
 var tween : Tween = null
 var chat_last_opened_time : int = 0
 
-@export var cli_mode : bool = false
-var cli_thread : Thread
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	line_edit.connect("text_submitted", _on_chat_submitted)
 	line_edit.connect("focus_entered", _on_line_edit_focus_entered)
 	line_edit.connect("focus_exited", _on_line_edit_focus_exited)
 	CommandHandler.connect("command_response", _on_command_response)
-	if Global.dedicated_server:
-		cli_thread = Thread.new()
-		cli_thread.start(_process_input)
-
-func _exit_tree() -> void:
-	if cli_thread != null:
-		cli_thread.wait_to_finish()
-
-func _process_input() -> void:
-	var read : String = ""
-	while read != "quit":
-		printraw("[ Console ] $: ")
-		read = OS.read_string_from_stdin().strip_edges()
-		submit_cli_input.call_deferred(read)
-	# quit when user types 'quit'
-	get_tree().quit()
-
-func submit_cli_input(read : String) -> void:
-	_on_chat_submitted(read)
 
 func _on_line_edit_focus_entered() -> void:
 	chat_last_opened_time = Time.get_ticks_msec()
 	if Global.get_player() != null:
 		Global.get_player().locked = true
 	# transparency effect for ingame
-	if !cli_mode:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		if tween:
-			tween.kill()
-			tween = null
-		modulate = Color("#ffffffff")
-		# show old entries
-		for entry in chat_list.get_children():
-			entry.visible = true
-		await get_tree().process_frame
-		# scroll to bottom
-		scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if tween:
+		tween.kill()
+		tween = null
+	modulate = Color("#ffffffff")
+	# show old entries
+	for entry in chat_list.get_children():
+		entry.visible = true
+	await get_tree().process_frame
+	# scroll to bottom
+	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _on_line_edit_focus_exited() -> void:
 	if Global.get_player() != null:
 		Global.get_player().locked = false
 	# transparency effect for ingame
-	if !cli_mode && !Global.dedicated_server:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		tween = get_tree().create_tween().set_parallel(true)
-		tween.tween_property(self, "modulate", Color("#ffffff5e"), 2)
-		# hide old entries
-		for entry in chat_list.get_children():
-			if Time.get_ticks_msec() - entry.age > entry.hide_age:
-				entry.visible = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	tween = get_tree().create_tween().set_parallel(true)
+	tween.tween_property(self, "modulate", Color("#ffffff5e"), 2)
+	# hide old entries
+	for entry in chat_list.get_children():
+		if Time.get_ticks_msec() - entry.age > entry.hide_age:
+			entry.visible = false
 
 func _unhandled_input(event : InputEvent) -> void:
 	if (event is InputEventKey):
@@ -97,8 +73,7 @@ func _on_chat_submitted(text : String) -> void:
 	CommandHandler.submit_command.rpc(Global.display_name, text)
 	line_edit.text = ""
 	# only release focus ingame
-	if !cli_mode:
-		line_edit.release_focus()
+	line_edit.release_focus()
 
 func _on_command_response(sender : String, text : String, timeout : int = 10) -> void:
 	var entry : Control = chat_entry.instantiate()
@@ -108,12 +83,7 @@ func _on_command_response(sender : String, text : String, timeout : int = 10) ->
 	entry.get_node("Margin/HBoxContainer/ChatLabel").text = str(text)
 	entry.get_node("Margin/HBoxContainer/PlayerLabel").text = str(sender)
 	
-	# cli mode doesnt time out
-	if !cli_mode:
-		get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry))
-	# cli mode also print
-	else:
-		print(str(sender, " >> ", text))
+	get_tree().create_timer(timeout).connect("timeout", _on_entry_timeout.bind(entry))
 	await get_tree().process_frame
 	# scroll to bottom
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value

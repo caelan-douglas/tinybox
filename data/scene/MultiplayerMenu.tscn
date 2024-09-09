@@ -380,15 +380,6 @@ text = "UPNP setting"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_public_settings/off"
 
-[node name="Dedicated" type="Button" parent="HostSettingsMenu"]
-layout_mode = 2
-tooltip_text = "Launch in a dedicated server mode, with a console for moderating. No 3D graphics will be rendered.
-You can also do this through the command line with the argument '-server'."
-toggle_mode = true
-text = "Server mode: Yes"
-script = ExtResource("2_o48rt")
-json_text = "ui/dedicated_server/off"
-
 [node name="Spacer5" type="Control" parent="HostSettingsMenu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2

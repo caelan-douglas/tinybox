@@ -35,7 +35,7 @@ var alert_colour_death : Color = Color(1.8, 0.0, 1.6, 1)
 @rpc("any_peer", "call_local")
 func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool = false, alert_colour : Color = Color("#ffffff")) -> void:
 	# if in dedicated server mode
-	if multiplayer.is_server() && Global.dedicated_server:
+	if multiplayer.is_server() && Global.server_mode():
 		# show a chat instead
 		CommandHandler.submit_command.rpc("ALERT FROM WORLD", alert_text, 1)
 	# normal alert
@@ -93,7 +93,7 @@ func show_alert_with_actions(alert_text : String, action_texts : Array, error :=
 @rpc("any_peer", "call_local")
 func show_toast(alert_text : String, timeout := 3, alert_colour : Color = Color("#ffffff"), font_size : int = 16) -> void:
 	# if in dedicated server mode
-	if multiplayer.is_server() && Global.dedicated_server:
+	if multiplayer.is_server() && Global.server_mode():
 		# show a chat instead
 		CommandHandler.submit_command.rpc("TOAST FROM WORLD", alert_text, 1)
 	# normal toast
