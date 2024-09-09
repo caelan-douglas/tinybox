@@ -448,7 +448,33 @@ layout_mode = 2
 [node name="CheckBox" type="CheckBox" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList/List"]
 layout_mode = 2
 
+[node name="GamemodesWIPMessage" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+custom_minimum_size = Vector2(908, 2.08165e-12)
+layout_mode = 2
+alignment = 1
+
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
+custom_minimum_size = Vector2(2.08165e-12, 70)
+layout_mode = 2
+
+[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
+self_modulate = Color(1, 1, 1, 0.447059)
+custom_minimum_size = Vector2(346, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_fonts/font = ExtResource("6_5yhmg")
+theme_override_font_sizes/font_size = 64
+text = "Modes"
+script = ExtResource("6_aufvl")
+
+[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
+layout_mode = 2
+text = "Custom gamemodes are currently work-in-progress."
+horizontal_alignment = 2
+script = ExtResource("6_aufvl")
+
 [node name="Gamemodes" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+visible = false
 custom_minimum_size = Vector2(908, 2.08165e-12)
 layout_mode = 2
 alignment = 1

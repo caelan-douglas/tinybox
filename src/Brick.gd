@@ -190,9 +190,17 @@ func set_property(property : StringName, value : Variant) -> void:
 				if fire_size > 1.5:
 					fire.set_particle_scale(Vector2(fire_size, fire_size))
 				if collider.shape is BoxShape3D:
-					collider.shape.size = scale_new
-					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
-					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
+					# all normal bricks
+					if _brick_spawnable_type != "brick_half":
+						collider.shape.size = scale_new
+						joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
+						cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
+					# half bricks
+					else:
+						var half_scale := Vector3(scale_new.x, scale_new.y * 0.5, scale_new.z)
+						collider.shape.size = half_scale
+						joint_collider.shape.size = half_scale + Vector3(0.3, 0.3, 0.3)
+						cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
 					resize_mesh()
 				elif collider.shape is CylinderShape3D:
