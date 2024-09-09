@@ -232,10 +232,12 @@ func load_tbw(file_name : String, switching := false, reset_player_and_cameras :
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Array) -> void:
 	if !multiplayer.is_server(): return
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	var actions := UIHandler.show_alert_with_actions(str(name_from, " wishes to load the world \"", world_name, ".tbw\".\nAll bricks will be destroyed. Is this OK?"), ["Load world", "Do not load"], true)
-	actions[0].connect("pressed", _world_accepted.bind(name_from, world_name, lines))
-	actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
+	#TODO: map voting system?
+	#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	#var actions := UIHandler.show_alert_with_actions(str(name_from, " wishes to load the world \"", world_name, ".tbw\".\nAll bricks will be destroyed. Is this OK?"), ["Load world", "Do not load"], true)
+	#actions[0].connect("pressed", _world_accepted.bind(name_from, world_name, lines))
+	#actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
+	_world_accepted(name_from, world_name, lines)
 
 func _world_denied(name_from : String, world_name : String) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
