@@ -40,7 +40,7 @@ func _process_input() -> void:
 	get_tree().quit()
 
 func submit_cli_input(read : String) -> void:
-	submit_command("Server", read)
+	submit_command.rpc_id(1, "Server", read)
 
 # Send the chat to all clients.
 @rpc("any_peer", "call_local")
@@ -67,8 +67,7 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$list", "List of connected players.", id_from)
 		_send_response("$admins", "List of server admins.", id_from)
 		_send_response("$loadmap", "ex. $loadmap Steep Swamp - Load an internal or saved map. (Exclude the .tbw extension.)", id_from)
-		_send_response("$end", "End the server as host.", id_from)
-		_send_response("$exit", "End the application (headless server mode only.)", id_from)
+		_send_response("$quit", "End the server (headless server mode only.)", id_from)
 		return
 	if text.begins_with("$"):
 		if split_text[0] == "$speed":
@@ -187,13 +186,6 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 				else:
 					_send_response("Info", "Invalid use of $loadmap. Correct syntax example: $loadmap MAPNAME", id_from)
 					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$end":
-			if id_from == 1:
-				var actions := UIHandler.show_alert_with_actions("Are you sure you wish to close the server?\nEveryone will be disconnected.", ["Close server", "Cancel"], true)
-				actions[1].grab_focus()
-				actions[0].connect("pressed", get_tree().quit)
 			else:
 				_send_response("Info", "You don't have permission to do that!", id_from)
 		elif split_text[0] == "$ban":
