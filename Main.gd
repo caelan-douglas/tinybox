@@ -44,13 +44,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 11011
+var server_version : int = 11020
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 11.1"
+var display_version := "beta 11.2pre"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
@@ -447,7 +447,8 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 		return
 	for i in Global.get_world().get_children():
 		if i is RigidPlayer:
-			if i.display_name == client_name:
+			# case insensitive
+			if i.display_name.to_lower() == client_name.to_lower():
 				# kick new client with code 2 (name taken)
 				response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
 				# wait for a bit before kicking to get message to client sent
