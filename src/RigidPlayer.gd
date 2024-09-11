@@ -456,9 +456,11 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						# if we were last hit by someone's projectile
 						if last_hit && last_hit_by_id != -1:
 							var last_hit_executing_player : RigidPlayer = Global.get_world().get_node_or_null(str(last_hit_by_id))
-							var last_hit_executing_player_name : String = last_hit_executing_player.display_name
-							# self
-							if last_hit_by_id == get_multiplayer_authority():
+							var last_hit_executing_player_name : String = ""
+							if last_hit_executing_player != null:
+								last_hit_executing_player_name = last_hit_executing_player.display_name
+							# self, or if player who hit self has left
+							if last_hit_by_id == get_multiplayer_authority() || last_hit_executing_player == null:
 								death_message = str(display_name, " hit themselves away!")
 							# don't increment kills for friendly fire
 							elif _is_friendly_fire(last_hit_executing_player):
@@ -568,8 +570,12 @@ func get_health() -> int:
 
 @rpc("any_peer", "call_local", "reliable")
 func set_last_hit_by_id(who : int) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
 	last_hit_by_id = who
-	last_hit = true
+	if last_hit_by_id == -1:
+		last_hit = false
+	else: last_hit = true
 
 # Update this player's team with a new team.
 @rpc("any_peer", "call_local", "reliable")
@@ -1204,7 +1210,7 @@ func enter_state() -> void:
 	
 	# last hit handling: states that should not change the fact you were 'last hit'
 	if _state != AIR && _state != HIGH_JUMP && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
-		last_hit = false
+		set_last_hit_by_id.rpc(-1)
 	
 	# reset from states that change the character's model rotation
 	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH && _state != SLIDE && _state != SLIDE_BACK:
