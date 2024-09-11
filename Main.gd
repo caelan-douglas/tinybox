@@ -405,6 +405,8 @@ func kick_client(reason : String) -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func announce_player_joined(p_display_name : String) -> void:
 	UIHandler.show_alert(str(p_display_name, " joined."), 4, false, UIHandler.alert_colour_player)
+	if multiplayer.is_server():
+		print("Server info: IP of player ", p_display_name, ": ", enet_peer.get_peer(multiplayer.get_remote_sender_id()).get_remote_address())
 
 # Adds a player to the server with id & name.
 func add_peer(peer_id : int) -> void:
