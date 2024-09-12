@@ -239,6 +239,11 @@ func selected_item_is_draggable() -> bool:
 		return true
 	else: return false
 
+func selected_item_is_brick() -> bool:
+	if selected_item_name_internal.begins_with("brick"):
+		return true
+	else: return false
+
 func selected_item_is_scalable() -> bool:
 	if selected_item_name_internal.begins_with("obj"):
 		return true
@@ -285,7 +290,7 @@ func _physics_process(delta : float) -> void:
 		if preview_node != null:
 			preview_node.global_position = camera.controlled_cam_pos
 			var rot_amount : float = 22.5
-			if selected_item_is_draggable():
+			if selected_item_is_brick():
 				rot_amount = 90
 			if active_preview_instance != null:
 				# rotation
