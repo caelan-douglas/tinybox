@@ -595,7 +595,8 @@ func update_team(new : String) -> void:
 		$Smoothing/NameLabel.modulate = Color("#fff")
 	else:
 		$Smoothing/NameLabel.modulate = world.get_current_map().get_teams().get_team(new).colour
-	Global.update_player_list_information() 
+	Global.update_player_list_information()
+	set_spawns(world.get_spawnpoint_for_team(team))
 
 # Update this player's name with a new name.
 @rpc("call_local")
@@ -652,6 +653,8 @@ func _ready() -> void:
 		update_info(get_multiplayer_authority())
 		# update peers with appearance
 		change_appearance()
+		# set default spawns
+		set_spawns(world.get_spawnpoint_for_team(team))
 		go_to_spawn()
 		# hide your own name label
 		$Smoothing/NameLabel.visible = false
@@ -1462,9 +1465,17 @@ func go_to_spawn() -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	# find team spawns
-	spawns = world.get_spawnpoint_for_team(team)
-	var spawn : Vector3 = spawns[randi() % spawns.size()]
+	var spawn : Vector3 = Vector3.ZERO
+	spawn = spawns[randi() % spawns.size()]
 	teleport(spawn)
+
+# run on client from server
+@rpc("any_peer", "call_local", "reliable")
+func set_spawns(new_spawns : Array) -> void:
+	# if this go to spawn request is not from the server or run locally, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+		return
+	spawns = new_spawns
 
 # replicates states on non-authority clients, mainly for animation reasons
 @rpc("call_remote", "reliable")

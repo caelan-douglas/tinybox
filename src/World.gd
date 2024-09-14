@@ -30,7 +30,7 @@ func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 	var spawns : Array[Vector3] = []
 	for obj in get_children():
 		if obj is SpawnPoint:
-			if obj.team_name == team_name:
+			if obj.team_name == team_name && !obj.checkpoint:
 				spawns.append(obj.global_position)
 	if spawns == []:
 		# default spawn
