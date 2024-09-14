@@ -656,11 +656,18 @@ func _ready() -> void:
 		# set default spawns
 		set_spawns(world.get_spawnpoint_for_team(team))
 		go_to_spawn()
+		# update spawns when world is loaded
+		Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 		# hide your own name label
 		$Smoothing/NameLabel.visible = false
 		# in case we were not present on client when server sent
 		# protect spawn call
 		_receive_server_protect_spawn(3.5, false)
+
+func _on_tbw_loaded() -> void:
+	# set default spawns
+	set_spawns(world.get_spawnpoint_for_team(team))
+	go_to_spawn()
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
