@@ -11,14 +11,6 @@ Attributions for /data/audio:
 	deflect.ogg:
 		by JohnBuhr; licensed under Creative Commons 0
 		https://freesound.org/people/JohnBuhr/sounds/326784/
-	
-	beep/beep_fifths.ogg:
-		by pan14; licensed under Creative Commons 0
-		https://freesound.org/people/pan14/sounds/263125/
-	
-	beep/beep_low.ogg:
-		by pan14; licensed under Creative Commons 0
-		https://freesound.org/people/pan14/sounds/263126/
 
 	beep/beep.ogg, beep/missile_beep.ogg:
 		by Entershift; licensed under Creative Commons 0
@@ -65,9 +57,9 @@ Attributions for /data/audio:
 		by deleted_user_2104797; licensed under Creative Commons 0
 		https://freesound.org/people/deleted_user_2104797/sounds/148987/
 
-	invalid.ogg:
-		by philRacoIndie; licensed under Creative Commons 0
-		https://freesound.org/people/philRacoIndie/sounds/551543/
+	invalid.ogg, kill.ogg, doublekill.ogg, triplekill.ogg, multikill.ogg, checkpoint.ogg, checkpoint_final.ogg:
+		by Matthew Tzavelas; licensed under Creative Commons 0
+		(source file)
 	
 	throw.ogg:
 		by denao270; licensed under Creative Commons 0

@@ -74,8 +74,10 @@ var pants_colour := Color("#1a203d")
 var hair_colour := Color("#a7606a")
 var skin_colour := Color("d29185")
 
-var beep_low : AudioStream = preload("res://data/audio/beep/beep_low.ogg")
-var beep_fifths : AudioStream = preload("res://data/audio/beep/beep_fifths.ogg")
+var kill : AudioStream = preload("res://data/audio/kill.ogg")
+var doublekill : AudioStream = preload("res://data/audio/doublekill.ogg")
+var triplekill : AudioStream = preload("res://data/audio/triplekill.ogg")
+var multikill : AudioStream = preload("res://data/audio/multikill.ogg")
 
 func reset_shirt_texture() -> void:
 	var actions := UIHandler.show_alert_with_actions("Are you sure? You will lose your\ncurrent shirt.", ["Reset shirt", "Nevermind"], true)
@@ -214,17 +216,29 @@ func update_player_list_information() -> void:
 
 # TODO: Maybe this should move to MusicHandler? + MusicHandler could be called AudioHandler?
 var last_kill_time := 0
+var combo := 0
 @rpc("any_peer", "call_local", "reliable")
 func play_kill_sound() -> void:
 	var audio := AudioStreamPlayer.new()
 	audio.volume_db = 1
 	get_world().add_child(audio)
+	# combo kill
 	if Time.get_unix_time_from_system() - last_kill_time < 4:
-		# double kill
-		audio.stream = beep_fifths
+		match (combo):
+			0:
+				# double kill
+				audio.stream = doublekill
+			1:
+				# triple kill
+				audio.stream = triplekill
+			_:
+				# multi kill
+				audio.stream = multikill
+		combo += 1
 	else:
 		# normal kill
-		audio.stream = beep_low
+		audio.stream = kill
+		combo = 0
 	last_kill_time = Time.get_unix_time_from_system()
 	# delay for sound (avoid getting muffled by explosions etc)
 	await get_tree().create_timer(0.3).timeout

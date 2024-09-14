@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://c715f67itwqrf"]
+[gd_scene load_steps=11 format=3 uid="uid://c715f67itwqrf"]
 
 [ext_resource type="Script" path="res://src/SpawnPoint.gd" id="1_nt8o8"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_2quxa"]
+[ext_resource type="AudioStream" uid="uid://cd56h7mjfkum5" path="res://data/audio/checkpoint.ogg" id="3_0oqkx"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_i6q18"]
 height = 0.1
@@ -96,3 +97,7 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("SphereShape3D_5i2os")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_0oqkx")
+bus = &"SFX"

@@ -18,6 +18,7 @@ extends TBWObject
 class_name SpawnPoint
 
 @onready var area : Area3D = $Area3D
+@onready var audio : AudioStreamPlayer = $AudioStreamPlayer
 var team_name : String = "Default"
 var checkpoint : bool = false
 
@@ -69,6 +70,14 @@ func _on_area_entered(body : PhysicsBody3D) -> void:
 			player.set_spawns.rpc([global_position])
 			print(str(player.display_name, " got checkpoint."))
 			UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), "Checkpoint spawn set!", 3, false, UIHandler.alert_colour_gold)
+			play_sound.rpc_id(player.get_multiplayer_authority())
+
+@rpc("any_peer", "call_local", "reliable")
+func play_sound() -> void:
+	# if this go to spawn request is not from the server or run locally, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	audio.play()
 
 func occupied() -> bool:
 	for b in area.get_overlapping_bodies():

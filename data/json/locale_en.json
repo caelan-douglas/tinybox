@@ -214,7 +214,8 @@
         "mus2": "Afloat",
         "mus3": "Autumn",
         "mus4": "New Heights",
-        "mus5": "Final Day"
+        "mus5": "Final Day",
+        "mus6": "Lullaby"
     },
     "enum": {
         "event_type": {
