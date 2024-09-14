@@ -181,7 +181,7 @@
             "obj_lifter": "Pushes players upwards into the air.",
             "obj_picnic_table": "Huge-sized picnic table.",
             "obj_sign": "Sign with customizable text.",
-            "obj_spawnpoint": "Provides a spawnpoint for a given team that will be chosen at random.",
+            "obj_spawnpoint": "Provides a spawnpoint for a given team that will be chosen at random.\nWith the 'checkpoint' flag enabled, any player that steps on this (regardless of team)\nwill have their only spawnpoint set to this one.",
             "obj_dining_table": "Huge-sized dining table.",
             "obj_camera_preview_point": "A preview point for the camera. This is used during intro sequences in gamemodes.",
             "obj_track_straight": "Straight racetrack piece.",

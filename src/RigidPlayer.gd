@@ -641,6 +641,8 @@ func _ready() -> void:
 		get_tool_inventory().reset()
 		if multiplayer.is_server():
 			protect_spawn(3.5, false)
+			# update spawns when world is loaded as server
+			Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 		# only execute on yourself
 		if !is_multiplayer_authority():
 			#freeze = true
@@ -656,8 +658,6 @@ func _ready() -> void:
 		# set default spawns
 		set_spawns(world.get_spawnpoint_for_team(team))
 		go_to_spawn()
-		# update spawns when world is loaded
-		Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 		# hide your own name label
 		$Smoothing/NameLabel.visible = false
 		# in case we were not present on client when server sent
@@ -666,8 +666,8 @@ func _ready() -> void:
 
 func _on_tbw_loaded() -> void:
 	# set default spawns
-	set_spawns(world.get_spawnpoint_for_team(team))
-	go_to_spawn()
+	set_spawns.rpc_id(get_multiplayer_authority(), world.get_spawnpoint_for_team(team))
+	go_to_spawn.rpc_id(get_multiplayer_authority())
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -1480,7 +1480,7 @@ func go_to_spawn() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func set_spawns(new_spawns : Array) -> void:
 	# if this go to spawn request is not from the server or run locally, return
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
 	spawns = new_spawns
 
