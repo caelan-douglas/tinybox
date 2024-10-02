@@ -1032,7 +1032,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 		
 		# check if standing on something
-		if ground_detect.has_overlapping_bodies():
+		if ground_detect.has_overlapping_bodies() && _state != DEAD:
 			for body in ground_detect.get_overlapping_bodies():
 				if standing_on_object != body:
 					standing_on_object_last_pos = body.global_position
@@ -1047,7 +1047,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		
 	# handle teleport requests
 	if teleport_requested:
-		standing_on_object = null
+		set_standing_on_object_rpc.rpc("null")
 		teleport_requested = false
 		var t := state.transform
 		t.origin = teleport_pos
