@@ -217,7 +217,6 @@ func enable_player() -> int:
 	Global.get_world().add_child(player, true)
 	# grace period for invincibility
 	await get_tree().create_timer(0.15).timeout
-	player.change_state(RigidPlayer.IDLE)
 	await get_tree().process_frame
 	return 0
 
