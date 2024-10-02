@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4pf0l65ojqcw"]
+[gd_scene load_steps=9 format=3 uid="uid://c4pf0l65ojqcw"]
 
 [ext_resource type="Script" path="res://src/ui/SettingsMenu.gd" id="1_khwxh"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_qejdm"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_r1aba"]
 [ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="4_mugbr"]
 [ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="5_es3m5"]
+[ext_resource type="PackedScene" uid="uid://cu74wlwpkwcad" path="res://data/scene/ui/WorldManagement.tscn" id="6_vs8tx"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_exarq"]
 color = Color(1, 1, 1, 0.356863)
@@ -138,6 +139,23 @@ script = ExtResource("4_mugbr")
 bus = 3
 
 [node name="Spacer9" type="Control" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel3" type="Label" parent="."]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_constants/line_spacing = -40
+theme_override_fonts/font = ExtResource("2_stvgj")
+theme_override_font_sizes/font_size = 64
+text = "World
+Manager"
+script = ExtResource("3_r1aba")
+
+[node name="WorldManagement" parent="." instance=ExtResource("6_vs8tx")]
+layout_mode = 2
+
+[node name="Spacer10" type="Control" parent="."]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 

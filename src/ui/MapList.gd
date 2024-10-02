@@ -16,6 +16,8 @@
 
 extends OptionButton
 
+@export var include_built_in : bool = true
+
 func add_map(file_name : String) -> void:
 	var image : Variant = Global.get_tbw_image(file_name)
 	if image != null:
@@ -28,12 +30,18 @@ func add_map(file_name : String) -> void:
 		add_icon_item(tex, file_name)
 
 func _ready() -> void:
+	refresh()
+	connect("pressed", refresh)
+
+func refresh() -> void:
+	clear()
 	# add built-in worlds
-	add_separator("Built-in worlds")
-	add_map("Frozen Field")
-	add_map("Castle")
-	add_map("Steep Swamp")
-	add_map("Grasslands")
+	if include_built_in:
+		add_separator("Built-in worlds")
+		add_map("Frozen Field")
+		add_map("Castle")
+		add_map("Steep Swamp")
+		add_map("Grasslands")
 	# add user worlds to list
 	add_separator("Your worlds")
 	for map : String in Global.get_user_tbw_names():

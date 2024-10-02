@@ -72,6 +72,7 @@ func swing() -> void:
 		is_hitting = false
 
 func on_hit(body : Node3D) -> void:
+	if !self.is_inside_tree(): return
 	# reduce player health on hit
 	if body is RigidPlayer:
 		# only take damage if not tripped

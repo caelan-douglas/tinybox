@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cu74wlwpkwcad"]
+
+[ext_resource type="Script" path="res://src/ui/WorldManagement.gd" id="1_jm3wn"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="2_heam5"]
+[ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="3_0y2v3"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="4_067pb"]
+
+[node name="WorldManagement" type="PanelContainer"]
+offset_right = 263.0
+offset_bottom = 178.0
+script = ExtResource("1_jm3wn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="DynamicLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Select a world to manage."
+script = ExtResource("2_heam5")
+
+[node name="MapSelection" parent="VBoxContainer" instance=ExtResource("3_0y2v3")]
+custom_minimum_size = Vector2(2.08165e-12, 78)
+layout_mode = 2
+text_overrun_behavior = 4
+include_built_in = false
+
+[node name="Delete" type="Button" parent="VBoxContainer"]
+self_modulate = Color(1, 0.282353, 0.282353, 1)
+layout_mode = 2
+text = "Move to trash"
+script = ExtResource("4_067pb")
