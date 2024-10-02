@@ -170,6 +170,7 @@
         "brick_motor_seat": "Motor seat",
         "brick_button": "Button",
         "brick_lamp": "Lamp",
+        "brick_wedge": "Wedge",
 
         "tooltips": {
             "obj_pine_tree": "Regular size pine tree.",
@@ -206,7 +207,8 @@
             "brick_cylinder": "Regular motor.\nWill spin freely around where the motor (grey circle) is attached;\nanything attached to the other side will be anchored to the motor and follow its rotation.\nWhen making vehicles, attach the motor side to the body of the vehicle (think of\nthe motor like an axle.)\nYou can use Flip Motor Side in the property editor to change the attachment side.",
             "brick_motor_seat": "Controls any motors that are attached to this brick group when a player sits down in it.",
             "brick_button": "Button with customizable parameters.",
-            "brick_lamp": "Lamp that provides light. Will shut off if displaced."
+            "brick_lamp": "Lamp that provides light. Will shut off if displaced.",
+            "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees."
         }
     },
     "songs": {

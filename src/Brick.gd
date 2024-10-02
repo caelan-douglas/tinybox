@@ -72,7 +72,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @export var _material : BrickMaterial = BrickMaterial.WOODEN
 @onready var mesh_material : Material = Material.new()
 @export var _brick_spawnable_type : String = "brick"
-@export var _colour : Color = "#ffffff"
+@export var _colour : Color = "#9a9a9a"
 
 @onready var wood_material : Material = preload("res://data/materials/wood.tres")
 @onready var wood_charred_material : Material = preload("res://data/materials/wood_charred.tres")
@@ -201,6 +201,15 @@ func set_property(property : StringName, value : Variant) -> void:
 						collider.shape.size = half_scale
 						joint_collider.shape.size = half_scale + Vector3(0.3, 0.3, 0.3)
 						cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
+					# Scaling mesh
+					resize_mesh()
+				# wedge
+				elif collider.shape is ConvexPolygonShape3D:
+					for i : int in range(collider.shape.points.size()):
+						collider.shape.points[i] *= scale_new
+						print(scale_new)
+					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
+					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
 					resize_mesh()
 				elif collider.shape is CylinderShape3D:
