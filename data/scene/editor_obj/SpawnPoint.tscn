@@ -71,8 +71,8 @@ shadow_mesh = SubResource("ArrayMesh_eqyg4")
 cull_mode = 2
 albedo_color = Color(0.863601, 0.282704, 0.399715, 1)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_5i2os"]
-radius = 0.8
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_inaa5"]
+radius = 0.6
 
 [node name="SpawnPoint" type="StaticBody3D"]
 script = ExtResource("1_nt8o8")
@@ -95,8 +95,8 @@ collision_layer = 256
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("SphereShape3D_5i2os")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_inaa5")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_0oqkx")
