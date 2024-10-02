@@ -638,8 +638,7 @@ func check_joints(specific_body : Node3D = null) -> void:
 			if body.immovable:
 				has_static_neighbour = true
 			found_brick = true
-			# Don't let things join to wheels (can prevent rotation)
-			if body.joinable:
+			if body.joinable && self.joinable:
 				# don't let normal bricks join to motor bricks; 
 				if body is MotorBrick && !(self is MotorBrick):
 					# in case motor brick did not check for this brick
