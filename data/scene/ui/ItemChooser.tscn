@@ -1,27 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://ku7hponrkcnk"]
+[gd_scene load_steps=2 format=3 uid="uid://ku7hponrkcnk"]
 
-[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_k718s"]
 [ext_resource type="Script" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
 
-[node name="ItemChooser" type="PanelContainer"]
+[node name="ItemChooser" type="TabContainer"]
 offset_right = 356.0
 offset_bottom = 202.0
+tab_alignment = 1
 script = ExtResource("1_p7u7r")
 
-[node name="Menu" type="VBoxContainer" parent="."]
+[node name="Bricks & Objects" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="Menu"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
-theme_override_constants/outline_size = 6
-text = "Select Brick or Object"
-script = ExtResource("1_k718s")
-json_text = "ui/editor/item_chooser_title"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Menu"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Bricks & Objects"]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -29,6 +21,24 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="Menu/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="Bricks & Objects/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Saved Stuff" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(308, 2.08165e-12)
+layout_mode = 2
+alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Saved Stuff"]
+custom_minimum_size = Vector2(2.08165e-12, 150)
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ItemList" type="VBoxContainer" parent="Saved Stuff/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3

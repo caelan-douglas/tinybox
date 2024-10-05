@@ -108,7 +108,6 @@ func _ready() -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
 	if display_version.contains("pre"):
-		await get_tree().create_timer(1).timeout
 		UIHandler.show_alert("You are using a pre-release build, you may encounter unexpected issues when joining incompatible servers", 8, false, UIHandler.alert_colour_error)
 
 # quit request

@@ -16,6 +16,11 @@
 
 extends Tool
 
+enum States {
+	BUILD,
+	SELECT
+}
+
 @onready var editor : Editor
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var select_area : Area3D = $SelectArea
@@ -25,8 +30,11 @@ var hovered_item_properties : Dictionary = {}
 var can_select_object : bool = true
 var selected_item : PackedScene = null
 var selected_item_name_internal : String = ""
+var selected_building_path : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
+
+var _state : States = States.BUILD
 
 @onready var property_editor : PropertyEditor
 @onready var item_chooser : ItemChooser
@@ -193,38 +201,49 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 	if item_name_display != "":
 		ui_partner.text = str(item_name_display)
 	item_offset = Vector3.ZERO
-	if !SpawnableObjects.objects.has(item_name_internal):
-		return
-	selected_item = SpawnableObjects.objects[item_name_internal]
-	selected_item_name_internal = item_name_internal
-	# show editable properties
-	var inst : Node3D = selected_item.instantiate()
-	# relist properties while instance has script
-	if relist_properties:
-		selected_item_properties = property_editor.list_object_properties(inst, self)
-	# set preview motor side
-	if inst is MotorBrick:
-		if selected_item_properties.has("flip_motor_side"):
-			inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
-	# disable script
-	inst.set_script(null)
-	# offset objects down a bit, also update preview
-	if item_name_internal.begins_with("obj"):
-		if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
-			item_offset = Vector3(0, -0.5, 0)
-	for c : Node in preview_node.get_children():
-		c.queue_free()
-	# add instance as preview
-	preview_node.add_child(inst)
-	inst.position += item_offset
-	inst.rotation = last_rotation
-	active_preview_instance = inst
-	property_editor.editing_hovered = false
-	var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(inst) as Array)
-	if new_mesh != null:
-		# apply construction material
-		for i in range(new_mesh.get_surface_override_material_count()):
-			new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
+	
+	# if this is a building
+	if item_name_internal.split(";").size() > 1:
+		selected_item_name_internal = item_name_internal
+		selected_item = PackedScene.new()
+		# in case preview is being regenerated
+		if item_name_display != "":
+			selected_building_path = item_name_display
+	else:
+		# not a building
+		
+		if !SpawnableObjects.objects.has(item_name_internal):
+			return
+		selected_item = SpawnableObjects.objects[item_name_internal]
+		selected_item_name_internal = item_name_internal
+		# show editable properties
+		var inst : Node3D = selected_item.instantiate()
+		# relist properties while instance has script
+		if relist_properties:
+			selected_item_properties = property_editor.list_object_properties(inst, self)
+		# set preview motor side
+		if inst is MotorBrick:
+			if selected_item_properties.has("flip_motor_side"):
+				inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
+		# disable script
+		inst.set_script(null)
+		# offset objects down a bit, also update preview
+		if item_name_internal.begins_with("obj"):
+			if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
+				item_offset = Vector3(0, -0.5, 0)
+		for c : Node in preview_node.get_children():
+			c.queue_free()
+		# add instance as preview
+		preview_node.add_child(inst)
+		inst.position += item_offset
+		inst.rotation = last_rotation
+		active_preview_instance = inst
+		property_editor.editing_hovered = false
+		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(inst) as Array)
+		if new_mesh != null:
+			# apply construction material
+			for i in range(new_mesh.get_surface_override_material_count()):
+				new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
 
 func find_item_mesh(array : Array) -> MeshInstance3D:
 	for c : Variant in array:
@@ -363,34 +382,54 @@ func _physics_process(delta : float) -> void:
 					
 					# place if valid
 					if valid && selected_item != null:
-						var inst : Node3D = selected_item.instantiate()
-						Global.get_world().add_child(inst, true)
-						inst.global_position = drag_start_point.lerp(drag_end_point, 0.5)
-						inst.global_rotation = active_preview_instance.global_rotation
-						if selected_item_is_draggable():
-							if selected_item_properties.has("brick_scale"):
-								if selected_item_name_internal == "brick_cylinder":
-									# x is forward on wheels
-									selected_item_properties["brick_scale"] = Vector3(active_preview_instance.scale.z, active_preview_instance.scale.y, active_preview_instance.scale.x)
+						
+						# --- is a building ---
+						if selected_item_name_internal.split(";").size() > 1:
+							var load_file := FileAccess.open(str("user://building/", selected_building_path), FileAccess.READ)
+							print("BuildTool: Tried to load building ", str("user://building/", selected_building_path))
+							if load_file != null:
+								# load building
+								var lines := []
+								while not load_file.eof_reached():
+									var line := load_file.get_line()
+									lines.append(str(line))
+								if multiplayer.is_server():
+									Global.get_world()._server_load_building(lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
 								else:
-									selected_item_properties["brick_scale"] = active_preview_instance.scale
+									Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+							else:
+								UIHandler.show_alert("Building not found or corrupt!", 8, false, UIHandler.alert_colour_error)
+						
+						# --- object or brick ---
 						else:
-							# match global transform for objects
-							inst.global_transform = active_preview_instance.global_transform
-						
-						if inst is TBWObject || inst is Brick:
-							for property : String in selected_item_properties.keys():
-								inst.set_property(property, selected_item_properties[property])
-						
-						# player specific
-						if inst is Brick && type == ToolType.PLAYER:
-							var line : String = ""
-							var type : String = inst._brick_spawnable_type
-							line += str(type)
-							for p : String in inst.properties_to_save:
-								line += str(" ; ", p , ":", inst.get(p))
-							Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, [line], Vector3.ZERO, true)
-							inst.queue_free()
+							var inst : Node3D = selected_item.instantiate()
+							Global.get_world().add_child(inst, true)
+							inst.global_position = drag_start_point.lerp(drag_end_point, 0.5)
+							inst.global_rotation = active_preview_instance.global_rotation
+							if selected_item_is_draggable():
+								if selected_item_properties.has("brick_scale"):
+									if selected_item_name_internal == "brick_cylinder":
+										# x is forward on wheels
+										selected_item_properties["brick_scale"] = Vector3(active_preview_instance.scale.z, active_preview_instance.scale.y, active_preview_instance.scale.x)
+									else:
+										selected_item_properties["brick_scale"] = active_preview_instance.scale
+							else:
+								# match global transform for objects
+								inst.global_transform = active_preview_instance.global_transform
+							
+							if inst is TBWObject || inst is Brick:
+								for property : String in selected_item_properties.keys():
+									inst.set_property(property, selected_item_properties[property])
+							
+							# player specific
+							if inst is Brick && type == ToolType.PLAYER:
+								var line : String = ""
+								var type : String = inst._brick_spawnable_type
+								line += str(type)
+								for p : String in inst.properties_to_save:
+									line += str(" ; ", p , ":", inst.get(p))
+								Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, [line], Vector3.ZERO, true)
+								inst.queue_free()
 					# if trying to spawn a brick in an invalid location
 					# and not dragging
 					elif !$InvalidAudio.playing && Input.is_action_just_released("click"):
