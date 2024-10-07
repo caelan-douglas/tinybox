@@ -31,7 +31,6 @@ func add_map(file_name : String) -> void:
 
 func _ready() -> void:
 	refresh()
-	connect("pressed", refresh)
 
 func refresh() -> void:
 	clear()

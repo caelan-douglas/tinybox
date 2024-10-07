@@ -109,6 +109,7 @@ func _ready() -> void:
 				if scrdir:
 					var image := Image.load_from_file(str("user://building_scr/", file_name.split(".")[0], ".jpg"))
 					if image != null:
+						# 16:9
 						image.resize(113, 64);
 						var texture := ImageTexture.create_from_image(image)
 						item_button.icon = texture
@@ -119,9 +120,11 @@ func _on_item_chosen(internal_name : String, display_name : String) -> void:
 
 func show_item_chooser() -> void:
 	list.visible = true
+	saved_list.visible = true
 
 func hide_item_chooser() -> void:
 	list.visible = false
+	saved_list.visible = false
 
 func get_item_chooser_visible() -> bool:
 	return list.visible

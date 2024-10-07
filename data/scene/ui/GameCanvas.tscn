@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_kk2ox"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
-[ext_resource type="Texture2D" uid="uid://cupojq83o6gc3" path="res://data/textures/ui/question.png" id="9_8oa63"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
@@ -708,7 +707,7 @@ text = "[color=yellow]Build Tool Controls[/color]
 [ Alt/Option ]		Descend
 [ Space ]			Ascend
 [ Ctrl/Cmd + Scroll ]	Zoom camera
-"
+[ C ]				Toggle select/build"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -734,111 +733,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 editor_mode = false
-
-[node name="BuildToolOLD" type="VBoxContainer" parent="ToolOverlay"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -466.5
-offset_top = -92.0
-offset_right = -235.5
-offset_bottom = 92.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Controls" type="Label" parent="ToolOverlay/BuildToolOLD"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
-theme_override_constants/outline_size = 6
-text = "..."
-vertical_alignment = 1
-script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/build_tool"
-
-[node name="Spacer2" type="Control" parent="ToolOverlay/BuildToolOLD"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-
-[node name="ModeLabel" type="Label" parent="ToolOverlay/BuildToolOLD"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
-theme_override_constants/outline_size = 6
-text = "MODE: BUILD
-"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="Spacer" type="Control" parent="ToolOverlay/BuildToolOLD"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-
-[node name="LoadModeBg" type="ColorRect" parent="ToolOverlay/BuildToolOLD"]
-visible = false
-custom_minimum_size = Vector2(0, 231)
-layout_mode = 2
-color = Color(0, 0, 0, 1)
-
-[node name="LoadModeImg" type="TextureRect" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-custom_minimum_size = Vector2(224, 224)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -112.5
-offset_top = -112.5
-offset_right = 112.5
-offset_bottom = 112.5
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_8oa63")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="LoadModeName" type="Label" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -115.5
-offset_top = -52.0
-offset_right = 115.5
-offset_bottom = -36.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(1, 0.694118, 0.364706, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.490196)
-theme_override_constants/outline_size = 6
-text = "[ C ] for next save"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LoadModeDelTip" type="Label" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -115.5
-offset_top = -31.0
-offset_right = 115.5
-offset_bottom = -15.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.991782, 0.0535578, 7.70092e-07, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 0.490196)
-theme_override_constants/outline_size = 6
-text = "[ Del ] to delete"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="PaintbrushTool" type="VBoxContainer" parent="ToolOverlay"]
 visible = false

@@ -172,6 +172,7 @@ text = "[color=yellow]Editor Controls[/color]
 [ Alt/Option ]		Descend
 [ Space ]			Ascend
 [ Ctrl/Cmd + Scroll ]	Zoom camera
+[ C ]				Toggle select/build
 "
 fit_content = true
 scroll_active = false
