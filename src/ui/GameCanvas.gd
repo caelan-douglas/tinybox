@@ -19,7 +19,7 @@ extends CanvasLayer
 @onready var pause_tip_text : Label = $PauseMenu/ScrollContainer/Pause/Tip
 @onready var client_request_world_timer : Timer = $RequestWorldTimer
 
-const NUM_OF_TIPS = 15
+const NUM_OF_TIPS = 16
 
 func _ready() -> void:
 	$PauseMenu/ScrollContainer/Pause/ChangeMap.connect("pressed", _send_on_change_map_pressed)

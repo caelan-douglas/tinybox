@@ -19,7 +19,7 @@ class_name Main
 
 signal upnp_completed(error : Object)
 
-const Player : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
+const PLAYER : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
 const CAMERA : PackedScene = preload("res://data/scene/camera/Camera.tscn")
 const PORT = 30815
 const SERVER_INFO_PORT = 30816
@@ -417,7 +417,7 @@ func add_peer(peer_id : int) -> void:
 		else:
 			# if joining as a player
 			if !Global.server_mode():
-				var player : RigidPlayer = Player.instantiate()
+				var player : RigidPlayer = PLAYER.instantiate()
 				player.name = str(peer_id)
 				$World.add_child(player, true)
 			Global.connected_to_server = true
@@ -458,7 +458,7 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 				return
 	# nothing wrong
 	response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 0)
-	var player : RigidPlayer = Player.instantiate()
+	var player : RigidPlayer = PLAYER.instantiate()
 	player.name = str(multiplayer.get_remote_sender_id())
 	$World.add_child(player)
 
