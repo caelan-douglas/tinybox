@@ -249,7 +249,7 @@ libraries = {
 }
 
 [node name="Chat" parent="." instance=ExtResource("3_en7sr")]
-modulate = Color(1, 1, 1, 0.368627)
+modulate = Color(1, 1, 1, 0.831373)
 
 [node name="ToolList" type="HBoxContainer" parent="."]
 offset_left = 8.0
