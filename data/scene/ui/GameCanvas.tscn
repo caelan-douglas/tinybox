@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://govhpsie1w5w" path="res://data/scene/ui/PlayerList.tscn" id="4_yb62t"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="5_6v07r"]
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_kk2ox"]
+[ext_resource type="Script" path="res://src/ui/ServerHealth.gd" id="5_pxnxr"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
@@ -248,25 +249,72 @@ libraries = {
 "": SubResource("AnimationLibrary_ie8a5")
 }
 
-[node name="Chat" parent="." instance=ExtResource("3_en7sr")]
-modulate = Color(1, 1, 1, 0.831373)
-
-[node name="ToolList" type="HBoxContainer" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 251.0
-offset_bottom = 8.0
-theme_override_constants/separation = 2
-
-[node name="VersionLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
+[node name="StatusBackground" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 40)
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -88.0
-offset_top = 8.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.152941)
+
+[node name="StatusBar" type="HBoxContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -416.0
+offset_top = -30.0
 offset_right = -8.0
-offset_bottom = 24.0
+offset_bottom = -8.0
 grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="RealTime" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "00:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_0plxg")
+
+[node name="Ping" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Ping: ?"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("2_884d4")
+
+[node name="ServerHealth" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Server health: 100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("5_pxnxr")
+
+[node name="Frames" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Fps: 100"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_x8dyc")
+
+[node name="VersionLabel" type="Label" parent="StatusBar"]
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
 theme_override_constants/outline_size = 4
@@ -277,62 +325,23 @@ script = ExtResource("6_qxctu")
 json_text = "Tinybox %version%"
 raw_format = true
 
-[node name="RealTime" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -478.0
-offset_top = 8.0
-offset_right = -386.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "00:00"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("10_0plxg")
+[node name="Chat" parent="." instance=ExtResource("3_en7sr")]
+modulate = Color(1, 1, 1, 0.831373)
+offset_top = -449.0
+offset_bottom = -2.0
 
-[node name="Ping" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -385.0
+[node name="ToolList" type="HBoxContainer" parent="."]
+offset_left = 8.0
 offset_top = 8.0
-offset_right = -293.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "Ping: ?"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("2_884d4")
-
-[node name="Frames" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -279.0
-offset_top = 8.0
-offset_right = -199.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "Fps: 100"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("10_x8dyc")
+offset_right = 251.0
+offset_bottom = 8.0
+theme_override_constants/separation = 2
 
 [node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
 offset_left = -224.0
-offset_top = 73.0
+offset_top = 49.0
 offset_right = -8.0
-offset_bottom = -13.0
+offset_bottom = -37.0
 show_team_names = false
 
 [node name="HealthBar" type="ProgressBar" parent="."]
@@ -341,9 +350,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -224.0
-offset_top = 32.0
+offset_top = 8.0
 offset_right = -8.0
-offset_bottom = 66.0
+offset_bottom = 42.0
 grow_horizontal = 0
 pivot_offset = Vector2(216, 0)
 max_value = 20.0

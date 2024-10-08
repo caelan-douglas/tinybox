@@ -67,7 +67,6 @@ func _process(delta : float) -> void:
 				hide_pause_menu()
 			else:
 				show_pause_menu()
-		
 
 func _send_on_change_map_pressed() -> void:
 	var map_selector : OptionButton = $PauseMenu/ScrollContainer/Pause/MapSelection
