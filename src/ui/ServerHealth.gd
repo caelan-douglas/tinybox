@@ -25,9 +25,10 @@ func _ready() -> void:
 	update_timer.start()
 
 func _on_update() -> void:
-	check_server_health.rpc_id(1, multiplayer.get_unique_id())
+	if Global.connected_to_server:
+		check_server_health.rpc_id(1, multiplayer.get_unique_id())
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func check_server_health(id_from : int) -> void:
 	# 45 is the target physics fps
 	var health : int = ((Engine.get_frames_per_second() / 45) * 100)

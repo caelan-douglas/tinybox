@@ -27,11 +27,12 @@ func _ready() -> void:
 	update_timer.start()
 
 func _on_ping_update() -> void:
-	# get the current time in ms at ping send.
-	ms_sent = Time.get_ticks_msec()
-	# server should not ping itself
-	if multiplayer.get_unique_id() != 1:
-		ping_server.rpc_id(1, multiplayer.get_unique_id())
+	if Global.connected_to_server:
+		# get the current time in ms at ping send.
+		ms_sent = Time.get_ticks_msec()
+		# server should not ping itself
+		if multiplayer.get_unique_id() != 1:
+			ping_server.rpc_id(1, multiplayer.get_unique_id())
 
 @rpc("any_peer", "call_remote", "reliable")
 func ping_server(id_from : int) -> void:

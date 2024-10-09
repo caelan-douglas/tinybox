@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=40 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -84,6 +84,17 @@ _data = {
 "RESET": SubResource("Animation_plri5"),
 "respawn": SubResource("Animation_ljbh7")
 }
+
+[sub_resource type="Gradient" id="Gradient_3y50s"]
+offsets = PackedFloat32Array(0, 0.470833)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.247059)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1rsd"]
+gradient = SubResource("Gradient_3y50s")
+width = 1
+height = 40
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
 
 [sub_resource type="Animation" id="Animation_vnqrf"]
 length = 0.001
@@ -249,15 +260,16 @@ libraries = {
 "": SubResource("AnimationLibrary_ie8a5")
 }
 
-[node name="StatusBackground" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(2.08165e-12, 40)
+[node name="StatusBackground" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 25)
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0, 0, 0, 0.152941)
+texture = SubResource("GradientTexture2D_a1rsd")
 
 [node name="StatusBar" type="HBoxContainer" parent="."]
 anchors_preset = 3
