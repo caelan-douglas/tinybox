@@ -285,7 +285,6 @@ func selected_item_is_scalable() -> bool:
 
 func change_state(new : States) -> void:
 	_state = new
-	UIHandler.show_toast(str("changed state to ", new));
 	match (_state):
 		States.BUILD:
 			# show item picker list

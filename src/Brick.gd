@@ -207,7 +207,6 @@ func set_property(property : StringName, value : Variant) -> void:
 				elif collider.shape is ConvexPolygonShape3D:
 					for i : int in range(collider.shape.points.size()):
 						collider.shape.points[i] *= scale_new
-						print(scale_new)
 					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
 					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
