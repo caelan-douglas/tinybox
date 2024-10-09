@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=40 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -9,9 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://govhpsie1w5w" path="res://data/scene/ui/PlayerList.tscn" id="4_yb62t"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="5_6v07r"]
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_kk2ox"]
+[ext_resource type="Script" path="res://src/ui/ServerHealth.gd" id="5_pxnxr"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
-[ext_resource type="Texture2D" uid="uid://cupojq83o6gc3" path="res://data/textures/ui/question.png" id="9_8oa63"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
@@ -84,6 +84,17 @@ _data = {
 "RESET": SubResource("Animation_plri5"),
 "respawn": SubResource("Animation_ljbh7")
 }
+
+[sub_resource type="Gradient" id="Gradient_3y50s"]
+offsets = PackedFloat32Array(0, 0.470833)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.247059)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a1rsd"]
+gradient = SubResource("Gradient_3y50s")
+width = 1
+height = 40
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
 
 [sub_resource type="Animation" id="Animation_vnqrf"]
 length = 0.001
@@ -249,25 +260,73 @@ libraries = {
 "": SubResource("AnimationLibrary_ie8a5")
 }
 
-[node name="Chat" parent="." instance=ExtResource("3_en7sr")]
-modulate = Color(1, 1, 1, 0.368627)
-
-[node name="ToolList" type="HBoxContainer" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 251.0
-offset_bottom = 8.0
-theme_override_constants/separation = 2
-
-[node name="VersionLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
+[node name="StatusBackground" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 25)
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -88.0
-offset_top = 8.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("GradientTexture2D_a1rsd")
+
+[node name="StatusBar" type="HBoxContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -416.0
+offset_top = -30.0
 offset_right = -8.0
-offset_bottom = 24.0
+offset_bottom = -8.0
 grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="RealTime" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "00:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_0plxg")
+
+[node name="Ping" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Ping: ?"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("2_884d4")
+
+[node name="ServerHealth" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Server health: 100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("5_pxnxr")
+
+[node name="Frames" type="Label" parent="StatusBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "Fps: 100"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("10_x8dyc")
+
+[node name="VersionLabel" type="Label" parent="StatusBar"]
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
 theme_override_constants/outline_size = 4
@@ -278,62 +337,23 @@ script = ExtResource("6_qxctu")
 json_text = "Tinybox %version%"
 raw_format = true
 
-[node name="RealTime" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -478.0
-offset_top = 8.0
-offset_right = -386.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "00:00"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("10_0plxg")
+[node name="Chat" parent="." instance=ExtResource("3_en7sr")]
+modulate = Color(1, 1, 1, 0.831373)
+offset_top = -449.0
+offset_bottom = -2.0
 
-[node name="Ping" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -385.0
+[node name="ToolList" type="HBoxContainer" parent="."]
+offset_left = 8.0
 offset_top = 8.0
-offset_right = -293.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "Ping: ?"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("2_884d4")
-
-[node name="Frames" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -279.0
-offset_top = 8.0
-offset_right = -199.0
-offset_bottom = 24.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
-theme_override_constants/outline_size = 4
-text = "Fps: 100"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = ExtResource("10_x8dyc")
+offset_right = 251.0
+offset_bottom = 8.0
+theme_override_constants/separation = 2
 
 [node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
 offset_left = -224.0
-offset_top = 73.0
+offset_top = 49.0
 offset_right = -8.0
-offset_bottom = -13.0
+offset_bottom = -37.0
 show_team_names = false
 
 [node name="HealthBar" type="ProgressBar" parent="."]
@@ -342,9 +362,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -224.0
-offset_top = 32.0
+offset_top = 8.0
 offset_right = -8.0
-offset_bottom = 66.0
+offset_bottom = 42.0
 grow_horizontal = 0
 pivot_offset = Vector2(216, 0)
 max_value = 20.0
@@ -708,7 +728,7 @@ text = "[color=yellow]Build Tool Controls[/color]
 [ Alt/Option ]		Descend
 [ Space ]			Ascend
 [ Ctrl/Cmd + Scroll ]	Zoom camera
-"
+[ C ]				Toggle select/build"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -734,111 +754,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 editor_mode = false
-
-[node name="BuildToolOLD" type="VBoxContainer" parent="ToolOverlay"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -466.5
-offset_top = -92.0
-offset_right = -235.5
-offset_bottom = 92.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Controls" type="Label" parent="ToolOverlay/BuildToolOLD"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
-theme_override_constants/outline_size = 6
-text = "..."
-vertical_alignment = 1
-script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/build_tool"
-
-[node name="Spacer2" type="Control" parent="ToolOverlay/BuildToolOLD"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-
-[node name="ModeLabel" type="Label" parent="ToolOverlay/BuildToolOLD"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
-theme_override_constants/outline_size = 6
-text = "MODE: BUILD
-"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="Spacer" type="Control" parent="ToolOverlay/BuildToolOLD"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-
-[node name="LoadModeBg" type="ColorRect" parent="ToolOverlay/BuildToolOLD"]
-visible = false
-custom_minimum_size = Vector2(0, 231)
-layout_mode = 2
-color = Color(0, 0, 0, 1)
-
-[node name="LoadModeImg" type="TextureRect" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-custom_minimum_size = Vector2(224, 224)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -112.5
-offset_top = -112.5
-offset_right = 112.5
-offset_bottom = 112.5
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_8oa63")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="LoadModeName" type="Label" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -115.5
-offset_top = -52.0
-offset_right = 115.5
-offset_bottom = -36.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(1, 0.694118, 0.364706, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.490196)
-theme_override_constants/outline_size = 6
-text = "[ C ] for next save"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LoadModeDelTip" type="Label" parent="ToolOverlay/BuildToolOLD/LoadModeBg"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -115.5
-offset_top = -31.0
-offset_right = 115.5
-offset_bottom = -15.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.991782, 0.0535578, 7.70092e-07, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 0.490196)
-theme_override_constants/outline_size = 6
-text = "[ Del ] to delete"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="PaintbrushTool" type="VBoxContainer" parent="ToolOverlay"]
 visible = false

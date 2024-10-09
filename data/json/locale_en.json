@@ -123,7 +123,8 @@
         "11": "Tip: You can jump to cancel a slide or roll.",
         "12": "Tip: Plastic is light and non-flammable. However, it falls apart very easily when hit by bouncyballs or other bricks.",
         "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles.",
-        "14": "Tip: Larger bricks are better at destroying other objects."
+        "14": "Tip: Larger bricks are better at destroying other objects.",
+        "15": "Tip: Building a long bar out of 1x1 bricks will make it bendier than if it were made out of one long brick."
     },
     "common": {
         "yes": "Yes",
@@ -170,6 +171,7 @@
         "brick_motor_seat": "Motor seat",
         "brick_button": "Button",
         "brick_lamp": "Lamp",
+        "brick_wedge": "Wedge",
 
         "tooltips": {
             "obj_pine_tree": "Regular size pine tree.",
@@ -181,7 +183,7 @@
             "obj_lifter": "Pushes players upwards into the air.",
             "obj_picnic_table": "Huge-sized picnic table.",
             "obj_sign": "Sign with customizable text.",
-            "obj_spawnpoint": "Provides a spawnpoint for a given team that will be chosen at random.",
+            "obj_spawnpoint": "Provides a spawnpoint for a given team that will be chosen at random.\nWith the 'checkpoint' flag enabled, any player that steps on this (regardless of team)\nwill have their only spawnpoint set to this one.",
             "obj_dining_table": "Huge-sized dining table.",
             "obj_camera_preview_point": "A preview point for the camera. This is used during intro sequences in gamemodes.",
             "obj_track_straight": "Straight racetrack piece.",
@@ -206,7 +208,8 @@
             "brick_cylinder": "Regular motor.\nWill spin freely around where the motor (grey circle) is attached;\nanything attached to the other side will be anchored to the motor and follow its rotation.\nWhen making vehicles, attach the motor side to the body of the vehicle (think of\nthe motor like an axle.)\nYou can use Flip Motor Side in the property editor to change the attachment side.",
             "brick_motor_seat": "Controls any motors that are attached to this brick group when a player sits down in it.",
             "brick_button": "Button with customizable parameters.",
-            "brick_lamp": "Lamp that provides light. Will shut off if displaced."
+            "brick_lamp": "Lamp that provides light. Will shut off if displaced.",
+            "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees."
         }
     },
     "songs": {
@@ -214,7 +217,8 @@
         "mus2": "Afloat",
         "mus3": "Autumn",
         "mus4": "New Heights",
-        "mus5": "Final Day"
+        "mus5": "Final Day",
+        "mus6": "Lullaby"
     },
     "enum": {
         "event_type": {

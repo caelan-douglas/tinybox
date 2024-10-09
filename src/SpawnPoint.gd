@@ -18,10 +18,15 @@ extends TBWObject
 class_name SpawnPoint
 
 @onready var area : Area3D = $Area3D
+@onready var audio : AudioStreamPlayer = $AudioStreamPlayer
 var team_name : String = "Default"
+var checkpoint : bool = false
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "scale", "team_name"]
+	properties_to_save = ["global_position", "global_rotation", "scale", "team_name", "checkpoint"]
+
+func _ready() -> void:
+	area.connect("body_entered", _on_area_entered)
 
 # set colour of spawns to team colour
 func set_property(property : StringName, value : Variant) -> void:
@@ -45,8 +50,34 @@ func set_property(property : StringName, value : Variant) -> void:
 			if add_material_to_cache:
 				Global.add_to_graphics_cache(mat)
 			$MeshInstance3D.set_surface_override_material(0, mat)
+		"checkpoint":
+			if value as bool == true:
+				$Flag.visible = true
+			else:
+				$Flag.visible = false
+			checkpoint = value
 		_:
 			set(property, value)
+
+# set player checkpoint as server
+func _on_area_entered(body : PhysicsBody3D) -> void:
+	if !multiplayer.is_server(): return
+	
+	# if the player enters a checkpoint, set its spawn there
+	if body is RigidPlayer && checkpoint:
+		var player : RigidPlayer = body as RigidPlayer
+		if player != null:
+			player.set_spawns.rpc([global_position])
+			print(str(player.display_name, " got checkpoint."))
+			UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), "Checkpoint spawn set!", 3, false, UIHandler.alert_colour_gold)
+			play_sound.rpc_id(player.get_multiplayer_authority())
+
+@rpc("any_peer", "call_local", "reliable")
+func play_sound() -> void:
+	# if this go to spawn request is not from the server or run locally, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	audio.play()
 
 func occupied() -> bool:
 	for b in area.get_overlapping_bodies():

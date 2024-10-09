@@ -17,15 +17,17 @@
 extends Node
 
 func _ready() -> void:
-	var file := FileAccess.open(str("res://data/json/server_list.json"), FileAccess.READ)
-	var json := JSON.new()
-	var parse_result : Variant = json.parse_string(file.get_as_text())
-	
-	# failed
-	if parse_result == null:
+	var req : HTTPRequest = HTTPRequest.new()
+	add_child(req)
+	req.request_completed.connect(_on_request_completed)
+	# Points to the repo server list.
+	req.request("https://raw.githubusercontent.com/caelan-douglas/tinybox/main/.export_exclude/server_list.json")
+
+func _on_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
+	var json : Variant = JSON.parse_string(body.get_string_from_utf8())
+	if json == null:
 		return
-	
-	for dict : Dictionary in parse_result:
+	for dict : Dictionary in json:
 		add_server(dict)
 
 @onready var server_list_entry : PackedScene = preload("res://data/scene/ui/ServerListEntry.tscn")

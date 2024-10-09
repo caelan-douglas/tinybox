@@ -72,7 +72,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @export var _material : BrickMaterial = BrickMaterial.WOODEN
 @onready var mesh_material : Material = Material.new()
 @export var _brick_spawnable_type : String = "brick"
-@export var _colour : Color = "#ffffff"
+@export var _colour : Color = "#9a9a9a"
 
 @onready var wood_material : Material = preload("res://data/materials/wood.tres")
 @onready var wood_charred_material : Material = preload("res://data/materials/wood_charred.tres")
@@ -201,6 +201,14 @@ func set_property(property : StringName, value : Variant) -> void:
 						collider.shape.size = half_scale
 						joint_collider.shape.size = half_scale + Vector3(0.3, 0.3, 0.3)
 						cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
+					# Scaling mesh
+					resize_mesh()
+				# wedge
+				elif collider.shape is ConvexPolygonShape3D:
+					for i : int in range(collider.shape.points.size()):
+						collider.shape.points[i] *= scale_new
+					joint_collider.shape.size = scale_new + Vector3(0.3, 0.3, 0.3)
+					cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
 					# Scaling mesh
 					resize_mesh()
 				elif collider.shape is CylinderShape3D:
@@ -501,28 +509,6 @@ func _ready() -> void:
 	# set material to spawn material
 	set_material(_material)
 
-# Spawns this brick, usually from a tool. Called reliably so that a client
-# does not miss their brick being spawned.
-# Arg 1: The authority this brick belongs to.
-# Arg 2: The material to set this brick to on spawn.
-@rpc("call_local", "reliable")
-func spawn(auth : int, material : BrickMaterial = BrickMaterial.WOODEN) -> void:
-	set_multiplayer_authority(auth)
-	# set material to spawn material
-	set_material(material)
-	# what player this brick came from
-	player_from = world.get_node(str(auth))
-	tool_from = player_from.get_node("Tools/BuildTool")
-	change_state.rpc(States.BUILD)
-	# default material colours
-	if _material == BrickMaterial.RUBBER:
-		set_colour("#000000")
-	elif _material == BrickMaterial.WOODEN:
-		set_colour("#cca597")
-	if is_multiplayer_authority():
-		# notify other clients of this brick's properties
-		sync_properties.rpc(properties_as_dict())
-
 # Spawns this brick in Editor mode.
 @rpc("call_local", "reliable")
 func spawn_editor(pos : Vector3, material : BrickMaterial = BrickMaterial.WOODEN) -> void:
@@ -638,111 +624,6 @@ func despawn(check_world_groups : bool = true) -> void:
 		brick_groups.check_world_groups()
 	queue_free()
 
-# Build mode, used when a brick is spawning from a tool.
-func build() -> void:
-	# only execute on yourself
-	if !is_multiplayer_authority(): return
-	
-	# if the the tool no longer exists (ex. player left while holding it)
-	if tool_from == null:
-		# remove this for all peers
-		despawn.rpc()
-		return
-	# if the user deselects the tool whilst this brick is being built, switches type,
-	# or enters delete mode
-	if (!tool_from.get_tool_active()) || tool_from.switched_type == true || tool_from._mode == BuildTool.BuildMode.DELETE:
-		# the tool is no longer building
-		tool_from.set_building(false)
-		tool_from.switched_type = false
-		# remove this for all peers
-		despawn.rpc()
-	# get mouse position in 3d space
-	var m_3d : Dictionary = {}
-	if camera is Camera:
-		m_3d = camera.get_mouse_pos_3d()
-	var m_pos_3d := Vector3()
-	# we must check if the mouse's ray is not hitting anything
-	if m_3d.has("position"):
-		# if it is hitting something
-		m_pos_3d = m_3d["position"] as Vector3
-	# snap to grid
-	var snapped_pos := (m_pos_3d / CELL_SIZE).round() * CELL_SIZE
-	# match floor on y
-	snapped_pos.y = m_pos_3d.y + (CELL_SIZE * 0.5)
-	# snap in relation to other bricks if mouse is over brick
-	if m_3d.has("collider"):
-		if m_3d["collider"].owner is Brick:
-			var m_3d_normal : Vector3 = m_3d["normal"] as Vector3
-			# we can get normal from the camera's mouse collision ray
-			snapped_pos = (m_3d["collider"].owner.global_position + m_3d_normal).round()
-	# offset Y pos from tool's offset value
-	if tool_from != null:
-		snapped_pos.y += tool_from.build_offset_y
-	# don't lerp from spawn
-	if !just_spawned_from_tool:
-		# smooth movement between grid positions
-		global_position = lerp(global_position, snapped_pos, 0.7)
-	else: global_position = snapped_pos
-	just_spawned_from_tool = false
-	
-	# placement range
-	var too_far : bool = global_position.distance_to(player_from.global_position as Vector3) > sandbox_placement_range
-	var valid := true
-	if intersect_d != null:
-		for body in intersect_d.get_overlapping_bodies():
-			if body.owner is Water:
-				valid = true
-			else:
-				valid = false
-				break
-	else:
-		valid = false
-	if too_far:
-		valid = false
-	
-	# Rotate brick
-	if Input.is_action_just_pressed("debug_action_r"):
-		tool_from.brick_rotation_y += 90
-		rotate_y(deg_to_rad(90))
-	# Rotate brick but differently
-	if Input.is_action_just_pressed("debug_action_f"):
-		tool_from.brick_rotation_x += 90
-		rotate_x(deg_to_rad(90))
-	
-	# if there is an active minigame
-	var cannot_afford := false
-	var too_close_to_target := false
-	# minigame costs
-	var cost := 2
-	
-	# if the type of brick is changing, this may be null during the change
-	if model_mesh != null:
-		if !valid:
-			model_mesh.set_surface_override_material(0, invalid_material)
-		else: 
-			model_mesh.set_surface_override_material(0, get_mesh_material())
-			set_colour(_colour)
-	
-	# place brick
-	if Input.is_action_just_pressed("click"):
-		if valid:
-			# in case the brick was still moving to new spot, snap to grid
-			global_position = snapped_pos
-			change_state.rpc(States.PLACED)
-			# If this brick was built by a tool, inform the tool it can
-			# now build again.
-			if tool_from != null:
-				tool_from.set_building(false)
-		else:
-			if too_far:
-				UIHandler.show_alert("Can't place! Too far away", 2, false, UIHandler.alert_colour_error)
-			elif cannot_afford:
-				UIHandler.show_alert("Your team can't afford this brick!", 2, false, UIHandler.alert_colour_error)
-			elif too_close_to_target:
-				UIHandler.show_alert("Can't place! Too close to team target!", 2, false, UIHandler.alert_colour_error)
-			else:
-				UIHandler.show_alert("Can't place! Intersection", 2, false, UIHandler.alert_colour_error)
-
 # Check joint for any nearby bricks to join to.
 # Arg 1: A set group to put this brick into. Used mainly for spawning prebuilt buildings.
 func check_joints(specific_body : Node3D = null) -> void:
@@ -765,8 +646,7 @@ func check_joints(specific_body : Node3D = null) -> void:
 			if body.immovable:
 				has_static_neighbour = true
 			found_brick = true
-			# Don't let things join to wheels (can prevent rotation)
-			if body.joinable:
+			if body.joinable && self.joinable:
 				# don't let normal bricks join to motor bricks; 
 				if body is MotorBrick && !(self is MotorBrick):
 					# in case motor brick did not check for this brick
@@ -874,8 +754,6 @@ func _physics_process(delta : float) -> void:
 		smoothing.set_process(true)
 	
 	match _state:
-		States.BUILD:
-			build()
 		_:
 			# despawn brick if it falls out of map
 			if global_position.y < -50:

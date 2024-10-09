@@ -456,9 +456,11 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						# if we were last hit by someone's projectile
 						if last_hit && last_hit_by_id != -1:
 							var last_hit_executing_player : RigidPlayer = Global.get_world().get_node_or_null(str(last_hit_by_id))
-							var last_hit_executing_player_name : String = last_hit_executing_player.display_name
-							# self
-							if last_hit_by_id == get_multiplayer_authority():
+							var last_hit_executing_player_name : String = ""
+							if last_hit_executing_player != null:
+								last_hit_executing_player_name = last_hit_executing_player.display_name
+							# self, or if player who hit self has left
+							if last_hit_by_id == get_multiplayer_authority() || last_hit_executing_player == null:
 								death_message = str(display_name, " hit themselves away!")
 							# don't increment kills for friendly fire
 							elif _is_friendly_fire(last_hit_executing_player):
@@ -568,8 +570,12 @@ func get_health() -> int:
 
 @rpc("any_peer", "call_local", "reliable")
 func set_last_hit_by_id(who : int) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
 	last_hit_by_id = who
-	last_hit = true
+	if last_hit_by_id == -1:
+		last_hit = false
+	else: last_hit = true
 
 # Update this player's team with a new team.
 @rpc("any_peer", "call_local", "reliable")
@@ -589,7 +595,8 @@ func update_team(new : String) -> void:
 		$Smoothing/NameLabel.modulate = Color("#fff")
 	else:
 		$Smoothing/NameLabel.modulate = world.get_current_map().get_teams().get_team(new).colour
-	Global.update_player_list_information() 
+	Global.update_player_list_information()
+	set_spawns(world.get_spawnpoint_for_team(team))
 
 # Update this player's name with a new name.
 @rpc("call_local")
@@ -634,6 +641,8 @@ func _ready() -> void:
 		get_tool_inventory().reset()
 		if multiplayer.is_server():
 			protect_spawn(3.5, false)
+			# update spawns when world is loaded as server
+			Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 		# only execute on yourself
 		if !is_multiplayer_authority():
 			#freeze = true
@@ -646,12 +655,19 @@ func _ready() -> void:
 		update_info(get_multiplayer_authority())
 		# update peers with appearance
 		change_appearance()
+		# set default spawns
+		set_spawns(world.get_spawnpoint_for_team(team))
 		go_to_spawn()
 		# hide your own name label
 		$Smoothing/NameLabel.visible = false
 		# in case we were not present on client when server sent
 		# protect spawn call
 		_receive_server_protect_spawn(3.5, false)
+
+func _on_tbw_loaded() -> void:
+	# set default spawns
+	set_spawns.rpc_id(get_multiplayer_authority(), world.get_spawnpoint_for_team(team))
+	go_to_spawn.rpc_id(get_multiplayer_authority())
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -1016,7 +1032,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 		
 		# check if standing on something
-		if ground_detect.has_overlapping_bodies():
+		if ground_detect.has_overlapping_bodies() && _state != DEAD:
 			for body in ground_detect.get_overlapping_bodies():
 				if standing_on_object != body:
 					standing_on_object_last_pos = body.global_position
@@ -1031,7 +1047,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		
 	# handle teleport requests
 	if teleport_requested:
-		standing_on_object = null
+		set_standing_on_object_rpc.rpc("null")
 		teleport_requested = false
 		var t := state.transform
 		t.origin = teleport_pos
@@ -1204,7 +1220,7 @@ func enter_state() -> void:
 	
 	# last hit handling: states that should not change the fact you were 'last hit'
 	if _state != AIR && _state != HIGH_JUMP && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
-		last_hit = false
+		set_last_hit_by_id.rpc(-1)
 	
 	# reset from states that change the character's model rotation
 	if _state != SWIMMING && _state != SWIMMING_IDLE && _state != SWIMMING_DASH && _state != SLIDE && _state != SLIDE_BACK:
@@ -1456,9 +1472,17 @@ func go_to_spawn() -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
 	# find team spawns
-	spawns = world.get_spawnpoint_for_team(team)
-	var spawn : Vector3 = spawns[randi() % spawns.size()]
+	var spawn : Vector3 = Vector3.ZERO
+	spawn = spawns[randi() % spawns.size()]
 	teleport(spawn)
+
+# run on client from server
+@rpc("any_peer", "call_local", "reliable")
+func set_spawns(new_spawns : Array) -> void:
+	# if this go to spawn request is not from the server or run locally, return
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	spawns = new_spawns
 
 # replicates states on non-authority clients, mainly for animation reasons
 @rpc("call_remote", "reliable")

@@ -19,7 +19,7 @@ class_name Main
 
 signal upnp_completed(error : Object)
 
-const Player : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
+const PLAYER : PackedScene = preload("res://data/scene/character/RigidPlayer.tscn")
 const CAMERA : PackedScene = preload("res://data/scene/camera/Camera.tscn")
 const PORT = 30815
 const SERVER_INFO_PORT = 30816
@@ -44,13 +44,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 11011
+var server_version : int = 11021
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 11.1"
+var display_version := "beta 11.2"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
@@ -108,7 +108,6 @@ func _ready() -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	
 	if display_version.contains("pre"):
-		await get_tree().create_timer(1).timeout
 		UIHandler.show_alert("You are using a pre-release build, you may encounter unexpected issues when joining incompatible servers", 8, false, UIHandler.alert_colour_error)
 
 # quit request
@@ -405,6 +404,8 @@ func kick_client(reason : String) -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func announce_player_joined(p_display_name : String) -> void:
 	UIHandler.show_alert(str(p_display_name, " joined."), 4, false, UIHandler.alert_colour_player)
+	if multiplayer.is_server():
+		print("Server info: IP of player ", p_display_name, ": ", enet_peer.get_peer(multiplayer.get_remote_sender_id()).get_remote_address())
 
 # Adds a player to the server with id & name.
 func add_peer(peer_id : int) -> void:
@@ -416,7 +417,7 @@ func add_peer(peer_id : int) -> void:
 		else:
 			# if joining as a player
 			if !Global.server_mode():
-				var player : RigidPlayer = Player.instantiate()
+				var player : RigidPlayer = PLAYER.instantiate()
 				player.name = str(peer_id)
 				$World.add_child(player, true)
 			Global.connected_to_server = true
@@ -447,7 +448,8 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 		return
 	for i in Global.get_world().get_children():
 		if i is RigidPlayer:
-			if i.display_name == client_name:
+			# case insensitive
+			if i.display_name.to_lower() == client_name.to_lower():
 				# kick new client with code 2 (name taken)
 				response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 2)
 				# wait for a bit before kicking to get message to client sent
@@ -456,7 +458,7 @@ func info_response_from_client(id : int, client_server_version : int, client_nam
 				return
 	# nothing wrong
 	response_from_server_joined.rpc_id(multiplayer.get_remote_sender_id(), 0)
-	var player : RigidPlayer = Player.instantiate()
+	var player : RigidPlayer = PLAYER.instantiate()
 	player.name = str(multiplayer.get_remote_sender_id())
 	$World.add_child(player)
 

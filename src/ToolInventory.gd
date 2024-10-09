@@ -97,6 +97,22 @@ func arrange_tools() -> void:
 			if t is ShootTool:
 				t.update_ammo_display()
 
+func _ready() -> void:
+	# for tool list UI scaling
+	# avoid overlapping other elements
+	resize_ui()
+	get_tree().root.size_changed.connect(resize_ui)
+
+func resize_ui() -> void:
+	# scale ui if too big
+	var tool_list : Control = get_tree().current_scene.get_node("GameCanvas/ToolList")
+	# 220 is size of player list
+	if tool_list.size.x > (get_viewport().get_window().size.x - 240):
+		var nscale := (get_viewport().get_window().size.x - 240) / tool_list.size.x 
+		tool_list.scale = Vector2(nscale, nscale)
+	else:
+		tool_list.scale = Vector2(1, 1)
+
 func _arrange_tools_by_ui_shortcut(a : Tool, b : Tool) -> bool:
 	if a.ui_shortcut < b.ui_shortcut:
 		return true

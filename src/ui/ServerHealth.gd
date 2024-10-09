@@ -17,32 +17,29 @@
 extends Label
 
 @onready var update_timer : Timer = Timer.new()
-var ms_sent : float = 0
-var ms_recieved : float = 0
 
 func _ready() -> void:
 	add_child(update_timer)
 	update_timer.wait_time = 2
-	update_timer.connect("timeout", _on_ping_update)
+	update_timer.connect("timeout", _on_update)
 	update_timer.start()
 
-func _on_ping_update() -> void:
+func _on_update() -> void:
 	if Global.connected_to_server:
-		# get the current time in ms at ping send.
-		ms_sent = Time.get_ticks_msec()
-		# server should not ping itself
-		if multiplayer.get_unique_id() != 1:
-			ping_server.rpc_id(1, multiplayer.get_unique_id())
+		check_server_health.rpc_id(1, multiplayer.get_unique_id())
+
+@rpc("any_peer", "call_local", "reliable")
+func check_server_health(id_from : int) -> void:
+	# 45 is the target physics fps
+	var health : int = ((Engine.get_frames_per_second() / 45) * 100)
+	health = clamp(health, 0, 100)
+	# send the client response back.
+	send_server_health.rpc_id(id_from, health)
 
 @rpc("any_peer", "call_remote", "reliable")
-func ping_server(id_from : int) -> void:
-	# send the client a ping back.
-	recieve_ping.rpc_id(id_from)
-
-@rpc("any_peer", "call_remote", "reliable")
-func recieve_ping() -> void:
-	# as client, get ping.
-	ms_recieved = Time.get_ticks_msec()
-	text = str("Ping: ", ms_recieved - ms_sent)
-	ms_recieved = 0
-	ms_sent = 0
+func send_server_health(health : int) -> void:
+	text = str("Server health: ", health, "%")
+	if health < 71:
+		modulate = Color.RED.lerp(Color("#ffffff"), float((health * (100/70)) * 0.01))
+	else:
+		modulate = Color("#ffffff")

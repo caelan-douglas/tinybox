@@ -44,25 +44,24 @@ func _on_line_edit_focus_entered() -> void:
 	if tween:
 		tween.kill()
 		tween = null
-	modulate = Color("#ffffffff")
 	# show old entries
 	for entry in chat_list.get_children():
 		entry.visible = true
-	await get_tree().process_frame
+	await get_tree().create_timer(0.1).timeout
 	# scroll to bottom
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _on_line_edit_focus_exited() -> void:
 	if Global.get_player() != null:
 		Global.get_player().locked = false
-	# transparency effect for ingame
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	tween = get_tree().create_tween().set_parallel(true)
-	tween.tween_property(self, "modulate", Color("#ffffff5e"), 2)
 	# hide old entries
 	for entry in chat_list.get_children():
 		if Time.get_ticks_msec() - entry.age > entry.hide_age:
 			entry.visible = false
+	await get_tree().create_timer(0.1).timeout
+	# scroll to bottom
+	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _unhandled_input(event : InputEvent) -> void:
 	if (event is InputEventKey):
@@ -74,6 +73,9 @@ func _on_chat_submitted(text : String) -> void:
 	line_edit.text = ""
 	# only release focus ingame
 	line_edit.release_focus()
+	await get_tree().create_timer(0.1).timeout
+	# scroll to bottom
+	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _on_command_response(sender : String, text : String, timeout : int = 10) -> void:
 	var entry : Control = chat_entry.instantiate()

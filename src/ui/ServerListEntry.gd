@@ -42,6 +42,11 @@ func update_server_status_label(mode : bool, player_count : String = "0", server
 	if mode == false:
 		status_label.text = "Offline"
 		status_label.self_modulate = Color("#ff2360")
+	elif server_version != (get_tree().current_scene as Main).display_version:
+		status_label.text = str("Online, incompatible ver.")
+		status_label.self_modulate = Color("#e8aa00")
+		var join_button : Button = $HBox/Join
+		join_button.disabled = true
 	else:
 		if player_count == "1":
 			status_label.text = str("Online - ", player_count, " player")

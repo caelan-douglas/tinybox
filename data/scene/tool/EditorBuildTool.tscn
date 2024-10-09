@@ -57,7 +57,7 @@ type = 1
 
 [node name="InvalidAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_g2inq")
-volume_db = -12.0
+volume_db = -3.0
 bus = &"SFX"
 
 [node name="SelectArea" type="Area3D" parent="."]

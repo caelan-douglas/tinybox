@@ -49,6 +49,7 @@ func _on_add_fake_health() -> void:
 
 func _on_add_fake_kills() -> void:
 	Global.get_player().increment_kills()
+	Global.play_kill_sound()
 		
 func _physics_process(delta : float) -> void:
 	if visible:

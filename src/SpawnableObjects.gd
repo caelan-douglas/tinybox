@@ -65,6 +65,7 @@ extends Node
 	"brick_motor_seat": load("res://data/scene/brick/MotorSeat.tscn"),
 	"brick_button": load("res://data/scene/brick/ButtonBrick.tscn"),
 	"brick_lamp": load("res://data/scene/brick/LampBrick.tscn"),
+	"brick_wedge": load("res://data/scene/brick/WedgeBrick.tscn"),
 	# GAMEMODE OBJ
 	"gamemode": load("res://data/scene/editor_obj/Gamemode.tscn")
 }

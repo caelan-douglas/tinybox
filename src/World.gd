@@ -30,7 +30,7 @@ func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 	var spawns : Array[Vector3] = []
 	for obj in get_children():
 		if obj is SpawnPoint:
-			if obj.team_name == team_name:
+			if obj.team_name == team_name && !obj.checkpoint:
 				spawns.append(obj.global_position)
 	if spawns == []:
 		# default spawn
@@ -255,7 +255,7 @@ func _world_accepted(name_from : String, world_name : String, lines : Array) -> 
 	show_tbw_switch_alert(name_from, world_name)
 
 func show_tbw_switch_alert(name_from : String, world_name : String) -> void:
-	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\ncreated by ", name_from), 7)
+	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\nrequested by ", name_from), 7)
 
 @rpc("authority", "call_local", "reliable")
 func set_loading_canvas_visiblity(mode : bool) -> void:
