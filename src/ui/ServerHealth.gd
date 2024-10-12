@@ -25,7 +25,7 @@ func _ready() -> void:
 	update_timer.start()
 
 func _on_update() -> void:
-	if Global.connected_to_server:
+	if Global.connected_to_server && !Global.server_mode():
 		check_server_health.rpc_id(1, multiplayer.get_unique_id())
 
 @rpc("any_peer", "call_local", "reliable")
@@ -36,7 +36,7 @@ func check_server_health(id_from : int) -> void:
 	# send the client response back.
 	send_server_health.rpc_id(id_from, health)
 
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func send_server_health(health : int) -> void:
 	text = str("Server health: ", health, "%")
 	if health < 71:

@@ -88,12 +88,20 @@ func _ready() -> void:
 				add_to_set("Objects", item_button)
 	
 	# create sets for saved items, in tab 1, 1 column wide
+	create_set("Built-in stuff", 1, 1)
 	create_set("Your saved stuff", 1, 1)
 	# load the users buildings into the set
+	populate_saved_stuff(true)
+	populate_saved_stuff(false)
+
+func populate_saved_stuff(internal : bool = false) -> void:
 	var load_dir : DirAccess = null
 	var file_name := "null"
 	if !load_dir:
-		load_dir = DirAccess.open("user://building")
+		if internal:
+			load_dir = DirAccess.open("res://data/building")
+		else:
+			load_dir = DirAccess.open("user://building")
 	if load_dir:
 		load_dir.list_dir_begin()
 		while file_name != "":
@@ -103,17 +111,26 @@ func _ready() -> void:
 				# node name is internal name
 				item_button.name = str("building;", file_name)
 				item_button.text = file_name
-				item_button.tooltip_text = "This is one of your saved buildings."
+				if internal:
+					item_button.tooltip_text = "This is from the built-in set."
+				else:
+					item_button.tooltip_text = "This is one of your saved buildings."
+				var user_img_dir := "res://data/building_scr"
+				if !internal:
+					user_img_dir = "user://building_scr"
 				# load image
-				var scrdir := DirAccess.open("user://building_scr")
+				var scrdir := DirAccess.open(user_img_dir)
 				if scrdir:
-					var image := Image.load_from_file(str("user://building_scr/", file_name.split(".")[0], ".jpg"))
+					var image := Image.load_from_file(str(user_img_dir, "/", file_name.split(".")[0], ".jpg"))
 					if image != null:
 						# 16:9
 						image.resize(113, 64);
 						var texture := ImageTexture.create_from_image(image)
 						item_button.icon = texture
-				add_to_set("Your saved stuff", item_button, 1)
+				if internal:
+					add_to_set("Built-in stuff", item_button, 1)
+				else:
+					add_to_set("Your saved stuff", item_button, 1)
 
 func _on_item_chosen(internal_name : String, display_name : String) -> void:
 	emit_signal("item_picked", internal_name, display_name)

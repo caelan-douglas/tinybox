@@ -440,7 +440,10 @@ func _physics_process(delta : float) -> void:
 							# --- is a building ---
 							if selected_item_name_internal.split(";").size() > 1:
 								var load_file := FileAccess.open(str("user://building/", selected_building_path), FileAccess.READ)
-								print("BuildTool: Tried to load building ", str("user://building/", selected_building_path))
+								# if does not exist in user dir, try the built-in dir
+								if load_file == null:
+									load_file = FileAccess.open(str("res://data/building/", selected_building_path), FileAccess.READ)
+								
 								if load_file != null:
 									# load building
 									var lines := []

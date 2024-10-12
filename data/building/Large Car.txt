@@ -1,0 +1,38 @@
+brick ; global_position:(61, 52, -32) ; global_rotation:(0, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 53, -33) ; global_rotation:(1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 52, -31) ; global_rotation:(0, 1.570796, 0.000001) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_cylinder ; global_position:(60, 52, -34) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 3, 3) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true ; flip_motor_side:false
+brick_half ; global_position:(60, 52, -33) ; global_rotation:(0, 1.570796, 0.000001) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 52, -32) ; global_rotation:(0, 1.570796, 0.000001) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 53, -31) ; global_rotation:(-1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 53, -32) ; global_rotation:(1.570796, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 54, -32) ; global_rotation:(0, 1.570797, -0.000002) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 54, -31) ; global_rotation:(-1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(60, 54, -33) ; global_rotation:(0, 1.570796, 1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(58, 54, -32) ; global_rotation:(0, 1.570797, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 54, -32) ; global_rotation:(0, 1.570797, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 53, -31) ; global_rotation:(0.000001, 1.570796, -1.570795) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 53, -33) ; global_rotation:(-0.000001, 1.570796, 1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 52, -32) ; global_rotation:(0, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 52, -33) ; global_rotation:(0, 1.570796, 1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(59, 52, -31) ; global_rotation:(0, 1.570796, -1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_cylinder ; global_position:(60, 52, -30) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 3, 3) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true ; flip_motor_side:true
+brick_half ; global_position:(58, 53, -31) ; global_rotation:(0.000001, 1.570796, -1.570798) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(58, 52, -32) ; global_rotation:(0, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_motor_seat ; global_position:(58, 53, -32) ; global_rotation:(0.000001, 1.570797, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.5451, 0, 0, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(58, 53, -33) ; global_rotation:(-0.000001, 1.570796, 1.570797) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(57, 52, -32) ; global_rotation:(0, 3.141592, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(57, 52, -33) ; global_rotation:(0, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(57, 52, -31) ; global_rotation:(0, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(58, 52, -31) ; global_rotation:(0, 1.570796, -1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(58, 52, -33) ; global_rotation:(0, 1.570796, 1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick ; global_position:(56, 52, -32) ; global_rotation:(0, -1.570796, -1.570796) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(56, 52, -31) ; global_rotation:(-1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(56, 53, -31) ; global_rotation:(-1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(55, 53, -32) ; global_rotation:(-0.000001, 3.141592, 1.570795) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(56, 52, -33) ; global_rotation:(1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(56, 53, -33) ; global_rotation:(1.570796, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_half ; global_position:(56, 53, -32) ; global_rotation:(0, 1.570797, -0.000002) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
+brick_cylinder ; global_position:(56, 52, -30) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 3, 3) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true ; flip_motor_side:true
+brick_cylinder ; global_position:(56, 52, -34) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 3, 3) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true ; flip_motor_side:false
+brick_half ; global_position:(55, 52, -32) ; global_rotation:(1.570796, 1.570796, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(0.8627, 0.0784, 0.2353, 1) ; immovable:false ; joinable:true
