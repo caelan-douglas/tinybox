@@ -31,14 +31,10 @@ enum EventType {
 	END_ACTIVE_GAMEMODE
 }
 
-# Event types that cannot be used in the editor gamemode creation tool.
-const EDITOR_DISALLOWED_TYPES : Array[String] = ["SHOW_WORLD_PREVIEW"]
-# Event types that can only be run as event events of watchers.
-const WATCHER_END_ONLY_TYPES : Array[String] = ["SHOW_PODIUM", "END_ACTIVE_GAMEMODE"]
 var event_type : EventType = EventType.TELEPORT_ALL_PLAYERS
 var args : Array = []
 
-func _init(e_event_type : EventType, e_args : Array) -> void:
+func _init(e_event_type : EventType, e_args : Array = []) -> void:
 	event_type = e_event_type
 	args = e_args
 
@@ -75,7 +71,7 @@ func start() -> int:
 				player.update_kills.rpc(0)
 				player.update_deaths.rpc(0)
 		EventType.END_ACTIVE_GAMEMODE:
-			for gamemode : Gamemode in Global.get_world().get_tbw_gamemodes():
+			for gamemode : Gamemode in Global.get_world().gamemode_list:
 				if gamemode.running:
 					gamemode.end([])
 		EventType.SHOW_PODIUM:

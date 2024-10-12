@@ -21,8 +21,9 @@ signal map_deleted
 signal tbw_loaded
 
 var rigidplayer_list : Array = []
-@onready var loading_canvas : CanvasLayer = get_tree().current_scene.get_node("LoadingCanvas")
+var gamemode_list : Array[Gamemode] = []
 
+@onready var loading_canvas : CanvasLayer = get_tree().current_scene.get_node("LoadingCanvas")
 var tbw_loading : bool = false
 
 
@@ -169,10 +170,6 @@ func save_tbw(world_name : String) -> bool:
 	for obj in get_children():
 		if obj != null:
 			if obj is TBWObject:
-				if obj is Gamemode:
-					# don't save built-in gamemodes
-					if obj.built_in:
-						continue
 				var type : String = obj.tbw_object_type
 				file.store_string(str(type))
 				for p : String in obj.properties_to_save:
@@ -347,55 +344,31 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	if reset_camera_and_player:
 		reset_player_cameras.rpc()
 		reset_player_positions.rpc()
+	# add basic gamemodes
+	_clear_gamemodes()
+	# add ffa
+	add_gamemode(GamemodeDeathmatch.new(true))
+	# add tdm
+	add_gamemode(GamemodeDeathmatch.new(false))
+	# announce we are done loading
 	tbw_loading = false
 	await get_tree().process_frame
-	load_default_gamemodes()
-	# announce we are done loading
 	emit_signal("tbw_loaded")
 
-# Loads default Gamemodes into the world, which are defined here.
-func load_default_gamemodes() -> void:
-	## Deathmatch
-	var dm : Gamemode = SpawnableObjects.objects["gamemode"].instantiate()
-	dm.create("Deathmatch",\
-	# Start events
-	[\
-	["CLEAR_LEADERBOARD", []],\
-	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
-	],\
-	# Watchers
-	[\
-	["PLAYER_PROPERTY_EXCEEDS", ["kills", 15], [\
-		["CLEAR_LEADERBOARD", []],\
-		["SHOW_PODIUM", []],\
-		["MOVE_ALL_PLAYERS_TO_SPAWN", []],\
-		["END_ACTIVE_GAMEMODE", []]\
-		]
-	]]\
-	)
-	dm.built_in = true
-	Global.get_world().add_child(dm, true)
-	
-	## Team Deathmatch
-	var tdm : Gamemode = SpawnableObjects.objects["gamemode"].instantiate()
-	tdm.create("Team Deathmatch",\
-	# Start events
-	[\
-	["CLEAR_LEADERBOARD", []],\
-	["BALANCE_TEAMS", []],\
-	["MOVE_ALL_PLAYERS_TO_SPAWN", []]\
-	],\
-	# Watchers
-	[\
-	["TEAM_KILLS_EXCEEDS", [15], [\
-		["CLEAR_LEADERBOARD", []],\
-		["MOVE_ALL_PLAYERS_TO_SPAWN", []],\
-		["END_ACTIVE_GAMEMODE", []]\
-		]
-	]]\
-	)
-	tdm.built_in = true
-	Global.get_world().add_child(tdm, true)
+func add_gamemode(new : Gamemode) -> void:
+	if !gamemode_list.has(new):
+		gamemode_list.append(new)
+		# add gm to world so it can access world properties
+		add_child(new)
+
+func remove_gamemode(what : Gamemode) -> void:
+	if gamemode_list.has(what):
+		gamemode_list.erase(what)
+
+func _clear_gamemodes() -> void:
+	for gm : Gamemode in gamemode_list:
+		gamemode_list.erase(gm)
+		gm.queue_free()
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:
@@ -570,11 +543,3 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 var first_brick_pos : Vector3 = Vector3.ZERO
 func _pos_sort(a : Node3D, b : Node3D) -> bool:
 	return a.global_position.distance_to(first_brick_pos) < b.global_position.distance_to(first_brick_pos)
-
-# Returns the loaded world's gamemodes.
-func get_tbw_gamemodes() -> Array[Gamemode]:
-	var arr : Array[Gamemode] = []
-	for child in get_children():
-		if child is Gamemode:
-			arr.append(child as Gamemode)
-	return arr

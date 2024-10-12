@@ -100,14 +100,6 @@ var last_hit := false
 var kills : int = 0
 var deaths : int = 0
 
-# property access for gamemodes
-var height : float:
-	get:
-		return global_position.y
-var velocity : float:
-	get:
-		return round(linear_velocity.length())
-
 @onready var fire : Fire = $Fire
 @onready var bubble_particles : GPUParticles3D = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
 @onready var character_model : Node3D = $Smoothing/character_model

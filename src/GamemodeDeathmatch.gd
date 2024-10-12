@@ -14,18 +14,48 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Node
-class_name Gamemode
-signal gamemode_ended
+extends Gamemode
+class_name GamemodeDeathmatch
 
-var gamemode_name := "Gamemode"
-var start_events : Array[Event] = []
-var watchers : Array[Watcher] = []
-var running := false
+# whether or not it's a team deathmatch
+var ffa : bool = false
+
+# constructor for deathmatch
+func _init(_ffa : bool) -> void:
+	ffa = _ffa
+	create()
+
+func create() -> void:
+	if ffa:
+		gamemode_name = "Deathmatch"
+		start_events = [
+			Event.new(Event.EventType.CLEAR_LEADERBOARD),
+			Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN),
+		]
+		watchers = [
+			Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
+				["kills", 15],\
+				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+		]
+	# tdm
+	else:
+		gamemode_name = "Team Deathmatch"
+		start_events = [
+			Event.new(Event.EventType.CLEAR_LEADERBOARD),
+			Event.new(Event.EventType.BALANCE_TEAMS),
+			Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN),
+		]
+		watchers = [
+			Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS,\
+				["kills", 20],\
+				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+		]
 
 func start() -> void:
 	# only server starts games
 	if !multiplayer.is_server(): return
+	# in case we are restarting, re-create the events and watchers
+	create()
 	running = true
 	print("Started gamemode: ", gamemode_name)
 	# clear player inventories

@@ -20,8 +20,6 @@ extends AnimatedList
 @onready var button : Button = $StartGamemode
 @onready var end_button : Button = $EndGamemode
 
-var gamemode_list : Array[Gamemode] = []
-
 func _ready() -> void:
 	super()
 	# automatically populate gamemode list based on map
@@ -33,10 +31,13 @@ func _ready() -> void:
 
 func _on_start_gamemode_pressed() -> void:
 	var idx : int = selector.selected
-	gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
-	button.disabled = true
-	end_button.disabled = false
-	gamemode_list[idx].start()
+	if Global.get_world().gamemode_list.size() > 0:
+		Global.get_world().gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
+		button.disabled = true
+		end_button.disabled = false
+		Global.get_world().gamemode_list[idx].start()
+	else:
+		UIHandler.show_alert("There are no gamemodes to start!")
 
 func _on_end_gamemode_pressed() -> void:
 	if !multiplayer.is_server(): return
@@ -44,19 +45,18 @@ func _on_end_gamemode_pressed() -> void:
 	e.start()
 
 func _on_gamemode_ended(idx : int) -> void:
-	if gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
-		gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
+	if Global.get_world().gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
+		Global.get_world().gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
 	if multiplayer.is_server():
 		button.disabled = false
 	end_button.disabled = true
 
 func _on_tbw_loaded() -> void:
-	gamemode_list = []
+	# delete old list
+	selector.clear()
+	# add new gamemodes
+	for gm : Gamemode in Global.get_world().gamemode_list:
+		selector.add_item(gm.gamemode_name)
 	# clear button disabled state
 	if multiplayer.is_server():
 		button.disabled = false
-	# clear old selector list
-	selector.clear()
-	for gamemode : Gamemode in Global.get_world().get_tbw_gamemodes():
-		gamemode_list.append(gamemode)
-		selector.add_item(gamemode.gamemode_name)

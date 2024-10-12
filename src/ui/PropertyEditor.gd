@@ -78,7 +78,6 @@ var colour_picker : PackedScene = preload("res://data/scene/ui/ColourPicker.tscn
 var adjuster : PackedScene = preload("res://data/scene/ui/Adjuster.tscn")
 var text_editor : PackedScene = preload("res://data/scene/ui/TextEditor.tscn")
 var option_picker : PackedScene = preload("res://data/scene/ui/OptionPicker.tscn")
-var event_list_editor : PackedScene = preload("res://data/scene/ui/EventListEditor.tscn")
 # Adds a corresponding UI entry for a given property.
 func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 	selected_item_properties[prop_name] = prop
@@ -128,10 +127,6 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 				team_option_picker.connect("item_selected", _update_object_property_team.bind(prop_name))
 			# get index of team in world and set the selected option to that
 			team_option_picker.selected = Global.get_world().get_current_map().get_teams().get_team_index(str(prop))
-		elif prop_name == "events":
-			entry = event_list_editor.instantiate()
-			event_list_editor.load_from_prop(JSON.parse_string(str(prop)) as Array)
-			event_list_editor.connect("event_list_updated", update_object_property.bind(prop_name))
 		else:
 			entry = text_editor.instantiate()
 			var text : TextEdit = entry.get_node("TextEdit")
