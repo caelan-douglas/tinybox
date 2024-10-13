@@ -39,6 +39,8 @@ func refresh() -> void:
 		add_separator("Built-in worlds")
 		add_map("Frozen Field")
 		add_map("Castle")
+		add_map("Quarry Quarrel")
+		add_map("Slapdash Central")
 		add_map("Steep Swamp")
 		add_map("Grasslands")
 	# add user worlds to list

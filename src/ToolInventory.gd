@@ -116,6 +116,7 @@ func _ready() -> void:
 	get_tree().root.size_changed.connect(resize_ui)
 
 func resize_ui() -> void:
+	await get_tree().process_frame
 	# scale ui if too big
 	var tool_list : Control = get_tree().current_scene.get_node("GameCanvas/ToolList")
 	# 220 is size of player list
@@ -155,6 +156,7 @@ func add_tool(tool : ToolIdx) -> Tool:
 	if !get_tools().has(tool):
 		var ntool : Tool = all_tools[tool].instantiate()
 		add_child(ntool, true)
+		resize_ui()
 		return ntool
 	return
 
@@ -175,6 +177,7 @@ func delete_all_tools() -> void:
 		return
 	for t : Tool in get_tools():
 		t.delete()
+	resize_ui()
 
 @rpc("any_peer", "call_local", "reliable")
 func give_all_tools() -> void:
@@ -191,6 +194,7 @@ func give_all_tools() -> void:
 					ntool.restore_ammo = true
 					ntool.max_ammo_restore = 999
 					ntool.ammo = 999
+	resize_ui()
 
 # resets inventory to default (sandbox) state (all tools in def. states)
 @rpc("any_peer", "call_local", "reliable")

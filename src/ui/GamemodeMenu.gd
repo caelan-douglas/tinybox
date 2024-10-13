@@ -68,12 +68,12 @@ func _on_tbw_loaded() -> void:
 	gamemode_names_list = []
 	# add new gamemodes
 	for gm : Gamemode in Global.get_world().gamemode_list:
-		selector.add_item(gm.gamemode_name)
 		gamemode_names_list.append(gm.gamemode_name)
 	# as server: populate all peers' gamemode lists
+	# including self
 	_populate_client_gamemode_list.rpc(gamemode_names_list)
 	
-@rpc("any_peer", "call_remote", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func _populate_client_gamemode_list(gamemode_names : Array) -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
@@ -83,3 +83,10 @@ func _populate_client_gamemode_list(gamemode_names : Array) -> void:
 	for gm : String in gamemode_names:
 		print(gm)
 		selector.add_item(gm)
+		match (gm):
+			"Deathmatch":
+				selector.set_item_tooltip(selector.item_count - 1, "A classic arena Deathmatch mode.\n\nStart with a ball and a bat; if the map has them, you can\ncollect pickups like rockets, bombs and missiles.")
+			"Team Deathmatch":
+				selector.set_item_tooltip(selector.item_count - 1, "A classic arena Deathmatch mode, but with teams.\n\nStart with a ball and a bat; if the map has them, you can\ncollect pickups like rockets, bombs and missiles.")
+			"Hide & Seek":
+				selector.set_item_tooltip(selector.item_count - 1, "Hide & Seek following the manhunt rules.\n\nStarts with one Seeker; the rest of the players are hiders.\nWhen the seeker hits a hider with their bat, they too become a seeker.\nThe seekers win if all the hiders are found before the time limit.\nThe hiders win if at least one of them lasts till the time limit.")
