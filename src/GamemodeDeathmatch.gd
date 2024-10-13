@@ -23,69 +23,38 @@ var ffa : bool = false
 # constructor for deathmatch
 func _init(_ffa : bool) -> void:
 	ffa = _ffa
-	create()
-
-func create() -> void:
 	if ffa:
 		gamemode_name = "Deathmatch"
-		start_events = [
-			Event.new(Event.EventType.CLEAR_LEADERBOARD),
-			Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN),
-		]
-		watchers = [
-			Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
-				["kills", 15],\
-				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
-		]
 	# tdm
 	else:
 		gamemode_name = "Team Deathmatch"
-		start_events = [
-			Event.new(Event.EventType.CLEAR_LEADERBOARD),
-			Event.new(Event.EventType.BALANCE_TEAMS),
-			Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN),
-		]
-		watchers = [
-			Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS,\
-				["kills", 20],\
-				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
-		]
 
-func start() -> void:
-	# only server starts games
+func run() -> void:
 	if !multiplayer.is_server(): return
-	# in case we are restarting, re-create the events and watchers
-	create()
-	running = true
-	print("Started gamemode: ", gamemode_name)
-	# clear player inventories
+	# wait for super method (camera preview)
+	await super()
+	
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().delete_all_tools.rpc()
-		p.get_tool_inventory().give_base_tools.rpc()
-	# run preview event
-	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name])
-	await preview_event.start()
+		p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bouncyball)
+		p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
 	# run start events
-	for event : Event in start_events:
-		# for any events that have delays in them (ex. showing a podium or entry screen)
-		await event.start()
+	Event.new(Event.EventType.CLEAR_LEADERBOARD).start()
+	if !ffa:
+		Event.new(Event.EventType.BALANCE_TEAMS).start()
+	Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN).start()
 	# wait for next frame
 	await get_tree().process_frame
 	# in case ended during start events being run
 	if running:
 		# setup watchers
-		for watcher : Watcher in watchers:
-			watcher.start()
-			# if this gamemode ends, stop any other watchers that are running
-			connect("gamemode_ended", watcher.queue_free)
-
-func end(params : Array) -> void:
-	# only server ends games
-	if !multiplayer.is_server(): return
-	print("Ended gamemode: ", gamemode_name)
-	# cleanup and run any final stuff
-	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().reset.rpc()
-	# never free gamemodes because they are saved as part of the world
-	emit_signal("gamemode_ended")
-	running = false
+		var watcher : Watcher
+		if ffa:
+			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
+					["kills", 15],\
+					[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+		else:
+			watcher = Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS,\
+				["kills", 20],\
+				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+		watcher.start()
+		connect("gamemode_ended", watcher.queue_free)

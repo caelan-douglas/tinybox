@@ -22,6 +22,18 @@ var last_held_tool : Tool = null
 var tool_just_holding : Tool = null
 var disabled := false
 
+enum ToolIdx {
+	BuildTool,
+	Bouncyball,
+	Bat,
+	Extinguisher,
+	RocketTool,
+	BombTool,
+	Flamethrower,
+	Missile,
+	Paintbrush
+}
+
 var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"),\
 preload("res://data/scene/tool/BouncyballTool.tscn"),\
 preload("res://data/scene/tool/BatTool.tscn"),\
@@ -135,9 +147,16 @@ func has_tool_by_name(name : String) -> Tool:
 	return null
 
 # Add a new tool to this tool inventory.
-func add_tool(tool : Tool) -> void:
+@rpc("any_peer", "call_local", "reliable")
+func add_tool(tool : ToolIdx) -> Tool:
+	# only run as auth
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
 	if !get_tools().has(tool):
-		add_child(tool, true)
+		var ntool : Tool = all_tools[tool].instantiate()
+		add_child(ntool, true)
+		return ntool
+	return
 
 # get the index of a tool in a list.
 func get_index_of_tool(tool : Tool) -> int:
@@ -162,16 +181,16 @@ func give_all_tools() -> void:
 	# if this change state request is not from the server or the owner client, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
 		return
-	for at : PackedScene in all_tools:
-		add_tool(at.instantiate() as Tool)
-
-@rpc("any_peer", "call_local", "reliable")
-func give_base_tools() -> void:
-	# if this change state request is not from the server or the owner client, return
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
-		return
-	add_tool(all_tools[1].instantiate() as Tool)
-	add_tool(all_tools[2].instantiate() as Tool)
+	for at : String in ToolIdx:
+		# index of enum
+		var ntool : Tool = add_tool(ToolIdx[at] as ToolIdx)
+		# give inf extinguisher in alltools
+		if ntool != null:
+			if ntool is ShootTool:
+				if ntool._shoot_type == ShootTool.ShootType.WATER:
+					ntool.restore_ammo = true
+					ntool.max_ammo_restore = 999
+					ntool.ammo = 999
 
 # resets inventory to default (sandbox) state (all tools in def. states)
 @rpc("any_peer", "call_local", "reliable")

@@ -600,6 +600,12 @@ func update_name(new : String) -> void:
 	var player_list : Control = get_tree().current_scene.get_node("GameCanvas/PlayerList")
 	player_list.add_player(self)
 
+@rpc("any_peer", "call_local", "reliable")
+func set_name_visible(mode : bool) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	$Smoothing/NameLabel.visible = mode
+
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
 func update_info(_who : int) -> void:

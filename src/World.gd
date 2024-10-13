@@ -346,14 +346,32 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 		reset_player_positions.rpc()
 	# add basic gamemodes
 	_clear_gamemodes()
-	# add ffa
-	add_gamemode(GamemodeDeathmatch.new(true))
-	# add tdm
-	add_gamemode(GamemodeDeathmatch.new(false))
+	add_all_gamemodes()
+	print(gamemode_list)
 	# announce we are done loading
 	tbw_loading = false
 	await get_tree().process_frame
 	emit_signal("tbw_loaded")
+
+# add gamemodes based on their requirements
+func add_all_gamemodes() -> void:
+	# add FFA, always available
+	add_gamemode(GamemodeDeathmatch.new(true))
+	# check tdm spawns
+	var first_team_spawn_name := ""
+	for obj in get_children():
+		if obj is SpawnPoint:
+			if obj.team_name != "Default":
+				# don't replace first found
+				if first_team_spawn_name != "":
+					first_team_spawn_name = obj.team_name
+				# at least two different team spawns
+				if obj.team_name != first_team_spawn_name:
+					# both tdm and hide and seek can be added
+					add_gamemode(GamemodeDeathmatch.new(false))
+					add_gamemode(GamemodeHideSeek.new())
+					# break out of loop once added
+					break
 
 func add_gamemode(new : Gamemode) -> void:
 	if !gamemode_list.has(new):
@@ -364,11 +382,12 @@ func add_gamemode(new : Gamemode) -> void:
 func remove_gamemode(what : Gamemode) -> void:
 	if gamemode_list.has(what):
 		gamemode_list.erase(what)
+		what.queue_free()
 
 func _clear_gamemodes() -> void:
 	for gm : Gamemode in gamemode_list:
-		gamemode_list.erase(gm)
 		gm.queue_free()
+	gamemode_list = []
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:

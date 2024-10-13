@@ -19,43 +19,33 @@ class_name Gamemode
 signal gamemode_ended
 
 var gamemode_name := "Gamemode"
-var start_events : Array[Event] = []
-var watchers : Array[Watcher] = []
 var running := false
 
 func start() -> void:
 	# only server starts games
 	if !multiplayer.is_server(): return
 	running = true
-	print("Started gamemode: ", gamemode_name)
+	print(get_multiplayer_authority(), " - Started gamemode: ", gamemode_name)
 	# clear player inventories
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.get_tool_inventory().delete_all_tools.rpc()
-		p.get_tool_inventory().give_base_tools.rpc()
+	run()
+
+func run() -> void:
+	# only server starts games
+	if !multiplayer.is_server(): return
 	# run preview event
 	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name])
 	await preview_event.start()
-	# run start events
-	for event : Event in start_events:
-		# for any events that have delays in them (ex. showing a podium or entry screen)
-		await event.start()
-	# wait for next frame
-	await get_tree().process_frame
-	# in case ended during start events being run
-	if running:
-		# setup watchers
-		for watcher : Watcher in watchers:
-			watcher.start()
-			# if this gamemode ends, stop any other watchers that are running
-			connect("gamemode_ended", watcher.queue_free)
 
 func end(params : Array) -> void:
 	# only server ends games
 	if !multiplayer.is_server(): return
-	print("Ended gamemode: ", gamemode_name)
+	print(get_multiplayer_authority(), " - Ended gamemode: ", gamemode_name)
 	# cleanup and run any final stuff
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.get_tool_inventory().reset.rpc()
+		p.update_team.rpc("Default")
 	# never free gamemodes because they are saved as part of the world
 	emit_signal("gamemode_ended")
 	running = false

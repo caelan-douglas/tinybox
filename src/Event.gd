@@ -94,13 +94,18 @@ func start() -> int:
 		EventType.WAIT_FOR_SECONDS:
 			# arg 0: seconds to wait
 			# arg 1: whether or not to show countdown
+			# arg 2: prefix text
 			if args.size() > 0:
 				for i : int in range(args[0]):
 					# if showing countdown
+					# make prefix nothing by default
+					var prefix : String = ""
+					# if args 2 exists, it's the prefix
+					if args[2] as String:
+						prefix = args[2]
 					if args[1] as bool:
-						UIHandler.show_toast.rpc(str(args[0] as int - i), 1, Color.DARK_ORANGE, 72)
+						UIHandler.show_toast.rpc(str(prefix, args[0] as int - i), 1, Color.DARK_ORANGE, 64)
 					await get_tree().create_timer(1).timeout
-			UIHandler.show_toast.rpc("GO!", 1, Color.LIME_GREEN, 72)
 		EventType.SHOW_WORLD_PREVIEW:
 			# arg 0: gamemode name
 			# show animation
@@ -120,6 +125,9 @@ func start() -> int:
 					UIHandler.play_preview_animation_overlay.rpc(str(args[0]))
 					# wait for animation to finish before running next events
 					await get_tree().create_timer(10).timeout
+			# fallback
+			else:
+				UIHandler.show_alert.rpc(str("Gamemode started: ", args[0]), 5, false, UIHandler.alert_colour_gold)
 		_:
 			printerr("Failed to run event because the event type is not valid.")
 	

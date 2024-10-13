@@ -81,12 +81,15 @@ func on_hit(body : Node3D) -> void:
 			if (body._state != RigidPlayer.TRIPPED) && (body.get_multiplayer_authority() != get_multiplayer_authority()):
 				body.reduce_health(damage, RigidPlayer.CauseOfDeath.MELEE, get_multiplayer_authority())
 				body.change_state.rpc_id(body.get_multiplayer_authority(), RigidPlayer.TRIPPED)
+				# running as server
+				body.emit_signal("hit_by_melee", self)
 		# only run this on the authority of who was hit (not necessarily
 		# the authority of the tool)
 		# and don't run on ourselves
 		if (body.get_multiplayer_authority() == multiplayer.get_unique_id()) && (body.get_multiplayer_authority() != get_multiplayer_authority()):
 			# running as hit player's authority
-			body.emit_signal("hit_by_melee", self)
+			if !multiplayer.is_server():
+				body.emit_signal("hit_by_melee", self)
 			# apply small impulse from bat hit
 			body.apply_impulse(Vector3(randi_range(-2, 2), 5, randi_range(-2, 2)))
 			# we hit a player, set the player's last hit by ID to this one

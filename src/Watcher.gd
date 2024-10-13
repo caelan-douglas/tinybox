@@ -22,7 +22,8 @@ enum WatcherType {
 	PLAYER_PROPERTY_EXCEEDS,
 	PLAYER_PROPERTY_FALLS_BELOW,
 	TEAM_KILLS_EXCEEDS,
-	TIMER_EXCEEDS
+	TIMER_EXCEEDS,
+	TEAM_FULL
 }
 
 var watcher_type : WatcherType = WatcherType.PLAYER_PROPERTY_EXCEEDS
@@ -54,7 +55,7 @@ func start() -> void:
 			timer.start()
 
 func _physics_process(delta : float) -> void:
-	if started:
+	if started && multiplayer.is_server():
 		# constantly checked variables
 		match (watcher_type):
 			WatcherType.PLAYER_PROPERTY_EXCEEDS:
@@ -73,6 +74,16 @@ func _physics_process(delta : float) -> void:
 							total_team_kills += player.kills
 					if total_team_kills > str(args[0]).to_int():
 						end([team.name])
+			WatcherType.TEAM_FULL:
+				# arg 0: team name
+				var teams : Teams = Global.get_world().get_current_map().get_teams()
+				var team : Team = teams.get_team(str(args[0]))
+				
+				for player : RigidPlayer in Global.get_world().rigidplayer_list:
+					if player.team != team.name:
+						return
+				# has all players
+				end([team.name])
 
 func end(end_args : Array = []) -> void:
 	started = false
