@@ -24,11 +24,11 @@ func _init() -> void:
 	gamemode_name = "Hide & Seek"
 	gamemode_subtitle = "Seekers chase down the Hiders. If the Seekers hit a Hider with their bat, they become a Seeker."
 
-func start(params : Array) -> void:
+func start(params : Array, mods : Array) -> void:
 	if params.size() > 1:
 		# seeker starting amount (param 2)
 		seeker_amt = params[1]
-	super(params)
+	super(params, mods)
 
 func run() -> void:
 	if !multiplayer.is_server(): return
@@ -63,10 +63,13 @@ func run() -> void:
 	for seeker : RigidPlayer in seekers:
 		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.DUMMY)
 	# seeker timer
-	await Event.new(Event.EventType.WAIT_FOR_SECONDS, [15, true, "Seeker released in "]).start()
+	await Event.new(Event.EventType.WAIT_FOR_SECONDS, [15, true, "Seeker(s) released in "]).start()
 	# unlock seeker after countdown
 	for seeker : RigidPlayer in seekers:
 		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.IDLE)
+	# add hider death penalty after seeker has been released
+	for player : RigidPlayer in others:
+		player.connect("died", _on_hider_death.bind(player))
 	
 	# end watchers
 	
@@ -94,11 +97,28 @@ func _on_hider_hit_by_melee(tool : Tool, player : RigidPlayer) -> void:
 		# change the player who got hit to seeker team
 		player.update_team.rpc(teams.get_team_list()[1].name)
 
+func _on_hider_death(player : RigidPlayer) -> void:
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	if player.team == teams.get_team_list()[2].name:
+		UIHandler.show_alert.rpc(str(player.display_name, " died and became a Seeker!"), 5, false, UIHandler.alert_colour_player)
+		player.get_tool_inventory().delete_all_tools()
+		player.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
+		# seekers' names are visible
+		player.set_name_visible.rpc(true)
+		UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), "You died and are now a Seeker! Find the other hiders!", 6, false, UIHandler.alert_colour_gold)
+		await get_tree().process_frame
+		# change the player who got hit to seeker team
+		player.update_team.rpc(teams.get_team_list()[1].name)
+		# no longer need connection
+		player.disconnect("died", _on_hider_death.bind(player))
+
 func end(args : Array) -> void:
 	# disconnect hit by melee connections
 	for player : RigidPlayer in Global.get_world().rigidplayer_list:
 		if player.is_connected("hit_by_melee", _on_hider_hit_by_melee.bind(player)):
 			player.disconnect("hit_by_melee", _on_hider_hit_by_melee.bind(player))
+		if player.is_connected("died", _on_hider_death.bind(player)):
+			player.disconnect("died", _on_hider_death.bind(player))
 		player.set_name_visible.rpc(true)
 	# reset camera zoom distance
 	Global.set_camera_max_dist.rpc()

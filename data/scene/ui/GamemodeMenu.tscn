@@ -37,11 +37,27 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 7
-text = "Gamemode Parameters"
+text = "Parameters"
 script = ExtResource("2_d2o1l")
 json_text = "ui/gamemode_parameters"
 
 [node name="ParameterList" type="VBoxContainer" parent="GamemodeMenu"]
+layout_mode = 2
+
+[node name="Spacer14" type="Control" parent="GamemodeMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="ModifierTitle" type="Label" parent="GamemodeMenu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+text = "Modifiers"
+script = ExtResource("2_d2o1l")
+json_text = "ui/gamemode_modifiers"
+
+[node name="ModifierList" type="VBoxContainer" parent="GamemodeMenu"]
 layout_mode = 2
 
 [node name="Spacer12" type="Control" parent="GamemodeMenu"]
@@ -63,6 +79,5 @@ script = ExtResource("3_1pov4")
 
 [node name="EndGamemode" type="Button" parent="GamemodeMenu"]
 layout_mode = 2
-disabled = true
 text = "End active gamemode"
 script = ExtResource("3_1pov4")

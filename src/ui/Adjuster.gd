@@ -21,6 +21,7 @@ signal value_changed(new_val : int)
 var val : int = 0
 var min : int = -9999
 var max : int = 9999
+var is_multiplier : bool = false
 
 func _ready() -> void:
 	$DownBig.connect("pressed", _increment_value.bind(-10))
@@ -30,7 +31,10 @@ func _ready() -> void:
 
 func set_value(new : int) -> void:
 	val = new
-	$DynamicLabel.text = str(new)
+	if is_multiplier:
+		$DynamicLabel.text = str(val, "x")
+	else:
+		$DynamicLabel.text = str(val)
 	emit_signal("value_changed", val)
 
 func set_min(new : int) -> void:
@@ -46,6 +50,9 @@ func _increment_value(amt : int) -> void:
 		val = max
 	else:
 		val += amt
-	$DynamicLabel.text = str(val)
+	if is_multiplier:
+		$DynamicLabel.text = str(val, "x")
+	else:
+		$DynamicLabel.text = str(val)
 	emit_signal("value_changed", val)
 

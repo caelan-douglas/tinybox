@@ -104,7 +104,7 @@ func start() -> int:
 					if args[2] as String:
 						prefix = args[2]
 					if args[1] as bool:
-						UIHandler.show_toast.rpc(str(prefix, args[0] as int - i), 1, Color.DARK_ORANGE, 64)
+						UIHandler.show_alert.rpc(str(prefix, args[0] as int - i), 1, false, Color.SEA_GREEN)
 					await get_tree().create_timer(1).timeout
 		EventType.SHOW_WORLD_PREVIEW:
 			# arg 0: gamemode name

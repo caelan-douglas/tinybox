@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_qxctu"]
 [ext_resource type="Texture2D" uid="uid://bxtnkoh6xx3qb" path="res://data/textures/ui/crosshair.png" id="7_6t1fc"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="10_0plxg"]
+[ext_resource type="Script" path="res://src/ui/GameTimer.gd" id="10_aw20e"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
@@ -373,6 +374,7 @@ max_value = 720.0
 step = 1.0
 value = 20.0
 show_percentage = false
+script = ExtResource("10_aw20e")
 
 [node name="Label" type="Label" parent="Timer"]
 layout_mode = 1
@@ -523,6 +525,14 @@ json_text = "ui/save_copy"
 [node name="Spacer11" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
+
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("16_hdnsf")
+theme_override_font_sizes/font_size = 64
+text = "Modes"
+script = ExtResource("6_qxctu")
 
 [node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("15_ies3a")]
 layout_mode = 2

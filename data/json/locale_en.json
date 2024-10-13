@@ -51,7 +51,8 @@
         "paused": "Paused",
         "contributors": "Contributors",
         "gamemodes": "Gamemodes",
-        "gamemode_parameters": "Gamemode Parameters",
+        "gamemode_parameters": "Parameters",
+        "gamemode_modifiers": "Modifiers",
         "graphics_settings": {
             "cool": "Graffix: COOL",
             "bad": "Graffix: BAD",

@@ -20,9 +20,11 @@ extends AnimatedList
 @onready var button : Button = $StartGamemode
 @onready var end_button : Button = $EndGamemode
 @onready var param_list : VBoxContainer = $ParameterList
+@onready var modifier_list : VBoxContainer = $ModifierList
 @onready var adjuster_label : PackedScene = load("res://data/scene/ui/AdjusterLabel.tscn")
 var gamemode_names_list : Array = []
 var selected_mode_params : Array = []
+var selected_mode_mods : Array = []
 
 func _ready() -> void:
 	super()
@@ -34,7 +36,7 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 
 func _on_start_gamemode_pressed() -> void:
-	server_start_gamemode.rpc_id(1, selector.selected, selected_mode_params)
+	server_start_gamemode.rpc_id(1, selector.selected, selected_mode_params, selected_mode_mods)
 
 func _on_peer_connected(id : int) -> void:
 	# only execute from the owner
@@ -42,14 +44,17 @@ func _on_peer_connected(id : int) -> void:
 	_populate_client_gamemode_list.rpc_id(id, gamemode_names_list)
 
 @rpc("any_peer", "call_local", "reliable")
-func server_start_gamemode(idx : int, params : Array) -> void:
+func server_start_gamemode(idx : int, params : Array, mods : Array) -> void:
+	for gm : Gamemode in Global.get_world().gamemode_list:
+		if gm.running:
+			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Can't start a new gamemode while one is currently running!", 6, false, UIHandler.alert_colour_error)
+			return
+		
 	if Global.get_world().gamemode_list.size() > 0:
 		Global.get_world().gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
-		button.disabled = true
-		end_button.disabled = false
-		Global.get_world().gamemode_list[idx].start(params)
+		Global.get_world().gamemode_list[idx].start(params, mods)
 	else:
-		UIHandler.show_alert("There are no gamemodes to start!")
+		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "There are no gamemodes to start!")
 
 func _on_end_gamemode_pressed() -> void:
 	if !multiplayer.is_server(): return
@@ -59,9 +64,6 @@ func _on_end_gamemode_pressed() -> void:
 func _on_gamemode_ended(idx : int) -> void:
 	if Global.get_world().gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
 		Global.get_world().gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
-	if multiplayer.is_server():
-		button.disabled = false
-	end_button.disabled = true
 
 func _on_tbw_loaded() -> void:
 	# server handles
@@ -101,32 +103,52 @@ func _on_item_selected(index : int) -> void:
 	# The selected mode from the dropdown
 	var gm : String = selector.get_item_text(index)
 	# clear existing params to default
-	selected_mode_params = [10, 0]
+	selected_mode_params = [0, 0]
+	selected_mode_mods = [0, 0, 0]
 	for c : Node in param_list.get_children():
 		c.queue_free()
+	for c : Node in modifier_list.get_children():
+		c.queue_free()
 	# load new params
+	
 	# time limit for all
-	var time_limit_adjuster : Control = adjuster_label.instantiate()
-	param_list.add_child(time_limit_adjuster)
-	time_limit_adjuster.get_node("List/Label").text = "Time limit (mins)"
-	var adj := time_limit_adjuster.get_node("List/Adjuster") as Adjuster
-	adj.connect("value_changed", _update_gamemode_params.bind(0))
-	adj.set_min(1)
-	adj.set_value(10)
+	add_param_or_mod(true, 0, 10, "Time limit (mins)", 1, 999)
+	# player speed and jump modifier
+	add_param_or_mod(false, 0, 5, "Player speed", 5, 10)
+	add_param_or_mod(false, 2, 1, "Player jump mult.", 1, 5, true)
+	# player health modifier
+	add_param_or_mod(false, 1, 20, "Player health", 10, 100)
+	
 	# gamemode-specific
 	match (gm):
 			"Deathmatch", "Team Deathmatch":
 				pass
 			"Hide & Seek":
 				# change number of starting seekers
-				var seeker_amt_adjuster : Control = adjuster_label.instantiate()
-				param_list.add_child(seeker_amt_adjuster)
-				seeker_amt_adjuster.get_node("List/Label").text = "# of Seekers"
-				var sadj := seeker_amt_adjuster.get_node("List/Adjuster") as Adjuster
-				sadj.connect("value_changed", _update_gamemode_params.bind(1))
-				sadj.set_max(8)
-				sadj.set_min(1)
-				sadj.set_value(1)
+				add_param_or_mod(true, 1, 1, "# of Seekers", 1, Global.get_world().rigidplayer_list.size() - 1)
 
 func _update_gamemode_params(new_param : int, param_idx : int) -> void:
 	selected_mode_params[param_idx] = new_param
+
+func _update_gamemode_mods(new_mod : int, mod_idx : int) -> void:
+	selected_mode_mods[mod_idx] = new_mod
+
+func add_param_or_mod(parameter : bool, adj_idx : int, def_val : int, label : String, min_val : int, max_val : int, is_multiplier : bool = false) -> void:
+	var adjuster : Control = adjuster_label.instantiate()
+	if parameter:
+		param_list.add_child(adjuster)
+	else:
+		modifier_list.add_child(adjuster)
+	adjuster.get_node("List/Label").text = label
+	var c_adj := adjuster.get_node("List/Adjuster") as Adjuster
+	if parameter:
+		c_adj.connect("value_changed", _update_gamemode_params.bind(adj_idx))
+	else:
+		c_adj.connect("value_changed", _update_gamemode_mods.bind(adj_idx))
+	c_adj.set_min(min_val)
+	c_adj.set_max(max_val)
+	c_adj.is_multiplier = is_multiplier
+	c_adj.set_value(def_val)
+	# different bg colour for modifiers
+	if !parameter:
+		adjuster.self_modulate = Color("#00f5bd")

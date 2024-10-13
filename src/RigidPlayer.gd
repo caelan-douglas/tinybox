@@ -18,6 +18,7 @@ extends RigidBody3D
 class_name RigidPlayer
 
 signal hit_by_melee(tool : Tool)
+signal died()
 
 enum {
 	IDLE,
@@ -538,6 +539,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						death_message = str(display_name, " will be back in 10 seconds!")
 			# set server dead flag
 			dead = true
+			emit_signal("died")
 			# display death feed to server
 			UIHandler.show_alert.rpc(death_message, 5, false, UIHandler.alert_colour_death)
 			# now we set the death message, change the state
@@ -1727,6 +1729,12 @@ func set_move_speed(new : int) -> void:
 	# if this change state request is not from the server
 	if multiplayer.get_remote_sender_id() != 1: return
 	move_speed = new
+
+@rpc("any_peer", "call_local", "reliable")
+func set_jump_force(new : float) -> void:
+	# if this change state request is not from the server
+	if multiplayer.get_remote_sender_id() != 1: return
+	jump_force = new
 
 func align_character_model_normal(ground_normal : Vector3) -> void:
 	# make sure we only align model in supported states
