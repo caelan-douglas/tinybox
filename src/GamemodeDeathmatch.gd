@@ -25,9 +25,11 @@ func _init(_ffa : bool) -> void:
 	ffa = _ffa
 	if ffa:
 		gamemode_name = "Deathmatch"
+		gamemode_subtitle = "A classic arena deathmatch mode! Free-for-all."
 	# tdm
 	else:
 		gamemode_name = "Team Deathmatch"
+		gamemode_subtitle = "A classic arena team deathmatch mode! Be careful of friendly fire."
 
 func run() -> void:
 	if !multiplayer.is_server(): return

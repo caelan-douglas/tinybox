@@ -53,6 +53,18 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(36, -182)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SubtitleAnchor/Subtitle:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(414, 759)]
+}
 
 [sub_resource type="Animation" id="Animation_vi55k"]
 resource_name = "preview"
@@ -105,6 +117,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 0.233258, 1, 3.86375, 1),
 "update": 0,
 "values": [Vector2(36, -182), Vector2(36, -182), Vector2(36, 34), Vector2(36, 53.8169), Vector2(36, -198.183)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SubtitleAnchor/Subtitle:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.625, 9, 9.625),
+"transitions": PackedFloat32Array(0.241485, 1, 3.36359, 1),
+"update": 0,
+"values": [Vector2(-992, 40), Vector2(-992, -120), Vector2(-992, -128), Vector2(-992, 40)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r3wi6"]
@@ -219,6 +243,38 @@ grow_horizontal = 2
 grow_vertical = 0
 rotation = -0.107718
 color = Color(0, 0, 0, 1)
+
+[node name="SubtitleAnchor" type="Control" parent="PersistentCanvas/Preview"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Subtitle" type="Label" parent="PersistentCanvas/Preview/SubtitleAnchor"]
+modulate = Color(0.871937, 0.771583, 0.69262, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 414.0
+offset_top = 759.0
+offset_right = 1374.0
+offset_bottom = 858.0
+grow_horizontal = 0
+pivot_offset = Vector2(762, 2.08165e-12)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_constants/line_spacing = -15
+theme_override_font_sizes/font_size = 36
+text = "Gamemode subtitle probably even longer wow it can even have two lines"
+horizontal_alignment = 2
+autowrap_mode = 2
+clip_text = true
+script = ExtResource("1_00vsm")
 
 [node name="Title" type="Label" parent="PersistentCanvas/Preview"]
 layout_mode = 1

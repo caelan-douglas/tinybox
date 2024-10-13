@@ -127,9 +127,11 @@ func fade_black_transition(duration : float = 0.5) -> void:
 	fade.visible = false
 
 @rpc("any_peer", "call_local")
-func play_preview_animation_overlay(title : String) -> void:
+func play_preview_animation_overlay(title : String, subtitle : String = "") -> void:
 	# play preview animation
 	var anim : AnimationPlayer = PersistentScene.get_node("PersistentCanvas/Preview/AnimationPlayer")
 	var label : Label = PersistentScene.get_node("PersistentCanvas/Preview/Title")
+	var subtitle_label : Label = PersistentScene.get_node("PersistentCanvas/Preview/SubtitleAnchor/Subtitle")
 	label.text = title
+	subtitle_label.text = subtitle
 	anim.play("preview")

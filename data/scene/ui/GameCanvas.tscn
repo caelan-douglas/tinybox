@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=37 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -18,10 +18,10 @@
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
 [ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="15_0571l"]
+[ext_resource type="PackedScene" uid="uid://tbixy6b8qkmy" path="res://data/scene/ui/GamemodeMenu.tscn" id="15_ies3a"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="16_hdnsf"]
 [ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
-[ext_resource type="Script" path="res://src/ui/GamemodeMenu.gd" id="18_n6mrs"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="20_eusui"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
@@ -155,43 +155,6 @@ tracks/1/keys = {
 _data = {
 "RESET": SubResource("Animation_vnqrf"),
 "flash_health": SubResource("Animation_ikspb")
-}
-
-[sub_resource type="Animation" id="Animation_wsom5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_815sr"]
-resource_name = "flash_controls"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.5, 0.7, 1, 1.2, 1.5, 1.7, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1), Color(10, 10, 10, 1), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_dd8xq"]
-_data = {
-"RESET": SubResource("Animation_wsom5"),
-"flash_controls": SubResource("Animation_815sr")
 }
 
 [sub_resource type="Gradient" id="Gradient_t4xug"]
@@ -394,124 +357,38 @@ libraries = {
 "": SubResource("AnimationLibrary_7ywci")
 }
 
-[node name="MinigameControls" type="HBoxContainer" parent="."]
+[node name="Timer" type="ProgressBar" parent="."]
 visible = false
-anchors_preset = 7
+self_modulate = Color(0.676198, 0.437283, 0.350525, 1)
+custom_minimum_size = Vector2(300, 32)
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -454.0
-offset_top = -83.0
-offset_right = 454.0
-offset_bottom = -58.0
+offset_left = -150.0
+offset_top = 64.0
+offset_right = 150.0
+offset_bottom = 96.0
 grow_horizontal = 2
-grow_vertical = 0
-alignment = 1
-
-[node name="GameTimer" type="ProgressBar" parent="MinigameControls"]
-self_modulate = Color(0.188235, 0.192157, 0.309804, 1)
-custom_minimum_size = Vector2(300, 25)
-layout_mode = 2
 max_value = 720.0
 step = 1.0
 value = 20.0
 show_percentage = false
 
-[node name="Label" type="Label" parent="MinigameControls/GameTimer"]
+[node name="Label" type="Label" parent="Timer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -29.5
-offset_top = -6.5
-offset_right = 29.5
-offset_bottom = 12.5
+offset_left = -80.0
+offset_top = -11.0
+offset_right = 80.0
+offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "10:00 left in game!"
+text = "Gamemode Name - 00:00"
 horizontal_alignment = 1
-
-[node name="TeamCash" type="ProgressBar" parent="MinigameControls"]
-self_modulate = Color(0.843137, 0.619608, 0.298039, 1)
-custom_minimum_size = Vector2(300, 25)
-layout_mode = 2
-max_value = 700.0
-step = 1.0
-value = 20.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="MinigameControls/TeamCash"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -29.5
-offset_top = -6.5
-offset_right = 29.5
-offset_bottom = 12.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Team cash remaning: 1000"
-horizontal_alignment = 1
-
-[node name="TeamTargetHP" type="ProgressBar" parent="MinigameControls"]
-self_modulate = Color(0.211765, 0.513726, 0.435294, 1)
-custom_minimum_size = Vector2(300, 25)
-layout_mode = 2
-max_value = 750.0
-step = 1.0
-value = 750.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="MinigameControls/TeamTargetHP"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -29.5
-offset_top = -6.5
-offset_right = 29.5
-offset_bottom = 12.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Your team's target HP: 500"
-horizontal_alignment = 1
-
-[node name="DMLeader" type="ProgressBar" parent="MinigameControls"]
-self_modulate = Color(0.584314, 0.298039, 0.745098, 1)
-custom_minimum_size = Vector2(300, 25)
-layout_mode = 2
-max_value = 15.0
-step = 1.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="MinigameControls/DMLeader"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -29.5
-offset_top = -6.5
-offset_right = 29.5
-offset_bottom = 12.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "No leader yet."
-horizontal_alignment = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MinigameControls"]
-libraries = {
-"": SubResource("AnimationLibrary_dd8xq")
-}
 
 [node name="Crosshair" type="TextureRect" parent="."]
 visible = false
@@ -565,7 +442,6 @@ follow_focus = true
 [node name="Pause" type="VBoxContainer" parent="PauseMenu/ScrollContainer"]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
-script = ExtResource("18_n6mrs")
 
 [node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
 self_modulate = Color(1, 1, 1, 0.447059)
@@ -648,30 +524,8 @@ json_text = "ui/save_copy"
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("15_ies3a")]
 layout_mode = 2
-text = "Gamemodes"
-script = ExtResource("6_qxctu")
-
-[node name="GamemodeSelector" type="OptionButton" parent="PauseMenu/ScrollContainer/Pause"]
-layout_mode = 2
-size_flags_horizontal = 3
-text_overrun_behavior = 4
-
-[node name="StartGamemode" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
-layout_mode = 2
-text = "Start gamemode"
-script = ExtResource("5_6v07r")
-
-[node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="EndGamemode" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
-layout_mode = 2
-disabled = true
-text = "End active gamemode"
-script = ExtResource("5_6v07r")
 
 [node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
@@ -689,6 +543,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="BuildTool" type="Control" parent="ToolOverlay"]
 visible = false

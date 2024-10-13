@@ -1,0 +1,68 @@
+[gd_scene load_steps=5 format=3 uid="uid://tbixy6b8qkmy"]
+
+[ext_resource type="Script" path="res://src/ui/GamemodeMenu.gd" id="1_cs65c"]
+[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="2_d2o1l"]
+[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="3_1pov4"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_1fps1"]
+color = Color(1, 1, 1, 0.356863)
+grow_begin = 16.0
+grow_end = 16.0
+thickness = 2
+
+[node name="GamemodeMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(308, 2.08165e-12)
+
+[node name="GamemodeMenu" type="VBoxContainer" parent="."]
+layout_mode = 2
+script = ExtResource("1_cs65c")
+
+[node name="DynamicLabel3" type="Label" parent="GamemodeMenu"]
+layout_mode = 2
+text = "Gamemodes"
+script = ExtResource("2_d2o1l")
+json_text = "ui/gamemodes"
+
+[node name="GamemodeSelector" type="OptionButton" parent="GamemodeMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 4
+
+[node name="Spacer11" type="Control" parent="GamemodeMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="ParameterTitle" type="Label" parent="GamemodeMenu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 7
+text = "Gamemode Parameters"
+script = ExtResource("2_d2o1l")
+json_text = "ui/gamemode_parameters"
+
+[node name="ParameterList" type="VBoxContainer" parent="GamemodeMenu"]
+layout_mode = 2
+
+[node name="Spacer12" type="Control" parent="GamemodeMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="GamemodeMenu"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxLine_1fps1")
+
+[node name="Spacer13" type="Control" parent="GamemodeMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="StartGamemode" type="Button" parent="GamemodeMenu"]
+layout_mode = 2
+text = "Start gamemode"
+script = ExtResource("3_1pov4")
+
+[node name="EndGamemode" type="Button" parent="GamemodeMenu"]
+layout_mode = 2
+disabled = true
+text = "End active gamemode"
+script = ExtResource("3_1pov4")

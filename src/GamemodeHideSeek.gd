@@ -17,9 +17,18 @@
 extends Gamemode
 class_name GamemodeHideSeek
 
+var seeker_amt : int = 1
+
 # constructor for deathmatch
 func _init() -> void:
 	gamemode_name = "Hide & Seek"
+	gamemode_subtitle = "Seekers chase down the Hiders. If the Seekers hit a Hider with their bat, they become a Seeker."
+
+func start(params : Array) -> void:
+	if params.size() > 1:
+		# seeker starting amount (param 2)
+		seeker_amt = params[1]
+	super(params)
 
 func run() -> void:
 	if !multiplayer.is_server(): return
@@ -29,29 +38,35 @@ func run() -> void:
 	# set camera max zoom distance
 	Global.set_camera_max_dist.rpc(8)
 	
+	var others : Array = Global.get_world().rigidplayer_list.duplicate()
+	var seekers : Array = []
 	# pick random player to be Seeker
 	var teams : Teams = Global.get_world().get_current_map().get_teams()
-	var seeker : RigidPlayer = Global.get_world().rigidplayer_list.pick_random()
-	seeker.update_team.rpc(teams.get_team_list()[1].name)
-	# give them the bat
-	seeker.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
-	UIHandler.show_alert.rpc_id(seeker.get_multiplayer_authority(), "You are a Seeker! Find the hiders and hit them with your bat!", 10, false, UIHandler.alert_colour_player)
+	for i : int in range(seeker_amt):
+		var seeker : RigidPlayer = others.pick_random()
+		seekers.append(seeker)
+		seeker.update_team.rpc(teams.get_team_list()[1].name)
+		# give them the bat
+		seeker.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
+		UIHandler.show_alert.rpc_id(seeker.get_multiplayer_authority(), "You are a Seeker! Find the hiders and hit them with your bat!", 10, false, UIHandler.alert_colour_player)
+		# this one has been chosen, erase from the remaining hiders pool
+		others.erase(seeker)
 	# set others to runners
-	var others : Array = Global.get_world().rigidplayer_list.duplicate()
-	others.erase(seeker)
 	for player : RigidPlayer in others:
 		player.update_team.rpc(teams.get_team_list()[2].name)
 		player.set_name_visible.rpc(false)
 		player.connect("hit_by_melee", _on_hider_hit_by_melee.bind(player))
-		UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), str("You are a hider! Hide from the seeker '", seeker.display_name, "'!"), 10, false, UIHandler.alert_colour_player)
+		UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), str("You are a hider! Hide from the seekers (green)!"), 10, false, UIHandler.alert_colour_player)
 	# move all players to spawn
 	Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN).start()
 	# set seeker to locked for now
-	seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.DUMMY)
+	for seeker : RigidPlayer in seekers:
+		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.DUMMY)
 	# seeker timer
 	await Event.new(Event.EventType.WAIT_FOR_SECONDS, [15, true, "Seeker released in "]).start()
 	# unlock seeker after countdown
-	seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.IDLE)
+	for seeker : RigidPlayer in seekers:
+		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.IDLE)
 	
 	# end watchers
 	

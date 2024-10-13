@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhk37fnhvc15p"]
+
+[ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="1_n064d"]
+
+[node name="PanelContainer" type="PanelContainer"]
+self_modulate = Color(0.992215, 0.753639, 0.741763, 1)
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="List" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="List"]
+layout_mode = 2
+text = "Label"
+
+[node name="Adjuster" parent="List" instance=ExtResource("1_n064d")]
+layout_mode = 2

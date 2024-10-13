@@ -108,6 +108,7 @@ func start() -> int:
 					await get_tree().create_timer(1).timeout
 		EventType.SHOW_WORLD_PREVIEW:
 			# arg 0: gamemode name
+			# arg 1: subtitle
 			# show animation
 			var has_previews : bool = false
 			for obj in Global.get_world().get_children():
@@ -122,7 +123,10 @@ func start() -> int:
 					if args.size() < 1:
 						# don't show name if there is none
 						args[0] = ""
-					UIHandler.play_preview_animation_overlay.rpc(str(args[0]))
+					if args.size() < 2:
+						# don't show subtitle if there is none
+						args[1] = ""
+					UIHandler.play_preview_animation_overlay.rpc(str(args[0]), str(args[1]))
 					# wait for animation to finish before running next events
 					await get_tree().create_timer(10).timeout
 			# fallback

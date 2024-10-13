@@ -19,6 +19,8 @@ class_name Adjuster
 signal value_changed(new_val : int)
 
 var val : int = 0
+var min : int = -9999
+var max : int = 9999
 
 func _ready() -> void:
 	$DownBig.connect("pressed", _increment_value.bind(-10))
@@ -26,8 +28,24 @@ func _ready() -> void:
 	$Up.connect("pressed", _increment_value.bind(1))
 	$UpBig.connect("pressed", _increment_value.bind(10))
 
+func set_value(new : int) -> void:
+	val = new
+	$DynamicLabel.text = str(new)
+	emit_signal("value_changed", val)
+
+func set_min(new : int) -> void:
+	min = new
+
+func set_max(new : int) -> void:
+	max = new
+
 func _increment_value(amt : int) -> void:
-	val += amt
+	if (val + amt) < min:
+		val = min
+	elif (val + amt) > max:
+		val = max
+	else:
+		val += amt
 	$DynamicLabel.text = str(val)
 	emit_signal("value_changed", val)
 

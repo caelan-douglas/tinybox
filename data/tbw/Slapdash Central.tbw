@@ -14,9 +14,9 @@ obj_spawnpoint ; global_position:(-42, 50.5, 6) ; global_rotation:(0, 0, 0) ; sc
 obj_spawnpoint ; global_position:(-39, 50.5, 6) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1) ; team_name:Purple ; checkpoint:false
 obj_spawnpoint ; global_position:(-36, 50.5, 6) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1) ; team_name:Purple ; checkpoint:false
 obj_spawnpoint ; global_position:(2, 50.5, -31) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1) ; team_name:Default ; checkpoint:false
-obj_camera_preview_point ; global_position:(-72, 86, 11) ; global_rotation:(0, -1.178097, 0) ; scale:(1, 1, 1)
+obj_camera_preview_point ; global_position:(-72, 55, 11) ; global_rotation:(0, -1.178097, 0) ; scale:(1, 1, 1)
 obj_camera_preview_point ; global_position:(-25, 60, -82) ; global_rotation:(0, -2.356194, 0) ; scale:(1, 1, 1)
-obj_camera_preview_point ; global_position:(59, 73, -71) ; global_rotation:(0, 2.356194, 0) ; scale:(1, 1, 1)
+obj_camera_preview_point ; global_position:(59, 50, -71) ; global_rotation:(0, 2.356194, 0) ; scale:(1, 1, 1)
 [building]
 brick ; global_position:(1.5, 50, -31.5) ; global_rotation:(0, 0, 0) ; brick_scale:(100, 1, 100) ; _material:3 ; _colour:(0.6039, 0.6039, 0.6039, 1) ; immovable:true ; joinable:true
 brick ; global_position:(41.5, 55.5, -65) ; global_rotation:(0, 0, 0) ; brick_scale:(4, 10, 7) ; _material:3 ; _colour:(0.6039, 0.6039, 0.6039, 1) ; immovable:true ; joinable:true

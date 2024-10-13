@@ -50,6 +50,8 @@
         "health": "Health",
         "paused": "Paused",
         "contributors": "Contributors",
+        "gamemodes": "Gamemodes",
+        "gamemode_parameters": "Gamemode Parameters",
         "graphics_settings": {
             "cool": "Graffix: COOL",
             "bad": "Graffix: BAD",
