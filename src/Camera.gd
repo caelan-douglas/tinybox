@@ -44,6 +44,12 @@ var do_interpolate := false
 @onready var gimbal : Node3D = get_parent()
 @onready var intersection_area : Area3D = $IntersectionArea
 
+func set_max_dist(new : float = 40) -> void:
+	max_dist = new
+	# update target dist too
+	if target_dist > max_dist:
+		target_dist = max_dist
+
 func get_mode_locked() -> bool:
 	return mode_locked
 
@@ -63,7 +69,6 @@ func get_camera_mode() -> CameraMode:
 func set_camera_mode(new : CameraMode) -> void:
 	if !mode_locked:
 		_camera_mode = new
-		max_dist = 40
 		if new == CameraMode.AIM:
 			get_tree().current_scene.get_node("GameCanvas/Crosshair").visible = true
 		else:

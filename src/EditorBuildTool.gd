@@ -162,6 +162,8 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 			if camera is Camera:
 				camera.set_target(tool_player_owner.target)
 				camera.set_camera_mode(Camera.CameraMode.FREE)
+		# reset camera zoom distance
+		Global.set_camera_max_dist()
 	else:
 		# set to build by default
 		change_state(States.BUILD)

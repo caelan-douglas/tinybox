@@ -360,3 +360,12 @@ func _unhandled_input(event : InputEvent) -> void:
 					node_stack.append_array(node.get_children())
 			# let other debug scripts know that debug has changed
 			emit_signal("debug_toggled", debug)
+
+# here because cameras are not synced between multiplayer clients
+@rpc("any_peer", "call_local", "reliable")
+func set_camera_max_dist(new : float = 40) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	var camera : Camera3D = get_viewport().get_camera_3d()
+	if camera is Camera:
+		camera.set_max_dist(new)

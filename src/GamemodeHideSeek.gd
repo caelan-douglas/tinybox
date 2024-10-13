@@ -26,6 +26,9 @@ func run() -> void:
 	# wait for super method (camera preview)
 	await super()
 	
+	# set camera max zoom distance
+	Global.set_camera_max_dist.rpc(8)
+	
 	# pick random player to be Seeker
 	var teams : Teams = Global.get_world().get_current_map().get_teams()
 	var seeker : RigidPlayer = Global.get_world().rigidplayer_list.pick_random()
@@ -82,4 +85,6 @@ func end(args : Array) -> void:
 		if player.is_connected("hit_by_melee", _on_hider_hit_by_melee.bind(player)):
 			player.disconnect("hit_by_melee", _on_hider_hit_by_melee.bind(player))
 		player.set_name_visible.rpc(true)
+	# reset camera zoom distance
+	Global.set_camera_max_dist.rpc()
 	super(args)

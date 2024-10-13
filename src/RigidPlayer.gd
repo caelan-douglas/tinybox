@@ -604,7 +604,11 @@ func update_name(new : String) -> void:
 func set_name_visible(mode : bool) -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
-	$Smoothing/NameLabel.visible = mode
+	# only visible for others
+	if multiplayer.get_unique_id() != get_multiplayer_authority():
+		$Smoothing/NameLabel.visible = mode
+	else:
+		$Smoothing/NameLabel.visible = false
 
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
