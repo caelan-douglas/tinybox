@@ -18,7 +18,15 @@ extends Node3D
 class_name Map
 
 @export var gravity_scale := 1.0
+var death_limit_low : int = 20
+var death_limit_high : int = 400
 var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
+
+func reset_map_properties() -> void:
+	gravity_scale = 1.0
+	death_limit_low = 20
+	death_limit_high = 400
+	songs = MusicHandler.ALL_SONGS_LIST.duplicate()
 
 func set_song(mode : bool, song_name : String) -> void:
 	if mode == true:

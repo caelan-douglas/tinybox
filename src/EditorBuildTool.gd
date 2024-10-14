@@ -27,7 +27,6 @@ enum States {
 @onready var scale_tooltip : Label = get_node("/root/PersistentScene/PersistentCanvas/ScaleTooltip")
 var hovered_editable_object : Node = null
 var hovered_item_properties : Dictionary = {}
-var can_select_object : bool = true
 var selected_item : PackedScene = null
 var selected_item_name_internal : String = ""
 var selected_building_path : String = ""
@@ -75,33 +74,31 @@ func _on_body_selected(body : Node3D) -> void:
 	if !is_multiplayer_authority(): return
 	if _state == States.SELECT: return
 	
+	
 	var selectable_body : Node3D = null
 	if body is Area3D:
-		if body.owner is TBWObject:
+		# don't select the preview instance
+		if (body.owner is TBWObject) && body.owner != active_preview_instance && body != hovered_editable_object:
 			if !(body.owner is Water):
 				selectable_body = body.owner
 	else:
-		if body is Brick || body is TBWObject:
+		# don't select the preview instance
+		if (body is Brick || body is TBWObject) && body != active_preview_instance && body != hovered_editable_object:
 			selectable_body = body
 	
-	if can_select_object:
-		if selectable_body != null:
-			hovered_editable_object = selectable_body
-			# show props for that object
-			hovered_item_properties = property_editor.list_object_properties(selectable_body, self)
-			var last_pos : Vector3 = select_area.global_position
-			# avoid ui spam when clicking + dragging (wait to be still
-			# to show editing notification )
-			await get_tree().create_timer(0.5).timeout
-			if selectable_body != null:
-				if select_area.global_position == last_pos:
-					property_editor.editing_hovered = true
+	print("body selected: ", selectable_body)
+	
+	if selectable_body != null:
+		hovered_editable_object = selectable_body
+		# show props for that object
+		hovered_item_properties = property_editor.list_object_properties(selectable_body, self)
+		property_editor.editing_hovered = true
 
 func _on_body_deselected(_body : Node3D) -> void:
 	# if we are not the authority of this object
 	if !is_multiplayer_authority(): return
 	if _state == States.SELECT: return
-	
+
 	var hovering_nothing := true
 	for body : Node3D in select_area.get_overlapping_bodies():
 		if body != active_preview_instance && body.owner != active_preview_instance:
@@ -117,6 +114,7 @@ func _on_body_deselected(_body : Node3D) -> void:
 		hovered_editable_object = null
 		# allow any tools to re show their list
 		_on_editor_deselected()
+
 
 func _on_property_updated(properties : Dictionary) -> void:
 	if property_editor.properties_from_tool == self:
@@ -249,10 +247,11 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		for c : Node in preview_node.get_children():
 			c.queue_free()
 		# add instance as preview
+		active_preview_instance = inst
 		preview_node.add_child(inst)
+		remove_item_collision(Global.get_all_children(inst) as Array)
 		inst.position += item_offset
 		inst.rotation = last_rotation
-		active_preview_instance = inst
 		property_editor.editing_hovered = false
 		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(inst) as Array)
 		if new_mesh != null:
@@ -269,6 +268,14 @@ func find_item_mesh(array : Array) -> MeshInstance3D:
 		elif c is Array:
 			return find_item_mesh(c as Array)
 	return null
+
+# Removes all collision from an item
+func remove_item_collision(array : Array) -> void:
+	for c : Variant in array:
+		if c is CollisionShape3D || c is Area3D:
+			c.queue_free()
+		elif c is Array:
+			remove_item_collision(c as Array)
 
 func selected_item_is_draggable() -> bool:
 	if selected_item_name_internal.begins_with("brick") && selected_item_name_internal != "brick_motor_seat" && selected_item_name_internal != "brick_button":

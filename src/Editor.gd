@@ -18,7 +18,7 @@
 extends Map
 class_name Editor
 
-@onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
+@onready var editor_canvas : EditorCanvas = get_tree().current_scene.get_node("EditorCanvas")
 @onready var editor_tool_inventory : ToolInventory = get_node("EditorToolInventory")
 @onready var property_editor : PropertyEditor = get_tree().current_scene.get_node("EditorCanvas/LeftPanel/PropertyEditor")
 
@@ -53,15 +53,18 @@ func _on_tbw_loaded() -> void:
 			active_water = obj
 			# update height display
 			water_height = active_water.global_position.y
-			adjust_water_height(0)
+			editor_canvas.water_height_adj.set_value(water_height)
+	# Set map height adjusters
+	editor_canvas.death_lim_low_adj.set_value(death_limit_low)
+	editor_canvas.death_lim_hi_adj.set_value(death_limit_high)
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:
-		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
+		editor_canvas.env_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
 	# Update background text
 	var bg : TBWObject = get_background()
 	if bg != null:
-		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
+		editor_canvas.bg_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
 	# Update song list
 	var song_list : VBoxContainer = editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/SongList/List")
 	for old_entry : Node in song_list.get_children():
@@ -109,10 +112,15 @@ func switch_water_type(update_text_path : String) -> void:
 			get_node(update_text_path).text = active_water.water_types_as_strings[water_type]
 
 func adjust_water_height(amt : float) -> void:
-	water_height += amt
+	water_height = amt
 	if active_water != null:
 		active_water.global_position.y = water_height
-	editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/DynamicLabel").text = str("Water height: ", water_height)
+
+func adjust_death_limit_low(new_val : int) -> void:
+	death_limit_low = new_val
+
+func adjust_death_limit_high(new_val : int) -> void:
+	death_limit_high = new_val
 
 func delete_environment() -> void:
 	for obj in Global.get_world().get_children():

@@ -163,7 +163,10 @@ func save_tbw(world_name : String) -> bool:
 	# store image data as base64 inside file
 	file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
 	# Save song list
-	file.store_line(str("songs ; ", JSON.stringify(Global.get_world().get_current_map().songs)))
+	file.store_line(str("songs ; ", JSON.stringify(get_current_map().songs)))
+	# Save map properties
+	file.store_line(str("death_limit_low ; ", get_current_map().death_limit_low))
+	file.store_line(str("death_limit_high ; ", get_current_map().death_limit_high))
 	# TBW object list
 	file.store_line("[objects]")
 	# Save objects before bricks
@@ -271,6 +274,9 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	# Load default empty map, unless we are in the editor
 	if !(Global.get_world().get_current_map() is Editor):
 		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")) as PackedScene)
+	# if we are in the editor, load map defaults because the map hasn't been reloaded
+	else:
+		Global.get_world().get_current_map().reset_map_properties()
 	
 	# BIG file, show loading visual
 	if lines.size() > 100:
@@ -293,6 +299,10 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 			# songs
 			if str(line).begins_with("songs ;"):
 				get_current_map().songs = JSON.parse_string(str(line).split(" ; ")[1])
+			if str(line).begins_with("death_limit_low ; "):
+				get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
+			if str(line).begins_with("death_limit_high ; "):
+				get_current_map().death_limit_high = str(line).split(" ; ")[1] as int
 			# final step, place building
 			if str(line) == "[building]":
 				# disable loading canvas if we used it

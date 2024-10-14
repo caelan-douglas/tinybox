@@ -15,29 +15,41 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends CanvasLayer
+class_name EditorCanvas
 
 @onready var world_name : LineEdit = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorldName
 @onready var pause_menu : Control = $PauseMenu
 @onready var options_button : Button = $OptionsButton
 @onready var coordinates_tooltip : Label = $Coordinates
 @onready var toggle_player_visual_button : Button = $TogglePlayerVisual
+
+@onready var water_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/Water"
+@onready var water_type_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/WaterType"
+@onready var env_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/Environment"
+@onready var bg_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/Background"
+@onready var water_height_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"
+@onready var death_lim_low_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"
+@onready var death_lim_hi_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"
+@onready var save_world_button : Button = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorld
+
 var mouse_just_captured : bool = false
 
 func _ready() -> void:
-	$PauseMenu/ScrollContainer/Sections/Editor/SaveWorld.connect("pressed", _on_save_world_pressed)
+	save_world_button.connect("pressed", _on_save_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
 
 func _on_map_loaded() -> void:
 	var editor : Map = Global.get_world().get_current_map()
 	if editor is Editor:
-		$"PauseMenu/ScrollContainer/Sections/World Properties/Water".connect("pressed", (editor as Editor).toggle_water)
-		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterType".connect("pressed", (editor as Editor).switch_water_type.bind($"PauseMenu/ScrollContainer/Sections/World Properties/WaterType".get_path()))
-		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/DownBig".connect("pressed", (editor as Editor).adjust_water_height.bind(-10))
-		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/Down".connect("pressed", (editor as Editor).adjust_water_height.bind(-1))
-		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/Up".connect("pressed", (editor as Editor).adjust_water_height.bind(1))
-		$"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster/UpBig".connect("pressed", (editor as Editor).adjust_water_height.bind(10))
-		$"PauseMenu/ScrollContainer/Sections/World Properties/Environment".connect("pressed", (editor as Editor).switch_environment)
-		$"PauseMenu/ScrollContainer/Sections/World Properties/Background".connect("pressed", (editor as Editor).switch_background)
+		water_button.connect("pressed", (editor as Editor).toggle_water)
+		water_type_button.connect("pressed", (editor as Editor).switch_water_type.bind(water_type_button.get_path()))
+		env_button.connect("pressed", (editor as Editor).switch_environment)
+		bg_button.connect("pressed", (editor as Editor).switch_background)
+		
+		# map property adjusters
+		water_height_adj.connect("value_changed", (editor as Editor).adjust_water_height)
+		death_lim_low_adj.connect("value_changed", (editor as Editor).adjust_death_limit_low)
+		death_lim_hi_adj.connect("value_changed", (editor as Editor).adjust_death_limit_high)
 		
 		$EntryScreen/Panel/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapSelection))

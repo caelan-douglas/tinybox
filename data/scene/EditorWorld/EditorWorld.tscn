@@ -28,6 +28,10 @@ script = ExtResource("2_stlqh")
 
 [node name="EditorBuildTool6" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
 
+[node name="EditorBuildTool7" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+
+[node name="EditorBuildTool8" parent="EditorToolInventory" instance=ExtResource("3_nojya")]
+
 [node name="CameraTarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 50, 2.08165e-12)
 

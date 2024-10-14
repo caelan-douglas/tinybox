@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=16 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -9,6 +9,7 @@
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="6_5yhmg"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="6_i5rxj"]
+[ext_resource type="Script" path="res://src/ui/RealTime.gd" id="8_t5c8k"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="14_f30l1"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="15_32mo6"]
@@ -179,14 +180,17 @@ tab_size = 7
 shortcut_keys_enabled = false
 
 [node name="VersionLabel" type="Label" parent="."]
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -178.0
-offset_top = 8.0
+offset_top = -30.0
 offset_right = -8.0
-offset_bottom = 30.0
+offset_bottom = -8.0
 grow_horizontal = 0
+grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
 theme_override_constants/outline_size = 4
@@ -196,6 +200,26 @@ vertical_alignment = 1
 script = ExtResource("6_aufvl")
 json_text = "Tinybox %version%"
 raw_format = true
+
+[node name="RealTime" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = -30.0
+offset_right = -200.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 4
+text = "00:00"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = ExtResource("8_t5c8k")
 
 [node name="Coordinates" type="Label" parent="."]
 anchors_preset = 5
@@ -345,6 +369,32 @@ script = ExtResource("6_aufvl")
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
+[node name="DynamicLabel8" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Lower death limit"
+script = ExtResource("6_aufvl")
+
+[node name="DeathLimitLow" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow" index="2"]
+text = "20"
+
+[node name="DynamicLabel9" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Higher death limit"
+script = ExtResource("6_aufvl")
+
+[node name="DeathLimitHigh" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh" index="2"]
+text = "20"
+
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
 [node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 layout_mode = 2
 text = "Water"
@@ -463,11 +513,13 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -385.0
-offset_top = 35.0
+offset_top = 49.0
 offset_right = -25.0
-offset_bottom = 73.0
+offset_bottom = 87.0
 grow_horizontal = 0
 text = "Options, Test, Gamemodes, Pause..."
 script = ExtResource("15_32mo6")
 
+[editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"]
+[editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"]

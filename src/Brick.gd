@@ -450,7 +450,7 @@ func set_charred(new : bool) -> void:
 # Lights this brick on fire.
 @rpc("any_peer", "call_local")
 func light_fire() -> void:
-	if !on_fire && flammable:
+	if !on_fire && flammable && !immovable:
 		on_fire = true
 		fire.light()
 		if is_multiplayer_authority():

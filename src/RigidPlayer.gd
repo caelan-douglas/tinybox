@@ -1060,7 +1060,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	# handle out of map ( runs outside auth check )
 	if multiplayer.is_server():
 		if !invulnerable:
-			if global_position.y < 20 || global_position.y > 400:
+			if global_position.y < Global.get_world().get_current_map().death_limit_low || global_position.y > Global.get_world().get_current_map().death_limit_high:
 				set_health(0, CauseOfDeath.OUT_OF_MAP)
 
 @rpc("any_peer", "call_local", "reliable")
