@@ -1334,6 +1334,9 @@ func enter_state() -> void:
 			change_state_non_authority.rpc(TRIPPED)
 			# stand up after trip timeout
 			await trip_time.timeout
+			# don't stand up in mid-air
+			while get_colliding_bodies().is_empty():
+				await get_tree().physics_frame
 			# if we are still tripped after waiting, don't intercept states:
 			if _state == TRIPPED:
 				change_state(STANDING_UP)

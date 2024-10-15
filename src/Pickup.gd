@@ -24,7 +24,8 @@ enum PickupType {
 	BOMB,
 	FLAMETHROWER,
 	EXTINGUISHER,
-	MISSILE
+	MISSILE,
+	MEDKIT
 }
 
 @export var type : PickupType = PickupType.ROCKET
@@ -40,6 +41,7 @@ enum PickupType {
 @onready var flamethrower_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FlamethrowerVisualMesh.tscn")
 @onready var extinguisher_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FireExtinguisherVisualMesh.tscn")
 @onready var missile_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/MissileLauncherVisualMesh.tscn")
+@onready var medkit_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/MedkitVisualMesh.tscn")
 
 @onready var rocket_tool : PackedScene = preload("res://data/scene/tool/RocketTool.tscn")
 @onready var missile_tool : PackedScene = preload("res://data/scene/tool/MissileTool.tscn")
@@ -86,6 +88,9 @@ func set_mesh() -> void:
 		PickupType.MISSILE:
 			var mesh_i : Node3D = missile_mesh.instantiate()
 			$MeshParent.add_child(mesh_i)
+		PickupType.MEDKIT:
+			var mesh_i : Node3D = medkit_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
 
 func _on_body_entered(body : Node3D) -> void:
 	if body is RigidPlayer && pickup_available:
@@ -97,8 +102,13 @@ func _take_pickup(body : RigidPlayer) -> void:
 	# hide child mesh
 	if $MeshParent.get_child_count() > 0:
 		$MeshParent.get_child(0).visible = false
+	# run on server for health
+	if type == PickupType.MEDKIT && multiplayer.is_server():
+		# ammo is health for medkit pickup
+		var newhealth : int = clamp(body.get_health() + ammo, 0, 20)
+		body.set_health(newhealth)
 	# only run on auth
-	if body.get_multiplayer_authority() == multiplayer.get_unique_id():
+	elif body.get_multiplayer_authority() == multiplayer.get_unique_id():
 		var tool_inv : ToolInventory = body.get_tool_inventory()
 		match(type):
 			PickupType.ROCKET:
@@ -187,6 +197,8 @@ func set_available_text() -> void:
 		label.text = str("Foam: ", ammo)
 	elif type == PickupType.FLAMETHROWER:
 		label.text = str("Fuel: ", ammo)
+	elif type == PickupType.MEDKIT:
+		label.text = str("Health: ", ammo)
 	else:
 		label.text = str("Shots: ", ammo)
 

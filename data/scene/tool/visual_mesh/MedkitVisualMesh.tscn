@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://rpvksak4qq3p"]
+
+[ext_resource type="PackedScene" uid="uid://bs3fcqnicobxh" path="res://data/models/medkit/medkit.blend" id="1_wyfyp"]
+[ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_87dpg"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e6t4j"]
+load_path = "res://.godot/imported/fp1-normal.png-411c5ad1b8163458fa2d0b080ac57be7.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vvpqk"]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.877891, 0, 0.195741, 1)
+metallic_texture_channel = 2
+roughness = 0.81
+roughness_texture_channel = 1
+normal_scale = 0.25
+normal_texture = SubResource("CompressedTexture2D_e6t4j")
+rim_enabled = true
+rim = 0.16
+clearcoat_enabled = true
+clearcoat_roughness = 0.17
+
+[node name="Medkit" type="Node3D"]
+
+[node name="medkit" parent="." instance=ExtResource("1_wyfyp")]
+
+[node name="Medkit" parent="medkit" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_vvpqk")
+surface_material_override/1 = ExtResource("2_87dpg")
+
+[editable path="medkit"]
