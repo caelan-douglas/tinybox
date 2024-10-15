@@ -160,6 +160,8 @@ func save_tbw(world_name : String) -> bool:
 	var file := FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
 	# Save image first
 	file.store_line("[tbw]")
+	# save version
+	file.store_line(str("version ; ", (get_tree().current_scene as Main).server_version))
 	# store image data as base64 inside file
 	file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
 	# Save song list
