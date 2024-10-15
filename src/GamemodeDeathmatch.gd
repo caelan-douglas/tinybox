@@ -52,11 +52,50 @@ func run() -> void:
 		var watcher : Watcher
 		if ffa:
 			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
-					["kills", 15],\
-					[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+					["kills", 14],\
+					[Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
 		else:
 			watcher = Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS,\
-				["kills", 20],\
-				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+				[19],\
+				[Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
 		watcher.start()
 		connect("gamemode_ended", watcher.queue_free)
+
+func end(args : Array) -> void:
+	# only server ends games
+	if !multiplayer.is_server(): return
+	if args.is_empty():
+		# free for all determinant
+		if ffa:
+			var player_highest_kills : RigidPlayer = null
+			for player : RigidPlayer in Global.get_world().rigidplayer_list:
+				if player_highest_kills == null:
+					player_highest_kills = player
+				else:
+					if player.kills > player_highest_kills.kills:
+						player_highest_kills = player
+			# determine winner if we ended based on timer
+			args = [player_highest_kills.get_multiplayer_authority(), "player"]
+		#tdm
+		else:
+			var team_highest_kills : Team = null
+			var team_highest_kill_count : int = 0
+			for team : Team in Global.get_world().get_current_map().get_teams().get_team_list():
+				var total_team_kills : int = 0
+				for player : RigidPlayer in Global.get_world().rigidplayer_list:
+					if player.team == team.name:
+						total_team_kills += player.kills
+				if team_highest_kills == null:
+					team_highest_kills = team
+					team_highest_kill_count = total_team_kills
+				elif total_team_kills > team_highest_kill_count:
+					team_highest_kills = team
+					team_highest_kill_count = total_team_kills
+			args = [team_highest_kills.name, "team"]
+	# end game
+	super(args)
+	# show podium
+	await Event.new(Event.EventType.SHOW_PODIUM, args).start()
+	# reset teams
+	for p : RigidPlayer in Global.get_world().rigidplayer_list:
+		p.update_team.rpc("Default")

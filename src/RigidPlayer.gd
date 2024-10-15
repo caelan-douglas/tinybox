@@ -1672,18 +1672,24 @@ func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
 	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * 25
 	apply_impulse(explosion_dir)
 
-@rpc("call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func update_kills(rpc_kills : int) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
 	kills = rpc_kills
 	Global.update_player_list_information()
 
-@rpc("call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func update_deaths(rpc_deaths : int) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
 	deaths = rpc_deaths
 	Global.update_player_list_information()
 
 @rpc("any_peer", "call_local", "reliable")
 func increment_kills() -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
 	kills += 1
 	update_kills.rpc(kills)
 

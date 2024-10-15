@@ -123,3 +123,6 @@ func end(args : Array) -> void:
 	# reset camera zoom distance
 	Global.set_camera_max_dist.rpc()
 	super(args)
+	# reset teams
+	for p : RigidPlayer in Global.get_world().rigidplayer_list:
+		p.update_team.rpc("Default")

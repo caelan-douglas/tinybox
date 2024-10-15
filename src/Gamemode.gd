@@ -55,6 +55,7 @@ func run() -> void:
 	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
 	await preview_event.start()
 	# start default timer
+	game_timer.one_shot = true
 	game_timer.wait_time = time_limit_seconds
 	game_timer.connect("timeout", end.bind([]))
 	add_child(game_timer)
@@ -78,7 +79,6 @@ func end(params : Array) -> void:
 	# cleanup and run any final stuff
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.get_tool_inventory().reset.rpc()
-		p.update_team.rpc("Default")
 		# reset player speed, in case it changed
 		p.set_move_speed.rpc(5)
 		p.set_jump_force.rpc(2.4)
