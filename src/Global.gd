@@ -63,8 +63,6 @@ func add_to_mesh_cache(what : Array) -> void:
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
 
-var brick_materials_as_names : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
-
 # Appearance settings
 var shirt : int = 0
 var shirt_texture : String = ""

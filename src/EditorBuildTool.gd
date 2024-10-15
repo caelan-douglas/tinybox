@@ -141,7 +141,7 @@ func update_subtitle() -> void:
 			ui_subtitle.visible = true
 			if ui_subtitle != null:
 				# show the material of the brick as its subtitle
-				ui_subtitle.text = str(Global.brick_materials_as_names[selected_item_properties["_material"] as int])
+				ui_subtitle.text = str(Brick.BRICK_MATERIALS_AS_STRINGS[selected_item_properties["_material"] as int])
 
 func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
 	super(mode, from_click)

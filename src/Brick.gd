@@ -35,6 +35,8 @@ enum BrickMaterial {
 	GRASS
 }
 
+const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
+
 @export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable"]
 
 # Size of grid cells.

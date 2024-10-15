@@ -101,11 +101,21 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			entry = option_picker.instantiate()
 			entry.get_node("Label").text = "Brick material"
 			var mat_option_picker : OptionButton = entry.get_node("Event")
-			for brick_name : String in Global.brick_materials_as_names:
+			for brick_name : String in Brick.BRICK_MATERIALS_AS_STRINGS:
 				mat_option_picker.add_item(brick_name)
 			# brick mat is an int so we can just use selected option as the new prop value
 			mat_option_picker.connect("item_selected", update_object_property.bind(prop_name))
 			mat_option_picker.selected = prop
+		# pickup types
+		elif prop_name == "type":
+			entry = option_picker.instantiate()
+			entry.get_node("Label").text = "Pickup type"
+			var type_option_picker : OptionButton = entry.get_node("Event")
+			for pickup_type : String in Pickup.PICKUP_TYPES_AS_STRINGS:
+				type_option_picker.add_item(pickup_type)
+			# pickup type is an int so we can just use selected option as the new prop value
+			type_option_picker.connect("item_selected", update_object_property.bind(prop_name))
+			type_option_picker.selected = prop
 		else:
 			entry = adjuster.instantiate()
 			var label : Label = entry.get_node("DynamicLabel")

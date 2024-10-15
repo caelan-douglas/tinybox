@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends TBWObject
+class_name Pickup
 
 @onready var area : Area3D = $Area3D
 var pickup_available := true
@@ -27,6 +28,8 @@ enum PickupType {
 	MISSILE,
 	MEDKIT
 }
+
+const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrower", "Extinguisher", "Missiles", "Medkit"]
 
 @export var type : PickupType = PickupType.ROCKET
 @export var ammo : int = 2
