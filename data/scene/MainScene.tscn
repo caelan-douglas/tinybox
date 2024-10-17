@@ -95,8 +95,8 @@ text = "------------- DEBUG MENU -------------- (Press ` to hide)"
 
 [node name="DebugText" type="Label" parent="DebugCanvas/DebugMenu"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.356863)
-theme_override_constants/outline_size = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.643137)
+theme_override_constants/outline_size = 3
 text = "debug"
 horizontal_alignment = 2
 autowrap_mode = 2

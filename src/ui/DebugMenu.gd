@@ -60,7 +60,6 @@ func _physics_process(delta : float) -> void:
 				brick_count += 1
 		debug_text.text = str("bricks in world: ", str(brick_count),
 		"\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
-		"\nvideo memory: ", round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001),
 		"mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 		"\nmaterial cache size: ", str(Global.graphics_cache.size()), " / 256",
 		"\nmesh cache size: ", str(Global.mesh_cache.size()), " / 128")
@@ -68,18 +67,12 @@ func _physics_process(delta : float) -> void:
 		if player != null:
 			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), 
 			"\nPlayer position (global): ", round(player.global_position), 
-			"\nPlayer state: ", player.states_as_names[player._state],
 			"\nPlayer friction: ", player.physics_material_override.friction,
 			"\nPlayer linear damp: ", player.linear_damp,
-			"\nPlayer air from jump?: ", player.air_from_jump, 
-			"\nPlayer air duration: ", player.air_duration, 
 			"\nPlayer last hit by: ", player.last_hit_by_id,
 			"\nPlayer occupying seat: ", player.seat_occupying)
-		debug_text.text += str("\n---------- WORLD TEAMS INFO -------------\n")
-		debug_text.text += str("World Teams Node list:\n")
 		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
 			var teams : Teams = Global.get_world().get_current_map().get_teams()
-			debug_text.text += str(teams.get_team_list())
 			debug_text.text += str("\n------------PLAYER TEAMS INFO ------------\n")
 			for t : Team in teams.get_team_list():
 				var team_name : String = t.name

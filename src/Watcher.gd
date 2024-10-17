@@ -16,6 +16,7 @@
 
 extends Node
 class_name Watcher
+signal ended(end_args : Array)
 
 enum WatcherType {
 	# 1 var
@@ -29,13 +30,10 @@ enum WatcherType {
 var watcher_type : WatcherType = WatcherType.PLAYER_PROPERTY_EXCEEDS
 var args : Array = []
 var started := false
-# list of events to run when this watcher's condition is met
-var end_events : Array[Event] = []
 
-func _init(w_watcher_type : WatcherType, w_args : Array = [], w_end_events : Array[Event] = []) -> void:
+func _init(w_watcher_type : WatcherType, w_args : Array = []) -> void:
 	watcher_type = w_watcher_type
 	args = w_args
-	end_events = w_end_events
 
 func start() -> void:
 	# add self to tree
@@ -87,12 +85,5 @@ func _physics_process(delta : float) -> void:
 
 func end(end_args : Array = []) -> void:
 	started = false
-	# run end events
-	for event : Event in end_events:
-		if event.event_type == Event.EventType.SHOW_PODIUM:
-			event.args = end_args
-		# create and run event
-		# for any events that have delays, like showing the podium or intro screen
-		await event.start()
-	
+	emit_signal("ended", end_args)
 	queue_free()

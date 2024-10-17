@@ -51,13 +51,11 @@ func run() -> void:
 		# setup watchers
 		var watcher : Watcher
 		if ffa:
-			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS,\
-					["kills", 14],\
-					[Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS, ["kills", 14])
+			watcher.connect("ended", end)
 		else:
-			watcher = Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS,\
-				[19],\
-				[Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+			watcher = Watcher.new(Watcher.WatcherType.TEAM_KILLS_EXCEEDS, [19])
+			watcher.connect("ended", end)
 		watcher.start()
 		connect("gamemode_ended", watcher.queue_free)
 

@@ -73,7 +73,7 @@ func start() -> int:
 		EventType.END_ACTIVE_GAMEMODE:
 			for gamemode : Gamemode in Global.get_world().gamemode_list:
 				if gamemode.running:
-					gamemode.end([])
+					gamemode.end([args])
 		EventType.SHOW_PODIUM:
 			if args.size() > 1:
 				# arg 0: player 1 id or team id
@@ -82,7 +82,6 @@ func start() -> int:
 					for player : RigidPlayer in players:
 						if player.name == str(args[0]):
 							player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
-							player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(0, 350, 0))
 							# show animation
 							var camera : Camera = get_viewport().get_camera_3d()
 							if camera is Camera:
@@ -100,8 +99,10 @@ func start() -> int:
 						print(player.team, " player team, ", str(args[0]))
 						if player.team == str(args[0]):
 							winners.append(player)
-							player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
-							player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(0, 350, 0))
+					for player : RigidPlayer in winners:
+						player.teleport.rpc_id(player.get_multiplayer_authority(), Vector3(winners[0].global_position.x + randf() as float, winners[0].global_position.y as float, winners[0].global_position.z + randf() as float))
+						await get_tree().physics_frame
+						player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.DUMMY)
 					# show animation
 					var camera : Camera = get_viewport().get_camera_3d()
 					if camera is Camera && !winners.is_empty():

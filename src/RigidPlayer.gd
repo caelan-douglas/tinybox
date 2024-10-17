@@ -70,6 +70,7 @@ var player_grav := 1.4
 var team := "Default"
 var seat_occupying : MotorSeat = null
 var health : int = 20
+var max_health : int = 20
 var dead : bool = false
 var spawns := []
 var death_message := ""
@@ -328,6 +329,26 @@ func _receive_server_health(new : int, potential_executor_id : int = -1) -> void
 	else:
 		health = new
 
+@rpc("any_peer", "call_local", "reliable")
+func _receive_server_max_health(new : int) -> void:
+	if is_multiplayer_authority():
+		max_health = new
+		# set visual health
+		health_bar.max_value = max_health
+	else:
+		max_health = new
+
+func set_max_health(new : int) -> void:
+	# only runs as server
+	if !multiplayer.is_server():
+		return
+	# send updated health to clients
+	_receive_server_max_health.rpc(new)
+	
+	max_health = new
+	if health > max_health:
+		set_health(max_health)
+
 func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
 	# only runs as server
 	if !multiplayer.is_server():
@@ -556,7 +577,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 			change_state.rpc_id(get_multiplayer_authority(), RESPAWN)
 			dead = false
 			extinguish_fire.rpc()
-			set_health(20)
+			set_health(max_health)
 			protect_spawn()
 
 func get_health() -> int:

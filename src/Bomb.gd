@@ -22,7 +22,7 @@ class_name Bomb
 
 @onready var explosion : PackedScene = SpawnableObjects.explosion
 @export var explode_time : float = 3
-@export var explosion_size : float = 3
+@export var explosion_size : float = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

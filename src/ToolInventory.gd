@@ -48,30 +48,31 @@ var hold_timer := 0
 
 func _process(delta : float) -> void:
 	if !disabled && Input.mouse_mode == Input.MOUSE_MODE_CAPTURED && get_tools().size() > 0 &&(Input.is_action_just_pressed("switch_tool_right") || Input.is_action_just_pressed("switch_tool_left")):
-		var active_tool : Tool = get_active_tool()
-		if active_tool == null:
-			# shift-scroll zooms camera
-			if Input.is_action_just_pressed("switch_tool_left") && !(Input.is_action_pressed("control")):
-				get_tools()[get_tools().size() - 1].set_tool_active(true)
-			elif !Input.is_action_pressed("control"):
-				get_tools()[0].set_tool_active(true)
-		else:
-			var active_tool_idx : int = get_index_of_tool(active_tool)
-			var last_active_tool_idx : int = active_tool_idx
-			# shift-scroll zooms camera
-			if Input.is_action_just_pressed("switch_tool_right") && !Input.is_action_pressed("control"):
-				active_tool_idx += 1
-				if active_tool_idx >= get_tools().size():
-					get_active_tool().set_tool_active(false)
-					return
-			elif !Input.is_action_pressed("control"):
-				active_tool_idx -= 1
-				if active_tool_idx < 0:
-					get_active_tool().set_tool_active(false)
-					return
-			# don't reactivate active tool if it didn't change (i.e. ctrl was pressed)
-			if active_tool_idx != last_active_tool_idx:
-				get_tools()[active_tool_idx].set_tool_active(true)
+		if 2==1:
+			var active_tool : Tool = get_active_tool()
+			if active_tool == null:
+				# shift-scroll zooms camera
+				if Input.is_action_just_pressed("switch_tool_left") && !(Input.is_action_pressed("control")):
+					get_tools()[get_tools().size() - 1].set_tool_active(true)
+				elif !Input.is_action_pressed("control"):
+					get_tools()[0].set_tool_active(true)
+			else:
+				var active_tool_idx : int = get_index_of_tool(active_tool)
+				var last_active_tool_idx : int = active_tool_idx
+				# shift-scroll zooms camera
+				if Input.is_action_just_pressed("switch_tool_right") && !Input.is_action_pressed("control"):
+					active_tool_idx += 1
+					if active_tool_idx >= get_tools().size():
+						get_active_tool().set_tool_active(false)
+						return
+				elif !Input.is_action_pressed("control"):
+					active_tool_idx -= 1
+					if active_tool_idx < 0:
+						get_active_tool().set_tool_active(false)
+						return
+				# don't reactivate active tool if it didn't change (i.e. ctrl was pressed)
+				if active_tool_idx != last_active_tool_idx:
+					get_tools()[active_tool_idx].set_tool_active(true)
 	if hold_timer > 0:
 		hold_timer -= 1
 		# when holdtimer reaches 0, reset tool just holding

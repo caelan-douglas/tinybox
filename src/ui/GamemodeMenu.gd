@@ -104,7 +104,7 @@ func _on_item_selected(index : int) -> void:
 	var gm : String = selector.get_item_text(index)
 	# clear existing params to default
 	selected_mode_params = [0, 0]
-	selected_mode_mods = [0, 0, 0]
+	selected_mode_mods = [0, 0, 0, false]
 	for c : Node in param_list.get_children():
 		c.queue_free()
 	for c : Node in modifier_list.get_children():
@@ -112,12 +112,14 @@ func _on_item_selected(index : int) -> void:
 	# load new params
 	
 	# time limit for all
-	add_param_or_mod(true, 0, 10, "Time limit (mins)", 1, 999)
+	add_param_or_mod_adjuster(true, 0, 10, "Time limit (mins)", 1, 999)
 	# player speed and jump modifier
-	add_param_or_mod(false, 0, 5, "Player speed", 5, 10)
-	add_param_or_mod(false, 2, 1, "Player jump mult.", 1, 5, true)
+	add_param_or_mod_adjuster(false, 0, 5, "Player speed", 5, 10)
+	add_param_or_mod_adjuster(false, 2, 1, "Player jump multiplier", 1, 5, true)
 	# player health modifier
-	add_param_or_mod(false, 1, 20, "Player health", 10, 100)
+	add_param_or_mod_adjuster(false, 1, 20, "Player maximum health", 1, 100)
+	# low grav toggle modifier
+	add_param_or_mod_toggle(false, 3, false, "Low gravity")
 	
 	# gamemode-specific
 	match (gm):
@@ -125,7 +127,7 @@ func _on_item_selected(index : int) -> void:
 				pass
 			"Hide & Seek":
 				# change number of starting seekers
-				add_param_or_mod(true, 1, 1, "# of Seekers", 1, Global.get_world().rigidplayer_list.size() - 1)
+				add_param_or_mod_adjuster(true, 1, 1, "# of Seekers", 1, Global.get_world().rigidplayer_list.size() - 1)
 
 func _update_gamemode_params(new_param : int, param_idx : int) -> void:
 	selected_mode_params[param_idx] = new_param
@@ -133,7 +135,7 @@ func _update_gamemode_params(new_param : int, param_idx : int) -> void:
 func _update_gamemode_mods(new_mod : int, mod_idx : int) -> void:
 	selected_mode_mods[mod_idx] = new_mod
 
-func add_param_or_mod(parameter : bool, adj_idx : int, def_val : int, label : String, min_val : int, max_val : int, is_multiplier : bool = false) -> void:
+func add_param_or_mod_adjuster(parameter : bool, adj_idx : int, def_val : int, label : String, min_val : int, max_val : int, is_multiplier : bool = false) -> void:
 	var adjuster : Control = adjuster_label.instantiate()
 	if parameter:
 		param_list.add_child(adjuster)
@@ -152,3 +154,20 @@ func add_param_or_mod(parameter : bool, adj_idx : int, def_val : int, label : St
 	# different bg colour for modifiers
 	if !parameter:
 		adjuster.self_modulate = Color("#00f5bd")
+
+func add_param_or_mod_toggle(parameter : bool, adj_idx : int, def_val : bool, label : String) -> void:
+	var checkbox : CheckBox = CheckBox.new()
+	if parameter:
+		param_list.add_child(checkbox)
+	else:
+		modifier_list.add_child(checkbox)
+	checkbox.text = label.capitalize()
+	checkbox.button_pressed = def_val as bool
+	if parameter:
+		checkbox.connect("toggled", _update_gamemode_params.bind(adj_idx))
+	else:
+		checkbox.connect("toggled", _update_gamemode_mods.bind(adj_idx))
+	if parameter:
+		checkbox.self_modulate = Color("#fdc0bd")
+	else:
+		checkbox.self_modulate = Color("#00f5bd")

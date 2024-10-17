@@ -8,6 +8,6 @@ tool_name = "Bomb"
 _shoot_type = 3
 shot_speed = 4
 shot_cooldown = 300
-explosion_size = 3.0
+explosion_size = 5.0
 show_cooldown_on_ui_partner = true
 visual_mesh_name = "BombVisualMesh"

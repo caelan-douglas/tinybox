@@ -77,9 +77,8 @@ func run() -> void:
 	if running:
 		# setup watchers
 		var watcher : Watcher
-		watcher = Watcher.new(Watcher.WatcherType.TEAM_FULL,\
-				[teams.get_team_list()[1].name],\
-				[Event.new(Event.EventType.SHOW_PODIUM), Event.new(Event.EventType.END_ACTIVE_GAMEMODE)])
+		watcher = Watcher.new(Watcher.WatcherType.TEAM_FULL, [teams.get_team_list()[1].name])
+		watcher.connect("ended", end)
 		watcher.start()
 		connect("gamemode_ended", watcher.queue_free)
 
@@ -122,7 +121,19 @@ func end(args : Array) -> void:
 		player.set_name_visible.rpc(true)
 	# reset camera zoom distance
 	Global.set_camera_max_dist.rpc()
+	# if ended with no args that means that the timer expired
+	# and the hiders won
+	if args.is_empty():
+		args.resize(2)
+		var teams : Teams = Global.get_world().get_current_map().get_teams()
+		args[0] = teams.get_team_list()[2].name
+	else:
+		args.resize(2)
+	# either way, the winner will be a team (for podium)
+	args[1] = "team"
 	super(args)
+	# show podium
+	await Event.new(Event.EventType.SHOW_PODIUM, args).start()
 	# reset teams
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.update_team.rpc("Default")

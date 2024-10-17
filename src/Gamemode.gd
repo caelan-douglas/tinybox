@@ -38,10 +38,14 @@ func start(params : Array, mods : Array) -> void:
 			p.set_move_speed.rpc(mods[0] as float)
 		if mods.size() > 1:
 			# set player health as server
-			p.set_health(mods[1] as int)
+			p.set_max_health(mods[1] as int)
+			# fill the health
+			p.set_health(p.max_health as int)
 		if mods.size() > 2:
 			# jump force is a multiplier
 			p.set_jump_force.rpc(2.4 * mods[2] as float)
+		if mods.size() > 3:
+			Global.get_world().get_current_map().set_low_grav(mods[3] as bool)
 	if params.size() > 0:
 		# the time limit chooser is in minutes but this is in
 		# seconds so we convert
@@ -56,7 +60,7 @@ func run() -> void:
 	await preview_event.start()
 	# start default timer
 	game_timer.one_shot = true
-	game_timer.wait_time = time_limit_seconds
+	game_timer.wait_time = 25
 	game_timer.connect("timeout", end.bind([]))
 	add_child(game_timer)
 	game_timer.start()
@@ -79,9 +83,12 @@ func end(params : Array) -> void:
 	# cleanup and run any final stuff
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
 		p.get_tool_inventory().reset.rpc()
-		# reset player speed, in case it changed
+		# reset player stuff
+		p.set_max_health(20)
 		p.set_move_speed.rpc(5)
 		p.set_jump_force.rpc(2.4)
+		# reset map gravity, in case it changed
+		Global.get_world().get_current_map().set_low_grav(false)
 	# never free gamemodes because they are saved as part of the world
 	emit_signal("gamemode_ended")
 	running = false

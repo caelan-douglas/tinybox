@@ -108,7 +108,7 @@ func _take_pickup(body : RigidPlayer) -> void:
 	# run on server for health
 	if type == PickupType.MEDKIT && multiplayer.is_server():
 		# ammo is health for medkit pickup
-		var newhealth : int = clamp(body.get_health() + ammo, 0, 20)
+		var newhealth : int = clamp(body.get_health() + ammo, 0, body.max_health)
 		body.set_health(newhealth)
 	# only run on auth
 	elif body.get_multiplayer_authority() == multiplayer.get_unique_id():
