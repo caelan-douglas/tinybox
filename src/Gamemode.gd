@@ -22,7 +22,7 @@ var gamemode_name := "Gamemode"
 var gamemode_subtitle := "A new gamemode has been started!"
 var running := false
 # defaults to 600 seconds or 10 mins
-var time_limit_seconds : int = 20
+var time_limit_seconds : int = 600
 @onready var game_timer : Timer = Timer.new()
 @onready var timer_ui : GameTimer = get_tree().current_scene.get_node("GameCanvas/Timer") as ProgressBar
 
@@ -60,7 +60,7 @@ func run() -> void:
 	await preview_event.start()
 	# start default timer
 	game_timer.one_shot = true
-	game_timer.wait_time = 25
+	game_timer.wait_time = time_limit_seconds
 	game_timer.connect("timeout", end.bind([]))
 	add_child(game_timer)
 	game_timer.start()
