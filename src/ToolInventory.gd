@@ -150,12 +150,15 @@ func has_tool_by_name(name : String) -> Tool:
 
 # Add a new tool to this tool inventory.
 @rpc("any_peer", "call_local", "reliable")
-func add_tool(tool : ToolIdx) -> Tool:
+func add_tool(tool : ToolIdx, ammo : int = -1) -> Tool:
 	# only run as auth
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
 	if !get_tools().has(tool):
 		var ntool : Tool = all_tools[tool].instantiate()
+		if ammo > 0 && ntool is ShootTool:
+			ntool.ammo = ammo
+			ntool.restore_ammo = false
 		add_child(ntool, true)
 		resize_ui()
 		return ntool

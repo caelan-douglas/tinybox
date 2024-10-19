@@ -222,7 +222,9 @@
         "mus3": "Autumn",
         "mus4": "New Heights",
         "mus5": "Final Day",
-        "mus6": "Lullaby"
+        "mus6": "Lullaby",
+        "mus7": "Ahead of the Curve",
+        "mus8": "Watermelon Shake"
     },
     "enum": {
         "event_type": {

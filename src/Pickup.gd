@@ -113,71 +113,37 @@ func _take_pickup(body : RigidPlayer) -> void:
 	# only run on auth
 	elif body.get_multiplayer_authority() == multiplayer.get_unique_id():
 		var tool_inv : ToolInventory = body.get_tool_inventory()
+		var result : Tool = null
+		var tool_idx : ToolInventory.ToolIdx = ToolInventory.ToolIdx.RocketTool
 		match(type):
 			PickupType.ROCKET:
 				# if we already have it, just add ammo
-				var result : Tool = tool_inv.has_tool_by_name("RocketTool")
-				if result:
-					# don't add to infinite ammo
-					if result.ammo >= 0:
-						result.ammo += ammo
-						result.update_ammo_display()
-				else:
-					var tool : Tool = rocket_tool.instantiate()
-					tool.ammo = ammo
-					tool_inv.add_child(tool)
+				result = tool_inv.has_tool_by_name("RocketTool")
+				tool_idx = ToolInventory.ToolIdx.RocketTool
 			PickupType.BOMB:
 				# if we already have it, just add ammo
-				var result : Tool = tool_inv.has_tool_by_name("BombTool")
-				if result:
-					# don't add to infinite ammo
-					if result.ammo >= 0:
-						result.ammo += ammo
-						result.update_ammo_display()
-				else:
-					var tool : Tool = bomb_tool.instantiate()
-					tool.ammo = ammo
-					tool_inv.add_child(tool)
+				result = tool_inv.has_tool_by_name("BombTool")
+				tool_idx = ToolInventory.ToolIdx.BombTool
 			PickupType.FLAMETHROWER:
 				# if we already have it, just add ammo
-				var result : Tool = tool_inv.has_tool_by_name("FlamethrowerTool")
-				if result:
-					# don't add to infinite ammo
-					if result.ammo >= 0:
-						result.ammo += ammo
-						result.update_ammo_display()
-				else:
-					var tool : Tool = flamethrower_tool.instantiate()
-					tool.ammo = ammo
-					# don't restore flamethrower fuel
-					tool.restore_ammo = false
-					tool_inv.add_child(tool)
+				result = tool_inv.has_tool_by_name("FlamethrowerTool")
+				tool_idx = ToolInventory.ToolIdx.Flamethrower
 			PickupType.EXTINGUISHER:
 				# if we already have it, just add ammo (usually case for extinguisher)
-				var result : Tool = tool_inv.has_tool_by_name("ExtinguisherTool")
-				if result:
-					# don't add to infinite ammo
-					if result.ammo >= 0:
-						result.ammo += ammo
-						result.update_ammo_display()
-				else:
-					var tool : Tool = extinguisher_tool.instantiate()
-					tool.ammo = ammo
-					# don't restore extinguisher foam
-					tool.restore_ammo = false
-					tool_inv.add_child(tool)
+				result = tool_inv.has_tool_by_name("ExtinguisherTool")
+				tool_idx = ToolInventory.ToolIdx.Extinguisher
 			PickupType.MISSILE:
 				# if we already have it, just add ammo
-				var result : Tool = tool_inv.has_tool_by_name("MissileTool")
-				if result:
-					# don't add to infinite ammo
-					if result.ammo >= 0:
-						result.ammo += ammo
-						result.update_ammo_display()
-				else:
-					var tool : Tool = missile_tool.instantiate()
-					tool.ammo = ammo
-					tool_inv.add_child(tool)
+				result = tool_inv.has_tool_by_name("MissileTool")
+				tool_idx = ToolInventory.ToolIdx.Missile
+		if type != PickupType.MEDKIT:
+			if result:
+				# don't add to infinite ammo
+				if result.ammo >= 0:
+					result.ammo += ammo
+					result.update_ammo_display()
+			else:
+				tool_inv.add_tool(tool_idx, ammo)
 	respawn_timer.start()
 	await respawn_timer.timeout
 	# reset label
