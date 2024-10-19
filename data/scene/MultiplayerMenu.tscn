@@ -264,19 +264,20 @@ layout_mode = 2
 text = "Back"
 script = ExtResource("2_o48rt")
 json_text = "ui/back"
+grab_initial_focus = true
 
 [node name="Spacer" type="Control" parent="PlayMenu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="ServerList" type="PanelContainer" parent="PlayMenu"]
-custom_minimum_size = Vector2(420, 27)
+custom_minimum_size = Vector2(420, 2.08165e-12)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("8_7bulb")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PlayMenu/ServerList"]
-custom_minimum_size = Vector2(2.08165e-12, 350)
+custom_minimum_size = Vector2(2.08165e-12, 200)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -294,7 +295,7 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 32
-text = "Direct / LAN"
+text = "Direct"
 script = ExtResource("3_yuqno")
 json_text = "ui/direct"
 
@@ -309,7 +310,6 @@ size_flags_horizontal = 3
 text = "Host direct"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_direct"
-grab_initial_focus = true
 
 [node name="Edit" type="Button" parent="PlayMenu/HostHbox"]
 layout_mode = 2
@@ -321,6 +321,14 @@ script = ExtResource("2_o48rt")
 [node name="JoinHbox" type="HBoxContainer" parent="PlayMenu"]
 layout_mode = 2
 
+[node name="Address" type="LineEdit" parent="PlayMenu/JoinHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.15
+placeholder_text = "direct join address"
+caret_blink = true
+caret_blink_interval = 0.5
+
 [node name="Join" type="Button" parent="PlayMenu/JoinHbox"]
 self_modulate = Color(0.761, 1.081, 1.081, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
@@ -330,12 +338,29 @@ text = "Join direct"
 script = ExtResource("2_o48rt")
 json_text = "ui/join_direct"
 
-[node name="Edit" type="Button" parent="PlayMenu/JoinHbox"]
+[node name="Spacer5" type="Control" parent="PlayMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.3
-text = "+"
-script = ExtResource("2_o48rt")
+
+[node name="DynamicLabel3" type="Label" parent="PlayMenu"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_labno")
+theme_override_font_sizes/font_size = 32
+text = "LAN"
+script = ExtResource("3_yuqno")
+json_text = "ui/lan"
+
+[node name="LANPanelContainer" type="VBoxContainer" parent="PlayMenu"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PlayMenu/LANPanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Searching for LAN servers..."
+script = ExtResource("3_yuqno")
 
 [node name="HostSettingsMenu" type="VBoxContainer" parent="."]
 visible = false
@@ -385,65 +410,6 @@ custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="Back" type="Button" parent="HostSettingsMenu"]
-self_modulate = Color(1, 0.529412, 0, 1)
-custom_minimum_size = Vector2(2.08165e-12, 40)
-layout_mode = 2
-text = "Back"
-script = ExtResource("2_o48rt")
-json_text = "ui/back"
-grab_initial_focus = true
-
-[node name="JoinSettingsMenu" type="VBoxContainer" parent="."]
-visible = false
-custom_minimum_size = Vector2(308, 2.08165e-12)
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -484.0
-offset_top = -255.0
-offset_right = -176.0
-offset_bottom = 255.0
-grow_horizontal = 0
-grow_vertical = 2
-script = ExtResource("2_ylpqp")
-
-[node name="DynamicLabel" type="Label" parent="JoinSettingsMenu"]
-self_modulate = Color(1, 1, 1, 0.447059)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_labno")
-theme_override_font_sizes/font_size = 64
-text = "Join"
-script = ExtResource("3_yuqno")
-json_text = "ui/join"
-
-[node name="Spacer" type="Control" parent="JoinSettingsMenu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="Address" type="LineEdit" parent="JoinSettingsMenu"]
-layout_mode = 2
-placeholder_text = "address"
-caret_blink = true
-caret_blink_interval = 0.5
-
-[node name="LANPanelContainer" type="VBoxContainer" parent="JoinSettingsMenu"]
-custom_minimum_size = Vector2(2.08165e-12, 60)
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="JoinSettingsMenu/LANPanelContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Searching for LAN servers..."
-script = ExtResource("3_yuqno")
-
-[node name="Spacer6" type="Control" parent="JoinSettingsMenu"]
-custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="Back" type="Button" parent="JoinSettingsMenu"]
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2

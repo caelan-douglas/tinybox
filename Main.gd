@@ -56,7 +56,7 @@ var display_version := "beta 12.0pre"
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
 @onready var join_button : Button = $MultiplayerMenu/PlayMenu/JoinHbox/Join
 @onready var display_name_field : LineEdit = $MultiplayerMenu/DisplayName
-@onready var join_address : LineEdit = $MultiplayerMenu/JoinSettingsMenu/Address
+@onready var join_address : LineEdit = $MultiplayerMenu/PlayMenu/JoinHbox/Address
 @onready var host_map_selector : OptionButton = $MultiplayerMenu/HostSettingsMenu/MapSelection
 @onready var editor_button : Button = $MultiplayerMenu/MainMenu/Editor
 @onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/Tutorial
@@ -125,8 +125,8 @@ func _on_new_lan_server(serverInfo : Dictionary) -> void:
 	var lan_entry : PackedScene = load("res://data/scene/ui/LANEntry.tscn")
 	if multiplayer_menu:
 		var new_lan_entry : Control = lan_entry.instantiate()
-		get_node("MultiplayerMenu/JoinSettingsMenu/LANPanelContainer/Label").text = "Join a server via LAN"
-		multiplayer_menu.get_node("JoinSettingsMenu/LANPanelContainer").add_child(new_lan_entry)
+		get_node("MultiplayerMenu/PlayMenu/LANPanelContainer/Label").text = "Join a server via LAN"
+		multiplayer_menu.get_node("PlayMenu/LANPanelContainer").add_child(new_lan_entry)
 		new_lan_entry.get_node("Name").text = str(serverInfo.name)
 		new_lan_entry.get_node("Join").connect("pressed", _on_join_pressed.bind(serverInfo.ip, true))
 		new_lan_entry.entry_server_ip = serverInfo.ip
@@ -139,7 +139,7 @@ func _on_remove_lan_server(serverIp : String) -> void:
 				lan_entries.erase(entry)
 				entry.queue_free()
 				if lan_entries.size() < 1:
-					get_node("MultiplayerMenu/JoinSettingsMenu/LANPanelContainer/Label").text = "Searching for LAN servers..."
+					get_node("MultiplayerMenu/PlayMenu/LANPanelContainer/Label").text = "Searching for LAN servers..."
 
 func verify_display_name(check_string : String) -> Variant:
 	var regex := RegEx.new()
