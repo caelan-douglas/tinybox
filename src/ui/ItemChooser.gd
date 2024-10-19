@@ -74,13 +74,13 @@ func _ready() -> void:
 		item_button.tooltip_text = JsonHandler.find_entry_in_file(str("tbw_objects/tooltips/", item))
 		if item.begins_with("brick"):
 			add_to_set("Basic bricks", item_button)
-		if editor_mode:
+		elif editor_mode:
 			# remove brick icon for non bricks
 			if item.begins_with("obj_camera"):
 				item_button.set_button_icon(load("res://data/textures/editor_icons/camera.png") as Texture2D)
 			elif !item.begins_with("brick"):
 				item_button.icon = null
-			if item.begins_with("obj_track"):
+			elif item.begins_with("obj_track"):
 				add_to_set("Track pieces", item_button)
 			elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "obj_camera_preview_point":
 				add_to_set("Special", item_button)

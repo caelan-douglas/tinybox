@@ -114,17 +114,16 @@ func update_ammo_display() -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func reduce_ammo() -> void:
-	if ammo != -1:
-		if ammo != 0:
-			ammo -= 1
-			update_ammo_display()
-			if ammo < 1 && !restore_ammo:
-				super.delete()
-			# delay restore timer
-			if restore_ammo:
-				restore_timer.stop()
-				await get_tree().create_timer(2).timeout
-				restore_timer.start()
+	if ammo > 0:
+		ammo -= 1
+		update_ammo_display()
+		if ammo < 1 && !restore_ammo:
+			delete()
+		# delay restore timer
+		if restore_ammo:
+			restore_timer.stop()
+			await get_tree().create_timer(2).timeout
+			restore_timer.start()
 
 func increase_ammo() -> void:
 	# reset wait time (from ammo reduction)
@@ -172,8 +171,6 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 					p = ball.instantiate()
 					Global.get_world().add_child(p, true)
 					p.spawn_projectile.rpc(id, shot_speed_rpc, true)
-			# Reduce ammo for client (this function is run as server).
-			reduce_ammo.rpc_id(get_multiplayer_authority())
 
 @rpc("any_peer", "call_remote", "reliable")
 func show_floaty_cost_client(cost : int) -> void:
@@ -214,10 +211,9 @@ func _physics_process(delta : float) -> void:
 						audio.play()
 					# if we are NOT the server,
 					# make server spawn ball so it is synced by MultiplayerSpawner
-					if !multiplayer.is_server():
-						spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed, _shoot_type)
-					else:
-						spawn_projectile(multiplayer.get_unique_id(), shot_speed, _shoot_type)
+					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed, _shoot_type)
+					# Reduce ammo for self (client).
+					reduce_ammo()
 				else:
 					if charged_shot_amt < charged_shot_amt_max:
 						charged_shot_amt += 1
