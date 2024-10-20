@@ -38,6 +38,7 @@ func refresh() -> void:
 	if include_built_in:
 		add_separator("Built-in worlds")
 		add_map("Frozen Field")
+		add_map("Acid House")
 		add_map("Castle")
 		add_map("Warp Spire")
 		add_map("Quarry Quarrel")
