@@ -221,7 +221,7 @@ func play_kill_sound() -> void:
 	audio.volume_db = 1
 	get_world().add_child(audio)
 	# combo kill
-	if Time.get_unix_time_from_system() - last_kill_time < 4:
+	if Time.get_unix_time_from_system() - last_kill_time < 8:
 		match (combo):
 			0:
 				# double kill

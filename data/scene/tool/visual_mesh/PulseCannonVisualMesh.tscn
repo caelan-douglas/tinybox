@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxgj3u28slf02"]
+
+[ext_resource type="PackedScene" uid="uid://cl3rhmvgcqf5q" path="res://data/models/visual_mesh/pulse_cannon/pulse_cannon.blend" id="1_mlrro"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="pulse_cannon" parent="." instance=ExtResource("1_mlrro")]
+transform = Transform3D(0.392481, 0.91974, 0.0061219, -0.0470213, 0.0267118, -0.998537, -0.918557, 0.391619, 0.0537312, 0.067, 0.045, -0.04)
+
+[node name="beam_start_point" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.188953, 0.975754, -0.0414446)

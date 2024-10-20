@@ -10,7 +10,7 @@ uniform sampler2D texture_normal;
 uniform sampler2D texture_normal2;
 uniform vec2 wave_direction = vec2(2.0,0.0); // Direction of wave 1
 uniform vec2 wave_direction2 = vec2(0.0,1.0); // Direction of wave 2
-uniform float time_scale : hint_range(0.0, 0.2, 0.005) = 0.025; // Rate of movement multiplied by TIME
+uniform float time_scale : hint_range(0.0, 1, 0.005) = 0.025; // Rate of movement multiplied by TIME
 uniform float noise_scale = 10.0;
 uniform float height_scale = 0.15;
 uniform float normal_scale = 10.0;

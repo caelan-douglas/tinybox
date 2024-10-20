@@ -26,10 +26,11 @@ enum PickupType {
 	FLAMETHROWER,
 	EXTINGUISHER,
 	MISSILE,
-	MEDKIT
+	MEDKIT,
+	PULSECANNON
 }
 
-const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrower", "Extinguisher", "Missiles", "Medkit"]
+const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrower", "Extinguisher", "Missiles", "Medkit", "Pulse Cannon"]
 
 @export var type : PickupType = PickupType.ROCKET
 @export var ammo : int = 2
@@ -45,12 +46,14 @@ const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrowe
 @onready var extinguisher_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FireExtinguisherVisualMesh.tscn")
 @onready var missile_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/MissileLauncherVisualMesh.tscn")
 @onready var medkit_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/MedkitVisualMesh.tscn")
+@onready var pulse_cannon_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/PulseCannonVisualMesh.tscn")
 
 @onready var rocket_tool : PackedScene = preload("res://data/scene/tool/RocketTool.tscn")
 @onready var missile_tool : PackedScene = preload("res://data/scene/tool/MissileTool.tscn")
 @onready var bomb_tool : PackedScene = preload("res://data/scene/tool/BombTool.tscn")
 @onready var flamethrower_tool : PackedScene = preload("res://data/scene/tool/FlamethrowerTool.tscn")
 @onready var extinguisher_tool : PackedScene = preload("res://data/scene/tool/ExtinguisherTool.tscn")
+@onready var pulse_cannon_tool : PackedScene = preload("res://data/scene/tool/PulseCannonTool.tscn")
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "type", "ammo", "respawn_time"]
@@ -94,6 +97,9 @@ func set_mesh() -> void:
 		PickupType.MEDKIT:
 			var mesh_i : Node3D = medkit_mesh.instantiate()
 			$MeshParent.add_child(mesh_i)
+		PickupType.PULSECANNON:
+			var mesh_i : Node3D = pulse_cannon_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
 
 func _on_body_entered(body : Node3D) -> void:
 	if body is RigidPlayer && pickup_available:
@@ -136,6 +142,10 @@ func _take_pickup(body : RigidPlayer) -> void:
 				# if we already have it, just add ammo
 				result = tool_inv.has_tool_by_name("MissileTool")
 				tool_idx = ToolInventory.ToolIdx.Missile
+			PickupType.PULSECANNON:
+				# if we already have it, just add ammo
+				result = tool_inv.has_tool_by_name("PulseCannonTool")
+				tool_idx = ToolInventory.ToolIdx.PulseCannon
 		if type != PickupType.MEDKIT:
 			if result:
 				# don't add to infinite ammo
@@ -143,7 +153,7 @@ func _take_pickup(body : RigidPlayer) -> void:
 					result.ammo += ammo
 					result.update_ammo_display()
 			else:
-				tool_inv.add_tool(tool_idx, ammo)
+				tool_inv.add_tool.rpc(tool_idx, ammo)
 	respawn_timer.start()
 	await respawn_timer.timeout
 	# reset label
@@ -168,6 +178,8 @@ func set_available_text() -> void:
 		label.text = str("Fuel: ", ammo)
 	elif type == PickupType.MEDKIT:
 		label.text = str("Health: ", ammo)
+	elif type == PickupType.PULSECANNON:
+		label.text = str("Pulse Energy: ", ammo)
 	else:
 		label.text = str("Shots: ", ammo)
 

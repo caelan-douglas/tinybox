@@ -31,7 +31,8 @@ enum ToolIdx {
 	BombTool,
 	Flamethrower,
 	Missile,
-	Paintbrush
+	Paintbrush,
+	PulseCannon
 }
 
 var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"),\
@@ -42,7 +43,8 @@ preload("res://data/scene/tool/RocketTool.tscn"),\
 preload("res://data/scene/tool/BombTool.tscn"),\
 preload("res://data/scene/tool/FlamethrowerTool.tscn"),\
 preload("res://data/scene/tool/MissileTool.tscn"),\
-preload("res://data/scene/tool/PaintbrushTool.tscn")]
+preload("res://data/scene/tool/PaintbrushTool.tscn"),
+preload("res://data/scene/tool/PulseCannonTool.tscn")]
 
 var hold_timer := 0
 
@@ -150,19 +152,17 @@ func has_tool_by_name(name : String) -> Tool:
 
 # Add a new tool to this tool inventory.
 @rpc("any_peer", "call_local", "reliable")
-func add_tool(tool : ToolIdx, ammo : int = -1) -> Tool:
+func add_tool(tool : ToolIdx, ammo : int = -1) -> void:
 	# only run as auth
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
-	if !get_tools().has(tool):
-		var ntool : Tool = all_tools[tool].instantiate()
-		if ammo > 0 && ntool is ShootTool:
-			ntool.ammo = ammo
+	var ntool : Tool = all_tools[tool].instantiate()
+	if ammo > 0 && (ntool is ShootTool || ntool is PulseCannonTool):
+		ntool.ammo = ammo
+		if ntool is ShootTool:
 			ntool.restore_ammo = false
-		add_child(ntool, true)
-		resize_ui()
-		return ntool
-	return
+	add_child(ntool, true)
+	resize_ui()
 
 # get the index of a tool in a list.
 func get_index_of_tool(tool : Tool) -> int:
@@ -189,15 +189,9 @@ func give_all_tools() -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
 		return
 	for at : String in ToolIdx:
-		# index of enum
-		var ntool : Tool = add_tool(ToolIdx[at] as ToolIdx)
-		# give inf extinguisher in alltools
-		if ntool != null:
-			if ntool is ShootTool:
-				if ntool._shoot_type == ShootTool.ShootType.WATER:
-					ntool.restore_ammo = true
-					ntool.max_ammo_restore = 999
-					ntool.ammo = 999
+		if at != "PulseCannon":
+			# index of enum
+			add_tool(ToolIdx[at] as ToolIdx)
 	resize_ui()
 
 # resets inventory to default (sandbox) state (all tools in def. states)

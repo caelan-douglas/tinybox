@@ -295,11 +295,11 @@ func _is_friendly_fire(other_player : RigidPlayer) -> bool:
 	return false
 
 var time_last_reduced_health : int = 0
-func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
+func reduce_health(amount : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1, override_invincibility_period : bool = false) -> void:
 	# server handles all player health
 	if !multiplayer.is_server(): return
 	# invincibility period
-	if Time.get_ticks_msec() - time_last_reduced_health > 499:
+	if (Time.get_ticks_msec() - time_last_reduced_health > 499) || override_invincibility_period:
 		# from server: update display for client and all players
 		set_health(get_health() - amount, potential_cause_of_death, potential_executor_id)
 		time_last_reduced_health = Time.get_ticks_msec()
@@ -705,6 +705,9 @@ func _physics_process(delta : float) -> void:
 	
 	if !is_multiplayer_authority(): return
 	# Idle animations
+	# reset idle time when clicking, ex. using tools
+	if Input.is_action_pressed("click"):
+		idle_time = 0
 	# (Also do dummy for main menu preview)
 	if _state == IDLE:
 		check_idle()

@@ -1,0 +1,239 @@
+[gd_scene load_steps=21 format=3 uid="uid://dofj1u51fgb3n"]
+
+[ext_resource type="Script" path="res://src/PulseCannonTool.gd" id="1_17p35"]
+[ext_resource type="AudioStream" uid="uid://bt1qfstyhshdi" path="res://data/audio/laser.ogg" id="2_hl60i"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="3_jmyfu"]
+[ext_resource type="Shader" path="res://data/shaders/water.gdshader" id="4_ajeco"]
+
+[sub_resource type="Animation" id="Animation_tx3k3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:pitch_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_srsuu"]
+resource_name = "fadein"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-50.0, -10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:pitch_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_uslbx"]
+resource_name = "fadeout"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-10.0, -50.0, -10.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioStreamPlayer:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer:pitch_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xdt0q"]
+_data = {
+"RESET": SubResource("Animation_tx3k3"),
+"fadein": SubResource("Animation_srsuu"),
+"fadeout": SubResource("Animation_uslbx")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0kucd"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2pdr2"]
+flip_faces = true
+size = Vector3(0.15, 0.15, 1)
+subdivide_width = 2
+subdivide_height = 2
+subdivide_depth = 50
+
+[sub_resource type="Gradient" id="Gradient_lnlve"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ma1rf"]
+frequency = 0.0019
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m23ss"]
+seamless = true
+seamless_blend_skirt = 1.0
+as_normal_map = true
+color_ramp = SubResource("Gradient_lnlve")
+noise = SubResource("FastNoiseLite_ma1rf")
+
+[sub_resource type="Gradient" id="Gradient_3aaam"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y5tne"]
+frequency = 0.0011
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sadk0"]
+seamless = true
+seamless_blend_skirt = 1.0
+as_normal_map = true
+color_ramp = SubResource("Gradient_3aaam")
+noise = SubResource("FastNoiseLite_y5tne")
+
+[sub_resource type="Gradient" id="Gradient_sxj1p"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2s700"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v1d1h"]
+color_ramp = SubResource("Gradient_sxj1p")
+noise = SubResource("FastNoiseLite_2s700")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ehhbm"]
+render_priority = 10
+shader = ExtResource("4_ajeco")
+shader_parameter/albedo = Color(0.54, 0.541, 9.189, 1)
+shader_parameter/albedo2 = Color(2.702, 0.184, 0.302, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.303
+shader_parameter/wave_direction = Vector2(2, 0)
+shader_parameter/wave_direction2 = Vector2(0, 1)
+shader_parameter/time_scale = 0.75
+shader_parameter/noise_scale = 2.0
+shader_parameter/height_scale = 0.25
+shader_parameter/normal_scale = 10.0
+shader_parameter/color_deep = Color(0.180392, 0.215686, 0.364706, 1)
+shader_parameter/color_shallow = Color(0.623529, 0.764706, 1, 1)
+shader_parameter/beers_law = 0.1
+shader_parameter/depth_offset = -0.75
+shader_parameter/edge_scale = 0.66
+shader_parameter/near = 1.0
+shader_parameter/far = 100.0
+shader_parameter/edge_color = Color(1, 1, 1, 1)
+shader_parameter/wave = SubResource("NoiseTexture2D_v1d1h")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_m23ss")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_sadk0")
+
+[node name="PulseCannonTool" type="Node3D"]
+script = ExtResource("1_17p35")
+visual_mesh_name = "PulseCannonVisualMesh"
+lock_camera_to_aim = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_hl60i")
+volume_db = -10.0
+unit_size = 120.0
+max_db = 4.996e-16
+max_distance = 200.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xdt0q")
+}
+
+[node name="BeamArea" type="Area3D" parent="."]
+top_level = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BeamArea"]
+shape = SubResource("BoxShape3D_0kucd")
+disabled = true
+
+[node name="Smoothing" type="Node3D" parent="."]
+top_level = true
+script = ExtResource("3_jmyfu")
+
+[node name="BeamMesh" type="Node3D" parent="Smoothing"]
+visible = false
+
+[node name="BeamMeshI" type="MeshInstance3D" parent="Smoothing/BeamMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.125, 2.08165e-12)
+mesh = SubResource("BoxMesh_2pdr2")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_ehhbm")

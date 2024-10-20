@@ -76,3 +76,7 @@ Attributions for /data/audio:
 	spotlight.ogg:
 		by reidmangan; licensed under Creative Commons 0
 		https://freesound.org/people/reidmangan/sounds/49023/
+
+	laser.ogg:
+		by BigDino1995: licensed under Creative Commons 0
+		https://freesound.org/people/BigDino1995/sounds/567309/

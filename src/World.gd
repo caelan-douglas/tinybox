@@ -272,6 +272,9 @@ func set_loading_canvas_text(text : String) -> void:
 # Only to be run as server
 func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
+	for p : RigidPlayer in rigidplayer_list:
+		p.protect_spawn(3.5, false)
+	await get_tree().physics_frame
 	tbw_loading = true
 	clear_world()
 	# Load default empty map, unless we are in the editor

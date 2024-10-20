@@ -25,7 +25,7 @@ enum ShootType {
 	WATER,
 	FIRE,
 	MISSILE,
-	SHOTBALL
+	PULSE_CANNON
 }
 
 @export var tool_name : String = "Shoot Tool"
@@ -112,7 +112,6 @@ func update_ammo_display() -> void:
 	else:
 		ui_partner.text = str(ui_tool_name, " (", ammo, ")")
 
-@rpc("any_peer", "call_local", "reliable")
 func reduce_ammo() -> void:
 	if ammo > 0:
 		ammo -= 1
@@ -163,14 +162,8 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 				p = ball.instantiate()
 		if p != null:
 			# Spawn projectile for client (this function is run as server).
-			if _shoot_type != ShootType.SHOTBALL:
-				Global.get_world().add_child(p, true)
-				p.spawn_projectile.rpc(id, shot_speed_rpc)
-			else:
-				for i in range(3):
-					p = ball.instantiate()
-					Global.get_world().add_child(p, true)
-					p.spawn_projectile.rpc(id, shot_speed_rpc, true)
+			Global.get_world().add_child(p, true)
+			p.spawn_projectile.rpc(id, shot_speed_rpc)
 
 @rpc("any_peer", "call_remote", "reliable")
 func show_floaty_cost_client(cost : int) -> void:

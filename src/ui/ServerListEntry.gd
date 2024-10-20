@@ -42,17 +42,26 @@ func update_server_status_label(mode : bool, player_count : String = "0", server
 	if mode == false:
 		status_label.text = "Offline"
 		status_label.self_modulate = Color("#ff2360")
-	elif server_version != (get_tree().current_scene as Main).display_version:
-		status_label.text = str("Online, incompatible ver.")
-		status_label.self_modulate = Color("#e8aa00")
-		var join_button : Button = $HBox/Join
-		join_button.disabled = true
 	else:
+		var my_version : String = (get_tree().current_scene as Main).display_version
 		if player_count == "1":
-			status_label.text = str("Online - ", player_count, " player")
+			if server_version != my_version:
+				status_label.text = str(player_count, " online, incompatible ver.")
+			else:
+				status_label.text = str("Online - ", player_count, " player")
 		else:
-			status_label.text = str("Online - ", player_count, " players")
-		status_label.self_modulate = Color("#00f88f")
+			if server_version != my_version:
+				status_label.text = str(player_count, " online, incompatible ver.")
+			else:
+				status_label.text = str("Online - ", player_count, " players")
+		if server_version != my_version:
+			status_label.self_modulate = Color("#e8aa00")
+			var join_button : Button = $HBox/Join
+			join_button.disabled = true
+		else:
+			status_label.self_modulate = Color("#00f88f")
+			var join_button : Button = $HBox/Join
+			join_button.disabled = false
 	version_label.text = str("Version: ", server_version)
 
 func ping_server(address : String) -> void:
