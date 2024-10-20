@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dofj1u51fgb3n"]
+[gd_scene load_steps=20 format=3 uid="uid://dofj1u51fgb3n"]
 
 [ext_resource type="Script" path="res://src/PulseCannonTool.gd" id="1_17p35"]
 [ext_resource type="AudioStream" uid="uid://bt1qfstyhshdi" path="res://data/audio/laser.ogg" id="2_hl60i"]
@@ -17,7 +17,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [-10.0]
+"values": [-13.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -44,46 +44,6 @@ tracks/2/keys = {
 "values": [1.0]
 }
 
-[sub_resource type="Animation" id="Animation_srsuu"]
-resource_name = "fadein"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AudioStreamPlayer:volume_db")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-50.0, -10.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AudioStreamPlayer:playing")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AudioStreamPlayer:pitch_scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.2, 1.0]
-}
-
 [sub_resource type="Animation" id="Animation_uslbx"]
 resource_name = "fadeout"
 length = 1.2
@@ -97,7 +57,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1, 1.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [-10.0, -50.0, -10.0]
+"values": [-13.0, -50.0, -13.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -127,7 +87,6 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xdt0q"]
 _data = {
 "RESET": SubResource("Animation_tx3k3"),
-"fadein": SubResource("Animation_srsuu"),
 "fadeout": SubResource("Animation_uslbx")
 }
 
@@ -205,7 +164,7 @@ lock_camera_to_aim = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_hl60i")
-volume_db = -10.0
+volume_db = -13.0
 unit_size = 120.0
 max_db = 4.996e-16
 max_distance = 200.0

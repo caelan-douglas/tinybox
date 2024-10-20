@@ -64,8 +64,8 @@ func _set_tool_audio_playing(mode : bool) -> void:
 	match(mode):
 		true:
 			audio_anim.stop()
-			audio.volume_db = -10
-			audio_anim.play("fadein")
+			audio.volume_db = -13
+			audio.play()
 		false:
 			audio_anim.play("fadeout")
 
@@ -118,7 +118,7 @@ func _process(delta : float) -> void:
 				tool_player_owner.locked = true
 				update_beam_active.rpc(true)
 				if (audio != null && audio_anim != null):
-					if !audio.playing || audio_anim.current_animation == "fadeout":
+					if !audio.playing || audio_anim.is_playing():
 						_set_tool_audio_playing.rpc(true)
 				var camera := get_viewport().get_camera_3d()
 				var mousepos := get_viewport().get_mouse_position()

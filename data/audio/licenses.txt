@@ -57,7 +57,7 @@ Attributions for /data/audio:
 		by deleted_user_2104797; licensed under Creative Commons 0
 		https://freesound.org/people/deleted_user_2104797/sounds/148987/
 
-	invalid.ogg, kill.ogg, doublekill.ogg, triplekill.ogg, multikill.ogg, checkpoint.ogg, checkpoint_final.ogg:
+	invalid.ogg, kill.ogg, doublekill.ogg, triplekill.ogg, multikill.ogg, checkpoint.ogg, checkpoint_final.ogg, laser.ogg:
 		by Matthew Tzavelas; licensed under Creative Commons 0
 		(source file)
 	
@@ -76,7 +76,3 @@ Attributions for /data/audio:
 	spotlight.ogg:
 		by reidmangan; licensed under Creative Commons 0
 		https://freesound.org/people/reidmangan/sounds/49023/
-
-	laser.ogg:
-		by BigDino1995: licensed under Creative Commons 0
-		https://freesound.org/people/BigDino1995/sounds/567309/
