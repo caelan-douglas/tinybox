@@ -166,7 +166,7 @@ lock_camera_to_aim = true
 stream = ExtResource("2_hl60i")
 volume_db = -13.0
 unit_size = 120.0
-max_db = 4.996e-16
+max_db = -1.5
 max_distance = 200.0
 bus = &"SFX"
 

@@ -69,16 +69,25 @@ func _set_tool_audio_playing(mode : bool) -> void:
 		false:
 			audio_anim.play("fadeout")
 
+var beam_active_time : int = 0
 func _physics_process(delta : float) -> void:
 	if multiplayer.is_server():
+		# timer for lighting player/items on fire with sustained fire
+		if beam_active:
+			beam_active_time += 1
+		else:
+			beam_active_time = 0
+		
 		for body in beam_area.get_overlapping_bodies():
 			# make sure we don't damage ourselves
 			if body is RigidPlayer && body.get_multiplayer_authority() != tool_player_owner.get_multiplayer_authority() && damage_cooldown < 1:
 				body.reduce_health(1, RigidPlayer.CauseOfDeath.FIRE, get_multiplayer_authority(), true)
-				body.light_fire.rpc(tool_player_owner.get_multiplayer_authority(), 0)
+				if beam_active_time > 35:
+					body.light_fire.rpc(tool_player_owner.get_multiplayer_authority(), 0)
 				damage_cooldown = 6
 			elif body is Bomb || body is Rocket:
-				body.explode.rpc(tool_player_owner.get_multiplayer_authority())
+				if beam_active_time > 35:
+					body.explode.rpc(tool_player_owner.get_multiplayer_authority())
 		if damage_cooldown > 0:
 			damage_cooldown -= 1
 	if is_multiplayer_authority():
