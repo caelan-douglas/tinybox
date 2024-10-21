@@ -1246,8 +1246,8 @@ func enter_state() -> void:
 		in_air_from_lifter = false
 		sparkle_audio_anim.play("fadeout")
 	
-	# last hit handling: states that should not change the fact you were 'last hit'
-	if _state != AIR && _state != HIGH_JUMP && _state != DIVE && _state != IDLE && _state != STANDING_UP && _state != EXIT_SEAT && _state != TRIPPED && _state != SLIDE && _state != ROLL && _state != ON_WALL:
+	# only reset last_hit_by when the player walks on ground
+	if _state == RUN || _state == RESPAWN:
 		set_last_hit_by_id.rpc(-1)
 	
 	# reset from states that change the character's model rotation

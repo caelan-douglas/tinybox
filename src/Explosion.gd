@@ -67,3 +67,8 @@ func play_sound() -> void:
 func explode(body : Node3D) -> void:
 	if body.has_method("explode") && !(body is Explosion) && !(body is Rocket) && !(body is Bomb):
 		body.explode.rpc(global_position, by_whom)
+		# set 'last_hit_by' on player to this authority so that
+		# if a player is knocked off the map by an explosion,
+		# the point is attributed
+		if body is RigidPlayer && multiplayer.is_server():
+			body.set_last_hit_by_id.rpc(by_whom)

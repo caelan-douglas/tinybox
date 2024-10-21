@@ -361,6 +361,24 @@ script = ExtResource("5_es3m5")
 default_key = 57
 keybind_for_what = "PaintbrushTool"
 
+[node name="KeybindContainerPulseCannon" type="HBoxContainer" parent="Keybinds"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerPulseCannon"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
+text = "Pulse Cannon"
+script = ExtResource("3_r1aba")
+
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerPulseCannon"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+script = ExtResource("5_es3m5")
+default_key = 48
+keybind_for_what = "PulseCannonTool"
+
 [node name="Spacer2" type="Control" parent="."]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
