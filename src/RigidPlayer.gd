@@ -19,6 +19,7 @@ class_name RigidPlayer
 
 signal hit_by_melee(tool : Tool)
 signal died()
+signal teleported()
 
 enum {
 	IDLE,
@@ -692,7 +693,8 @@ func _ready() -> void:
 func _on_tbw_loaded() -> void:
 	# set default spawns
 	set_spawns.rpc_id(get_multiplayer_authority(), world.get_spawnpoint_for_team(team))
-	go_to_spawn.rpc_id(get_multiplayer_authority())
+	if !(Global.get_world().get_current_map() is Editor):
+		go_to_spawn.rpc_id(get_multiplayer_authority())
 
 @rpc("any_peer", "call_local")
 func set_lifter_particles(mode : bool) -> void:
@@ -1080,6 +1082,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		var t := state.transform
 		t.origin = teleport_pos
 		state.set_transform(t)
+		await get_tree().physics_frame
+		emit_signal("teleported")
 	
 	# handle out of map ( runs outside auth check )
 	if multiplayer.is_server():

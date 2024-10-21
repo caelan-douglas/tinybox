@@ -223,8 +223,10 @@ func enable_player(at_spot : Variant = null) -> int:
 	player.name = str(1)
 	Global.get_world().add_child(player, true)
 	# grace period for invincibility
-	await get_tree().create_timer(0.15).timeout
+	await player.teleported
+	await get_tree().physics_frame
 	if at_spot != null:
+		print("moving to ", at_spot)
 		if at_spot is Vector3:
 			player.teleport(at_spot as Vector3)
 	await get_tree().process_frame
@@ -233,6 +235,13 @@ func enable_player(at_spot : Variant = null) -> int:
 var test_mode_world_name : String = ""
 func enter_test_mode(world_name : String, at_spot : bool = false) -> void:
 	test_mode = true
+	var player_spot : Variant = null
+	if at_spot:
+		var camera : Camera3D = get_viewport().get_camera_3d()
+		if camera != null:
+			if camera is Camera:
+				player_spot = camera.controlled_cam_pos
+	
 	# save in case player makes any changes / destroys things in testing
 	var ok : Variant = await Global.get_world().save_tbw(str(world_name))
 	if ok == false:
@@ -244,12 +253,6 @@ func enter_test_mode(world_name : String, at_spot : bool = false) -> void:
 	while Global.get_world().tbw_loading:
 		await get_tree().process_frame
 	
-	var player_spot : Variant = null
-	if at_spot:
-		var camera : Camera3D = get_viewport().get_camera_3d()
-		if camera != null:
-			if camera is Camera:
-				player_spot = camera.controlled_cam_pos
 	await enable_player(player_spot)
 	editor_canvas.visible = false
 	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
