@@ -328,6 +328,13 @@ text = "Save & test world"
 script = ExtResource("15_32mo6")
 json_text = "ui/save_and_test"
 
+[node name="TestWorldAtSpot" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+self_modulate = Color(1, 2.702, 1.8, 1)
+layout_mode = 2
+text = "Save & test world at this spot"
+script = ExtResource("15_32mo6")
+json_text = "ui/save_and_test_at_spot"
+
 [node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2

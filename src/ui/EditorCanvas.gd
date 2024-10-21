@@ -54,7 +54,8 @@ func _on_map_loaded() -> void:
 		$EntryScreen/Panel/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapSelection))
 		$PauseMenu/ScrollContainer/Sections/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/ScrollContainer/Sections/Editor/MapSelection, true))
-		$PauseMenu/ScrollContainer/Sections/Editor/TestWorld.connect("pressed", _on_test_world_pressed)
+		$PauseMenu/ScrollContainer/Sections/Editor/TestWorld.connect("pressed", _on_test_world_pressed.bind(false))
+		$PauseMenu/ScrollContainer/Sections/Editor/TestWorldAtSpot.connect("pressed", _on_test_world_pressed.bind(true))
 		
 		$EntryScreen/Panel/Menu/New.grab_focus()
 		
@@ -63,13 +64,13 @@ func _on_map_loaded() -> void:
 		# disable tools for entry screen
 		editor.editor_tool_inventory.set_disabled(true)
 
-func _on_test_world_pressed() -> void:
+func _on_test_world_pressed(at_spot : bool = false) -> void:
 	if world_name.text == "":
 		UIHandler.show_alert("Please enter a world name before testing!", 4, false, UIHandler.alert_colour_error)
 	else:
 		var editor : Node3D = Global.get_world().get_current_map()
 		if editor is Editor:
-			editor.enter_test_mode(str(world_name.text))
+			editor.enter_test_mode(str(world_name.text), at_spot)
 
 func _on_new_world_pressed() -> void:
 	var editor : Node3D = Global.get_world().get_current_map()
