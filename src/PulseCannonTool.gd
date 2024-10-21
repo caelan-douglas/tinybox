@@ -77,6 +77,8 @@ func _physics_process(delta : float) -> void:
 				body.reduce_health(1, RigidPlayer.CauseOfDeath.FIRE, get_multiplayer_authority(), true)
 				body.light_fire.rpc(tool_player_owner.get_multiplayer_authority(), 0)
 				damage_cooldown = 6
+			elif body is Bomb || body is Rocket:
+				body.explode.rpc(tool_player_owner.get_multiplayer_authority())
 		if damage_cooldown > 0:
 			damage_cooldown -= 1
 	if is_multiplayer_authority():

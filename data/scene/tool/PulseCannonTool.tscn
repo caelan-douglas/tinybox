@@ -178,7 +178,7 @@ libraries = {
 [node name="BeamArea" type="Area3D" parent="."]
 top_level = true
 collision_layer = 0
-collision_mask = 2
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BeamArea"]
 shape = SubResource("BoxShape3D_0kucd")

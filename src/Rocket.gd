@@ -42,7 +42,7 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(_player_left)
 	if (despawn_time != -1) && despawn_time > 0:
 		despawn_timer = get_tree().create_timer(despawn_time as float)
-		despawn_timer.connect("timeout", _send_explode.bind(1, null))
+		despawn_timer.connect("timeout", _send_explode.bind(1))
 	
 	if guided:
 		$MissileBeep.playing = true
@@ -51,19 +51,16 @@ func _ready() -> void:
 	if add_synchronizer_on_spawn:
 		add_synchronizer()
 
-func _send_explode(from_whom_id : int, peer_position : Variant) -> void:
-	explode.rpc(from_whom_id, peer_position)
+func _send_explode(from_whom_id : int) -> void:
+	explode.rpc(from_whom_id)
 
 @rpc("any_peer", "call_local", "reliable")
-func explode(from_whom_id : int, peer_position : Variant) -> void:
+func explode(from_whom_id : int) -> void:
 	var explosion_i : Explosion = explosion.instantiate()
 	get_tree().current_scene.add_child(explosion_i)
 	explosion_i.set_explosion_size(explosion_size)
 	explosion_i.set_explosion_owner(from_whom_id)
-	if peer_position != null:
-		explosion_i.global_position = peer_position as Vector3
-	else:
-		explosion_i.global_position = global_position
+	explosion_i.global_position = global_position
 	explosion_i.play_sound()
 	# wait a bit before resetting camera in guided missiles
 	if guided && is_multiplayer_authority():
@@ -130,14 +127,14 @@ func _physics_process(delta : float) -> void:
 			global_rotation.z = lerp_angle(global_rotation.z, camera.global_rotation.z, delta * 1.4)
 			global_rotation.x = lerp_angle(global_rotation.x, camera.global_rotation.x, delta * 1.4)
 		else:
-			explode.rpc(get_multiplayer_authority(), global_position)
+			explode.rpc(get_multiplayer_authority())
 		var dir : Vector3 = -global_transform.basis.z
 		dir = dir.normalized()
 		linear_velocity = dir * speed
 		
 		# explode on owner's death
 		if player_from._state == RigidPlayer.DEAD:
-			explode.rpc(get_multiplayer_authority(), global_position)
+			explode.rpc(get_multiplayer_authority())
 		
 		if tool_overlay_time != null && despawn_timer != null:
 			tool_overlay_time.value = despawn_timer.time_left
@@ -161,7 +158,7 @@ func connect_explosion(body : Node3D) -> void:
 	if grace_period && body is RigidPlayer:
 		if body.get_multiplayer_authority() == get_multiplayer_authority():
 			return
-	explode.rpc(get_multiplayer_authority(), global_position)
+	explode.rpc(get_multiplayer_authority())
 
 # water does not affect rocket physics
 func entered_water() -> void:
