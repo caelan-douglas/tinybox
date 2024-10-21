@@ -117,19 +117,20 @@
         "0": "Tip: Slide on your back using [ Shift ] or ( B ). Jump while back-sliding to go into a roll.",
         "1": "Tip: You can use the Extinguisher as a mode of propulsion. This is especially effective in low-gravity.",
         "2": "Tip: Bouncyballs can displace light bricks like plastic. With enough power, they can displace wood too.",
-        "3": "Tip: Use the Extinguisher and a back slide [ Shift or ( B ) ] to slide on your back indefinitely. Try it at a racetrack.",
+        "3": "Tip: Use the Extinguisher and a back slide [ Shift ] or ( B ) to slide on your back indefinitely. Try it at a racetrack.",
         "4": "Tip: Using lifters, the Extinguisher, a dive, and a roll together, you can soar quite far through the air.",
         "5": "Tip: The Flamethrower is prone to blowing up when it's hit by something.",
         "6": "Tip: When you are in a vehicle, the Extinguisher can be used as a boost.",
         "7": "Tip: Jumping while in a dive will send you into a roll if you are going fast enough.",
         "8": "Tip: The guided Missiles are good for long-range. But be careful, they leave your character out in the open whilst you're controlling the missile.",
         "9": "Tip: You can control your rolls and slides by aiming the camera in the direction you want to go.",
-        "10": "Tip: When underwater, aim the camera in the direction you want to swim; press [ Shift or ( B ) ] to dash.",
+        "10": "Tip: When underwater, aim the camera in the direction you want to swim; press [ Shift ] or ( B ) to dash.",
         "11": "Tip: You can jump to cancel a slide or roll.",
         "12": "Tip: Plastic is light and non-flammable. However, it falls apart very easily when hit by bouncyballs or other bricks.",
         "13": "Tip: Metal is non-flammable but very heavy. This makes it bad for building vehicles, but very good for destroying vehicles.",
         "14": "Tip: Larger bricks are better at destroying other objects.",
-        "15": "Tip: Building a long bar out of 1x1 bricks will make it bendier than if it were made out of one long brick."
+        "15": "Tip: Building a long bar out of 1x1 bricks will make it bendier than if it were made out of one long brick.",
+        "16": "Tip: With sustained fire, the Pulse Cannon will blow up any explosives that are in its beam, and ignite other players."
     },
     "common": {
         "yes": "Yes",

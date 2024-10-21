@@ -90,6 +90,13 @@ func end(args : Array) -> void:
 					team_highest_kills = team
 					team_highest_kill_count = total_team_kills
 			args = [team_highest_kills.name, "team"]
+	# args returned from watcher does not have player/team distinction
+	else:
+		args.resize(2)
+		if ffa:
+			args[1] = "player"
+		else:
+			args[1] = "team"
 	# end game
 	super(args)
 	# show podium
