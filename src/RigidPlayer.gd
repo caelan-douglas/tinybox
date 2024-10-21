@@ -100,6 +100,8 @@ var standing_on_object : Node3D = null
 var last_hit_by_id : int = -1
 var last_hit := false
 
+var time_last_tripped : int = 0
+
 var kills : int = 0
 var deaths : int = 0
 
@@ -1158,6 +1160,10 @@ func change_state(state : int) -> void:
 	if (_state == DEAD && state != RESPAWN && state != DUMMY) || (_state == RESPAWN && state != IDLE) || ((_state == SWIMMING || _state == SWIMMING_IDLE) && state == TRIPPED):
 		return
 	
+	# trip invincibility timer
+	if (Time.get_ticks_msec() - time_last_tripped) < 1000 && state == TRIPPED:
+		return
+	
 	# dummies can only change to idle default state
 	if (_state == DUMMY) && (state != IDLE):
 		return
@@ -1375,6 +1381,8 @@ func enter_state() -> void:
 			var tween : Tween = create_tween()
 			tween.tween_property(self, "rotation", Vector3(0, rotation.y, 0), 0.4)
 			change_state_non_authority.rpc(IDLE)
+			# for handling trip invincibility
+			time_last_tripped = Time.get_ticks_msec()
 			await get_tree().create_timer(0.4).timeout
 			# if we are still standing up after waiting (do not intercept states):
 			if _state == STANDING_UP:
