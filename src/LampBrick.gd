@@ -19,6 +19,7 @@ extends Brick
 @onready var light : OmniLight3D = $Smoothing/OmniLight3D
 
 func _ready() -> void:
+	super()
 	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
 	_on_graphics_preset_changed()
 
