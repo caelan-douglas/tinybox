@@ -113,12 +113,20 @@ func _ready() -> void:
 # quit request
 func _notification(what : int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		var question : String = "Are you sure you want to quit?"
-		if Global.get_world().get_current_map() is Editor:
-			question = "Are you sure you want to quit? All unsaved\nchanges will be lost!"
-		var actions := UIHandler.show_alert_with_actions(question, ["Quit game", "Cancel"], true)
-		actions[0].connect("pressed", get_tree().quit)
+		if !Global.server_mode():
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			var question : String = "Are you sure you want to quit?"
+			if Global.get_world().get_current_map() is Editor:
+				question = "Are you sure you want to quit? All unsaved\nchanges will be lost!"
+			var actions := UIHandler.show_alert_with_actions(question, ["Quit game", "Cancel"], true)
+			actions[0].connect("pressed", get_tree().quit)
+		# server quit
+		else:
+			print("\nSaving world...")
+			var ok : Variant = await Global.get_world().save_tbw("server_world", true)
+			if ok == false:
+				print("\nFailed to save world!")
+			get_tree().quit()
 
 func _on_new_lan_server(serverInfo : Dictionary) -> void:
 	var multiplayer_menu : CanvasLayer = get_node_or_null("MultiplayerMenu")
@@ -246,16 +254,14 @@ func _on_host_pressed() -> void:
 	var world : World = $World
 	
 	if Global.server_mode():
-		# Go to windowed mode
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-		get_window().title = "Tinybox Server"
+		# load server preferences
+		Global.server_banned_ips = UserPreferences.load_server_pref("banned_ips")
+		Global.server_can_clients_load_worlds = UserPreferences.load_server_pref("can_clients_load_worlds")
 		# Set 'low processor mode', so that the screen does not redraw if
 		# nothing changes
 		OS.low_processor_usage_mode = true
 		# Disable audio and no camera for dedicated servers
 		AudioServer.set_bus_mute(0, true)
-		get_tree().current_scene.get_node("MultiplayerMenu").visible = false
-		get_window().size = Vector2i(700, 700)
 		UIHandler.show_alert(str("Started with arguments: ", OS.get_cmdline_args()))
 		await get_tree().create_timer(0.3).timeout
 		CommandHandler.submit_command.rpc("Info", "Your dedicated server has started! Type '?' in the command box for a list of commands. Alerts will show in this chat list. Player's chats will also appear here.")
@@ -264,15 +270,21 @@ func _on_host_pressed() -> void:
 		if no_display_name:
 			await get_tree().create_timer(0.3).timeout
 			CommandHandler.submit_command.rpc("Alert", "You have no saved display name so the default name 'Server' was used.")
+		# load server world, first check if world exists
+		var lines : Array = Global.get_tbw_lines("server_world", true)
+		if lines.size() > 0:
+			world.load_tbw.call_deferred("server_world", false, true, true)
+		else:
+			# load default world
+			world.load_tbw.call_deferred("Grasslands", false, true, false)
 	else:
 		# add camera
 		var camera_inst : Node3D = CAMERA.instantiate()
 		world.add_child(camera_inst, true)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		get_tree().current_scene.get_node("GameCanvas").visible = true
-	
-	# remove ".tbw"
-	world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
+		# remove ".tbw"
+		world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
 	await Signal(world, "map_loaded")
 	add_peer(multiplayer.get_unique_id())
 	# Create the LAN advertiser.

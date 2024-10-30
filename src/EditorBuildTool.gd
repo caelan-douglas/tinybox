@@ -459,10 +459,7 @@ func _physics_process(delta : float) -> void:
 									while not load_file.eof_reached():
 										var line := load_file.get_line()
 										lines.append(str(line))
-									if multiplayer.is_server():
-										Global.get_world()._server_load_building(lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
-									else:
-										Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+									Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
 								else:
 									UIHandler.show_alert("Building not found or corrupt!", 8, false, UIHandler.alert_colour_error)
 							

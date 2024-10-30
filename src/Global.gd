@@ -23,7 +23,10 @@ signal debug_toggled(mode : bool)
 
 var display_name : String = ""
 var connected_to_server := false
-var server_banned_ips : Array[String] = []
+# server settings
+var server_banned_ips : Array = []
+var server_can_clients_load_worlds : bool = true
+
 func server_mode() -> bool:
 	return DisplayServer.get_name() == "headless"
 
@@ -270,13 +273,18 @@ func get_tbw_image(file_name : String) -> Image:
 		return image
 	return null
 
-func get_tbw_lines(file_name : String) -> Array:
+func get_tbw_lines(file_name : String, server : bool = false) -> Array:
 	var load_file : FileAccess = null
-	load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
-	# if file does not exist, check internal
-	if load_file == null:
-		# check internal
-		load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+	# non-server worlds
+	if !server:
+		load_file = FileAccess.open(str("user://world/", file_name, ".tbw"), FileAccess.READ)
+		# if file does not exist, check internal
+		if load_file == null:
+			# check internal
+			load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+	else:
+		# server world as load file
+		load_file = FileAccess.open(str(UserPreferences.os_path, file_name, ".tbw"), FileAccess.READ)
 	if load_file != null:
 		# load building
 		var lines := []

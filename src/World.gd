@@ -26,6 +26,7 @@ var gamemode_list : Array[Gamemode] = []
 @onready var loading_canvas : CanvasLayer = get_tree().current_scene.get_node("LoadingCanvas")
 var tbw_loading : bool = false
 
+var last_tbw_load_time : int = 0
 
 func get_spawnpoint_for_team(team_name : String) -> Array[Vector3]:
 	var spawns : Array[Vector3] = []
@@ -96,7 +97,7 @@ func load_map(map: PackedScene) -> void:
 	emit_signal("map_loaded")
 
 # Save the currently open world as a .tbw file. Returns false if did not save.
-func save_tbw(world_name : String) -> bool:
+func save_tbw(world_name : String, server : bool = false) -> bool:
 	# don't save worlds that are currently loading
 	if tbw_loading:
 		UIHandler.show_alert("Please wait for the world to load before saving it!", 5, false, UIHandler.alert_colour_error)
@@ -114,6 +115,8 @@ func save_tbw(world_name : String) -> bool:
 	
 	# save building to file
 	dir = DirAccess.open("user://world")
+	if server:
+		dir = DirAccess.open(UserPreferences.os_path)
 	var count : int = 0
 	if dir:
 		dir.list_dir_begin()
@@ -129,41 +132,49 @@ func save_tbw(world_name : String) -> bool:
 	var img : Image = null
 	# get frame image and save it as raw->base64 on first line
 	# hide everything
-	if get_current_map() is Editor:
-		# only hide editor ui
-		get_tree().current_scene.get_node("EditorCanvas").visible = false
-		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
-		var editor : Editor = get_current_map()
-		# wait 1 frame so we can get screenshot
-		await get_tree().process_frame
-		await get_tree().process_frame
-		img = get_viewport().get_texture().get_image()
-		img.shrink_x2()
-		get_tree().current_scene.get_node("EditorCanvas").visible = true
-		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
-	else:
-		Global.get_player().visible = false
-		get_tree().current_scene.get_node("GameCanvas").visible = false
-		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
-		# wait a bit so we can get screenshot
-		await get_tree().process_frame
-		await get_tree().process_frame
-		img = get_viewport().get_texture().get_image()
-		img.shrink_x2()
-		# show everything again
-		Global.get_player().visible = true
-		get_tree().current_scene.get_node("GameCanvas").visible = true
-		get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
+	# servers don't save images
+	if !server:
+		if get_current_map() is Editor:
+			# only hide editor ui
+			get_tree().current_scene.get_node("EditorCanvas").visible = false
+			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
+			var editor : Editor = get_current_map()
+			# wait 1 frame so we can get screenshot
+			await get_tree().process_frame
+			await get_tree().process_frame
+			img = get_viewport().get_texture().get_image()
+			img.shrink_x2()
+			get_tree().current_scene.get_node("EditorCanvas").visible = true
+			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
+		else:
+			Global.get_player().visible = false
+			get_tree().current_scene.get_node("GameCanvas").visible = false
+			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = false
+			# wait a bit so we can get screenshot
+			await get_tree().process_frame
+			await get_tree().process_frame
+			img = get_viewport().get_texture().get_image()
+			img.shrink_x2()
+			# show everything again
+			Global.get_player().visible = true
+			get_tree().current_scene.get_node("GameCanvas").visible = true
+			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
 	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
 	
 	# Create tbw file.
-	var file := FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
+	var file : FileAccess
+	if server:
+		file = FileAccess.open(str(UserPreferences.os_path, save_name, ".tbw"), FileAccess.WRITE)
+	else:
+		file = FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
 	# Save image first
 	file.store_line("[tbw]")
 	# save version
 	file.store_line(str("version ; ", (get_tree().current_scene as Main).server_version))
 	# store image data as base64 inside file
-	file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
+	# servers don't save images
+	if !server:
+		file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
 	# Save song list (if not using all songs)
 	if get_current_map().songs.size() != MusicHandler.ALL_SONGS_LIST.size():
 		file.store_line(str("songs ; ", JSON.stringify(get_current_map().songs)))
@@ -210,14 +221,14 @@ func save_tbw(world_name : String) -> bool:
 	file.close()
 	return true
 
-func load_tbw(file_name : String, switching := false, reset_player_and_cameras := true) -> void:
+func load_tbw(file_name : String, switching := false, reset_player_and_cameras := true, server : bool = false) -> void:
 	print("Attempting to load ", file_name, ".tbw")
 	# prevent loading multiple files at once
 	if tbw_loading:
 		await tbw_loaded
 		await get_tree().create_timer(0.3).timeout
 	# get lines of file
-	var lines : Array = Global.get_tbw_lines(file_name)
+	var lines : Array = Global.get_tbw_lines(file_name, server)
 	if lines.size() > 0:
 		# if we are server
 		if multiplayer.is_server():
@@ -235,12 +246,21 @@ func load_tbw(file_name : String, switching := false, reset_player_and_cameras :
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Array) -> void:
 	if !multiplayer.is_server(): return
-	#TODO: map voting system?
-	#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	#var actions := UIHandler.show_alert_with_actions(str(name_from, " wishes to load the world \"", world_name, ".tbw\".\nAll bricks will be destroyed. Is this OK?"), ["Load world", "Do not load"], true)
-	#actions[0].connect("pressed", _world_accepted.bind(name_from, world_name, lines))
-	#actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
-	_world_accepted(name_from, world_name, lines)
+	if !Global.server_can_clients_load_worlds:
+		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Sorry, clients are not permitted to change worlds in this server", 7, false, UIHandler.alert_colour_error)
+		return
+	# 10 seconds between loading buildings/maps
+	elif Time.get_ticks_msec() - last_tbw_load_time < 10000:
+		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
+		return
+	else:
+		last_tbw_load_time = Time.get_ticks_msec()
+		_world_accepted(name_from, world_name, lines)
+		#TODO: map voting system?
+		#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		#var actions := UIHandler.show_alert_with_actions(str(name_from, " wishes to load the world \"", world_name, ".tbw\".\nAll bricks will be destroyed. Is this OK?"), ["Load world", "Do not load"], true)
+		#actions[0].connect("pressed", _world_accepted.bind(name_from, world_name, lines))
+		#actions[1].connect("pressed", _world_denied.bind(name_from, world_name))
 
 func _world_denied(name_from : String, world_name : String) -> void:
 	# if the alert showed when the game wasn't paused, go back to captured
@@ -445,9 +465,15 @@ func clear_bricks() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
-	if Global.server_mode():
-		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
-	_server_load_building(lines, b_position, use_global_position)
+	# 10 seconds between loading buildings
+	if Time.get_ticks_msec() - last_tbw_load_time < 10000:
+		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
+		return
+	else:
+		last_tbw_load_time = Time.get_ticks_msec()
+		if Global.server_mode():
+			CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
+		_server_load_building(lines, b_position, use_global_position)
 
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return

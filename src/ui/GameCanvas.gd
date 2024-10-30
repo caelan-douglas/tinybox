@@ -17,7 +17,6 @@
 extends CanvasLayer
 
 @onready var pause_tip_text : Label = $PauseMenu/ScrollContainer/Pause/Tip
-@onready var client_request_world_timer : Timer = $RequestWorldTimer
 
 const NUM_OF_TIPS = 17
 
@@ -76,12 +75,8 @@ func _send_on_change_map_pressed() -> void:
 	if multiplayer.is_server():
 		Global.get_world().load_tbw(map_name.split(".")[0], true)
 	else:
-		if client_request_world_timer.is_stopped():
-			Global.get_world().load_tbw(map_name.split(".")[0], true)
-			UIHandler.show_alert(str("Your request to load \"", map_name, "\" was sent to the host."), 4)
-			client_request_world_timer.start()
-		else:
-			UIHandler.show_alert(str("Wait ", round(client_request_world_timer.time_left), " more seconds before requesting\nto load another world!"), 5, false, UIHandler.alert_colour_error)
+		Global.get_world().load_tbw(map_name.split(".")[0], true)
+		UIHandler.show_alert(str("Your request to load \"", map_name, "\" was sent to the host."), 4)
 
 func _on_save_world_pressed() -> void:
 	var world_name : String = $PauseMenu/ScrollContainer/Pause/SaveWorldName.text

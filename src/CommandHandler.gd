@@ -25,6 +25,11 @@ func _ready() -> void:
 	if Global.server_mode():
 		cli_thread = Thread.new()
 		cli_thread.start(_process_input)
+		# close when cli thread closes, because that means that we quit
+		while cli_thread.is_alive():
+			await get_tree().process_frame
+		print("\n\nQuitting server...")
+		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func _exit_tree() -> void:
 	if cli_thread != null:
@@ -33,11 +38,10 @@ func _exit_tree() -> void:
 func _process_input() -> void:
 	var read : String = ""
 	while read != "$quit":
-		printraw("[ Console ] $: ")
 		read = OS.read_string_from_stdin().strip_edges()
 		submit_cli_input.call_deferred(read)
 	# quit when user types 'quit'
-	get_tree().quit()
+	return
 
 func submit_cli_input(read : String) -> void:
 	submit_command.rpc_id(1, "Server", read)
@@ -67,6 +71,7 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$list", "List of connected players.", id_from)
 		_send_response("$admins", "List of server admins.", id_from)
 		_send_response("$loadmap", "ex. $loadmap Steep Swamp - Load an internal or saved map. (Exclude the .tbw extension.)", id_from)
+		_send_response("$can_clients_load_worlds", "ex. $can_clients_load_worlds false - Sets whether or not clients can load new worlds. True by default.", id_from)
 		_send_response("$quit", "End the server (headless server mode only.)", id_from)
 		return
 	if text.begins_with("$"):
@@ -188,6 +193,20 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 					return
 			else:
 				_send_response("Info", "You don't have permission to do that!", id_from)
+		elif split_text[0] == "$can_clients_load_worlds":
+			if admins.has(id_from):
+				if split_text.size() > 1:
+					var result := str(split_text[1])
+					if result == "true":
+						Global.server_can_clients_load_worlds = true
+					else:
+						Global.server_can_clients_load_worlds = false
+					UserPreferences.save_server_pref("can_clients_load_worlds", Global.server_can_clients_load_worlds)
+				else:
+					_send_response("Info", "Invalid use of can_clients_load_worlds. Correct syntax example: $can_clients_load_worlds true/false", id_from)
+					return
+			else:
+				_send_response("Info", "You don't have permission to do that!", id_from)
 		elif split_text[0] == "$ban":
 			if id_from == 1:
 				if split_text.size() > 1:
@@ -200,6 +219,8 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 						# add to banned ip lists
 						if !Global.server_banned_ips.has(player_ip):
 							Global.server_banned_ips.append(player_ip)
+						# save to server config file
+						UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
 						_send_response("Info", str("Banned ", split_text[1]))
 					else:
 						_send_response("Info", "Player to ban not found", id_from)
