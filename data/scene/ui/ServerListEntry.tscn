@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://cq27bbbvpdotl"]
+[gd_scene load_steps=6 format=3 uid="uid://cq27bbbvpdotl"]
 
 [ext_resource type="Script" path="res://src/ui/ServerListEntry.gd" id="1_cokx7"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_d0cnq"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="2_ftirw"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="3_xtvug"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_84fmv"]
+color = Color(1, 1, 1, 0.356863)
+grow_begin = 16.0
+grow_end = 0.0
+thickness = 2
 
 [node name="ServerListEntry" type="PanelContainer"]
 self_modulate = Color(0.918991, 0.734199, 0.698769, 1)
@@ -28,11 +34,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -8
 theme_override_fonts/font = ExtResource("2_d0cnq")
+theme_override_font_sizes/font_size = 24
 text = "Official Testing Server"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Spacer" type="Control" parent="HBox/ServerInfo"]
+[node name="Status" type="Label" parent="HBox/ServerInfo"]
+self_modulate = Color(0.355314, 0.355314, 0.355314, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = -8
+text = "Checking status..."
+autowrap_mode = 2
+script = ExtResource("2_ftirw")
+
+[node name="Spacer3" type="Control" parent="HBox/ServerInfo"]
+custom_minimum_size = Vector2(2.08165e-12, 8)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="HBox/ServerInfo"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxLine_84fmv")
+
+[node name="Spacer2" type="Control" parent="HBox/ServerInfo"]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
@@ -62,17 +86,9 @@ text = "Server Version"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Status" type="Label" parent="HBox/ServerInfo"]
-self_modulate = Color(0.355314, 0.355314, 0.355314, 1)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/line_spacing = -8
-text = "Checking status..."
-autowrap_mode = 2
-script = ExtResource("2_ftirw")
-
 [node name="Join" type="Button" parent="HBox"]
 self_modulate = Color(4.325, 2.703, 3.784, 1)
+custom_minimum_size = Vector2(114, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Join"
