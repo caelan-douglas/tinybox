@@ -278,13 +278,13 @@ func _on_host_pressed() -> void:
 			# load default world
 			world.load_tbw.call_deferred("Grasslands", false, true, false)
 	else:
-		# add camera
-		var camera_inst : Node3D = CAMERA.instantiate()
-		world.add_child(camera_inst, true)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		get_tree().current_scene.get_node("GameCanvas").visible = true
 		# remove ".tbw"
 		world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
+	# add camera (server mode needs this too)
+	var camera_inst : Node3D = CAMERA.instantiate()
+	world.add_child(camera_inst, true)
 	await Signal(world, "map_loaded")
 	add_peer(multiplayer.get_unique_id())
 	# Create the LAN advertiser.
