@@ -1,7 +1,12 @@
 [
     {
-        "name": "Official - Canada East",
+        "name": "Official - Main",
         "address": "tinybox.caeland.com",
+        "hosted_by": "Tinybox developers"
+    },
+    {
+        "name": "Official - Testing",
+        "address": "tinybox2.caeland.com",
         "hosted_by": "Tinybox developers"
     }
 ]
