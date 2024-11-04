@@ -1185,7 +1185,6 @@ func change_state(state : int) -> void:
 		if get_tool_inventory().get_active_tool() is ShootTool:
 			var st : ShootTool = get_tool_inventory().get_active_tool()
 			if st._shoot_type == ShootTool.ShootType.WATER && st.firing:
-				print("firing extinguisher")
 				external_propulsion = true
 	
 	# set to new state

@@ -18,7 +18,7 @@ extends Brick
 class_name MotorBrick
 
 var speed : float = 0
-var target_speed : float = 20
+var max_speed : float = 80
 var steer : float = 0
 var flip_motor_side : bool = false
 
@@ -42,23 +42,12 @@ func set_material(new : Brick.BrickMaterial) -> void:
 	# call base function
 	super(new)
 
-	match(new):
-		# Plastic
-		BrickMaterial.PLASTIC:
-			target_speed = 80
-		# Rubber
-		BrickMaterial.RUBBER:
-			target_speed = 90
-		# Wood, Charred Wood, Metal
-		_:
-			target_speed = 85
-
 @rpc("any_peer", "call_local")
 func set_parent_seat(seat_as_path : NodePath) -> void:
 	parent_seat = get_node(seat_as_path)
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "flip_motor_side"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "flip_motor_side", "max_speed"]
 
 func _ready() -> void:
 	super()
@@ -100,7 +89,7 @@ func _physics_process(delta : float) -> void:
 	if steer == 0:
 		straight_mult = 3
 	
-	var to_velocity : Vector3 = transform.basis.z * speed * target_speed * straight_mult
+	var to_velocity : Vector3 = transform.basis.z * speed * max_speed * straight_mult
 	
 	if to_velocity.length() > angular_velocity.length():
 		# larger wheels accel slower
@@ -126,7 +115,7 @@ func _physics_process(delta : float) -> void:
 		
 		# set velocity for tank turning
 		var divisor : float = clamp(mass_mult * 0.7, 1, 999)
-		angular_velocity = lerp(angular_velocity, transform.basis.z * steer * -dot_z * target_speed * 0.2, 0.1 / divisor)
+		angular_velocity = lerp(angular_velocity, transform.basis.z * steer * -dot_z * max_speed * 0.2, 0.1 / divisor)
 		
 		# in water propulsion
 		if in_water:

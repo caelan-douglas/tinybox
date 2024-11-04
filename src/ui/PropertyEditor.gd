@@ -119,7 +119,8 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		else:
 			entry = adjuster.instantiate()
 			var label : Label = entry.get_node("DynamicLabel")
-			label.text = str(prop_name, ": ", prop)
+			# format string (ex. "target_speed" to "Target speed")
+			label.text = str(formatted_prop_name(prop_name), ": ", prop)
 			entry.val = prop as int
 			entry.connect("value_changed", update_object_property.bind(prop_name, false, label))
 	
@@ -172,5 +173,8 @@ func update_object_property(new_value : Variant, prop_name : String, increment :
 		else:
 			selected_item_properties[prop_name] = new_value
 		if update_label:
-			update_label.text = str(prop_name, ": ", selected_item_properties[prop_name])
+			update_label.text = str(formatted_prop_name(prop_name), ": ", selected_item_properties[prop_name])
 	emit_signal("property_updated", selected_item_properties)
+
+func formatted_prop_name(what : String) -> String:
+	return what.replace("_", " ").capitalize()

@@ -466,14 +466,15 @@ func clear_bricks() -> void:
 func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	# 10 seconds between loading buildings
-	if Time.get_ticks_msec() - last_tbw_load_time < 10000:
-		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
-		return
-	else:
-		last_tbw_load_time = Time.get_ticks_msec()
-		if Global.server_mode():
-			CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
-		_server_load_building(lines, b_position, use_global_position)
+	# buildings are 3 lines or greater
+	if lines.size() > 2:
+		if Time.get_ticks_msec() - last_tbw_load_time < 10000:
+			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
+			return
+	last_tbw_load_time = Time.get_ticks_msec()
+	if Global.server_mode():
+		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
+	_server_load_building(lines, b_position, use_global_position)
 
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
