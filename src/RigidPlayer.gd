@@ -1179,9 +1179,14 @@ func change_state(state : int) -> void:
 		$Smoothing/dizzy_stars/AnimationPlayer.stop()
 		rotation = Vector3(0, rotation.y, 0)
 	
-	# reset external propulsion (unless going from slide into jump, to avoid 'hiccup')
-	if !(_state == SLIDE && state == AIR):
-		external_propulsion = false
+	# reset external propulsion (unless going from slide into jump while extinguishing, to avoid 'hiccup')
+	external_propulsion = false
+	if (_state == SLIDE && state == AIR):
+		if get_tool_inventory().get_active_tool() is ShootTool:
+			var st : ShootTool = get_tool_inventory().get_active_tool()
+			if st._shoot_type == ShootTool.ShootType.WATER && st.firing:
+				print("firing extinguisher")
+				external_propulsion = true
 	
 	# set to new state
 	if _state != state:

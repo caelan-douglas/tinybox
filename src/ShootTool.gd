@@ -24,8 +24,7 @@ enum ShootType {
 	BOMB,
 	WATER,
 	FIRE,
-	MISSILE,
-	PULSE_CANNON
+	MISSILE
 }
 
 @export var tool_name : String = "Shoot Tool"
@@ -56,6 +55,8 @@ var ui_progress : ProgressBar = null
 @onready var fire : PackedScene = preload("res://data/scene/fire/FireProjectile.tscn")
 # for showing cost in minigame
 @onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
+
+var firing : bool = false
 
 func set_shot_cooldown_counter(new : int) -> void:
 	shot_cooldown_counter = new
@@ -190,6 +191,12 @@ func _physics_process(delta : float) -> void:
 	var stop_audio := false
 	# if this tool is selected
 	if get_tool_active():
+		# for determining if player is actively trying to fire
+		if Input.is_action_pressed("click") && (ammo > 0 || ammo == -1):
+			firing = true
+		else:
+			firing = false
+		# for actually handling firing
 		if shot_cooldown_counter <= 0 && (ammo > 0 || ammo == -1):
 			if Input.is_action_pressed("click") && !tool_player_owner.locked:
 				# For single-click shots
@@ -240,6 +247,7 @@ func _physics_process(delta : float) -> void:
 	else: 
 		stop_audio = true
 		_end_shot()
+		firing = false
 	if stop_audio && (audio != null && audio_anim != null):
 		# if audio is currently playing, and we are not fading out, fade out
 		if audio.playing && !audio_anim.is_playing():
