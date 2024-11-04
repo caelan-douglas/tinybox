@@ -143,6 +143,12 @@ func _ready() -> void:
 	get_viewport().connect("gui_focus_changed", _on_gui_focus_changed)
 	# save version once on launch, in case we want to compare against it in a newer version
 	UserPreferences.save_pref("version", get_tree().current_scene.server_version)
+	# fullscreen if not in debug mode
+	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !Global.server_mode():
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
+	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !Global.server_mode():
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func save_appearance() -> void:
 	UserPreferences.save_pref("shirt", shirt)

@@ -100,13 +100,6 @@ func _ready() -> void:
 	if Global.server_mode():
 		_on_host_pressed()
 	
-	# fullscreen if not in debug mode
-	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !Global.server_mode():
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
-	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !Global.server_mode():
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-	
 	if display_version.contains("pre"):
 		UIHandler.show_alert("You are using a pre-release build, you may encounter unexpected issues when joining incompatible servers", 8, false, UIHandler.alert_colour_error)
 
