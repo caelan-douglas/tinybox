@@ -227,7 +227,8 @@
         "mus6": "Lullaby",
         "mus7": "Ahead of the Curve",
         "mus8": "Watermelon Shake",
-        "mus9": "Transmission"
+        "mus9": "Transmission",
+        "mus10": "Lakehouse"
     },
     "enum": {
         "event_type": {
