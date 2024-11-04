@@ -1178,6 +1178,12 @@ func change_state(state : int) -> void:
 		$Smoothing/dizzy_stars.visible = false
 		$Smoothing/dizzy_stars/AnimationPlayer.stop()
 		rotation = Vector3(0, rotation.y, 0)
+	
+	# reset external propulsion (unless going from slide into jump, to avoid 'hiccup')
+	if !(_state == SLIDE && state == AIR):
+		external_propulsion = false
+	
+	# set to new state
 	if _state != state:
 		_state = state
 		enter_state()
@@ -1191,8 +1197,6 @@ func enter_state() -> void:
 	if debug_menu.visible:
 		UIHandler.show_toast(str(states_as_names[_state], ": AD ", air_duration, ": AFJ", air_from_jump), 3)
 	
-	# reset external propulsion
-	external_propulsion = false
 	# reset blend states
 	animator["parameters/BlendSit/blend_amount"] = 0
 	
