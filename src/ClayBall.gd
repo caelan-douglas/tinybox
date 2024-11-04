@@ -57,6 +57,26 @@ func _on_body_entered(body : Node3D) -> void:
 		if body is ButtonBrick:
 			body.stepped.rpc(get_path())
 
+@rpc("authority", "call_local", "reliable")
+func set_colour(new : String) -> void:
+	var new_colour : Color = Color(new)
+	var mesh : MeshInstance3D = $Smoothing/MeshInstance3D
+	var mat : Material = mesh.get_surface_override_material(0).duplicate()
+	mat.albedo_color = new_colour
+	var add_material_to_cache := true
+	# Check over the graphics cache to make sure we don't already have the same material created.
+	for cached_material : Material in Global.ball_colour_cache:
+		# If the material texture and colour matches (that's all that really matters):
+		if (cached_material.albedo_color == new_colour):
+			# Instead of using the duplicate material we created, use the cached material.
+			mat = cached_material
+			# Don't add this material to cache, since we're pulling it from the cache already.
+			add_material_to_cache = false
+	# Add the material to the graphics cache if we need to.
+	if add_material_to_cache:
+		Global.add_to_ball_colour_cache(mat)
+	mesh.set_surface_override_material(0, mat)
+
 @rpc("call_local")
 func spawn_projectile(auth : int, shot_speed := 30, random_pos := false) -> void:
 	set_multiplayer_authority(auth)
@@ -72,6 +92,9 @@ func spawn_projectile(auth : int, shot_speed := 30, random_pos := false) -> void
 	if random_pos:
 		global_rotation = player_from.global_rotation
 		translate_object_local(Vector3(randf_range(-0.5, 0.5), randf_range(-0.5, 0.5), 0))
+	
+	# Set ball colour to auth's pants colour.
+	set_colour.rpc(Global.pants_colour.to_html(false))
 	
 	# Set ball velocity to the position entry of get_mouse_pos_3d dict.
 	var direction := Vector3.ZERO

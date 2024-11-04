@@ -60,8 +60,9 @@ func _physics_process(delta : float) -> void:
 				brick_count += 1
 		debug_text.text = str("bricks in world: ", str(brick_count),
 		"\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
-		"mb\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 		"\nmaterial cache size: ", str(Global.graphics_cache.size()), " / 256",
+		"\nball colour cache size: ", str(Global.ball_colour_cache.size()), " / 64",
 		"\nmesh cache size: ", str(Global.mesh_cache.size()), " / 128")
 		var player : RigidPlayer = Global.get_player()
 		if player != null:

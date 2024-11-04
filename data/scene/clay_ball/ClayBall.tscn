@@ -16,6 +16,10 @@ radius = 0.6
 [sub_resource type="SphereShape3D" id="SphereShape3D_bvw4g"]
 radius = 0.3
 
+[sub_resource type="SphereMesh" id="SphereMesh_hof2s"]
+radius = 0.3
+height = 0.6
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqnc1"]
 resource_name = "clay.vincent.hair"
 vertex_color_use_as_albedo = true
@@ -26,11 +30,6 @@ roughness_texture_channel = 1
 normal_enabled = true
 normal_scale = 0.25
 normal_texture = ExtResource("2_0dw7p")
-
-[sub_resource type="SphereMesh" id="SphereMesh_hof2s"]
-material = SubResource("StandardMaterial3D_vqnc1")
-radius = 0.3
-height = 0.6
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
 properties/0/path = NodePath(".:position")
@@ -71,6 +70,7 @@ script = ExtResource("2_5txvd")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Smoothing"]
 mesh = SubResource("SphereMesh_hof2s")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_vqnc1")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.04

@@ -42,6 +42,8 @@ enum GraphicsPresets {
 
 # A cache of already painted materials that can be re-used. Keeps draw call counts down.
 var graphics_cache : Array[Material] = []
+# Cache of ball colours.
+var ball_colour_cache : Array[Material] = []
 # Cache of already made meshes to avoid re-making meshes for bricks.
 # 1: scale as vector3
 # 2: brick type
@@ -49,6 +51,7 @@ var graphics_cache : Array[Material] = []
 var mesh_cache : Array = []
 
 const GRAPHICS_CACHE_MAX = 256
+const BALL_COLOUR_CACHE_MAX = 64
 const MESH_CACHE_MAX = 128
 func add_to_graphics_cache(what : Material) -> void:
 	if graphics_cache.size() < GRAPHICS_CACHE_MAX:
@@ -62,6 +65,12 @@ func add_to_mesh_cache(what : Array) -> void:
 	else:
 		mesh_cache.remove_at(0)
 		mesh_cache.append(what)
+func add_to_ball_colour_cache(what : Material) -> void:
+	if graphics_cache.size() < BALL_COLOUR_CACHE_MAX:
+		ball_colour_cache.append(what)
+	else:
+		ball_colour_cache.remove_at(0)
+		ball_colour_cache.append(what)
 
 # The currently selected graphics preset.
 var graphics_preset : GraphicsPresets = GraphicsPresets.COOL
