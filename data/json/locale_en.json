@@ -226,7 +226,8 @@
         "mus5": "Final Day",
         "mus6": "Lullaby",
         "mus7": "Ahead of the Curve",
-        "mus8": "Watermelon Shake"
+        "mus8": "Watermelon Shake",
+        "mus9": "Transmission"
     },
     "enum": {
         "event_type": {
