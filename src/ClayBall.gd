@@ -28,6 +28,15 @@ func _ready() -> void:
 	despawn_time = 15
 	super()
 
+# When ball is in an explosion
+@rpc("any_peer", "call_local")
+func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
+	# only run on authority
+	if !is_multiplayer_authority(): return
+	var explosion_force : float = randi_range(8, 20)
+	var explosion_dir := explosion_position.direction_to(global_position) * explosion_force
+	apply_impulse(explosion_dir, Vector3(randf_range(0, 0.05), randf_range(0, 0.05), randf_range(0, 0.05)))
+
 func _on_body_entered(body : Node3D) -> void:
 	spring_audio.volume_db = -15 + linear_velocity.length()
 	clamp(spring_audio.volume_db, -50, 0)
