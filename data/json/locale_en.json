@@ -178,6 +178,7 @@
         "brick_button": "Button",
         "brick_lamp": "Lamp",
         "brick_wedge": "Wedge",
+        "brick_explosive": "Explosive",
 
         "tooltips": {
             "obj_pine_tree": "Regular size pine tree.",
@@ -215,7 +216,8 @@
             "brick_motor_seat": "Controls any motors that are attached to this brick group when a player sits down in it.",
             "brick_button": "Button with customizable parameters.",
             "brick_lamp": "Lamp that provides light. Will shut off if displaced.",
-            "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees."
+            "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees.",
+            "brick_explosive": "Explodes when a button attached to it is pressed or it is hit by a bomb, rocket, etc."
         }
     },
     "songs": {

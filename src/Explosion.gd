@@ -20,6 +20,7 @@ class_name Explosion
 @onready var particles : GPUParticles3D = $GPUParticles3D
 @onready var area : Area3D = $Area3D
 @onready var audio : AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var spawn_time : int = Time.get_ticks_msec()
 @onready var distant_sound : AudioStream = preload("res://data/audio/explosion/explode_distant.ogg")
 @onready var general_sounds : Array[AudioStream] = [
 	preload("res://data/audio/explosion/explode_0.ogg"),
@@ -27,11 +28,16 @@ class_name Explosion
 ]
 
 var by_whom : int = 1
+var explosion_size : int = 1
 
 func set_explosion_size(new : float) -> void:
+	explosion_size = new
 	(area.get_node("CollisionShape3D") as CollisionShape3D).get_shape().set("radius", new)
 	particles.scale = Vector3(new/4, new/4, new/4)
 	particles.amount = new*80/2
+	var new_dp := particles.draw_pass_1.duplicate()
+	new_dp.size = Vector2((new + 2)/3, (new + 2)/3)
+	particles.draw_pass_1 = new_dp
 
 func set_explosion_owner(who_id : int) -> void:
 	by_whom = who_id
@@ -49,24 +55,32 @@ func _ready() -> void:
 	brick_groups.check_world_groups()
 
 func play_sound() -> void:
+	var db_lower : int = 0
+	# check other explosions to lower volume
+	for e : Node in get_tree().current_scene.get_children():
+		if e is Explosion && e != self:
+			if Time.get_ticks_msec() - e.spawn_time < 1000:
+				db_lower += 1
+	
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera == null:
 		return
 	if global_position.distance_to(camera.global_position) > 100:
 		audio.attenuation_model = AudioStreamPlayer3D.ATTENUATION_DISABLED
 		audio.stream = distant_sound
-		audio.volume_db = 4
+		audio.volume_db -= db_lower
 		audio.max_distance = 5000
 		audio.play()
 	else:
 		audio.stream = general_sounds[randi() % general_sounds.size()]
 		audio.max_distance = 200
-		audio.volume_db = 4
+		audio.volume_db -= db_lower
 		audio.play()
 
 func explode(body : Node3D) -> void:
+	print("Explosion size: ", explosion_size)
 	if body.has_method("explode") && !(body is Explosion) && !(body is Rocket) && !(body is Bomb):
-		body.explode.rpc(global_position, by_whom)
+		body.explode.rpc(global_position, by_whom, explosion_size)
 		# set 'last_hit_by' on player to this authority so that
 		# if a player is knocked off the map by an explosion,
 		# the point is attributed

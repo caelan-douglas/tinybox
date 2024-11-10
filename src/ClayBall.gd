@@ -30,7 +30,7 @@ func _ready() -> void:
 
 # When ball is in an explosion
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
+func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	var explosion_force : float = randi_range(8, 20)

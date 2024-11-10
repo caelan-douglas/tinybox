@@ -479,19 +479,19 @@ func extinguish_fire() -> void:
 # Arg 1: The position of the explosion. Required to determine impulse on the brick.
 # Arg 2: From who this explosion came from.
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
+func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	if immovable: return
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
-	var explosion_force : float = randi_range(80, 200) * clamp(mass_mult * 0.5, 1, 4)
+	var explosion_force : float = randi_range(80, 200) * (_explosion_force)
 	if explosion_force > 160:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
 	await get_tree().create_timer(0.1).timeout
-	var explosion_dir := explosion_position.direction_to(global_position) * explosion_force
+	var explosion_dir := explosion_position.direction_to(global_position).normalized() * explosion_force
 	apply_impulse(explosion_dir, Vector3(randf_range(0, 0.05), randf_range(0, 0.05), randf_range(0, 0.05)))
 
 func set_non_groupable_for(seconds : float) -> void:

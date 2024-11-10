@@ -35,3 +35,6 @@ func stepped(by_what_node_path : NodePath) -> void:
 	if by_what != null:
 		if by_what is Node:
 			last_stepped_by = by_what
+			for b : Node in joint_detector.get_overlapping_bodies():
+				if b is ExplosiveBrick:
+					b.explode.rpc(b.global_position, by_what.get_multiplayer_authority())

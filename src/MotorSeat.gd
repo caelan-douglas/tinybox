@@ -51,8 +51,8 @@ func light_fire() -> void:
 # Arg 1: The position of the explosion. Required to determine impulse on the brick.
 # Arg 2: From who this explosion came from.
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom : int = -1) -> void:
-	super.explode(explosion_position, from_whom)
+func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
+	super.explode(explosion_position, from_whom, _explosion_force)
 	# only run on authority
 	if !is_multiplayer_authority(): return
 	if controlling_player:

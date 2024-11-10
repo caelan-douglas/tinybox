@@ -1691,7 +1691,7 @@ func set_collider_short(mode : bool) -> void:
 		collider.position.y = 0.405
 
 @rpc("any_peer", "call_local")
-func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
+func explode(explosion_position : Vector3, from_whom : int = 1, _explosion_force : float = 4) -> void:
 	# only run on server and auth
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
 		return
@@ -1714,7 +1714,7 @@ func explode(explosion_position : Vector3, from_whom : int = 1) -> void:
 		if flamethrower == get_tool_inventory().tool_just_holding:
 			cause_of_death = CauseOfDeath.FLAMETHROWER_EXPLOSION
 	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * 25
-	apply_impulse(explosion_dir)
+	apply_impulse(explosion_dir * (_explosion_force/4))
 
 @rpc("any_peer", "call_local", "reliable")
 func update_kills(rpc_kills : int) -> void:

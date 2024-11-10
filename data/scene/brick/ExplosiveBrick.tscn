@@ -1,0 +1,90 @@
+[gd_scene load_steps=12 format=3 uid="uid://bde1qvp4v6opt"]
+
+[ext_resource type="Script" path="res://src/ExplosiveBrick.gd" id="1_sbvri"]
+[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_2nqpl"]
+[ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_njokc"]
+[ext_resource type="Material" uid="uid://dokmq4mxw3vng" path="res://data/materials/explosive_brick.tres" id="4_24yt8"]
+[ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_f1rrm"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
+size = Vector3(0.9, 0.9, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mtstk"]
+size = Vector3(1.4, 1.4, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w63pj"]
+size = Vector3(1.3, 1.3, 1.3)
+
+[node name="Brick" type="RigidBody3D"]
+collision_mask = 3
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_osnen")
+freeze = true
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_sbvri")
+_brick_spawnable_type = "brick_explosive"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bwia1")
+
+[node name="collider" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_b80at")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("2_2nqpl")
+
+[node name="model" parent="Smoothing" instance=ExtResource("3_njokc")]
+
+[node name="Cube" parent="Smoothing/model" index="0"]
+surface_material_override/0 = ExtResource("4_24yt8")
+
+[node name="IntersectDetector" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+shape = SubResource("BoxShape3D_d6iny")
+
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+collision_layer = 32
+collision_mask = 32
+
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+shape = SubResource("BoxShape3D_mtstk")
+disabled = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+max_distance = 70.0
+bus = &"SFX"
+
+[node name="SoundExpiration" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="InactivityTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
+
+[node name="JointDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+shape = SubResource("BoxShape3D_w63pj")
+
+[node name="Fire" parent="." instance=ExtResource("4_f1rrm")]
+
+[editable path="Smoothing/model"]

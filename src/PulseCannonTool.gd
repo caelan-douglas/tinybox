@@ -88,6 +88,9 @@ func _physics_process(delta : float) -> void:
 			elif body is Bomb || body is Rocket:
 				if beam_active_time > 35:
 					body.explode.rpc(tool_player_owner.get_multiplayer_authority())
+			elif body is ExplosiveBrick:
+				if beam_active_time > 35:
+					body.explode.rpc(body.global_position, tool_player_owner.get_multiplayer_authority())
 		if damage_cooldown > 0:
 			damage_cooldown -= 1
 	if is_multiplayer_authority():
