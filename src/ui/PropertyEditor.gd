@@ -94,6 +94,11 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		entry.text = prop_name.capitalize()
 		entry.button_pressed = prop as bool
 		entry.connect("toggled", update_object_property.bind(prop_name))
+		# special tooltips for some properties
+		if prop_name == "immovable":
+			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/immovable")
+		elif prop_name == "joinable":
+			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/joinable")
 	
 	# Add adjuster for floats and ints
 	if prop is float || prop is int:

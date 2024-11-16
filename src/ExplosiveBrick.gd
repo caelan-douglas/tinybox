@@ -40,18 +40,19 @@ func set_colour(new : Color) -> void:
 var fuse_lit : bool = false
 @rpc("any_peer", "call_local")
 func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
-	if !fuse_lit:
+	if multiplayer.is_server():
+		if !fuse_lit:
+			super(explosion_position, from_whom)
 		fuse_lit = true
-		super(explosion_position, from_whom)
-		await get_tree().create_timer((randf() * 0.4) + 0.6).timeout
-		var explosion_i : Explosion = explosion.instantiate()
-		get_tree().current_scene.add_child(explosion_i)
-		explosion_i.set_explosion_size(clamp(mass_mult * 4, 1, 150) as float) # base is 4
-		# player_from id is later used in death messages
-		explosion_i.set_explosion_owner(from_whom)
-		explosion_i.global_position = global_position
-		explosion_i.play_sound()
-		despawn.rpc()
+	await get_tree().create_timer((randf() * 0.4) + 0.6).timeout
+	var explosion_i : Explosion = explosion.instantiate()
+	get_tree().current_scene.add_child(explosion_i)
+	explosion_i.set_explosion_size(clamp(mass_mult * 4, 1, 150) as float) # base is 4
+	# player_from id is later used in death messages
+	explosion_i.set_explosion_owner(from_whom)
+	explosion_i.global_position = global_position
+	explosion_i.play_sound()
+	despawn.rpc()
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "joinable"]

@@ -21,7 +21,7 @@ class_name ButtonBrick
 @onready var button_audio : AudioStreamPlayer3D = $ButtonAudio
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "_material", "_colour"]
+	properties_to_save = ["global_position", "global_rotation", "_material", "_colour", "immovable", "joinable"]
 
 func _ready() -> void:
 	super()

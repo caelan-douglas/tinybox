@@ -140,6 +140,10 @@
         "long_sleeve": "Long sleeve",
         "short_sleeve": "Short sleeve"
     },
+    "property_tooltips": {
+        "immovable": "Whether or not this brick can be displaced by explosions or other external effects.\nImmovable bricks cannot be used for vehicles.",
+        "joinable": "Whether or not this brick can join to other bricks to form a group.\nBricks that are joinable will attach to vehicles."
+    },
     "tbw_objects": {
         "obj_water": "Water",
         "obj_pine_tree": "Pine tree",
