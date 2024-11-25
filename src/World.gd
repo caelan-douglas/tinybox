@@ -292,6 +292,10 @@ func set_loading_canvas_text(text : String) -> void:
 # Only to be run as server
 func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
+	# End the active gamemode if a new world is requested.
+	var e : Event = Event.new(Event.EventType.END_ACTIVE_GAMEMODE, [])
+	e.start()
+	
 	for p : RigidPlayer in rigidplayer_list:
 		p.protect_spawn(3.5, false)
 	await get_tree().physics_frame
