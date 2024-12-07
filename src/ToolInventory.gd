@@ -46,6 +46,18 @@ preload("res://data/scene/tool/MissileTool.tscn"),\
 preload("res://data/scene/tool/PaintbrushTool.tscn"),
 preload("res://data/scene/tool/PulseCannonTool.tscn")]
 
+# for setting up the tool client synchronizer
+var all_tools_paths : Array[String] = ["res://data/scene/tool/BuildTool.tscn",\
+"res://data/scene/tool/BouncyballTool.tscn",\
+"res://data/scene/tool/BatTool.tscn",\
+"res://data/scene/tool/ExtinguisherTool.tscn",\
+"res://data/scene/tool/RocketTool.tscn",\
+"res://data/scene/tool/BombTool.tscn",\
+"res://data/scene/tool/FlamethrowerTool.tscn",\
+"res://data/scene/tool/MissileTool.tscn",\
+"res://data/scene/tool/PaintbrushTool.tscn",
+"res://data/scene/tool/PulseCannonTool.tscn"]
+
 var hold_timer := 0
 
 func _process(delta : float) -> void:
@@ -117,6 +129,11 @@ func _ready() -> void:
 	# avoid overlapping other elements
 	resize_ui()
 	get_tree().root.size_changed.connect(resize_ui)
+	# set up synchronizer
+	var tool_spawner : MultiplayerSpawner = get_parent().get_node_or_null("ToolSpawner")
+	if tool_spawner != null:
+		for t in all_tools_paths:
+			tool_spawner.add_spawnable_scene(t)
 
 func resize_ui() -> void:
 	await get_tree().process_frame

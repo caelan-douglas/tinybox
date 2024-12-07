@@ -666,7 +666,6 @@ func _ready() -> void:
 	else:
 		Global.get_world().add_player_to_list(self)
 		gravity_scale = player_grav
-		get_tool_inventory().reset()
 		if multiplayer.is_server():
 			protect_spawn(3.5, false)
 			# update spawns when world is loaded as server
@@ -675,6 +674,7 @@ func _ready() -> void:
 		if !is_multiplayer_authority():
 			#freeze = true
 			return
+		get_tool_inventory().reset()
 		set_camera(get_viewport().get_camera_3d())
 		connect("body_entered", _on_body_entered)
 		multiplayer.connected_to_server.connect(update_info)
