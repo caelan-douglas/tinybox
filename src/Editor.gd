@@ -226,7 +226,6 @@ func enable_player(at_spot : Variant = null) -> int:
 	await player.teleported
 	await get_tree().physics_frame
 	if at_spot != null:
-		print("moving to ", at_spot)
 		if at_spot is Vector3:
 			player.teleport(at_spot as Vector3)
 	await get_tree().process_frame

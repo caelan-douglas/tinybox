@@ -78,7 +78,6 @@ func play_sound() -> void:
 		audio.play()
 
 func explode(body : Node3D) -> void:
-	print("Explosion size: ", explosion_size)
 	if body.has_method("explode") && !(body is Explosion) && !(body is Rocket) && !(body is Bomb):
 		body.explode.rpc(global_position, by_whom, explosion_size)
 		# set 'last_hit_by' on player to this authority so that

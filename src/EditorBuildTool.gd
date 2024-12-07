@@ -86,8 +86,6 @@ func _on_body_selected(body : Node3D) -> void:
 		if (body is Brick || body is TBWObject) && body != active_preview_instance && body != hovered_editable_object:
 			selectable_body = body
 	
-	print("body selected: ", selectable_body)
-	
 	if selectable_body != null:
 		hovered_editable_object = selectable_body
 		# show props for that object
