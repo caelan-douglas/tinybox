@@ -68,6 +68,13 @@ func init(tool_name : String, player_owner : RigidPlayer = null) -> void:
 	ui_partner.connect("pressed", set_tool_active.bind(true, true))
 	Global.connect("keybinds_changed", update_tool_number)
 	update_tool_number()
+	# for updating tool being held when a player joins
+	multiplayer.peer_connected.connect(_on_peer_connected)
+
+# only runs on auth
+func _on_peer_connected(id : int) -> void:
+	if active:
+		show_tool_visual.rpc_id(id, true)
 
 func add_ui_partner() -> void:
 	if type == ToolType.PLAYER:
