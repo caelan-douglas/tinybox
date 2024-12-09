@@ -57,7 +57,7 @@ var display_version := "beta 12.2pre"
 @onready var join_button : Button = $MultiplayerMenu/PlayMenu/JoinHbox/Join
 @onready var display_name_field : LineEdit = $MultiplayerMenu/DisplayName
 @onready var join_address : LineEdit = $MultiplayerMenu/PlayMenu/JoinHbox/Address
-@onready var host_map_selector : OptionButton = $MultiplayerMenu/HostSettingsMenu/MapSelection
+@onready var host_map_selector : MapList = $MultiplayerMenu/HostSettingsMenu/MapList
 @onready var editor_button : Button = $MultiplayerMenu/MainMenu/Editor
 @onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/Tutorial
 
@@ -233,7 +233,6 @@ func _on_host_pressed() -> void:
 			host_button.disabled = false
 			return
 	# Get the host's selected map from the dropdown.
-	var selected_map : String = host_map_selector.get_item_text(host_map_selector.selected)
 	# Create the server.
 	enet_peer.create_server(PORT)
 	# Set the current multiplayer peer to the server.
@@ -273,7 +272,7 @@ func _on_host_pressed() -> void:
 	else:
 		get_tree().current_scene.get_node("GameCanvas").visible = true
 		# remove ".tbw"
-		world.load_tbw.call_deferred(str(selected_map.split(".")[0]))
+		world.load_tbw.call_deferred("Frozen Field")
 	# add camera
 	var camera_inst : Node3D = CAMERA.instantiate()
 	world.add_child(camera_inst, true)

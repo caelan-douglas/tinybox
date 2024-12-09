@@ -13,6 +13,7 @@
         "save_world": "Save world",
         "save_and_test": "Save & test world",
         "save_and_test_at_spot": "Save & test world at this spot",
+        "upload_world": "Save & upload world to Browser",
         "load_world": "Load world",
         "host_or_join": "Host or Join",
         "servers": "Servers",

@@ -246,6 +246,9 @@ func load_tbw(file_name : String, switching := false, reset_player_and_cameras :
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_open_tbw(name_from : String, world_name : String, lines : Array) -> void:
 	if !multiplayer.is_server(): return
+	if lines.is_empty():
+		UIHandler.show_alert("World not found or corrupt!", 8, false, UIHandler.alert_colour_error)
+		return
 	if !Global.server_can_clients_load_worlds:
 		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Sorry, clients are not permitted to change worlds in this server", 7, false, UIHandler.alert_colour_error)
 		return

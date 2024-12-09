@@ -19,6 +19,7 @@ class_name EditorCanvas
 
 @onready var world_name : LineEdit = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorldName
 @onready var pause_menu : Control = $PauseMenu
+@onready var upload_world_button : Button = $PauseMenu/ScrollContainer/Sections/Editor/UploadWorld
 @onready var options_button : Button = $OptionsButton
 @onready var coordinates_tooltip : Label = $Coordinates
 @onready var toggle_player_visual_button : Button = $TogglePlayerVisual
@@ -36,6 +37,7 @@ var mouse_just_captured : bool = false
 
 func _ready() -> void:
 	save_world_button.connect("pressed", _on_save_world_pressed)
+	upload_world_button.connect("pressed", _on_upload_world_pressed)
 	Global.get_world().connect("map_loaded", _on_map_loaded)
 
 func _on_map_loaded() -> void:
@@ -52,8 +54,8 @@ func _on_map_loaded() -> void:
 		death_lim_hi_adj.connect("value_changed", (editor as Editor).adjust_death_limit_high)
 		
 		$EntryScreen/Panel/Menu/New.connect("pressed", _on_new_world_pressed)
-		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapSelection))
-		$PauseMenu/ScrollContainer/Sections/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/ScrollContainer/Sections/Editor/MapSelection, true))
+		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapList))
+		$PauseMenu/ScrollContainer/Sections/Editor/Load.connect("pressed", _on_load_world_pressed.bind($PauseMenu/ScrollContainer/Sections/Editor/MapList, true))
 		$PauseMenu/ScrollContainer/Sections/Editor/TestWorld.connect("pressed", _on_test_world_pressed.bind(false))
 		$PauseMenu/ScrollContainer/Sections/Editor/TestWorldAtSpot.connect("pressed", _on_test_world_pressed.bind(true))
 		
@@ -80,7 +82,7 @@ func _on_new_world_pressed() -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _on_load_world_pressed(map_selector : OptionButton, confirm := false) -> void:
+func _on_load_world_pressed(map_selector : MapList, confirm := false) -> void:
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
 		editor.editor_tool_inventory.set_disabled(false)
@@ -91,19 +93,18 @@ func _on_load_world_pressed(map_selector : OptionButton, confirm := false) -> vo
 	else:
 		_load_world(map_selector)
 
-func _load_world(map_selector : OptionButton) -> void:
+func _load_world(map_selector : MapList) -> void:
 	# delete old environment
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
 		(editor as Editor).delete_environment()
 	# load file
-	var world_name_load : String = map_selector.get_item_text(map_selector.selected)
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# remove ".tbw" from string
-	Global.get_world().load_tbw(world_name_load.split(".")[0], false, false)
+	Global.get_world().ask_server_to_open_tbw.rpc_id(1, Global.display_name, map_selector.selected_name, map_selector.selected_lines)
 	# set save field name to loaded world name
-	world_name.text = str(world_name_load.split(".")[0])
+	world_name.text = str(map_selector.selected_name)
 
 func toggle_pause_menu() -> void:
 	# only do this in editor mode
@@ -139,3 +140,27 @@ func _on_save_world_pressed() -> void:
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
 		Global.get_world().save_tbw(str(world_name.text))
+
+func _on_upload_world_pressed() -> void:
+	if world_name.text == "":
+		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
+	else:
+		var ok : bool = await Global.get_world().save_tbw(str(world_name.text))
+		if ok:
+			var map_name : String = world_name.text
+			var tbw : String = "" 
+			var lines : Array = Global.get_tbw_lines(str(world_name.text))
+			for l : String in lines:
+				tbw += str(l, "\n")
+			
+			var req : HTTPRequest = HTTPRequest.new()
+			add_child(req)
+			var body := JSON.new().stringify({"name": map_name, "tbw": tbw})
+									# default REST API for worlds, hosted on my website
+			var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/", ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
+			if error != OK:
+				push_error("An error occurred in the HTTP request.")
+			else:
+				UIHandler.show_alert("Your world has been uploaded.", 4, false)
+		else:
+			UIHandler.show_alert("Sorry, there was an error saving the world.", 4, false, UIHandler.alert_colour_error)

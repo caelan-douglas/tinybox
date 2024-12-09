@@ -6,11 +6,11 @@
 [ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="2_ylpqp"]
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_yuqno"]
 [ext_resource type="Script" path="res://src/ui/UpdateButton.gd" id="5_awynh"]
-[ext_resource type="PackedScene" uid="uid://ip8uhbg31syp" path="res://data/scene/ui/MapSelection.tscn" id="5_mmcxg"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="6_j7jhb"]
 [ext_resource type="Script" path="res://src/ui/CreditsMenu.gd" id="8_5c1i6"]
 [ext_resource type="Script" path="res://src/ui/ServerList.gd" id="8_7bulb"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="8_labno"]
+[ext_resource type="PackedScene" uid="uid://d4f0w4x3panmu" path="res://data/scene/ui/MapList.tscn" id="9_imjug"]
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
 length = 0.001
@@ -391,10 +391,8 @@ json_text = "ui/host"
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="MapSelection" parent="HostSettingsMenu" instance=ExtResource("5_mmcxg")]
-custom_minimum_size = Vector2(2.08165e-12, 78)
+[node name="MapList" parent="HostSettingsMenu" instance=ExtResource("9_imjug")]
 layout_mode = 2
-text_overrun_behavior = 4
 
 [node name="HostPublic" type="Button" parent="HostSettingsMenu"]
 layout_mode = 2

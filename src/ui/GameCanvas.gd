@@ -68,15 +68,12 @@ func _process(delta : float) -> void:
 				show_pause_menu()
 
 func _send_on_change_map_pressed() -> void:
-	var map_selector : OptionButton = $PauseMenu/ScrollContainer/Pause/MapSelection
-	var map_name : String = map_selector.get_item_text(map_selector.selected)
+	var map_selector : MapList = $PauseMenu/ScrollContainer/Pause/MapList
 	# load tbw with switching flag
 	# clients must wait 15s between loading worlds to avoid spam
-	if multiplayer.is_server():
-		Global.get_world().load_tbw(map_name.split(".")[0], true)
-	else:
-		Global.get_world().load_tbw(map_name.split(".")[0], true)
-		UIHandler.show_alert(str("Your request to load \"", map_name, "\" was sent to the host."), 4)
+	Global.get_world().ask_server_to_open_tbw.rpc_id(1, Global.display_name, map_selector.selected_name, map_selector.selected_lines)
+	if !multiplayer.is_server():
+		UIHandler.show_alert(str("Your request to load \"", map_selector.selected_name, "\" was sent to the host."), 4)
 
 func _on_save_world_pressed() -> void:
 	var world_name : String = $PauseMenu/ScrollContainer/Pause/SaveWorldName.text

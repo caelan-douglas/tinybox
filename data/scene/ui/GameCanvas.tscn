@@ -17,12 +17,12 @@
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
+[ext_resource type="PackedScene" uid="uid://d4f0w4x3panmu" path="res://data/scene/ui/MapList.tscn" id="14_l2isx"]
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
 [ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="15_0571l"]
 [ext_resource type="PackedScene" uid="uid://tbixy6b8qkmy" path="res://data/scene/ui/GamemodeMenu.tscn" id="15_ies3a"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="16_hdnsf"]
-[ext_resource type="Script" path="res://src/ui/MapList.gd" id="16_oucrq"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="20_eusui"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
@@ -487,11 +487,8 @@ json_text = "ui/switch_maps"
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="MapSelection" type="OptionButton" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("14_l2isx")]
 layout_mode = 2
-size_flags_horizontal = 3
-text_overrun_behavior = 4
-script = ExtResource("16_oucrq")
 
 [node name="ChangeMap" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2

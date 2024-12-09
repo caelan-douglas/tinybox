@@ -278,6 +278,9 @@ func get_internal_tbw_names() -> Array:
 
 func get_tbw_image(file_name : String) -> Image:
 	var lines := get_tbw_lines(file_name)
+	return get_tbw_image_from_lines(lines)
+
+func get_tbw_image_from_lines(lines : Array) -> Image:
 	var image_base64 : String = ""
 	for line : String in lines:
 		if line.begins_with("image ; "):

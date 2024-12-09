@@ -487,7 +487,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_forc
 	set_non_groupable_for(1)
 	unjoin()
 	var explosion_force : float = randi_range(20, 40) * (_explosion_force)
-	if explosion_force > 160:
+	if explosion_force > 60:
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
 	await get_tree().create_timer(0.1).timeout
