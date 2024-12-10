@@ -237,6 +237,7 @@ vertical_alignment = 1
 script = ExtResource("6_aufvl")
 
 [node name="PauseMenu" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -348,9 +349,9 @@ json_text = "ui/upload_world"
 modulate = Color(1, 1, 1, 0.588235)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
-text = "If you upload this world, it will first be reviewed by a moderator. Once accepted, it will show up under the 'User-uploaded' section of the World Browser."
 autowrap_mode = 3
 script = ExtResource("6_aufvl")
+json_text = "ui/upload_world_tip"
 
 [node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 custom_minimum_size = Vector2(0, 30)

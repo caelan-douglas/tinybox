@@ -5,6 +5,6 @@ content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 6.0
-bg_color = Color(0.0196078, 0.0509804, 0.0901961, 0.545098)
+bg_color = Color(0.0196078, 0.0509804, 0.0901961, 0.760784)
 corner_radius_top_left = 6
 corner_radius_top_right = 6

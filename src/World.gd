@@ -171,6 +171,8 @@ func save_tbw(world_name : String, server : bool = false) -> bool:
 	file.store_line("[tbw]")
 	# save version
 	file.store_line(str("version ; ", (get_tree().current_scene as Main).server_version))
+	# author tag
+	file.store_line(str("author ; ", Global.display_name))
 	# store image data as base64 inside file
 	# servers don't save images
 	if !server:

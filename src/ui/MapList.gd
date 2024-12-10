@@ -19,7 +19,7 @@ class_name MapList
 
 @onready var built_in : VBoxContainer = $"TabContainer/Built-in"
 @onready var your_maps : VBoxContainer = $"TabContainer/Your maps"
-@onready var user_uploaded : VBoxContainer = $"TabContainer/User-uploaded"
+@onready var user_uploaded : VBoxContainer = $"TabContainer/World Browser"
 @onready var all_lists : Array = [built_in, your_maps, user_uploaded]
 @onready var window : Control = $TabContainer
 
@@ -43,8 +43,20 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 	
 	var entry : Control = map_list_entry.instantiate()
 	var entry_map_button : Button = entry.get_node("Map")
-	entry_map_button.text = file_name
-	entry_map_button.icon = tex
+	var entry_img : TextureRect = entry.get_node("Map/Split/Image")
+	var entry_title : Label = entry.get_node("Map/Split/Labels/Title")
+	var entry_auth : Label = entry.get_node("Map/Split/Labels/Author")
+	var entry_ver : Label = entry.get_node("Map/Split/Labels/Version")
+	# set title
+	entry_title.text = file_name
+	# parse lines to set auth and version
+	for l : String in lines:
+		if l.contains("author ;"):
+			entry_auth.text = str("by ", l.split(" ; ")[1])
+		elif l.contains("version ;"):
+			entry_ver.text = str("version: ", l.split(" ; ")[1])
+	# set image
+	entry_img.texture = tex
 	if can_delete:
 		var entry_delete_button : Button = entry.get_node("Delete")
 		entry_delete_button.visible = true
@@ -90,10 +102,26 @@ func clear() -> void:
 		for c : Control in list.get_node("ScrollContainer/ItemList").get_children():
 			c.queue_free()
 
+var req_time : int = 0
 func refresh_user_uploaded() -> void:
 	for c : Control in user_uploaded.get_node("ScrollContainer/ItemList").get_children():
 		c.queue_free()
 	
+	# add info about user uploaded maps
+	var l := Label.new()
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.text = JsonHandler.find_entry_in_file("ui/user_maps_info")
+	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l)
+	
+	# loading tag
+	var l2 := Label.new()
+	l2.name = "_loading"
+	l2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l2.text = "\n\n\nFetching worlds..."
+	l2.modulate = Color("#b973ff")
+	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l2)
+	
+	req_time = Time.get_ticks_msec()
 	var req : HTTPRequest = HTTPRequest.new()
 	add_child(req)
 	req.request_completed.connect(self._user_maps_request_completed)
@@ -104,10 +132,23 @@ func refresh_user_uploaded() -> void:
 		push_error("An error occurred in the HTTP request.")
 
 func _user_maps_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
+	# remove loading text
+	var loading_text : Control = user_uploaded.get_node("ScrollContainer/ItemList").get_node_or_null("_loading")
+	if loading_text != null:
+		loading_text.queue_free()
+	
+	# debug fetch time
+	var l := Label.new()
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.text = str("\n\nWorld list fetch took ", Time.get_ticks_msec() - req_time, "ms.")
+	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l)
+	
 	var json := JSON.new()
 	json.parse(body.get_string_from_utf8())
 	var response : Variant = json.get_data()
 	if response is Array:
+		# sort by newest
+		response.reverse()
 		for r : Variant in response:
 			if r is Dictionary:
 				var map_name := "(no name)"

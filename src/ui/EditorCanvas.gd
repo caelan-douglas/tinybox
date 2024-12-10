@@ -155,12 +155,17 @@ func _on_upload_world_pressed() -> void:
 			
 			var req : HTTPRequest = HTTPRequest.new()
 			add_child(req)
+			req.request_completed.connect(self._user_maps_upload_request_completed)
 			var body := JSON.new().stringify({"name": map_name, "tbw": tbw})
 									# default REST API for worlds, hosted on my website
 			var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/", ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
 			if error != OK:
 				push_error("An error occurred in the HTTP request.")
-			else:
-				UIHandler.show_alert("Your world has been uploaded.", 4, false)
 		else:
 			UIHandler.show_alert("Sorry, there was an error saving the world.", 4, false, UIHandler.alert_colour_error)
+
+func _user_maps_upload_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
+	if str(body.get_string_from_utf8()) == "OK":
+		UIHandler.show_alert("Your world has been uploaded.", 4, false)
+	else:
+		UIHandler.show_alert(str("Sorry, issue uploading your world: ", body.get_string_from_utf8()), 4, false, UIHandler.alert_colour_error)
