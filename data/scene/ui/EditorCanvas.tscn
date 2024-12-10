@@ -120,8 +120,9 @@ script = ExtResource("6_aufvl")
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="MapList" parent="EntryScreen/Panel/Menu" instance=ExtResource("12_qtwve")]
+[node name="MapList" parent="EntryScreen/Panel/Menu" node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
+associated_button = NodePath("../Load")
 
 [node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
@@ -362,8 +363,9 @@ layout_mode = 2
 text = "Load world"
 script = ExtResource("6_aufvl")
 
-[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" instance=ExtResource("12_qtwve")]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
+associated_button = NodePath("../Load")
 
 [node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 layout_mode = 2

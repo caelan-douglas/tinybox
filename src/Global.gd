@@ -393,3 +393,14 @@ func set_camera_max_dist(new : float = 40) -> void:
 	var camera : Camera3D = get_viewport().get_camera_3d()
 	if camera is Camera:
 		camera.set_max_dist(new)
+
+func format_server_version(what : String) -> String:
+	var first : String = what.substr(0, 2)
+	var second : String = what.substr(2, 2)
+	var last : String = what.right(1)
+	
+	var suffix : String = ""
+	if last == "0":
+		suffix = "pre"
+	return str("beta ", first, ".", str(int(second)), suffix)
+	

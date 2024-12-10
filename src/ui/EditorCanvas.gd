@@ -102,7 +102,7 @@ func _load_world(map_selector : MapList) -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# remove ".tbw" from string
-	Global.get_world().ask_server_to_open_tbw.rpc_id(1, Global.display_name, map_selector.selected_name, map_selector.selected_lines)
+	Global.get_world()._parse_and_open_tbw(map_selector.selected_lines)
 	# set save field name to loaded world name
 	world_name.text = str(map_selector.selected_name)
 
@@ -145,24 +145,28 @@ func _on_upload_world_pressed() -> void:
 	if world_name.text == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
-		var ok : bool = await Global.get_world().save_tbw(str(world_name.text))
-		if ok:
-			var map_name : String = world_name.text
-			var tbw : String = "" 
-			var lines : Array = Global.get_tbw_lines(str(world_name.text))
-			for l : String in lines:
-				tbw += str(l, "\n")
-			
-			var req : HTTPRequest = HTTPRequest.new()
-			add_child(req)
-			req.request_completed.connect(self._user_maps_upload_request_completed)
-			var body := JSON.new().stringify({"name": map_name, "tbw": tbw})
-									# default REST API for worlds, hosted on my website
-			var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/", ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
-			if error != OK:
-				push_error("An error occurred in the HTTP request.")
-		else:
-			UIHandler.show_alert("Sorry, there was an error saving the world.", 4, false, UIHandler.alert_colour_error)
+		var actions := UIHandler.show_alert_with_actions("Upload world to World Browser?\nIt will be made public and available to download for other players.\nOnce uploaded, it can't be changed.", ["Upload world", "Cancel"], false)
+		actions[0].connect("pressed", _upload_world)
+
+func _upload_world() -> void:
+	var ok : bool = await Global.get_world().save_tbw(str(world_name.text))
+	if ok:
+		var map_name : String = world_name.text
+		var tbw : String = "" 
+		var lines : Array = Global.get_tbw_lines(str(world_name.text))
+		for l : String in lines:
+			tbw += str(l, "\n")
+		
+		var req : HTTPRequest = HTTPRequest.new()
+		add_child(req)
+		req.request_completed.connect(self._user_maps_upload_request_completed)
+		var body := JSON.new().stringify({"name": map_name, "tbw": tbw})
+								# default REST API for worlds, hosted on my website
+		var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/", ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
+		if error != OK:
+			push_error("An error occurred in the HTTP request.")
+	else:
+		UIHandler.show_alert("Sorry, there was an error saving the world.", 4, false, UIHandler.alert_colour_error)
 
 func _user_maps_upload_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
 	if str(body.get_string_from_utf8()) == "OK":

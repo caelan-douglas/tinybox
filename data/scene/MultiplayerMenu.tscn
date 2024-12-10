@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene load_steps=15 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://src/ui/CreditsMenu.gd" id="8_5c1i6"]
 [ext_resource type="Script" path="res://src/ui/ServerList.gd" id="8_7bulb"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="8_labno"]
-[ext_resource type="PackedScene" uid="uid://d4f0w4x3panmu" path="res://data/scene/ui/MapList.tscn" id="9_imjug"]
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
 length = 0.001
@@ -389,9 +388,6 @@ json_text = "ui/host"
 
 [node name="Spacer" type="Control" parent="HostSettingsMenu"]
 custom_minimum_size = Vector2(2.08165e-12, 16)
-layout_mode = 2
-
-[node name="MapList" parent="HostSettingsMenu" instance=ExtResource("9_imjug")]
 layout_mode = 2
 
 [node name="HostPublic" type="Button" parent="HostSettingsMenu"]

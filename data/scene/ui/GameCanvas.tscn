@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=39 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://tbixy6b8qkmy" path="res://data/scene/ui/GamemodeMenu.tscn" id="15_ies3a"]
 [ext_resource type="Texture2D" uid="uid://fobp08fvky1j" path="res://data/textures/ui/progress_texture_right_over.png" id="15_kkx1g"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="16_hdnsf"]
+[ext_resource type="Texture2D" uid="uid://cawrg7wtfx8vo" path="res://data/textures/ui/flag.png" id="16_lfo80"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="20_eusui"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
@@ -487,14 +488,40 @@ json_text = "ui/switch_maps"
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="MapList" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("14_l2isx")]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Pause" node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("14_l2isx")]
 layout_mode = 2
+associated_button = NodePath("../ChangeMap")
+report_button = NodePath("../Report")
 
 [node name="ChangeMap" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
 layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
+
+[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
+visible = false
+modulate = Color(4, 0.8, 2.8, 1)
+custom_minimum_size = Vector2(45, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 0
+text = "Report this map"
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Pause/Report"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -12.0
+offset_right = 53.0
+offset_bottom = 12.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("16_lfo80")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
