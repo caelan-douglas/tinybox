@@ -19,7 +19,7 @@ image = SubResource("Image_18h3v")
 [node name="MapListEntry" type="HBoxContainer"]
 
 [node name="Map" type="Button" parent="."]
-custom_minimum_size = Vector2(300, 190)
+custom_minimum_size = Vector2(300, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
@@ -74,9 +74,10 @@ vertical_alignment = 1
 
 [node name="Title" type="Label" parent="Map/Split/Labels"]
 layout_mode = 2
+theme_override_constants/line_spacing = -4
 theme_override_fonts/font = ExtResource("1_vl26o")
 theme_override_font_sizes/font_size = 21
-text = "Map Name"
+text = "Map Name Newline"
 autowrap_mode = 3
 script = ExtResource("1_rxr4i")
 

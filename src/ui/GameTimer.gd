@@ -17,14 +17,39 @@
 extends ProgressBar
 class_name GameTimer
 
+var min_audio : AudioStreamPlayer
+var end_audio : AudioStreamPlayer
+@onready var anim : AnimationPlayer = $AnimationPlayer
+
+func _ready() -> void:
+	min_audio = AudioStreamPlayer.new()
+	end_audio = AudioStreamPlayer.new()
+	min_audio.bus = "UI"
+	end_audio.bus = "UI"
+	min_audio.stream = load("res://data/audio/countdown.ogg")
+	end_audio.stream = load("res://data/audio/countdown10sec.ogg")
+	add_child(min_audio)
+	add_child(end_audio)
+
 @rpc("any_peer", "call_local", "reliable")
 func update_timer(label : String, time_s : float) -> void:
+	# only accept updates from server
+	if multiplayer.get_remote_sender_id() != 1:
+		return
 	var timer_text : Label = get_node("Label")
 	if timer_text != null:
 		var mins := str(int(time_s as int / 60))
 		var seconds := str('%02d' % (int(time_s as int) % 60))
 		timer_text.text = str(label, " - ", mins, ":", seconds)
 		value = time_s
+	
+	if (!min_audio.playing && !end_audio.playing):
+		if round(time_s) == 60:
+			min_audio.play()
+			anim.play("flash_timer")
+		elif round(time_s) == 10:
+			end_audio.play()
+			anim.play("flash_timer")
 
 @rpc("any_peer", "call_local", "reliable")
 func set_max_val_rpc(new : int) -> void:

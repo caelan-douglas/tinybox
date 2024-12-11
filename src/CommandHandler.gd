@@ -61,8 +61,9 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 	# commands
 	if text == "?":
 		_send_response("Commands", "", id_from)
-		_send_response("$speed", "ex. $speed Playername 12 - sets a given player's movement speed. Default is 5.", id_from)
 		_send_response("$stuck", "Respawns you in case you are stuck.", id_from)
+		_send_response("$speed", "ex. $speed Playername 12 - sets a given player's movement speed. Default is 5.", id_from)
+		_send_response("$size", "ex. $size Playername 2 - sets the scale of a player's character. Default is 1.", id_from)
 		_send_response("$health", "ex. $health Playername 15 - sets a given player's health. Standard range is 0 - 20; higher than 20 will not show on the health bar.", id_from)
 		_send_response("$tpall", "ex. $tpall Playername - teleports all players to a given player.", id_from)
 		_send_response("$promote", "ex. $promote Playername - promotes player to admin. Be careful, this allows them to use all commands except $end, $promote, and $demote.", id_from)
@@ -98,13 +99,36 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 			else:
 				_send_response("Info", "You don't have permission to do that!", id_from)
 				return
+		elif split_text[0] == "$size":
+			# only admins can do size command
+			if admins.has(id_from):
+				if rsplit.size() == 2:
+					# Get this player and give them the size.
+					var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
+					# change to x size
+					var x := clampf(str(rsplit[1]).to_float(), 1, 15)
+					if player != null:
+						if x >= 1:
+							player.set_model_size.rpc(x)
+							_send_response("Info", str("Set ", rsplit[0], "'s size to ", x))
+						else:
+							_send_response("Info", "Size must be greater than or equal to 1", id_from)
+					else:
+						_send_response("Info", "Player not found", id_from)
+					return
+				else:
+					_send_response("Info", "Invalid use of $size. Correct syntax example: $size NAME SCALE_AMOUNT", id_from)
+					return
+			else:
+				_send_response("Info", "You don't have permission to do that!", id_from)
+				return
 		elif split_text[0] == "$health":
 			# only admins can do health command
 			if admins.has(id_from):
 				if rsplit.size() == 2:
-					# Get this player and give them the speed.
+					# Get this player and give them the health.
 					var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
-					# change to x speed
+					# change to x health
 					var x := str(rsplit[1]).to_int()
 					if player != null:
 						player.set_health(x)

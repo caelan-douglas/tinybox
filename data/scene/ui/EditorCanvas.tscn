@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=18 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -9,8 +9,10 @@
 [ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="6_aufvl"]
 [ext_resource type="Script" path="res://src/ui/AnimatedList.gd" id="6_i5rxj"]
 [ext_resource type="Script" path="res://src/ui/RealTime.gd" id="8_t5c8k"]
+[ext_resource type="Texture2D" uid="uid://cawrg7wtfx8vo" path="res://data/textures/ui/flag.png" id="12_dihgv"]
 [ext_resource type="PackedScene" uid="uid://dudk6o40fwhnj" path="res://data/scene/ui/LeaveButton.tscn" id="12_nulw5"]
 [ext_resource type="PackedScene" uid="uid://d4f0w4x3panmu" path="res://data/scene/ui/MapList.tscn" id="12_qtwve"]
+[ext_resource type="Script" path="res://src/ui/UploadWorld.gd" id="12_whfwp"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="14_f30l1"]
 [ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="15_32mo6"]
 
@@ -339,12 +341,12 @@ json_text = "ui/save_and_test_at_spot"
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="UploadWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="UploadWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("world_name")]
 self_modulate = Color(1, 0.541, 1.8, 1)
 layout_mode = 2
 text = "Save & upload world to Browser"
-script = ExtResource("15_32mo6")
-json_text = "ui/upload_world"
+script = ExtResource("12_whfwp")
+world_name = NodePath("../SaveWorldName")
 
 [node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 modulate = Color(1, 1, 1, 0.588235)
@@ -363,15 +365,45 @@ layout_mode = 2
 text = "Load world"
 script = ExtResource("6_aufvl")
 
-[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
 associated_button = NodePath("../Load")
+report_button = NodePath("../Report")
 
 [node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 layout_mode = 2
 text = "Load world"
 script = ExtResource("15_32mo6")
 json_text = "ui/load_world"
+
+[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+custom_minimum_size = Vector2(2.08165e-12, 24)
+layout_mode = 2
+
+[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+visible = false
+modulate = Color(1, 0.541, 1.8, 1)
+custom_minimum_size = Vector2(45, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 0
+text = "Report this map"
+icon_alignment = 1
+script = ExtResource("15_32mo6")
+
+[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Sections/Editor/Report"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -12.0
+offset_right = 53.0
+offset_bottom = 12.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_dihgv")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
 custom_minimum_size = Vector2(2.08165e-12, 70)

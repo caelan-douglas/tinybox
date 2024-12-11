@@ -1737,6 +1737,13 @@ func increment_kills() -> void:
 	kills += 1
 	update_kills.rpc(kills)
 
+# for fun
+@rpc("any_peer", "call_local", "reliable")
+func set_model_size(new : int = 1) -> void:
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	character_model.scale = Vector3(new, new, new)
+
 func protect_spawn(time : float = 3.5, overlay := true) -> void:
 	_receive_server_protect_spawn.rpc(time, overlay)
 	invulnerable = true
@@ -1792,10 +1799,12 @@ func set_jump_force(new : float) -> void:
 func align_character_model_normal(ground_normal : Vector3) -> void:
 	# make sure we only align model in supported states
 	if _state == SLIDE || _state == SLIDE_BACK || _state == DEAD:
+		var old_scale : Vector3 = character_model.scale
 		# from: https://kidscancode.org/godot_recipes/3.x/3d/3d_align_surface/index.html
 		character_model.global_transform.basis.y = ground_normal
 		character_model.global_transform.basis.x = -character_model.global_transform.basis.z.cross(ground_normal)
 		character_model.global_transform.basis = character_model.global_transform.basis.orthonormalized()
+		character_model.scale = old_scale
 
 # for removing player from world
 func despawn() -> void:

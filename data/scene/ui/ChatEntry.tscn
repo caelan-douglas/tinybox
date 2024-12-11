@@ -25,12 +25,12 @@ theme_override_constants/separation = 13
 [node name="PlayerLabel" type="Label" parent="Margin/HBoxContainer"]
 custom_minimum_size = Vector2(112, 2.08165e-12)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.871717, 0.663142, 0.334449, 1)
 text = "Playername"
 autowrap_mode = 2
 
 [node name="ChatLabel" type="Label" parent="Margin/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 0.415686)
 text = "here is a whole bunch of chat text that most likely will not fit inside the chat box so its good for testing"
 autowrap_mode = 3

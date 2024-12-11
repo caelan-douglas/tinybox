@@ -196,10 +196,8 @@ func _set_selected_user_map_tbw(result : int, response_code : int, headers : Pac
 	json.parse(body.get_string_from_utf8())
 	var response : Variant = json.get_data()
 	if response is Array:
-		print("response is array")
 		if response[0] is Dictionary:
 			if response[0].has("tbw"):
-				print(response[0]["tbw"])
 				selected_lines = str(response[0]["tbw"]).split("\n")
 	_map_downloaded = true
 
