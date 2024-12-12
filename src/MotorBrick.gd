@@ -22,7 +22,7 @@ var max_speed : float = 80
 var steer : float = 0
 var flip_motor_side : bool = false
 
-var parent_seat : MotorSeat = null
+var parent_controller : MotorController = null
 var in_water := false
 
 # Set a custom property
@@ -43,8 +43,8 @@ func set_material(new : Brick.BrickMaterial) -> void:
 	super(new)
 
 @rpc("any_peer", "call_local")
-func set_parent_seat(seat_as_path : NodePath) -> void:
-	parent_seat = get_node(seat_as_path)
+func set_parent_controller(as_path : NodePath) -> void:
+	parent_controller = get_node(as_path)
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "flip_motor_side", "max_speed"]
@@ -58,9 +58,9 @@ func _ready() -> void:
 # Remove this brick
 @rpc("any_peer", "call_local")
 func despawn(check_world_groups : bool = true) -> void:
-	if parent_seat:
-		if parent_seat.attached_motors.has(self):
-			parent_seat.attached_motors.erase(self)
+	if parent_controller:
+		if parent_controller.attached_motors.has(self):
+			parent_controller.attached_motors.erase(self)
 	super()
 
 # Receive input from a player (motor seat).
@@ -100,10 +100,10 @@ func _physics_process(delta : float) -> void:
 		angular_velocity = lerp(angular_velocity, to_velocity, 1/angular_velocity.length() * 0.5)
 	
 	# if this is controlled by a seat
-	if parent_seat:
+	if parent_controller:
 		# rotation relative to seat left/right
 		var z_vec : Vector3 = global_transform.basis.z
-		var rel_pos : Vector3 = parent_seat.global_position - global_position
+		var rel_pos : Vector3 = parent_controller.global_position - global_position
 		var dot_z : float = z_vec.dot(rel_pos)
 		
 		# determines if wheel is on left or right side of seat.
@@ -121,14 +121,14 @@ func _physics_process(delta : float) -> void:
 		if in_water:
 			# max speed 11 underwater
 			if linear_velocity.length() < 11:
-				apply_central_force(parent_seat.transform.basis.z * speed * -500)
+				apply_central_force(parent_controller.transform.basis.z * speed * -500)
 			if steer != 0:
 				# apply angular velocity to all bricks
 				if brick_groups.groups.has(str(group)):
 					for b : Variant in brick_groups.groups[str(group)]:
 						if b != null:
 							b = b as Brick
-							b.angular_velocity = parent_seat.transform.basis.y * -steer * 3
+							b.angular_velocity = parent_controller.transform.basis.y * -steer * 3
 
 func entered_water() -> void:
 	super()

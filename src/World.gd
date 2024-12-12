@@ -283,7 +283,7 @@ func _world_accepted(name_from : String, world_name : String, lines : Array) -> 
 	show_tbw_switch_alert(name_from, world_name)
 
 func show_tbw_switch_alert(name_from : String, world_name : String) -> void:
-	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, ".tbw\"\nrequested by ", name_from), 7)
+	UIHandler.show_alert.rpc(str("Switched to world \"", world_name, "\"\nrequested by ", name_from), 7)
 
 @rpc("authority", "call_local", "reliable")
 func set_loading_canvas_visiblity(mode : bool) -> void:

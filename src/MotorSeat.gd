@@ -14,15 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends Brick
+extends MotorController
 class_name MotorSeat
 
 # The player who is controlling this motorseat.
 var controlling_player : RigidPlayer
-# The motors attached to this seat, determined by this seat's group.
-var attached_motors := []
-# Vehicle weight determined by weight of all bricks combined.
-var vehicle_weight : float = 0
 @onready var sit_area : Area3D = $SitArea
 @onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
 
@@ -82,16 +78,6 @@ func set_controlling_player(player_id : int) -> void:
 	else:
 		controlling_player = Global.get_world().get_node_or_null(str(player_id))
 
-# Drives this seat's motors based on user input.
-@rpc("any_peer", "call_local")
-func drive(input_forward : float, input_steer : float) -> void:
-	for motor_brick : Variant in attached_motors:
-		if motor_brick != null:
-			if motor_brick is MotorBrick:
-				motor_brick.receive_input(input_forward, input_steer)
-		else:
-			attached_motors.erase(motor_brick)
-
 # Remove this brick
 @rpc("any_peer", "call_local")
 func despawn(check_world_groups : bool = true) -> void:
@@ -99,10 +85,6 @@ func despawn(check_world_groups : bool = true) -> void:
 		controlling_player.seat_destroyed.rpc_id(controlling_player.get_multiplayer_authority())
 	else:
 		controlling_player = null
-	for b : Variant in attached_motors:
-		if b != null:
-			if b is MotorBrick:
-				b.parent_seat = null
 	super()
 
 # Sets the controlling player of this seat, and gives control to the player that sat down.
@@ -112,30 +94,9 @@ func sit(player : RigidPlayer) -> void:
 	
 	# set the controlling player for ALL peers
 	set_controlling_player.rpc(player.get_multiplayer_authority())
-	
-	# find child motors
-	vehicle_weight = 0
-	if brick_groups.groups.has(str(group)):
-		for b : Variant in brick_groups.groups[str(group)]:
-			if b != null:
-				b = b as Brick
-				vehicle_weight += b.mass
-				if b is MotorBrick:
-					if !attached_motors.has(b):
-						attached_motors.append(b)
-					# set the motorbricks parent seat to this one
-					b.set_parent_seat(self.get_path())
-	
-	update_weight.rpc(vehicle_weight)
+	activate()
 	var player_id : int = player.get_multiplayer_authority()
 	player.entered_seat.rpc_id(player_id, self.get_path())
-	# unfreeze group so that the body that has
-	# these motors is released.
-	unfreeze_entire_group()
-
-@rpc("any_peer", "call_local", "reliable")
-func update_weight(new : float) -> void:
-	vehicle_weight = new
 
 @rpc("call_remote")
 func _sync_velocity(rpc_velocity : Vector3) -> void:

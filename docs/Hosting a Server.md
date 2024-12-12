@@ -14,7 +14,7 @@ However, uPnP is understandably disabled by default for a lot of routers, so if 
 **Linux**: In terminal navigate to where the Tinybox binary is and type <br>`./Tinybox.x86_64 --headless`<br><br>
 **Windows**: In command prompt navigate to where the Tinybox executeable is and type <br>`Tinybox.exe --headless`
 
-The server will use your saved display name. The server will run out of your terminal. Headless servers are supported in beta 11.0 and later.
+The server will use your saved display name, and will run out of your terminal.
 
 ## Moderating
 
@@ -22,4 +22,4 @@ The command list can be shown by typing "?" in console.<br>
 Typing "$end" will end the server.<br>
 Typing "$quit" will exit the app.
 
-Note that as of now server data is only stored per session. This means changes to your map, bans on players, promotions, etc will be reset when the server is shut down.
+Note that changes to the map and player bans are saved when the server is shut down. However, admin privileges are revoked upon the admin leaving or the server being shut down due to lack of authentication.
