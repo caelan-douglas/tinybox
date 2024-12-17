@@ -18,9 +18,6 @@ extends Control
 
 # For running server commands.
 
-# TODO: Implement this in a better way, commands 
-# should be something that Global or World runs, not Chat.
-
 @onready var scroll_box : ScrollContainer = $VBoxContainer/ScrollContainer
 @onready var chat_list : Control = $VBoxContainer/ScrollContainer/ChatList
 @onready var line_edit : Control = $VBoxContainer/LineEdit

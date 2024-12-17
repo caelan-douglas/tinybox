@@ -37,7 +37,7 @@ enum BrickMaterial {
 
 const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -57,6 +57,7 @@ var sync_step : int = 0
 var joinable : bool = true
 var groupable : bool = true
 var immovable : bool = false
+var indestructible : bool = false
 # for larger bricks
 @export var mass_mult : float = 1
 @export var flammable : bool = true
@@ -367,7 +368,7 @@ func get_colour() -> Color:
 func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:
 	if !is_multiplayer_authority(): return
 	# static brick material cannot be unglued
-	if immovable:
+	if immovable || indestructible:
 		return
 	# iterate through all bricks in group. Do not run this on dummy bricks.
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
@@ -376,7 +377,7 @@ func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0)
 				# do not unglue static neighbours
 				if b != null:
 					b = b as Brick
-					if !b.immovable:
+					if !b.immovable && !b.indestructible:
 						if new == false:
 						# only deglue inside the deglue radius
 							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius + addl_radius:
@@ -482,7 +483,7 @@ func extinguish_fire() -> void:
 func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
-	if immovable: return
+	if immovable || indestructible: return
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
@@ -716,6 +717,8 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 func unjoin() -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
+	if indestructible:
+		return
 	
 	for j in get_children():
 		if j is Generic6DOFJoint3D:

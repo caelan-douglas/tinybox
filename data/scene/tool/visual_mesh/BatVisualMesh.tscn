@@ -184,10 +184,10 @@ normal_texture = ExtResource("6_m6t0x")
 uv1_offset = Vector3(0, 0.135, 0.695)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v1ufs"]
-size = Vector3(0.1, 0.8, 0.1)
+size = Vector3(0.4, 0.8, 0.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2ebpc"]
-size = Vector3(0.8, 0.9, 0.6)
+size = Vector3(1.2, 1.2, 1.4)
 
 [node name="BatVisualMesh" type="Node3D"]
 
@@ -230,7 +230,7 @@ transform = Transform3D(1, 1.11759e-08, 7.45058e-09, 1.11759e-08, 1, 0, 0, 0, 1,
 collision_mask = 131
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="mesh/LargeHitArea"]
-transform = Transform3D(1, -8.19564e-08, 2.30968e-07, 1.01328e-06, 0.999999, 2.68221e-07, 1.3411e-07, 6.55651e-07, 1, -3.72529e-08, 0.198845, -0.1)
+transform = Transform3D(1, 1.47751e-08, 1.66368e-07, 9.8156e-07, 0.999999, 3.25531e-08, 1.22603e-07, 7.17789e-07, 1, 2.08165e-12, 0.199, 2.08165e-12)
 shape = SubResource("BoxShape3D_2ebpc")
 
 [editable path="mesh"]

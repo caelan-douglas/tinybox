@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckaxljlenuwow"]
-
-[ext_resource type="Script" path="res://src/Building.gd" id="1_gnd4i"]
-[ext_resource type="PackedScene" uid="uid://bqv3y51inp7pj" path="res://data/scene/brick/Brick.tscn" id="2_3n0go"]
-
-[node name="Building" type="Node3D"]
-script = ExtResource("1_gnd4i")
-
-[node name="Brick" parent="." instance=ExtResource("2_3n0go")]
