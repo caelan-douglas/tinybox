@@ -659,6 +659,10 @@ func check_joints(specific_body : Node3D = null) -> void:
 	for body in bodies_to_check:
 		# don't join with self
 		if body is Brick && body != self:
+			# if this is immovable (loaded first)
+			if self.immovable:
+				body.has_static_neighbour = true
+			# if other loaded first
 			if body.immovable:
 				has_static_neighbour = true
 			found_brick = true

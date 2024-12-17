@@ -143,6 +143,12 @@ var deaths : int = 0
 
 @export var spawn_as_dummy : bool = false
 
+func on_ice() -> bool:
+	if standing_on_object is Brick:
+		if standing_on_object._material == Brick.BrickMaterial.ICE:
+			return true
+	return false
+
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
 @rpc("any_peer", "call_local", "reliable")
@@ -1108,10 +1114,9 @@ func set_standing_on_object_rpc(what_path : String) -> void:
 	else:
 		standing_on_object = get_node(what_path)
 		decel_multiplier = normal_decel_multiplier
-		if standing_on_object is Brick:
-			if standing_on_object._material == Brick.BrickMaterial.ICE:
-				# more slippy on ice
-				decel_multiplier = ice_decel_multiplier
+		if on_ice():
+			# more slippy on ice
+			decel_multiplier = ice_decel_multiplier
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
