@@ -1,9 +1,9 @@
 <br>
-<p align="center"><img src=title.png width="450px"></p>
-Free and open source sandbox game with peer-to-peer multiplayer, world editor, PvP and a physics-based building system. It is made with Godot 4 using GDScript.<br><br>
+<img align="left" style="padding: 40px" src=title.png width="250px"></p>
+Free and open source sandbox game with peer-to-peer multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
 
-Download the latest beta release:<br>
-[![Tinybox](https://img.shields.io/badge/Get%20latest-beta%20version-teal?style=plastic)](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
+[<img alt="Download link" height="24px" src="https://img.shields.io/badge/Link%3A%20Get%20the%20latest%20beta!%20-%20%2F?color=teal&link=https%3A%2F%2Fgithub.com%2Fcaelan-douglas%2Ftinybox%2Freleases%2Flatest">](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
+
 ### License
 
 Tinybox is free software licensed under the GNU Affero General Public License v3 (GNU AGPLv3), located in [`COPYING.txt`](COPYING.txt).
@@ -13,6 +13,7 @@ Some assets (textures, audio, music, etc.) are under different licensing. These 
 - GNU AGPLv3
 - Creative Commons CC0
 - Creative Commons CC-BY-SA 4.0
+- MIT License
 
 Files with different licenses are denoted in the various `licenses.txt` files located in the respective data folders, which point to the file's source and their license.
 
@@ -21,15 +22,15 @@ The Godot Engine is under its own license, the details of which are noted at htt
 ## About
 
 ### Screenshots
-<img src=.export_exclude/screenshot_1.png width="600px">
-<img src=.export_exclude/screenshot_3.png width="600px">
-<img src=.export_exclude/screenshot_2.png width="600px">
-<img src=.export_exclude/screenshot_4.png width="600px">
+<img src=.export_exclude/screenshot_4.png width="800px">
+<img src=.export_exclude/screenshot_1.png width="800px">
+<img src=.export_exclude/screenshot_3.png width="800px">
+<img src=.export_exclude/screenshot_2.png width="800px">
 
 ### Game vision
 Tinybox *('tiny + sandbox')* is a sandbox game focused on creativity, experimentation, and destroying your friends with rockets. Bricks allow players to create destructible platforms, bridges, houses, vehicles, etc. The world editor allows players to delve a bit deeper and create their own worlds with custom events and features. As of now, the main goal of feature updates in the project is to expand on this with more included worlds; new features, events, and objects in the editor; and new item types.
 
-In order to keep PvP aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way (ex. bombs and rockets for ranged weapons, rather than hitscan weapons.)
+In order to keep PvP aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way.
 
 ## Setting up the project
 [![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
