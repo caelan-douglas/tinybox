@@ -38,6 +38,7 @@ func despawn(check_world_groups : bool = true) -> void:
 	for b : Variant in attached_motors:
 		if b != null:
 			if b is MotorBrick:
+				b.receive_input(0, 0)
 				b.parent_controller = null
 	super()
 
@@ -45,6 +46,10 @@ func despawn(check_world_groups : bool = true) -> void:
 func activate() -> void:
 	# only execute for owner of seat
 	if !is_multiplayer_authority(): return
+	if Global.get_world().get_current_map() is Editor:
+		var editor : Editor = Global.get_world().get_current_map() as Editor
+		if !editor.test_mode:
+			return
 	
 	# find child motors
 	vehicle_weight = 0
@@ -66,3 +71,4 @@ func activate() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func update_weight(new : float) -> void:
 	vehicle_weight = new
+	

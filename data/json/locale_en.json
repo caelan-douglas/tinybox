@@ -186,6 +186,7 @@
         "brick_lamp": "Lamp",
         "brick_wedge": "Wedge",
         "brick_explosive": "Explosive",
+        "brick_activator": "Activator",
 
         "tooltips": {
             "obj_pine_tree": "Regular size pine tree.",

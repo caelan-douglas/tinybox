@@ -268,14 +268,16 @@ func _on_body_entered(body : Node3D) -> void:
 		if (body is RigidBody3D) && !(body is RigidPlayer):
 			if (body.linear_velocity.length() + body.angular_velocity.length()) > 4:
 				if _state != STANDING_UP && _state != IN_SEAT:
-					if body == standing_on_object:
-						return
+					if standing_on_object != null:
+						if body == standing_on_object:
+							return
 					# take damage from fast bricks hitting player
 					# unless they are part of the group the player is standing on
 					if body is Brick:
-						if standing_on_object is Brick:
-							if body.group == standing_on_object.group:
-								return
+						if standing_on_object != null:
+							if standing_on_object is Brick:
+								if body.group == standing_on_object.group:
+									return
 						reduce_health(body.mass_mult as int, CauseOfDeath.HIT_BY_BRICK)
 					change_state.rpc_id(get_multiplayer_authority(), TRIPPED)
 			if body is Brick:

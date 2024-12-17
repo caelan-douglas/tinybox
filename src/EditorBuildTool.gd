@@ -326,16 +326,32 @@ func _physics_process(delta : float) -> void:
 				States.SELECT:
 					change_state(States.BUILD)
 		
-		# for all states
-		if select_area != null:
-			select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
-		
 		# SELECT MODE -----------
 		if _state == States.SELECT:
-			pass
+			if select_area != null:
+				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					# drag select
+					if Input.is_action_just_pressed("click"):
+						drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
+					elif Input.is_action_pressed("click"):
+						var drag_scale : Vector3 = drag_end_point - drag_start_point + Vector3(1, 1, 1)
+						select_area.scale = abs(drag_scale).clamp(Vector3(1, 1, 1), drag_scale)
+						select_area.position = drag_start_point + drag_scale/2 + Vector3(-0.5, -0.5, -0.5)
+						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
+					elif Input.is_action_just_released("click"):
+						# when recapturing mouse with click
+						if editor != null:
+							if editor.editor_canvas.mouse_just_captured:
+								return
+						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
+						if drag_start_point == drag_end_point:
+							return
+					else:
+						select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 		# BUILD MODE ------------
 		else:
 			if select_area != null:
+				select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 				if Input.is_action_pressed("editor_delete"):
 					# Delete the hovered object
 					if select_area != null:

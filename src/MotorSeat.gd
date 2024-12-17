@@ -22,6 +22,9 @@ var controlling_player : RigidPlayer
 @onready var sit_area : Area3D = $SitArea
 @onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
 
+func _init() -> void:
+	_brick_spawnable_type = "brick_motor_seat"
+
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
 	if property == "brick_scale":
