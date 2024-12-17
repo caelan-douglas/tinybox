@@ -10,3 +10,7 @@ Attributions for /data/textures:
 	Snow010A_2K-JPG_Color.jpg, Snow010A_2K-JPG_NormalGL.jpg, Snow010A_2K-JPG_Roughness.jpg:
 	by ambientCG; licensed under Creative Commons 0
 	https://ambientcg.com/view?id=Snow010A
+
+	Ice003*.jpg:
+	by ambientCG; licensed under Creative Commons 0
+	https://ambientcg.com/view?id=Ice003

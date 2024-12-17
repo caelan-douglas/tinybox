@@ -32,10 +32,11 @@ enum BrickMaterial {
 	METAL,
 	PLASTIC,
 	RUBBER,
-	GRASS
+	GRASS,
+	ICE
 }
 
-const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
+const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Grass", "Ice"]
 
 @export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible"]
 
@@ -83,6 +84,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @onready var plastic_material : Material = preload("res://data/materials/plastic.tres")
 @onready var rubber_material : Material = preload("res://data/materials/rubber.tres")
 @onready var grass_material : Material = preload("res://data/materials/grass.tres")
+@onready var ice_material : Material = preload("res://data/materials/ice.tres")
 
 # for showing cost in minigame
 @onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
@@ -308,6 +310,17 @@ func set_material(new : BrickMaterial) -> void:
 			
 			# set physics material properties for brick.
 			set_physics_material_properties(0.7, 0)
+			
+			flammable = false
+		# Ice
+		6:
+			_material = BrickMaterial.ICE
+			model_mesh.set_surface_override_material(0, ice_material)
+			mass = 3 * mass_mult
+			unjoin_velocity = 15
+			
+			# set physics material properties for brick.
+			set_physics_material_properties(0.05, 0)
 			
 			flammable = false
 	mesh_material = model_mesh.get_surface_override_material(0)

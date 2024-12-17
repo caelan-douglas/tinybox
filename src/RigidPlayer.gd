@@ -67,6 +67,8 @@ var jump_force := 2.4
 var extra_jump_force := 2.4
 var move_speed : float = 5
 var decel_multiplier := 0.85
+var normal_decel_multiplier := 0.85
+var ice_decel_multiplier := 0.98
 var player_grav := 1.4
 var team := "Default"
 var seat_occupying : MotorSeat = null
@@ -1105,6 +1107,11 @@ func set_standing_on_object_rpc(what_path : String) -> void:
 		standing_on_object = null
 	else:
 		standing_on_object = get_node(what_path)
+		decel_multiplier = normal_decel_multiplier
+		if standing_on_object is Brick:
+			if standing_on_object._material == Brick.BrickMaterial.ICE:
+				# more slippy on ice
+				decel_multiplier = ice_decel_multiplier
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
