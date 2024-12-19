@@ -17,6 +17,8 @@
 extends PanelContainer
 class_name Alert
 
+var dupes : int = 1
+
 func timeout() -> void:
 	var anim : AnimationPlayer = $AnimationPlayer
 	anim.play("hide")

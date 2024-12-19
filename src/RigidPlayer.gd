@@ -98,6 +98,7 @@ var external_propulsion := false
 var swim_dash_cooldown : int = 0
 var lateral_velocity := Vector3.ZERO
 var standing_on_object : Node3D = null
+var last_spot_standing_on_object : Vector3 = Vector3.ZERO
 
 var last_hit_by_id : int = -1
 var last_hit := false
@@ -362,8 +363,8 @@ func set_max_health(new : int) -> void:
 	if health > max_health:
 		set_health(max_health)
 
+# ONLY RUNS AS SERVER
 func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
-	# only runs as server
 	if !multiplayer.is_server():
 		return
 	
@@ -397,8 +398,8 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 									death_message = str(executing_player_name, " blew up their teammate ", display_name, "! Good going!")
 								# If friendly fire is ON
 								else:
-									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									# run increment kills command on server side
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 4:
@@ -423,7 +424,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 2:
@@ -442,7 +443,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -465,7 +466,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -494,7 +495,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								death_message = str(last_hit_executing_player_name, " knocked their teammate ", display_name, " off the map!")
 							# If friendly fire is ON
 							else:
-								last_hit_executing_player.increment_kills.rpc_id(last_hit_executing_player.get_multiplayer_authority())
+								last_hit_executing_player.update_kills(last_hit_executing_player.kills + 1)
 								# play kill sound for last hit executor
 								Global.play_kill_sound.rpc_id(last_hit_by_id)
 								match randi() % 3:
@@ -537,7 +538,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -571,6 +572,9 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						death_message = str(display_name, " has met their demise!")
 					2:
 						death_message = str(display_name, " will be back in 10 seconds!")
+			# set server deaths
+			if !dead:
+				update_deaths(deaths + 1)
 			# set server dead flag
 			dead = true
 			emit_signal("died")
@@ -652,8 +656,10 @@ func update_info(_who : int) -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)
 	change_appearance()
-	update_kills.rpc(kills)
-	update_deaths.rpc(deaths)
+	# server handles kills and deaths
+	if multiplayer.is_server():
+		update_kills(kills)
+		update_deaths(deaths)
 
 func set_camera(new : Camera3D) -> void:
 	camera = new
@@ -1073,18 +1079,29 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				pass
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 		
+		var grounded_on_standing_object : bool = false
 		# check if standing on something
 		if ground_detect.has_overlapping_bodies() && _state != DEAD:
+			# check every body standing on
 			for body in ground_detect.get_overlapping_bodies():
+				# if this is not what we are already standing on
 				if standing_on_object != body:
 					standing_on_object_last_pos = body.global_position
-				set_standing_on_object_rpc.rpc(body.get_path())
+					set_standing_on_object_rpc.rpc(body.get_path())
+				else:
+					grounded_on_standing_object = true
+					last_spot_standing_on_object = global_position
 		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
 			set_standing_on_object_rpc.rpc("null")
 		
 		# move if standing on something
 		if standing_on_object != null:
-			global_position += standing_on_object.global_position - standing_on_object_last_pos
+			var standing_influence : float = 1
+			if !grounded_on_standing_object:
+				standing_influence -= (clampf(last_spot_standing_on_object.distance_to(global_position) - 3, 0, 10)*0.15)
+				standing_influence = clampf(standing_influence, 0, 1)
+			print(standing_influence)
+			global_position += (standing_on_object.global_position - standing_on_object_last_pos) * standing_influence
 			standing_on_object_last_pos = standing_on_object.global_position
 		
 	# handle teleport requests
@@ -1436,8 +1453,6 @@ func enter_state() -> void:
 			seat_occupying = null
 			get_tree().create_timer(0.5).connect("timeout", _set_can_enter_seat.bind(true))
 		DEAD:
-			deaths += 1
-			update_deaths.rpc(deaths)
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
@@ -1730,26 +1745,35 @@ func explode(explosion_position : Vector3, from_whom : int = 1, _explosion_force
 	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * 25
 	apply_impulse(explosion_dir * (_explosion_force/4))
 
-@rpc("any_peer", "call_local", "reliable")
-func update_kills(rpc_kills : int) -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+# server side
+func update_kills(new_kills : int) -> void:
+	if !multiplayer.is_server():
 		return
-	kills = rpc_kills
+	kills = new_kills
+	_receive_server_kills.rpc(new_kills)
 	Global.update_player_list_information()
 
-@rpc("any_peer", "call_local", "reliable")
-func update_deaths(rpc_deaths : int) -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+# server side
+func update_deaths(new_deaths : int) -> void:
+	if !multiplayer.is_server():
 		return
-	deaths = rpc_deaths
+	deaths = new_deaths
+	_receive_server_deaths.rpc(new_deaths)
 	Global.update_player_list_information()
 
+# client side
 @rpc("any_peer", "call_local", "reliable")
-func increment_kills() -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
-		return
-	kills += 1
-	update_kills.rpc(kills)
+func _receive_server_kills(new : int) -> void:
+	if multiplayer.is_server(): return
+	kills = new
+	Global.update_player_list_information()
+
+# client side
+@rpc("any_peer", "call_local", "reliable")
+func _receive_server_deaths(new : int) -> void:
+	if multiplayer.is_server(): return
+	deaths = new
+	Global.update_player_list_information()
 
 # for fun
 @rpc("any_peer", "call_local", "reliable")

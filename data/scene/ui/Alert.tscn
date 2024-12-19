@@ -28,6 +28,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="Duplicate" type="Label" parent="."]
+modulate = Color(0.80001, 0.657949, 0.454563, 1)
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": ExtResource("2_s56u3")

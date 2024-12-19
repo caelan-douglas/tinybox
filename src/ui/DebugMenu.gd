@@ -34,6 +34,11 @@ func _ready() -> void:
 	add_button.connect("pressed", _on_add_fake_kills)
 	add_child(add_button)
 	
+	add_button = Button.new()
+	add_button.text = "Spam server requests"
+	add_button.connect("pressed", _on_spam_server_requests)
+	add_child(add_button)
+	
 	Global.connect("debug_toggled", _on_debug_toggled)
 
 func _on_debug_toggled(mode : bool) -> void:
@@ -48,9 +53,15 @@ func _on_add_fake_health() -> void:
 		Global.get_player()._receive_server_health(Global.get_player().health + 10)
 
 func _on_add_fake_kills() -> void:
-	Global.get_player().increment_kills()
-	Global.play_kill_sound()
-		
+	Global.get_player()._receive_server_kills(Global.get_player().kills + 1)
+
+func _on_spam_server_requests() -> void:
+	for i : int in range(2048):
+		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, ["[tbw]", "test"], Vector3.ZERO, true)
+		CommandHandler.submit_command.rpc(Global.display_name, "SPAM")
+		UIHandler.show_alert.rpc(str("my name is ", Global.display_name, " and i love spamming"), 3)
+		await get_tree().create_timer(0.01).timeout
+
 func _physics_process(delta : float) -> void:
 	if visible:
 		var brick_count : int = 0

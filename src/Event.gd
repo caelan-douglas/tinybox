@@ -68,8 +68,8 @@ func start() -> int:
 				participants[i].update_info.rpc_id(participants[i].get_multiplayer_authority(), participants[i].get_multiplayer_authority())
 		EventType.CLEAR_LEADERBOARD:
 			for player : RigidPlayer in Global.get_world().rigidplayer_list:
-				player.update_kills.rpc(0)
-				player.update_deaths.rpc(0)
+				player.update_kills(0)
+				player.update_deaths(0)
 		EventType.END_ACTIVE_GAMEMODE:
 			for gamemode : Gamemode in Global.get_world().gamemode_list:
 				if gamemode.running:

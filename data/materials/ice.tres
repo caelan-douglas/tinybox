@@ -21,7 +21,6 @@ clearcoat_enabled = true
 clearcoat = 0.25
 clearcoat_roughness = 0.11
 clearcoat_texture = ExtResource("2_bixfm")
-backlight_enabled = true
 backlight = Color(0.716296, 0.716296, 0.716296, 1)
 uv1_scale = Vector3(0.063, 0.063, 0.063)
 uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
