@@ -98,7 +98,6 @@ var external_propulsion := false
 var swim_dash_cooldown : int = 0
 var lateral_velocity := Vector3.ZERO
 var standing_on_object : Node3D = null
-var last_spot_standing_on_object : Vector3 = Vector3.ZERO
 
 var last_hit_by_id : int = -1
 var last_hit := false
@@ -141,6 +140,8 @@ var deaths : int = 0
 @onready var jump_particles : PackedScene = preload("res://data/scene/character/JumpParticles.tscn")
 @onready var run_particles : PackedScene = preload("res://data/scene/character/RunParticles.tscn")
 @onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
+@onready var influence_piv : Node3D = $InfluencePivot
+@onready var influence_pos : Node3D = $InfluencePivot/InfluencePosition
 
 @export var spawn_as_dummy : bool = false
 
@@ -1086,23 +1087,28 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			for body in ground_detect.get_overlapping_bodies():
 				# if this is not what we are already standing on
 				if standing_on_object != body:
-					standing_on_object_last_pos = body.global_position
+					influence_piv.global_position = body.global_position
+					influence_piv.global_rotation = body.global_rotation
+					influence_pos.global_position = global_position
+					standing_on_object_last_pos = influence_pos.global_position
 					set_standing_on_object_rpc.rpc(body.get_path())
 				else:
 					grounded_on_standing_object = true
-					last_spot_standing_on_object = global_position
 		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
 			set_standing_on_object_rpc.rpc("null")
 		
 		# move if standing on something
 		if standing_on_object != null:
+			influence_pos.global_position = standing_on_object_last_pos
+			influence_piv.global_position = standing_on_object.global_position
+			influence_piv.global_rotation = standing_on_object.global_rotation
 			var standing_influence : float = 1
 			if !grounded_on_standing_object:
-				standing_influence -= (clampf(last_spot_standing_on_object.distance_to(global_position) - 3, 0, 10)*0.15)
+				standing_influence -= (clampf(influence_pos.global_position.distance_to(global_position) - 3, 0, 10)*0.15)
 				standing_influence = clampf(standing_influence, 0, 1)
-			print(standing_influence)
-			global_position += (standing_on_object.global_position - standing_on_object_last_pos) * standing_influence
-			standing_on_object_last_pos = standing_on_object.global_position
+			global_position += (influence_pos.global_position - standing_on_object_last_pos) * standing_influence
+			if grounded_on_standing_object:
+				standing_on_object_last_pos = global_position
 		
 	# handle teleport requests
 	if teleport_requested:
