@@ -59,6 +59,8 @@ func _physics_process(delta : float) -> void:
 			"\n[b]	Last hit by[/b]			", player.last_hit_by_id, 
 			"\n[b]	Seat[/b]					", player.seat_occupying,
 			"\n[b]	On object[/b]			", player.standing_on_object)
+		else:
+			col2.text = str("\n[b]No player info available.[/b]")
 		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
 			var teams : Teams = Global.get_world().get_current_map().get_teams()
 			col2.text += str("\n\n[b]Teams[/b]")
