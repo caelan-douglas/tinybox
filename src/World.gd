@@ -364,7 +364,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 				# disable loading canvas if we used it
 				set_loading_canvas_visiblity.rpc(false)
 				# load building portion, use global pos
-				_server_load_building(lines.slice(count+1), Vector3.ZERO, true)
+				await _server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:

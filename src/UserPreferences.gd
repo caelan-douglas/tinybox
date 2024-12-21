@@ -17,6 +17,8 @@
 extends Node
 
 var os_path : String = ""
+var mouse_sensitivity : float = 1.0
+var camera_fov : float = 55.0
 
 func _ready() -> void:
 	os_path = OS.get_executable_path().get_base_dir() + "/"

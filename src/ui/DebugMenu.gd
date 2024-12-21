@@ -16,77 +16,53 @@
 
 extends VBoxContainer
 
-@onready var debug_text : Label = $DebugText
+@onready var col1 : RichTextLabel = $HBoxContainer/DebugCol1
+@onready var col2 : RichTextLabel = $HBoxContainer/DebugCol2
 
 func _ready() -> void:
-	var add_button : Button = Button.new()
-	add_button.text = "Add fake health (pretend to be server as client)"
-	add_button.connect("pressed", _on_add_fake_health)
-	add_child(add_button)
-	
-	add_button = Button.new()
-	add_button.text = "Add fake spawn protection (pretend to be server as client)"
-	add_button.connect("pressed", _on_add_fake_spawnprot)
-	add_child(add_button)
-	
-	add_button = Button.new()
-	add_button.text = "Add fake kills"
-	add_button.connect("pressed", _on_add_fake_kills)
-	add_child(add_button)
-	
-	add_button = Button.new()
-	add_button.text = "Spam server requests"
-	add_button.connect("pressed", _on_spam_server_requests)
-	add_child(add_button)
-	
 	Global.connect("debug_toggled", _on_debug_toggled)
 
 func _on_debug_toggled(mode : bool) -> void:
 	visible = mode
 
-func _on_add_fake_spawnprot() -> void:
-	if !multiplayer.is_server():
-		Global.get_player()._receive_server_protect_spawn()
-
-func _on_add_fake_health() -> void:
-	if !multiplayer.is_server():
-		Global.get_player()._receive_server_health(Global.get_player().health + 10)
-
-func _on_add_fake_kills() -> void:
-	Global.get_player()._receive_server_kills(Global.get_player().kills + 1)
-
-func _on_spam_server_requests() -> void:
-	for i : int in range(2048):
-		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, ["[tbw]", "test"], Vector3.ZERO, true)
-		CommandHandler.submit_command.rpc(Global.display_name, "SPAM")
-		UIHandler.show_alert.rpc(str("my name is ", Global.display_name, " and i love spamming"), 3)
-		await get_tree().create_timer(0.01).timeout
-
 func _physics_process(delta : float) -> void:
 	if visible:
+		# slow but only if debug menu is visible
 		var brick_count : int = 0
 		var bricks : Array = Global.get_world().get_children()
 		for b : Node in bricks:
 			if b is Brick:
 				brick_count += 1
-		debug_text.text = str("bricks in world: ", str(brick_count),
-		"\nactive physics objects: ", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
-		"\ndraw calls: ", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
-		"\nmaterial cache size: ", str(Global.graphics_cache.size()), " / 256",
-		"\nball colour cache size: ", str(Global.ball_colour_cache.size()), " / 64",
-		"\nmesh cache size: ", str(Global.mesh_cache.size()), " / 128")
+		col1.text = str("[b]Compute				(", Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS), "ms)[/b]",
+		"\n[b]	Bricks[/b]				", str(brick_count),
+		"\n[b]	Physics[/b]			", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
+		"\n[b]	Objects[/b]			", str(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+		"\n[b]	Orphans[/b]			", str(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)),
+		"\n[b]	Collisions[/b]		", str(Performance.get_monitor(Performance.PHYSICS_3D_COLLISION_PAIRS)),
+		"\n[b]	Memory[/b]			", round(OS.get_static_memory_usage() * 0.000001), "mb",
+		"\n\n[b]Draw					(", Performance.get_monitor(Performance.TIME_PROCESS), "ms)[/b]",
+		"\n[b]	Drawcalls[/b]		", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"\n[b]	Mat. Cache[/b]		", str(Global.graphics_cache.size()), " / 256",
+		"\n[b]	Ball Cache[/b]		", str(Global.ball_colour_cache.size()), " / 64",
+		"\n[b]	Mesh Cache[/b]	", str(Global.mesh_cache.size()), " / 128",
+		"\n[b]	Video Mem[/b]	", str(round(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) * 0.000001), "mb"),
+		"\n\n[b]System[/b]",
+		"\n[b]	Platform[/b]		", OS.get_name(), " ", OS.get_version(),
+		"\n[b]	Processor[/b]		", OS.get_processor_name(),
+		"\n[b]	Graphics[/b]			", RenderingServer.get_rendering_device().get_device_name())
 		var player : RigidPlayer = Global.get_player()
 		if player != null:
-			debug_text.text += str("\nPlayer linear velocity total:", round(player.linear_velocity.length()), 
-			"\nPlayer position (global): ", round(player.global_position), 
-			"\nPlayer friction: ", player.physics_material_override.friction,
-			"\nPlayer linear damp: ", player.linear_damp,
-			"\nPlayer last hit by: ", player.last_hit_by_id,
-			"\nPlayer occupying seat: ", player.seat_occupying)
+			col2.text = str("\n[b]Player[/b]", 
+			"\n[b]	Velocity[/b]				", round(player.linear_velocity.length()), 
+			"\n[b]	Position[/b]				", round(player.global_position), 
+			"\n[b]	Friction[/b]				", player.physics_material_override.friction, 
+			"\n[b]	Last hit by[/b]			", player.last_hit_by_id, 
+			"\n[b]	Seat[/b]					", player.seat_occupying,
+			"\n[b]	On object[/b]			", player.standing_on_object)
 		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
 			var teams : Teams = Global.get_world().get_current_map().get_teams()
-			debug_text.text += str("\n------------PLAYER TEAMS INFO ------------\n")
+			col2.text += str("\n\n[b]Teams[/b]")
 			for t : Team in teams.get_team_list():
 				var team_name : String = t.name
-				debug_text.text += str("\n----- ", team_name, " -----\n")
-				debug_text.text += str(teams.get_players_in_team(team_name))
+				col2.text += str("\n[b]	", team_name, "[/b]")
+				col2.text += str("\n		", teams.get_players_in_team(team_name))
