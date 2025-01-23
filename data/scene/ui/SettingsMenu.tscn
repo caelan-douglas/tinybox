@@ -77,6 +77,23 @@ step = 2.5
 value = 55.0
 scrollable = false
 
+[node name="Spacer13" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "World Database Repository
+(leave blank for default)"
+script = ExtResource("3_r1aba")
+
+[node name="DatabaseRepo" type="LineEdit" parent="."]
+layout_mode = 2
+text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+placeholder_text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+max_length = 512
+
 [node name="Spacer12" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2

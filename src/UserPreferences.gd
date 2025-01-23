@@ -17,6 +17,15 @@
 extends Node
 
 var os_path : String = ""
+# default repo for database items
+const DEFAULT_DATABASE_REPO : String = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+# user's current repo
+var database_repo : String = "https://tinybox-worlds.caelan-douglas.workers.dev/" :
+	set(value):
+		database_repo = value
+		# a blank repo just points to the default repo
+		if value == "":
+			database_repo = DEFAULT_DATABASE_REPO
 var mouse_sensitivity : float = 1.0
 var camera_fov : float = 55.0
 

@@ -43,3 +43,48 @@ If done correctly, you should be able to see the .blend files in the /data/model
 If you're working on this (or any multiplayer project) and running Windows, I recommend using the app [`clumsy`](https://github.com/jagt/clumsy), which is very helpful for simulating bad network conditions (latency, dropped packets, throttled connection, etc.) when testing.
 
 Tinybox enforces statically typed GDScript - see the static typing guide [`here.`](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/static_typing.html)
+
+## World Database API documentation
+
+There is a feature in the game that contacts a remote API. Using this API, the user can upload their own worlds and fetch worlds made by other users.
+
+By default it links to https://tinybox-worlds.caelan-douglas.workers.dev/. If you want to make your own repo (or get worlds from an unofficial repo), you can change the world repo in-game in Settings -> World Database Repo.
+
+The functionality of the repo is as follows (where `/` is the root of the API web page):
+
+---
+
+### `GET` requests
+
+#### `/`
+ Returns an array of dictionaries containing all the worlds in the database. Each dictionary entry has the following:
+- `id` (int): world ID in the database
+- `name` (string):
+- `featured` (int): 1 for featured, 0 for not featured
+- `date` (string): format YYYY-MM-DD
+- `downloads` (int): download count (updated via a `POST` request defined later)
+- `version` (string): internal server version of map (ie. 12020)
+- `author` (string): author name
+- `image` (string): base64 image preview
+
+#### `/?id=X`
+Returns TBW file of map, where X is the map ID; used for downloading. No other data is returned.
+
+- `tbw` (string): full TBW world file plaintext
+
+#### `/?report=X`
+Reports a map, where X is its ID. Internally this increments the 'reports' member of the world in the database.
+
+
+---
+### `POST` requests
+
+#### `/`
+Uploads a map to the database. The `Content-Type` header should be `application/json`. The body should contain the following values:
+
+- `name` (string): name of the map
+- `tbw` (string): full plaintext tbw file. Information like the preview image, author name, and version can be parsed from this file and then stored in the database.
+
+Returns body with `OK` if the upload was successful. If the body does not return `OK`, then the game will consider the upload failed.
+
+This is ratelimited by the server on a per-user basis.
