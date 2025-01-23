@@ -84,7 +84,11 @@ func _on_fov_changed(value : float) -> void:
 
 func _on_db_repo_text_changed(text : String) -> void:
 	UserPreferences.database_repo = text
-	UserPreferences.save_pref("database_repo", text)
+	# save blank for default repo, in case the default repo URL changes
+	if UserPreferences.database_repo == UserPreferences.DEFAULT_DATABASE_REPO:
+		UserPreferences.save_pref("database_repo", "")
+	else:
+		UserPreferences.save_pref("database_repo", text)
 
 # Toggles the graphics presets via Global and saves the setting.
 func toggle_graphics_presets() -> void:

@@ -48,7 +48,7 @@ Tinybox enforces statically typed GDScript - see the static typing guide [`here.
 
 There is a feature in the game that contacts a remote API. Using this API, the user can upload their own worlds and fetch worlds made by other users.
 
-By default it links to https://tinybox-worlds.caelan-douglas.workers.dev/. If you want to make your own repo (or get worlds from an unofficial repo), you can change the world repo in-game in Settings -> World Database Repo.
+By default it links to https://tinybox-worlds.caelan-douglas.workers.dev/. You can change the world repo in-game in Settings -> World Database Repo. If you wish to make your own repo, you can implement this API however you like, but these are the guidelines on the data that the game expects to recieve & what it sends.
 
 The functionality of the repo is as follows (where `/` is the root of the API web page):
 
@@ -59,7 +59,7 @@ The functionality of the repo is as follows (where `/` is the root of the API we
 #### `/`
  Returns an array containing all the worlds in the database. Each entry has a dictionary with the following:
 - `id` (int): world ID in the database
-- `name` (string):
+- `name` (string)
 - `featured` (int): 1 for featured, 0 for not featured
 - `date` (string): format YYYY-MM-DD
 - `downloads` (int): download count (updated via a `POST` request defined later)
@@ -72,8 +72,10 @@ Returns TBW file of map, where X is the map ID; used for downloading. No other d
 
 - `tbw` (string): full TBW world file plaintext
 
+Internally, this also increments the `downloads` member of the world in the database.
+
 #### `/?report=X`
-Reports a map, where X is its ID. Internally this increments the 'reports' member of the world in the database.
+Reports a map, where X is its ID. Internally this increments the `reports` member of the world in the database.
 
 
 ---
