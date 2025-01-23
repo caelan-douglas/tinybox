@@ -57,7 +57,7 @@ The functionality of the repo is as follows (where `/` is the root of the API we
 ### `GET` requests
 
 #### `/`
- Returns an array of dictionaries containing all the worlds in the database. Each dictionary entry has the following:
+ Returns an array containing all the worlds in the database. Each entry has a dictionary with the following:
 - `id` (int): world ID in the database
 - `name` (string):
 - `featured` (int): 1 for featured, 0 for not featured
