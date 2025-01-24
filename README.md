@@ -34,7 +34,7 @@ In order to keep PvP aligned with the physics-based sandbox nature of the game, 
 
 ## Setting up the project
 [![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.2.2-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
-Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. The project's current Godot version is linked above.<br>
+Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. Note that active development sometimes happens on the main branch, so pre-release versions of the game may be unstable. The project's current Godot version is linked above.<br>
 An additional step you will have to take is linking a Blender 3.0+ executeable in your Godot Editor settings. **I recommend you do this before loading the project to avoid import errors.**<br>
 `Editor > Editor Settings > FileSystem > Import > Blender 3 Path`<br>
 If done correctly, you should be able to see the .blend files in the /data/models directory within the Editor filesystem. On macOS, you will have to link the actual executeable within the Blender.app Contents, not Blender.app binary itself. For example, on my macOS install the path I have set is:
@@ -62,7 +62,7 @@ The functionality of the repo is as follows (where `/` is the root of the API we
 - `name` (string)
 - `featured` (int): 1 for featured, 0 for not featured
 - `date` (string): format YYYY-MM-DD
-- `downloads` (int): download count (updated via a `POST` request defined later)
+- `downloads` (int): download count (updated via a method defined later)
 - `version` (string): internal server version of map (ie. 12020)
 - `author` (string): author name
 - `image` (string): base64 image preview
