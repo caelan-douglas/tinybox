@@ -141,6 +141,7 @@ var deaths : int = 0
 @onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
 @onready var influence_piv : Node3D = $InfluencePivot
 @onready var influence_pos : Node3D = $InfluencePivot/InfluencePosition
+@onready var chat_label : Label3D = $Smoothing/ChatLabel
 
 @export var spawn_as_dummy : bool = false
 
@@ -1804,6 +1805,12 @@ func align_character_model_normal(ground_normal : Vector3) -> void:
 		character_model.global_transform.basis.x = -character_model.global_transform.basis.z.cross(ground_normal)
 		character_model.global_transform.basis = character_model.global_transform.basis.orthonormalized()
 		character_model.scale = old_scale
+
+func show_chat(what : String) -> void:
+	chat_label.visible = true
+	chat_label.text = what
+	await get_tree().create_timer(6).timeout
+	chat_label.visible = false
 
 # for removing player from world
 func despawn() -> void:
