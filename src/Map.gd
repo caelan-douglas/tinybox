@@ -49,9 +49,14 @@ func _ready() -> void:
 	MusicHandler.switch_song(songs)
 	# Modify default gravity
 	if !self is Editor:
-		set_low_grav(false)
+		set_low_grav.rpc(false)
 
+@rpc ("authority", "call_local", "reliable")
 func set_low_grav(mode : bool = false) -> void:
+	# only server or auth can change this
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
+	
 	if mode == false:
 		PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * gravity_scale)
 	else:

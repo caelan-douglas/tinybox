@@ -45,7 +45,7 @@ func start(params : Array, mods : Array) -> void:
 			# jump force is a multiplier
 			p.set_jump_force.rpc(2.4 * mods[2] as float)
 		if mods.size() > 3:
-			Global.get_world().get_current_map().set_low_grav(mods[3] as bool)
+			Global.get_world().get_current_map().set_low_grav.rpc(mods[3] as bool)
 	if params.size() > 0:
 		# the time limit chooser is in minutes but this is in
 		# seconds so we convert
@@ -88,7 +88,7 @@ func end(params : Array) -> void:
 		p.set_move_speed.rpc(5)
 		p.set_jump_force.rpc(2.4)
 		# reset map gravity, in case it changed
-		Global.get_world().get_current_map().set_low_grav(false)
+		Global.get_world().get_current_map().set_low_grav.rpc(false)
 	# never free gamemodes because they are saved as part of the world
 	emit_signal("gamemode_ended")
 	running = false
