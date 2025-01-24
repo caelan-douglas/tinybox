@@ -47,7 +47,7 @@ func set_parent_controller(as_path : NodePath) -> void:
 	parent_controller = get_node(as_path)
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "flip_motor_side", "max_speed"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "flip_motor_side", "max_speed"]
 
 func _ready() -> void:
 	super()

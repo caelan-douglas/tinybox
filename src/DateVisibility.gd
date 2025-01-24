@@ -14,18 +14,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends PanelContainer
-class_name Alert
+# Toggles visiblity of two objects based on special dates or holidays.
+extends Node3D
 
-var dupes : int = 1
+enum Dates {
+	XMAS
+}
 
-func timeout() -> void:
-	var anim : AnimationPlayer = $AnimationPlayer
-	anim.play("hide")
-	# for alert boxes, disable their buttons so that they cannot be clicked
-	# multiple times once already pressed
-	if has_node("Content/HBoxContainer"):
-		for b : Button in $Content/HBoxContainer.get_children():
-			b.disabled = true
-	await Signal(anim, "animation_finished")
-	queue_free()
+@export var special_date : Dates = Dates.XMAS
+@export var set_visible_to_what : bool = true
+
+func _ready() -> void:
+	var date := Time.get_datetime_dict_from_system()
+	visible = !set_visible_to_what
+	match special_date:
+		# Any day from Dec 12 - Jan 8
+		Dates.XMAS:
+			if date.month == 12:
+				if date.day > 11:
+					visible = set_visible_to_what
+			elif date.month == 1:
+				if date.day < 8:
+					visible = set_visible_to_what
+

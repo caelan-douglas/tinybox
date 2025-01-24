@@ -35,6 +35,28 @@ var copied_properties : Dictionary = {}
 func _ready() -> void:
 	copy_button.connect("pressed", _on_copy_pressed)
 
+func show_grab_actions(grabbed : Array, from_tool : EditorBuildTool) -> void:
+	clear_list()
+	
+	var grab_label := Label.new()
+	grab_label.text = str("Grabbed " , grabbed.size(), " things.")
+	editor_props_list.add_child(grab_label)
+	
+	var copy_button := DynamicButton.new()
+	copy_button.text = "Copy grabbed things"
+	copy_button.connect("pressed", from_tool.copy_grabbed)
+	editor_props_list.add_child(copy_button)
+	
+	var paste_button := DynamicButton.new()
+	paste_button.text = "Paste grabbed things"
+	paste_button.connect("pressed", from_tool.paste_grabbed)
+	editor_props_list.add_child(paste_button)
+	
+	var save_button := DynamicButton.new()
+	save_button.text = "Save grabbed things"
+	save_button.connect("pressed", from_tool.save_grabbed)
+	editor_props_list.add_child(save_button)
+
 func _on_copy_pressed() -> void:
 	copied_properties = selected_item_properties
 	copy_button.text = JsonHandler.find_entry_in_file("ui/editor/copied")

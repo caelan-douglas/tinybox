@@ -18,9 +18,6 @@ extends Control
 
 # For running server commands.
 
-# TODO: Implement this in a better way, commands 
-# should be something that Global or World runs, not Chat.
-
 @onready var scroll_box : ScrollContainer = $VBoxContainer/ScrollContainer
 @onready var chat_list : Control = $VBoxContainer/ScrollContainer/ChatList
 @onready var line_edit : Control = $VBoxContainer/LineEdit
@@ -89,6 +86,11 @@ func _on_command_response(sender : String, text : String, timeout : int = 10) ->
 	await get_tree().process_frame
 	# scroll to bottom
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
+	
+	# show chat above player
+	var player : RigidPlayer = Global.get_player_by_name(sender)
+	if player != null:
+		player.show_chat(text)
 
 func _on_entry_timeout(entry : Node) -> void:
 	# don't hide entries if chat is open

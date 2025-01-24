@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://ky2h7r63y8gy"]
+[gd_scene load_steps=16 format=3 uid="uid://ky2h7r63y8gy"]
 
 [ext_resource type="Script" path="res://src/ClayBall.gd" id="1_6whcq"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_0dw7p"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_5txvd"]
+[ext_resource type="Script" path="res://src/DateVisibility.gd" id="2_xkwcy"]
 [ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="3_t2in4"]
+[ext_resource type="PackedScene" uid="uid://cgghr1eaqoc8b" path="res://data/models/present.blend" id="3_wt68o"]
 [ext_resource type="AudioStream" uid="uid://cjvylwe7kkani" path="res://data/audio/spring.ogg" id="5_200ox"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
@@ -16,10 +18,6 @@ radius = 0.6
 [sub_resource type="SphereShape3D" id="SphereShape3D_bvw4g"]
 radius = 0.3
 
-[sub_resource type="SphereMesh" id="SphereMesh_hof2s"]
-radius = 0.3
-height = 0.6
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqnc1"]
 resource_name = "clay.vincent.hair"
 vertex_color_use_as_albedo = true
@@ -30,6 +28,13 @@ roughness_texture_channel = 1
 normal_enabled = true
 normal_scale = 0.25
 normal_texture = ExtResource("2_0dw7p")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1p2au"]
+cull_mode = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_hof2s"]
+radius = 0.3
+height = 0.6
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
 properties/0/path = NodePath(".:position")
@@ -67,10 +72,21 @@ shape = SubResource("SphereShape3D_bvw4g")
 [node name="Smoothing" type="Node3D" parent="."]
 script = ExtResource("2_5txvd")
 
+[node name="present" parent="Smoothing" instance=ExtResource("3_wt68o")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+visible = false
+script = ExtResource("2_xkwcy")
+
+[node name="Present" parent="Smoothing/present" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_vqnc1")
+surface_material_override/1 = SubResource("StandardMaterial3D_1p2au")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Smoothing"]
 mesh = SubResource("SphereMesh_hof2s")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_vqnc1")
+script = ExtResource("2_xkwcy")
+set_visible_to_what = false
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.04
@@ -82,3 +98,5 @@ stream = SubResource("AudioStreamRandomizer_jf210")
 max_distance = 60.0
 max_polyphony = 4
 bus = &"SFX"
+
+[editable path="Smoothing/present"]

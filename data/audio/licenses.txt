@@ -76,3 +76,8 @@ Attributions for /data/audio:
 	spotlight.ogg:
 		by reidmangan; licensed under Creative Commons 0
 		https://freesound.org/people/reidmangan/sounds/49023/
+
+	bowling.ogg:
+		(modified)
+		by Iamgiorgio; licensed under Creative Commons 0
+		https://freesound.org/people/Iamgiorgio/sounds/371346/

@@ -61,6 +61,7 @@ func _on_body_entered(body : Node3D) -> void:
 func set_colour(new : String) -> void:
 	var new_colour : Color = Color(new)
 	var mesh : MeshInstance3D = $Smoothing/MeshInstance3D
+	var xmas_mesh : MeshInstance3D = $Smoothing/present/Present
 	var mat : Material = mesh.get_surface_override_material(0).duplicate()
 	mat.albedo_color = new_colour
 	var add_material_to_cache := true
@@ -76,6 +77,7 @@ func set_colour(new : String) -> void:
 	if add_material_to_cache:
 		Global.add_to_ball_colour_cache(mat)
 	mesh.set_surface_override_material(0, mat)
+	xmas_mesh.set_surface_override_material(0, mat)
 
 @rpc("call_local")
 func spawn_projectile(auth : int, shot_speed := 30, random_pos := false) -> void:

@@ -35,6 +35,7 @@ func find_players() -> void:
 func update_list() -> void:
 	for entry in get_children():
 		for player : RigidPlayer in Global.get_world().rigidplayer_list:
+			# compare IDs
 			if str(player.name) == str(entry.name):
 				var k : Label = entry.get_node("HBoxContainer/K")
 				var d : Label = entry.get_node("HBoxContainer/D")

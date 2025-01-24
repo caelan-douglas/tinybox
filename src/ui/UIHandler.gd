@@ -40,6 +40,7 @@ func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool =
 		CommandHandler.submit_command.rpc("ALERT FROM WORLD", alert_text, 1)
 	# normal alert
 	else:
+		
 		var alert : Alert = alert_resource.instantiate()
 		alert.get_node("Content").text = alert_text
 		if alert_colour.to_html() != "#ffffff":
@@ -51,6 +52,20 @@ func show_alert(alert_text : String, timeout := -1, show_in_game_canvas : bool =
 		
 		# make sure that we haven't been disconnected
 		if alert_canvas != null:
+			# don't show dupes
+			for existing : Node in alert_canvas.get_children():
+				if existing is Alert:
+					var content := existing.get_node_or_null("Content")
+					if content != null:
+						if content is Label:
+							if content.text == alert_text:
+								# show duplicate count
+								var dupe_count := existing.get_node_or_null("Duplicate")
+								if dupe_count != null:
+									existing.dupes += 1
+									dupe_count.text = str("(", existing.dupes, ")")
+								alert.queue_free()
+								return
 			alert_canvas.add_child(alert)
 		
 		if timeout > 0:

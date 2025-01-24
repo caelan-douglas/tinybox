@@ -27,7 +27,7 @@ func set_property(property : StringName, value : Variant) -> void:
 
 func _init() -> void:
 	_brick_spawnable_type = "brick_activator"
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "acceleration", "steering", "follow_nearby_player"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player"]
 
 func _ready() -> void:
 	super()

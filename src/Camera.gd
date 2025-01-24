@@ -104,11 +104,12 @@ func _ready() -> void:
 	set_process_priority(255)
 	set_physics_process_priority(255)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	fov = UserPreferences.camera_fov
 
 func move_around_target(vec: Vector2) -> void:
 	# fmod is modulo on floats
-	yaw = fmod((yaw - vec.x * sensitivity), 360)
-	pitch = max(min(pitch - vec.y * sensitivity, 70), -85)
+	yaw = fmod((yaw - vec.x * sensitivity * UserPreferences.mouse_sensitivity), 360)
+	pitch = max(min(pitch - vec.y * sensitivity * UserPreferences.mouse_sensitivity, 70), -85)
 	rotation = Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0)
 
 func _unhandled_input(event : InputEvent) -> void:
@@ -295,7 +296,7 @@ func _process(delta : float) -> void:
 	elif _camera_mode == CameraMode.TRACK && target != null:
 		look_at(target.global_position as Vector3)
 		var far_dist : float = clamp(global_position.distance_to(target.global_position as Vector3), 0, 40)
-		fov = 55 - far_dist
+		fov = UserPreferences.camera_fov - far_dist
 
 func get_mouse_pos_3d() -> Dictionary:
 	if get_world_3d():
@@ -341,7 +342,7 @@ func play_podium_animation(focus_player_id : int) -> void:
 		look_at(Vector3(focus_player.global_position.x, focus_player.global_position.y + 1, focus_player.global_position.z))
 		await get_tree().create_timer(8).timeout
 		focus_player.animator["parameters/BlendOutroPose/blend_amount"] = 0
-	fov = 55
+	fov = UserPreferences.camera_fov
 	set_camera_mode(CameraMode.FREE)
 	locked = false
 
@@ -383,7 +384,7 @@ func play_preview_animation(time : float = 10) -> void:
 			await get_tree().create_timer(0.5).timeout
 	
 	# reset cam
-	fov = 55
+	fov = UserPreferences.camera_fov
 	set_camera_mode(CameraMode.FREE)
 	locked = false
 	get_tree().current_scene.get_node("GameCanvas").visible = true

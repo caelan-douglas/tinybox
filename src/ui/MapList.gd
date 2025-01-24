@@ -101,7 +101,7 @@ func _send_report(id : int) -> void:
 	add_child(req)
 	req.request_completed.connect(self._set_selected_user_map_tbw)
 						# REST API on my website that hosts tinybox world files.
-	var error := req.request(str("https://tinybox-worlds.caelan-douglas.workers.dev/?report=", id))
+	var error := req.request(str(UserPreferences.database_repo, "?report=", id))
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 	UIHandler.show_alert("Thank you, your report has been sent.", 4, false)
@@ -159,7 +159,7 @@ func _on_map_selected(file_name : String, lines : Array, image : Image, id : int
 		add_child(req)
 		req.request_completed.connect(self._set_selected_user_map_tbw)
 							# REST API on my website that hosts tinybox world files.
-		var error := req.request(str("https://tinybox-worlds.caelan-douglas.workers.dev/?id=", id))
+		var error := req.request(str(UserPreferences.database_repo, "?id=", id))
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
 		
@@ -238,7 +238,7 @@ func refresh_user_uploaded() -> void:
 	req.request_completed.connect(self._user_maps_request_completed)
 
 							# REST API on my website that hosts tinybox world files.
-	var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/")
+	var error := req.request(str(UserPreferences.database_repo))
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 
@@ -285,6 +285,8 @@ func refresh() -> void:
 	clear()
 	# add built-in worlds
 	add_map("Frozen Field", built_in)
+	add_map("Icy Inclines", built_in)
+	add_map("Tunnel Tussle", built_in)
 	add_map("Acid House", built_in)
 	add_map("Castle", built_in)
 	add_map("Warp Spire", built_in)

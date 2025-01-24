@@ -277,7 +277,7 @@ func exit_test_mode() -> void:
 		camera.set_target($CameraTarget)
 		camera.set_camera_mode(Camera.CameraMode.CONTROLLED)
 		# reset fov in case we died
-		camera.fov = 55
+		camera.fov = UserPreferences.camera_fov
 	editor_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

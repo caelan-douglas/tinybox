@@ -1,0 +1,27 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://wlyrwmvp6onh"]
+
+[ext_resource type="Texture2D" uid="uid://cr6tutv8k53uc" path="res://data/textures/Snow010A_2K-JPG_Color.jpg" id="1_r2vxt"]
+[ext_resource type="Texture2D" uid="uid://nutkalnwu184" path="res://data/textures/Snow010A_2K-JPG_Roughness.jpg" id="2_bixfm"]
+[ext_resource type="Texture2D" uid="uid://c656pmvqhqyb7" path="res://data/textures/Ice003_2K-JPG_NormalGL.jpg" id="2_dfyjj"]
+[ext_resource type="Texture2D" uid="uid://dtqr2iapofx6l" path="res://data/textures/Ice003_2K-JPG_Roughness.jpg" id="3_stgnv"]
+
+[resource]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_r2vxt")
+metallic_specular = 1.0
+roughness_texture = ExtResource("3_stgnv")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_texture = ExtResource("2_dfyjj")
+rim_enabled = true
+rim = 0.3
+rim_tint = 0.8
+clearcoat_enabled = true
+clearcoat = 0.25
+clearcoat_roughness = 0.11
+clearcoat_texture = ExtResource("2_bixfm")
+backlight = Color(0.716296, 0.716296, 0.716296, 1)
+uv1_scale = Vector3(0.063, 0.063, 0.063)
+uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+uv1_triplanar = true

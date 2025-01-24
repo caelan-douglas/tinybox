@@ -97,11 +97,20 @@ func load_map(map: PackedScene) -> void:
 	emit_signal("map_loaded")
 
 # Save the currently open world as a .tbw file. Returns false if did not save.
-func save_tbw(world_name : String, server : bool = false) -> bool:
+func save_tbw(world_name : String, server : bool = false, selection : Array = [], temp : bool = false) -> bool:
 	# don't save worlds that are currently loading
 	if tbw_loading:
 		UIHandler.show_alert("Please wait for the world to load before saving it!", 5, false, UIHandler.alert_colour_error)
 		return false
+	
+	# check if there is a given selection
+	var saving_entire_world : bool = false
+	if selection.is_empty():
+		saving_entire_world = true
+		selection = get_children()
+	
+	if !temp && world_name == "temp":
+		UIHandler.show_alert("That name is reserved for internal use! Please pick another.", 5, false, UIHandler.alert_colour_error)
 	
 	for map : String in Global.get_internal_tbw_names():
 		var internal_name : String = map.split(".")[0]
@@ -110,11 +119,18 @@ func save_tbw(world_name : String, server : bool = false) -> bool:
 			return false
 	
 	var dir : DirAccess = DirAccess.open("user://world")
-	if !dir:
-		DirAccess.make_dir_absolute("user://world")
+	if saving_entire_world:
+		if !dir:
+			DirAccess.make_dir_absolute("user://world")
+		# save building to file
+		dir = DirAccess.open("user://world")
+	else:
+		dir = DirAccess.open("user://building")
+		if !dir:
+			DirAccess.make_dir_absolute("user://building")
+		# save building to file
+		dir = DirAccess.open("user://building")
 	
-	# save building to file
-	dir = DirAccess.open("user://world")
 	if server:
 		dir = DirAccess.open(UserPreferences.os_path)
 	var count : int = 0
@@ -166,7 +182,10 @@ func save_tbw(world_name : String, server : bool = false) -> bool:
 	if server:
 		file = FileAccess.open(str(UserPreferences.os_path, save_name, ".tbw"), FileAccess.WRITE)
 	else:
-		file = FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
+		if saving_entire_world:
+			file = FileAccess.open(str("user://world/", save_name, ".tbw"), FileAccess.WRITE)
+		else:
+			file = FileAccess.open(str("user://building/", save_name, ".tbw"), FileAccess.WRITE)
 	# Save image first
 	file.store_line("[tbw]")
 	# save version
@@ -177,16 +196,18 @@ func save_tbw(world_name : String, server : bool = false) -> bool:
 	# servers don't save images
 	if !server:
 		file.store_line(str("image ; ", Marshalls.raw_to_base64(img.save_jpg_to_buffer())))
-	# Save song list (if not using all songs)
-	if get_current_map().songs.size() != MusicHandler.ALL_SONGS_LIST.size():
-		file.store_line(str("songs ; ", JSON.stringify(get_current_map().songs)))
-	# Save map properties
-	file.store_line(str("death_limit_low ; ", get_current_map().death_limit_low))
-	file.store_line(str("death_limit_high ; ", get_current_map().death_limit_high))
+	
+	if saving_entire_world:
+		# Save song list (if not using all songs)
+		if get_current_map().songs.size() != MusicHandler.ALL_SONGS_LIST.size():
+			file.store_line(str("songs ; ", JSON.stringify(get_current_map().songs)))
+		# Save map properties
+		file.store_line(str("death_limit_low ; ", get_current_map().death_limit_low))
+		file.store_line(str("death_limit_high ; ", get_current_map().death_limit_high))
 	# TBW object list
 	file.store_line("[objects]")
 	# Save objects before bricks
-	for obj in get_children():
+	for obj : Node in selection:
 		if obj != null:
 			if obj is TBWObject:
 				var type : String = obj.tbw_object_type
@@ -209,7 +230,7 @@ func save_tbw(world_name : String, server : bool = false) -> bool:
 	
 	# Make sure there is actually a brick to save
 	var found_brick := false
-	for b : Node in get_children():
+	for b : Node in selection:
 		if b != null:
 			if b is Brick:
 				if found_brick == false:
@@ -343,7 +364,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 				# disable loading canvas if we used it
 				set_loading_canvas_visiblity.rpc(false)
 				# load building portion, use global pos
-				_server_load_building(lines.slice(count+1), Vector3.ZERO, true)
+				await _server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:
@@ -488,10 +509,17 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
 	if !multiplayer.is_server(): return
 	
+	var count_start : int = 0
+	# if loading a tbw as a building, remove extra data like image and author
+	for line : String in lines:
+		count_start += 1
+		if str(line) == "[building]":
+			lines = lines.slice(count_start)
+	
 	var building_group := []
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	if line_split_init.size() < 2:
-		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
+		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 5, false, UIHandler.alert_colour_error)
 		return
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick

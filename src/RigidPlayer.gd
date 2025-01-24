@@ -41,7 +41,6 @@ enum {
 	SLIDE,
 	SLIDE_BACK,
 	ROLL,
-	ON_WALL,
 	ON_LEDGE
 }
 
@@ -67,6 +66,8 @@ var jump_force := 2.4
 var extra_jump_force := 2.4
 var move_speed : float = 5
 var decel_multiplier := 0.85
+var normal_decel_multiplier := 0.85
+var ice_decel_multiplier := 0.98
 var player_grav := 1.4
 var team := "Default"
 var seat_occupying : MotorSeat = null
@@ -85,7 +86,6 @@ var locked := false:
 			locked = true
 		else:
 			locked = v
-		#get_tool_inventory().set_disabled(v)
 var high_priority_lock := false
 # invulnerable on spawn
 var invulnerable := true
@@ -127,6 +127,7 @@ var deaths : int = 0
 @onready var roll_time : Timer = $RollTime
 @onready var respawn_time : Timer = $RespawnTime
 @onready var trip_audio : AudioStreamPlayer3D = $TripAudio
+@onready var bowling_audio : AudioStreamPlayer3D = $BowlingAudio
 @onready var sparkle_audio_anim : AnimationPlayer = $SparkleAudio/AnimationPlayer
 @onready var world : World = Global.get_world()
 @onready var animator : AnimationTree = $AnimationTree
@@ -138,8 +139,17 @@ var deaths : int = 0
 @onready var jump_particles : PackedScene = preload("res://data/scene/character/JumpParticles.tscn")
 @onready var run_particles : PackedScene = preload("res://data/scene/character/RunParticles.tscn")
 @onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
+@onready var influence_piv : Node3D = $InfluencePivot
+@onready var influence_pos : Node3D = $InfluencePivot/InfluencePosition
+@onready var chat_label : Label3D = $Smoothing/ChatLabel
 
 @export var spawn_as_dummy : bool = false
+
+func on_ice() -> bool:
+	if standing_on_object is Brick:
+		if standing_on_object._material == Brick.BrickMaterial.ICE:
+			return true
+	return false
 
 var teleport_requested : bool = false
 var teleport_pos : Vector3 = Vector3.ZERO
@@ -254,13 +264,11 @@ func _server_receive_on_body_entered_from_client(path_to_body : String) -> void:
 # When this player hits something too hard, trip them.
 func _on_body_entered(body : Node3D) -> void:
 	# run on host client
+	# TODO: Move this to button
 	if is_multiplayer_authority():
 		# stepped on button
 		if body is ButtonBrick:
 			body.stepped.rpc(get_path())
-		if _state == ROLL:
-			if body is RigidPlayer:
-				body.trip_by_player.rpc(15)
 	
 	# stuff handled by the server
 	if multiplayer.is_server():
@@ -283,6 +291,11 @@ func _on_body_entered(body : Node3D) -> void:
 			if body is Brick:
 				if body.on_fire:
 					light_fire.rpc()
+		# trip other players
+		elif _state == ROLL:
+			if body is RigidPlayer:
+				body.trip_by_player.rpc_id(body.get_multiplayer_authority(), global_transform.basis.z * 15)
+				body.set_last_hit_by_id.rpc(self.get_multiplayer_authority())
 	else:
 		_server_receive_on_body_entered_from_client.rpc_id(1, body.get_path())
 
@@ -354,8 +367,8 @@ func set_max_health(new : int) -> void:
 	if health > max_health:
 		set_health(max_health)
 
+# ONLY RUNS AS SERVER
 func set_health(new : int, potential_cause_of_death : int = -1, potential_executor_id : int = -1) -> void:
-	# only runs as server
 	if !multiplayer.is_server():
 		return
 	
@@ -389,8 +402,8 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 									death_message = str(executing_player_name, " blew up their teammate ", display_name, "! Good going!")
 								# If friendly fire is ON
 								else:
-									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									# run increment kills command on server side
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 4:
@@ -415,7 +428,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 2:
@@ -434,7 +447,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -457,7 +470,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -486,16 +499,14 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								death_message = str(last_hit_executing_player_name, " knocked their teammate ", display_name, " off the map!")
 							# If friendly fire is ON
 							else:
-								last_hit_executing_player.increment_kills.rpc_id(last_hit_executing_player.get_multiplayer_authority())
+								last_hit_executing_player.update_kills(last_hit_executing_player.kills + 1)
 								# play kill sound for last hit executor
 								Global.play_kill_sound.rpc_id(last_hit_by_id)
-								match randi() % 3:
+								match randi() % 2:
 									0:
-										death_message = str(display_name, " was hit by ", last_hit_executing_player_name, "!")
-									1:
 										death_message = str(last_hit_executing_player_name, " sent ", display_name, " into the stratosphere!")
-									2:
-										death_message = str(display_name, " was whacked away by ", last_hit_executing_player_name, "!")
+									1:
+										death_message = str(last_hit_executing_player_name, " knocked ", display_name, " off the map!")
 						else:
 							if external_propulsion:
 								match randi() % 3:
@@ -529,7 +540,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 								# If friendly fire is ON
 								else:
 									# run increment kills command on the authority of the executing player
-									executing_player.increment_kills.rpc_id(executing_player.get_multiplayer_authority())
+									executing_player.update_kills(executing_player.kills + 1)
 									# play kill sound for executor
 									Global.play_kill_sound.rpc_id(potential_executor_id)
 									match randi() % 3:
@@ -563,6 +574,9 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						death_message = str(display_name, " has met their demise!")
 					2:
 						death_message = str(display_name, " will be back in 10 seconds!")
+			# set server deaths
+			if !dead:
+				update_deaths(deaths + 1)
 			# set server dead flag
 			dead = true
 			emit_signal("died")
@@ -644,8 +658,10 @@ func update_info(_who : int) -> void:
 	update_team.rpc(team)
 	update_name.rpc(Global.display_name)
 	change_appearance()
-	update_kills.rpc(kills)
-	update_deaths.rpc(deaths)
+	# server handles kills and deaths
+	if multiplayer.is_server():
+		update_kills(kills)
+		update_deaths(deaths)
 
 func set_camera(new : Camera3D) -> void:
 	camera = new
@@ -726,7 +742,7 @@ func _physics_process(delta : float) -> void:
 	animator["parameters/BlendRun/blend_amount"] = clamp(linear_velocity.length() / move_speed, 0, 1)
 	# Set looking direction
 	var hor_linear_velocity := Vector3(linear_velocity.x, 0, linear_velocity.z)
-	if _state != TRIPPED and _state != DEAD and _state != STANDING_UP and _state != ON_WALL and _state != ON_LEDGE:
+	if _state != TRIPPED and _state != DEAD and _state != STANDING_UP and _state != ON_LEDGE:
 		# if the active camera has the custom Camera script
 		if camera is Camera:
 			if camera.get_camera_mode() == Camera.CameraMode.FREE:
@@ -870,11 +886,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				# dive if jump is pressed again mid-air and we have space to dive
 				elif Input.is_action_just_pressed("jump") && !locked && air_duration > 8 && !forward_detect.has_overlapping_bodies():
 					change_state(DIVE)
-				# wall jump detect
-				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-					change_state(ON_WALL)
 				# ledge detect
-				elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 					change_state(ON_LEDGE)
 			HIGH_JUMP:
 				# avoid setting velocity when being pushed by extinguisher
@@ -884,49 +897,22 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				air_duration += 1
 				if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
 					change_state(IDLE)
-				# wall jump detect
-				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-					change_state(ON_WALL)
 				# ledge detect
-				elif !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 					change_state(ON_LEDGE)
 			DIVE:
 				# high velocity into roll
 				if Input.is_action_just_pressed("jump") && !locked && lateral_velocity.length() > 10:
 					apply_central_impulse(Vector3.UP * 4)
 					change_state(ROLL)
-				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
-					change_state(ON_WALL)
+				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
+					change_state(ON_LEDGE)
 				# if we just dived, and hit something
 				for body in get_colliding_bodies():
 					if !(body is MotorSeat):
 						# on ground
 						if slide_detect.has_overlapping_bodies():
 							change_state(SLIDE)
-			ON_WALL:
-				# align with wall
-				if forward_ray.is_colliding():
-					var normal : Vector3 = -forward_ray.get_collision_normal()
-					# angle to wall normal
-					var diff := global_transform.basis.z.signed_angle_to(normal, Vector3.UP)
-					# rotate smoothly
-					if abs(diff) > 0.05:
-						rotate_y(diff * 0.2)
-				# if no longer on wall
-				if (!forward_detect.has_overlapping_bodies() || is_on_ground) && air_time.is_stopped():
-					change_state(IDLE)
-				linear_velocity = Vector3(0, -0.5, 0)
-				# jump / move off wall
-				if Input.is_action_just_pressed("jump") && !locked:
-					rotate_object_local(Vector3.UP, deg_to_rad(180))
-					change_state(DIVE)
-					var forward : Vector3 = get_global_transform().basis.z
-					apply_central_impulse(forward * 5)
-					apply_central_impulse(Vector3.UP * 9)
-				elif !(Input.is_action_pressed("forward") || Input.is_action_pressed("left") || Input.is_action_pressed("right")) && on_wall_cooldown < 1 && !locked:
-					on_wall_cooldown = 20
-					rotate_object_local(Vector3.UP, deg_to_rad(180))
-					change_state(AIR)
 			ON_LEDGE:
 				# align with wall
 				if forward_ray.is_colliding():
@@ -1065,28 +1051,46 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				pass
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
 		
+		var grounded_on_standing_object : bool = false
 		# check if standing on something
-		if ground_detect.has_overlapping_bodies() && _state != DEAD:
+		if ground_detect.has_overlapping_bodies() && _state != DEAD && _state != RESPAWN:
+			# check every body standing on
 			for body in ground_detect.get_overlapping_bodies():
+				# if this is not what we are already standing on
 				if standing_on_object != body:
-					standing_on_object_last_pos = body.global_position
-				set_standing_on_object_rpc.rpc(body.get_path())
+					influence_piv.global_position = body.global_position
+					influence_piv.global_rotation = body.global_rotation
+					influence_pos.global_position = global_position
+					standing_on_object_last_pos = influence_pos.global_position
+					set_standing_on_object_rpc.rpc(body.get_path())
+				else:
+					grounded_on_standing_object = true
 		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
-			set_standing_on_object_rpc.rpc("null")
+			if standing_on_object != null:
+				set_standing_on_object_rpc.rpc("null")
 		
 		# move if standing on something
 		if standing_on_object != null:
-			global_position += standing_on_object.global_position - standing_on_object_last_pos
-			standing_on_object_last_pos = standing_on_object.global_position
+			influence_pos.global_position = standing_on_object_last_pos
+			influence_piv.global_position = standing_on_object.global_position
+			influence_piv.global_rotation = standing_on_object.global_rotation
+			var standing_influence : float = 1
+			if !grounded_on_standing_object:
+				standing_influence -= (clampf(influence_pos.global_position.distance_to(global_position) - 3, 0, 10)*0.15)
+				standing_influence = clampf(standing_influence, 0, 1)
+			if !teleport_requested:
+				global_position += (influence_pos.global_position - standing_on_object_last_pos) * standing_influence
+			if grounded_on_standing_object:
+				standing_on_object_last_pos = global_position
 		
 	# handle teleport requests
 	if teleport_requested:
 		set_standing_on_object_rpc.rpc("null")
-		teleport_requested = false
 		var t := state.transform
 		t.origin = teleport_pos
 		state.set_transform(t)
 		await get_tree().physics_frame
+		teleport_requested = false
 		emit_signal("teleported")
 	
 	# handle out of map ( runs outside auth check )
@@ -1105,6 +1109,10 @@ func set_standing_on_object_rpc(what_path : String) -> void:
 		standing_on_object = null
 	else:
 		standing_on_object = get_node(what_path)
+		decel_multiplier = normal_decel_multiplier
+		if on_ice():
+			# more slippy on ice
+			decel_multiplier = ice_decel_multiplier
 
 # When the player enters a seat
 @rpc("any_peer", "call_local")
@@ -1135,7 +1143,7 @@ func seat_destroyed(offset := false) -> void:
 	change_state(TRIPPED)
 	apply_central_impulse(Vector3.UP * jump_force)
 
-@rpc("any_peer", "call_remote")
+@rpc("any_peer", "call_local")
 func trip_by_player(hit_velocity : Vector3) -> void:
 	# if this change state request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0:
@@ -1143,7 +1151,8 @@ func trip_by_player(hit_velocity : Vector3) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
 	change_state(TRIPPED)
-	await get_tree().process_frame
+	play_bowling_audio.rpc()
+	await get_tree().physics_frame
 	linear_velocity = hit_velocity
 
 @rpc("any_peer", "call_local", "reliable")
@@ -1214,12 +1223,7 @@ func enter_state() -> void:
 	
 	if _state != AIR:
 		air_from_jump = false
-		# prevent fast jumps off wall from cutting off jump animation afterwards
-		if _state == ON_WALL:
-			var tween : Tween = get_tree().create_tween().set_parallel(true)
-			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.01)
-			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.01)
-		elif _state != DIVE && _state != EXIT_SEAT:
+		if _state != DIVE && _state != EXIT_SEAT:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendJump/blend_amount", 0.0, 0.1)
 			tween.tween_property(animator, "parameters/BlendDive/blend_amount", 0.0, 0.3)
@@ -1248,10 +1252,6 @@ func enter_state() -> void:
 	if _state != ROLL:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendRoll/blend_amount", 0.0, 0.2)
-	
-	if _state != ON_WALL:
-		var tween : Tween = get_tree().create_tween().set_parallel(true)
-		tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 0.0, 0.2)
 	
 	if _state != ON_LEDGE:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -1424,8 +1424,6 @@ func enter_state() -> void:
 			seat_occupying = null
 			get_tree().create_timer(0.5).connect("timeout", _set_can_enter_seat.bind(true))
 		DEAD:
-			deaths += 1
-			update_deaths.rpc(deaths)
 			# dizzy stars visual effect
 			$Smoothing/dizzy_stars.visible = false
 			$Smoothing/dizzy_stars/AnimationPlayer.stop()
@@ -1453,7 +1451,7 @@ func enter_state() -> void:
 				camera.locked = false
 				camera.set_camera_mode(death_camera_mode)
 				camera.set_target(target)
-				camera.fov = 55
+				camera.fov = UserPreferences.camera_fov
 			# reset executing player
 			executing_player = null
 			go_to_spawn()
@@ -1503,12 +1501,6 @@ func enter_state() -> void:
 			linear_damp = 0
 			change_state_non_authority.rpc(EXIT_SWIMMING)
 			change_state(IDLE)
-		ON_WALL:
-			air_time.start()
-			var tween : Tween = get_tree().create_tween().set_parallel(true)
-			play_jump_particles()
-			tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 1.0, 0.2)
-			change_state_non_authority.rpc(ON_WALL)
 		ON_LEDGE:
 			air_time.start()
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -1573,9 +1565,6 @@ func change_state_non_authority(state : int) -> void:
 	if _state != DEAD:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendDead/blend_amount", 0.0, 0.2)
-	if _state != ON_WALL:
-		var tween : Tween = get_tree().create_tween().set_parallel(true)
-		tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 0.0, 0.2)
 	if _state != ON_LEDGE:
 		var tween : Tween = get_tree().create_tween().set_parallel(true)
 		tween.tween_property(animator, "parameters/BlendOnLedge/blend_amount", 0.0, 0.2)
@@ -1648,11 +1637,6 @@ func change_state_non_authority(state : int) -> void:
 		DEAD:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendDead/blend_amount", 1.0, 0.3)
-		ON_WALL:
-			air_time.start()
-			play_jump_particles()
-			var tween : Tween = get_tree().create_tween().set_parallel(true)
-			tween.tween_property(animator, "parameters/BlendOnWall/blend_amount", 1.0, 0.2)
 		ON_LEDGE:
 			air_time.start()
 			play_jump_particles()
@@ -1664,6 +1648,11 @@ func change_state_non_authority(state : int) -> void:
 @rpc("call_local")
 func play_trip_audio() -> void:
 	trip_audio.play()
+
+@rpc("call_local")
+func play_bowling_audio() -> void:
+	if !bowling_audio.playing:
+		bowling_audio.play()
 
 func get_movement_direction() -> Vector3:
 	# only execute on yourself
@@ -1718,26 +1707,35 @@ func explode(explosion_position : Vector3, from_whom : int = 1, _explosion_force
 	var explosion_dir : Vector3 = explosion_position.direction_to(global_position) * 25
 	apply_impulse(explosion_dir * (_explosion_force/4))
 
-@rpc("any_peer", "call_local", "reliable")
-func update_kills(rpc_kills : int) -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+# server side
+func update_kills(new_kills : int) -> void:
+	if !multiplayer.is_server():
 		return
-	kills = rpc_kills
+	kills = new_kills
+	_receive_server_kills.rpc(new_kills)
 	Global.update_player_list_information()
 
-@rpc("any_peer", "call_local", "reliable")
-func update_deaths(rpc_deaths : int) -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+# server side
+func update_deaths(new_deaths : int) -> void:
+	if !multiplayer.is_server():
 		return
-	deaths = rpc_deaths
+	deaths = new_deaths
+	_receive_server_deaths.rpc(new_deaths)
 	Global.update_player_list_information()
 
+# client side
 @rpc("any_peer", "call_local", "reliable")
-func increment_kills() -> void:
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
-		return
-	kills += 1
-	update_kills.rpc(kills)
+func _receive_server_kills(new : int) -> void:
+	if multiplayer.is_server(): return
+	kills = new
+	Global.update_player_list_information()
+
+# client side
+@rpc("any_peer", "call_local", "reliable")
+func _receive_server_deaths(new : int) -> void:
+	if multiplayer.is_server(): return
+	deaths = new
+	Global.update_player_list_information()
 
 # for fun
 @rpc("any_peer", "call_local", "reliable")
@@ -1807,6 +1805,12 @@ func align_character_model_normal(ground_normal : Vector3) -> void:
 		character_model.global_transform.basis.x = -character_model.global_transform.basis.z.cross(ground_normal)
 		character_model.global_transform.basis = character_model.global_transform.basis.orthonormalized()
 		character_model.scale = old_scale
+
+func show_chat(what : String) -> void:
+	chat_label.visible = true
+	chat_label.text = what
+	await get_tree().create_timer(6).timeout
+	chat_label.visible = false
 
 # for removing player from world
 func despawn() -> void:

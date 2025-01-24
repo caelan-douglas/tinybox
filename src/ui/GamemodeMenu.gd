@@ -87,7 +87,6 @@ func _populate_client_gamemode_list(gamemode_names : Array) -> void:
 	selector.clear()
 	# add new gamemodes
 	for gm : String in gamemode_names:
-		print(gm)
 		selector.add_item(gm)
 		match (gm):
 			"Deathmatch":

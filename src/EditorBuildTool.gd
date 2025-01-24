@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Tool
+class_name EditorBuildTool
 
 enum States {
 	BUILD,
@@ -24,6 +25,8 @@ enum States {
 @onready var editor : Editor
 @onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
 @onready var select_area : Area3D = $SelectArea
+@onready var build_collider : CollisionShape3D = $SelectArea/build_collider
+@onready var grab_collider : CollisionShape3D = $SelectArea/grab_collider
 @onready var scale_tooltip : Label = get_node("/root/PersistentScene/PersistentCanvas/ScaleTooltip")
 var hovered_editable_object : Node = null
 var hovered_item_properties : Dictionary = {}
@@ -313,6 +316,28 @@ func change_state(new : States) -> void:
 			item_chooser.hide_item_chooser()
 			clear_preview()
 
+var grabbed : Array = []
+var copied_lines : Array = []
+func set_grabbed() -> void:
+	grabbed = []
+	if select_area != null:
+		for obj : Node3D in select_area.get_overlapping_bodies():
+			if obj is TBWObject || obj is Brick:
+				grabbed.append(obj)
+	property_editor.show_grab_actions(grabbed, self)
+
+func copy_grabbed() -> void:
+	var ok : bool = await Global.get_world().save_tbw("temp", false, grabbed, true)
+	if ok:
+		copied_lines = Global.get_tbw_lines("temp")
+
+func save_grabbed() -> void:
+	var save_name := str("Building", ("%X" % Time.get_unix_time_from_system()))
+	Global.get_world().save_tbw(save_name, false, grabbed)
+
+func paste_grabbed() -> void:
+	Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+
 func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	
@@ -323,8 +348,12 @@ func _physics_process(delta : float) -> void:
 			match (_state):
 				States.BUILD:
 					change_state(States.SELECT)
+					grab_collider.disabled = false
+					build_collider.disabled = true
 				States.SELECT:
 					change_state(States.BUILD)
+					grab_collider.disabled = true
+					build_collider.disabled = false
 		
 		# SELECT MODE -----------
 		if _state == States.SELECT:
@@ -346,7 +375,9 @@ func _physics_process(delta : float) -> void:
 						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
 						if drag_start_point == drag_end_point:
 							return
+						set_grabbed()
 					else:
+						select_area.scale = Vector3(1, 1, 1)
 						select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 		# BUILD MODE ------------
 		else:

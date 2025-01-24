@@ -32,12 +32,13 @@ enum BrickMaterial {
 	METAL,
 	PLASTIC,
 	RUBBER,
-	GRASS
+	GRASS,
+	ICE
 }
 
-const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Texture: Grass"]
+const BRICK_MATERIALS_AS_STRINGS : Array[String] = ["Wooden", "Wooden (charred)", "Metal", "Plastic", "Rubber", "Grass", "Ice"]
 
-@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable"]
+@export var properties_to_save : Array[String] = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible"]
 
 # Size of grid cells.
 const CELL_SIZE : int = 1
@@ -57,6 +58,7 @@ var sync_step : int = 0
 var joinable : bool = true
 var groupable : bool = true
 var immovable : bool = false
+var indestructible : bool = false
 # for larger bricks
 @export var mass_mult : float = 1
 @export var flammable : bool = true
@@ -82,6 +84,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @onready var plastic_material : Material = preload("res://data/materials/plastic.tres")
 @onready var rubber_material : Material = preload("res://data/materials/rubber.tres")
 @onready var grass_material : Material = preload("res://data/materials/grass.tres")
+@onready var ice_material : Material = preload("res://data/materials/ice.tres")
 
 # for showing cost in minigame
 @onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
@@ -309,6 +312,17 @@ func set_material(new : BrickMaterial) -> void:
 			set_physics_material_properties(0.7, 0)
 			
 			flammable = false
+		# Ice
+		6:
+			_material = BrickMaterial.ICE
+			model_mesh.set_surface_override_material(0, ice_material)
+			mass = 3 * mass_mult
+			unjoin_velocity = 15
+			
+			# set physics material properties for brick.
+			set_physics_material_properties(0.05, 0)
+			
+			flammable = false
 	mesh_material = model_mesh.get_surface_override_material(0)
 
 func show_delete_overlay() -> void:
@@ -367,7 +381,7 @@ func get_colour() -> Color:
 func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:
 	if !is_multiplayer_authority(): return
 	# static brick material cannot be unglued
-	if immovable:
+	if immovable || indestructible:
 		return
 	# iterate through all bricks in group. Do not run this on dummy bricks.
 	if affect_others && (_state == States.BUILD || _state == States.PLACED):
@@ -376,7 +390,7 @@ func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0)
 				# do not unglue static neighbours
 				if b != null:
 					b = b as Brick
-					if !b.immovable:
+					if !b.immovable && !b.indestructible:
 						if new == false:
 						# only deglue inside the deglue radius
 							if b == self || b.global_position.distance_to(self.global_position) < deglue_radius + addl_radius:
@@ -482,7 +496,7 @@ func extinguish_fire() -> void:
 func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
 	# only run on authority
 	if !is_multiplayer_authority(): return
-	if immovable: return
+	if immovable || indestructible: return
 	set_glued(false)
 	set_non_groupable_for(1)
 	unjoin()
@@ -645,6 +659,10 @@ func check_joints(specific_body : Node3D = null) -> void:
 	for body in bodies_to_check:
 		# don't join with self
 		if body is Brick && body != self:
+			# if this is immovable (loaded first)
+			if self.immovable:
+				body.has_static_neighbour = true
+			# if other loaded first
 			if body.immovable:
 				has_static_neighbour = true
 			found_brick = true
@@ -716,6 +734,8 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 func unjoin() -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
+	if indestructible:
+		return
 	
 	for j in get_children():
 		if j is Generic6DOFJoint3D:

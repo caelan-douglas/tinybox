@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=3 uid="uid://dinh2untg6m17"]
+[gd_scene load_steps=112 format=3 uid="uid://dinh2untg6m17"]
 
 [ext_resource type="Script" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
@@ -15,7 +15,9 @@
 [ext_resource type="AudioStream" uid="uid://ck83w2477sbka" path="res://data/audio/clang_1.ogg" id="14_tuqtl"]
 [ext_resource type="AudioStream" uid="uid://y50qbc1kv2fw" path="res://data/audio/clang_2.ogg" id="15_x7mcp"]
 [ext_resource type="AudioStream" uid="uid://hhw1130fet3a" path="res://data/audio/clang_3.ogg" id="16_srewf"]
+[ext_resource type="AudioStream" uid="uid://cxd4vstyijgoq" path="res://data/audio/bowling.ogg" id="17_6cw34"]
 [ext_resource type="AudioStream" uid="uid://bso068q2pvggt" path="res://data/audio/sparkle.ogg" id="17_iikyd"]
+[ext_resource type="Script" path="res://src/DebugVisibility.gd" id="18_4ygmw"]
 [ext_resource type="Texture2D" uid="uid://c3bv8fogwqd3s" path="res://data/textures/bubble.png" id="19_4icmy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ktb66"]
@@ -571,6 +573,12 @@ stream_2/weight = 1.0
 stream_3/stream = ExtResource("16_srewf")
 stream_3/weight = 1.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wpn65"]
+random_pitch = 1.05
+streams_count = 1
+stream_0/stream = ExtResource("17_6cw34")
+stream_0/weight = 1.0
+
 [sub_resource type="Animation" id="Animation_p5udv"]
 length = 0.001
 tracks/0/type = "value"
@@ -676,6 +684,23 @@ size = Vector3(0.5, 0.506348, 0.53916)
 [sub_resource type="BoxShape3D" id="BoxShape3D_j3bsj"]
 size = Vector3(0.5, 0.187073, 0.516333)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_68e7j"]
+no_depth_test = true
+albedo_color = Color(0.11109, 0.639328, 0.558671, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7fhql"]
+material = SubResource("StandardMaterial3D_68e7j")
+radial_segments = 8
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j46wh"]
+albedo_color = Color(0.899261, 0.299865, 0.520177, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_0wg5v"]
+material = SubResource("StandardMaterial3D_j46wh")
+radial_segments = 8
+rings = 2
+
 [node name="RigidPlayer" type="RigidBody3D"]
 collision_layer = 2
 collision_mask = 131
@@ -725,6 +750,19 @@ fixed_size = true
 text = "name id"
 font_size = 28
 
+[node name="ChatLabel" type="Label3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.06806, 2.08165e-12)
+visible = false
+pixel_size = 0.0008
+billboard = 1
+double_sided = false
+fixed_size = true
+modulate = Color(1, 1, 0.533333, 1)
+text = "Chat message"
+font_size = 28
+autowrap_mode = 3
+width = 700.0
+
 [node name="spawn_protection" parent="Smoothing" instance=ExtResource("6_346qe")]
 visible = false
 
@@ -773,7 +811,7 @@ autoplay = "dizzy"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Smoothing/character_model/character" index="1"]
-bones/0/position = Vector3(0.297754, 0.745223, -0.0211049)
+bones/0/position = Vector3(0.294466, 0.741939, -0.0211737)
 bones/0/rotation = Quaternion(0.839802, -0.00779576, 0.542789, 0.0072306)
 bones/1/rotation = Quaternion(-0.105482, 0.257163, 0.0461096, 0.959486)
 bones/1/scale = Vector3(1, 1, 1)
@@ -790,7 +828,7 @@ bones/6/scale = Vector3(1, 1, 1)
 bones/7/position = Vector3(-0.0429668, 0.052494, 0.00168533)
 bones/7/rotation = Quaternion(-0.0372231, 0.230413, 0.199993, 0.951592)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/position = Vector3(-0.290483, 0.744652, 0.011783)
+bones/9/position = Vector3(-0.287149, 0.742747, 0.0116333)
 bones/9/rotation = Quaternion(0.579905, 0.122429, -0.804111, 0.0461267)
 bones/10/rotation = Quaternion(-0.102253, -0.302322, -0.0379064, 0.946947)
 bones/10/scale = Vector3(1, 1, 1)
@@ -813,9 +851,9 @@ bones/22/rotation = Quaternion(-0.107632, 0.698867, 0.698867, 0.107632)
 bones/23/rotation = Quaternion(-7.36663e-08, -0.0849115, 0.996388, -9.75116e-08)
 bones/24/rotation = Quaternion(0, 0, 1, 0)
 bones/26/position = Vector3(0.00403294, 0.681664, -0.0386739)
-bones/26/rotation = Quaternion(-0.00710127, 1.09469e-07, -2.13285e-08, 0.999975)
-bones/27/rotation = Quaternion(-0.013301, 0.994061, 0.0561915, -0.0922389)
-bones/28/rotation = Quaternion(0.0931874, -0.0924402, 0.0167238, 0.991207)
+bones/26/rotation = Quaternion(-0.00497178, 1.09788e-07, -1.96185e-08, 0.999988)
+bones/27/rotation = Quaternion(-0.0128707, 0.994312, 0.0515539, -0.0923015)
+bones/28/rotation = Quaternion(0.090773, -0.0924826, 0.0165027, 0.991431)
 bones/29/position = Vector3(-0.0755105, 0.134086, 0.141418)
 bones/29/rotation = Quaternion(-0.153046, 0.690346, 0.690346, 0.153046)
 bones/29/scale = Vector3(1, 1, 1)
@@ -832,30 +870,30 @@ bones/34/rotation = Quaternion(-5.10654e-06, 0.552558, 0.833474, 3.5987e-06)
 bones/34/scale = Vector3(1, 1, 1)
 bones/35/rotation = Quaternion(-9.93916e-09, 0.552558, 0.833474, -4.1717e-08)
 bones/35/scale = Vector3(1, 1, 1)
-bones/37/rotation = Quaternion(-0.00468457, 0.000479441, -0.0079377, 0.999957)
-bones/38/rotation = Quaternion(-0.00932625, 0.000590778, -0.00793019, 0.999925)
+bones/37/rotation = Quaternion(-0.00472875, -0.00136891, 0.0218251, 0.99975)
+bones/38/rotation = Quaternion(-0.00936865, -0.00167511, 0.0218037, 0.999717)
 bones/39/rotation = Quaternion(-2.07102e-10, 0.999786, -0.0206824, 2.04005e-09)
 bones/39/scale = Vector3(0.945, 0.945, 0.945)
-bones/40/rotation = Quaternion(0.485924, 0.337904, 0.643736, -0.48508)
+bones/40/rotation = Quaternion(0.487457, 0.334703, 0.646326, -0.482309)
 bones/40/scale = Vector3(1, 1, 1)
-bones/41/rotation = Quaternion(-0.432839, -0.375706, 0.155964, 0.804469)
+bones/41/rotation = Quaternion(-0.430955, -0.37614, 0.153891, 0.805677)
 bones/41/scale = Vector3(1, 1, 1)
-bones/42/rotation = Quaternion(-0.211482, 0.0137303, -0.0806271, 0.973954)
-bones/43/rotation = Quaternion(-0.493776, 0.32079, 0.651203, 0.478762)
+bones/42/rotation = Quaternion(-0.216104, 0.013714, -0.0823897, 0.972791)
+bones/43/rotation = Quaternion(-0.4972, 0.317539, 0.654223, 0.473237)
 bones/43/scale = Vector3(1, 1, 1)
-bones/44/rotation = Quaternion(-0.424896, 0.476019, -0.284092, 0.715654)
-bones/45/rotation = Quaternion(-0.102493, -0.0140109, 0.039075, 0.993867)
-bones/46/rotation = Quaternion(0.989485, -0.00766261, -0.1418, -0.0274686)
+bones/44/rotation = Quaternion(-0.41831, 0.475602, -0.284487, 0.719644)
+bones/45/rotation = Quaternion(-0.115515, -0.0139878, 0.0440396, 0.99223)
+bones/46/rotation = Quaternion(0.989549, -0.0079499, -0.141802, -0.0249232)
 bones/46/scale = Vector3(1, 0.999999, 0.999955)
-bones/47/rotation = Quaternion(-0.162003, 1.23235e-05, -0.0125807, 0.98671)
-bones/48/rotation = Quaternion(0.979122, 0.093731, 0.175711, -0.0407499)
+bones/47/rotation = Quaternion(-0.162275, 1.23261e-05, -0.0126018, 0.986665)
+bones/48/rotation = Quaternion(0.979216, 0.0940729, 0.17557, -0.0382315)
 bones/48/scale = Vector3(1, 1, 0.999983)
-bones/49/rotation = Quaternion(-0.044174, -1.24173e-05, 0.00342989, 0.999018)
+bones/49/rotation = Quaternion(-0.0444773, -1.24105e-05, 0.00345345, 0.999004)
 bones/49/scale = Vector3(1, 1, 1)
 bones/50/position = Vector3(-7.98204e-08, 1.1638, -1.15144)
 
 [node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
-transform = Transform3D(-0.999999, 0.000135461, 0.00152211, 5.68768e-08, 0.996067, -0.0886026, -0.00152811, -0.0886026, -0.996066, -0.00173789, 1.265, -0.0141776)
+transform = Transform3D(-0.999999, 0.000135763, 0.00152273, 5.86146e-09, 0.996049, -0.088802, -0.00152871, -0.0888019, -0.996048, -0.00173793, 1.26515, -0.0146458)
 bone_name = "neck"
 bone_idx = 28
 
@@ -869,7 +907,7 @@ process_material = SubResource("ParticleProcessMaterial_nceru")
 draw_pass_1 = SubResource("PlaneMesh_v2b1p")
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
-transform = Transform3D(0.944999, 6.84154e-05, -0.00144246, -5.3877e-08, 0.943941, 0.0447302, 0.00144407, -0.0447302, 0.94394, -0.00175158, 1.59184, -0.00519648)
+transform = Transform3D(0.944999, 6.86761e-05, -0.00144306, -5.6667e-09, 0.943932, 0.0449191, 0.00144464, -0.0449191, 0.943931, -0.00175154, 1.592, -0.00573003)
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
@@ -889,7 +927,7 @@ visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 
 [node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="9"]
-transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.290483, 0.744652, 0.011783)
+transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.287149, 0.742747, 0.0116333)
 bone_name = "hand.l"
 bone_idx = 9
 
@@ -997,6 +1035,13 @@ libraries = {
 stream = SubResource("AudioStreamRandomizer_2jp56")
 bus = &"SFX"
 
+[node name="BowlingAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_wpn65")
+max_db = 4.996e-16
+pitch_scale = 1.05
+max_distance = 50.0
+bus = &"SFX"
+
 [node name="SparkleAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_iikyd")
 volume_db = -80.0
@@ -1058,6 +1103,22 @@ target_position = Vector3(0, 0, 1)
 [node name="LedgeRay" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0.4)
 target_position = Vector3(0, -1.5, 0)
+
+[node name="InfluencePivot" type="Node3D" parent="."]
+top_level = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="InfluencePivot"]
+visible = false
+mesh = SubResource("SphereMesh_7fhql")
+script = ExtResource("18_4ygmw")
+
+[node name="InfluencePosition" type="Node3D" parent="InfluencePivot"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="InfluencePivot/InfluencePosition"]
+visible = false
+mesh = SubResource("SphereMesh_0wg5v")
+skeleton = NodePath("../..")
+script = ExtResource("18_4ygmw")
 
 [editable path="Smoothing/spawn_protection"]
 [editable path="Smoothing/character_model"]

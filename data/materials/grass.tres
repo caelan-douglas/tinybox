@@ -5,7 +5,7 @@
 [resource]
 resource_name = "clay.vincent.hair"
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.625002, 0.578684, 0.391096, 1)
+albedo_color = Color(0.434462, 0.64143, 0.386643, 1)
 albedo_texture = ExtResource("1_vnepo")
 metallic_texture_channel = 2
 roughness_texture_channel = 4

@@ -43,7 +43,7 @@ func _upload_world() -> void:
 		req.request_completed.connect(self._user_maps_upload_request_completed)
 		var body := JSON.new().stringify({"name": map_name, "tbw": tbw})
 								# default REST API for worlds, hosted on my website
-		var error := req.request("https://tinybox-worlds.caelan-douglas.workers.dev/", ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
+		var error := req.request(str(UserPreferences.database_repo), ["Content-Type: application/json"], HTTPClient.METHOD_POST, body)
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
 	else:

@@ -39,13 +39,72 @@ script = ExtResource("2_qejdm")
 json_text = "ui/save"
 grab_initial_focus = true
 
+[node name="Spacer10" type="Control" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 24)
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Mouse Sensitivity (0.2x - 3.0x)"
+script = ExtResource("3_r1aba")
+
+[node name="MouseSensitivity" type="HSlider" parent="."]
+layout_mode = 2
+min_value = 0.2
+max_value = 3.0
+step = 0.2
+value = 1.0
+scrollable = false
+tick_count = 15
+ticks_on_borders = true
+
+[node name="Spacer8" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Camera Field of View"
+script = ExtResource("3_r1aba")
+
+[node name="FOV" type="HSlider" parent="."]
+layout_mode = 2
+min_value = 55.0
+max_value = 80.0
+step = 2.5
+value = 55.0
+scrollable = false
+
+[node name="Spacer13" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "World Database Repository
+(leave blank for default)"
+script = ExtResource("3_r1aba")
+
+[node name="DatabaseRepo" type="LineEdit" parent="."]
+layout_mode = 2
+text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+placeholder_text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+max_length = 512
+
+[node name="Spacer12" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
 [node name="Graphics" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Graffix: COOL"
 script = ExtResource("2_qejdm")
 
-[node name="Spacer8" type="Control" parent="."]
+[node name="Spacer11" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
