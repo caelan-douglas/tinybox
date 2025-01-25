@@ -14,7 +14,7 @@
         "save_and_test": "Save & test world",
         "save_and_test_at_spot": "Save & test world at this spot",
         "upload_world": "Save & upload world to Browser",
-        "upload_world_tip": "If you upload this world, it will show up to all players under the 'World Browser' section of the map list. If it contains abusive or inappropriate content it may be removed.",
+        "upload_world_tip": "If you upload this world, it will show up to all players under the 'World Browser' section of the map list. If it contains abusive or inappropriate content, or is considered low-effort, it may be removed.",
         "user_maps_info": "Welcome to the World Browser!\nThis is a list of maps uploaded by other players. You can upload your own maps from the Editor. If you find an issue with a map, you can report it with the flag button.",
         "load_world": "Load world",
         "host_or_join": "Host or Join",
