@@ -1,10 +1,11 @@
-[gd_scene load_steps=112 format=3 uid="uid://dinh2untg6m17"]
+[gd_scene load_steps=115 format=3 uid="uid://dinh2untg6m17"]
 
 [ext_resource type="Script" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="2_d7810"]
 [ext_resource type="Script" path="res://src/ToolInventory.gd" id="4_0qq5v"]
 [ext_resource type="PackedScene" uid="uid://bdoyyw0s2yfun" path="res://data/models/character/spawn_protection.blend" id="6_346qe"]
+[ext_resource type="Texture2D" uid="uid://com33jtjoygcr" path="res://data/textures/ui/panel_white.png" id="6_j6hds"]
 [ext_resource type="PackedScene" uid="uid://cbks1seqvjwkh" path="res://data/models/character/character_model.blend" id="6_jdytf"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="7_onyoa"]
 [ext_resource type="Texture2D" uid="uid://dacnw201grgcp" path="res://data/textures/dizzy_star.png" id="8_6lxy6"]
@@ -71,6 +72,22 @@ material = SubResource("StandardMaterial3D_gsght")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j240a"]
 radius = 0.262349
 height = 1.62796
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fjd1w"]
+viewport_path = NodePath("Smoothing/SubViewport")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6nkf1"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+texture = ExtResource("6_j6hds")
+texture_margin_left = 43.0
+texture_margin_top = 43.0
+texture_margin_right = 43.0
+texture_margin_bottom = 43.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a40ip"]
 cull_mode = 2
@@ -741,27 +758,60 @@ shape = SubResource("CapsuleShape3D_j240a")
 [node name="Smoothing" type="Node3D" parent="."]
 script = ExtResource("8_as1qh")
 
-[node name="NameLabel" type="Label3D" parent="Smoothing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.8, 2.08165e-12)
-pixel_size = 0.0008
+[node name="PlayerHUD" type="Sprite3D" parent="Smoothing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.77078, 2.08165e-12)
+centered = false
+offset = Vector2(-200, 2.08165e-12)
+pixel_size = 0.0012
 billboard = 1
-double_sided = false
 fixed_size = true
-text = "name id"
-font_size = 28
+texture = SubResource("ViewportTexture_fjd1w")
+region_rect = Rect2(0, 0, 128, 128)
 
-[node name="ChatLabel" type="Label3D" parent="Smoothing"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.06806, 2.08165e-12)
-visible = false
-pixel_size = 0.0008
-billboard = 1
-double_sided = false
-fixed_size = true
-modulate = Color(1, 1, 0.533333, 1)
-text = "Chat message"
-font_size = 28
+[node name="SubViewport" type="SubViewport" parent="Smoothing"]
+transparent_bg = true
+size = Vector2i(400, 192)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Smoothing/SubViewport"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Smoothing/SubViewport/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="NameLabel" type="Label" parent="Smoothing/SubViewport/CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.237539, 0.237539, 0.237539, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 24
+text = "Name label"
+horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
-width = 700.0
+max_lines_visible = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="Smoothing/SubViewport/CanvasLayer/VBoxContainer"]
+visible = false
+self_modulate = Color(0.32549, 0.32549, 0.32549, 0.501961)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_6nkf1")
+
+[node name="ChatLabel" type="Label" parent="Smoothing/SubViewport/CanvasLayer/VBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Chat message
+Line 2
+Line 3
+Line 4"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 3
 
 [node name="spawn_protection" parent="Smoothing" instance=ExtResource("6_346qe")]
 visible = false
@@ -811,7 +861,7 @@ autoplay = "dizzy"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Smoothing/character_model/character" index="1"]
-bones/0/position = Vector3(0.294466, 0.741939, -0.0211737)
+bones/0/position = Vector3(0.291163, 0.738641, -0.0212428)
 bones/0/rotation = Quaternion(0.839802, -0.00779576, 0.542789, 0.0072306)
 bones/1/rotation = Quaternion(-0.105482, 0.257163, 0.0461096, 0.959486)
 bones/1/scale = Vector3(1, 1, 1)
@@ -828,7 +878,7 @@ bones/6/scale = Vector3(1, 1, 1)
 bones/7/position = Vector3(-0.0429668, 0.052494, 0.00168533)
 bones/7/rotation = Quaternion(-0.0372231, 0.230413, 0.199993, 0.951592)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/position = Vector3(-0.287149, 0.742747, 0.0116333)
+bones/9/position = Vector3(-0.2838, 0.740833, 0.0114829)
 bones/9/rotation = Quaternion(0.579905, 0.122429, -0.804111, 0.0461267)
 bones/10/rotation = Quaternion(-0.102253, -0.302322, -0.0379064, 0.946947)
 bones/10/scale = Vector3(1, 1, 1)
@@ -851,9 +901,9 @@ bones/22/rotation = Quaternion(-0.107632, 0.698867, 0.698867, 0.107632)
 bones/23/rotation = Quaternion(-7.36663e-08, -0.0849115, 0.996388, -9.75116e-08)
 bones/24/rotation = Quaternion(0, 0, 1, 0)
 bones/26/position = Vector3(0.00403294, 0.681664, -0.0386739)
-bones/26/rotation = Quaternion(-0.00497178, 1.09788e-07, -1.96185e-08, 0.999988)
-bones/27/rotation = Quaternion(-0.0128707, 0.994312, 0.0515539, -0.0923015)
-bones/28/rotation = Quaternion(0.090773, -0.0924826, 0.0165027, 0.991431)
+bones/26/rotation = Quaternion(-0.00289974, 1.09747e-07, -1.98459e-08, 0.999996)
+bones/27/rotation = Quaternion(-0.0124392, 0.994542, 0.0468939, -0.0923693)
+bones/28/rotation = Quaternion(0.088437, -0.0925298, 0.0162899, 0.991641)
 bones/29/position = Vector3(-0.0755105, 0.134086, 0.141418)
 bones/29/rotation = Quaternion(-0.153046, 0.690346, 0.690346, 0.153046)
 bones/29/scale = Vector3(1, 1, 1)
@@ -870,30 +920,30 @@ bones/34/rotation = Quaternion(-5.10654e-06, 0.552558, 0.833474, 3.5987e-06)
 bones/34/scale = Vector3(1, 1, 1)
 bones/35/rotation = Quaternion(-9.93916e-09, 0.552558, 0.833474, -4.1717e-08)
 bones/35/scale = Vector3(1, 1, 1)
-bones/37/rotation = Quaternion(-0.00472875, -0.00136891, 0.0218251, 0.99975)
-bones/38/rotation = Quaternion(-0.00936865, -0.00167511, 0.0218037, 0.999717)
+bones/37/rotation = Quaternion(-0.00473756, -0.00175953, 0.0281149, 0.999592)
+bones/38/rotation = Quaternion(-0.00937655, -0.00215396, 0.0280874, 0.999559)
 bones/39/rotation = Quaternion(-2.07102e-10, 0.999786, -0.0206824, 2.04005e-09)
 bones/39/scale = Vector3(0.945, 0.945, 0.945)
-bones/40/rotation = Quaternion(0.487457, 0.334703, 0.646326, -0.482309)
+bones/40/rotation = Quaternion(0.488984, 0.331478, 0.648911, -0.479513)
 bones/40/scale = Vector3(1, 1, 1)
-bones/41/rotation = Quaternion(-0.430955, -0.37614, 0.153891, 0.805677)
+bones/41/rotation = Quaternion(-0.429113, -0.376612, 0.151689, 0.806856)
 bones/41/scale = Vector3(1, 1, 1)
-bones/42/rotation = Quaternion(-0.216104, 0.013714, -0.0823897, 0.972791)
-bones/43/rotation = Quaternion(-0.4972, 0.317539, 0.654223, 0.473237)
+bones/42/rotation = Quaternion(-0.220506, 0.013698, -0.084068, 0.971659)
+bones/43/rotation = Quaternion(-0.500608, 0.314254, 0.657216, 0.467657)
 bones/43/scale = Vector3(1, 1, 1)
-bones/44/rotation = Quaternion(-0.41831, 0.475602, -0.284487, 0.719644)
-bones/45/rotation = Quaternion(-0.115515, -0.0139878, 0.0440396, 0.99223)
-bones/46/rotation = Quaternion(0.989549, -0.0079499, -0.141802, -0.0249232)
+bones/44/rotation = Quaternion(-0.411978, 0.475493, -0.28435, 0.723413)
+bones/45/rotation = Quaternion(-0.127063, -0.013965, 0.0484427, 0.990613)
+bones/46/rotation = Quaternion(0.989608, -0.00823729, -0.141803, -0.0223604)
 bones/46/scale = Vector3(1, 0.999999, 0.999955)
-bones/47/rotation = Quaternion(-0.162275, 1.23261e-05, -0.0126018, 0.986665)
-bones/48/rotation = Quaternion(0.979216, 0.0940729, 0.17557, -0.0382315)
+bones/47/rotation = Quaternion(-0.161889, 1.233e-05, -0.0125718, 0.986729)
+bones/48/rotation = Quaternion(0.979306, 0.0944133, 0.175428, -0.0356456)
 bones/48/scale = Vector3(1, 1, 0.999983)
-bones/49/rotation = Quaternion(-0.0444773, -1.24105e-05, 0.00345345, 0.999004)
+bones/49/rotation = Quaternion(-0.0440015, -1.24121e-05, 0.0034165, 0.999026)
 bones/49/scale = Vector3(1, 1, 1)
 bones/50/position = Vector3(-7.98204e-08, 1.1638, -1.15144)
 
 [node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
-transform = Transform3D(-0.999999, 0.000135763, 0.00152273, 5.86146e-09, 0.996049, -0.088802, -0.00152871, -0.0888019, -0.996048, -0.00173793, 1.26515, -0.0146458)
+transform = Transform3D(-0.999999, 0.000135878, 0.00152296, -6.99065e-07, 0.996003, -0.0893169, -0.00152894, -0.0893168, -0.996002, -0.00173846, 1.2653, -0.0151951)
 bone_name = "neck"
 bone_idx = 28
 
@@ -907,7 +957,7 @@ process_material = SubResource("ParticleProcessMaterial_nceru")
 draw_pass_1 = SubResource("PlaneMesh_v2b1p")
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
-transform = Transform3D(0.944999, 6.86761e-05, -0.00144306, -5.6667e-09, 0.943932, 0.0449191, 0.00144464, -0.0449191, 0.943931, -0.00175154, 1.592, -0.00573003)
+transform = Transform3D(0.944999, 6.87756e-05, -0.00144328, 6.60491e-07, 0.943908, 0.045407, 0.00144486, -0.045407, 0.943907, -0.00175204, 1.59214, -0.00644829)
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
@@ -927,7 +977,7 @@ visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 
 [node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="9"]
-transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.287149, 0.742747, 0.0116333)
+transform = Transform3D(-0.323166, 0.216176, -0.921321, 0.0678124, -0.965767, -0.250391, -0.94391, -0.143395, 0.297443, -0.2838, 0.740833, 0.0114829)
 bone_name = "hand.l"
 bone_idx = 9
 
@@ -995,6 +1045,10 @@ one_shot = true
 
 [node name="TripTime" type="Timer" parent="."]
 wait_time = 2.0
+one_shot = true
+
+[node name="ChatTime" type="Timer" parent="."]
+wait_time = 6.0
 one_shot = true
 
 [node name="SlideTime" type="Timer" parent="."]

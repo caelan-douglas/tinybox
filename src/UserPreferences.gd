@@ -28,6 +28,7 @@ var database_repo : String = "https://tinybox-worlds.caelan-douglas.workers.dev/
 			database_repo = DEFAULT_DATABASE_REPO
 var mouse_sensitivity : float = 1.0
 var camera_fov : float = 55.0
+var show_chats_above_players : bool = true
 
 func _ready() -> void:
 	os_path = OS.get_executable_path().get_base_dir() + "/"

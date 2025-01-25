@@ -21,6 +21,7 @@ extends AnimatedList
 @onready var sensitivity_slider : Slider = $MouseSensitivity
 @onready var fov_slider : Slider = $FOV
 @onready var db_repo : LineEdit = $DatabaseRepo
+@onready var player_chats : CheckBox = $PlayerChats
 @export var show_save_button : bool = true
 
 # Called when the node enters the scene tree for the first time.
@@ -37,6 +38,7 @@ func _ready() -> void:
 	sensitivity_slider.connect("value_changed", _on_sensitivity_changed)
 	fov_slider.connect("value_changed", _on_fov_changed)
 	db_repo.connect("text_changed", _on_db_repo_text_changed)
+	player_chats.connect("toggled", _on_player_chats_toggled)
 	
 	var current_preset : int = Global.load_graphics_preset()
 	match current_preset:
@@ -63,10 +65,15 @@ func load_prefs() -> void:
 	var loaded_db_repo : Variant = UserPreferences.load_pref("database_repo")
 	if loaded_db_repo != null:
 		UserPreferences.database_repo = str(loaded_db_repo)
+	
+	var loaded_player_chats : Variant = UserPreferences.load_pref("show_chats_above_players")
+	if loaded_player_chats != null:
+		UserPreferences.show_chats_above_players = loaded_player_chats as bool
 		
 	db_repo.text = UserPreferences.database_repo
 	sensitivity_slider.value = UserPreferences.mouse_sensitivity
 	fov_slider.value = UserPreferences.camera_fov
+	player_chats.button_pressed = UserPreferences.show_chats_above_players
 
 func _on_sensitivity_changed(value : float) -> void:
 	UserPreferences.mouse_sensitivity = value
@@ -89,6 +96,10 @@ func _on_db_repo_text_changed(text : String) -> void:
 		UserPreferences.save_pref("database_repo", "")
 	else:
 		UserPreferences.save_pref("database_repo", text)
+
+func _on_player_chats_toggled(mode : bool) -> void:
+	UserPreferences.show_chats_above_players = mode
+	UserPreferences.save_pref("show_chats_above_players", mode)
 
 # Toggles the graphics presets via Global and saves the setting.
 func toggle_graphics_presets() -> void:

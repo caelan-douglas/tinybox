@@ -60,7 +60,7 @@ tick_count = 15
 ticks_on_borders = true
 
 [node name="Spacer8" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="Label4" type="Label" parent="."]
@@ -78,7 +78,7 @@ value = 55.0
 scrollable = false
 
 [node name="Spacer13" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="Label5" type="Label" parent="."]
@@ -95,7 +95,16 @@ placeholder_text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
 max_length = 512
 
 [node name="Spacer12" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 8)
+custom_minimum_size = Vector2(2.08165e-12, 16)
+layout_mode = 2
+
+[node name="PlayerChats" type="CheckBox" parent="."]
+layout_mode = 2
+button_pressed = true
+text = "Show chats above players"
+
+[node name="Spacer14" type="Control" parent="."]
+custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
 [node name="Graphics" type="Button" parent="."]

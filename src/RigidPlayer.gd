@@ -119,6 +119,7 @@ var deaths : int = 0
 @onready var forward_ray : RayCast3D = $ForwardRay
 @onready var ledge_ray : RayCast3D = $LedgeRay
 @onready var air_time : Timer = $AirTime
+@onready var chat_time : Timer = $ChatTime
 @onready var ledge_time : Timer = $LedgeTime
 @onready var trip_time : Timer = $TripTime
 @onready var slide_time : Timer = $SlideTime
@@ -141,7 +142,9 @@ var deaths : int = 0
 @onready var debug_menu : Control = get_tree().current_scene.get_node("DebugCanvas/DebugMenu")
 @onready var influence_piv : Node3D = $InfluencePivot
 @onready var influence_pos : Node3D = $InfluencePivot/InfluencePosition
-@onready var chat_label : Label3D = $Smoothing/ChatLabel
+@onready var chat_label : Label = $Smoothing/SubViewport/CanvasLayer/VBoxContainer/PanelContainer/ChatLabel
+@onready var chat_panel : PanelContainer = $Smoothing/SubViewport/CanvasLayer/VBoxContainer/PanelContainer
+@onready var name_label : Label = $Smoothing/SubViewport/CanvasLayer/VBoxContainer/NameLabel
 
 @export var spawn_as_dummy : bool = false
 
@@ -214,6 +217,11 @@ func update_appearance(shirt : int, shirt_texture_base64 : String, hair : int, s
 		shirt_material.albedo_color = shirt_colour
 	if pants_colour != null:
 		pants_material.albedo_color = pants_colour
+		# update chat bubble colour as well, 
+		# keep chat panel value below 70 for contrast
+		chat_panel.self_modulate = pants_colour
+		chat_panel.self_modulate.v = clampf(chat_panel.self_modulate.v, 0, 0.27)
+		chat_panel.self_modulate.a = 0.85
 	if hair_colour != null:
 		hair_material.albedo_color = hair_colour
 	if skin_colour != null:
@@ -626,16 +634,16 @@ func update_team(new : String) -> void:
 	# Make nametag colour team's colour
 	# default colour name should be white, but the team's colour is technically grey
 	if new == "Default":
-		$Smoothing/NameLabel.modulate = Color("#fff")
+		name_label.modulate = Color("#fff")
 	else:
-		$Smoothing/NameLabel.modulate = world.get_current_map().get_teams().get_team(new).colour
+		name_label.modulate = world.get_current_map().get_teams().get_team(new).colour
 	Global.update_player_list_information()
 	set_spawns(world.get_spawnpoint_for_team(team))
 
 # Update this player's name with a new name.
 @rpc("call_local")
 func update_name(new : String) -> void:
-	$Smoothing/NameLabel.text = new
+	name_label.text = new
 	display_name = new
 	
 	# Add the player to the player list.
@@ -648,9 +656,9 @@ func set_name_visible(mode : bool) -> void:
 		return
 	# only visible for others
 	if multiplayer.get_unique_id() != get_multiplayer_authority():
-		$Smoothing/NameLabel.visible = mode
+		name_label.visible = mode
 	else:
-		$Smoothing/NameLabel.visible = false
+		name_label.visible = false
 
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
@@ -679,7 +687,7 @@ func _ready() -> void:
 		freeze = true
 		# update appearance
 		change_appearance()
-		$Smoothing/NameLabel.visible = false
+		name_label.visible = false
 	# execute for everyone
 	else:
 		Global.get_world().add_player_to_list(self)
@@ -705,7 +713,7 @@ func _ready() -> void:
 		set_spawns(world.get_spawnpoint_for_team(team))
 		go_to_spawn()
 		# hide your own name label
-		$Smoothing/NameLabel.visible = false
+		name_label.visible = false
 		# in case we were not present on client when server sent
 		# protect spawn call
 		_receive_server_protect_spawn(3.5, false)
@@ -1807,10 +1815,13 @@ func align_character_model_normal(ground_normal : Vector3) -> void:
 		character_model.scale = old_scale
 
 func show_chat(what : String) -> void:
-	chat_label.visible = true
-	chat_label.text = what
-	await get_tree().create_timer(6).timeout
-	chat_label.visible = false
+	if UserPreferences.show_chats_above_players:
+		chat_panel.visible = true
+		chat_label.text = what
+		chat_time.stop()
+		chat_time.start()
+		await chat_time.timeout
+		chat_panel.visible = false
 
 # for removing player from world
 func despawn() -> void:
