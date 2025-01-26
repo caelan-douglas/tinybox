@@ -122,15 +122,18 @@ func _ready() -> void:
 	_on_map_selected("Frozen Field", def_lines, def_image)
 
 func _on_search(what : String) -> void:
-	var list : Control = user_uploaded.get_node("ScrollContainer/ItemList")
+	var user_uploaded_list : Control = user_uploaded.get_node_or_null("ScrollContainer/ItemList")
+	if user_uploaded_list == null:
+		return
+	
 	if what != "":
-		for c : Control in list.get_children():
+		for c : Control in user_uploaded_list.get_children():
 			var name_label : Label = c.get_node_or_null("Map/Split/Labels/Title")
 			if name_label != null:
 				if !name_label.text.to_lower().contains(what.to_lower()):
 					c.visible = false
 	else:
-		for c : Control in list.get_children():
+		for c : Control in user_uploaded_list.get_children():
 			c.visible = true
 
 func _on_visibility_changed() -> void:
@@ -212,7 +215,11 @@ func clear() -> void:
 
 var req_time : int = 0
 func refresh_user_uploaded() -> void:
-	for c : Control in user_uploaded.get_node("ScrollContainer/ItemList").get_children():
+	var user_uploaded_list : Control = user_uploaded.get_node_or_null("ScrollContainer/ItemList")
+	if user_uploaded_list == null:
+		return
+	
+	for c : Control in user_uploaded_list.get_children():
 		c.queue_free()
 	
 	search.text = ""
@@ -222,7 +229,7 @@ func refresh_user_uploaded() -> void:
 	var l := Label.new()
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.text = JsonHandler.find_entry_in_file("ui/user_maps_info")
-	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l)
+	user_uploaded_list.add_child(l)
 	
 	# loading tag
 	var l2 := Label.new()
@@ -230,7 +237,7 @@ func refresh_user_uploaded() -> void:
 	l2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l2.text = "\n\n\nFetching worlds..."
 	l2.modulate = Color("#b973ff")
-	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l2)
+	user_uploaded_list.add_child(l2)
 	
 	req_time = Time.get_ticks_msec()
 	var req : HTTPRequest = HTTPRequest.new()
@@ -243,17 +250,29 @@ func refresh_user_uploaded() -> void:
 		push_error("An error occurred in the HTTP request.")
 
 func _user_maps_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
+	var user_uploaded_list : Control = user_uploaded.get_node_or_null("ScrollContainer/ItemList")
+	if user_uploaded_list == null:
+		return
 	# remove loading text
-	var loading_text : Control = user_uploaded.get_node("ScrollContainer/ItemList").get_node_or_null("_loading")
+	var loading_text : Control = user_uploaded_list.get_node_or_null("_loading")
 	if loading_text != null:
 		loading_text.queue_free()
+	
+	if (response_code != 200):
+		var lerr := Label.new()
+		lerr.name = "_error"
+		lerr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lerr.text = "\n\n\nUnable to fetch worlds. Do you have an internet connection?\n(If you changed the Database Repository setting, it may be incorrectly typed.)"
+		lerr.modulate = Color("#d65656")
+		user_uploaded_list.add_child(lerr)
+		return
 	
 	search.editable = true
 	# debug fetch time
 	var l := Label.new()
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.text = str("\n\nWorld list fetch took ", Time.get_ticks_msec() - req_time, "ms.")
-	user_uploaded.get_node("ScrollContainer/ItemList").add_child(l)
+	user_uploaded_list.add_child(l)
 	
 	var json := JSON.new()
 	json.parse(body.get_string_from_utf8())
