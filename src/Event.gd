@@ -111,6 +111,7 @@ func start() -> int:
 					await get_tree().create_timer(8).timeout
 					for winner : RigidPlayer in winners:
 						winner.change_state.rpc_id(winner.get_multiplayer_authority(), RigidPlayer.IDLE)
+						winner.protect_spawn()
 		EventType.WAIT_FOR_SECONDS:
 			# arg 0: seconds to wait
 			# arg 1: whether or not to show countdown
