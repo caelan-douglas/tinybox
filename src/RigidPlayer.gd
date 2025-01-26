@@ -662,9 +662,15 @@ func set_name_visible(mode : bool) -> void:
 
 # Update peers with new name and team info on join.
 @rpc("call_local", "reliable")
-func update_info(_who : int) -> void:
-	update_team.rpc(team)
-	update_name.rpc(Global.display_name)
+func update_info(_who : int, to_connected_peer : bool = false) -> void:
+	# If updating info to all other peers
+	if !to_connected_peer:
+		update_team.rpc(team)
+		update_name.rpc(Global.display_name)
+	# If updating info to only a specific (usually joined) peer
+	else:
+		update_team.rpc_id(_who, team)
+		update_name.rpc_id(_who, Global.display_name)
 	change_appearance()
 	# server handles kills and deaths
 	if multiplayer.is_server():
@@ -704,7 +710,8 @@ func _ready() -> void:
 		set_camera(get_viewport().get_camera_3d())
 		connect("body_entered", _on_body_entered)
 		multiplayer.connected_to_server.connect(update_info)
-		multiplayer.peer_connected.connect(update_info)
+		# when someone connects, broadcast our player info to only them
+		multiplayer.peer_connected.connect(update_info.bind(true))
 		# update peers with name and team
 		update_info(get_multiplayer_authority())
 		# update peers with appearance
