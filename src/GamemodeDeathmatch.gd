@@ -31,14 +31,18 @@ func _init(_ffa : bool) -> void:
 		gamemode_name = "Team Deathmatch"
 		gamemode_subtitle = "A classic arena team deathmatch mode! Be careful of friendly fire."
 
+# runs as server
+func set_run_parameters(p : RigidPlayer) -> void:
+	p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bouncyball)
+	p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
+
 func run() -> void:
 	if !multiplayer.is_server(): return
 	# wait for super method (camera preview)
 	await super()
 	
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bouncyball)
-		p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
+		set_run_parameters(p)
 	# run start events
 	Event.new(Event.EventType.CLEAR_LEADERBOARD).start()
 	if !ffa:

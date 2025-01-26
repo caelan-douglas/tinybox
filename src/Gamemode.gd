@@ -18,6 +18,8 @@ extends Node
 class_name Gamemode
 signal gamemode_ended
 
+var params : Array
+var mods : Array
 var gamemode_name := "Gamemode"
 var gamemode_subtitle := "A new gamemode has been started!"
 var running := false
@@ -26,31 +28,55 @@ var time_limit_seconds : int = 600
 @onready var game_timer : Timer = Timer.new()
 @onready var timer_ui : GameTimer = get_tree().current_scene.get_node("GameCanvas/Timer") as ProgressBar
 
-func start(params : Array, mods : Array) -> void:
+func start(_params : Array, _mods : Array) -> void:
 	# only server starts games
 	if !multiplayer.is_server(): return
+	# make sure if someone joins mid-game the properties sync
+	multiplayer.peer_connected.connect(_on_peer_connected)
+	
+	params = _params
+	mods = _mods
+	
 	running = true
 	print(get_multiplayer_authority(), " - Started gamemode: ", gamemode_name, " with params ", params, " and modifiers ", mods)
 	# clear player inventories
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		p.get_tool_inventory().delete_all_tools.rpc()
-		if mods.size() > 0:
-			p.set_move_speed.rpc(mods[0] as float)
-		if mods.size() > 1:
-			# set player health as server
-			p.set_max_health(mods[1] as int)
-			# fill the health
-			p.set_health(p.max_health as int)
-		if mods.size() > 2:
-			# jump force is a multiplier
-			p.set_jump_force.rpc(2.4 * mods[2] as float)
-		if mods.size() > 3:
-			Global.get_world().get_current_map().set_low_grav.rpc(mods[3] as bool)
+		set_parameters(p)
 	if params.size() > 0:
 		# the time limit chooser is in minutes but this is in
 		# seconds so we convert
 		time_limit_seconds = params[0] * 60
 	run()
+
+# Sync parameters on player join.
+func _on_peer_connected(id : int) -> void:
+	var joined_player : RigidPlayer
+	while joined_player == null:
+		joined_player = Global.get_world().get_node_or_null(str(id)) as RigidPlayer
+		await get_tree().physics_frame
+	set_parameters(joined_player)
+	set_run_parameters(joined_player)
+	if timer_ui != null:
+		timer_ui.set_visible_rpc.rpc_id(id, true)
+		timer_ui.set_max_val_rpc.rpc_id(id, time_limit_seconds)
+
+func set_parameters(p : RigidPlayer) -> void:
+	p.get_tool_inventory().delete_all_tools.rpc()
+	if mods.size() > 0:
+		p.set_move_speed.rpc(mods[0] as float)
+	if mods.size() > 1:
+		# set player health as server
+		p.set_max_health(mods[1] as int)
+		# fill the health
+		p.set_health(p.max_health as int)
+	if mods.size() > 2:
+		# jump force is a multiplier
+		p.set_jump_force.rpc(2.4 * mods[2] as float)
+	if mods.size() > 3:
+		Global.get_world().get_current_map().set_low_grav.rpc(mods[3] as bool)
+
+func set_run_parameters(p : RigidPlayer) -> void:
+	pass
 
 func run() -> void:
 	# only server starts games

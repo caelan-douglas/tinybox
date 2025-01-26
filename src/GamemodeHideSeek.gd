@@ -30,6 +30,14 @@ func start(params : Array, mods : Array) -> void:
 		seeker_amt = params[1]
 	super(params, mods)
 
+# runs as server
+func set_run_parameters(p : RigidPlayer) -> void:
+	var teams : Teams = Global.get_world().get_current_map().get_teams()
+	p.update_team.rpc(teams.get_team_list()[2].name)
+	p.set_name_visible.rpc(false)
+	p.connect("hit_by_melee", _on_hider_hit_by_melee.bind(p))
+	UIHandler.show_alert.rpc_id(p.get_multiplayer_authority(), str("You are a hider! Hide from the seekers (green)!"), 10, false, UIHandler.alert_colour_player)
+
 func run() -> void:
 	if !multiplayer.is_server(): return
 	# wait for super method (camera preview)
@@ -53,10 +61,7 @@ func run() -> void:
 		others.erase(seeker)
 	# set others to runners
 	for player : RigidPlayer in others:
-		player.update_team.rpc(teams.get_team_list()[2].name)
-		player.set_name_visible.rpc(false)
-		player.connect("hit_by_melee", _on_hider_hit_by_melee.bind(player))
-		UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), str("You are a hider! Hide from the seekers (green)!"), 10, false, UIHandler.alert_colour_player)
+		set_run_parameters(player)
 	# move all players to spawn
 	Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN).start()
 	# set seeker to locked for now
