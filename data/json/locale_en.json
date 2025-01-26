@@ -238,7 +238,8 @@
         "mus7": "Ahead of the Curve",
         "mus8": "Watermelon Shake",
         "mus9": "Transmission",
-        "mus10": "Lakehouse"
+        "mus10": "Lakehouse",
+        "mus11": "Horizon"
     },
     "enum": {
         "event_type": {

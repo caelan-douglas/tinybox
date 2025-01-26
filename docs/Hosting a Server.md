@@ -20,5 +20,6 @@ The server will use your saved display name, and will run out of your terminal.
 
 The command list can be shown by typing "?" in console.<br>
 Typing "$end" will end the server.<br>
-Typing "$quit" will exit the app.
-You can ban players with "$ban playername". This is an IP ban.
+Typing "$quit" will exit the app.<br>
+You can ban players with "$ban playername". This is an IP ban.<br>
+Changes to the map and player bans **are** saved when the server is shut down. However, admin privileges are revoked upon the admin leaving or the server being shut down, due to lack of authentication.
