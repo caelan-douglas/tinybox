@@ -49,7 +49,8 @@ func _on_request_completed(result : int, response_code : int, headers : PackedSt
 	if response_code != 200:
 		print("UserPreferences: could not get default database repo")
 		return
-	DEFAULT_DATABASE_REPO = body.get_string_from_utf8()
+	DEFAULT_DATABASE_REPO = body.get_string_from_utf8().strip_escapes()
+	print("UserPreferences: Fetched default database repo: '", DEFAULT_DATABASE_REPO, "'")
 	# reload in case using default repo
 	database_repo = load_pref("database_repo")
 

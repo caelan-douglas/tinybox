@@ -69,8 +69,12 @@ func load_prefs() -> void:
 	var loaded_player_chats : Variant = UserPreferences.load_pref("show_chats_above_players")
 	if loaded_player_chats != null:
 		UserPreferences.show_chats_above_players = loaded_player_chats as bool
-		
-	db_repo.text = UserPreferences.database_repo
+	
+	# only populate database repo text field if it is not the default
+	if UserPreferences.database_repo != UserPreferences.DEFAULT_DATABASE_REPO:
+		db_repo.text = UserPreferences.database_repo
+	else:
+		db_repo.text = ""
 	sensitivity_slider.value = UserPreferences.mouse_sensitivity
 	fov_slider.value = UserPreferences.camera_fov
 	player_chats.button_pressed = UserPreferences.show_chats_above_players
