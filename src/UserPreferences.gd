@@ -18,7 +18,7 @@ extends Node
 
 var os_path : String = ""
 # default repo for database items
-const DEFAULT_DATABASE_REPO : String = "https://tinybox-worlds.caelan-douglas.workers.dev/"
+var DEFAULT_DATABASE_REPO : String = "https://tinybox-worlds.caelan-douglas.workers.dev/"
 # user's current repo
 var database_repo : String = "https://tinybox-worlds.caelan-douglas.workers.dev/" :
 	set(value):
@@ -37,6 +37,21 @@ func _ready() -> void:
 		os_path = ""
 		for i in range(0, op_split.size() - 4):
 			os_path += str(op_split[i], "/")
+	
+	# get default database repo from github
+	var req : HTTPRequest = HTTPRequest.new()
+	add_child(req)
+	req.request_completed.connect(_on_request_completed)
+	# Points to the default repo url.
+	req.request("https://raw.githubusercontent.com/caelan-douglas/tinybox/main/.export_exclude/default_database_repo.txt")
+
+func _on_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
+	if response_code != 200:
+		print("UserPreferences: could not get default database repo")
+		return
+	DEFAULT_DATABASE_REPO = body.get_string_from_utf8()
+	# reload in case using default repo
+	database_repo = load_pref("database_repo")
 
 # Saves a preference to the disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
 func save_pref(key : String, value: Variant, section := "preferences") -> void:

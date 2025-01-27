@@ -271,7 +271,7 @@ func _user_maps_request_completed(result : int, response_code : int, headers : P
 	# debug fetch time
 	var l := Label.new()
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.text = str("\n\nWorld list fetch took ", Time.get_ticks_msec() - req_time, "ms.")
+	l.text = str("\n\nWorld list fetch took ", Time.get_ticks_msec() - req_time, "ms (from repo ", UserPreferences.database_repo, ").")
 	user_uploaded_list.add_child(l)
 	
 	var json := JSON.new()
