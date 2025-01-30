@@ -104,6 +104,8 @@ var time_last_tripped : int = 0
 
 var kills : int = 0
 var deaths : int = 0
+# -1 when not being used
+var capture_time : int = -1
 
 @onready var fire : Fire = $Fire
 @onready var bubble_particles : GPUParticles3D = $Smoothing/character_model/character/Skeleton3D/NeckAttachment/Bubbles
@@ -1738,6 +1740,14 @@ func update_deaths(new_deaths : int) -> void:
 	_receive_server_deaths.rpc(new_deaths)
 	Global.update_player_list_information()
 
+# server side
+func update_capture_time(new_capture_time : int) -> void:
+	if !multiplayer.is_server():
+		return
+	capture_time = new_capture_time
+	_receive_server_capture_time.rpc(new_capture_time)
+	Global.update_player_list_information()
+
 # client side
 @rpc("any_peer", "call_local", "reliable")
 func _receive_server_kills(new : int) -> void:
@@ -1750,6 +1760,13 @@ func _receive_server_kills(new : int) -> void:
 func _receive_server_deaths(new : int) -> void:
 	if multiplayer.is_server(): return
 	deaths = new
+	Global.update_player_list_information()
+
+# client side
+@rpc("any_peer", "call_local", "reliable")
+func _receive_server_capture_time(new : int) -> void:
+	if multiplayer.is_server(): return
+	capture_time = new
 	Global.update_player_list_information()
 
 # for fun

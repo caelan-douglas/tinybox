@@ -46,6 +46,7 @@ extends Node
 	"obj_track_big_slope": load("res://data/scene/editor_obj/track/TrackBigSlope.tscn"),
 	"obj_track_divided_transition": load("res://data/scene/editor_obj/track/TrackDividedTransition.tscn"),
 	"obj_track_divided": load("res://data/scene/editor_obj/track/TrackDivided.tscn"),
+	"obj_capture_point": load("res://data/scene/editor_obj/CapturePoint.tscn"),
 	# ENVIRONMENTS
 	"env_sunny": load("res://data/scene/environments/Sunny.tscn"),
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),

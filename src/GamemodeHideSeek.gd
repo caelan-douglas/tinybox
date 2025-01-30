@@ -21,14 +21,14 @@ var seeker_amt : int = 1
 
 # constructor for deathmatch
 func _init() -> void:
-	gamemode_name = "Hide & Seek"
+	gamemode_name = "Manhunt"
 	gamemode_subtitle = "Seekers chase down the Hiders. If the Seekers hit a Hider with their bat, they become a Seeker."
 
-func start(params : Array, mods : Array) -> void:
-	if params.size() > 1:
+func start(_params : Array, _mods : Array) -> void:
+	if _params.size() > 1:
 		# seeker starting amount (param 2)
-		seeker_amt = params[1]
-	super(params, mods)
+		seeker_amt = _params[1]
+	super(_params, _mods)
 
 # runs as server
 func set_run_parameters(p : RigidPlayer) -> void:

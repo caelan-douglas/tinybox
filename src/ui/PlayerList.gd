@@ -39,9 +39,17 @@ func update_list() -> void:
 			if str(player.name) == str(entry.name):
 				var k : Label = entry.get_node("HBoxContainer/K")
 				var d : Label = entry.get_node("HBoxContainer/D")
+				var capture : Label = entry.get_node("HBoxContainer/CaptureTime")
 				var player_team : Label = entry.get_node("HBoxContainer/Team")
 				k.text = str(player.kills)
 				d.text = str(player.deaths)
+				# if player has capture time
+				if player.capture_time > -1:
+					capture.visible = true
+					capture.text = str(player.capture_time)
+				# hide capture value when not being used (-1)
+				else:
+					capture.visible = false
 				player_team.text = str(player.team)
 				# set colour to our team colour.
 				if Global.get_world().get_current_map().get_teams().get_team(player.team) != null:

@@ -423,6 +423,15 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 func add_all_gamemodes() -> void:
 	# add FFA, always available
 	add_gamemode(GamemodeDeathmatch.new(true))
+	
+	var has_capture_point : bool = false
+	# check capture ffa
+	for obj in get_children():
+		if obj is CapturePoint:
+			add_gamemode(GamemodeKOTH.new(true))
+			has_capture_point = true
+			break
+	
 	# check tdm spawns
 	var first_team_spawn_name := ""
 	for obj in get_children():
@@ -436,6 +445,9 @@ func add_all_gamemodes() -> void:
 					# both tdm and hide and seek can be added
 					add_gamemode(GamemodeDeathmatch.new(false))
 					add_gamemode(GamemodeHideSeek.new())
+					if has_capture_point:
+						# team capture
+						add_gamemode(GamemodeKOTH.new(false))
 					# break out of loop once added
 					break
 

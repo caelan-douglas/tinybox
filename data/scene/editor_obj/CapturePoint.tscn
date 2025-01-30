@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://t8ujxmero2bt"]
+
+[ext_resource type="Script" path="res://src/CapturePoint.gd" id="1_bhrvc"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ix0xn"]
+top_radius = 8.0
+bottom_radius = 8.0
+height = 6.0
+radial_segments = 32
+rings = 1
+cap_bottom = false
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u1gd7"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.643, 0.416, 0.3)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dayl2"]
+height = 6.0
+radius = 8.0
+
+[node name="CapturePoint" type="Node3D"]
+script = ExtResource("1_bhrvc")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
+visible = false
+mesh = SubResource("CylinderMesh_ix0xn")
+skeleton = NodePath("../Area/CollisionShape3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_u1gd7")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+pixel_size = 0.001
+billboard = 1
+fixed_size = true
+text = "Capture Point"
+
+[node name="Area" type="Area3D" parent="."]
+collision_layer = 32
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
+shape = SubResource("CylinderShape3D_dayl2")
+disabled = true

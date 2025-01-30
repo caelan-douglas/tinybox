@@ -70,6 +70,7 @@ func start() -> int:
 			for player : RigidPlayer in Global.get_world().rigidplayer_list:
 				player.update_kills(0)
 				player.update_deaths(0)
+				player.update_capture_time(-1)
 		EventType.END_ACTIVE_GAMEMODE:
 			for gamemode : Gamemode in Global.get_world().gamemode_list:
 				if gamemode.running:

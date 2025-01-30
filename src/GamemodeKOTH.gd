@@ -14,22 +14,50 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
 extends Gamemode
-class_name GamemodeDeathmatch
+class_name GamemodeKOTH
 
-# whether or not it's a team deathmatch
+# whether or not it's a team KOTH
 var ffa : bool = false
+var capture_points : Array[CapturePoint] = []
+var capture_time_limit : int = 60
 
-# constructor for deathmatch
+# constructor for koth
 func _init(_ffa : bool) -> void:
 	ffa = _ffa
 	if ffa:
-		gamemode_name = "Deathmatch"
-		gamemode_subtitle = "A classic arena deathmatch mode! Free-for-all."
+		gamemode_name = "Capture"
+		gamemode_subtitle = "Capture and hold a point to win!"
 	# tdm
 	else:
-		gamemode_name = "Team Deathmatch"
-		gamemode_subtitle = "A classic arena team deathmatch mode! Be careful of friendly fire."
+		gamemode_name = "Team Capture"
+		gamemode_subtitle = "As a team, capture and hold a point to win!"
+
+func start(_params : Array, _mods : Array) -> void:
+	# only server starts games
+	if !multiplayer.is_server(): return
+	
+	if _params.size() > 1:
+		# capture time limit is default 60s
+		capture_time_limit = _params[1]
+	
+	# get all capture points in world
+	for c in Global.get_world().get_children():
+		if c is CapturePoint:
+			capture_points.append(c)
+			print(str("Capture Point added: ", c, "."))
+			c.set_visible_rpc.rpc(true)
+	
+	super(_params, _mods)
+
+# Sync parameters on player join.
+func _on_peer_connected(id : int) -> void:
+	super(id)
+	# sync capture point colours
+	for c in capture_points:
+		c.set_colour.rpc_id(id, c.current_colour)
+		c.set_visible_rpc.rpc(true)
 
 # runs as server
 func set_run_parameters(p : RigidPlayer) -> void:
@@ -55,10 +83,11 @@ func run() -> void:
 		# setup watchers
 		var watcher : Watcher
 		if ffa:
-			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS, ["kills", 14])
+			watcher = Watcher.new(Watcher.WatcherType.PLAYER_PROPERTY_EXCEEDS, ["capture_time", capture_time_limit - 1])
 			watcher.connect("ended", end)
+		# team capture
 		else:
-			watcher = Watcher.new(Watcher.WatcherType.TEAM_PROPERTY_EXCEEDS, ["kills", 19])
+			watcher = Watcher.new(Watcher.WatcherType.TEAM_PROPERTY_EXCEEDS, ["capture_time", capture_time_limit - 1])
 			watcher.connect("ended", end)
 		watcher.start()
 		connect("gamemode_ended", watcher.queue_free)
@@ -66,34 +95,38 @@ func run() -> void:
 func end(args : Array) -> void:
 	# only server ends games
 	if !multiplayer.is_server(): return
+	
+	for c in capture_points:
+		c.set_visible_rpc.rpc(false)
+	
 	if args.is_empty():
 		# free for all determinant
 		if ffa:
-			var player_highest_kills : RigidPlayer = null
+			var player_highest_capture : RigidPlayer = null
 			for player : RigidPlayer in Global.get_world().rigidplayer_list:
-				if player_highest_kills == null:
-					player_highest_kills = player
+				if player_highest_capture == null:
+					player_highest_capture = player
 				else:
-					if player.kills > player_highest_kills.kills:
-						player_highest_kills = player
+					if player.capture_time > player_highest_capture.capture_time:
+						player_highest_capture = player
 			# determine winner if we ended based on timer
-			args = [player_highest_kills.get_multiplayer_authority(), "player"]
-		#tdm
+			args = [player_highest_capture.get_multiplayer_authority(), "player"]
+		#team
 		else:
-			var team_highest_kills : Team = null
-			var team_highest_kill_count : int = 0
+			var team_highest_capture : Team = null
+			var team_highest_capture_count : int = 0
 			for team : Team in Global.get_world().get_current_map().get_teams().get_team_list():
-				var total_team_kills : int = 0
+				var total_team_capture : int = 0
 				for player : RigidPlayer in Global.get_world().rigidplayer_list:
 					if player.team == team.name:
-						total_team_kills += player.kills
-				if team_highest_kills == null:
-					team_highest_kills = team
-					team_highest_kill_count = total_team_kills
-				elif total_team_kills > team_highest_kill_count:
-					team_highest_kills = team
-					team_highest_kill_count = total_team_kills
-			args = [team_highest_kills.name, "team"]
+						total_team_capture += player.capture_time
+				if team_highest_capture == null:
+					team_highest_capture = team
+					team_highest_capture_count = total_team_capture
+				elif total_team_capture > team_highest_capture_count:
+					team_highest_capture = team
+					team_highest_capture_count = total_team_capture
+			args = [team_highest_capture.name, "team"]
 	# args returned from watcher does not have player/team distinction
 	else:
 		args.resize(2)

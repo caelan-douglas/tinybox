@@ -428,9 +428,9 @@ func _physics_process(delta : float) -> void:
 					elif Input.is_action_just_pressed("editor_rotate_right"):
 						active_preview_instance.rotate(Vector3.UP, deg_to_rad(-rot_amount))
 					elif Input.is_action_just_pressed("editor_rotate_up"):
-						active_preview_instance.rotate(camera.basis.x.round(), deg_to_rad(-rot_amount))
+						active_preview_instance.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
 					elif Input.is_action_just_pressed("editor_rotate_down"):
-						active_preview_instance.rotate(camera.basis.x.round(), deg_to_rad(rot_amount))
+						active_preview_instance.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
 					elif Input.is_action_just_pressed("editor_scale_up"):
 						if selected_item_is_scalable():
 							active_preview_instance.scale += Vector3(1, 1, 1)
@@ -549,3 +549,27 @@ func _physics_process(delta : float) -> void:
 								UIHandler.show_alert("Can't place there! Selection (green)\nmust be unobstructed", 4, false, UIHandler.alert_colour_error)
 					# regenerate after placement
 					_on_item_picked(selected_item_name_internal, "", false)
+
+# Find the closest Vector3 axis to a normalized vector using dot.
+func find_closest_axis(normalized_vector : Vector3) -> Vector3:
+	var axes : Array[Vector3] = [\
+		Vector3(1, 0, 0),
+		Vector3(0, 1, 0),\
+		Vector3(0, 0, 1),\
+	]
+	
+	var closest_axis := axes[0]
+	var max_dot : float = -1
+	var signed_max_dot : float = -1
+	# find closest axis out of 6 dof
+	for a in axes:
+		var dot : float = normalized_vector.dot(a)
+		if abs(dot) > max_dot:
+			max_dot = abs(dot)
+			signed_max_dot = dot
+			closest_axis = a
+	
+	if signed_max_dot >= 0:
+		return closest_axis
+	else:
+		return closest_axis * -1
