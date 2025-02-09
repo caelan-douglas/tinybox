@@ -69,6 +69,7 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$promote", "ex. $promote Playername - promotes player to admin. Be careful, this allows them to use all commands except $end, $promote, and $demote.", id_from)
 		_send_response("$demote", "ex. $demote Playername - demotes player from admin.", id_from)
 		_send_response("$ban", "ex. $ban Playername - bans a player from the current session.", id_from)
+		_send_response("$unban", "ex. $unban IP - unbans an IP of a user that had been previously banned.", id_from)
 		_send_response("$list", "List of connected players.", id_from)
 		_send_response("$admins", "List of server admins.", id_from)
 		_send_response("$loadmap", "ex. $loadmap Steep Swamp - Load an internal or saved map. (Exclude the .tbw extension.)", id_from)
@@ -250,6 +251,22 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 						_send_response("Info", "Player to ban not found", id_from)
 				else:
 					_send_response("Info", "Invalid use of $ban. Correct syntax example: $ban PLAYERNAME", id_from)
+					return
+			else:
+				_send_response("Info", "You don't have permission to do that!", id_from)
+		elif split_text[0] == "$unban":
+			if id_from == 1:
+				if split_text.size() > 1:
+					var player_ip: String = split_text[1]
+					if Global.server_banned_ips.has(player_ip):
+						Global.server_banned_ips.erase(player_ip)
+						# save to server config file
+						UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
+						_send_response("Info", str("Unbanned IP ", player_ip))
+					else:
+						_send_response("Info", "Invalid IP or IP not currently banned", id_from)
+				else:
+					_send_response("Info", "Invalid use of $unban. Correct syntax example: $unban IP", id_from)
 					return
 			else:
 				_send_response("Info", "You don't have permission to do that!", id_from)
