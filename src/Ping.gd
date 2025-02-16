@@ -18,31 +18,44 @@ extends Label
 
 @onready var update_timer : Timer = Timer.new()
 var ms_sent : float = 0
-var ms_recieved : float = 0
 
 func _ready() -> void:
 	add_child(update_timer)
 	update_timer.wait_time = 2
 	update_timer.connect("timeout", _on_ping_update)
 	update_timer.start()
+	
+	# reset sent time to avoid waiting for response after disconnecting
+	multiplayer.server_disconnected.connect(func() -> void: ms_sent = 0)
 
 func _on_ping_update() -> void:
 	if Global.connected_to_server:
-		# get the current time in ms at ping send.
-		ms_sent = Time.get_ticks_msec()
+		# check that response has been received from the previous ping before
+		# sending another
+		if ms_sent != 0:
+			update_label(Time.get_ticks_msec() - ms_sent)
+			return
+
 		# server should not ping itself
 		if multiplayer.get_unique_id() != 1:
+			# get the current time in ms at ping send.
+			ms_sent = Time.get_ticks_msec()
 			ping_server.rpc_id(1, multiplayer.get_unique_id())
+		else:
+			# the server should show 0 ping
+			update_label(0)
 
 @rpc("any_peer", "call_remote", "reliable")
 func ping_server(id_from : int) -> void:
 	# send the client a ping back.
-	recieve_ping.rpc_id(id_from)
+	receive_ping.rpc_id(id_from)
 
 @rpc("any_peer", "call_remote", "reliable")
-func recieve_ping() -> void:
+func receive_ping() -> void:
 	# as client, get ping.
-	ms_recieved = Time.get_ticks_msec()
-	text = str("Ping: ", ms_recieved - ms_sent)
-	ms_recieved = 0
+	update_label(Time.get_ticks_msec() - ms_sent)
+	# reset the send time so the timer can send another ping
 	ms_sent = 0
+
+func update_label(ping_ms : int) -> void:
+	text = str("Ping: ", ping_ms)
