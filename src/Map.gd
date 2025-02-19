@@ -20,10 +20,14 @@ class_name Map
 @export var gravity_scale := 1.0
 var death_limit_low : int = 20
 var death_limit_high : int = 400
-var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
+@export var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
 
+# set fallback values for loading new world before properties are set
 func reset_map_properties() -> void:
-	gravity_scale = 1.0
+	# set default gravity
+	set_gravity_scale.rpc(1.0)
+	set_gravity.rpc(false)
+	
 	death_limit_low = 20
 	death_limit_high = 400
 	songs = MusicHandler.ALL_SONGS_LIST.duplicate()
@@ -47,17 +51,29 @@ func _ready() -> void:
 	# wait for music / server setting to load if on main menu
 	await get_tree().create_timer(0.2).timeout
 	MusicHandler.switch_song(songs)
-	# Modify default gravity
-	if !self is Editor:
-		set_low_grav.rpc(false)
+	if multiplayer.is_server():
+		multiplayer.peer_connected.connect(_on_peer_connected)
+
+# runs as server
+func _on_peer_connected(id : int) -> void:
+	set_gravity_scale.rpc_id(id, gravity_scale)
+	set_gravity.rpc_id(false)
 
 @rpc ("authority", "call_local", "reliable")
-func set_low_grav(mode : bool = false) -> void:
+func set_gravity_scale(value : float) -> void:
 	# only server or auth can change this
-	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
 		return
 	
-	if mode == false:
+	gravity_scale = value
+
+@rpc ("authority", "call_local", "reliable")
+func set_gravity(low_grav : bool = false) -> void:
+	# only server or auth can change this
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
+	
+	if low_grav == false:
 		PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * gravity_scale)
 	else:
 		PhysicsServer3D.area_set_param(get_viewport().find_world_3d().space, PhysicsServer3D.AREA_PARAM_GRAVITY, 9.8 * 0.5)

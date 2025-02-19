@@ -73,7 +73,8 @@ func set_parameters(p : RigidPlayer) -> void:
 		# jump force is a multiplier
 		p.set_jump_force.rpc(2.4 * mods[2] as float)
 	if mods.size() > 3:
-		Global.get_world().get_current_map().set_low_grav.rpc(mods[3] as bool)
+		# set low gravity toggle to on
+		Global.get_world().get_current_map().set_gravity.rpc(mods[3] as bool)
 
 func set_run_parameters(p : RigidPlayer) -> void:
 	pass
@@ -114,7 +115,7 @@ func end(params : Array) -> void:
 		p.set_move_speed.rpc(5)
 		p.set_jump_force.rpc(2.4)
 		# reset map gravity, in case it changed
-		Global.get_world().get_current_map().set_low_grav.rpc(false)
+		Global.get_world().get_current_map().set_gravity.rpc(false)
 	# never free gamemodes because they are saved as part of the world
 	emit_signal("gamemode_ended")
 	running = false

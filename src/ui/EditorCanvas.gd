@@ -27,6 +27,7 @@ class_name EditorCanvas
 @onready var water_type_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/WaterType"
 @onready var env_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/Environment"
 @onready var bg_button : Button = $"PauseMenu/ScrollContainer/Sections/World Properties/Background"
+@onready var grav_slider : HSlider = $"PauseMenu/ScrollContainer/Sections/World Properties/GravScale"
 @onready var water_height_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"
 @onready var death_lim_low_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"
 @onready var death_lim_hi_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"
@@ -47,6 +48,7 @@ func _on_map_loaded() -> void:
 		bg_button.connect("pressed", (editor as Editor).switch_background)
 		
 		# map property adjusters
+		grav_slider.connect("value_changed", (editor as Editor).set_gravity_scale)
 		water_height_adj.connect("value_changed", (editor as Editor).adjust_water_height)
 		death_lim_low_adj.connect("value_changed", (editor as Editor).adjust_death_limit_low)
 		death_lim_hi_adj.connect("value_changed", (editor as Editor).adjust_death_limit_high)

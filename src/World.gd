@@ -204,6 +204,7 @@ func save_tbw(world_name : String, server : bool = false, selection : Array = []
 		# Save map properties
 		file.store_line(str("death_limit_low ; ", get_current_map().death_limit_low))
 		file.store_line(str("death_limit_high ; ", get_current_map().death_limit_high))
+		file.store_line(str("gravity_scale ; ", get_current_map().gravity_scale))
 	# TBW object list
 	file.store_line("[objects]")
 	# Save objects before bricks
@@ -330,9 +331,9 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	# Load default empty map, unless we are in the editor
 	if !(Global.get_world().get_current_map() is Editor):
 		load_map(load(str("res://data/scene/BaseWorld/BaseWorld.tscn")) as PackedScene)
-	# if we are in the editor, load map defaults because the map hasn't been reloaded
-	else:
-		Global.get_world().get_current_map().reset_map_properties()
+	
+	# set fallback values
+	Global.get_world().get_current_map().reset_map_properties()
 	
 	# BIG file, show loading visual
 	if lines.size() > 100:
@@ -342,6 +343,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	# amount of lines to read in a frame
 	var max_proc := 32
 	var cur_proc := 0
+	
 	# run through each line
 	for line : String in lines:
 		cur_proc += 1
@@ -359,6 +361,11 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 				get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
 			if str(line).begins_with("death_limit_high ; "):
 				get_current_map().death_limit_high = str(line).split(" ; ")[1] as int
+			if str(line).begins_with("gravity_scale ; "):
+				var gravity_scale : float = str(line).split(" ; ")[1] as float
+				# Modify default gravity
+				get_current_map().set_gravity_scale.rpc(gravity_scale)
+				get_current_map().set_gravity.rpc(false)
 			# final step, place building
 			if str(line) == "[building]":
 				# disable loading canvas if we used it

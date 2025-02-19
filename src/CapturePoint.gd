@@ -28,7 +28,7 @@ var current_colour : Color = Color("c7a46a4d")
 @onready var collider : CollisionShape3D = $Area/CollisionShape3D
 @onready var mesh : MeshInstance3D = $Mesh
 @onready var area : Area3D = $Area
-@onready var label : Label3D = $Label3D
+@onready var label : Label3D = $Mesh/Label3D
 
 var held_by : RigidPlayer :
 	set(p):
@@ -83,6 +83,7 @@ func _init() -> void:
 func _ready() -> void:
 	if !multiplayer.is_server():
 		return
+	set_visible_rpc(false)
 	area.connect("body_entered", _on_body_entered)
 	area.connect("body_exited", _on_body_exited)
 	capture_timer()
@@ -167,5 +168,8 @@ func properties_as_dict() -> Dictionary:
 
 @rpc("authority", "call_local", "reliable")
 func set_visible_rpc(mode : bool) -> void:
+	# always show in editor
+	if Global.get_world().get_current_map() is Editor:
+		mode = true
 	mesh.visible = mode;
 	collider.disabled = !mode;

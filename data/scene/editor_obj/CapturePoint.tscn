@@ -25,13 +25,12 @@ script = ExtResource("1_bhrvc")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
-visible = false
 mesh = SubResource("CylinderMesh_ix0xn")
 skeleton = NodePath("../Area/CollisionShape3D")
 surface_material_override/0 = SubResource("StandardMaterial3D_u1gd7")
 
-[node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+[node name="Label3D" type="Label3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08165e-12, 2, -2.08165e-12)
 pixel_size = 0.001
 billboard = 1
 fixed_size = true
@@ -44,4 +43,3 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
 shape = SubResource("CylinderShape3D_dayl2")
-disabled = true

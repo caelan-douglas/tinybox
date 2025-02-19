@@ -61,9 +61,9 @@ func _ready() -> void:
 	# create sets for bricks and objects
 	create_set("Basic bricks")
 	if editor_mode:
+		create_set("Special")
 		create_set("Objects")
 		create_set("Track pieces")
-		create_set("Special")
 	else:
 		create_set("More object types are available in the World Editor.")
 	for item in item_names_list:
@@ -83,7 +83,11 @@ func _ready() -> void:
 				add_to_set("Basic bricks", item_button)
 			elif item.begins_with("obj_track"):
 				add_to_set("Track pieces", item_button)
-			elif item == "obj_lifter" || item == "obj_pickup" || item == "obj_spawnpoint" || item == "obj_camera_preview_point":
+			elif item == "obj_lifter" ||\
+			item == "obj_pickup" ||\
+			item == "obj_spawnpoint" ||\
+			item == "obj_camera_preview_point" ||\
+			item == "obj_capture_point":
 				add_to_set("Special", item_button)
 			else:
 				add_to_set("Objects", item_button)

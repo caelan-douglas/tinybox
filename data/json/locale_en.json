@@ -241,7 +241,8 @@
         "mus8": "Watermelon Shake",
         "mus9": "Transmission",
         "mus10": "Lakehouse",
-        "mus11": "Horizon"
+        "mus11": "Horizon",
+        "mus12": "Good Morning"
     },
     "enum": {
         "event_type": {

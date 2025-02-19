@@ -217,6 +217,7 @@ _data = {
 
 [node name="MultiplayerMenuMap" type="Node3D"]
 script = ExtResource("1_uutk4")
+songs = ["mus12"]
 
 [node name="RigidPlayer" parent="." instance=ExtResource("2_pa7kw")]
 transform = Transform3D(0.922187, 5.58064e-09, 0.386743, -9.07914e-09, 1, 7.21934e-09, -0.386743, -1.01689e-08, 0.922187, -0.905372, -1.52259, -2.68341)

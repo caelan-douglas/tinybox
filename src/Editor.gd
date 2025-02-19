@@ -57,6 +57,8 @@ func _on_tbw_loaded() -> void:
 	# Set map height adjusters
 	editor_canvas.death_lim_low_adj.set_value(death_limit_low)
 	editor_canvas.death_lim_hi_adj.set_value(death_limit_high)
+	# Set gravity adjuster
+	editor_canvas.grav_slider.set_value(gravity_scale)
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:

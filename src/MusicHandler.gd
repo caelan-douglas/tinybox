@@ -27,7 +27,7 @@ var ui_setting := 1.0
 var min_db : float = 30
 var current_song_name := ""
 var song_list : Array = [""]
-const ALL_SONGS_LIST : Array = ["mus1", "mus2", "mus3", "mus4", "mus5", "mus6", "mus7", "mus8", "mus9", "mus10", "mus11"]
+const ALL_SONGS_LIST : Array = ["mus1", "mus2", "mus3", "mus4", "mus5", "mus6", "mus7", "mus8", "mus9", "mus10", "mus11", "mus12"]
 
 @onready var music_player : AudioStreamPlayer = $AudioStreamPlayer
 @onready var music_animator : AnimationPlayer = $AudioStreamPlayer/AnimationPlayer
