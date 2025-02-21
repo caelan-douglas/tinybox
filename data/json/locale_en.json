@@ -227,7 +227,8 @@
             "brick_button": "Button with customizable parameters.",
             "brick_lamp": "Lamp that provides light. Will shut off if displaced.",
             "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees.",
-            "brick_explosive": "Explodes when a button attached to it is pressed or it is hit by a bomb, rocket, etc."
+            "brick_explosive": "Explodes when a button attached to it is pressed or it is hit by a bomb, rocket, etc.",
+            "brick_activator": "Activates (releases) the brick group it is attached to, making it susceptible to gravity.\nAlso allows vehicles to auto-drive with set steering and acceleration, or to follow the nearest player."
         }
     },
     "songs": {
