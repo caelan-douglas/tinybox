@@ -4,4 +4,3 @@
 
 [node name="Gamemode" type="Node3D"]
 script = ExtResource("1_8j4hb")
-tbw_object_type = "gamemode"

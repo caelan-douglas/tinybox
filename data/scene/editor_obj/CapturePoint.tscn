@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://t8ujxmero2bt"]
+[gd_scene load_steps=8 format=3 uid="uid://t8ujxmero2bt"]
 
 [ext_resource type="Script" path="res://src/CapturePoint.gd" id="1_bhrvc"]
+[ext_resource type="AudioStream" uid="uid://diffqxt3veixw" path="res://data/audio/capture/capture.ogg" id="2_tro2i"]
+[ext_resource type="AudioStream" uid="uid://bbm4gvvgagrsi" path="res://data/audio/capture/lost.ogg" id="3_0py6e"]
+[ext_resource type="AudioStream" uid="uid://bh65w2wikxw37" path="res://data/audio/capture/contested.ogg" id="4_af6hn"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ix0xn"]
 top_radius = 8.0
@@ -43,3 +46,15 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
 shape = SubResource("CylinderShape3D_dayl2")
+
+[node name="Capture" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_tro2i")
+bus = &"UI"
+
+[node name="Lost" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_0py6e")
+bus = &"UI"
+
+[node name="Contested" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_af6hn")
+bus = &"UI"

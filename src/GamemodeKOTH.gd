@@ -63,16 +63,17 @@ func _on_peer_connected(id : int) -> void:
 func set_run_parameters(p : RigidPlayer) -> void:
 	p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bouncyball)
 	p.get_tool_inventory().add_tool.rpc(ToolInventory.ToolIdx.Bat)
+	p.update_capture_time(0)
 
 func run() -> void:
 	if !multiplayer.is_server(): return
 	# wait for super method (camera preview)
 	await super()
 	
-	for p : RigidPlayer in Global.get_world().rigidplayer_list:
-		set_run_parameters(p)
 	# run start events
 	Event.new(Event.EventType.CLEAR_LEADERBOARD).start()
+	for p : RigidPlayer in Global.get_world().rigidplayer_list:
+		set_run_parameters(p)
 	if !ffa:
 		Event.new(Event.EventType.BALANCE_TEAMS).start()
 	Event.new(Event.EventType.MOVE_ALL_PLAYERS_TO_SPAWN).start()
