@@ -278,7 +278,8 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 func _response(sender : String, text : String) -> void:
 	emit_signal("command_response", sender, text)
 	if Global.server_mode() && multiplayer.is_server():
-		print(sender, " >> ", text)
+		var time := Time.get_datetime_dict_from_system()
+		print("(", time["day"], "/", time["month"], "/", time["year"], " @ ", time["hour"], ":", time["minute"], ") ", sender, " >> ", text)
 
 func _send_response(sender : String, text : String, only_to_id : int = -1) -> void:
 	if only_to_id == -1:
