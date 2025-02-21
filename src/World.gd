@@ -619,6 +619,8 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	# change ownership first
 	# wait a bit before checking joints
 	await get_tree().create_timer(0.1).timeout
+	if building_group[0] == null:
+		return
 	# update first brick pos for sorter
 	first_brick_pos = building_group[0].global_position
 	var building_group_extras := []

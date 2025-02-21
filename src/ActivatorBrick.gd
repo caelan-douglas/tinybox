@@ -24,10 +24,24 @@ var follow_nearby_player : bool = true
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
 	super(property, value)
+	# set mass after determing mass mult from size
+	mass = 10 * mass_mult
+
+# Set the material of this brick to a different one, 
+# and update any related properties.
+@rpc("call_local")
+func set_material(new : Brick.BrickMaterial) -> void:
+	# don't change material on activator bricks
+	pass
+
+@rpc("any_peer", "call_local", "reliable")
+func set_colour(new : Color) -> void:
+	# don't change colour
+	pass
 
 func _init() -> void:
 	_brick_spawnable_type = "brick_activator"
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player"]
 
 func _ready() -> void:
 	super()

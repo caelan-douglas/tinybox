@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://c2pwwy57eoilm"]
+[gd_scene load_steps=15 format=3 uid="uid://c2pwwy57eoilm"]
 
 [ext_resource type="Script" path="res://src/ActivatorBrick.gd" id="1_w1b6s"]
 [ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_rvino"]
 [ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_0ykmc"]
+[ext_resource type="Texture2D" uid="uid://dv43g17rxqbfe" path="res://data/textures/activator_brick.jpg" id="4_aikdr"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_oh56m"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="5_o44xs"]
 
@@ -17,6 +18,18 @@ properties/1/spawn = true
 properties/1/replication_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y551j"]
+load_path = "res://.godot/imported/wood_tex_normal.jpg-ff310ac6ae7c28ca80e2da168daa7524.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_us10a"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_aikdr")
+roughness_texture_channel = 4
+normal_texture = SubResource("CompressedTexture2D_y551j")
+uv1_offset = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
 size = Vector3(0.9, 0.9, 0.9)
@@ -47,6 +60,9 @@ shape = SubResource("BoxShape3D_b80at")
 script = ExtResource("2_rvino")
 
 [node name="model" parent="Smoothing" instance=ExtResource("3_0ykmc")]
+
+[node name="Cube" parent="Smoothing/model" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_us10a")
 
 [node name="IntersectDetector" type="Area3D" parent="."]
 collision_mask = 3
@@ -88,3 +104,5 @@ shape = SubResource("BoxShape3D_w63pj")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5)
 pixel_size = 0.005
 texture = ExtResource("5_o44xs")
+
+[editable path="Smoothing/model"]
