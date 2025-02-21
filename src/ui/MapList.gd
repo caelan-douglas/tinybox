@@ -21,7 +21,7 @@ class_name MapList
 @export var report_button : Button
 
 @onready var built_in : VBoxContainer = $"TabContainer/Built-in"
-@onready var your_maps : VBoxContainer = $"TabContainer/Your maps"
+@onready var your_maps : VBoxContainer = $"TabContainer/Your maps (local disk)"
 @onready var user_uploaded : VBoxContainer = $"TabContainer/World Browser"
 @onready var all_lists : Array = [built_in, your_maps, user_uploaded]
 @onready var window : Control = $TabContainer
@@ -52,6 +52,7 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 	var entry_map_button : Button = entry.get_node("Map")
 	var entry_img : TextureRect = entry.get_node("Map/Split/Image")
 	var entry_featured : Control = entry.get_node("Map/Split/Labels/FeaturedTag")
+	var entry_new : Control = entry.get_node("Map/Split/Labels/NewTag")
 	var entry_title : Label = entry.get_node("Map/Split/Labels/Title")
 	var entry_auth : Label = entry.get_node("Map/Split/Labels/Author")
 	var entry_date : Label = entry.get_node("Map/Split/Labels/Date")
@@ -71,6 +72,12 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 				entry_is_featured = true
 		elif l.contains("date ;"):
 			entry_date.text = str("on ", l.split(" ; ")[1])
+			# calculate if "new" (uploaded <2 weeks ago)
+			var upload_date : int = Time.get_unix_time_from_datetime_string(str(l.split(" ; ")[1]))
+			var current_date : int = Time.get_unix_time_from_system()
+			# 2 weeks in seconds
+			if (current_date - upload_date < 1209600):
+				entry_new.visible = true
 		elif l.contains("downloads ;"):
 			entry_downloads.text = str("Downloads: ", l.split(" ; ")[1])
 	# set image
