@@ -146,6 +146,10 @@ func update_subtitle() -> void:
 
 func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
 	super(mode, from_click)
+	# zero out rotation for player
+	if type == ToolType.PLAYER:
+		global_rotation = Vector3.ZERO
+		select_area.global_rotation = Vector3.ZERO
 	if mode == false:
 		item_chooser.hide_item_chooser()
 		if item_chooser.is_connected("item_picked", _on_item_picked):
@@ -235,12 +239,6 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		# relist properties while instance has script
 		if relist_properties:
 			selected_item_properties = property_editor.list_object_properties(inst, self)
-		# set preview motor side
-		if inst is MotorBrick:
-			if selected_item_properties.has("flip_motor_side"):
-				inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
-		# disable script
-		inst.set_script(null)
 		# offset objects down a bit, also update preview
 		if item_name_internal.begins_with("obj"):
 			if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
@@ -250,6 +248,23 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		# add instance as preview
 		active_preview_instance = inst
 		preview_node.add_child(inst)
+		
+		# set preview-specific parameters ------------
+		# set preview motor side
+		if inst is MotorBrick:
+			if selected_item_properties.has("flip_motor_side"):
+				inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
+		# set capture point radius and height
+		if inst is CapturePoint:
+			if selected_item_properties.has("radius"):
+				inst.set_property("radius", selected_item_properties["radius"])
+			if selected_item_properties.has("height"):
+				inst.set_property("height", selected_item_properties["height"])
+		# -------------------------------------------
+		
+		# disable script
+		inst.set_script(null)
+		# remove collision
 		remove_item_collision(Global.get_all_children(inst) as Array)
 		inst.position += item_offset
 		inst.rotation = last_rotation
