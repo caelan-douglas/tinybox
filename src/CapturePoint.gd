@@ -116,7 +116,7 @@ func _init() -> void:
 func _ready() -> void:
 	if !multiplayer.is_server():
 		return
-	#Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
+	Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
 	area.connect("body_entered", _on_body_entered)
 	area.connect("body_exited", _on_body_exited)
 	capture_timer()
