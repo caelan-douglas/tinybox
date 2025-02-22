@@ -244,19 +244,22 @@ func update_appearance(shirt : int, shirt_texture_base64 : String, hair : int, s
 			if image is Image:
 				shirt_material.albedo_texture = ImageTexture.new().create_from_image(image)
 	if hair != null:
+		var all_hairs : Array = []
+		all_hairs.append(armature.get_node("hair_short"))
+		all_hairs.append(armature.get_node("hair_ponytail"))
+		all_hairs.append(armature.get_node("hair_baseballcap"))
+		for h : Node in all_hairs:
+			h.visible = false
 		match hair:
 			# short
 			0:
-				armature.get_node("hair_short").visible = true
-				armature.get_node("hair_ponytail").visible = false
+				all_hairs[0].visible = true
 			# ponytail
 			1:
-				armature.get_node("hair_short").visible = false
-				armature.get_node("hair_ponytail").visible = true
-			# bald
-			2:
-				armature.get_node("hair_short").visible = false
-				armature.get_node("hair_ponytail").visible = false
+				all_hairs[1].visible = true
+			# baseball cap
+			3:
+				all_hairs[2].visible = true
 
 # Returns this player's tool inventory.
 func get_tool_inventory() -> ToolInventory:

@@ -21,12 +21,12 @@ class_name MapList
 @export var report_button : Button
 
 @onready var built_in : VBoxContainer = $"TabContainer/Built-in"
-@onready var your_maps : VBoxContainer = $"TabContainer/Your maps (local disk)"
-@onready var user_uploaded : VBoxContainer = $"TabContainer/World Browser"
+@onready var your_maps : VBoxContainer = $"TabContainer/Saved maps"
+@onready var user_uploaded : VBoxContainer = $"TabContainer/World Browser (Online)"
 @onready var all_lists : Array = [built_in, your_maps, user_uploaded]
 @onready var window : Control = $TabContainer
 
-@onready var search : LineEdit = $"TabContainer/World Browser/Search"
+@onready var search : LineEdit = $"TabContainer/World Browser (Online)/Search"
 
 @onready var map_list_entry : PackedScene = preload("res://data/scene/ui/MapListEntry.tscn")
 
