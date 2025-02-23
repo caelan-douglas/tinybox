@@ -240,6 +240,7 @@ vertical_alignment = 1
 script = ExtResource("6_aufvl")
 
 [node name="PauseMenu" type="Control" parent="."]
+visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
