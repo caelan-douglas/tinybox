@@ -169,7 +169,7 @@ func has_tool_by_name(name : String) -> Tool:
 
 # Add a new tool to this tool inventory.
 @rpc("any_peer", "call_local", "reliable")
-func add_tool(tool : ToolIdx, ammo : int = -1) -> void:
+func add_tool(tool : ToolIdx, ammo : int = -1, params : Dictionary = {}) -> void:
 	# only run as auth
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
@@ -178,6 +178,10 @@ func add_tool(tool : ToolIdx, ammo : int = -1) -> void:
 		ntool.ammo = ammo
 		if ntool is ShootTool:
 			ntool.restore_ammo = false
+	# set custom tool parameters (ie. knockback, damage)
+	if !params.is_empty():
+		for param : String in params.keys():
+			ntool.set(str(param), params[param])
 	add_child(ntool, true)
 	resize_ui()
 

@@ -428,8 +428,9 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 
 # add gamemodes based on their requirements
 func add_all_gamemodes() -> void:
-	# add FFA, always available
+	# add FFA & Home Run, always available
 	add_gamemode(GamemodeDeathmatch.new(true))
+	add_gamemode(GamemodeHomeRun.new(true))
 	
 	var has_capture_point : bool = false
 	# check capture ffa
@@ -451,6 +452,7 @@ func add_all_gamemodes() -> void:
 				if obj.team_name != first_team_spawn_name:
 					# both tdm and hide and seek can be added
 					add_gamemode(GamemodeDeathmatch.new(false))
+					add_gamemode(GamemodeHomeRun.new(false))
 					add_gamemode(GamemodeHideSeek.new())
 					if has_capture_point:
 						# team capture

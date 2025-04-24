@@ -25,6 +25,7 @@ enum MeleeType {
 @export var _melee_type : MeleeType = MeleeType.BAT
 @export var damage : int = 4
 @export var cooldown : int = 7
+var knockback : int = 0
 var cooldown_counter : int = 0
 var deflect_time := 0
 var is_hitting := false
@@ -92,6 +93,11 @@ func on_hit(body : Node3D) -> void:
 				body.emit_signal("hit_by_melee", self)
 			# apply small impulse from bat hit
 			body.apply_impulse(Vector3(randi_range(-2, 2), 5, randi_range(-2, 2)))
+			# apply impulse from knockback (defaults zero, changed with modifiers)
+			if knockback > 0:
+				var knockback_vec : Vector3 = global_position.direction_to(body.global_position).normalized() * knockback
+				knockback_vec.y = knockback * 0.5
+				body.apply_impulse(knockback_vec)
 			# we hit a player, set the player's last hit by ID to this one
 			body.set_last_hit_by_id.rpc(get_multiplayer_authority())
 	elif body is Character:

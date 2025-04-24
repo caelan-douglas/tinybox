@@ -130,6 +130,9 @@ func _on_item_selected(index : int) -> void:
 			"Capture", "Team Capture":
 				# change limit for capture time
 				add_param_or_mod_adjuster(true, 1, 60, "Capture Time Limit (s)", 15, 240)
+			"Home Run", "Team Home Run":
+				# change bat knockback force
+				add_param_or_mod_adjuster(true, 1, 10, "Bat Hit Force", 5, 50)
 
 func _update_gamemode_params(new_param : int, param_idx : int) -> void:
 	selected_mode_params[param_idx] = new_param
