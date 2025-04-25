@@ -170,3 +170,14 @@ func _process(delta : float) -> void:
 func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inactive : bool = true) -> void:
 	super(mode, from_click, free_camera_on_inactive)
 	
+func delete() -> void:
+	if !is_multiplayer_authority() || type == ToolType.EDITOR: return
+	
+	predelete = true
+	update_beam_active.rpc(false)
+	_force_stop_audio.rpc()
+	super()
+
+@rpc("any_peer", "call_local", "reliable")
+func _force_stop_audio() -> void:
+	audio.stop()
