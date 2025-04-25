@@ -431,6 +431,7 @@ func add_all_gamemodes() -> void:
 	# add FFA & Home Run, always available
 	add_gamemode(GamemodeDeathmatch.new(true))
 	add_gamemode(GamemodeHomeRun.new(true))
+	add_gamemode(GamemodeBalls.new(true))
 	
 	var has_capture_point : bool = false
 	# check capture ffa
@@ -453,6 +454,7 @@ func add_all_gamemodes() -> void:
 					# both tdm and hide and seek can be added
 					add_gamemode(GamemodeDeathmatch.new(false))
 					add_gamemode(GamemodeHomeRun.new(false))
+					add_gamemode(GamemodeBalls.new(false))
 					add_gamemode(GamemodeHideSeek.new())
 					if has_capture_point:
 						# team capture

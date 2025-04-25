@@ -36,34 +36,17 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 
 func _on_start_gamemode_pressed() -> void:
-	server_start_gamemode.rpc_id(1, selector.selected, selected_mode_params, selected_mode_mods)
+	Global.server_start_gamemode.rpc_id(1, selector.selected, selected_mode_params, selected_mode_mods)
 
 func _on_peer_connected(id : int) -> void:
 	# only execute from the owner
 	if !multiplayer.is_server(): return
 	_populate_client_gamemode_list.rpc_id(id, gamemode_names_list)
 
-@rpc("any_peer", "call_local", "reliable")
-func server_start_gamemode(idx : int, params : Array, mods : Array) -> void:
-	for gm : Gamemode in Global.get_world().gamemode_list:
-		if gm.running:
-			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Can't start a new gamemode while one is currently running!", 6, false, UIHandler.alert_colour_error)
-			return
-		
-	if Global.get_world().gamemode_list.size() > 0:
-		Global.get_world().gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
-		Global.get_world().gamemode_list[idx].start(params, mods)
-	else:
-		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "There are no gamemodes to start!")
-
 func _on_end_gamemode_pressed() -> void:
 	if !multiplayer.is_server(): return
 	var e : Event = Event.new(Event.EventType.END_ACTIVE_GAMEMODE, [])
 	e.start()
-
-func _on_gamemode_ended(idx : int) -> void:
-	if Global.get_world().gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
-		Global.get_world().gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
 
 func _on_tbw_loaded() -> void:
 	# server handles
@@ -95,6 +78,10 @@ func _populate_client_gamemode_list(gamemode_names : Array) -> void:
 				selector.set_item_tooltip(selector.item_count - 1, "A classic arena Deathmatch mode, but with teams.\n\nStart with a ball and a bat; if the map has them, you can\ncollect pickups like rockets, bombs and missiles.")
 			"Manhunt":
 				selector.set_item_tooltip(selector.item_count - 1, "Hide & Seek following the manhunt rules.\n\nStarts with one Seeker; the rest of the players are hiders.\nWhen the seeker hits a hider with their bat, they too become a seeker.\nThe seekers win if all the hiders are found before the time limit.\nThe hiders win if at least one of them lasts till the time limit.")
+			"Home Run", "Team Home Run":
+				selector.set_item_tooltip(selector.item_count - 1, "A variant of the Deathmatch mode.\n\nPlayers are given high knockback bats and tasked\nwith flinging each other away.\n\nBest played on a map with cliffs!")
+			"Balls!!!", "Team Balls!!!":
+				selector.set_item_tooltip(selector.item_count - 1, "A variant of the Deathmatch mode.\n\nYou are given only a bouncyball, but it fires very quickly.\nSpam the left mouse button!")
 	# load default params
 	_on_item_selected(0)
 

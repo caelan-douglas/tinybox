@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene load_steps=45 format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" path="res://src/Ping.gd" id="2_884d4"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://src/ui/GameTimer.gd" id="10_aw20e"]
 [ext_resource type="Script" path="res://src/FrameCounter.gd" id="10_x8dyc"]
 [ext_resource type="Texture2D" uid="uid://b1wwmbpy1qux2" path="res://data/textures/ui/progress_texture_left_over.png" id="12_2re8m"]
+[ext_resource type="PackedScene" uid="uid://p3qpu0ujxkis" path="res://data/scene/ui/VotePanel.tscn" id="12_g8epv"]
 [ext_resource type="Texture2D" uid="uid://w20axlg2ac27" path="res://data/textures/ui/progress_texture_left.png" id="13_jaf8i"]
 [ext_resource type="PackedScene" uid="uid://d4f0w4x3panmu" path="res://data/scene/ui/MapList.tscn" id="14_l2isx"]
 [ext_resource type="Texture2D" uid="uid://nhu8qlesmlv2" path="res://data/textures/ui/progress_texture_right.png" id="14_yidfq"]
@@ -25,6 +26,7 @@
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="16_hdnsf"]
 [ext_resource type="Texture2D" uid="uid://cawrg7wtfx8vo" path="res://data/textures/ui/flag.png" id="16_lfo80"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="20_eusui"]
+[ext_resource type="Shader" path="res://data/shaders/wavylabel.gdshader" id="27_lx8bw"]
 
 [sub_resource type="Animation" id="Animation_plri5"]
 length = 0.001
@@ -242,6 +244,12 @@ _data = {
 "RESET": SubResource("Animation_f2f1i"),
 "power_max": SubResource("Animation_64ys2")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pv5k6"]
+shader = ExtResource("27_lx8bw")
+shader_parameter/height = 3.0
+shader_parameter/frequency = 20.0
+shader_parameter/speed = 3.0
 
 [node name="GameCanvas" type="CanvasLayer"]
 script = ExtResource("1_5vqc6")
@@ -968,3 +976,22 @@ layout_mode = 2
 layout_mode = 2
 text = "Return to editor"
 script = null
+
+[node name="VotePanel" parent="." instance=ExtResource("12_g8epv")]
+visible = false
+
+[node name="WinLabel" type="Label" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_pv5k6")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 120.0
+offset_right = 20.0
+offset_bottom = 138.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.912335, 0.719267, 0.398259, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
+theme_override_constants/outline_size = 24
+theme_override_font_sizes/font_size = 48

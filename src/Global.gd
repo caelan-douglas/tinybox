@@ -98,6 +98,10 @@ var doublekill : AudioStream = preload("res://data/audio/doublekill.ogg")
 var triplekill : AudioStream = preload("res://data/audio/triplekill.ogg")
 var multikill : AudioStream = preload("res://data/audio/multikill.ogg")
 
+var last_gamemode_idx : int = 0;
+var last_gamemode_params : Array = []
+var last_gamemode_mods : Array = []
+
 func reset_shirt_texture() -> void:
 	var actions := UIHandler.show_alert_with_actions("Are you sure? You will lose your\ncurrent shirt.", ["Reset shirt", "Nevermind"], true)
 	actions[0].connect("pressed", _reset_shirt_texture_pressed)
@@ -414,4 +418,24 @@ func format_server_version(what : String) -> String:
 	if last == "0":
 		suffix = "pre"
 	return str("beta ", first, ".", str(int(second)), suffix)
-	
+
+@rpc("any_peer", "call_local", "reliable")
+func server_start_gamemode(idx : int, params : Array, mods : Array) -> void:
+	for gm : Gamemode in get_world().gamemode_list:
+		if gm.running:
+			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Can't start a new gamemode while one is currently running!", 6, false, UIHandler.alert_colour_error)
+			return
+		
+	if get_world().gamemode_list.size() > 0:
+		get_world().gamemode_list[idx].connect("gamemode_ended", _on_gamemode_ended.bind(idx))
+		get_world().gamemode_list[idx].start(params, mods)
+		
+		last_gamemode_idx = idx
+		last_gamemode_params = params
+		last_gamemode_mods = mods
+	else:
+		UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "There are no gamemodes to start!")
+
+func _on_gamemode_ended(idx : int) -> void:
+	if get_world().gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
+		get_world().gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))

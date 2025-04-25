@@ -27,6 +27,7 @@ var running := false
 var time_limit_seconds : int = 600
 @onready var game_timer : Timer = Timer.new()
 @onready var timer_ui : GameTimer = get_tree().current_scene.get_node("GameCanvas/Timer") as ProgressBar
+@onready var vote_panel : VotePanel = get_tree().current_scene.get_node("GameCanvas/VotePanel") as VotePanel
 
 func start(_params : Array, _mods : Array) -> void:
 	# only server starts games
@@ -82,9 +83,15 @@ func set_run_parameters(p : RigidPlayer) -> void:
 func run() -> void:
 	# only server starts games
 	if !multiplayer.is_server(): return
-	# run preview event
-	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
-	await preview_event.start()
+	# run preview event, if the server's debug menu is not open
+	# debug menu on server to skip this
+	if !Global.debug:
+		var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
+		await preview_event.start()
+	else:
+		# set timer to 15s for debug
+		time_limit_seconds = 15
+		pass
 	# start default timer
 	game_timer.one_shot = true
 	game_timer.wait_time = time_limit_seconds
@@ -125,3 +132,6 @@ func end(params : Array) -> void:
 	if game_timer.is_connected("timeout", end.bind([])):
 		game_timer.disconnect("timeout", end.bind([]))
 	game_timer.stop()
+	# show vote screen
+	# only runs as server
+	vote_panel.start_voting()

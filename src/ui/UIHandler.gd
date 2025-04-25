@@ -150,3 +150,14 @@ func play_preview_animation_overlay(title : String, subtitle : String = "") -> v
 	label.text = title
 	subtitle_label.text = subtitle
 	anim.play("preview")
+
+@rpc("any_peer", "call_local", "reliable")
+func show_win_label(text : String) -> void:
+	var win_label : Label = get_tree().current_scene.get_node("GameCanvas/WinLabel")
+	win_label.text = text
+	win_label.visible = true
+
+@rpc("any_peer", "call_local", "reliable")
+func hide_win_label() -> void:
+	var win_label : Label = get_tree().current_scene.get_node("GameCanvas/WinLabel")
+	win_label.visible = false

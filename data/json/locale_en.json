@@ -58,6 +58,7 @@
         "gamemodes": "Gamemodes",
         "gamemode_parameters": "Parameters",
         "gamemode_modifiers": "Modifiers",
+        "gamemode_tip": "You can hover your mouse over a gamemode in the list for more details on it.",
         "graphics_settings": {
             "cool": "Graffix: COOL",
             "bad": "Graffix: BAD",

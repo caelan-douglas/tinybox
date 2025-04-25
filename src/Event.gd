@@ -87,11 +87,12 @@ func start() -> int:
 							var camera : Camera = get_viewport().get_camera_3d()
 							if camera is Camera:
 								camera.play_podium_animation.rpc(str(args[0]).to_int())
-								UIHandler.show_alert.rpc(str(player.display_name, " wins!"), 8, false, UIHandler.alert_colour_gold)
-							
-							# show podium for 8s
-							await get_tree().create_timer(8).timeout
+								UIHandler.show_win_label.rpc(str(player.display_name, " wins!"))
+							# show podium for voting period
+							var voting : VotePanel = get_tree().current_scene.get_node("GameCanvas/VotePanel") as VotePanel
+							await voting.voting_ended
 							player.change_state.rpc_id(player.get_multiplayer_authority(), RigidPlayer.IDLE)
+							UIHandler.hide_win_label.rpc()
 				# team name
 				elif args[1] == "team":
 					var players : Array = Global.get_world().rigidplayer_list
@@ -108,11 +109,13 @@ func start() -> int:
 					var camera : Camera = get_viewport().get_camera_3d()
 					if camera is Camera && !winners.is_empty():
 						camera.play_podium_animation.rpc(winners[0].get_multiplayer_authority())
-						UIHandler.show_alert.rpc(str(args[0], " team wins!"), 8, false, UIHandler.alert_colour_gold)
-					await get_tree().create_timer(8).timeout
+						UIHandler.show_win_label.rpc(str(args[0], " team wins!"))
+					var voting : VotePanel = get_tree().current_scene.get_node("GameCanvas/VotePanel") as VotePanel
+					await voting.voting_ended
 					for winner : RigidPlayer in winners:
 						winner.change_state.rpc_id(winner.get_multiplayer_authority(), RigidPlayer.IDLE)
 						winner.protect_spawn()
+					UIHandler.hide_win_label.rpc()
 		EventType.WAIT_FOR_SECONDS:
 			# arg 0: seconds to wait
 			# arg 1: whether or not to show countdown

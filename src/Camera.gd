@@ -340,7 +340,9 @@ func play_podium_animation(focus_player_id : int) -> void:
 		# move camera
 		global_position = Vector3(focus_player.global_position.x + 1, focus_player.global_position.y + 1, focus_player.global_position.z + 3)
 		look_at(Vector3(focus_player.global_position.x, focus_player.global_position.y + 1, focus_player.global_position.z))
-		await get_tree().create_timer(8).timeout
+		# show podium for voting period
+		var voting : VotePanel = get_tree().current_scene.get_node("GameCanvas/VotePanel") as VotePanel
+		await voting.voting_ended
 		focus_player.animator["parameters/BlendOutroPose/blend_amount"] = 0
 	fov = UserPreferences.camera_fov
 	set_camera_mode(CameraMode.FREE)

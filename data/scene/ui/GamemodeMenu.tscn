@@ -23,6 +23,15 @@ text = "Gamemodes"
 script = ExtResource("2_d2o1l")
 json_text = "ui/gamemodes"
 
+[node name="DynamicLabel4" type="Label" parent="GamemodeMenu"]
+self_modulate = Color(1, 1, 1, 0.588235)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+text = "You can hover your mouse over a gamemode in the list for more details on it."
+autowrap_mode = 3
+script = ExtResource("2_d2o1l")
+json_text = "ui/gamemode_tip"
+
 [node name="GamemodeSelector" type="OptionButton" parent="GamemodeMenu"]
 layout_mode = 2
 size_flags_horizontal = 3
