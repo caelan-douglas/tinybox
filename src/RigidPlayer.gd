@@ -602,7 +602,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 			var cur_respawn := respawn_time.wait_time
 			for second in respawn_time.wait_time:
 				# in case we instantly changed states
-				UIHandler.show_alert.rpc_id(get_multiplayer_authority(), str("Respawn in ", cur_respawn, "..."), 1, false, Color("#c67171"))
+				UIHandler.show_alert.rpc_id(get_multiplayer_authority(), str("Respawn in ", int(cur_respawn), "..."), 1, false, Color("#c67171"))
 				cur_respawn -= 1
 				await get_tree().create_timer(1).timeout
 			# if we are still dead after timer, don't intercept states:
