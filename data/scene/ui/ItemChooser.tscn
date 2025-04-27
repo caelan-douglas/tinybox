@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ku7hponrkcnk"]
 
-[ext_resource type="Script" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
+[ext_resource type="Script" uid="uid://c1fsmdshwj812" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
 
 [node name="ItemChooser" type="TabContainer"]
 offset_right = 356.0

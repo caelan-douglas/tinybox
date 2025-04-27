@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://227kic5617ga"]
 
-[ext_resource type="Script" path="res://src/Camera.gd" id="1"]
+[ext_resource type="Script" uid="uid://cdv86jmsfl5ql" path="res://src/Camera.gd" id="1"]
 [ext_resource type="Animation" uid="uid://2t1dvsdwkiht" path="res://data/animation/camera/intro.res" id="2_c4qs1"]
 [ext_resource type="Material" uid="uid://bo38d2joh47t4" path="res://data/materials/camera_water_overlay.tres" id="2_togp0"]
 [ext_resource type="Animation" uid="uid://dbl1eyp0l5u06" path="res://data/animation/camera/intro_alt.res" id="3_vdhlv"]
@@ -36,6 +36,7 @@ emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 0.25
 emission_ring_radius = 0.25
 emission_ring_inner_radius = 0.25
+emission_ring_cone_angle = 90.0
 gravity = Vector3(0, -1, 0)
 linear_accel_min = 30.0
 linear_accel_max = 40.0
@@ -138,11 +139,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vcqc4"]
 _data = {
-"RESET": SubResource("Animation_3fan0"),
-"intro": ExtResource("2_c4qs1"),
-"intro_alt": ExtResource("3_vdhlv"),
-"move_to_left_side": SubResource("Animation_bbcbh"),
-"move_to_right_side": SubResource("Animation_kd2k8")
+&"RESET": SubResource("Animation_3fan0"),
+&"intro": ExtResource("2_c4qs1"),
+&"intro_alt": ExtResource("3_vdhlv"),
+&"move_to_left_side": SubResource("Animation_bbcbh"),
+&"move_to_right_side": SubResource("Animation_kd2k8")
 }
 
 [node name="CameraGimbal" type="Node3D"]

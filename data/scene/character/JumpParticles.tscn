@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://b2ngpbwaa2ste"]
 
 [ext_resource type="Texture2D" uid="uid://ueteyyevj7r4" path="res://data/textures/jump_particle_tex.png" id="1_7e2ge"]
-[ext_resource type="Script" path="res://src/ExpireAfterTime.gd" id="2_7xus8"]
+[ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_7xus8"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
 offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)

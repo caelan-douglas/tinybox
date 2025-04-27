@@ -38,7 +38,7 @@ func _exit_tree() -> void:
 func _process_input() -> void:
 	var read : String = ""
 	while read != "$quit":
-		read = OS.read_string_from_stdin().strip_edges()
+		read = OS.read_string_from_stdin(1024).strip_edges()
 		submit_cli_input.call_deferred(read)
 	# quit when user types 'quit'
 	return

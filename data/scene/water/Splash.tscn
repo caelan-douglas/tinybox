@@ -6,7 +6,6 @@
 random_pitch = 1.6
 streams_count = 1
 stream_0/stream = ExtResource("1_xvldr")
-stream_0/weight = 1.0
 
 [node name="Splash" type="AudioStreamPlayer3D"]
 stream = SubResource("AudioStreamRandomizer_l57nt")

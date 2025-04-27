@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://bde1qvp4v6opt"]
 
-[ext_resource type="Script" path="res://src/ExplosiveBrick.gd" id="1_sbvri"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_2nqpl"]
+[ext_resource type="Script" uid="uid://3mley7js4amj" path="res://src/ExplosiveBrick.gd" id="1_sbvri"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_2nqpl"]
 [ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_njokc"]
 [ext_resource type="Material" uid="uid://dokmq4mxw3vng" path="res://data/materials/explosive_brick.tres" id="4_24yt8"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_f1rrm"]

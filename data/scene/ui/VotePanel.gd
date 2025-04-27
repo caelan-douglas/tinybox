@@ -231,4 +231,3 @@ func hide_panel() -> void:
 	visible = false
 	if !Global.is_paused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-

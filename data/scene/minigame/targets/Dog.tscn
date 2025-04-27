@@ -1,7 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://gd6l0n3l7l38"]
 
-[ext_resource type="Script" path="res://src/MinigameTarget.gd" id="1_ak3c7"]
 [ext_resource type="PackedScene" uid="uid://bx5kiubfc00do" path="res://data/models/dog/dog.blend" id="2_3gw3a"]
+
+[sub_resource type="Resource" id="Resource_xmndb"]
+metadata/__load_path__ = "res://src/MinigameTarget.gd"
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3d5u8"]
 properties/0/path = NodePath(".:team")
@@ -31,7 +33,7 @@ node_connections = [&"output", 0, &"Animation"]
 
 [node name="Dog" type="RigidBody3D"]
 freeze = true
-script = ExtResource("1_ak3c7")
+script = SubResource("Resource_xmndb")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_3d5u8")

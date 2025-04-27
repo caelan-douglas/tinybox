@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://d3owcticknpbn"]
 
-[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="1_00vsm"]
+[ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="1_00vsm"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_lyflj"]
 
 [sub_resource type="Animation" id="Animation_t0vev"]
@@ -133,8 +133,8 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r3wi6"]
 _data = {
-"RESET": SubResource("Animation_t0vev"),
-"preview": SubResource("Animation_vi55k")
+&"RESET": SubResource("Animation_t0vev"),
+&"preview": SubResource("Animation_vi55k")
 }
 
 [node name="PersistentScene" type="Node"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bmlrlyxc1aqce"]
 
-[ext_resource type="Script" path="res://src/Water.gd" id="1_74equ"]
+[ext_resource type="Script" uid="uid://d20xhik2m43xs" path="res://src/Water.gd" id="1_74equ"]
 [ext_resource type="Material" uid="uid://d30b1sj22govo" path="res://data/materials/water.tres" id="2_eb4lj"]
 [ext_resource type="PackedScene" uid="uid://jwlfeuxe10n5" path="res://data/scene/water/Splash.tscn" id="3_rwimi"]
 

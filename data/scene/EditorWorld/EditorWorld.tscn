@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://46bsl4nq14py"]
 
-[ext_resource type="Script" path="res://src/Editor.gd" id="1_v6r6j"]
-[ext_resource type="Script" path="res://src/ToolInventory.gd" id="2_stlqh"]
-[ext_resource type="Script" path="res://src/Teams.gd" id="3_jjyfp"]
+[ext_resource type="Script" uid="uid://brhmc72njr8t7" path="res://src/Editor.gd" id="1_v6r6j"]
+[ext_resource type="Script" uid="uid://dpdosysmi3vet" path="res://src/ToolInventory.gd" id="2_stlqh"]
+[ext_resource type="Script" uid="uid://3qgffieonwor" path="res://src/Teams.gd" id="3_jjyfp"]
 [ext_resource type="PackedScene" uid="uid://dj387li7w0abc" path="res://data/scene/tool/EditorBuildTool.tscn" id="3_nojya"]
 [ext_resource type="PackedScene" uid="uid://cbks1seqvjwkh" path="res://data/models/character/character_model.blend" id="4_8lbmw"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_qkc34"]

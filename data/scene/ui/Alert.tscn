@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://brjdiht6xtg3e"]
 
-[ext_resource type="Script" path="res://src/ui/Alert.gd" id="1_ucase"]
+[ext_resource type="Script" uid="uid://bgom7r43skc6t" path="res://src/ui/Alert.gd" id="1_ucase"]
 [ext_resource type="AnimationLibrary" uid="uid://htgaatcuovr2" path="res://data/animation/ui_alert/alert_anim_library.res" id="2_s56u3"]
 
 [node name="Alert" type="PanelContainer"]

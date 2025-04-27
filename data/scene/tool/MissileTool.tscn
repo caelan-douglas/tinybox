@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bo2g6ud0bnb1j"]
 
-[ext_resource type="Script" path="res://src/ShootTool.gd" id="1_cotb6"]
+[ext_resource type="Script" uid="uid://5mi6s03dbpql" path="res://src/ShootTool.gd" id="1_cotb6"]
 
 [node name="MissileTool" type="Node3D"]
 script = ExtResource("1_cotb6")

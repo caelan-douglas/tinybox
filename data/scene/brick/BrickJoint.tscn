@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bhil8lbbf6ucm"]
 
-[ext_resource type="Script" path="res://src/DebugVisibility.gd" id="1_8pou7"]
+[ext_resource type="Script" uid="uid://ccsij7cj3xcng" path="res://src/DebugVisibility.gd" id="1_8pou7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oke3i"]
 no_depth_test = true

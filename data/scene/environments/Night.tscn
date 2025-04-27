@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://c018ya3k3q2en"]
 
-[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_l5xax"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="2_ndbh2"]
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_l5xax"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="2_ndbh2"]
 
 [sub_resource type="Gradient" id="Gradient_5lid8"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cpc0y6dffts5n"]
 
-[ext_resource type="Script" path="res://src/Map.gd" id="1_t851o"]
-[ext_resource type="Script" path="res://src/Teams.gd" id="3_hrmyj"]
+[ext_resource type="Script" uid="uid://bdh2ltm6loblx" path="res://src/Map.gd" id="1_t851o"]
+[ext_resource type="Script" uid="uid://3qgffieonwor" path="res://src/Teams.gd" id="3_hrmyj"]
 [ext_resource type="Resource" uid="uid://qabpabfggsdp" path="res://data/team.tres" id="4_id4bl"]
 [ext_resource type="Resource" uid="uid://cimhewj2wn54n" path="res://data/green_team.tres" id="5_dpts0"]
 [ext_resource type="Resource" uid="uid://r855pcta01ie" path="res://data/purple_team.tres" id="6_0ptro"]

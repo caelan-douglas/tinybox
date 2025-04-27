@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dnjrw3cumbife"]
 
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="1_recen"]
-[ext_resource type="Script" path="res://src/ExpireAfterTime.gd" id="2_mf6nb"]
+[ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_mf6nb"]
 
 [sub_resource type="Gradient" id="Gradient_o5qp0"]
 offsets = PackedFloat32Array(0, 0.266862, 0.791789, 1)
@@ -11,7 +11,7 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 gradient = SubResource("Gradient_o5qp0")
 
 [sub_resource type="Curve" id="Curve_csgoh"]
-max_value = 3.5
+_limits = [0.0, 3.5, 0.0, 1.0]
 _data = [Vector2(0, 0.944084), 0.0, 0.0, 0, 0, Vector2(0.140078, 3.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 

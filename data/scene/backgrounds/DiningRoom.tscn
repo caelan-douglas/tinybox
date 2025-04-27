@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://oolh72sbwp1a"]
 
-[ext_resource type="Script" path="res://src/TBWObject.gd" id="1_eqocu"]
+[ext_resource type="Script" uid="uid://cew6k87fglhlf" path="res://src/TBWObject.gd" id="1_eqocu"]
 [ext_resource type="PackedScene" uid="uid://1sqf4570yn2c" path="res://data/scene/Caffeina/room_model/CaffeinaRoomModel.tscn" id="2_1jqrs"]
 [ext_resource type="ArrayMesh" uid="uid://b7aj46221lehd" path="res://data/models/tree/pine_tree_0_mesh.res" id="3_xp6s4"]
 [ext_resource type="Material" uid="uid://dlucy31mxb5ya" path="res://data/materials/wood_picnic.tres" id="4_00jk2"]

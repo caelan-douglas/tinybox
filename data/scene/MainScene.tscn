@@ -1,14 +1,14 @@
 [gd_scene load_steps=11 format=3 uid="uid://bhj43my7js408"]
 
-[ext_resource type="Script" path="res://Main.gd" id="1_jgbvu"]
-[ext_resource type="Script" path="res://src/World.gd" id="2_alcqr"]
+[ext_resource type="Script" uid="uid://cbn1b5ermac7n" path="res://Main.gd" id="1_jgbvu"]
+[ext_resource type="Script" uid="uid://sbrtj4n5nf6f" path="res://src/World.gd" id="2_alcqr"]
 [ext_resource type="PackedScene" uid="uid://da61xyvkih0q" path="res://data/scene/MultiplayerMenuMap/MultiplayerMenuMap.tscn" id="3_lya7f"]
-[ext_resource type="Script" path="res://src/BrickGroups.gd" id="4_nsdny"]
+[ext_resource type="Script" uid="uid://ckr5o6ujg7l45" path="res://src/BrickGroups.gd" id="4_nsdny"]
 [ext_resource type="PackedScene" uid="uid://bot4om7nsyg2l" path="res://data/scene/ui/GameCanvas.tscn" id="5_ki5at"]
 [ext_resource type="PackedScene" uid="uid://c5aeyr5rirpm4" path="res://data/scene/MultiplayerMenu.tscn" id="5_ti6c5"]
 [ext_resource type="PackedScene" uid="uid://b4heya8wtwyuo" path="res://data/scene/ui/EditorCanvas.tscn" id="7_c1osm"]
-[ext_resource type="Script" path="res://src/ui/DebugMenu.gd" id="8_cc4qc"]
-[ext_resource type="Script" path="res://src/ui/AnimatedPanelContainer.gd" id="9_macom"]
+[ext_resource type="Script" uid="uid://d1yiuqim6svpi" path="res://src/ui/DebugMenu.gd" id="8_cc4qc"]
+[ext_resource type="Script" uid="uid://dafapgvrl3pds" path="res://src/ui/AnimatedPanelContainer.gd" id="9_macom"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="10_km8j6"]
 
 [node name="Main" type="Node"]
@@ -22,14 +22,14 @@ script = ExtResource("2_alcqr")
 [node name="MultiplayerMenuMap" parent="World/Map" instance=ExtResource("3_lya7f")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/character/RigidPlayer.tscn", "res://data/scene/clay_ball/ClayBall.tscn", "res://data/scene/rocket/Rocket.tscn", "res://data/scene/bomb/Bomb.tscn", "res://data/scene/minigame/targets/Dog.tscn", "res://data/scene/water/WaterProjectile.tscn", "res://data/scene/fire/FireProjectile.tscn")
+_spawnable_scenes = PackedStringArray("uid://dinh2untg6m17", "uid://ky2h7r63y8gy", "uid://dq4jgcqroudj7", "uid://cd3af1twwe58l", "uid://gd6l0n3l7l38", "uid://dv1sisl0rn8iq", "uid://bjkvftq5sd13")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerObjSpawner" type="MultiplayerSpawner" parent="World"]
 spawn_path = NodePath("..")
 
 [node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("res://data/scene/BaseWorld/BaseWorld.tscn")
+_spawnable_scenes = PackedStringArray("uid://cpc0y6dffts5n")
 spawn_path = NodePath("../Map")
 spawn_limit = 1
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bg2508sm35hrk"]
 
-[ext_resource type="Script" path="res://src/Teleporter.gd" id="1_nymie"]
+[ext_resource type="Script" uid="uid://cagtabuwc6wur" path="res://src/Teleporter.gd" id="1_nymie"]
 [ext_resource type="Material" uid="uid://d4ihw612im0uk" path="res://data/materials/teleporter.tres" id="2_u0fjr"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_p2abd"]

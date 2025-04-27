@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://c4pf0l65ojqcw"]
 
-[ext_resource type="Script" path="res://src/ui/SettingsMenu.gd" id="1_khwxh"]
-[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_qejdm"]
+[ext_resource type="Script" uid="uid://b3k3hfrltcidu" path="res://src/ui/SettingsMenu.gd" id="1_khwxh"]
+[ext_resource type="Script" uid="uid://dwy5qfsib3g3m" path="res://src/ui/DynamicButton.gd" id="2_qejdm"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_stvgj"]
-[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="3_r1aba"]
-[ext_resource type="Script" path="res://src/ui/VolumeSlider.gd" id="4_mugbr"]
-[ext_resource type="Script" path="res://src/ui/KeybindMapButton.gd" id="5_es3m5"]
+[ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="3_r1aba"]
+[ext_resource type="Script" uid="uid://cg4ob62ffqe84" path="res://src/ui/VolumeSlider.gd" id="4_mugbr"]
+[ext_resource type="Script" uid="uid://ct3bbx112imhl" path="res://src/ui/KeybindMapButton.gd" id="5_es3m5"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_exarq"]
 color = Color(1, 1, 1, 0.356863)

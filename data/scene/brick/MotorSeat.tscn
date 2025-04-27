@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://dca5npetcw4di"]
 
-[ext_resource type="Script" path="res://src/MotorSeat.gd" id="1_6w7jr"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_kv3g4"]
+[ext_resource type="Script" uid="uid://xhd86lqr174x" path="res://src/MotorSeat.gd" id="1_6w7jr"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_kv3g4"]
 [ext_resource type="PackedScene" uid="uid://ccd46fjn2mddy" path="res://data/models/brick/seat.blend" id="3_p5qhp"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="3_xao1q"]
 

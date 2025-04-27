@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bfdard88ejdsw"]
 
 [ext_resource type="PackedScene" uid="uid://ccd46fjn2mddy" path="res://data/models/brick/seat.blend" id="1_aelbu"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="1_prft2"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="1_prft2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 

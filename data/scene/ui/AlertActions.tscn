@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dqbq3tvx6gkfk"]
 
 [ext_resource type="AnimationLibrary" uid="uid://htgaatcuovr2" path="res://data/animation/ui_alert/alert_anim_library.res" id="1_cx6ty"]
-[ext_resource type="Script" path="res://src/ui/Alert.gd" id="1_yc1hw"]
+[ext_resource type="Script" uid="uid://bgom7r43skc6t" path="res://src/ui/Alert.gd" id="1_yc1hw"]
 
 [node name="Alert" type="PanelContainer"]
 custom_minimum_size = Vector2(496, 140)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://dv1sisl0rn8iq"]
 
-[ext_resource type="Script" path="res://src/WaterProjectile.gd" id="1_0xm6f"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_o3kjx"]
+[ext_resource type="Script" uid="uid://c6r3cayh3lyem" path="res://src/WaterProjectile.gd" id="1_0xm6f"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_o3kjx"]
 [ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="3_f0wog"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
@@ -20,7 +20,7 @@ gradient = SubResource("Gradient_66m8f")
 width = 128
 
 [sub_resource type="Curve" id="Curve_g2lxx"]
-min_value = -3.0
+_limits = [-3.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 16.2323, 0, 0, Vector2(0.196552, 1), 0.0, 0.0, 0, 0, Vector2(1, -3), -3.96349, 0.0, 0, 0]
 point_count = 3
 
@@ -28,7 +28,7 @@ point_count = 3
 curve_y = SubResource("Curve_g2lxx")
 
 [sub_resource type="Curve" id="Curve_fuel6"]
-max_value = 4.0
+_limits = [0.0, 4.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 31.0353, 0, 0, Vector2(0.143969, 3.45219), 3.89874, 3.89874, 0, 0, Vector2(0.762646, 3.74716), -0.601656, -0.601656, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 

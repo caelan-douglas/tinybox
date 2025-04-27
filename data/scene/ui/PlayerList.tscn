@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://govhpsie1w5w"]
 
-[ext_resource type="Script" path="res://src/ui/PlayerList.gd" id="1_6ujlf"]
+[ext_resource type="Script" uid="uid://im7283ql3ujv" path="res://src/ui/PlayerList.gd" id="1_6ujlf"]
 
 [node name="PlayerList" type="VBoxContainer"]
 custom_minimum_size = Vector2(210, 0)

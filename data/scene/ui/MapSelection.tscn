@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ip8uhbg31syp"]
 
-[ext_resource type="Script" path="res://src/ui/MapList.gd" id="1_cl7lk"]
+[ext_resource type="Script" uid="uid://dkdej1opalm7f" path="res://src/ui/MapList.gd" id="1_cl7lk"]
 
 [node name="MapSelection" type="OptionButton"]
 size_flags_horizontal = 3

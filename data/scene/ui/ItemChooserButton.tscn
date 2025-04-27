@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8s7blprpfw2p"]
 
 [ext_resource type="Texture2D" uid="uid://bed4pahj3ao4t" path="res://data/textures/editor_icons/brick.png" id="1_yt745"]
-[ext_resource type="Script" path="res://src/ui/DynamicButton.gd" id="2_imrks"]
+[ext_resource type="Script" uid="uid://dwy5qfsib3g3m" path="res://src/ui/DynamicButton.gd" id="2_imrks"]
 
 [node name="Button" type="Button"]
 custom_minimum_size = Vector2(120, 48)

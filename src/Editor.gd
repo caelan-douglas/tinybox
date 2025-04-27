@@ -303,4 +303,3 @@ func _process(delta : float) -> void:
 	if camera is Camera:
 		editor_canvas.coordinates_tooltip.text =\
 			str("x", camera.controlled_cam_pos.x, " y", camera.controlled_cam_pos.y, " z", camera.controlled_cam_pos.z)
-

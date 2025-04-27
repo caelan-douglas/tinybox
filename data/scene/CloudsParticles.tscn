@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bdeq6bmhjenve"]
 
 [ext_resource type="Material" uid="uid://b5lyiq31bpwyd" path="res://data/materials/clouds_billboard.tres" id="1_wh2v2"]
-[ext_resource type="Script" path="res://src/CameraParticles.gd" id="2_xvpb0"]
+[ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_xvpb0"]
 
 [sub_resource type="Gradient" id="Gradient_2ktwl"]
 offsets = PackedFloat32Array(0, 0.266862, 0.791789, 1)

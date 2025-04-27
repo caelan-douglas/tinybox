@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dv48wiw65w5d"]
 
-[ext_resource type="Script" path="res://src/ui/FloatyText.gd" id="1_qevpb"]
+[ext_resource type="Script" uid="uid://cdufl8xp2txs3" path="res://src/ui/FloatyText.gd" id="1_qevpb"]
 
 [sub_resource type="Animation" id="Animation_p7s4r"]
 length = 0.001
@@ -83,8 +83,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o7ov2"]
 _data = {
-"RESET": SubResource("Animation_p7s4r"),
-"floaty": SubResource("Animation_v3dr5")
+&"RESET": SubResource("Animation_p7s4r"),
+&"floaty": SubResource("Animation_v3dr5")
 }
 
 [node name="FloatyText" type="Node3D"]

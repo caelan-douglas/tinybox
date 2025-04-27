@@ -1,15 +1,15 @@
 [gd_scene load_steps=117 format=3 uid="uid://dinh2untg6m17"]
 
-[ext_resource type="Script" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
+[ext_resource type="Script" uid="uid://bvb640yrpmsgh" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="2_d7810"]
-[ext_resource type="Script" path="res://src/ToolInventory.gd" id="4_0qq5v"]
+[ext_resource type="Script" uid="uid://dpdosysmi3vet" path="res://src/ToolInventory.gd" id="4_0qq5v"]
 [ext_resource type="PackedScene" uid="uid://bdoyyw0s2yfun" path="res://data/models/character/spawn_protection.blend" id="6_346qe"]
 [ext_resource type="Texture2D" uid="uid://com33jtjoygcr" path="res://data/textures/ui/panel_white.png" id="6_j6hds"]
 [ext_resource type="PackedScene" uid="uid://cbks1seqvjwkh" path="res://data/models/character/character_model.blend" id="6_jdytf"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="7_onyoa"]
 [ext_resource type="Texture2D" uid="uid://dacnw201grgcp" path="res://data/textures/dizzy_star.png" id="8_6lxy6"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="8_as1qh"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="8_as1qh"]
 [ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="8_dwypa"]
 [ext_resource type="Texture2D" uid="uid://c36ws0cwo4te5" path="res://data/models/character/textures/fabric.jpg" id="9_tig65"]
 [ext_resource type="PackedScene" uid="uid://bx46tc7ejoomf" path="res://data/models/character/hair/baseball_cap.blend" id="11_k4ttv"]
@@ -19,7 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://hhw1130fet3a" path="res://data/audio/clang_3.ogg" id="16_srewf"]
 [ext_resource type="AudioStream" uid="uid://cxd4vstyijgoq" path="res://data/audio/bowling.ogg" id="17_6cw34"]
 [ext_resource type="AudioStream" uid="uid://bso068q2pvggt" path="res://data/audio/sparkle.ogg" id="17_iikyd"]
-[ext_resource type="Script" path="res://src/DebugVisibility.gd" id="18_4ygmw"]
+[ext_resource type="Script" uid="uid://ccsij7cj3xcng" path="res://src/DebugVisibility.gd" id="18_4ygmw"]
 [ext_resource type="Texture2D" uid="uid://c3bv8fogwqd3s" path="res://data/textures/bubble.png" id="19_4icmy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ktb66"]
@@ -32,7 +32,7 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 gradient = SubResource("2")
 
 [sub_resource type="Curve" id="Curve_rb14a"]
-max_value = 3.5
+_limits = [0.0, 3.5, 0.0, 1.0]
 _data = [Vector2(0, 0.944084), 0.0, 0.0, 0, 0, Vector2(0.140078, 3.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
@@ -130,8 +130,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8typ0"]
 _data = {
-"RESET": SubResource("Animation_8tkq7"),
-"dizzy": SubResource("Animation_fwin2")
+&"RESET": SubResource("Animation_8tkq7"),
+&"dizzy": SubResource("Animation_fwin2")
 }
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
@@ -476,8 +476,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6mglm"]
 _data = {
-"RESET": SubResource("Animation_nveij"),
-"spawn": SubResource("Animation_gxefw")
+&"RESET": SubResource("Animation_nveij"),
+&"spawn": SubResource("Animation_gxefw")
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_rlwhd"]
@@ -579,27 +579,22 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sotcv"]
 _data = {
-"RESET": SubResource("Animation_wxqg3"),
-"drip": SubResource("Animation_ssd1k")
+&"RESET": SubResource("Animation_wxqg3"),
+&"drip": SubResource("Animation_ssd1k")
 }
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2jp56"]
 random_pitch = 1.1
 streams_count = 4
 stream_0/stream = ExtResource("13_vu3wm")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("14_tuqtl")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("15_x7mcp")
-stream_2/weight = 1.0
 stream_3/stream = ExtResource("16_srewf")
-stream_3/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wpn65"]
 random_pitch = 1.05
 streams_count = 1
 stream_0/stream = ExtResource("17_6cw34")
-stream_0/weight = 1.0
 
 [sub_resource type="Animation" id="Animation_p5udv"]
 length = 0.001
@@ -684,9 +679,9 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_w1opw"]
 _data = {
-"RESET": SubResource("Animation_p5udv"),
-"fadein": SubResource("Animation_cver3"),
-"fadeout": SubResource("Animation_lhfkh")
+&"RESET": SubResource("Animation_p5udv"),
+&"fadein": SubResource("Animation_cver3"),
+&"fadeout": SubResource("Animation_lhfkh")
 }
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_mvho4"]

@@ -36,8 +36,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_halfk"]
 _data = {
-"RESET": SubResource("Animation_4onwx"),
-"pulse": SubResource("Animation_pshl0")
+&"RESET": SubResource("Animation_4onwx"),
+&"pulse": SubResource("Animation_pshl0")
 }
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jfh52"]

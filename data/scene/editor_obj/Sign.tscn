@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://1704itv20xrn"]
 
-[ext_resource type="Script" path="res://src/Sign.gd" id="1_3pn5f"]
+[ext_resource type="Script" uid="uid://b2ptcrvneumgk" path="res://src/Sign.gd" id="1_3pn5f"]
 [ext_resource type="PackedScene" uid="uid://bs2fw01jbmd55" path="res://data/models/sign/sign.blend" id="2_sw52x"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yactn"]
