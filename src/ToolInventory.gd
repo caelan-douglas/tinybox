@@ -179,8 +179,8 @@ func add_tool(tool : ToolIdx, ammo : int = -1, params : Dictionary = {}) -> void
 		if ntool is ShootTool:
 			ntool.restore_ammo = false
 	# set custom tool parameters (ie. knockback, damage)
-	if !params.is_empty():
-		for param : String in params.keys():
+	for param : String in params.keys():
+		if param != "script":
 			ntool.set(str(param), params[param])
 	add_child(ntool, true)
 	resize_ui()

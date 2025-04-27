@@ -52,7 +52,8 @@ func _on_request_completed(result : int, response_code : int, headers : PackedSt
 	DEFAULT_DATABASE_REPO = body.get_string_from_utf8().strip_escapes()
 	print("UserPreferences: Fetched default database repo: '", DEFAULT_DATABASE_REPO, "'")
 	# reload in case using default repo
-	database_repo = load_pref("database_repo")
+	if load_pref("database_repo") != null:
+		database_repo = load_pref("database_repo")
 
 # Saves a preference to the disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
 func save_pref(key : String, value: Variant, section := "preferences") -> void:
