@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=26 format=3 uid="uid://6c22jhpmjxt5"]
+[gd_resource type="Theme" load_steps=27 format=3 uid="uid://6c22jhpmjxt5"]
 
 [ext_resource type="StyleBox" uid="uid://bokej48131wgh" path="res://data/theme_elements/stylebox_disabled_button.tres" id="1_q4w54"]
 [ext_resource type="StyleBox" uid="uid://b8fdwk3iumwvk" path="res://data/theme_elements/focused_stylebox.tres" id="2_1ge5j"]
@@ -14,6 +14,7 @@
 [ext_resource type="StyleBox" uid="uid://bokred2fb76ji" path="res://data/theme_elements/tabs/tab_unselected.tres" id="10_o5rup"]
 [ext_resource type="StyleBox" uid="uid://cwpb0x34chlda" path="res://data/theme_elements/tabs/tab_selected.tres" id="11_n06xi"]
 [ext_resource type="FontVariation" uid="uid://qaem8tptsp6l" path="res://data/theme_elements/default_font_variation.tres" id="12_7v5nn"]
+[ext_resource type="StyleBox" uid="uid://dcaxluyucnca6" path="res://data/theme_elements/stylebox_popupmenu.tres" id="12_qx3g4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q0wri"]
 content_margin_left = 16.0
@@ -117,7 +118,7 @@ PanelContainer/styles/panel = ExtResource("8_15qjp")
 PopupMenu/styles/hover = ExtResource("3_vixmh")
 PopupMenu/styles/labeled_separator_left = ExtResource("9_mr10g")
 PopupMenu/styles/labeled_separator_right = ExtResource("9_mr10g")
-PopupMenu/styles/panel = ExtResource("4_apwx1")
+PopupMenu/styles/panel = ExtResource("12_qx3g4")
 PopupMenu/styles/separator = ExtResource("9_mr10g")
 ProgressBar/colors/font_color = Color(0.94902, 0.894118, 0.839216, 1)
 ProgressBar/styles/background = ExtResource("3_vixmh")
