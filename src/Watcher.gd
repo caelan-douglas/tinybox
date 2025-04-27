@@ -23,6 +23,7 @@ enum WatcherType {
 	PLAYER_PROPERTY_EXCEEDS,
 	PLAYER_PROPERTY_FALLS_BELOW,
 	TEAM_PROPERTY_EXCEEDS,
+	SPECIFIC_TEAM_PROPERTY_EXCEEDS,
 	TIMER_EXCEEDS,
 	TEAM_FULL
 }
@@ -72,6 +73,15 @@ func _physics_process(delta : float) -> void:
 							total_team_prop += player.get(str(args[0]))
 					if total_team_prop > str(args[1]).to_int():
 						end([team.name])
+			WatcherType.SPECIFIC_TEAM_PROPERTY_EXCEEDS:
+				for team : Team in Global.get_world().get_current_map().get_teams().get_team_list():
+					if team.name == str(args[2]):
+						var total_team_prop : int = 0
+						for player : RigidPlayer in Global.get_world().rigidplayer_list:
+							if player.team == team.name:
+								total_team_prop += player.get(str(args[0]))
+						if total_team_prop > str(args[1]).to_int():
+							end([team.name])
 			WatcherType.TEAM_FULL:
 				# arg 0: team name
 				var teams : Teams = Global.get_world().get_current_map().get_teams()

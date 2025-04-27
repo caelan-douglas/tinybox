@@ -455,6 +455,7 @@ func add_all_gamemodes() -> void:
 					add_gamemode(GamemodeDeathmatch.new(false))
 					add_gamemode(GamemodeHomeRun.new(false))
 					add_gamemode(GamemodeBalls.new(false))
+					add_gamemode(GamemodeOneVersusAll.new())
 					add_gamemode(GamemodeHideSeek.new())
 					if has_capture_point:
 						# team capture

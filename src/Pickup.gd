@@ -114,8 +114,9 @@ func _take_pickup(body : RigidPlayer) -> void:
 	# run on server for health
 	if type == PickupType.MEDKIT && multiplayer.is_server():
 		# ammo is health for medkit pickup
-		var newhealth : int = clamp(body.get_health() + ammo, 0, body.max_health)
-		body.set_health(newhealth)
+		if (body.get_health() < body.max_health):
+			var newhealth : int = clamp(body.get_health() + ammo, 0, body.max_health)
+			body.set_health(newhealth)
 	# only run on auth
 	elif body.get_multiplayer_authority() == multiplayer.get_unique_id():
 		var tool_inv : ToolInventory = body.get_tool_inventory()
@@ -186,4 +187,4 @@ func set_available_text() -> void:
 func _process(delta : float) -> void:
 	if pickup_available == false:
 		var cur_respawn : float = respawn_timer.time_left
-		label.text = str("Respawn in ", round(cur_respawn), "...")
+		label.text = str("Respawn in ", int(cur_respawn) + 1, "...")

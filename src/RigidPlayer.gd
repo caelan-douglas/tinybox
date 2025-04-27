@@ -20,6 +20,7 @@ class_name RigidPlayer
 signal hit_by_melee(tool : Tool)
 signal died()
 signal teleported()
+signal kills_increased()
 
 enum {
 	IDLE,
@@ -1731,6 +1732,8 @@ func explode(explosion_position : Vector3, from_whom : int = 1, _explosion_force
 func update_kills(new_kills : int) -> void:
 	if !multiplayer.is_server():
 		return
+	if (new_kills > kills):
+		emit_signal("kills_increased")
 	kills = new_kills
 	_receive_server_kills.rpc(new_kills)
 	Global.update_player_list_information()
