@@ -136,7 +136,7 @@ func _ready() -> void:
 			tool_spawner.add_spawnable_scene(t)
 
 func resize_ui() -> void:
-	await get_tree().process_frame
+	await get_tree().physics_frame
 	# scale ui if too big
 	var tool_list : Control = get_tree().current_scene.get_node("GameCanvas/ToolList")
 	# 220 is size of player list
