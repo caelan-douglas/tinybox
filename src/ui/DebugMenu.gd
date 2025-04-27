@@ -49,7 +49,8 @@ func _physics_process(delta : float) -> void:
 		"\n\n[b]System[/b]",
 		"\n[b]	Platform[/b]		", OS.get_name(), " ", OS.get_version(),
 		"\n[b]	Processor[/b]		", OS.get_processor_name(),
-		"\n[b]	Graphics[/b]			", RenderingServer.get_rendering_device().get_device_name())
+		"\n[b]	Graphics[/b]			", RenderingServer.get_rendering_device().get_device_name(),
+		"\n[b]	Gfx API[/b]			", RenderingServer.get_current_rendering_driver_name().capitalize())
 		var player : RigidPlayer = Global.get_player()
 		if player != null:
 			col2.text = str("\n[b]Player[/b]", 
