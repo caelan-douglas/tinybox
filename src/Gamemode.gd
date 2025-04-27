@@ -83,15 +83,8 @@ func set_run_parameters(p : RigidPlayer) -> void:
 func run() -> void:
 	# only server starts games
 	if !multiplayer.is_server(): return
-	# run preview event, if the server's debug menu is not open
-	# debug menu on server to skip this
-	if !Global.debug:
-		var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
-		await preview_event.start()
-	else:
-		# set timer to 15s for debug
-		time_limit_seconds = 15
-		pass
+	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
+	await preview_event.start()
 	# start default timer
 	game_timer.one_shot = true
 	game_timer.wait_time = time_limit_seconds
