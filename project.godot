@@ -319,6 +319,7 @@ editor_select_toggle={
 
 common/physics_ticks_per_second=45
 common/max_physics_steps_per_frame=1
+3d/physics_engine="GodotPhysics3D"
 3d/sleep_threshold_linear=0.3
 3d/sleep_threshold_angular=0.5
 3d/time_before_sleep=0.4
