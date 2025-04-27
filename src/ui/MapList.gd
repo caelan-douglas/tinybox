@@ -67,7 +67,7 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 		elif l.contains("version ;"):
 			entry_ver.text = str("version: ", Global.format_server_version(l.split(" ; ")[1]))
 		elif l.contains("featured ;"):
-			if str(l.split(" ; ")[1]) == "1":
+			if str(int(l.split(" ; ")[1])) == "1":
 				entry_featured.visible = true
 				entry_is_featured = true
 		elif l.contains("date ;"):
@@ -79,7 +79,7 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 			if (current_date - upload_date < 1209600):
 				entry_new.visible = true
 		elif l.contains("downloads ;"):
-			entry_downloads.text = str("Downloads: ", l.split(" ; ")[1])
+			entry_downloads.text = str("Downloads: ", int(l.split(" ; ")[1]))
 	# set image
 	entry_img.texture = tex
 	if can_delete:
