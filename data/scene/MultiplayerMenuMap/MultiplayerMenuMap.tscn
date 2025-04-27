@@ -1,12 +1,12 @@
 [gd_scene load_steps=18 format=3 uid="uid://da61xyvkih0q"]
 
-[ext_resource type="Script" path="res://src/Map.gd" id="1_uutk4"]
+[ext_resource type="Script" uid="uid://bdh2ltm6loblx" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
 [ext_resource type="Animation" uid="uid://cpbmua5aa3x2j" path="res://data/animation/main_menu/appearance_in.res" id="5_1xpc5"]
 [ext_resource type="Animation" uid="uid://bv8140eakwmkm" path="res://data/animation/main_menu/appearance_out.res" id="6_eed1v"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
 [ext_resource type="AudioStream" uid="uid://c0gcn31iumd17" path="res://data/audio/spotlight.ogg" id="7_2nw57"]
-[ext_resource type="Script" path="res://src/Teams.gd" id="9_ykrt6"]
+[ext_resource type="Script" uid="uid://3qgffieonwor" path="res://src/Teams.gd" id="9_ykrt6"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_v6w6k"]
 dof_blur_far_distance = 300.0
@@ -210,9 +210,9 @@ tracks/11/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kgx20"]
 _data = {
-"RESET": SubResource("Animation_ce657"),
-"appearance_in": ExtResource("5_1xpc5"),
-"appearance_out": ExtResource("6_eed1v")
+&"RESET": SubResource("Animation_ce657"),
+&"appearance_in": ExtResource("5_1xpc5"),
+&"appearance_out": ExtResource("6_eed1v")
 }
 
 [node name="MultiplayerMenuMap" type="Node3D"]

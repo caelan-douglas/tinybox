@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://y722t65cacix"]
 
 [ext_resource type="AudioStream" uid="uid://bmuhj2148tvfn" path="res://data/audio/music/mus1.ogg" id="1_gqqnu"]
-[ext_resource type="Script" path="res://src/MusicHandler.gd" id="1_qgeqv"]
+[ext_resource type="Script" uid="uid://cuo41gt4r0k61" path="res://src/MusicHandler.gd" id="1_qgeqv"]
 
 [sub_resource type="Animation" id="Animation_0r80i"]
 length = 0.001
@@ -52,9 +52,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1qkk6"]
 _data = {
-"RESET": SubResource("Animation_0r80i"),
-"song_fade_in": SubResource("Animation_jn3jl"),
-"song_fade_out": SubResource("Animation_3fl2v")
+&"RESET": SubResource("Animation_0r80i"),
+&"song_fade_in": SubResource("Animation_jn3jl"),
+&"song_fade_out": SubResource("Animation_3fl2v")
 }
 
 [node name="MusicHandler" type="Node"]

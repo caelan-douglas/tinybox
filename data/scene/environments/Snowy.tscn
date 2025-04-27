@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://fm6lgsauxibh"]
 
-[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
 [ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="2_5ipcy"]
 [ext_resource type="Sky" uid="uid://qbldbv6nh5ve" path="res://data/materials/skybox/cloudy_skybox.tres" id="3_hhohi"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
 
 [sub_resource type="Gradient" id="Gradient_yngdy"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)

@@ -59,4 +59,3 @@ func set_max_val_rpc(new : int) -> void:
 @rpc("any_peer", "call_local", "reliable")
 func set_visible_rpc(mode : bool) -> void:
 	visible = mode
-

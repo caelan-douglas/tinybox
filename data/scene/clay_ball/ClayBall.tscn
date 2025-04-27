@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://ky2h7r63y8gy"]
 
-[ext_resource type="Script" path="res://src/ClayBall.gd" id="1_6whcq"]
+[ext_resource type="Script" uid="uid://b4iypd4txttgx" path="res://src/ClayBall.gd" id="1_6whcq"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_0dw7p"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_5txvd"]
-[ext_resource type="Script" path="res://src/DateVisibility.gd" id="2_xkwcy"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_5txvd"]
+[ext_resource type="Script" uid="uid://dwxqjqompuoyo" path="res://src/DateVisibility.gd" id="2_xkwcy"]
 [ext_resource type="Texture2D" uid="uid://dqegnce8ifldo" path="res://data/models/character/textures/fp1contrast.png" id="3_t2in4"]
 [ext_resource type="PackedScene" uid="uid://cgghr1eaqoc8b" path="res://data/models/present.blend" id="3_wt68o"]
 [ext_resource type="AudioStream" uid="uid://cjvylwe7kkani" path="res://data/audio/spring.ogg" id="5_200ox"]
@@ -49,7 +49,6 @@ playback_mode = 2
 random_pitch = 1.2
 streams_count = 1
 stream_0/stream = ExtResource("5_200ox")
-stream_0/weight = 1.0
 
 [node name="ClayBall" type="RigidBody3D"]
 collision_layer = 128

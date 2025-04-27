@@ -1,13 +1,12 @@
 [gd_scene load_steps=7 format=3 uid="uid://k38mpvqdmjjo"]
 
-[ext_resource type="Script" path="res://src/ShootTool.gd" id="1_lnwkt"]
+[ext_resource type="Script" uid="uid://5mi6s03dbpql" path="res://src/ShootTool.gd" id="1_lnwkt"]
 [ext_resource type="AudioStream" uid="uid://b6rmf8ndmltg3" path="res://data/audio/extinguisher/extinguisher.ogg" id="2_bmthb"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_7fsnj"]
 random_pitch = 1.1
 streams_count = 1
 stream_0/stream = ExtResource("2_bmthb")
-stream_0/weight = 1.0
 
 [sub_resource type="Animation" id="Animation_tx3k3"]
 length = 0.001
@@ -66,8 +65,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xdt0q"]
 _data = {
-"RESET": SubResource("Animation_tx3k3"),
-"fadeout": SubResource("Animation_uslbx")
+&"RESET": SubResource("Animation_tx3k3"),
+&"fadeout": SubResource("Animation_uslbx")
 }
 
 [node name="ExtinguisherTool" type="Node3D"]

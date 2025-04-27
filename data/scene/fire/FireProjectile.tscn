@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bjkvftq5sd13"]
 
-[ext_resource type="Script" path="res://src/FireProjectile.gd" id="1_sp1hs"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_3qv8n"]
+[ext_resource type="Script" uid="uid://cw6qbue1yq5mh" path="res://src/FireProjectile.gd" id="1_sp1hs"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_3qv8n"]
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_hku55"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]

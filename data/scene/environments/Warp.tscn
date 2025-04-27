@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://b3jp8ipg5rvsf"]
 
-[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_j4ojj"]
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_j4ojj"]
 [ext_resource type="Texture2D" uid="uid://bpnamvebkkr7n" path="res://data/textures/sky/warpsky.png" id="2_mjwdf"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7ic6q"]
@@ -34,6 +34,21 @@ volumetric_fog_anisotropy = 0.5
 volumetric_fog_length = 100.0
 volumetric_fog_ambient_inject = 0.15
 
+[sub_resource type="Animation" id="Animation_abi5h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WorldEnvironment:environment:sky_rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_7pl3r"]
 resource_name = "rotate"
 length = 240.0
@@ -51,25 +66,10 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(6.28319, 6.28319, 6.28319)]
 }
 
-[sub_resource type="Animation" id="Animation_abi5h"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WorldEnvironment:environment:sky_rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3o2pb"]
 _data = {
-"RESET": SubResource("Animation_abi5h"),
-"rotate": SubResource("Animation_7pl3r")
+&"RESET": SubResource("Animation_abi5h"),
+&"rotate": SubResource("Animation_7pl3r")
 }
 
 [node name="Environment" type="Node"]

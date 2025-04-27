@@ -1,9 +1,9 @@
 [gd_scene load_steps=20 format=3 uid="uid://dofj1u51fgb3n"]
 
-[ext_resource type="Script" path="res://src/PulseCannonTool.gd" id="1_17p35"]
+[ext_resource type="Script" uid="uid://4cf8hw4refam" path="res://src/PulseCannonTool.gd" id="1_17p35"]
 [ext_resource type="AudioStream" uid="uid://bt1qfstyhshdi" path="res://data/audio/laser.ogg" id="2_hl60i"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="3_jmyfu"]
-[ext_resource type="Shader" path="res://data/shaders/water.gdshader" id="4_ajeco"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="3_jmyfu"]
+[ext_resource type="Shader" uid="uid://depxhgqidthci" path="res://data/shaders/water.gdshader" id="4_ajeco"]
 
 [sub_resource type="Animation" id="Animation_tx3k3"]
 length = 0.001
@@ -86,8 +86,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xdt0q"]
 _data = {
-"RESET": SubResource("Animation_tx3k3"),
-"fadeout": SubResource("Animation_uslbx")
+&"RESET": SubResource("Animation_tx3k3"),
+&"fadeout": SubResource("Animation_uslbx")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0kucd"]
@@ -139,6 +139,9 @@ shader_parameter/albedo = Color(0.54, 0.541, 9.189, 1)
 shader_parameter/albedo2 = Color(2.702, 0.184, 0.302, 1)
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.303
+shader_parameter/wave = SubResource("NoiseTexture2D_v1d1h")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_m23ss")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_sadk0")
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.75
@@ -153,9 +156,6 @@ shader_parameter/edge_scale = 0.66
 shader_parameter/near = 1.0
 shader_parameter/far = 100.0
 shader_parameter/edge_color = Color(1, 1, 1, 1)
-shader_parameter/wave = SubResource("NoiseTexture2D_v1d1h")
-shader_parameter/texture_normal = SubResource("NoiseTexture2D_m23ss")
-shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_sadk0")
 
 [node name="PulseCannonTool" type="Node3D"]
 script = ExtResource("1_17p35")

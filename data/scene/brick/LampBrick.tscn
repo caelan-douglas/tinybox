@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://d34ua4bytc5s5"]
 
-[ext_resource type="Script" path="res://src/LampBrick.gd" id="1_1idt1"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_1dqe2"]
+[ext_resource type="Script" uid="uid://c8g72ci0okq0j" path="res://src/LampBrick.gd" id="1_1idt1"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_1dqe2"]
 [ext_resource type="PackedScene" uid="uid://ccxi02reit78" path="res://data/models/brick/lamp.blend" id="3_37fvo"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="4_ol2f4"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="4_ol2f4"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_putf8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dovtmna702no8"]
 
-[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_kpopq"]
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_kpopq"]
 [ext_resource type="PackedScene" uid="uid://bdeq6bmhjenve" path="res://data/scene/CloudsParticles.tscn" id="4_xri4f"]
 
 [sub_resource type="Gradient" id="Gradient_51eee"]

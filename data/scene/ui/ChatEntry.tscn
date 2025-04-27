@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://brro43168s8jp"]
 
-[ext_resource type="Script" path="res://src/ui/ChatEntry.gd" id="1_5lv54"]
+[ext_resource type="Script" uid="uid://c48uaabe7ge0f" path="res://src/ui/ChatEntry.gd" id="1_5lv54"]
 
 [node name="ChatEntry" type="MarginContainer"]
 custom_minimum_size = Vector2(0, 27)

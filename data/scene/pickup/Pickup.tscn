@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://3fiodktyscht"]
 
 [ext_resource type="Texture2D" uid="uid://bj7ihpi18ashl" path="res://data/textures/glow.png" id="1_gmim4"]
-[ext_resource type="Script" path="res://src/Pickup.gd" id="1_obmro"]
+[ext_resource type="Script" uid="uid://bgdw2fkg88nrb" path="res://src/Pickup.gd" id="1_obmro"]
 [ext_resource type="AudioStream" uid="uid://dhclxdtmsl16j" path="res://data/audio/wobble.ogg" id="3_ah04k"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3to75"]
@@ -58,8 +58,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_airdm"]
 _data = {
-"RESET": SubResource("Animation_4pbmj"),
-"rotate": SubResource("Animation_3kpen")
+&"RESET": SubResource("Animation_4pbmj"),
+&"rotate": SubResource("Animation_3kpen")
 }
 
 [node name="Pickup" type="Node3D"]

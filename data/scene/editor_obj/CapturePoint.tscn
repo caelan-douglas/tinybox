@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://t8ujxmero2bt"]
 
-[ext_resource type="Script" path="res://src/CapturePoint.gd" id="1_bhrvc"]
+[ext_resource type="Script" uid="uid://7kmu3frakj1b" path="res://src/CapturePoint.gd" id="1_bhrvc"]
 [ext_resource type="AudioStream" uid="uid://diffqxt3veixw" path="res://data/audio/capture/capture.ogg" id="2_tro2i"]
 [ext_resource type="AudioStream" uid="uid://bbm4gvvgagrsi" path="res://data/audio/capture/lost.ogg" id="3_0py6e"]
 [ext_resource type="AudioStream" uid="uid://bh65w2wikxw37" path="res://data/audio/capture/contested.ogg" id="4_af6hn"]

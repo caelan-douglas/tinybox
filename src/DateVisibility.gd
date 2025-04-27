@@ -36,4 +36,3 @@ func _ready() -> void:
 			elif date.month == 1:
 				if date.day < 8:
 					visible = set_visible_to_what
-

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://c7u565kah5317"]
 
 [ext_resource type="Texture2D" uid="uid://c6juqn73t8ejc" path="res://data/textures/snowflake.png" id="1_tk1uy"]
-[ext_resource type="Script" path="res://src/CameraParticles.gd" id="2_gcq1m"]
+[ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_gcq1m"]
 
 [sub_resource type="Curve" id="Curve_ic4rd"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.200855, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]

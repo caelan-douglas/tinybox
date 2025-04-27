@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bjhwg6c4kxm5n"]
 
-[ext_resource type="Script" path="res://src/CameraPreviewPoint.gd" id="1_k8gqa"]
+[ext_resource type="Script" uid="uid://cujihbwshm5bi" path="res://src/CameraPreviewPoint.gd" id="1_k8gqa"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_vsu3r"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_lopqb"]

@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://ugv8oiinp1p0"]
 
-[ext_resource type="Script" path="res://src/Brick.gd" id="1_vfybu"]
+[ext_resource type="Script" uid="uid://ckhgejm1vx35w" path="res://src/Brick.gd" id="1_vfybu"]
 [ext_resource type="Shape3D" uid="uid://cvybpi020fmkb" path="res://data/collisionshape/wedge_collisionshape.tres" id="2_ajorh"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_hflf5"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_hflf5"]
 [ext_resource type="PackedScene" uid="uid://bxql5m6vsayxq" path="res://data/models/brick/wedge.blend" id="3_tnyal"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_nb8gv"]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://p3qpu0ujxkis"]
 
-[ext_resource type="Script" path="res://data/scene/ui/VotePanel.gd" id="1_r7ixh"]
-[ext_resource type="Script" path="res://src/ui/DynamicLabel.gd" id="2_aa6de"]
+[ext_resource type="Script" uid="uid://dko2jflkn5qtx" path="res://data/scene/ui/VotePanel.gd" id="1_r7ixh"]
+[ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="2_aa6de"]
 [ext_resource type="PackedScene" uid="uid://cq8as1ma0gr7k" path="res://data/scene/ui/vote/VoteListEntry.tscn" id="3_1sg75"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="4_vlxba"]
 

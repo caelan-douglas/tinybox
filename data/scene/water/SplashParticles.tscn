@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://x6ityafb1bax"]
 
-[ext_resource type="Script" path="res://src/ExpireAfterTime.gd" id="2_4tep0"]
+[ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_4tep0"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
 offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
@@ -11,7 +11,7 @@ gradient = SubResource("Gradient_66m8f")
 width = 128
 
 [sub_resource type="Curve" id="Curve_g2lxx"]
-min_value = -3.0
+_limits = [-3.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 16.2323, 0, 0, Vector2(0.196552, 1), 0.0, 0.0, 0, 0, Vector2(1, -3), -3.96349, 0.0, 0, 0]
 point_count = 3
 

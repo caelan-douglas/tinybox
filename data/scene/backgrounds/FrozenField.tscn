@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://by8rwp7grgg1m"]
 
-[ext_resource type="Script" path="res://src/TBWObject.gd" id="1_iy8wi"]
+[ext_resource type="Script" uid="uid://cew6k87fglhlf" path="res://src/TBWObject.gd" id="1_iy8wi"]
 [ext_resource type="PackedScene" uid="uid://cemgmdxkihhxp" path="res://data/models/backgrounds/bg_frozen_field.blend" id="1_q7h40"]
 [ext_resource type="AudioStream" uid="uid://dqqfcxecttbyn" path="res://data/audio/outdoorambience.ogg" id="3_xmk5q"]
 

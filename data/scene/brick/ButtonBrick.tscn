@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://d2gxhhq25bxkk"]
 
-[ext_resource type="Script" path="res://src/ButtonBrick.gd" id="1_je5ca"]
-[ext_resource type="Script" path="res://addons/smoothing/smoothing.gd" id="2_sgx5r"]
+[ext_resource type="Script" uid="uid://c2qs4hgme811n" path="res://src/ButtonBrick.gd" id="1_je5ca"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_sgx5r"]
 [ext_resource type="PackedScene" uid="uid://bm72uohd2da87" path="res://data/models/brick/button.blend" id="3_ol8rk"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_jm0y6"]
 [ext_resource type="AudioStream" uid="uid://bo4houxqutp2g" path="res://data/audio/button.ogg" id="5_wtscq"]

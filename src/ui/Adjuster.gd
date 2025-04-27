@@ -55,4 +55,3 @@ func _increment_value(amt : int) -> void:
 	else:
 		$DynamicLabel.text = str(val)
 	emit_signal("value_changed", val)
-

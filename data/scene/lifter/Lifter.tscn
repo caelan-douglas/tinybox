@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://baiu57k2676um"]
 
-[ext_resource type="Script" path="res://src/Lifter.gd" id="1_kkssy"]
+[ext_resource type="Script" uid="uid://b0s4a76sls8o5" path="res://src/Lifter.gd" id="1_kkssy"]
 [ext_resource type="PackedScene" uid="uid://bagdsh518cwy5" path="res://data/scene/lifter/LifterParticles.tscn" id="2_ho4e0"]
 [ext_resource type="AudioStream" uid="uid://cmvuqyafnjgnk" path="res://data/audio/lifter.ogg" id="4_eks58"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="4_h61rx"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="4_h61rx"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_5qe2b"]
 height = 12.0

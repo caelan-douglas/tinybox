@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bh1utiu8ireoo"]
 
-[ext_resource type="Script" path="res://src/Explosion.gd" id="1_bvuci"]
+[ext_resource type="Script" uid="uid://x5faqqei0yhv" path="res://src/Explosion.gd" id="1_bvuci"]
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_nruka"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
@@ -12,7 +12,7 @@ gradient = SubResource("Gradient_66m8f")
 width = 128
 
 [sub_resource type="Curve" id="Curve_cr2qs"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 2), 0.0, 0.0, 0, 0, Vector2(0.571984, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 

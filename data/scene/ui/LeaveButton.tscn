@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dudk6o40fwhnj"]
 
-[ext_resource type="Script" path="res://src/ui/LeaveButton.gd" id="1_jupgq"]
+[ext_resource type="Script" uid="uid://cr4ny7twtbpk0" path="res://src/ui/LeaveButton.gd" id="1_jupgq"]
 
 [node name="LeaveButton" type="Button"]
 anchors_preset = 1

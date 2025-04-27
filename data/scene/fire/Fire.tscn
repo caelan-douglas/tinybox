@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://dwfrmjgcn6sg3"]
 
-[ext_resource type="Script" path="res://src/Fire.gd" id="1_35qdu"]
+[ext_resource type="Script" uid="uid://2khj4kha6sah" path="res://src/Fire.gd" id="1_35qdu"]
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="2_8txrk"]
 [ext_resource type="AudioStream" uid="uid://c4pp0lvm8hoam" path="res://data/audio/fire/fire_crackle.ogg" id="3_vjlv8"]
 
@@ -46,7 +46,6 @@ orientation = 2
 random_pitch = 1.1
 streams_count = 1
 stream_0/stream = ExtResource("3_vjlv8")
-stream_0/weight = 1.0
 
 [node name="Fire" type="Node3D"]
 script = ExtResource("1_35qdu")

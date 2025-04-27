@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://eyv2kk27quaf"]
 
-[ext_resource type="Script" path="res://src/TBWEnvrionment.gd" id="1_0mx85"]
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_0mx85"]
 [ext_resource type="Texture2D" uid="uid://cj1otog15h7v2" path="res://data/textures/sky/clouds.png" id="2_7urxt"]
-[ext_resource type="Script" path="res://src/GraphicsVisibility.gd" id="3_tll4i"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="3_tll4i"]
 [ext_resource type="Animation" uid="uid://bqpy2sqp0jknh" path="res://data/animation/skybox/clouds.res" id="4_ebaor"]
 
 [sub_resource type="Gradient" id="Gradient_f1ai1"]
@@ -64,8 +64,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e3436"]
 _data = {
-"RESET": SubResource("Animation_4m6i8"),
-"clouds": ExtResource("4_ebaor")
+&"RESET": SubResource("Animation_4m6i8"),
+&"clouds": ExtResource("4_ebaor")
 }
 
 [node name="Environment" type="Node"]
