@@ -123,18 +123,6 @@ func populate_saved_stuff(internal : bool = false) -> void:
 					item_button.tooltip_text = "This is from the built-in set."
 				else:
 					item_button.tooltip_text = "This is one of your saved buildings."
-				var user_img_dir := "res://data/building_scr"
-				if !internal:
-					user_img_dir = "user://building_scr"
-				# load image
-				var scrdir := DirAccess.open(user_img_dir)
-				if scrdir:
-					var image := Image.load_from_file(str(user_img_dir, "/", file_name.split(".")[0], ".jpg"))
-					if image != null:
-						# 16:9
-						image.resize(113, 64);
-						var texture := ImageTexture.create_from_image(image)
-						item_button.icon = texture
 				if internal:
 					add_to_set("Built-in stuff", item_button, 1)
 				else:

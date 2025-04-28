@@ -237,7 +237,7 @@ func update_appearance(shirt : int, shirt_texture_base64 : String, hair : int, s
 			1:
 				armature.get_node("shirt_jacket").visible = true
 				armature.get_node("shirt_shortsleeve").visible = false
-	if shirt_texture_base64 != null:
+	if shirt_texture_base64 != null && shirt_texture_base64 != "":
 		# set shirt to base64 image
 		var image : Image = Image.new()
 		image.load_jpg_from_buffer(Marshalls.base64_to_raw(shirt_texture_base64))

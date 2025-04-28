@@ -119,7 +119,8 @@ func _send_report(id : int) -> void:
 func _ready() -> void:
 	super()
 	connect("pressed", _on_pressed)
-	connect("visibility_changed", _on_visibility_changed)
+	if !is_connected("visibility_changed", _on_visibility_changed):
+		connect("visibility_changed", _on_visibility_changed)
 	search.connect("text_changed", _on_search)
 	window.connect("tab_changed", _on_tab_changed)
 	refresh()
@@ -183,7 +184,8 @@ func _on_map_selected(file_name : String, lines : Array, image : Image, id : int
 		
 		# show report button for downloaded maps
 		if report_button != null:
-			report_button.disconnect("pressed", _on_report_pressed)
+			if report_button.is_connected("pressed", _on_report_pressed):
+				report_button.disconnect("pressed", _on_report_pressed)
 			report_button.visible = true
 			report_button.disabled = false
 			report_button.connect("pressed", _on_report_pressed.bind(id, file_name))

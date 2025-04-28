@@ -86,7 +86,7 @@ script = ExtResource("1_fgila")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_s1exg")
+&"": SubResource("AnimationLibrary_s1exg")
 }
 autoplay = "load_in"
 
@@ -470,8 +470,8 @@ script = ExtResource("3_yuqno")
 
 [node name="Picker" type="OptionButton" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
 layout_mode = 2
-item_count = 4
 selected = 0
+item_count = 4
 popup/item_0/text = "Short"
 popup/item_0/id = 0
 popup/item_1/text = "Ponytail"
@@ -518,8 +518,8 @@ script = ExtResource("3_yuqno")
 [node name="TypePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "Short sleeve"
 popup/item_0/id = 0
 popup/item_1/text = "Jacket"
