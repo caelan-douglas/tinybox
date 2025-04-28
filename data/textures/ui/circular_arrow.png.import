@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bx00i685shs7k"
 path.s3tc="res://.godot/imported/circular_arrow.png-55f22797a531ce28feded400c48dc15f.s3tc.ctex"
+path.etc2="res://.godot/imported/circular_arrow.png-55f22797a531ce28feded400c48dc15f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/ui/circular_arrow.png"
-dest_files=["res://.godot/imported/circular_arrow.png-55f22797a531ce28feded400c48dc15f.s3tc.ctex"]
+dest_files=["res://.godot/imported/circular_arrow.png-55f22797a531ce28feded400c48dc15f.s3tc.ctex", "res://.godot/imported/circular_arrow.png-55f22797a531ce28feded400c48dc15f.etc2.ctex"]
 
 [params]
 

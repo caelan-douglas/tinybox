@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqiuxri68qqr2"
 path.s3tc="res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.s3tc.ctex"
+path.etc2="res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/watercolour.png"
-dest_files=["res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.s3tc.ctex"]
+dest_files=["res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.s3tc.ctex", "res://.godot/imported/watercolour.png-eaadef80978492e6eb4f5b3301a7ea32.etc2.ctex"]
 
 [params]
 

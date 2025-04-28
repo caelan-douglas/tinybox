@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ueteyyevj7r4"
 path.s3tc="res://.godot/imported/jump_particle_tex.png-5bb0bc0b0d3d8c76fa117a6156e9605b.s3tc.ctex"
+path.etc2="res://.godot/imported/jump_particle_tex.png-5bb0bc0b0d3d8c76fa117a6156e9605b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/jump_particle_tex.png"
-dest_files=["res://.godot/imported/jump_particle_tex.png-5bb0bc0b0d3d8c76fa117a6156e9605b.s3tc.ctex"]
+dest_files=["res://.godot/imported/jump_particle_tex.png-5bb0bc0b0d3d8c76fa117a6156e9605b.s3tc.ctex", "res://.godot/imported/jump_particle_tex.png-5bb0bc0b0d3d8c76fa117a6156e9605b.etc2.ctex"]
 
 [params]
 

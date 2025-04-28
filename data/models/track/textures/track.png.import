@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ikfa8wlpg1cg"
 path.s3tc="res://.godot/imported/track.png-253b9c66eab557278af2e275c98515dd.s3tc.ctex"
+path.etc2="res://.godot/imported/track.png-253b9c66eab557278af2e275c98515dd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/models/track/textures/track.png"
-dest_files=["res://.godot/imported/track.png-253b9c66eab557278af2e275c98515dd.s3tc.ctex"]
+dest_files=["res://.godot/imported/track.png-253b9c66eab557278af2e275c98515dd.s3tc.ctex", "res://.godot/imported/track.png-253b9c66eab557278af2e275c98515dd.etc2.ctex"]
 
 [params]
 

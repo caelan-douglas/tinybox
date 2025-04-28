@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtqr2iapofx6l"
 path.s3tc="res://.godot/imported/Ice003_2K-JPG_Roughness.jpg-12ffdf02258aab20d21f53d75d23f2bc.s3tc.ctex"
+path.etc2="res://.godot/imported/Ice003_2K-JPG_Roughness.jpg-12ffdf02258aab20d21f53d75d23f2bc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/Ice003_2K-JPG_Roughness.jpg"
-dest_files=["res://.godot/imported/Ice003_2K-JPG_Roughness.jpg-12ffdf02258aab20d21f53d75d23f2bc.s3tc.ctex"]
+dest_files=["res://.godot/imported/Ice003_2K-JPG_Roughness.jpg-12ffdf02258aab20d21f53d75d23f2bc.s3tc.ctex", "res://.godot/imported/Ice003_2K-JPG_Roughness.jpg-12ffdf02258aab20d21f53d75d23f2bc.etc2.ctex"]
 
 [params]
 

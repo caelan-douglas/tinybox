@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1bn554ua5eur"
 path.s3tc="res://.godot/imported/explosive_brick.jpg-a747f23f9cda8c9e5b51d6ba9037728e.s3tc.ctex"
+path.etc2="res://.godot/imported/explosive_brick.jpg-a747f23f9cda8c9e5b51d6ba9037728e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/explosive_brick.jpg"
-dest_files=["res://.godot/imported/explosive_brick.jpg-a747f23f9cda8c9e5b51d6ba9037728e.s3tc.ctex"]
+dest_files=["res://.godot/imported/explosive_brick.jpg-a747f23f9cda8c9e5b51d6ba9037728e.s3tc.ctex", "res://.godot/imported/explosive_brick.jpg-a747f23f9cda8c9e5b51d6ba9037728e.etc2.ctex"]
 
 [params]
 

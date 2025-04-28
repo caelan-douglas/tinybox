@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dnck2psfkx1p5"
 path.s3tc="res://.godot/imported/PLACEHOLDER_tank.jpg-332b94b50a1b931be771a07df9af3b8c.s3tc.ctex"
+path.etc2="res://.godot/imported/PLACEHOLDER_tank.jpg-332b94b50a1b931be771a07df9af3b8c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/PLACEHOLDER_tank.jpg"
-dest_files=["res://.godot/imported/PLACEHOLDER_tank.jpg-332b94b50a1b931be771a07df9af3b8c.s3tc.ctex"]
+dest_files=["res://.godot/imported/PLACEHOLDER_tank.jpg-332b94b50a1b931be771a07df9af3b8c.s3tc.ctex", "res://.godot/imported/PLACEHOLDER_tank.jpg-332b94b50a1b931be771a07df9af3b8c.etc2.ctex"]
 
 [params]
 

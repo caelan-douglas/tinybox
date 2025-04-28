@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmxdymr7cf4mh"
 path.s3tc="res://.godot/imported/fp1contrast.png-bd4f784335dc6fc71a12409e15eb89f4.s3tc.ctex"
+path.etc2="res://.godot/imported/fp1contrast.png-bd4f784335dc6fc71a12409e15eb89f4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/models/character/hair/textures/fp1contrast.png"
-dest_files=["res://.godot/imported/fp1contrast.png-bd4f784335dc6fc71a12409e15eb89f4.s3tc.ctex"]
+dest_files=["res://.godot/imported/fp1contrast.png-bd4f784335dc6fc71a12409e15eb89f4.s3tc.ctex", "res://.godot/imported/fp1contrast.png-bd4f784335dc6fc71a12409e15eb89f4.etc2.ctex"]
 
 [params]
 

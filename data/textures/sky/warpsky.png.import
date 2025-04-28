@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpnamvebkkr7n"
 path.s3tc="res://.godot/imported/warpsky.png-d3feb4d85250dd8b3faa7ecf51910bd8.s3tc.ctex"
+path.etc2="res://.godot/imported/warpsky.png-d3feb4d85250dd8b3faa7ecf51910bd8.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/sky/warpsky.png"
-dest_files=["res://.godot/imported/warpsky.png-d3feb4d85250dd8b3faa7ecf51910bd8.s3tc.ctex"]
+dest_files=["res://.godot/imported/warpsky.png-d3feb4d85250dd8b3faa7ecf51910bd8.s3tc.ctex", "res://.godot/imported/warpsky.png-d3feb4d85250dd8b3faa7ecf51910bd8.etc2.ctex"]
 
 [params]
 

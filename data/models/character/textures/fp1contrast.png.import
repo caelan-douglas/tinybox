@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqegnce8ifldo"
 path.s3tc="res://.godot/imported/fp1contrast.png-bf33d02114e2e632b74f23e81c02bb82.s3tc.ctex"
+path.etc2="res://.godot/imported/fp1contrast.png-bf33d02114e2e632b74f23e81c02bb82.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/models/character/textures/fp1contrast.png"
-dest_files=["res://.godot/imported/fp1contrast.png-bf33d02114e2e632b74f23e81c02bb82.s3tc.ctex"]
+dest_files=["res://.godot/imported/fp1contrast.png-bf33d02114e2e632b74f23e81c02bb82.s3tc.ctex", "res://.godot/imported/fp1contrast.png-bf33d02114e2e632b74f23e81c02bb82.etc2.ctex"]
 
 [params]
 

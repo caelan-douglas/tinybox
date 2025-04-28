@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://tcl3tcc402us"
 path.s3tc="res://.godot/imported/lifter_star.png-5f8f73d454654f1bbf88dc72b1280614.s3tc.ctex"
+path.etc2="res://.godot/imported/lifter_star.png-5f8f73d454654f1bbf88dc72b1280614.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/lifter_star.png"
-dest_files=["res://.godot/imported/lifter_star.png-5f8f73d454654f1bbf88dc72b1280614.s3tc.ctex"]
+dest_files=["res://.godot/imported/lifter_star.png-5f8f73d454654f1bbf88dc72b1280614.s3tc.ctex", "res://.godot/imported/lifter_star.png-5f8f73d454654f1bbf88dc72b1280614.etc2.ctex"]
 
 [params]
 

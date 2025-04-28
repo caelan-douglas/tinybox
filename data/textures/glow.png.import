@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bj7ihpi18ashl"
 path.s3tc="res://.godot/imported/glow.png-88cef02be5d2e54212cf4bba30ffb2f1.s3tc.ctex"
+path.etc2="res://.godot/imported/glow.png-88cef02be5d2e54212cf4bba30ffb2f1.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/glow.png"
-dest_files=["res://.godot/imported/glow.png-88cef02be5d2e54212cf4bba30ffb2f1.s3tc.ctex"]
+dest_files=["res://.godot/imported/glow.png-88cef02be5d2e54212cf4bba30ffb2f1.s3tc.ctex", "res://.godot/imported/glow.png-88cef02be5d2e54212cf4bba30ffb2f1.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dacnw201grgcp"
 path.s3tc="res://.godot/imported/dizzy_star.png-80fe25bdf7f79b4e2adeb1469610517d.s3tc.ctex"
+path.etc2="res://.godot/imported/dizzy_star.png-80fe25bdf7f79b4e2adeb1469610517d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://data/textures/dizzy_star.png"
-dest_files=["res://.godot/imported/dizzy_star.png-80fe25bdf7f79b4e2adeb1469610517d.s3tc.ctex"]
+dest_files=["res://.godot/imported/dizzy_star.png-80fe25bdf7f79b4e2adeb1469610517d.s3tc.ctex", "res://.godot/imported/dizzy_star.png-80fe25bdf7f79b4e2adeb1469610517d.etc2.ctex"]
 
 [params]
 
