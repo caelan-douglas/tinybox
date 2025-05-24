@@ -356,7 +356,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 		if line != "":
 			# songs
 			if str(line).begins_with("songs ;"):
-				get_current_map().songs = JSON.parse_string(str(line).split(" ; ")[1])
+				get_current_map().set_songs.rpc(line)
 			if str(line).begins_with("death_limit_low ; "):
 				get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
 			if str(line).begins_with("death_limit_high ; "):

@@ -21,6 +21,14 @@ class_name Map
 var death_limit_low : int = 20
 var death_limit_high : int = 400
 @export var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
+var _song_line : String = ""
+
+@rpc("any_peer", "call_local", "reliable")
+func set_songs(line : String) -> void:
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
+		return
+	songs = JSON.parse_string(str(line).split(" ; ")[1])
+	_song_line = line
 
 # set fallback values for loading new world before properties are set
 func reset_map_properties() -> void:
@@ -57,7 +65,8 @@ func _ready() -> void:
 # runs as server
 func _on_peer_connected(id : int) -> void:
 	set_gravity_scale.rpc_id(id, gravity_scale)
-	set_gravity.rpc_id(false)
+	set_gravity.rpc_id(id, false)
+	set_songs.rpc_id(id, _song_line)
 
 @rpc ("authority", "call_local", "reliable")
 func set_gravity_scale(value : float) -> void:
