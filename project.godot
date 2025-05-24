@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Tinybox"
+config/version="12.6"
 run/main_scene="res://data/scene/MainScene.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Tinybox"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
-config/icon="res://icon.png"
+config/icon="uid://ccl1h2rnq8f85"
 config/windows_native_icon="res://icon.ico"
 boot_splash/windows_native_icon="res://icon.ico"
 

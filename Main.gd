@@ -414,6 +414,10 @@ func announce_player_joined(p_display_name : String) -> void:
 # Adds a player to the server with id & name.
 func add_peer(peer_id : int) -> void:
 	if multiplayer.is_server():
+		# unpause, if was paused from empty server
+		if get_tree().paused == true:
+			get_tree().paused = false
+			CommandHandler._send_response("Info", str("Server unpaused."))
 		# for connecting clients, do prejoin before adding player
 		if peer_id != 1:
 			rpc_id(peer_id, "client_info_request_from_server")
@@ -497,3 +501,9 @@ func remove_player(peer_id : int) -> void:
 				CommandHandler._send_response("Info", str("Demoted ", player.display_name, " because they left."))
 		
 		player.queue_free()
+		
+		if multiplayer.is_server():
+			# if no one is online, pause physics
+			if Global.get_world().rigidplayer_list.size() == 0:
+				CommandHandler._send_response("Info", str("Pausing the server because no one is online. It will automatically resume when someone joins."))
+				get_tree().paused = true
