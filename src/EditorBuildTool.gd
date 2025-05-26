@@ -35,6 +35,8 @@ var selected_item_name_internal : String = ""
 var selected_building_path : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
+# active copied tbw
+var clipboard : Node3D = null
 
 var ui_subtitle : Label
 
@@ -339,12 +341,29 @@ func set_grabbed() -> void:
 		for obj : Node3D in select_area.get_overlapping_bodies():
 			if obj is TBWObject || obj is Brick:
 				grabbed.append(obj)
+	copy_grabbed()
 	property_editor.show_grab_actions(grabbed, self)
 
 func copy_grabbed() -> void:
 	var ok : bool = await Global.get_world().save_tbw("temp", false, grabbed, true)
 	if ok:
+		# clear old clipboard
+		if clipboard != null:
+			clipboard.queue_free()
 		copied_lines = Global.get_tbw_lines("temp")
+		clipboard = await Global.get_world().parse_tbw(copied_lines, true)
+		for child : Node in clipboard.get_children():
+			child.set_script(null)
+		#container.reparent(preview_node)
+		await get_tree().physics_frame
+		clipboard.position = Vector3.ZERO
+		# make all children have preview material
+		for child : Node in clipboard.get_children():
+			var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
+			if new_mesh != null:
+				# apply construction material
+				for i in range(new_mesh.get_surface_override_material_count()):
+					new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
 
 func save_grabbed() -> void:
 	var save_name := str("Building", ("%X" % Time.get_unix_time_from_system()))
@@ -372,16 +391,20 @@ func _physics_process(delta : float) -> void:
 		
 		# SELECT MODE -----------
 		if _state == States.SELECT:
+			if clipboard != null:
+				clipboard.visible = true
+				clipboard.global_position = select_area.global_position
 			if select_area != null:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 					# drag select
 					if Input.is_action_just_pressed("click"):
 						drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 					elif Input.is_action_pressed("click"):
-						var drag_scale : Vector3 = drag_end_point - drag_start_point + Vector3(1, 1, 1)
-						select_area.scale = abs(drag_scale).clamp(Vector3(1, 1, 1), drag_scale)
-						select_area.position = drag_start_point + drag_scale/2 + Vector3(-0.5, -0.5, -0.5)
 						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
+						var drag_scale : Vector3 = drag_end_point - drag_start_point + Vector3(1, 1, 1)
+						select_area.scale = abs(drag_end_point - drag_start_point) + Vector3(1, 1, 1)
+						select_area.scale = select_area.scale.clamp(Vector3(1, 1, 1), Vector3(9999, 9999, 9999))
+						select_area.global_position = drag_start_point.lerp(drag_end_point, 0.5)
 					elif Input.is_action_just_released("click"):
 						# when recapturing mouse with click
 						if editor != null:
@@ -396,6 +419,8 @@ func _physics_process(delta : float) -> void:
 						select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 		# BUILD MODE ------------
 		else:
+			if clipboard != null:
+				clipboard.visible = false
 			if select_area != null:
 				select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 				if Input.is_action_pressed("editor_delete"):

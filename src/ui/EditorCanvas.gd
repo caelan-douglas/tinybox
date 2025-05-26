@@ -102,7 +102,7 @@ func _load_world(map_selector : MapList) -> void:
 	$EntryScreen.set_visible(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# remove ".tbw" from string
-	Global.get_world()._parse_and_open_tbw(map_selector.selected_lines)
+	Global.get_world().open_tbw(map_selector.selected_lines)
 	# set save field name to loaded world name
 	world_name.text = str(map_selector.selected_name)
 

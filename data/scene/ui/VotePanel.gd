@@ -105,7 +105,7 @@ func _on_vote_timeout() -> void:
 			
 			# built-in
 			if map_id == -1:
-				Global.get_world()._parse_and_open_tbw(Global.get_tbw_lines(str(maps[highest_vote]["name"])))
+				Global.get_world().open_tbw(Global.get_tbw_lines(str(maps[highest_vote]["name"])))
 			else:
 				# browser
 				var req : HTTPRequest = HTTPRequest.new()
@@ -126,7 +126,7 @@ func _switch_map(result : int, response_code : int, headers : PackedStringArray,
 		if response[0] is Dictionary:
 			if response[0].has("tbw"):
 				var lines : PackedStringArray = str(response[0]["tbw"]).split("\n")
-				Global.get_world()._parse_and_open_tbw(lines)
+				Global.get_world().open_tbw(lines)
 
 func _maps_request_completed(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
 	if (response_code != 200):

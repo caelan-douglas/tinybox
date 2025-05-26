@@ -54,8 +54,6 @@ rim_tint = 1.0
 
 [node name="EditorBuildTool" type="Node3D"]
 script = ExtResource("1_1jwcf")
-visual_mesh_name = null
-lock_camera_to_aim = null
 type = 1
 
 [node name="PreviewNode" parent="." instance=ExtResource("2_3p1u0")]

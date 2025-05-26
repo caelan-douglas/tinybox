@@ -175,7 +175,8 @@ func save_tbw(world_name : String, server : bool = false, selection : Array = []
 			Global.get_player().visible = true
 			get_tree().current_scene.get_node("GameCanvas").visible = true
 			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
-	UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
+	if !temp:
+		UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
 	
 	# Create tbw file.
 	var file : FileAccess
@@ -259,7 +260,7 @@ func load_tbw(file_name : String, switching := false, reset_player_and_cameras :
 			# switching from pause menu, show "map switching" alert to users
 			if switching:
 				show_tbw_switch_alert(Global.display_name, file_name)
-			_parse_and_open_tbw(lines, reset_player_and_cameras)
+			open_tbw(lines, reset_player_and_cameras)
 		# if we are client
 		else:
 			ask_server_to_open_tbw.rpc_id(1, Global.display_name, file_name, lines)
@@ -300,7 +301,7 @@ func _world_accepted(name_from : String, world_name : String, lines : Array) -> 
 	# if the alert showed when the game wasn't paused, go back to captured
 	if !Global.is_paused && !Global.server_mode():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	_parse_and_open_tbw(lines)
+	open_tbw(lines)
 	# show alert to all users that map was switched
 	show_tbw_switch_alert(name_from, world_name)
 
@@ -316,8 +317,8 @@ func set_loading_canvas_text(text : String) -> void:
 	var loading_text : Label = loading_canvas.get_node("Panel/Label")
 	loading_text.text = str(text)
 
-# Only to be run as server
-func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
+
+func open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	if !multiplayer.is_server(): return
 	# End the active gamemode if a new world is requested.
 	var e : Event = Event.new(Event.EventType.END_ACTIVE_GAMEMODE, [])
@@ -338,6 +339,27 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 	# BIG file, show loading visual
 	if lines.size() > 100:
 		set_loading_canvas_visiblity.rpc(true)
+	
+	var contained_world := await parse_tbw(lines)
+	
+	# reset all player cameras once world is done loading
+	if reset_camera_and_player:
+		reset_player_cameras.rpc()
+		reset_player_positions.rpc()
+	# add basic gamemodes
+	_clear_gamemodes()
+	add_all_gamemodes()
+	print(gamemode_list)
+	# announce we are done loading
+	tbw_loading = false
+	await get_tree().process_frame
+	emit_signal("tbw_loaded")
+
+
+# Only to be run as server or local client
+func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
+	var container := Node3D.new()
+	add_child(container)
 	
 	var count : int = 0
 	# amount of lines to read in a frame
@@ -371,7 +393,11 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 				# disable loading canvas if we used it
 				set_loading_canvas_visiblity.rpc(false)
 				# load building portion, use global pos
-				await _server_load_building(lines.slice(count+1), Vector3.ZERO, true)
+				# pass container if returning as container
+				if return_as_container:
+					await _server_load_building(lines.slice(count+1), Vector3.ZERO, false, container)
+				else:
+					await _server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
 			# Load other world elements, like environment, objects, etc.
 			else:
@@ -397,7 +423,10 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 								inst = ret.instantiate()
 				# ignore invalid items
 				if inst != null:
-					add_child(inst, true)
+					if return_as_container:
+						container.add_child(inst, true)
+					else:
+						add_child(inst, true)
 					# if this object has properties
 					if props:
 						var prop_list := line_split.slice(1)
@@ -413,18 +442,7 @@ func _parse_and_open_tbw(lines : Array, reset_camera_and_player : bool = true) -
 								inst.set_property(property_name, property)
 						sync_tbw_obj_properties.rpc(inst.get_path(), inst.properties_as_dict())
 		count += 1
-	# reset all player cameras once world is done loading
-	if reset_camera_and_player:
-		reset_player_cameras.rpc()
-		reset_player_positions.rpc()
-	# add basic gamemodes
-	_clear_gamemodes()
-	add_all_gamemodes()
-	print(gamemode_list)
-	# announce we are done loading
-	tbw_loading = false
-	await get_tree().process_frame
-	emit_signal("tbw_loaded")
+	return container
 
 # add gamemodes based on their requirements
 func add_all_gamemodes() -> void:
@@ -482,9 +500,10 @@ func _clear_gamemodes() -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func sync_tbw_obj_properties(obj_path : String, props : Dictionary) -> void:
 	var node : TBWObject = get_node_or_null(obj_path)
-	for prop : String in props.keys():
-		if prop != "script":
-			node.set_property(prop, props[prop])
+	if node:
+		for prop : String in props.keys():
+			if prop != "script":
+				node.set_property(prop, props[prop])
 
 @rpc("any_peer", "call_local", "reliable")
 func reset_player_cameras() -> void:
@@ -530,7 +549,7 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
 	_server_load_building(lines, b_position, use_global_position)
 
-func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false) -> void:
+func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false, container : Node3D = null) -> void:
 	if !multiplayer.is_server(): return
 	
 	var count_start : int = 0
@@ -599,7 +618,11 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			var line_split := line.split(" ; ")
 			if SpawnableObjects.objects.has(line_split[0]):
 				var b : Brick = SpawnableObjects.objects[line_split[0]].instantiate()
-				add_child(b, true)
+				# for parsing return as container
+				if container != null:
+					container.add_child(b, true)
+				else:
+					add_child(b, true)
 				building_group.append(b)
 				var prop_list := line_split.slice(1)
 				for p : String in prop_list:
@@ -615,54 +638,55 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 							property = property - offset_pos + b_position
 						# set the property
 						b.set_property(property_name, property)
-	### Joining bricks
-	# don't place nothing
-	if building_group.size() < 1:
-		printerr("Building: Tried to load building with nothing in it.")
-		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
-		return
-	# change ownership first
-	# wait a bit before checking joints
-	await get_tree().create_timer(0.1).timeout
-	if building_group[0] == null:
-		return
-	# update first brick pos for sorter
-	first_brick_pos = building_group[0].global_position
-	var building_group_extras := []
-	# sort array by position
-	building_group.sort_custom(_pos_sort)
-	# now move all extra bricks (motorseat, motorbrick) to building_group_extras
-	for b : Brick in building_group:
-		if b is MotorBrick || b is MotorSeat:
-			building_group_extras.append(b)
-			building_group.erase(b)
-	# resort basic bricks
-	building_group.sort_custom(_pos_sort)
-	# now for each basic brick:
-	# 1. enable its collider
-	# 2. check neighbours
-	var count : int = 0
-	for b : Brick in building_group:
-		b.change_state.rpc(Brick.States.PLACED)
-		if count == 1:
-			# recheck first brick in array on second brick check
-			# (never gets chance to join)
-			building_group[0].check_joints()
-		count += 1
-		b.sync_properties.rpc(b.properties_as_dict())
-	# now for each extra brick:
-	# 1. enable its collider
-	# 2. check neighbours
-	await get_tree().process_frame
-	count = 0
-	for b : Brick in building_group_extras:
-		b.change_state.rpc(Brick.States.PLACED)
-		count += 1
-		b.sync_properties.rpc(b.properties_as_dict())
-	
-	print(str("Done loading building, checking groups. ", Time.get_ticks_msec()))
-	# Update the brick groups.
-	get_node("BrickGroups").check_world_groups(true)
+	if container == null:
+		### Joining bricks
+		# don't place nothing
+		if building_group.size() < 1:
+			printerr("Building: Tried to load building with nothing in it.")
+			UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 7, false, UIHandler.alert_colour_error)
+			return
+		# change ownership first
+		# wait a bit before checking joints
+		await get_tree().create_timer(0.1).timeout
+		if building_group[0] == null:
+			return
+		# update first brick pos for sorter
+		first_brick_pos = building_group[0].global_position
+		var building_group_extras := []
+		# sort array by position
+		building_group.sort_custom(_pos_sort)
+		# now move all extra bricks (motorseat, motorbrick) to building_group_extras
+		for b : Brick in building_group:
+			if b is MotorBrick || b is MotorSeat:
+				building_group_extras.append(b)
+				building_group.erase(b)
+		# resort basic bricks
+		building_group.sort_custom(_pos_sort)
+		# now for each basic brick:
+		# 1. enable its collider
+		# 2. check neighbours
+		var count : int = 0
+		for b : Brick in building_group:
+			b.change_state.rpc(Brick.States.PLACED)
+			if count == 1:
+				# recheck first brick in array on second brick check
+				# (never gets chance to join)
+				building_group[0].check_joints()
+			count += 1
+			b.sync_properties.rpc(b.properties_as_dict())
+		# now for each extra brick:
+		# 1. enable its collider
+		# 2. check neighbours
+		await get_tree().process_frame
+		count = 0
+		for b : Brick in building_group_extras:
+			b.change_state.rpc(Brick.States.PLACED)
+			count += 1
+			b.sync_properties.rpc(b.properties_as_dict())
+		
+		print(str("Done loading building, checking groups. ", Time.get_ticks_msec()))
+		# Update the brick groups.
+		get_node("BrickGroups").check_world_groups(true)
 	set_loading_canvas_visiblity.rpc(false)
 
 var first_brick_pos : Vector3 = Vector3.ZERO

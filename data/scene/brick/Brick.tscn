@@ -31,8 +31,8 @@ collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
 freeze = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_hwuoe")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
