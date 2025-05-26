@@ -541,7 +541,7 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 	# 10 seconds between loading buildings
 	# buildings are 3 lines or greater
 	if lines.size() > 2:
-		if Time.get_ticks_msec() - last_tbw_load_time < 10000:
+		if Time.get_ticks_msec() - last_tbw_load_time < 10000 && Global.get_world().get_current_map() is not Editor:
 			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
 			return
 	last_tbw_load_time = Time.get_ticks_msec()

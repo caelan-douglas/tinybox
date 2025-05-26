@@ -35,8 +35,8 @@ var selected_item_name_internal : String = ""
 var selected_building_path : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
-# active copied tbw
-var clipboard : Node3D = null
+# active copied tbw, shared between build tools
+static var clipboard : Node3D = null
 
 var ui_subtitle : Label
 
@@ -333,8 +333,9 @@ func change_state(new : States) -> void:
 			item_chooser.hide_item_chooser()
 			clear_preview()
 
-var grabbed : Array = []
-var copied_lines : Array = []
+# share copied objs between buildtools
+static var grabbed : Array = []
+static var copied_lines : Array = []
 func set_grabbed() -> void:
 	grabbed = []
 	if select_area != null:
@@ -347,6 +348,7 @@ func set_grabbed() -> void:
 func copy_grabbed() -> void:
 	var ok : bool = await Global.get_world().save_tbw("temp", false, grabbed, true)
 	if ok:
+		UIHandler.show_toast("Selection copied, right click or use the Property Editor to paste")
 		# clear old clipboard
 		if clipboard != null:
 			clipboard.queue_free()
@@ -357,8 +359,9 @@ func copy_grabbed() -> void:
 		#container.reparent(preview_node)
 		await get_tree().physics_frame
 		clipboard.position = Vector3.ZERO
-		# make all children have preview material
+		# make all children have preview material and remove collision
 		for child : Node in clipboard.get_children():
+			remove_item_collision(Global.get_all_children(child) as Array)
 			var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
 			if new_mesh != null:
 				# apply construction material
@@ -370,7 +373,8 @@ func save_grabbed() -> void:
 	Global.get_world().save_tbw(save_name, false, grabbed)
 
 func paste_grabbed() -> void:
-	Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+	if copied_lines.size() > 0:
+		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
 
 func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
@@ -396,6 +400,9 @@ func _physics_process(delta : float) -> void:
 				clipboard.global_position = select_area.global_position
 			if select_area != null:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+					# paste
+					if Input.is_action_just_pressed("editor_delete"):
+						paste_grabbed()
 					# drag select
 					if Input.is_action_just_pressed("click"):
 						drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
