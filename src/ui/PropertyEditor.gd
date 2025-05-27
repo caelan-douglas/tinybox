@@ -121,6 +121,8 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/immovable")
 		elif prop_name == "joinable":
 			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/joinable")
+		elif prop_name == "indestructible":
+			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/indestructible")
 	
 	# Add adjuster for floats and ints
 	if prop is float || prop is int:

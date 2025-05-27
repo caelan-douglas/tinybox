@@ -146,7 +146,8 @@
     },
     "property_tooltips": {
         "immovable": "Whether or not this brick can be displaced by explosions or other external effects.\nImmovable bricks cannot be used for vehicles.",
-        "joinable": "Whether or not this brick can join to other bricks to form a group.\nBricks that are joinable will attach to vehicles."
+        "joinable": "Whether or not this brick can join to other bricks to form a group.\nBricks that are joinable will attach to vehicles.",
+        "indestructible": "Prevents bricks that are in a group from being seperated.\nCan be used to make vehicles that cannot be destroyed."
     },
     "tbw_objects": {
         "obj_water": "Water",
@@ -229,7 +230,7 @@
             "brick_lamp": "Lamp that provides light. Will shut off if displaced.",
             "brick_wedge": "Wedge-shaped brick allowing for slopes. Can be dragged out to have different incline degrees.",
             "brick_explosive": "Explodes when a button attached to it is pressed or it is hit by a bomb, rocket, etc.",
-            "brick_activator": "Activates (releases) the brick group it is attached to, making it susceptible to gravity.\nAlso allows vehicles to auto-drive with set steering and acceleration, or to follow the nearest player."
+            "brick_activator": "Activates (releases) the brick group it is attached to, making it susceptible to gravity.\nAlso allows vehicles to auto-drive with set steering and acceleration, or to follow the nearest player.\nThis can be used in many ways, from making autonomous vehicles to ferris wheels and moving platforms."
         }
     },
     "songs": {
