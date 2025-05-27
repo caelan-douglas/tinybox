@@ -41,6 +41,10 @@ func _ready() -> void:
 func switch_song(new_song_names : Array, overwrite_song_list := true) -> void:
 	if overwrite_song_list:
 		song_list = new_song_names
+	
+	# don't actually try to play songs as dedicated server
+	if Global.server_mode():
+		return
 	#print("Switching songs to: ", str(new_song_names), " ;;; Total song list: ", str(song_list))
 	var new_song_name : String = ""
 	if new_song_names.size() > 0:
@@ -76,7 +80,7 @@ func switch_song(new_song_names : Array, overwrite_song_list := true) -> void:
 				music_animator.play("RESET")
 
 func _physics_process(delta : float) -> void:
-	if !music_player.playing && song_list != [""]:
+	if !music_player.playing && song_list != [""] && !Global.server_mode():
 		# don't play the same song again if there is more than one song
 		var songs_minus_current : Array = song_list.duplicate()
 		if song_list.size() > 1:
