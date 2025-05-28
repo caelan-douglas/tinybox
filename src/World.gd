@@ -376,18 +376,19 @@ func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
 			if loading_canvas.visible:
 				set_loading_canvas_text.rpc(str("Loading .tbw file...     Objects: ", count))
 		if line != "":
-			# songs
-			if str(line).begins_with("songs ;"):
-				get_current_map().set_songs.rpc(line)
-			if str(line).begins_with("death_limit_low ; "):
-				get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
-			if str(line).begins_with("death_limit_high ; "):
-				get_current_map().death_limit_high = str(line).split(" ; ")[1] as int
-			if str(line).begins_with("gravity_scale ; "):
-				var gravity_scale : float = str(line).split(" ; ")[1] as float
-				# Modify default gravity
-				get_current_map().set_gravity_scale.rpc(gravity_scale)
-				get_current_map().set_gravity.rpc(false)
+			if !return_as_container:
+				# songs
+				if str(line).begins_with("songs ;"):
+					get_current_map().set_songs.rpc(line)
+				if str(line).begins_with("death_limit_low ; "):
+					get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
+				if str(line).begins_with("death_limit_high ; "):
+					get_current_map().death_limit_high = str(line).split(" ; ")[1] as int
+				if str(line).begins_with("gravity_scale ; "):
+					var gravity_scale : float = str(line).split(" ; ")[1] as float
+					# Modify default gravity
+					get_current_map().set_gravity_scale.rpc(gravity_scale)
+					get_current_map().set_gravity.rpc(false)
 			# final step, place building
 			if str(line) == "[building]":
 				# disable loading canvas if we used it
@@ -400,7 +401,7 @@ func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
 					await _server_load_building(lines.slice(count+1), Vector3.ZERO, true)
 				break
 			# Load other world elements, like environment, objects, etc.
-			else:
+			elif !return_as_container:
 				var line_split := line.split(" ; ")
 				var inst : Node = null
 				var props := true
@@ -536,7 +537,7 @@ func clear_bricks() -> void:
 
 # server places bricks
 @rpc("any_peer", "call_local", "reliable")
-func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false) -> void:
+func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false, placement_rotation : Vector3 = Vector3.ZERO) -> void:
 	if !multiplayer.is_server(): return
 	# 10 seconds between loading buildings
 	# buildings are 3 lines or greater
@@ -547,9 +548,9 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 	last_tbw_load_time = Time.get_ticks_msec()
 	if Global.server_mode():
 		CommandHandler.submit_command.rpc("Alert", str(name_from, " placed building at: ", b_position, ". Number of objects: ", lines.size()), 1)
-	_server_load_building(lines, b_position, use_global_position)
+	_server_load_building(lines, b_position, use_global_position, null, placement_rotation)
 
-func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false, container : Node3D = null) -> void:
+func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false, container : Node3D = null, placement_rotation : Vector3 = Vector3.ZERO) -> void:
 	if !multiplayer.is_server(): return
 	
 	var count_start : int = 0
@@ -639,6 +640,29 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 						# set the property
 						b.set_property(property_name, property)
 	if container == null:
+		### Offset by rotation
+		print("Placement rotation:", placement_rotation)
+		var pivot_obj : Node3D = Node3D.new()
+		add_child(pivot_obj)
+		pivot_obj.global_position = b_position
+		pivot_obj.global_rotation = Vector3.ZERO
+		var pivot : Transform3D = pivot_obj.global_transform
+		# pivot origin to placement position, as it works with the preview
+		# TODO: clean this up
+		var quat_left := Quaternion(Vector3(1, 0, 0), placement_rotation.x)
+		var quat_up := Quaternion(Vector3(0, 1, 0), placement_rotation.y)
+		var quat_forward := Quaternion(Vector3(0, 0, 1), placement_rotation.z)
+		var target_quat := quat_up * quat_left * quat_forward
+		var target_basis := Basis(target_quat)
+
+		var new_pivot := Transform3D(target_basis, pivot.origin)
+		for b : Brick in building_group:
+			#var last_rot := b.global_rotation
+			var local_trans := pivot.affine_inverse() * b.global_transform
+			b.global_transform = new_pivot * local_trans
+		pivot_obj.queue_free()
+		
+		
 		### Joining bricks
 		# don't place nothing
 		if building_group.size() < 1:

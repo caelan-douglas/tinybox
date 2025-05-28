@@ -1,3 +1,5 @@
+[tbw]
+[building]
 brick_motor_seat ; global_position:(90, 64, 37) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true
 brick ; global_position:(91, 59.5, 44) ; global_rotation:(0, 0, 0) ; brick_scale:(7, 8, 33) ; _material:0 ; _colour:(1, 0.5625, 0, 1) ; immovable:false ; joinable:true
 brick_motor_seat ; global_position:(92, 64, 37) ; global_rotation:(0, 0, 0) ; brick_scale:(1, 1, 1) ; _material:0 ; _colour:(1, 1, 1, 1) ; immovable:false ; joinable:true

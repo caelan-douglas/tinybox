@@ -36,7 +36,7 @@ var selected_building_path : String = ""
 var selected_item_properties : Dictionary = {}
 var item_offset := Vector3(0, 0, 0)
 # active copied tbw, shared between build tools
-static var clipboard : Node3D = null
+static var preview : Node3D = null
 
 var ui_subtitle : Label
 
@@ -45,7 +45,6 @@ var _state : States = States.BUILD
 @onready var property_editor : PropertyEditor
 @onready var item_chooser : ItemChooser
 @onready var preview_node : Node3D = $PreviewNode
-var active_preview_instance : Node3D = null
 var drag_start_point : Vector3 = Vector3.ZERO
 var b_scale : Vector3 = Vector3.ZERO
 var drag_end_point : Vector3 = Vector3.ZERO
@@ -83,12 +82,12 @@ func _on_body_selected(body : Node3D) -> void:
 	var selectable_body : Node3D = null
 	if body is Area3D:
 		# don't select the preview instance
-		if (body.owner is TBWObject) && body.owner != active_preview_instance && body != hovered_editable_object:
+		if (body.owner is TBWObject) && body.owner != preview && body != hovered_editable_object:
 			if !(body.owner is Water):
 				selectable_body = body.owner
 	else:
 		# don't select the preview instance
-		if (body is Brick || body is TBWObject) && body != active_preview_instance && body != hovered_editable_object:
+		if (body is Brick || body is TBWObject) && body != preview && body != hovered_editable_object:
 			selectable_body = body
 	
 	if selectable_body != null:
@@ -104,10 +103,10 @@ func _on_body_deselected(_body : Node3D) -> void:
 
 	var hovering_nothing := true
 	for body : Node3D in select_area.get_overlapping_bodies():
-		if body != active_preview_instance && body.owner != active_preview_instance:
+		if body != preview && body.owner != preview:
 			hovering_nothing = false
 	for area : Node3D in select_area.get_overlapping_areas():
-		if area != active_preview_instance && area.owner != active_preview_instance:
+		if area != preview && area.owner != preview:
 			hovering_nothing = false
 	# check currently hovering bodies
 	if hovering_nothing:
@@ -229,6 +228,11 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		if item_name_display != "":
 			selected_building_path = item_name_display
 		selected_item_properties = {}
+		
+		# load preview
+		var lines := _load_selected_building_path_lines()
+		_show_clipboard_preview(lines)
+		
 	else:
 		# not a building
 		
@@ -248,7 +252,10 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		for c : Node in preview_node.get_children():
 			c.queue_free()
 		# add instance as preview
-		active_preview_instance = inst
+		if preview != null:
+			preview.queue_free()
+		preview = inst
+		preview.rotation = last_rotation
 		preview_node.add_child(inst)
 		
 		# set preview-specific parameters ------------
@@ -301,7 +308,7 @@ func selected_item_is_draggable() -> bool:
 	else: return false
 
 func selected_item_is_brick() -> bool:
-	if selected_item_name_internal.begins_with("brick"):
+	if selected_item_name_internal.begins_with("brick") || selected_item_name_internal.split(";").size() > 1:
 		return true
 	else: return false
 
@@ -349,24 +356,7 @@ func copy_grabbed() -> void:
 	var ok : bool = await Global.get_world().save_tbw("temp", false, grabbed, true)
 	if ok:
 		UIHandler.show_toast("Selection copied, right click or use the Property Editor to paste")
-		# clear old clipboard
-		if clipboard != null:
-			clipboard.queue_free()
-		copied_lines = Global.get_tbw_lines("temp")
-		clipboard = await Global.get_world().parse_tbw(copied_lines, true)
-		for child : Node in clipboard.get_children():
-			child.set_script(null)
-		#container.reparent(preview_node)
-		await get_tree().physics_frame
-		clipboard.position = Vector3.ZERO
-		# make all children have preview material and remove collision
-		for child : Node in clipboard.get_children():
-			remove_item_collision(Global.get_all_children(child) as Array)
-			var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
-			if new_mesh != null:
-				# apply construction material
-				for i in range(new_mesh.get_surface_override_material_count()):
-					new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
+		_show_clipboard_preview(Global.get_tbw_lines("temp"))
 
 func save_grabbed() -> void:
 	var save_name := str("Building", ("%X" % Time.get_unix_time_from_system()))
@@ -374,13 +364,19 @@ func save_grabbed() -> void:
 
 func paste_grabbed() -> void:
 	if copied_lines.size() > 0:
-		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3, false, preview.rotation)
 
 func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	
+	
 	var camera := get_viewport().get_camera_3d()
 	if active:
+		
+		if preview != null:
+			preview.visible = true
+			preview.global_position = select_area.global_position
+		
 		# change states
 		if Input.is_action_just_pressed("editor_select_toggle"):
 			match (_state):
@@ -395,9 +391,6 @@ func _physics_process(delta : float) -> void:
 		
 		# SELECT MODE -----------
 		if _state == States.SELECT:
-			if clipboard != null:
-				clipboard.visible = true
-				clipboard.global_position = select_area.global_position
 			if select_area != null:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 					# paste
@@ -426,8 +419,6 @@ func _physics_process(delta : float) -> void:
 						select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 		# BUILD MODE ------------
 		else:
-			if clipboard != null:
-				clipboard.visible = false
 			if select_area != null:
 				select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 				if Input.is_action_pressed("editor_delete"):
@@ -466,28 +457,28 @@ func _physics_process(delta : float) -> void:
 				var rot_amount : float = 22.5
 				if selected_item_is_brick():
 					rot_amount = 90
-				if active_preview_instance != null:
+				if preview != null:
 					# rotation
 					if Input.is_action_just_pressed("editor_rotate_reset"):
-						active_preview_instance.rotation = Vector3.ZERO
+						preview.rotation = Vector3.ZERO
 					elif Input.is_action_just_pressed("editor_rotate_left"):
-						active_preview_instance.rotate(Vector3.UP, deg_to_rad(rot_amount))
+						preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
 					elif Input.is_action_just_pressed("editor_rotate_right"):
-						active_preview_instance.rotate(Vector3.UP, deg_to_rad(-rot_amount))
+						preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
 					elif Input.is_action_just_pressed("editor_rotate_up"):
-						active_preview_instance.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
+						preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
 					elif Input.is_action_just_pressed("editor_rotate_down"):
-						active_preview_instance.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
+						preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
 					elif Input.is_action_just_pressed("editor_scale_up"):
 						if selected_item_is_scalable():
-							active_preview_instance.scale += Vector3(1, 1, 1)
-							active_preview_instance.scale = clamp(active_preview_instance.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+							preview.scale += Vector3(1, 1, 1)
+							preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
 					elif Input.is_action_just_pressed("editor_scale_down"):
 						if selected_item_is_scalable():
-							active_preview_instance.scale -= Vector3(1, 1, 1)
-							active_preview_instance.scale = clamp(active_preview_instance.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-					active_preview_instance.rotation = Vector3(snapped(active_preview_instance.rotation.x, deg_to_rad(22.5)) as float, snapped(active_preview_instance.rotation.y, deg_to_rad(22.5)) as float, snapped(active_preview_instance.rotation.z, deg_to_rad(22.5)) as float)
-					last_rotation = active_preview_instance.rotation 
+							preview.scale -= Vector3(1, 1, 1)
+							preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+					preview.rotation = Vector3(snapped(preview.rotation.x, deg_to_rad(22.5)) as float, snapped(preview.rotation.y, deg_to_rad(22.5)) as float, snapped(preview.rotation.z, deg_to_rad(22.5)) as float)
+					last_rotation = preview.rotation 
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				# place
 				if Input.is_action_just_pressed("click"):
@@ -496,11 +487,11 @@ func _physics_process(delta : float) -> void:
 					if selected_item_is_draggable():
 						# Click and drag to scale bricks
 						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
-						active_preview_instance.global_position = drag_start_point.lerp(drag_end_point, 0.5)
+						preview.global_position = drag_start_point.lerp(drag_end_point, 0.5)
 						b_scale = abs(drag_end_point - drag_start_point) + Vector3(1, 1, 1)
 						b_scale = b_scale.clamp(Vector3(1, 1, 1), Vector3(2000, 2000, 2000))
-						active_preview_instance.scale = Vector3(1, 1, 1)
-						active_preview_instance.global_scale(b_scale)
+						preview.scale = Vector3(1, 1, 1)
+						preview.global_scale(b_scale)
 						if b_scale != Vector3(1, 1, 1):
 							scale_tooltip.text = str(b_scale.x, " x ", b_scale.y, " x ", b_scale.z)
 				if Input.is_action_just_released("click"):
@@ -523,16 +514,16 @@ func _physics_process(delta : float) -> void:
 							if body.owner is TBWObject:
 								if body.owner.tbw_object_type == "obj_water":
 									valid = true
-								elif body.owner != active_preview_instance:
+								elif body.owner != preview:
 									valid = false
 									break
-							elif body.owner != active_preview_instance:
+							elif body.owner != preview:
 								valid = false
 								break
 						
 						# however if there are any overlapping bodies it's no longer valid
 						for body in select_area.get_overlapping_bodies():
-							if body != active_preview_instance:
+							if body != preview:
 								valid = false
 						
 						# place if valid
@@ -540,18 +531,9 @@ func _physics_process(delta : float) -> void:
 							
 							# --- is a building ---
 							if selected_item_name_internal.split(";").size() > 1:
-								var load_file := FileAccess.open(str("user://building/", selected_building_path), FileAccess.READ)
-								# if does not exist in user dir, try the built-in dir
-								if load_file == null:
-									load_file = FileAccess.open(str("res://data/building/", selected_building_path), FileAccess.READ)
-								
-								if load_file != null:
-									# load building
-									var lines := []
-									while not load_file.eof_reached():
-										var line := load_file.get_line()
-										lines.append(str(line))
-									Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3)
+								var lines := _load_selected_building_path_lines()
+								if lines.size() > 0:
+									Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3, false, preview.rotation)
 								else:
 									UIHandler.show_alert("Building not found or corrupt!", 8, false, UIHandler.alert_colour_error)
 							
@@ -560,17 +542,17 @@ func _physics_process(delta : float) -> void:
 								var inst : Node3D = selected_item.instantiate()
 								Global.get_world().add_child(inst, true)
 								inst.global_position = drag_start_point.lerp(drag_end_point, 0.5)
-								inst.global_rotation = active_preview_instance.global_rotation
+								inst.global_rotation = preview.global_rotation
 								if selected_item_is_draggable():
 									if selected_item_properties.has("brick_scale"):
 										if selected_item_name_internal == "brick_cylinder":
 											# x is forward on wheels
-											selected_item_properties["brick_scale"] = Vector3(active_preview_instance.scale.z, active_preview_instance.scale.y, active_preview_instance.scale.x)
+											selected_item_properties["brick_scale"] = Vector3(preview.scale.z, preview.scale.y, preview.scale.x)
 										else:
-											selected_item_properties["brick_scale"] = active_preview_instance.scale
+											selected_item_properties["brick_scale"] = preview.scale
 								else:
 									# match global transform for objects
-									inst.global_transform = active_preview_instance.global_transform
+									inst.global_transform = preview.global_transform
 								
 								if inst is TBWObject || inst is Brick:
 									for property : String in selected_item_properties.keys():
@@ -597,6 +579,43 @@ func _physics_process(delta : float) -> void:
 					# regenerate after placement
 					_on_item_picked(selected_item_name_internal, "", false)
 
+func _load_selected_building_path_lines() -> Array:
+	var lines := []
+	var load_file := FileAccess.open(str("user://building/", selected_building_path), FileAccess.READ)
+	# if does not exist in user dir, try the built-in dir
+	if load_file == null:
+		load_file = FileAccess.open(str("res://data/building/", selected_building_path), FileAccess.READ)
+	
+	if load_file != null:
+		# load building
+		while not load_file.eof_reached():
+			var line := load_file.get_line()
+			lines.append(str(line))
+	return lines
+
+func _show_clipboard_preview(lines : Array) -> void:
+	# clear old clipboard
+	if preview != null:
+		preview.queue_free()
+	copied_lines = lines
+	if preview != null:
+		preview.queue_free()
+	preview = await Global.get_world().parse_tbw(copied_lines, true)
+	for child : Node in preview.get_children():
+		child.set_script(null)
+	#container.reparent(preview_node)
+	await get_tree().physics_frame
+	preview.position = Vector3.ZERO
+	# make all children have preview material and remove collision
+	for child : Node in preview.get_children():
+		remove_item_collision(Global.get_all_children(child) as Array)
+		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
+		if new_mesh != null:
+			# apply construction material
+			for i in range(new_mesh.get_surface_override_material_count()):
+				new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
+	preview.rotation = last_rotation
+	
 # Find the closest Vector3 axis to a normalized vector using dot.
 func find_closest_axis(normalized_vector : Vector3) -> Vector3:
 	var axes : Array[Vector3] = [\

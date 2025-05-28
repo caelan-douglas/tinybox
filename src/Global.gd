@@ -313,6 +313,9 @@ func get_tbw_lines(file_name : String, server : bool = false) -> Array:
 		if load_file == null:
 			# check internal
 			load_file = FileAccess.open(str("res://data/tbw/", file_name, ".tbw"), FileAccess.READ)
+		if load_file == null:
+			# check building
+			load_file = FileAccess.open(str("user://building/", file_name), FileAccess.READ)
 		if file_name == "temp":
 			load_file = FileAccess.open(str("user://building/temp.tbw"), FileAccess.READ)
 	else:
