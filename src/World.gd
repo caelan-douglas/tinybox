@@ -640,28 +640,29 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 						# set the property
 						b.set_property(property_name, property)
 	if container == null:
-		### Offset by rotation
-		print("Placement rotation:", placement_rotation)
-		var pivot_obj : Node3D = Node3D.new()
-		add_child(pivot_obj)
-		pivot_obj.global_position = b_position
-		pivot_obj.global_rotation = Vector3.ZERO
-		var pivot : Transform3D = pivot_obj.global_transform
-		# pivot origin to placement position, as it works with the preview
-		# TODO: clean this up
-		var quat_left := Quaternion(Vector3(1, 0, 0), placement_rotation.x)
-		var quat_up := Quaternion(Vector3(0, 1, 0), placement_rotation.y)
-		var quat_forward := Quaternion(Vector3(0, 0, 1), placement_rotation.z)
-		var target_quat := quat_up * quat_left * quat_forward
-		var target_basis := Basis(target_quat)
+		if placement_rotation != Vector3.ZERO:
+			await get_tree().physics_frame
+			### Offset by rotation
+			print("Placement rotation:", placement_rotation)
+			var pivot_obj : Node3D = Node3D.new()
+			add_child(pivot_obj)
+			pivot_obj.global_position = b_position
+			pivot_obj.global_rotation = Vector3.ZERO
+			var pivot : Transform3D = pivot_obj.global_transform
+			# pivot origin to placement position, as it works with the preview
+			# TODO: clean this up
+			var quat_left := Quaternion(Vector3(1, 0, 0), placement_rotation.x)
+			var quat_up := Quaternion(Vector3(0, 1, 0), placement_rotation.y)
+			var quat_forward := Quaternion(Vector3(0, 0, 1), placement_rotation.z)
+			var target_quat := quat_up * quat_left * quat_forward
+			var target_basis := Basis(target_quat)
 
-		var new_pivot := Transform3D(target_basis, pivot.origin)
-		for b : Brick in building_group:
-			#var last_rot := b.global_rotation
-			var local_trans := pivot.affine_inverse() * b.global_transform
-			b.global_transform = new_pivot * local_trans
-		pivot_obj.queue_free()
-		
+			var new_pivot := Transform3D(target_basis, pivot.origin)
+			for b : Brick in building_group:
+				#var last_rot := b.global_rotation
+				var local_trans := pivot.affine_inverse() * b.global_transform
+				b.global_transform = new_pivot * local_trans
+			pivot_obj.queue_free()
 		
 		### Joining bricks
 		# don't place nothing

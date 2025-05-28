@@ -766,9 +766,9 @@ func _physics_process(delta : float) -> void:
 	# used by motor seat
 	sync_step += 1
 	
-	# handle smoothing, wait a frame to allow smoothing to
+	# handle smoothing, wait a bit to allow smoothing to
 	# move bricks before disabling its process
-	if (freeze && sync_step > 2) && (_state != States.BUILD):
+	if (freeze && sync_step > 120) && (_state != States.BUILD):
 		smoothing.set_physics_process(false)
 		smoothing.set_process(false)
 	else:
