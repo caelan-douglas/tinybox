@@ -324,7 +324,8 @@ func change_state(new : States) -> void:
 	_state = new
 	match (_state):
 		States.BUILD:
-			editor_canvas.toggle_select_mode_ui(false)
+			if type == ToolType.EDITOR:
+				editor_canvas.toggle_select_mode_ui(false)
 			# show item picker list
 			item_chooser.show_item_chooser()
 			if !item_chooser.is_connected("item_picked", _on_item_picked):
@@ -341,7 +342,8 @@ func change_state(new : States) -> void:
 			# update UI subtitle
 			update_subtitle()
 		States.SELECT:
-			editor_canvas.toggle_select_mode_ui(true)
+			if type == ToolType.EDITOR:
+				editor_canvas.toggle_select_mode_ui(true)
 			item_chooser.hide_item_chooser()
 			clear_preview()
 			# re show the selection
