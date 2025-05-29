@@ -176,7 +176,7 @@ func save_tbw(world_name : String, server : bool = false, selection : Array = []
 			get_tree().current_scene.get_node("GameCanvas").visible = true
 			get_tree().current_scene.get_node("/root/PersistentScene/AlertCanvas").visible = true
 	if !temp:
-		UIHandler.show_alert(str("Saved world as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
+		UIHandler.show_alert(str("Saved as ", save_name, ".tbw."), 4, false, UIHandler.alert_colour_gold)
 	
 	# Create tbw file.
 	var file : FileAccess

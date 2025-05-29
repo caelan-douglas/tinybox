@@ -360,8 +360,16 @@ func copy_grabbed() -> void:
 		UIHandler.show_toast("Selection copied, right click or use the Property Editor to paste")
 		_show_clipboard_preview(Global.get_tbw_lines("temp"))
 
+var save_grabbed_name_lineedit : LineEdit = null
 func save_grabbed() -> void:
-	var save_name := str("Building", ("%X" % Time.get_unix_time_from_system()))
+	var save_name := ""
+	if save_grabbed_name_lineedit != null:
+		if save_grabbed_name_lineedit.text == "":
+			UIHandler.show_alert("Enter a name to save as first.", 4, false, UIHandler.alert_colour_error)
+			return
+		save_name = save_grabbed_name_lineedit.text
+	else:
+		save_name = str("Building", ("%X" % Time.get_unix_time_from_system()))
 	Global.get_world().save_tbw(save_name, false, grabbed)
 
 func paste_grabbed() -> void:

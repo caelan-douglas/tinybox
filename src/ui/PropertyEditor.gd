@@ -52,6 +52,15 @@ func show_grab_actions(grabbed : Array, from_tool : EditorBuildTool) -> void:
 	paste_button.connect("pressed", from_tool.paste_grabbed)
 	editor_props_list.add_child(paste_button)
 	
+	var spacer := Control.new()
+	spacer.custom_minimum_size.y = 16
+	editor_props_list.add_child(spacer)
+	
+	var save_lineedit := LineEdit.new()
+	save_lineedit.placeholder_text = "Save name"
+	from_tool.save_grabbed_name_lineedit = save_lineedit
+	editor_props_list.add_child(save_lineedit)
+	
 	var save_button := DynamicButton.new()
 	save_button.text = "Save grabbed things"
 	save_button.connect("pressed", from_tool.save_grabbed)
