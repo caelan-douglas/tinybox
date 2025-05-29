@@ -114,14 +114,14 @@ func populate_saved_stuff(internal : bool = false) -> void:
 		load_dir.list_dir_begin()
 		while file_name != "":
 			file_name = load_dir.get_next()
-			if file_name != "":
+			# don't show tempfile in list
+			if file_name != "" && file_name != "temp.tbw":
 				var item_button : Button = item_chooser_button.instantiate()
 				# node name is internal name
 				item_button.name = str("building;", file_name)
 				item_button.text = file_name
 				
 				var lines := Global.get_tbw_lines(file_name, false)
-				print("lines: ", lines)
 				var image := Global.get_tbw_image_from_lines(lines)
 				if image != null:
 					image.resize(100, 56)

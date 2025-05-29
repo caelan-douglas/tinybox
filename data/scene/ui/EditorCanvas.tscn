@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene load_steps=23 format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" uid="uid://bxryb3slo76ng" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
+[ext_resource type="Texture2D" uid="uid://fcce6nsnj7qq" path="res://data/textures/caution.png" id="3_kascy"]
 [ext_resource type="Script" uid="uid://dafapgvrl3pds" path="res://src/ui/AnimatedPanelContainer.gd" id="4_gqbks"]
 [ext_resource type="PackedScene" uid="uid://ku7hponrkcnk" path="res://data/scene/ui/ItemChooser.tscn" id="5_noy30"]
 [ext_resource type="PackedScene" uid="uid://bhgp5nni0peas" path="res://data/scene/ui/Adjuster.tscn" id="5_umgt3"]
@@ -15,6 +16,98 @@
 [ext_resource type="Script" uid="uid://ci48kywo0mcpq" path="res://src/ui/UploadWorld.gd" id="12_whfwp"]
 [ext_resource type="PackedScene" uid="uid://c4pf0l65ojqcw" path="res://data/scene/ui/SettingsMenu.tscn" id="14_f30l1"]
 [ext_resource type="Script" uid="uid://dwy5qfsib3g3m" path="res://src/ui/DynamicButton.gd" id="15_32mo6"]
+
+[sub_resource type="Animation" id="Animation_jivar"]
+resource_name = "show"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.535887, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -64)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_i88th"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ybtqk"]
+resource_name = "hide"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1.68179, 0.420448),
+"update": 0,
+"values": [Vector2(0, -64), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kbj0m"]
+_data = {
+&"RESET": SubResource("Animation_i88th"),
+&"hide": SubResource("Animation_ybtqk"),
+&"show": SubResource("Animation_jivar")
+}
 
 [sub_resource type="Gradient" id="Gradient_22hil"]
 offsets = PackedFloat32Array(0, 0.281065)
@@ -51,6 +144,63 @@ grow_horizontal = 2
 text = "Toggle player scale helper"
 script = ExtResource("15_32mo6")
 
+[node name="SelectModeOffset" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="SelectModeUI" type="TextureRect" parent="SelectModeOffset"]
+visible = false
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 64.0
+grow_horizontal = 2
+texture = ExtResource("3_kascy")
+expand_mode = 2
+stretch_mode = 1
+
+[node name="DynamicLabel" type="Label" parent="SelectModeOffset/SelectModeUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.0
+offset_right = 20.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 32
+text = "Select Mode Active"
+script = ExtResource("6_aufvl")
+metadata/_custom_type_script = "uid://c6ou7173i57do"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SelectModeOffset/SelectModeUI"]
+libraries = {
+&"": SubResource("AnimationLibrary_kbj0m")
+}
+
+[node name="TextureRect" type="ColorRect" parent="SelectModeOffset/SelectModeUI"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.279528, 0.204099, 0.102366, 1)
+
 [node name="LeftPanel" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(360, 2.08165e-12)
 anchors_preset = 9
@@ -68,6 +218,7 @@ layout_mode = 2
 [node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
 layout_mode = 2
 size_flags_vertical = 3
+current_tab = 0
 
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 540)
@@ -154,8 +305,8 @@ offset_bottom = 219.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
-theme_override_constants/line_separation = 5
 theme_override_constants/outline_size = 6
+theme_override_constants/line_separation = 5
 bbcode_enabled = true
 text = "[color=yellow]Editor Controls[/color]
 

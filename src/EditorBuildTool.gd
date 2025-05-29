@@ -23,7 +23,7 @@ enum States {
 }
 
 @onready var editor : Editor
-@onready var editor_canvas : CanvasLayer = get_tree().current_scene.get_node("EditorCanvas")
+@onready var editor_canvas : EditorCanvas = get_tree().current_scene.get_node("EditorCanvas")
 @onready var select_area : Area3D = $SelectArea
 @onready var build_collider : CollisionShape3D = $SelectArea/build_collider
 @onready var grab_collider : CollisionShape3D = $SelectArea/grab_collider
@@ -40,7 +40,8 @@ static var preview : Node3D = null
 
 var ui_subtitle : Label
 
-var _state : States = States.BUILD
+# consistent across all tools
+static var _state : States = States.BUILD
 
 @onready var property_editor : PropertyEditor
 @onready var item_chooser : ItemChooser
@@ -323,6 +324,7 @@ func change_state(new : States) -> void:
 	_state = new
 	match (_state):
 		States.BUILD:
+			editor_canvas.toggle_select_mode_ui(false)
 			# show item picker list
 			item_chooser.show_item_chooser()
 			if !item_chooser.is_connected("item_picked", _on_item_picked):
@@ -339,25 +341,32 @@ func change_state(new : States) -> void:
 			# update UI subtitle
 			update_subtitle()
 		States.SELECT:
+			editor_canvas.toggle_select_mode_ui(true)
 			item_chooser.hide_item_chooser()
 			clear_preview()
+			# re show the selection
+			_show_clipboard_preview(Global.get_tbw_lines("temp"))
+			# re show options for the selection
+			if grabbed.size() > 0:
+				property_editor.show_grab_actions(grabbed, self)
 
 # share copied objs between buildtools
 static var grabbed : Array = []
 static var copied_lines : Array = []
 func set_grabbed() -> void:
-	grabbed = []
+	var new_grabbed := []
 	if select_area != null:
 		for obj : Node3D in select_area.get_overlapping_bodies():
 			if obj is TBWObject || obj is Brick:
-				grabbed.append(obj)
+				new_grabbed.append(obj)
+	if new_grabbed.size() > 0:
+		grabbed = new_grabbed
 	copy_grabbed()
 	property_editor.show_grab_actions(grabbed, self)
 
 func copy_grabbed() -> void:
 	var ok : bool = await Global.get_world().save_tbw("temp", false, grabbed, true)
 	if ok:
-		UIHandler.show_toast("Selection copied, right click or use the Property Editor to paste")
 		_show_clipboard_preview(Global.get_tbw_lines("temp"))
 
 var save_grabbed_name_lineedit : LineEdit = null
@@ -429,13 +438,12 @@ func _physics_process(delta : float) -> void:
 		if _state == States.SELECT:
 			if select_area != null:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					# paste
-					if Input.is_action_just_pressed("editor_delete"):
-						paste_grabbed()
 					# drag select
 					if Input.is_action_just_pressed("click"):
 						drag_start_point = get_viewport().get_camera_3d().controlled_cam_pos
 					elif Input.is_action_pressed("click"):
+						# don't show preview while dragging
+						preview.visible = false
 						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
 						var drag_scale : Vector3 = drag_end_point - drag_start_point + Vector3(1, 1, 1)
 						select_area.scale = abs(drag_end_point - drag_start_point) + Vector3(1, 1, 1)
@@ -447,7 +455,9 @@ func _physics_process(delta : float) -> void:
 							if editor.editor_canvas.mouse_just_captured:
 								return
 						drag_end_point = get_viewport().get_camera_3d().controlled_cam_pos
+						# paste on single click, no drag
 						if drag_start_point == drag_end_point:
+							paste_grabbed()
 							return
 						set_grabbed()
 					else:

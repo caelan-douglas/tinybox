@@ -33,6 +33,8 @@ class_name EditorCanvas
 @onready var death_lim_hi_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"
 @onready var save_world_button : Button = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorld
 
+@onready var select_mode_ui_animator : AnimationPlayer = $SelectModeOffset/SelectModeUI/AnimationPlayer
+
 var mouse_just_captured : bool = false
 
 func _ready() -> void:
@@ -114,6 +116,12 @@ func toggle_pause_menu() -> void:
 			hide_pause_menu()
 		else:
 			show_pause_menu()
+
+func toggle_select_mode_ui(mode : bool) -> void:
+	if mode:
+		select_mode_ui_animator.play("show")
+	else:
+		select_mode_ui_animator.play("hide")
 
 func hide_pause_menu() -> void:
 	Global.is_paused = false

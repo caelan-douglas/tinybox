@@ -42,16 +42,6 @@ func show_grab_actions(grabbed : Array, from_tool : EditorBuildTool) -> void:
 	grab_label.text = str("Grabbed " , grabbed.size(), " things.")
 	editor_props_list.add_child(grab_label)
 	
-	var copy_button := DynamicButton.new()
-	copy_button.text = "Copy grabbed things"
-	copy_button.connect("pressed", from_tool.copy_grabbed)
-	editor_props_list.add_child(copy_button)
-	
-	var paste_button := DynamicButton.new()
-	paste_button.text = "Paste grabbed things"
-	paste_button.connect("pressed", from_tool.paste_grabbed)
-	editor_props_list.add_child(paste_button)
-	
 	var spacer := Control.new()
 	spacer.custom_minimum_size.y = 16
 	editor_props_list.add_child(spacer)
