@@ -187,6 +187,8 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 func clear_preview() -> void:
 	if preview_node != null:
 		preview_node.visible = false
+	if preview != null:
+		preview.queue_free()
 	# deselecting tool, remove any properties from list
 	if property_editor.properties_from_tool == self:
 		property_editor.clear_list()
@@ -363,15 +365,41 @@ func save_grabbed() -> void:
 	Global.get_world().save_tbw(save_name, false, grabbed)
 
 func paste_grabbed() -> void:
-	if copied_lines.size() > 0:
+	if copied_lines.size() > 0 && preview != null:
 		Global.get_world().ask_server_to_load_building.rpc_id(1, Global.display_name, copied_lines, get_viewport().get_camera_3d().controlled_cam_pos as Vector3, false, preview.rotation)
 
 func _physics_process(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	
-	
-	var camera := get_viewport().get_camera_3d()
 	if active:
+		var camera := get_viewport().get_camera_3d()
+		if preview_node != null:
+			preview_node.global_position = camera.controlled_cam_pos
+			var rot_amount : float = 22.5
+			if selected_item_is_brick():
+				rot_amount = 90
+			if preview != null:
+				# rotation
+				if Input.is_action_just_pressed("editor_rotate_reset"):
+					preview.rotation = Vector3.ZERO
+				elif Input.is_action_just_pressed("editor_rotate_left"):
+					preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
+				elif Input.is_action_just_pressed("editor_rotate_right"):
+					preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
+				elif Input.is_action_just_pressed("editor_rotate_up"):
+					preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
+				elif Input.is_action_just_pressed("editor_rotate_down"):
+					preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
+				elif Input.is_action_just_pressed("editor_scale_up"):
+					if selected_item_is_scalable():
+						preview.scale += Vector3(1, 1, 1)
+						preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+				elif Input.is_action_just_pressed("editor_scale_down"):
+					if selected_item_is_scalable():
+						preview.scale -= Vector3(1, 1, 1)
+						preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+				preview.rotation = Vector3(snapped(preview.rotation.x, deg_to_rad(22.5)) as float, snapped(preview.rotation.y, deg_to_rad(22.5)) as float, snapped(preview.rotation.z, deg_to_rad(22.5)) as float)
+				last_rotation = preview.rotation 
 		
 		if preview != null:
 			preview.visible = true
@@ -451,34 +479,6 @@ func _physics_process(delta : float) -> void:
 								property_editor.editing_hovered = false
 								# allow any tools to re show their list
 								_on_editor_deselected()
-			
-			if preview_node != null:
-				preview_node.global_position = camera.controlled_cam_pos
-				var rot_amount : float = 22.5
-				if selected_item_is_brick():
-					rot_amount = 90
-				if preview != null:
-					# rotation
-					if Input.is_action_just_pressed("editor_rotate_reset"):
-						preview.rotation = Vector3.ZERO
-					elif Input.is_action_just_pressed("editor_rotate_left"):
-						preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
-					elif Input.is_action_just_pressed("editor_rotate_right"):
-						preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
-					elif Input.is_action_just_pressed("editor_rotate_up"):
-						preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
-					elif Input.is_action_just_pressed("editor_rotate_down"):
-						preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
-					elif Input.is_action_just_pressed("editor_scale_up"):
-						if selected_item_is_scalable():
-							preview.scale += Vector3(1, 1, 1)
-							preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-					elif Input.is_action_just_pressed("editor_scale_down"):
-						if selected_item_is_scalable():
-							preview.scale -= Vector3(1, 1, 1)
-							preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-					preview.rotation = Vector3(snapped(preview.rotation.x, deg_to_rad(22.5)) as float, snapped(preview.rotation.y, deg_to_rad(22.5)) as float, snapped(preview.rotation.z, deg_to_rad(22.5)) as float)
-					last_rotation = preview.rotation 
 			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 				# place
 				if Input.is_action_just_pressed("click"):

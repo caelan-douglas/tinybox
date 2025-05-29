@@ -1,8 +1,12 @@
 <br>
 <img align="left" style="padding: 40px" src=title.png width="250px"></p>
-Free and open source sandbox game with peer-to-peer multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
+Free and open source sandbox game with online multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
 
-[<img alt="Download link" height="24px" src="https://img.shields.io/badge/Link%3A%20Get%20the%20latest%20beta!%20-%20%2F?color=teal&link=https%3A%2F%2Fgithub.com%2Fcaelan-douglas%2Ftinybox%2Freleases%2Flatest">](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
+### Links
+[<img alt="Download link" height="24px" src="https://img.shields.io/badge/Download%20the%20latest%20beta%20-%20%2F?color=teal">](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
+[<img alt="Contrib guidelines link" height="24px" src="https://img.shields.io/badge/Contributor%20guidelines%20-%20%2F?color=lightgrey">](docs/CONTRIBUTING.md)<br>
+[<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=lightgrey">](docs/Hosting%20a%20Server.md)<br>
+
 
 ### License
 

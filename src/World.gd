@@ -551,8 +551,6 @@ func ask_server_to_load_building(name_from : String, lines : Array, b_position :
 	_server_load_building(lines, b_position, use_global_position, null, placement_rotation)
 
 func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_global_position := false, container : Node3D = null, placement_rotation : Vector3 = Vector3.ZERO) -> void:
-	if !multiplayer.is_server(): return
-	
 	var count_start : int = 0
 	# if loading a tbw as a building, remove extra data like image and author
 	for line : String in lines:
