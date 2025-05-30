@@ -8,5 +8,10 @@
         "name": "Official - Testing",
         "address": "tinybox2.caeland.com",
         "hosted_by": "Tinybox developers"
+    },
+    {
+        "name": "Localhost",
+        "address": "localhost",
+        "hosted_by": "(you)"
     }
 ]
