@@ -23,8 +23,6 @@ const PLAYER : PackedScene = preload("res://data/scene/character/RigidPlayer.tsc
 const CAMERA : PackedScene = preload("res://data/scene/camera/Camera.tscn")
 const PORT = 30815
 const SERVER_INFO_PORT = 30816
-# for server info
-var udp_server : UDPServer = UDPServer.new()
 # thread for UPNP connection
 var thread : Thread = null
 var upnp : UPNP = null
@@ -44,13 +42,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 12061
+var server_version : int = 12071
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 12.6"
+var display_version := "beta 12.7"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
@@ -59,6 +57,8 @@ var display_version := "beta 12.6"
 @onready var join_address : LineEdit = $MultiplayerMenu/PlayMenu/JoinHbox/Address
 @onready var editor_button : Button = $MultiplayerMenu/MainMenu/Editor
 @onready var tutorial_button : Button = $MultiplayerMenu/MainMenu/Tutorial
+
+@onready var udp_server : InfoServer = $UDPServer
 
 func _ready() -> void:
 	# reset paused state
@@ -240,7 +240,7 @@ func _on_host_pressed() -> void:
 	multiplayer.peer_connected.connect(add_peer)
 	multiplayer.peer_disconnected.connect(remove_player)
 	# Server info ping listener
-	start_udp_listener()
+	udp_server.start_udp_listener()
 	# Load the world using the multiplayerspawner spawn method.
 	var world : World = $World
 	
@@ -285,17 +285,6 @@ func _on_host_pressed() -> void:
 	lan_advertiser.serverInfo["name"] = str(display_name_field.text, "'s Server")
 	lan_advertiser.broadcast_interval = 3
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
-
-func start_udp_listener() -> void:
-	udp_server.listen(SERVER_INFO_PORT)
-
-# Listen on the udp server.
-func _process(delta : float) -> void:
-	udp_server.poll()
-	if udp_server.is_connection_available():
-		var peer : PacketPeerUDP = udp_server.take_connection()
-		# Reply w/ player count
-		peer.put_packet(str(Global.get_world().rigidplayer_list.size(), ";", display_version).to_utf8_buffer())
 
 # Only runs for client
 func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
@@ -395,7 +384,8 @@ func _on_host_disconnect_as_client() -> void:
 func leave_server() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	enet_peer.close()
-	udp_server.stop()
+	if udp_server != null:
+		udp_server.udp_server.stop()
 	Global.connected_to_server = false
 	get_tree().change_scene_to_file("res://data/scene/MainScene.tscn")
 

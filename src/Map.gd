@@ -27,7 +27,10 @@ var _song_line : String = ""
 func set_songs(line : String) -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
-	songs = JSON.parse_string(str(line).split(" ; ")[1])
+	if line != "":
+		songs = JSON.parse_string(str(line).split(" ; ")[1])
+	else:
+		songs = []
 	_song_line = line
 
 # set fallback values for loading new world before properties are set

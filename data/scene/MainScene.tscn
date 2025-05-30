@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bhj43my7js408"]
+[gd_scene load_steps=12 format=3 uid="uid://bhj43my7js408"]
 
 [ext_resource type="Script" uid="uid://cbn1b5ermac7n" path="res://Main.gd" id="1_jgbvu"]
+[ext_resource type="Script" uid="uid://c2cxxa471svcm" path="res://src/InfoServer.gd" id="2_3hubp"]
 [ext_resource type="Script" uid="uid://sbrtj4n5nf6f" path="res://src/World.gd" id="2_alcqr"]
 [ext_resource type="PackedScene" uid="uid://da61xyvkih0q" path="res://data/scene/MultiplayerMenuMap/MultiplayerMenuMap.tscn" id="3_lya7f"]
 [ext_resource type="Script" uid="uid://ckr5o6ujg7l45" path="res://src/BrickGroups.gd" id="4_nsdny"]
@@ -13,6 +14,10 @@
 
 [node name="Main" type="Node"]
 script = ExtResource("1_jgbvu")
+
+[node name="UDPServer" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("2_3hubp")
 
 [node name="World" type="Node3D" parent="."]
 script = ExtResource("2_alcqr")
