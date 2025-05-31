@@ -45,7 +45,6 @@ static var _state : States = States.BUILD
 
 @onready var property_editor : PropertyEditor
 @onready var item_chooser : ItemChooser
-@onready var preview_node : Node3D = $PreviewNode
 var drag_start_point : Vector3 = Vector3.ZERO
 var b_scale : Vector3 = Vector3.ZERO
 var drag_end_point : Vector3 = Vector3.ZERO
@@ -186,15 +185,11 @@ func set_tool_active(mode : bool, from_click : bool = false, free_camera_on_inac
 				camera.controlled_cam_pos = (tool_player_owner.global_position + Vector3(0, 3, 0)).round()
 
 func clear_preview() -> void:
-	if preview_node != null:
-		preview_node.visible = false
 	if preview != null:
 		preview.queue_free()
 	# deselecting tool, remove any properties from list
 	if property_editor.properties_from_tool == self:
 		property_editor.clear_list()
-	for c : Node in preview_node.get_children():
-		c.queue_free()
 
 @rpc("any_peer", "call_local", "reliable")
 func set_select_area_visible(mode : bool) -> void:
@@ -252,14 +247,12 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		if item_name_internal.begins_with("obj"):
 			if item_name_internal != "obj_water" && item_name_internal != "obj_camera_preview_point":
 				item_offset = Vector3(0, -0.5, 0)
-		for c : Node in preview_node.get_children():
-			c.queue_free()
 		# add instance as preview
 		if preview != null:
 			preview.queue_free()
 		preview = inst
 		preview.rotation = last_rotation
-		preview_node.add_child(inst)
+		add_child(inst)
 		
 		# set preview-specific parameters ------------
 		# set preview motor side
@@ -330,9 +323,6 @@ func change_state(new : States) -> void:
 			item_chooser.show_item_chooser()
 			if !item_chooser.is_connected("item_picked", _on_item_picked):
 				item_chooser.connect("item_picked", _on_item_picked)
-			# show object blue preview
-			if preview_node != null:
-				preview_node.visible = true
 			# regenerate preview based on object name
 			_on_item_picked(selected_item_name_internal, "", false)
 			# update object property list
@@ -392,33 +382,31 @@ func _physics_process(delta : float) -> void:
 	
 	if active:
 		var camera := get_viewport().get_camera_3d()
-		if preview_node != null:
-			preview_node.global_position = camera.controlled_cam_pos
-			var rot_amount : float = 22.5
-			if selected_item_is_brick():
-				rot_amount = 90
-			if preview != null:
-				# rotation
-				if Input.is_action_just_pressed("editor_rotate_reset"):
-					preview.rotation = Vector3.ZERO
-				elif Input.is_action_just_pressed("editor_rotate_left"):
-					preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
-				elif Input.is_action_just_pressed("editor_rotate_right"):
-					preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
-				elif Input.is_action_just_pressed("editor_rotate_up"):
-					preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
-				elif Input.is_action_just_pressed("editor_rotate_down"):
-					preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
-				elif Input.is_action_just_pressed("editor_scale_up"):
-					if selected_item_is_scalable():
-						preview.scale += Vector3(1, 1, 1)
-						preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-				elif Input.is_action_just_pressed("editor_scale_down"):
-					if selected_item_is_scalable():
-						preview.scale -= Vector3(1, 1, 1)
-						preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-				preview.rotation = Vector3(snapped(preview.rotation.x, deg_to_rad(22.5)) as float, snapped(preview.rotation.y, deg_to_rad(22.5)) as float, snapped(preview.rotation.z, deg_to_rad(22.5)) as float)
-				last_rotation = preview.rotation 
+		var rot_amount : float = 22.5
+		if selected_item_is_brick():
+			rot_amount = 90
+		if preview != null:
+			# rotation
+			if Input.is_action_just_pressed("editor_rotate_reset"):
+				preview.rotation = Vector3.ZERO
+			elif Input.is_action_just_pressed("editor_rotate_left"):
+				preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
+			elif Input.is_action_just_pressed("editor_rotate_right"):
+				preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
+			elif Input.is_action_just_pressed("editor_rotate_up"):
+				preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
+			elif Input.is_action_just_pressed("editor_rotate_down"):
+				preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
+			elif Input.is_action_just_pressed("editor_scale_up"):
+				if selected_item_is_scalable():
+					preview.scale += Vector3(1, 1, 1)
+					preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+			elif Input.is_action_just_pressed("editor_scale_down"):
+				if selected_item_is_scalable():
+					preview.scale -= Vector3(1, 1, 1)
+					preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
+			preview.rotation = Vector3(snapped(preview.rotation.x, deg_to_rad(22.5)) as float, snapped(preview.rotation.y, deg_to_rad(22.5)) as float, snapped(preview.rotation.z, deg_to_rad(22.5)) as float)
+			last_rotation = preview.rotation 
 		
 		if preview != null:
 			preview.visible = true

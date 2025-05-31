@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=4 uid="uid://1mdeppfhe4p6"]
+[gd_scene load_steps=10 format=4 uid="uid://1mdeppfhe4p6"]
 
 [ext_resource type="Script" uid="uid://cg7fox8367q44" path="res://src/EditorBuildTool.gd" id="1_f2x06"]
-[ext_resource type="PackedScene" uid="uid://cb1sikepc8br0" path="res://data/scene/PreviewNode.tscn" id="2_vmqng"]
 [ext_resource type="AudioStream" uid="uid://btqo5m6d0rhqc" path="res://data/audio/invalid.ogg" id="3_roj3x"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_fc2vy"]
@@ -61,9 +60,6 @@ rim_tint = 1.0
 top_level = true
 script = ExtResource("1_f2x06")
 visual_mesh_name = "BuildToolVisualMesh"
-
-[node name="PreviewNode" parent="." instance=ExtResource("2_vmqng")]
-visible = false
 
 [node name="InvalidAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_roj3x")

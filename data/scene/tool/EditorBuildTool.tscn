@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dj387li7w0abc"]
+[gd_scene load_steps=7 format=3 uid="uid://dj387li7w0abc"]
 
 [ext_resource type="Script" uid="uid://cg7fox8367q44" path="res://src/EditorBuildTool.gd" id="1_1jwcf"]
-[ext_resource type="PackedScene" uid="uid://cb1sikepc8br0" path="res://data/scene/PreviewNode.tscn" id="2_3p1u0"]
 [ext_resource type="AudioStream" uid="uid://btqo5m6d0rhqc" path="res://data/audio/invalid.ogg" id="3_g2inq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jq5dr"]
@@ -25,8 +24,6 @@ rim_tint = 1.0
 [node name="EditorBuildTool" type="Node3D"]
 script = ExtResource("1_1jwcf")
 type = 1
-
-[node name="PreviewNode" parent="." instance=ExtResource("2_3p1u0")]
 
 [node name="InvalidAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_g2inq")
