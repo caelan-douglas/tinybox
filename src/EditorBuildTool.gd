@@ -422,7 +422,7 @@ func _physics_process(delta : float) -> void:
 		
 		if preview != null:
 			preview.visible = true
-			preview.global_position = select_area.global_position
+			preview.global_position = select_area.global_position + item_offset
 		
 		# change states
 		if Input.is_action_just_pressed("editor_select_toggle"):
