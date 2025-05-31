@@ -33,20 +33,23 @@ const MAX_THUNDER_TIME : int = 40
 
 func _ready() -> void:
 	# Sync thunder timing between clients.
-	add_child(thunder_timer)
-	thunder_timer.connect("timeout", _on_thunder_timer_timeout)
 	if multiplayer.is_server():
+		add_child(thunder_timer)
+		thunder_timer.connect("timeout", _on_thunder_timer_timeout)
 		set_thunder_timer_server()
 
 func set_thunder_timer_server() -> void:
-	set_thunder_timer_rpc.rpc(randi_range(MIN_THUNDER_TIME, MAX_THUNDER_TIME))
-
-@rpc("authority", "call_local", "reliable")
-func set_thunder_timer_rpc(time : int) -> void:
-	thunder_timer.wait_time = time
+	thunder_timer.wait_time = randi_range(MIN_THUNDER_TIME, MAX_THUNDER_TIME)
 	thunder_timer.start()
 
 func _on_thunder_timer_timeout() -> void:
+	if multiplayer.is_server():
+		thunder_rpc.rpc()
+		# Set up timer again, as server
+		set_thunder_timer_server()
+
+@rpc("authority", "call_local", "reliable")
+func thunder_rpc() -> void:
 	# Play random audio, move audio to random spot
 	# for 3d autio effect
 	thunder_audio.global_position = Vector3(randi_range(-1000, 1000), 0, (randi_range(-1000, 1000)))
@@ -55,7 +58,3 @@ func _on_thunder_timer_timeout() -> void:
 	# Play lightning effect
 	if lightning_animator != null:
 		lightning_animator.play("lightning")
-	
-	# Set up timer again, as server
-	if multiplayer.is_server():
-		set_thunder_timer_server()
