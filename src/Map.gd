@@ -20,6 +20,7 @@ class_name Map
 @export var gravity_scale := 1.0
 var death_limit_low : int = 20
 var death_limit_high : int = 400
+var respawn_time : int = 5
 @export var songs : Array = MusicHandler.ALL_SONGS_LIST.duplicate()
 var _song_line : String = ""
 
@@ -41,6 +42,7 @@ func reset_map_properties() -> void:
 	
 	death_limit_low = 20
 	death_limit_high = 400
+	respawn_time = 5
 	songs = MusicHandler.ALL_SONGS_LIST.duplicate()
 
 func set_song(mode : bool, song_name : String) -> void:
@@ -68,6 +70,7 @@ func _ready() -> void:
 # runs as server
 func _on_peer_connected(id : int) -> void:
 	set_gravity_scale.rpc_id(id, gravity_scale)
+	set_respawn_time.rpc_id(id, respawn_time)
 	set_gravity.rpc_id(id, false)
 	set_songs.rpc_id(id, _song_line)
 
@@ -78,6 +81,14 @@ func set_gravity_scale(value : float) -> void:
 		return
 	
 	gravity_scale = value
+
+@rpc ("authority", "call_local", "reliable")
+func set_respawn_time(value : float) -> void:
+	# only server or auth can change this
+	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
+		return
+	
+	respawn_time = value
 
 @rpc ("authority", "call_local", "reliable")
 func set_gravity(low_grav : bool = false) -> void:

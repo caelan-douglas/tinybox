@@ -404,7 +404,6 @@ vertical_alignment = 1
 script = ExtResource("6_aufvl")
 
 [node name="PauseMenu" type="Control" parent="."]
-visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -637,6 +636,21 @@ layout_mode = 2
 [node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh" index="2"]
 text = "20"
 
+[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+
+[node name="DynamicLabel12" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+layout_mode = 2
+text = "Sandbox respawn time"
+script = ExtResource("6_aufvl")
+
+[node name="RespawnTime" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+layout_mode = 2
+
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/RespawnTime" index="2"]
+text = "5"
+
 [node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
@@ -769,4 +783,5 @@ script = ExtResource("15_32mo6")
 [editable path="EntryScreen/Panel/Menu/MapList"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"]
+[editable path="PauseMenu/ScrollContainer/Sections/World Properties/RespawnTime"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"]

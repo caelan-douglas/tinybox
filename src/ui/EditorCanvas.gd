@@ -31,6 +31,7 @@ class_name EditorCanvas
 @onready var water_height_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"
 @onready var death_lim_low_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"
 @onready var death_lim_hi_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"
+@onready var respawn_time_adj : Adjuster = $"PauseMenu/ScrollContainer/Sections/World Properties/RespawnTime"
 @onready var save_world_button : Button = $PauseMenu/ScrollContainer/Sections/Editor/SaveWorld
 
 @onready var select_mode_ui_animator : AnimationPlayer = $SelectModeOffset/SelectModeUI/AnimationPlayer
@@ -54,6 +55,9 @@ func _on_map_loaded() -> void:
 		water_height_adj.connect("value_changed", (editor as Editor).adjust_water_height)
 		death_lim_low_adj.connect("value_changed", (editor as Editor).adjust_death_limit_low)
 		death_lim_hi_adj.connect("value_changed", (editor as Editor).adjust_death_limit_high)
+		respawn_time_adj.connect("value_changed", (editor as Editor).adjust_respawn_time)
+		respawn_time_adj.max = 10
+		respawn_time_adj.min = 1
 		
 		$EntryScreen/Panel/Menu/New.connect("pressed", _on_new_world_pressed)
 		$EntryScreen/Panel/Menu/Load.connect("pressed", _on_load_world_pressed.bind($EntryScreen/Panel/Menu/MapList))

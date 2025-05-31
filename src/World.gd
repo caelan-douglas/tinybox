@@ -205,6 +205,7 @@ func save_tbw(world_name : String, server : bool = false, selection : Array = []
 		# Save map properties
 		file.store_line(str("death_limit_low ; ", get_current_map().death_limit_low))
 		file.store_line(str("death_limit_high ; ", get_current_map().death_limit_high))
+		file.store_line(str("respawn_time ; ", get_current_map().respawn_time))
 		file.store_line(str("gravity_scale ; ", get_current_map().gravity_scale))
 	# TBW object list
 	file.store_line("[objects]")
@@ -384,6 +385,10 @@ func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
 					get_current_map().death_limit_low = str(line).split(" ; ")[1] as int
 				if str(line).begins_with("death_limit_high ; "):
 					get_current_map().death_limit_high = str(line).split(" ; ")[1] as int
+				if str(line).begins_with("respawn_time ; "):
+					var respawn_time : int = str(line).split(" ; ")[1] as int
+					get_current_map().respawn_time = respawn_time
+					get_current_map().set_respawn_time.rpc(respawn_time)
 				if str(line).begins_with("gravity_scale ; "):
 					var gravity_scale : float = str(line).split(" ; ")[1] as float
 					# Modify default gravity

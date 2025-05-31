@@ -394,7 +394,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 		
 		if health <= 0:
 			# shorter respawn in sandbox
-			respawn_time.wait_time = 5
+			respawn_time.wait_time = Global.get_world().get_current_map().respawn_time
 			# death feed handler
 			if potential_cause_of_death != -1:
 				# determine if there is an executing player
@@ -733,6 +733,7 @@ func _ready() -> void:
 
 func _on_tbw_loaded() -> void:
 	# set default spawns
+	respawn_time.wait_time = Global.get_world().get_current_map().respawn_time
 	set_spawns.rpc_id(get_multiplayer_authority(), world.get_spawnpoint_for_team(team))
 	if !(Global.get_world().get_current_map() is Editor):
 		go_to_spawn.rpc_id(get_multiplayer_authority())

@@ -57,6 +57,8 @@ func _on_tbw_loaded() -> void:
 	# Set map height adjusters
 	editor_canvas.death_lim_low_adj.set_value(death_limit_low)
 	editor_canvas.death_lim_hi_adj.set_value(death_limit_high)
+	# Set map respawn adjuster
+	editor_canvas.respawn_time_adj.set_value(respawn_time)
 	# Set gravity adjuster
 	editor_canvas.grav_slider.set_value(gravity_scale)
 	# Update environment text
@@ -123,6 +125,9 @@ func adjust_death_limit_low(new_val : int) -> void:
 
 func adjust_death_limit_high(new_val : int) -> void:
 	death_limit_high = new_val
+
+func adjust_respawn_time(new_val : int) -> void:
+	respawn_time = new_val
 
 func delete_environment() -> void:
 	for obj in Global.get_world().get_children():
