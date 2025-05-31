@@ -52,6 +52,7 @@ extends Node
 	"env_sunset": load("res://data/scene/environments/Sunset.tscn"),
 	"env_night": load("res://data/scene/environments/Night.tscn"),
 	"env_snowy": load("res://data/scene/environments/Snowy.tscn"),
+	"env_thunderstorm": load("res://data/scene/environments/Thunderstorm.tscn"),
 	"env_clouds": load("res://data/scene/environments/Clouds.tscn"),
 	"env_molten": load("res://data/scene/environments/Molten.tscn"),
 	"env_warp": load("res://data/scene/environments/Warp.tscn"),

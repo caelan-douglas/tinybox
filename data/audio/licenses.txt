@@ -81,3 +81,12 @@ Attributions for /data/audio:
 		(modified)
 		by Iamgiorgio; licensed under Creative Commons 0
 		https://freesound.org/people/Iamgiorgio/sounds/371346/
+
+	rain.ogg:
+		by schafferdavid; licensed under Creative Commons 0
+		https://freesound.org/people/schafferdavid/sounds/172643/
+	
+	thunder_*.ogg:
+		by Aeonemi; licensed under Creative Commons 0
+		https://freesound.org/people/Aeonemi/sounds/180327/
+		

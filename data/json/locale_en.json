@@ -175,6 +175,7 @@
         "env_sunset": "Sunset",
         "env_night": "Night",
         "env_snowy": "Snowy",
+        "env_thunderstorm": "Thunderstorm",
         "env_clouds": "Clouds",
         "env_molten": "Molten",
         "env_warp": "Warp",

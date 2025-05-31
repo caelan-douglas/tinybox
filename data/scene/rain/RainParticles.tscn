@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://xe60ohkjtn13"]
+
+[ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_yah8f"]
+
+[sub_resource type="Curve" id="Curve_lyvke"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.200855, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_0s58g"]
+curve = SubResource("Curve_lyvke")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_umq2w"]
+emission_shape_offset = Vector3(0, 5, 0)
+emission_shape = 3
+emission_box_extents = Vector3(7, 0.5, 8)
+gravity = Vector3(0, -8, 0)
+scale_min = 0.8
+scale_max = 1.4
+scale_curve = SubResource("CurveTexture_0s58g")
+turbulence_enabled = true
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 8.299
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.005
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mtpop"]
+load_path = "res://.godot/imported/snowflake.png-0e969e1cf7732e00ab44dfed096a0b7f.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xdk4e"]
+transparency = 1
+shading_mode = 2
+specular_mode = 2
+albedo_color = Color(0.474595, 0.685652, 0.935316, 1)
+albedo_texture = SubResource("CompressedTexture2D_mtpop")
+emission_enabled = true
+emission = Color(0.641934, 0.641934, 0.641934, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 15.0
+distance_fade_min_distance = 1.0
+distance_fade_max_distance = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_s7hj1"]
+material = SubResource("StandardMaterial3D_xdk4e")
+size = Vector2(0.02, 0.1)
+
+[node name="RainParticles" type="GPUParticles3D"]
+extra_cull_margin = 128.0
+amount = 256
+lifetime = 2.0
+speed_scale = 2.3
+fixed_fps = 0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_umq2w")
+draw_pass_1 = SubResource("QuadMesh_s7hj1")
+script = ExtResource("2_yah8f")
+visible_on_awful = false

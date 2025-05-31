@@ -1,0 +1,135 @@
+[gd_scene load_steps=16 format=3 uid="uid://g1mk776jaq5h"]
+
+[ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_0let5"]
+[ext_resource type="PackedScene" uid="uid://xe60ohkjtn13" path="res://data/scene/rain/RainParticles.tscn" id="2_8qb56"]
+[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="4_ymxxm"]
+[ext_resource type="Script" uid="uid://h7lq51rklncm" path="res://src/Thunder.gd" id="5_2j35j"]
+[ext_resource type="AudioStream" uid="uid://cxguwinr5121d" path="res://data/audio/thunder_0.ogg" id="6_ymxxm"]
+[ext_resource type="AudioStream" uid="uid://vxxk05y55wsc" path="res://data/audio/rain.ogg" id="7_1hs56"]
+
+[sub_resource type="Gradient" id="Gradient_1vmab"]
+colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4oe5b"]
+gradient = SubResource("Gradient_1vmab")
+fill_from = Vector2(0, 0.175214)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7auh"]
+load_path = "res://.godot/imported/clouds.png-6ac5f7927be7e0cb4d37b36860897316.s3tc.ctex"
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_831tl"]
+sky_top_color = Color(0.0591115, 0.127345, 0.219206, 1)
+sky_horizon_color = Color(0.565376, 0.664098, 0.793616, 1)
+sky_cover = SubResource("CompressedTexture2D_i7auh")
+sky_cover_modulate = Color(0.288518, 0.288518, 0.288517, 1)
+ground_bottom_color = Color(0.195981, 0.278932, 0.388616, 1)
+ground_horizon_color = Color(0.564706, 0.662745, 0.792157, 1)
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_cam3l"]
+sky_material = SubResource("ProceduralSkyMaterial_831tl")
+radiance_size = 1
+
+[sub_resource type="Environment" id="Environment_v6omg"]
+background_mode = 2
+background_energy_multiplier = 0.8
+sky = SubResource("Sky_cam3l")
+sky_rotation = Vector3(0, 2.34049, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.0893607, 0.247926, 0.426226, 1)
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 3.0
+ssil_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.151557, 0.159149, 0.204047, 1)
+fog_sun_scatter = 0.03
+fog_density = 0.004
+fog_sky_affect = 0.8
+adjustment_enabled = true
+adjustment_color_correction = SubResource("GradientTexture2D_4oe5b")
+
+[sub_resource type="Animation" id="Animation_ymxxm"]
+resource_name = "lightning"
+length = 3.0
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:environment:sky:sky_material:sky_top_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09, 0.15, 0.24, 2.98),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.0591115, 0.127345, 0.219206, 1), Color(1, 1, 1, 1), Color(0.0591115, 0.127345, 0.219206, 1), Color(2, 2, 2, 1), Color(0.0591115, 0.127345, 0.219206, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1hs56"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:environment:sky:sky_material:sky_top_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.0591115, 0.127345, 0.219206, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2j35j"]
+_data = {
+&"RESET": SubResource("Animation_1hs56"),
+&"lightning": SubResource("Animation_ymxxm")
+}
+
+[node name="Environment" type="Node"]
+script = ExtResource("1_0let5")
+environment_name = "env_thunderstorm"
+
+[node name="RainParticles" parent="." instance=ExtResource("2_8qb56")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_v6omg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.631909, 0.490828, -0.599816, 0.772846, -0.340823, 0.535303, 0.0583105, -0.801828, -0.594703, 0, 11.7417, 0)
+light_color = Color(0.822766, 0.880588, 0.907908, 1)
+light_energy = 0.65
+shadow_enabled = true
+shadow_blur = 3.5
+directional_shadow_max_distance = 350.0
+script = ExtResource("4_ymxxm")
+visible_on_awful = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../WorldEnvironment")
+libraries = {
+&"": SubResource("AnimationLibrary_2j35j")
+}
+
+[node name="Thunder" type="Node" parent="." node_paths=PackedStringArray("lightning_animator")]
+script = ExtResource("5_2j35j")
+lightning_animator = NodePath("../AnimationPlayer")
+
+[node name="ThunderAudio" type="AudioStreamPlayer3D" parent="Thunder"]
+stream = ExtResource("6_ymxxm")
+attenuation_model = 3
+volume_db = 6.0
+unit_size = 100.0
+max_db = 6.0
+max_distance = 4000.0
+bus = &"SFX"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_1hs56")
+volume_db = -8.0
+autoplay = true
+bus = &"SFX"
