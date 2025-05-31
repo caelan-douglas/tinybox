@@ -391,19 +391,19 @@ func _physics_process(delta : float) -> void:
 			# rotation
 			if Input.is_action_just_pressed("editor_rotate_reset"):
 				preview.rotation = Vector3.ZERO
-			elif Input.is_action_just_pressed("editor_rotate_left"):
+			elif Input.is_action_just_pressed("editor_rotate_left") && !Global.is_text_focused:
 				preview.rotate(Vector3.UP, deg_to_rad(rot_amount))
-			elif Input.is_action_just_pressed("editor_rotate_right"):
+			elif Input.is_action_just_pressed("editor_rotate_right") && !Global.is_text_focused:
 				preview.rotate(Vector3.UP, deg_to_rad(-rot_amount))
-			elif Input.is_action_just_pressed("editor_rotate_up"):
+			elif Input.is_action_just_pressed("editor_rotate_up") && !Global.is_text_focused:
 				preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(-rot_amount))
-			elif Input.is_action_just_pressed("editor_rotate_down"):
+			elif Input.is_action_just_pressed("editor_rotate_down") && !Global.is_text_focused:
 				preview.rotate(find_closest_axis(camera.basis.x.normalized()), deg_to_rad(rot_amount))
-			elif Input.is_action_just_pressed("editor_scale_up"):
+			elif Input.is_action_just_pressed("editor_scale_up") && !Global.is_text_focused:
 				if selected_item_is_scalable():
 					preview.scale += Vector3(1, 1, 1)
 					preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
-			elif Input.is_action_just_pressed("editor_scale_down"):
+			elif Input.is_action_just_pressed("editor_scale_down") && !Global.is_text_focused:
 				if selected_item_is_scalable():
 					preview.scale -= Vector3(1, 1, 1)
 					preview.scale = clamp(preview.scale, Vector3(1, 1, 1), Vector3(10, 10, 10))
@@ -415,7 +415,7 @@ func _physics_process(delta : float) -> void:
 			preview.global_position = select_area.global_position + item_offset
 		
 		# change states
-		if Input.is_action_just_pressed("editor_select_toggle"):
+		if Input.is_action_just_pressed("editor_select_toggle") && !Global.is_text_focused:
 			match (_state):
 				States.BUILD:
 					change_state(States.SELECT)
