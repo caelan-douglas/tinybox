@@ -218,7 +218,6 @@ layout_mode = 2
 [node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
 
 [node name="EntryScreen" type="Control" parent="."]
 custom_minimum_size = Vector2(540, 540)
@@ -276,6 +275,20 @@ layout_mode = 2
 [node name="MapList" parent="EntryScreen/Panel/Menu" node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
 associated_button = NodePath("../Load")
+
+[node name="TabContainer" parent="EntryScreen/Panel/Menu/MapList" index="0"]
+current_tab = 1
+
+[node name="Built-in" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="1"]
+visible = false
+metadata/_tab_index = 0
+
+[node name="Saved maps" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="2"]
+visible = true
+metadata/_tab_index = 1
+
+[node name="World Browser (Online)" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="3"]
+metadata/_tab_index = 2
 
 [node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
@@ -753,6 +766,7 @@ grow_horizontal = 0
 text = "Options, Test, Gamemodes, Pause..."
 script = ExtResource("15_32mo6")
 
+[editable path="EntryScreen/Panel/Menu/MapList"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh"]
 [editable path="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster"]

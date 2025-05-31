@@ -824,6 +824,7 @@ func enter_state() -> void:
 			# function makes use of the freeze function.
 			if !get_glued():
 				freeze = false
+			await get_tree().physics_frame
 			# check if this is placed next to any other bricks, if so, join them
 			check_joints()
 			# update world groups if placed by a tool

@@ -419,15 +419,13 @@ func _physics_process(delta : float) -> void:
 			match (_state):
 				States.BUILD:
 					change_state(States.SELECT)
-					grab_collider.disabled = false
-					build_collider.disabled = true
 				States.SELECT:
 					change_state(States.BUILD)
-					grab_collider.disabled = true
-					build_collider.disabled = false
 		
 		# SELECT MODE -----------
 		if _state == States.SELECT:
+			grab_collider.disabled = false
+			build_collider.disabled = true
 			if select_area != null:
 				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 					# drag select
@@ -457,6 +455,8 @@ func _physics_process(delta : float) -> void:
 						select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 		# BUILD MODE ------------
 		else:
+			grab_collider.disabled = true
+			build_collider.disabled = false
 			if select_area != null:
 				select_area.global_position = get_viewport().get_camera_3d().controlled_cam_pos
 				if Input.is_action_pressed("editor_delete"):
