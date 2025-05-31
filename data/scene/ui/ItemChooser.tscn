@@ -6,12 +6,14 @@
 offset_right = 356.0
 offset_bottom = 202.0
 tab_alignment = 1
+current_tab = 0
 script = ExtResource("1_p7u7r")
 
 [node name="Bricks & Objects" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
+metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Bricks & Objects"]
 custom_minimum_size = Vector2(2.08165e-12, 150)
@@ -30,6 +32,7 @@ visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
+metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Saved Stuff"]
 custom_minimum_size = Vector2(2.08165e-12, 150)

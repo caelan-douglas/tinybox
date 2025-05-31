@@ -372,6 +372,8 @@ func save_grabbed() -> void:
 	else:
 		save_name = str("Building", ("%X" % Time.get_unix_time_from_system()))
 	Global.get_world().save_tbw(save_name, false, grabbed)
+	await get_tree().physics_frame
+	item_chooser.refresh_saved_list()
 
 func paste_grabbed() -> void:
 	if copied_lines.size() > 0 && preview != null:

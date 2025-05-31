@@ -95,6 +95,13 @@ func _ready() -> void:
 			if item.begins_with("brick"):
 				add_to_set("Basic bricks", item_button)
 	
+	refresh_saved_list()
+
+func refresh_saved_list() -> void:
+	for child : Node in saved_list.get_children():
+		child.queue_free()
+	await get_tree().physics_frame
+	
 	# create sets for saved items, in tab 1, 1 column wide
 	create_set("Built-in stuff", 1, 1)
 	create_set("Your saved stuff", 1, 1)
