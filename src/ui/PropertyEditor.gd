@@ -55,6 +55,16 @@ func show_grab_actions(grabbed : Array, from_tool : EditorBuildTool) -> void:
 	save_button.text = "Save grabbed things"
 	save_button.connect("pressed", from_tool.save_grabbed)
 	editor_props_list.add_child(save_button)
+	
+	var spacer2 := Control.new()
+	spacer2.custom_minimum_size.y = 16
+	editor_props_list.add_child(spacer)
+	
+	var del_button := DynamicButton.new()
+	del_button.text = "Delete grabbed things"
+	del_button.self_modulate = Color.RED
+	del_button.connect("pressed", from_tool.delete_grabbed)
+	editor_props_list.add_child(del_button)
 
 func _on_copy_pressed() -> void:
 	copied_properties = selected_item_properties

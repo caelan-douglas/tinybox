@@ -361,6 +361,12 @@ func copy_grabbed() -> void:
 	if ok:
 		_show_clipboard_preview(Global.get_tbw_lines("temp"))
 
+func delete_grabbed() -> void:
+	for brick : Node in grabbed:
+		if brick is Brick:
+			grabbed.erase(brick)
+			brick.despawn(true)
+
 var save_grabbed_name_lineedit : LineEdit = null
 func save_grabbed() -> void:
 	var save_name := ""
@@ -608,8 +614,6 @@ func _show_clipboard_preview(lines : Array) -> void:
 	if preview != null:
 		preview.queue_free()
 	copied_lines = lines
-	if preview != null:
-		preview.queue_free()
 	preview = await Global.get_world().parse_tbw(copied_lines, true)
 	for child : Node in preview.get_children():
 		child.set_script(null)

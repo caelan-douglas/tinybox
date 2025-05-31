@@ -592,7 +592,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 						if this_pos.y < lowest_pos.y:
 							lowest_pos = this_pos
 		var building_pos : Vector3 = Global.property_string_to_property("global_position", line_split_init[1].split(":")[1])
-		offset_pos = Vector3(building_pos.x, lowest_pos.y, building_pos.z)
+		offset_pos = Vector3(roundf(building_pos.x), roundf(lowest_pos.y), roundf(building_pos.z))
 	
 	# BIG file, show loading visual
 	if lines.size() > 100:
