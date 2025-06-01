@@ -3,7 +3,6 @@ name: Cleanup or change
 about: Cleanup or change an existing feature
 title: "[cleanup / change]"
 labels: enhancement
-assignees: caelan-douglas
 
 ---
 
