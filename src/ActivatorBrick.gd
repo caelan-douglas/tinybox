@@ -45,6 +45,8 @@ func _init() -> void:
 
 func _ready() -> void:
 	super()
+	if Global.get_world().tbw_loading:
+		await Global.get_world().tbw_loaded
 	await get_tree().create_timer(0.5).timeout
 	activate()
 
