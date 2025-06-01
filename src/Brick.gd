@@ -854,18 +854,6 @@ func entered_water() -> void:
 	extinguish_fire()
 	gravity_scale = -0.3
 
-@rpc("any_peer", "call_remote", "reliable")
-func request_group_from_authority(id_from : int) -> void:
-	var group_array := []
-	if brick_groups.groups.has(str(group)):
-		for b : Variant in brick_groups.groups[str(group)]:
-			if b != null:
-				b = b as Brick
-				group_array.append(b)
-	# for every brick in the array, tell the non-auth its new group is this one's
-	for b : Brick in group_array:
-		brick_groups.receive_group_from_authority.rpc_id(id_from, b.name)
-
 func properties_as_dict() -> Dictionary:
 	var dict : Dictionary = {}
 	for p : String in properties_to_save:

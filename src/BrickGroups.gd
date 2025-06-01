@@ -21,15 +21,6 @@ class_name BrickGroups
 @export var groups : Dictionary = {}
 
 var non_auth_group : Array = []
-var receive_timeout : int = 0
-
-@rpc("any_peer", "call_remote", "reliable")
-func receive_group_from_authority(brick_name : String) -> void:
-	receive_timeout = 45
-	non_auth_group.append(brick_name)
-
-func _physics_process(delta : float) -> void:
-	receive_timeout -= 1
 
 var last_checked_time : int = 0
 # Determines the groups for bricks in the world.
