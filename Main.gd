@@ -42,13 +42,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 12081
+var server_version : int = 12090
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 12.8"
+var display_version := "beta 12.9pre"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
@@ -282,6 +282,8 @@ func _on_host_pressed() -> void:
 	# Create the LAN advertiser.
 	lan_advertiser = ServerAdvertiser.new()
 	get_tree().current_scene.add_child(lan_advertiser)
+	# Don't stop advertising to LAN listeners when the server pauses.
+	lan_advertiser.process_mode = Node.PROCESS_MODE_ALWAYS
 	lan_advertiser.serverInfo["name"] = str(display_name_field.text, "'s Server")
 	lan_advertiser.broadcast_interval = 3
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
