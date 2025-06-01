@@ -364,7 +364,7 @@ func copy_grabbed() -> void:
 func delete_grabbed() -> void:
 	for brick : Node in grabbed:
 		if brick is Brick:
-			brick.despawn(true)
+			brick.despawn.rpc(true)
 	grabbed = []
 
 var save_grabbed_name_lineedit : LineEdit = null
