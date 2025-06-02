@@ -3,9 +3,10 @@
 Free and open source sandbox game with online multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
 
 ### Links
-[<img alt="Download link" height="24px" src="https://img.shields.io/badge/Download%20the%20latest%20beta%20-%20%2F?color=teal">](https://github.com/caelan-douglas/tinybox/releases/latest)<br>
-[<img alt="Contrib guidelines link" height="24px" src="https://img.shields.io/badge/Contributor%20guidelines%20-%20%2F?color=lightgrey">](docs/CONTRIBUTING.md)<br>
-[<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=lightgrey">](docs/Hosting%20a%20Server.md)<br>
+[<img alt="Download link" height="24px" src="https://img.shields.io/badge/Download%20the%20latest%20beta%20-%20%2F?color=teal">](https://github.com/caelan-douglas/tinybox/releases/latest)<br><br>
+[<img alt="Contrib guidelines link" height="24px" src="https://img.shields.io/badge/Contributor%20guidelines%20-%20%2F?color=grey">](docs/CONTRIBUTING.md)<br>
+[<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=grey">](docs/Hosting%20a%20Server.md)<br>
+[<img alt="Promo video link" height="24px" src="https://img.shields.io/badge/Short%20promo%20video%20(youtube)%20-%20%2F?color=darkred">](https://www.youtube.com/watch?v=_35vkHCguak)<br>
 
 
 ### License
@@ -31,12 +32,7 @@ The Godot Engine is under its own license, the details of which are noted at htt
 <img src=.export_exclude/screenshot_3.png width="800px">
 <img src=.export_exclude/screenshot_2.png width="800px">
 
-### Game vision
-Tinybox *('tiny + sandbox')* is a sandbox game focused on creativity, experimentation, and destroying your friends with rockets. Bricks allow players to create destructible platforms, bridges, houses, vehicles, etc. The world editor allows players to delve a bit deeper and create their own worlds with custom events and features. As of now, the main goal of feature updates in the project is to expand on this with more included worlds; new features, events, and objects in the editor; and new item types.
-
-In order to keep PvP aligned with the physics-based sandbox nature of the game, weapons generally interact with the world in some way.
-
-## Setting up the project
+## Setting up the project for development
 [![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.4.1-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
 Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. Note that active development sometimes happens on the main branch, so pre-release versions of the game may be unstable. The project's current Godot version is linked above.<br>
 An additional step you will have to take is linking a Blender 4.4.0+ executable in your Godot Editor settings. **I recommend you do this before loading the project to avoid import errors.**<br>
