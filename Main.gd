@@ -234,8 +234,8 @@ func _on_host_pressed() -> void:
 			return
 	# Get the host's selected map from the dropdown.
 	# Create the server.
-	enet_peer.host.compress(NETWORK_COMPRESSION_MODE)
 	enet_peer.create_server(PORT)
+	enet_peer.host.compress(NETWORK_COMPRESSION_MODE)
 	# Set the current multiplayer peer to the server.
 	multiplayer.multiplayer_peer = enet_peer
 	# When a new player connects, add them with their id.
@@ -313,8 +313,8 @@ func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
 	join_button.text = JsonHandler.find_entry_in_file("ui/join_clicked")
 	
 	# Create the client.
-	enet_peer.host.compress(NETWORK_COMPRESSION_MODE)
 	enet_peer.create_client(str(address), PORT)
+	enet_peer.host.compress(NETWORK_COMPRESSION_MODE)
 	# Set the current multiplayer peer to the client.
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.connection_failed.connect(kick_client.bind("Server timeout or couldn't find server."))
