@@ -63,10 +63,26 @@ func activate() -> void:
 						attached_motors.append(b)
 					# set the motorbricks parent seat to this one
 					b.set_parent_controller(self.get_path())
+	sync_attached_motors()
 	update_weight.rpc(vehicle_weight)
 	# unfreeze group so that the body that has
 	# these motors is released.
 	unfreeze_entire_group()
+
+func sync_attached_motors() -> void:
+	var to_sync : Array[String] = []
+	for m : Brick in attached_motors:
+		to_sync.append(str(m.get_path()))
+	update_attached_motors.rpc(to_sync)
+
+@rpc("any_peer", "call_remote", "reliable")
+func update_attached_motors(new : Array[String]) -> void:
+	attached_motors = []
+	for m : String in new:
+		var motor := get_node_or_null(m)
+		if motor != null:
+			if motor is MotorBrick:
+				attached_motors.append(motor)
 
 @rpc("any_peer", "call_local", "reliable")
 func update_weight(new : float) -> void:

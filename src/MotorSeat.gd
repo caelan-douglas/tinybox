@@ -101,15 +101,5 @@ func sit(player : RigidPlayer) -> void:
 	var player_id : int = player.get_multiplayer_authority()
 	player.entered_seat.rpc_id(player_id, self.get_path())
 
-@rpc("call_remote")
-func _sync_velocity(rpc_velocity : Vector3) -> void:
-	linear_velocity = rpc_velocity
-
 func _physics_process(delta : float) -> void:
 	super(delta)
-	# only run on auth
-	if !is_multiplayer_authority(): return
-	# sync velocity only every other frame to reduce network stress
-	if sync_step % 2 == 0:
-		# sync velocity for seat exit mechanics
-		_sync_velocity.rpc(linear_velocity)
