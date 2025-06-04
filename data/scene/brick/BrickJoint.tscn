@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhil8lbbf6ucm"]
+[gd_scene load_steps=5 format=3 uid="uid://bhil8lbbf6ucm"]
 
 [ext_resource type="Script" uid="uid://ccsij7cj3xcng" path="res://src/DebugVisibility.gd" id="1_8pou7"]
 
@@ -12,6 +12,17 @@ radius = 0.25
 height = 0.5
 radial_segments = 4
 rings = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ycjtm"]
+properties/0/path = NodePath(".:node_a")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:node_b")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:angular_limit_z/enabled")
+properties/2/spawn = true
+properties/2/replication_mode = 2
 
 [node name="Joint" type="Generic6DOFJoint3D"]
 linear_limit_x/softness = 1.5
@@ -28,3 +39,6 @@ angular_limit_z/restitution = 0.05
 visible = false
 mesh = SubResource("SphereMesh_nbvt3")
 script = ExtResource("1_8pou7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ycjtm")
