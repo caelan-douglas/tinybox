@@ -1,20 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://bde1qvp4v6opt"]
+[gd_scene load_steps=13 format=3 uid="uid://bde1qvp4v6opt"]
 
 [ext_resource type="Script" uid="uid://3mley7js4amj" path="res://src/ExplosiveBrick.gd" id="1_sbvri"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_2nqpl"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_18dtu"]
 [ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_njokc"]
+[ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_ph5fx"]
 [ext_resource type="Material" uid="uid://dokmq4mxw3vng" path="res://data/materials/explosive_brick.tres" id="4_24yt8"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_f1rrm"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 2
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 
@@ -32,13 +26,14 @@ collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
 freeze = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_sbvri")
 _brick_spawnable_type = "brick_explosive"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bwia1")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_18dtu")]
+
+[node name="BrickSynchronizer" parent="." instance=ExtResource("3_ph5fx")]
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_b80at")

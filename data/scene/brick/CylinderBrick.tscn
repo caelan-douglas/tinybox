@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=4 uid="uid://cwymj2xlxiri4"]
+[gd_scene load_steps=20 format=4 uid="uid://cwymj2xlxiri4"]
 
 [ext_resource type="Script" uid="uid://fhyh0pqn2gcl" path="res://src/MotorBrick.gd" id="1_ap5pn"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="2_cpgvr"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_v0nme"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_xgxvc"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="3_fh6f0"]
 [ext_resource type="PackedScene" uid="uid://con3wop6sjd4q" path="res://data/models/brick/cylinder.blend" id="3_wv0jl"]
@@ -81,11 +82,10 @@ max_contacts_reported = 1
 script = ExtResource("1_ap5pn")
 _brick_spawnable_type = "brick_cylinder"
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bhil8lbbf6ucm")
-spawn_path = NodePath("..")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_v0nme")]
 
 [node name="BrickSynchronizer" parent="." instance=ExtResource("2_cpgvr")]
+delta_interval = 0.044
 
 [node name="collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)

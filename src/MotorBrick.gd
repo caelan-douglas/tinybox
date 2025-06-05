@@ -117,18 +117,6 @@ func _physics_process(delta : float) -> void:
 		var divisor : float = clamp(mass_mult * 0.7, 1, 999)
 		angular_velocity = lerp(angular_velocity, transform.basis.z * steer * -dot_z * max_speed * 0.2, 0.1 / divisor)
 		
-		# in water propulsion
-		if in_water:
-			# max speed 11 underwater
-			if linear_velocity.length() < 11:
-				apply_central_force(parent_controller.transform.basis.z * speed * -500)
-			if steer != 0:
-				# apply angular velocity to all bricks
-				if brick_groups.groups.has(str(group)):
-					for b : Variant in brick_groups.groups[str(group)]:
-						if b != null:
-							b = b as Brick
-							b.angular_velocity = parent_controller.transform.basis.y * -steer * 3
 
 func entered_water() -> void:
 	super()

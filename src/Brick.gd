@@ -834,20 +834,20 @@ func enter_state() -> void:
 			cam_collider.disabled = true
 			collider.disabled = true
 			
-			freeze = true
+			#freeze = true
 		States.DUMMY_PLACED:
 			cam_collider.disabled = false
 			collider.disabled = false
 			# freeze = true on dummy placed bricks so that
 			# they do not try to calculate their own physics on
 			# non-authority peers.
-			freeze = true
+			#freeze = true
 		States.DUMMY_PROJECTILE:
 			cam_collider.disabled = false
 			collider.disabled = false
 			# freeze = true on dummy projectiles, as brick projectiles
 			# are dummies on both authority and non-authority.
-			freeze = false
+			#freeze = false
 
 func entered_water() -> void:
 	super()

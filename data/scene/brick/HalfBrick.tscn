@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://6dcw2huh16uq"]
+[gd_scene load_steps=12 format=3 uid="uid://6dcw2huh16uq"]
 
 [ext_resource type="Script" uid="uid://ckhgejm1vx35w" path="res://src/Brick.gd" id="1_xgj62"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="2_6enjb"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_u0pg4"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_wma50"]
 [ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_7bj0j"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="3_y4fj6"]
 
@@ -30,9 +31,7 @@ max_contacts_reported = 1
 script = ExtResource("1_xgj62")
 _brick_spawnable_type = "brick_half"
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bhil8lbbf6ucm")
-spawn_path = NodePath("..")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_wma50")]
 
 [node name="BrickSynchronizer" parent="." instance=ExtResource("2_6enjb")]
 

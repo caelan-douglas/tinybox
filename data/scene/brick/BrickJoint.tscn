@@ -23,6 +23,9 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath(".:angular_limit_z/enabled")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath(".:position")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [node name="Joint" type="Generic6DOFJoint3D"]
 linear_limit_x/softness = 1.5

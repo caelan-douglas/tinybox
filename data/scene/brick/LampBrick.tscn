@@ -1,20 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://d34ua4bytc5s5"]
+[gd_scene load_steps=14 format=3 uid="uid://d34ua4bytc5s5"]
 
 [ext_resource type="Script" uid="uid://c8g72ci0okq0j" path="res://src/LampBrick.gd" id="1_1idt1"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_1dqe2"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_q038b"]
 [ext_resource type="PackedScene" uid="uid://ccxi02reit78" path="res://data/models/brick/lamp.blend" id="3_37fvo"]
+[ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_pq1uh"]
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="4_ol2f4"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_putf8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 2
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 
@@ -37,13 +31,14 @@ collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
 freeze = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_1idt1")
 _brick_spawnable_type = "brick_lamp"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bwia1")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_q038b")]
+
+[node name="BrickSynchronizer" parent="." instance=ExtResource("3_pq1uh")]
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_b80at")

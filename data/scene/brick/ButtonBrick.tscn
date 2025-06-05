@@ -1,20 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://d2gxhhq25bxkk"]
+[gd_scene load_steps=14 format=3 uid="uid://d2gxhhq25bxkk"]
 
 [ext_resource type="Script" uid="uid://c2qs4hgme811n" path="res://src/ButtonBrick.gd" id="1_je5ca"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_hd5s1"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_sgx5r"]
+[ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_i3glu"]
 [ext_resource type="PackedScene" uid="uid://bm72uohd2da87" path="res://data/models/brick/button.blend" id="3_ol8rk"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_jm0y6"]
 [ext_resource type="AudioStream" uid="uid://bo4houxqutp2g" path="res://data/audio/button.ogg" id="5_wtscq"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 2
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 size = Vector3(1, 0.4, 1)
@@ -39,13 +33,14 @@ collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
 freeze = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_je5ca")
 _brick_spawnable_type = "brick_button"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bwia1")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_hd5s1")]
+
+[node name="BrickSynchronizer" parent="." instance=ExtResource("3_i3glu")]
 
 [node name="collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)

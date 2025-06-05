@@ -1,21 +1,15 @@
-[gd_scene load_steps=15 format=3 uid="uid://c2pwwy57eoilm"]
+[gd_scene load_steps=16 format=3 uid="uid://c2pwwy57eoilm"]
 
 [ext_resource type="Script" uid="uid://bcq8qw4imotdm" path="res://src/ActivatorBrick.gd" id="1_w1b6s"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_5j7lv"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_rvino"]
 [ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="3_0ykmc"]
+[ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_d0p3j"]
 [ext_resource type="Texture2D" uid="uid://dv43g17rxqbfe" path="res://data/textures/activator_brick.jpg" id="4_aikdr"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_oh56m"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="5_o44xs"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bwia1"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 2
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 
@@ -45,13 +39,14 @@ collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
 freeze = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_w1b6s")
 _brick_spawnable_type = "brick_activator"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_bwia1")
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_5j7lv")]
+
+[node name="BrickSynchronizer" parent="." instance=ExtResource("3_d0p3j")]
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_b80at")
