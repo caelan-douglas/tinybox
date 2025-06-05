@@ -32,7 +32,6 @@ script = ExtResource("1_hwuoe")
 [node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_yu5xo")]
 
 [node name="BrickSynchronizer" parent="." instance=ExtResource("2_nbvbe")]
-delta_interval = 1.0
 
 [node name="collider" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_b80at")

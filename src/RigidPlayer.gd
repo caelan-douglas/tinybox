@@ -811,6 +811,7 @@ var last_move_direction := Vector3.ZERO
 var air_from_jump := false
 var on_wall_cooldown : int = 0
 var standing_on_object_last_pos : Vector3 = Vector3.ZERO
+var init_velocity := Vector3.ZERO
 # Manages movement
 func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	# handle movement
@@ -828,10 +829,47 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		if !Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 			move_direction = get_movement_direction()
 		
+		var grounded_on_standing_object : bool = false
+		# check if standing on something
+		if ground_detect.has_overlapping_bodies() && _state != DEAD && _state != RESPAWN:
+			# check every body standing on
+			for body in ground_detect.get_overlapping_bodies():
+				# if this is not what we are already standing on
+				if standing_on_object != body:
+					influence_piv.global_position = body.global_position
+					influence_piv.global_rotation = body.global_rotation
+					influence_pos.global_position = global_position
+					standing_on_object_last_pos = influence_pos.global_position
+					set_standing_on_object_rpc.rpc(body.get_path())
+				else:
+					grounded_on_standing_object = true
+		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
+			if standing_on_object != null:
+				set_standing_on_object_rpc.rpc("null")
+		# move if standing on something
+		if standing_on_object != null:
+			influence_pos.global_position = standing_on_object_last_pos
+			influence_piv.global_position = standing_on_object.global_position
+			influence_piv.global_rotation = standing_on_object.global_rotation
+			var standing_influence : float = 1
+			if !grounded_on_standing_object:
+				standing_influence -= (clampf(influence_pos.global_position.distance_to(global_position) - 3, 0, 10)*0.15)
+				standing_influence = clampf(standing_influence, 0, 1)
+			if !teleport_requested:
+				global_position += (influence_pos.global_position - standing_on_object_last_pos) * standing_influence
+			if grounded_on_standing_object:
+				standing_on_object_last_pos = global_position
+		
 		match _state:
 			IDLE:
-				state.linear_velocity.x *= decel_multiplier
-				state.linear_velocity.z *= decel_multiplier
+				var adj_decel_multiplier := decel_multiplier
+				if standing_on_object != null:
+					if standing_on_object is RigidBody3D:
+						var adj_vel : Vector3 = abs(state.linear_velocity - standing_on_object.linear_velocity)
+						if adj_vel.length() < 0.03:
+							decel_multiplier = 0
+				state.linear_velocity.x *= adj_decel_multiplier
+				state.linear_velocity.z *= adj_decel_multiplier
 				if is_on_ground and Input.is_action_pressed("jump") && !locked:
 					air_from_jump = true
 					# jump particles
@@ -1072,39 +1110,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				character_model.rotation.x = lerp_angle(character_model.rotation.x, atan2(linear_velocity.y, Vector2(linear_velocity.z, linear_velocity.x).length()) - 0.56, 0.15)
 				pass
 		lateral_velocity = Vector3(linear_velocity.x, 0, linear_velocity.z)
-		
-		var grounded_on_standing_object : bool = false
-		# check if standing on something
-		if ground_detect.has_overlapping_bodies() && _state != DEAD && _state != RESPAWN:
-			# check every body standing on
-			for body in ground_detect.get_overlapping_bodies():
-				# if this is not what we are already standing on
-				if standing_on_object != body:
-					influence_piv.global_position = body.global_position
-					influence_piv.global_rotation = body.global_rotation
-					influence_pos.global_position = global_position
-					standing_on_object_last_pos = influence_pos.global_position
-					set_standing_on_object_rpc.rpc(body.get_path())
-				else:
-					grounded_on_standing_object = true
-		elif _state != AIR && _state != DIVE && _state != HIGH_JUMP:
-			if standing_on_object != null:
-				set_standing_on_object_rpc.rpc("null")
-		
-		# move if standing on something
-		if standing_on_object != null:
-			influence_pos.global_position = standing_on_object_last_pos
-			influence_piv.global_position = standing_on_object.global_position
-			influence_piv.global_rotation = standing_on_object.global_rotation
-			var standing_influence : float = 1
-			if !grounded_on_standing_object:
-				standing_influence -= (clampf(influence_pos.global_position.distance_to(global_position) - 3, 0, 10)*0.15)
-				standing_influence = clampf(standing_influence, 0, 1)
-			if !teleport_requested:
-				global_position += (influence_pos.global_position - standing_on_object_last_pos) * standing_influence
-			if grounded_on_standing_object:
-				standing_on_object_last_pos = global_position
-		
+	
 	# handle teleport requests
 	if teleport_requested:
 		set_standing_on_object_rpc.rpc("null")

@@ -25,13 +25,12 @@ var vehicle_weight : float = 0
 # Drives this controller's motors based on given input.
 @rpc("any_peer", "call_local")
 func drive(input_forward : float, input_steer : float) -> void:
-	if multiplayer.is_server():
-		for motor_brick : Variant in attached_motors:
-			if motor_brick != null:
-				if motor_brick is MotorBrick:
-					motor_brick.receive_input(input_forward, input_steer)
-			else:
-				attached_motors.erase(motor_brick)
+	for motor_brick : Variant in attached_motors:
+		if motor_brick != null:
+			if motor_brick is MotorBrick:
+				motor_brick.receive_input(input_forward, input_steer)
+		else:
+			attached_motors.erase(motor_brick)
 
 # Remove this brick
 @rpc("any_peer", "call_local")
