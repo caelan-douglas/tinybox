@@ -865,8 +865,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				var adj_decel_multiplier := decel_multiplier
 				if standing_on_object != null:
 					if standing_on_object is RigidBody3D:
-						var adj_vel : Vector3 = abs(state.linear_velocity - standing_on_object.linear_velocity)
-						if adj_vel.length() < 0.03:
+						var adj_vel : float = standing_on_object.linear_velocity.length()
+						if adj_vel > 0.1:
 							decel_multiplier = 0
 				state.linear_velocity.x *= adj_decel_multiplier
 				state.linear_velocity.z *= adj_decel_multiplier

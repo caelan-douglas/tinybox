@@ -33,14 +33,14 @@ func _physics_process(delta : float) -> void:
 		for b : Node in bricks:
 			if b is Brick:
 				brick_count += 1
-		col1.text = str("[b]Compute				(", Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS), "ms)[/b]",
+		col1.text = str("[b]Compute				(", Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS), "s)[/b]",
 		"\n[b]	Bricks[/b]				", str(brick_count),
 		"\n[b]	Physics[/b]			", Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
 		"\n[b]	Objects[/b]			", str(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
 		"\n[b]	Orphans[/b]			", str(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)),
 		"\n[b]	Collisions[/b]		", str(Performance.get_monitor(Performance.PHYSICS_3D_COLLISION_PAIRS)),
 		"\n[b]	Memory[/b]			", round(OS.get_static_memory_usage() * 0.000001), "mb",
-		"\n\n[b]Draw					(", Performance.get_monitor(Performance.TIME_PROCESS), "ms)[/b]",
+		"\n\n[b]Draw					(", Performance.get_monitor(Performance.TIME_PROCESS), "s)[/b]",
 		"\n[b]	Drawcalls[/b]		", Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 		"\n[b]	Mat. Cache[/b]		", str(Global.graphics_cache.size()), " / 256",
 		"\n[b]	Ball Cache[/b]		", str(Global.ball_colour_cache.size()), " / 64",

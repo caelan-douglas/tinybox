@@ -18,5 +18,5 @@ properties/4/spawn = true
 properties/4/replication_mode = 2
 
 [node name="BrickSynchronizer" type="MultiplayerSynchronizer"]
-delta_interval = 0.3
+delta_interval = 1.0
 replication_config = SubResource("SceneReplicationConfig_mxi6k")

@@ -51,9 +51,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	super()
-	# only show dir arrow to owner of brick
-	if !is_multiplayer_authority():
-		$DirectionArrow.visible = false
 
 # Remove this brick
 @rpc("any_peer", "call_local")
