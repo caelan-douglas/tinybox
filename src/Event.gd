@@ -50,11 +50,13 @@ func start() -> int:
 		EventType.TELEPORT_ALL_PLAYERS:
 			var players : Array = Global.get_world().rigidplayer_list
 			for player : RigidPlayer in players:
+				player.protect_spawn()
 				# assuming vec3 may be string formatted
 				player.teleport.rpc(Global.string_to_vec3(str(args[0])))
 		EventType.MOVE_ALL_PLAYERS_TO_SPAWN:
 			var players : Array = Global.get_world().rigidplayer_list
 			for player : RigidPlayer in players:
+				player.protect_spawn()
 				player.go_to_spawn.rpc()
 		EventType.BALANCE_TEAMS:
 			var teams : Teams = Global.get_world().get_current_map().get_teams()

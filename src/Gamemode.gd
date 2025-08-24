@@ -38,7 +38,6 @@ func start(_params : Array, _mods : Array) -> void:
 	params = _params
 	mods = _mods
 	
-	running = true
 	print(get_multiplayer_authority(), " - Started gamemode: ", gamemode_name, " with params ", params, " and modifiers ", mods)
 	# clear player inventories
 	for p : RigidPlayer in Global.get_world().rigidplayer_list:
@@ -56,7 +55,8 @@ func _on_peer_connected(id : int) -> void:
 		joined_player = Global.get_world().get_node_or_null(str(id)) as RigidPlayer
 		await get_tree().physics_frame
 	set_parameters(joined_player)
-	set_run_parameters(joined_player)
+	if running:
+		set_run_parameters(joined_player)
 	if timer_ui != null:
 		timer_ui.set_visible_rpc.rpc_id(id, true)
 		timer_ui.set_max_val_rpc.rpc_id(id, time_limit_seconds)
@@ -85,6 +85,8 @@ func run() -> void:
 	if !multiplayer.is_server(): return
 	var preview_event : Event = Event.new(Event.EventType.SHOW_WORLD_PREVIEW, [gamemode_name, gamemode_subtitle])
 	await preview_event.start()
+	
+	running = true
 	# start default timer
 	game_timer.one_shot = true
 	game_timer.wait_time = time_limit_seconds
