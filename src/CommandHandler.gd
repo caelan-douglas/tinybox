@@ -17,7 +17,41 @@
 extends Node
 signal command_response(sender : String, text : String)
 
+enum PermissionLevel {
+	NONE,
+	ADMIN,
+	SERVER
+}
+
+class Command:
+	var command_name : String
+	var arg_size : int
+	var permission_level : PermissionLevel
+	var command_syntax : String
+	
+	func _init(_command_name : String, _arg_size : int, _permission_level: PermissionLevel, _command_syntax : String = "") -> void:
+		command_name = _command_name
+		arg_size = _arg_size
+		permission_level = _permission_level
+		command_syntax = _command_syntax
+
 var admins : Array[int] = [1]
+var valid_commands : Array[Command] = [
+								Command.new("$stuck", 0, PermissionLevel.NONE), 
+								Command.new("$speed", 2, PermissionLevel.ADMIN, "$speed NAME SPEED_AMOUNT"),
+								Command.new("$size", 2, PermissionLevel.ADMIN, "$size NAME SIZE"),
+								Command.new("$health", 2, PermissionLevel.ADMIN, "$health NAME HEALTH_AMOUNT"),
+								Command.new("$tpall", 1, PermissionLevel.ADMIN, "$tpall TO_NAME"),
+								Command.new("$promote", 1, PermissionLevel.SERVER, "$promote NAME"),
+								Command.new("$demote", 1, PermissionLevel.SERVER, "$demote NAME"),
+								Command.new("$ban", 1, PermissionLevel.ADMIN, "$ban NAME"),
+								Command.new("$unban", 1, PermissionLevel.SERVER, "$unban IP_ADDRESS"),
+								Command.new("$list", 0, PermissionLevel.NONE),
+								Command.new("$admins", 0, PermissionLevel.NONE),
+								Command.new("$loadmap", 1, PermissionLevel.ADMIN, "$loadmap MAP_FILENAME"),
+								Command.new("$can_clients_load_worlds", 1, PermissionLevel.ADMIN, "$can_clients_load_worlds true/false"),
+								Command.new("$quit", 0, PermissionLevel.SERVER)
+								]
 
 var cli_thread : Thread
 
@@ -45,6 +79,37 @@ func _process_input() -> void:
 
 func submit_cli_input(read : String) -> void:
 	submit_command.rpc_id(1, "Server", read)
+
+func command_is_valid(command : Command, id_from : int) -> bool:
+	# only server handles commands
+	if !multiplayer.is_server(): return false
+	
+	for valid_command : Command in valid_commands:
+		if valid_command.command_name == command.command_name:
+			# check correct number of arguments
+			if valid_command.arg_size <= command.arg_size:
+				# check permission levels
+				match(valid_command.permission_level):
+					PermissionLevel.NONE:
+						return true
+					PermissionLevel.ADMIN:
+						if !admins.has(id_from):
+							_send_response("Info", "You don't have permission to do that!", id_from)
+							return false
+						else:
+							return true
+					PermissionLevel.SERVER:
+						if id_from != 1:
+							_send_response("Info", "You don't have permission to do that!", id_from)
+							return false
+						else:
+							return true
+			else:
+				_send_response("Info", "Invalid use of command. Correct syntax example: " + valid_command.command_syntax, id_from)
+				return false
+	# not in valid commands list, invalid command
+	_send_response("Info", "Invalid command. Type '?' for help.", id_from)
+	return false
 
 # Send the chat to all clients.
 @rpc("any_peer", "call_local")
@@ -77,199 +142,151 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 		_send_response("$quit", "End the server (headless server mode only.)", id_from)
 		return
 	if text.begins_with("$"):
-		if split_text[0] == "$speed":
-			# only admins can do speed command
-			if admins.has(id_from):
-				if rsplit.size() == 2:
-					# Get this player and give them the speed.
-					var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
-					# change to x speed
-					var x := str(rsplit[1]).to_int()
-					if player != null:
-						if x != 0:
-							player.set_move_speed.rpc(x)
-							_send_response("Info", str("Set ", rsplit[0], "'s move speed to ", x))
-						else:
-							_send_response("Info", "Speed cannot be zero", id_from)
+		# if running a command, first check it is valid
+		if command_is_valid(Command.new(str(split_text[0]), rsplit.size(), PermissionLevel.NONE), id_from):
+			if split_text[0] == "$speed":
+				# Get this player and give them the speed.
+				var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
+				# change to x speed
+				var x := str(rsplit[1]).to_int()
+				if player != null:
+					if x != 0:
+						player.set_move_speed.rpc(x)
+						_send_response("Info", str("Set ", rsplit[0], "'s move speed to ", x))
 					else:
-						_send_response("Info", "Player not found", id_from)
-					return
+						_send_response("Info", "Speed cannot be zero", id_from)
 				else:
-					_send_response("Info", "Invalid use of $speed. Correct syntax example: $speed NAME SPEED_AMOUNT", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
+					_send_response("Info", "Player not found", id_from)
 				return
-		elif split_text[0] == "$size":
-			# only admins can do size command
-			if admins.has(id_from):
-				if rsplit.size() == 2:
-					# Get this player and give them the size.
-					var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
-					# change to x size
-					var x := clampf(str(rsplit[1]).to_float(), 1, 15)
-					if player != null:
-						if x >= 1:
-							player.set_model_size.rpc(x)
-							_send_response("Info", str("Set ", rsplit[0], "'s size to ", x))
-						else:
-							_send_response("Info", "Size must be greater than or equal to 1", id_from)
+			
+			elif split_text[0] == "$size":
+				# Get this player and give them the size.
+				var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
+				# change to x size
+				var x := clampf(str(rsplit[1]).to_float(), 1, 15)
+				if player != null:
+					if x >= 1:
+						player.set_model_size.rpc(x)
+						_send_response("Info", str("Set ", rsplit[0], "'s size to ", x))
 					else:
-						_send_response("Info", "Player not found", id_from)
-					return
+						_send_response("Info", "Size must be greater than or equal to 1", id_from)
 				else:
-					_send_response("Info", "Invalid use of $size. Correct syntax example: $size NAME SCALE_AMOUNT", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
+					_send_response("Info", "Player not found", id_from)
 				return
-		elif split_text[0] == "$health":
-			# only admins can do health command
-			if admins.has(id_from):
-				if rsplit.size() == 2:
-					# Get this player and give them the health.
-					var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
-					# change to x health
-					var x := str(rsplit[1]).to_int()
-					if player != null:
-						player.set_health(x)
-						_send_response("Info", str("Set ", rsplit[0], "'s health to ", x))
-					else:
-						_send_response("Info", "Player not found", id_from)
-					return
+			
+			elif split_text[0] == "$health":
+				# Get this player and give them the health.
+				var player : RigidPlayer = Global.get_player_by_name(str(rsplit[0]))
+				# change to x health
+				var x := str(rsplit[1]).to_int()
+				if player != null:
+					player.set_health(x)
+					_send_response("Info", str("Set ", rsplit[0], "'s health to ", x))
 				else:
-					_send_response("Info", "Invalid use of $health. Correct syntax example: $health NAME AMOUNT", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
+					_send_response("Info", "Player not found", id_from)
 				return
-		elif split_text[0] == "$stuck":
-			var player : Node = Global.get_world().get_node_or_null(str(id_from))
-			if player != null:
-				player.reduce_health(9999)
-		elif split_text[0] == "$tpall":
-			# only admins can do tp command
-			if admins.has(id_from):
-				if split_text.size() > 1:
-					# Get the "to" player.
-					var to_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
-					if to_player != null:
-						for p : Node in Global.get_world().rigidplayer_list:
-							if p is RigidPlayer:
-								# add a bit of random to avoid sending people flying
-								p.teleport.rpc(Vector3(to_player.global_position.x + randf() * 0.05, to_player.global_position.y + randf() * 0.05, to_player.global_position.z + randf() * 0.05))
-						_send_response("Info", str("Teleporting all players to ", split_text[1], "."))
-					else:
-						_send_response("Info", "Player to teleport to not found", id_from)
+			
+			elif split_text[0] == "$stuck":
+				var player : Node = Global.get_world().get_node_or_null(str(id_from))
+				if player != null:
+					player.reduce_health(9999)
+				return
+			
+			elif split_text[0] == "$tpall":
+				# Get the "to" player.
+				var to_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
+				if to_player != null:
+					for p : Node in Global.get_world().rigidplayer_list:
+						if p is RigidPlayer:
+							# add a bit of random to avoid sending people flying
+							p.teleport.rpc(Vector3(to_player.global_position.x + randf() * 0.05, to_player.global_position.y + randf() * 0.05, to_player.global_position.z + randf() * 0.05))
+					_send_response("Info", str("Teleporting all players to ", split_text[1], "."))
 				else:
-					_send_response("Info", "Invalid use of $tpall. Correct syntax example: $tpall TO_PLAYER_NAME", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$promote":
-			if id_from == 1:
-				if split_text.size() > 1:
-					var promote_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
-					if promote_player != null:
-						if !admins.has(promote_player.get_multiplayer_authority()):
-							admins.append(promote_player.get_multiplayer_authority())
-							_send_response("Info", str("Promoted ", split_text[1], " to admin. They can now run all commands except $end, $promote, and $demote."))
-					else:
-						_send_response("Info", "Player to promote not found", id_from)
+					_send_response("Info", "Player to teleport to not found", id_from)
+				return
+							
+			elif split_text[0] == "$promote":
+				var promote_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
+				if promote_player != null:
+					if !admins.has(promote_player.get_multiplayer_authority()):
+						admins.append(promote_player.get_multiplayer_authority())
+						_send_response("Info", str("Promoted ", split_text[1], " to admin. They can now run all commands except $end, $promote, and $demote."))
 				else:
-					_send_response("Info", "Invalid use of $promote. Correct syntax example: $promote PLAYERNAME", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$demote":
-			if id_from == 1:
-				if split_text.size() > 1:
-					var demote_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
-					if demote_player != null:
-						if admins.has(demote_player.get_multiplayer_authority()):
-							admins.erase(demote_player.get_multiplayer_authority())
-							_send_response("Info", str("Demoted ", split_text[1], "."))
-					else:
-						_send_response("Info", "Player to promote not found", id_from)
+					_send_response("Info", "Player to promote not found", id_from)
+				return
+					
+			elif split_text[0] == "$demote":
+				var demote_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
+				if demote_player != null:
+					if (demote_player.get_multiplayer_authority() == 1):
+						_send_response("Info", "Server cannot be demoted", id_from)
+						return
+					if admins.has(demote_player.get_multiplayer_authority()):
+						admins.erase(demote_player.get_multiplayer_authority())
+						_send_response("Info", str("Demoted ", split_text[1], "."))
 				else:
-					_send_response("Info", "Invalid use of $demote. Correct syntax example: $demote PLAYERNAME", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$list":
-			var player_names : Array[String] = []
-			for p : RigidPlayer in Global.get_world().rigidplayer_list:
-				player_names.append(p.display_name)
-			if player_names.size() > 0:
-				_send_response("Info", str(player_names))
-			else:
-				_send_response("Info", "Nobody is here.")
-		elif split_text[0] == "$admins":
-			if admins.size() > 0:
-				_send_response("Info", str("Server admins: ", admins))
-			else:
-				_send_response("Info", "Nobody is admin.")
-		elif split_text[0] == "$loadmap":
-			if admins.has(id_from):
-				if split_text.size() > 1:
-					Global.get_world().load_tbw(str(split_text[1]), true)
+					_send_response("Info", "Player to demote not found", id_from)
+				return
+			
+			elif split_text[0] == "$list":
+				var player_names : Array[String] = []
+				for p : RigidPlayer in Global.get_world().rigidplayer_list:
+					player_names.append(p.display_name)
+				if player_names.size() > 0:
+					_send_response("Info", str(player_names))
 				else:
-					_send_response("Info", "Invalid use of $loadmap. Correct syntax example: $loadmap MAPNAME", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$can_clients_load_worlds":
-			if admins.has(id_from):
-				if split_text.size() > 1:
-					var result := str(split_text[1])
-					if result == "true":
-						Global.server_can_clients_load_worlds = true
-					else:
-						Global.server_can_clients_load_worlds = false
-					UserPreferences.save_server_pref("can_clients_load_worlds", Global.server_can_clients_load_worlds)
+					_send_response("Info", "Nobody is here.")
+				return
+			
+			elif split_text[0] == "$admins":
+				if admins.size() > 0:
+					_send_response("Info", str("Server admins: ", admins))
 				else:
-					_send_response("Info", "Invalid use of can_clients_load_worlds. Correct syntax example: $can_clients_load_worlds true/false", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$ban":
-			if id_from == 1:
-				if split_text.size() > 1:
-					var ban_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
-					if ban_player != null:
-						var main : Main = get_tree().current_scene
-						var player_ip : String = main.enet_peer.get_peer(ban_player.get_multiplayer_authority()).get_remote_address()
-						var player_id : int = ban_player.get_multiplayer_authority()
-						main.enet_peer.disconnect_peer(player_id)
-						# add to banned ip lists
-						if !Global.server_banned_ips.has(player_ip):
-							Global.server_banned_ips.append(player_ip)
-						# save to server config file
-						UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
-						_send_response("Info", str("Banned ", split_text[1]))
-					else:
-						_send_response("Info", "Player to ban not found", id_from)
+					_send_response("Info", "Nobody is admin.")
+				return
+			
+			elif split_text[0] == "$loadmap":
+				Global.get_world().load_tbw(str(split_text[1]), true)
+				return
+			
+			elif split_text[0] == "$can_clients_load_worlds":
+				var result := str(split_text[1])
+				if result == "true":
+					Global.server_can_clients_load_worlds = true
+					_send_response("Info", "Clients are now able to load worlds.")
 				else:
-					_send_response("Info", "Invalid use of $ban. Correct syntax example: $ban PLAYERNAME", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
-		elif split_text[0] == "$unban":
-			if id_from == 1:
-				if split_text.size() > 1:
-					var player_ip: String = split_text[1]
-					if Global.server_banned_ips.has(player_ip):
-						Global.server_banned_ips.erase(player_ip)
-						# save to server config file
-						UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
-						_send_response("Info", str("Unbanned IP ", player_ip))
-					else:
-						_send_response("Info", "Invalid IP or IP not currently banned", id_from)
+					Global.server_can_clients_load_worlds = false
+					_send_response("Info", "Clients are no longer able to load worlds.")
+				UserPreferences.save_server_pref("can_clients_load_worlds", Global.server_can_clients_load_worlds)
+				return
+				
+			elif split_text[0] == "$ban":
+				var ban_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
+				if ban_player != null:
+					var main : Main = get_tree().current_scene
+					var player_ip : String = main.enet_peer.get_peer(ban_player.get_multiplayer_authority()).get_remote_address()
+					var player_id : int = ban_player.get_multiplayer_authority()
+					main.enet_peer.disconnect_peer(player_id)
+					# add to banned ip lists
+					if !Global.server_banned_ips.has(player_ip):
+						Global.server_banned_ips.append(player_ip)
+					# save to server config file
+					UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
+					_send_response("Info", str("Banned ", split_text[1]))
 				else:
-					_send_response("Info", "Invalid use of $unban. Correct syntax example: $unban IP", id_from)
-					return
-			else:
-				_send_response("Info", "You don't have permission to do that!", id_from)
+					_send_response("Info", "Player to ban not found", id_from)
+				return
+							
+			elif split_text[0] == "$unban":
+				var player_ip: String = split_text[1]
+				if Global.server_banned_ips.has(player_ip):
+					Global.server_banned_ips.erase(player_ip)
+					# save to server config file
+					UserPreferences.save_server_pref("banned_ips", Global.server_banned_ips)
+					_send_response("Info", str("Unbanned IP ", player_ip))
+				else:
+					_send_response("Info", "Invalid IP or IP not currently banned", id_from)
+				return
 	else:
 		# no command, just send the chat
 		_send_response(str(display_name), str(text), only_show_to_id)

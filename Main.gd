@@ -235,6 +235,11 @@ func _on_host_pressed() -> void:
 	# Get the host's selected map from the dropdown.
 	# Create the server.
 	enet_peer.create_server(PORT)
+	if enet_peer.host == null:
+		host_button.text = "Host server"
+		host_button.disabled = false
+		UIHandler.show_alert("Failed to start server, is one already running?", 6, false, UIHandler.alert_colour_error)
+		return
 	enet_peer.host.compress(NETWORK_COMPRESSION_MODE)
 	# Set the current multiplayer peer to the server.
 	multiplayer.multiplayer_peer = enet_peer
