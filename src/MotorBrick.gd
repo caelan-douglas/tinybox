@@ -65,6 +65,12 @@ func receive_input(input_forward : float, input_steer : float) -> void:
 	speed = input_forward
 	steer = input_steer
 
+@rpc("any_peer", "call_remote", "reliable")
+func sync_properties(props : Dictionary) -> void:
+	super(props)
+	# Don't show indicator to newly joined clients
+	$DirectionArrow.visible = false
+
 func enter_state() -> void:
 	super()
 	
