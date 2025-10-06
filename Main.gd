@@ -43,13 +43,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 12091
+var server_version : int = 12100
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 12.9"
+var display_version := "beta 12.10pre"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic

@@ -30,7 +30,6 @@ angular_velocity_max = 101.84
 gravity = Vector3(0, 2, 0)
 color_ramp = SubResource("GradientTexture1D_pvn45")
 emission_curve = SubResource("CurveTexture_p3i6u")
-turbulence_enabled = true
 turbulence_noise_strength = 0.2
 turbulence_noise_scale = 10.0
 turbulence_noise_speed = Vector3(1, 0, 1)

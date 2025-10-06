@@ -95,6 +95,7 @@ var brick_scale : Vector3 = Vector3(1, 1, 1)
 @onready var intersect_d : Area3D = $IntersectDetector
 @onready var model_mesh : MeshInstance3D = $Smoothing/model/Cube
 @onready var smoothing : Node3D = $Smoothing
+@onready var brick_synchronizer : MultiplayerSynchronizer = $BrickSynchronizer
 
 @onready var joint_scn : PackedScene = preload("res://data/scene/brick/BrickJoint.tscn")
 @onready var joint_detector : Area3D = $"JointDetector"
@@ -505,8 +506,17 @@ func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_forc
 		light_fire.rpc()
 	#0.1s wait to allow for grace period for all affected bricks to unjoin
 	await get_tree().create_timer(0.1).timeout
+	
 	var explosion_dir := explosion_position.direction_to(global_position).normalized() * explosion_force
+	var rep : float = 0
+	if brick_synchronizer:
+		rep = brick_synchronizer.delta_interval
 	apply_impulse(explosion_dir, Vector3(randf_range(0, 0.05), randf_range(0, 0.05), randf_range(0, 0.05)))
+	# force sync to clients
+	if brick_synchronizer:
+		brick_synchronizer.delta_interval = 0
+		await get_tree().physics_frame
+		brick_synchronizer.delta_interval = rep
 
 func set_non_groupable_for(seconds : float) -> void:
 	# avoid grouping together bricks that just exploded
