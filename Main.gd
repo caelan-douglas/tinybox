@@ -502,8 +502,8 @@ func remove_player(peer_id : int) -> void:
 		
 		player.queue_free()
 		
-		if multiplayer.is_server():
-			# if no one is online, pause physics
-			if Global.get_world().rigidplayer_list.size() == 0:
-				CommandHandler._send_response("Info", str("Pausing the server because no one is online. It will automatically resume when someone joins."))
-				get_tree().paused = true
+	# if no one is online, pause physics
+	if multiplayer.is_server():
+		if Global.get_world().rigidplayer_list.size() == 0:
+			CommandHandler._send_response("Info", str("Pausing the server because no one is online. It will automatically resume when someone joins."))
+			get_tree().paused = true
