@@ -8,11 +8,11 @@
 frequency = 0.0019
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hicvp"]
-seamless = true
-seamless_blend_skirt = 1.0
-as_normal_map = true
-color_ramp = SubResource("Gradient_2tffw")
 noise = SubResource("FastNoiseLite_11ixs")
+color_ramp = SubResource("Gradient_2tffw")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_5f3ha"]
 
@@ -20,19 +20,19 @@ noise = SubResource("FastNoiseLite_11ixs")
 frequency = 0.0011
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_htwdj"]
-seamless = true
-seamless_blend_skirt = 1.0
-as_normal_map = true
-color_ramp = SubResource("Gradient_5f3ha")
 noise = SubResource("FastNoiseLite_8o78u")
+color_ramp = SubResource("Gradient_5f3ha")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_vrif7"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_duv0x"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_iotmo"]
-color_ramp = SubResource("Gradient_vrif7")
 noise = SubResource("FastNoiseLite_duv0x")
+color_ramp = SubResource("Gradient_vrif7")
 
 [resource]
 render_priority = 0

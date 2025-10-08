@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://da61xyvkih0q"]
+[gd_scene load_steps=40 format=3 uid="uid://da61xyvkih0q"]
 
 [ext_resource type="Script" uid="uid://bdh2ltm6loblx" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
@@ -6,7 +6,29 @@
 [ext_resource type="Animation" uid="uid://bv8140eakwmkm" path="res://data/animation/main_menu/appearance_out.res" id="6_eed1v"]
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
 [ext_resource type="AudioStream" uid="uid://c0gcn31iumd17" path="res://data/audio/spotlight.ogg" id="7_2nw57"]
+[ext_resource type="PackedScene" uid="uid://b41armf0g1vux" path="res://data/scene/character/RunParticles.tscn" id="8_gvwsq"]
+[ext_resource type="PackedScene" uid="uid://bh1utiu8ireoo" path="res://data/scene/explosion/Explosion.tscn" id="8_pu6kk"]
+[ext_resource type="PackedScene" uid="uid://bagdsh518cwy5" path="res://data/scene/lifter/LifterParticles.tscn" id="9_2wn0s"]
+[ext_resource type="PackedScene" uid="uid://b2ngpbwaa2ste" path="res://data/scene/character/JumpParticles.tscn" id="9_h0u7c"]
+[ext_resource type="Script" uid="uid://dwxqjqompuoyo" path="res://src/DateVisibility.gd" id="9_qsm76"]
 [ext_resource type="Script" uid="uid://3qgffieonwor" path="res://src/Teams.gd" id="9_ykrt6"]
+[ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="10_gwa83"]
+[ext_resource type="PackedScene" uid="uid://xe60ohkjtn13" path="res://data/scene/rain/RainParticles.tscn" id="10_qsm76"]
+[ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="11_27r6r"]
+[ext_resource type="PackedScene" uid="uid://bjkvftq5sd13" path="res://data/scene/fire/FireProjectile.tscn" id="11_gvwsq"]
+[ext_resource type="PackedScene" uid="uid://dv1sisl0rn8iq" path="res://data/scene/water/WaterProjectile.tscn" id="12_2wn0s"]
+[ext_resource type="PackedScene" uid="uid://x6ityafb1bax" path="res://data/scene/water/SplashParticles.tscn" id="12_fo7yy"]
+[ext_resource type="PackedScene" uid="uid://ky2h7r63y8gy" path="res://data/scene/clay_ball/ClayBall.tscn" id="13_qsm76"]
+[ext_resource type="PackedScene" uid="uid://bad2ir20f17hp" path="res://data/scene/tool/visual_mesh/BatVisualMesh.tscn" id="14_wdbmj"]
+[ext_resource type="PackedScene" uid="uid://tmvf2pb5q4x1" path="res://data/scene/tool/visual_mesh/BombVisualMesh.tscn" id="15_d0aok"]
+[ext_resource type="PackedScene" uid="uid://coelgovu43p42" path="res://data/scene/tool/visual_mesh/BuildToolVisualMesh.tscn" id="16_pu6kk"]
+[ext_resource type="PackedScene" uid="uid://bc0a0aso2d6l7" path="res://data/scene/tool/visual_mesh/FireExtinguisherVisualMesh.tscn" id="17_h0u7c"]
+[ext_resource type="PackedScene" uid="uid://bjq6dqtwfjogw" path="res://data/scene/tool/visual_mesh/FlamethrowerVisualMesh.tscn" id="18_gwa83"]
+[ext_resource type="PackedScene" uid="uid://rpvksak4qq3p" path="res://data/scene/tool/visual_mesh/MedkitVisualMesh.tscn" id="19_gvwsq"]
+[ext_resource type="PackedScene" uid="uid://dp2d68ixposb0" path="res://data/scene/tool/visual_mesh/MissileLauncherVisualMesh.tscn" id="20_2wn0s"]
+[ext_resource type="PackedScene" uid="uid://1w0g52r8trv5" path="res://data/scene/tool/visual_mesh/PaintbrushToolVisualMesh.tscn" id="21_qsm76"]
+[ext_resource type="PackedScene" uid="uid://bxgj3u28slf02" path="res://data/scene/tool/visual_mesh/PulseCannonVisualMesh.tscn" id="22_27r6r"]
+[ext_resource type="PackedScene" uid="uid://cuby2ah84p07d" path="res://data/scene/tool/visual_mesh/RocketLauncherVisualMesh.tscn" id="23_fo7yy"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_v6w6k"]
 dof_blur_far_distance = 300.0
@@ -220,7 +242,7 @@ script = ExtResource("1_uutk4")
 songs = ["mus12"]
 
 [node name="RigidPlayer" parent="." instance=ExtResource("2_pa7kw")]
-transform = Transform3D(0.922187, 5.58064e-09, 0.386743, -9.07914e-09, 1, 7.21934e-09, -0.386743, -1.01689e-08, 0.922187, -0.905372, -1.52259, -2.68341)
+transform = Transform3D(0.9221871, 5.5806426e-09, 0.38674265, -9.079136e-09, 1, 7.219336e-09, -0.38674265, -1.0168878e-08, 0.9221871, -0.905372, -1.52259, -2.68341)
 spawn_as_dummy = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -259,7 +281,7 @@ mesh = SubResource("CapsuleMesh_gk5ne")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_kgx20")
+&"": SubResource("AnimationLibrary_kgx20")
 }
 
 [node name="AppearanceLight" type="SpotLight3D" parent="."]
@@ -289,3 +311,71 @@ light_specular = 0.0
 stream = ExtResource("7_2nw57")
 volume_db = -12.0
 bus = &"SFX"
+
+[node name="MainMenuFestivities" type="Node" parent="."]
+
+[node name="SnowParticles" parent="MainMenuFestivities" instance=ExtResource("11_27r6r")]
+visible = false
+script = ExtResource("9_qsm76")
+special_date = 0
+set_visible_to_what = true
+
+[node name="ShaderPrecomp" type="Node" parent="."]
+
+[node name="run_particles" parent="ShaderPrecomp" instance=ExtResource("8_gvwsq")]
+visible = false
+
+[node name="Particles" parent="ShaderPrecomp" instance=ExtResource("9_2wn0s")]
+visible = false
+
+[node name="RainParticles" parent="ShaderPrecomp" instance=ExtResource("10_qsm76")]
+visible = false
+script = null
+
+[node name="SnowParticles" parent="ShaderPrecomp" instance=ExtResource("11_27r6r")]
+visible = false
+script = null
+
+[node name="splash_particles" parent="ShaderPrecomp" instance=ExtResource("12_fo7yy")]
+visible = false
+
+[node name="Explosion" parent="ShaderPrecomp" instance=ExtResource("8_pu6kk")]
+visible = false
+
+[node name="jump_particles" parent="ShaderPrecomp" instance=ExtResource("9_h0u7c")]
+visible = false
+
+[node name="Fire" parent="ShaderPrecomp" instance=ExtResource("10_gwa83")]
+visible = false
+
+[node name="FireProjectile" parent="ShaderPrecomp" instance=ExtResource("11_gvwsq")]
+visible = false
+
+[node name="WaterProjectile" parent="ShaderPrecomp" instance=ExtResource("12_2wn0s")]
+visible = false
+
+[node name="ClayBall" parent="ShaderPrecomp" instance=ExtResource("13_qsm76")]
+visible = false
+
+[node name="ToolPrecomp" type="Node3D" parent="ShaderPrecomp"]
+visible = false
+
+[node name="BatVisualMesh" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("14_wdbmj")]
+
+[node name="BombToolVisual" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("15_d0aok")]
+
+[node name="Node3D" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("16_pu6kk")]
+
+[node name="Node3D2" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("17_h0u7c")]
+
+[node name="Node3D3" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("18_gwa83")]
+
+[node name="Medkit" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("19_gvwsq")]
+
+[node name="Node3D4" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("20_2wn0s")]
+
+[node name="Node3D5" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("21_qsm76")]
+
+[node name="Node3D6" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("22_27r6r")]
+
+[node name="Node3D7" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("23_fo7yy")]

@@ -33,7 +33,7 @@ The Godot Engine is under its own license, the details of which are noted at htt
 <img src=.export_exclude/screenshot_2.png width="800px">
 
 ## Setting up the project for development
-[![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.4.1-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
+[![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.5-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
 Like any other Godot project, working on a copy of Tinybox is mostly just a matter of opening it in the Godot editor. Note that active development sometimes happens on the main branch, so pre-release versions of the game may be unstable. The project's current Godot version is linked above.<br>
 An additional step you will have to take is linking a Blender 4.4.0+ executable in your Godot Editor settings. **I recommend you do this before loading the project to avoid import errors.**<br>
 `Editor > Editor Settings > FileSystem > Import > Blender 3 Path`<br>
