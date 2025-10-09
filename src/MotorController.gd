@@ -42,10 +42,9 @@ func despawn(check_world_groups : bool = true) -> void:
 				b.parent_controller = null
 	super()
 
-# Sets the controlling player of this seat, and gives control to the player that sat down.
+@rpc("authority", "call_local", "reliable")
 func activate() -> void:
-	# only execute for owner of seat
-	if !is_multiplayer_authority(): return
+	# only execute for owner of controller
 	if Global.get_world().get_current_map() is Editor:
 		var editor : Editor = Global.get_world().get_current_map() as Editor
 		if !editor.test_mode:
@@ -61,13 +60,15 @@ func activate() -> void:
 				if b is MotorBrick:
 					if !attached_motors.has(b):
 						attached_motors.append(b)
-					# set the motorbricks parent seat to this one
+					# set the motorbricks parent controller to this one
 					b.set_parent_controller(self.get_path())
-	sync_attached_motors()
-	update_weight.rpc(vehicle_weight)
-	# unfreeze group so that the body that has
-	# these motors is released.
-	unfreeze_entire_group()
+	
+	if is_multiplayer_authority():
+		sync_attached_motors()
+		update_weight.rpc(vehicle_weight)
+		# unfreeze group so that the body that has
+		# these motors is released.
+		unfreeze_entire_group()
 
 func sync_attached_motors() -> void:
 	var to_sync : Array[String] = []

@@ -17,10 +17,7 @@
 extends Node
 class_name BrickGroups
 
-# Holds a list of all brick's groups in the map. Bricks read and write their own groups to this.
 @export var groups : Dictionary = {}
-
-var non_auth_group : Array = []
 
 var last_checked_time : int = 0
 # Determines the groups for bricks in the world.
@@ -31,6 +28,8 @@ func check_world_groups(override : bool = false) -> void:
 		return
 	last_checked_time = curr_time
 	groups = {}
+	
+	print("Checking world brick groups.")
 	
 	# reset all groups
 	for b : Variant in Global.get_world().get_children():

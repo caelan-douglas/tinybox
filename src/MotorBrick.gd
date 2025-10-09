@@ -60,10 +60,13 @@ func despawn(check_world_groups : bool = true) -> void:
 			parent_controller.attached_motors.erase(self)
 	super()
 
+# Debug
+var last_input_time : int = 0
 # Receive input from a player (motor seat).
 func receive_input(input_forward : float, input_steer : float) -> void:
 	speed = input_forward
 	steer = input_steer
+	last_input_time = Time.get_ticks_msec()
 
 @rpc("any_peer", "call_remote", "reliable")
 func sync_properties(props : Dictionary) -> void:

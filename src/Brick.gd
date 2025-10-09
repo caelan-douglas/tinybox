@@ -704,6 +704,7 @@ func check_joints(specific_body : Node3D = null) -> void:
 		elif body is StaticBody3D:
 			has_static_neighbour = true
 
+var joint_path_list : Array[String] = []
 # Join with another brick.
 # Arg 1: The other brick to join to, as a NodePath.
 @rpc ("call_local")
@@ -721,11 +722,18 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	if (brick_node_state == States.DUMMY_BUILD || brick_node_state == States.DUMMY_PLACED || brick_node_state == States.DUMMY_PROJECTILE):
 		return
 	
+	# Do not create duplicate joints.
+	if joint_path_list.has(path_to_brick.get_name(path_to_brick.get_name_count() - 1)):
+		print(str(multiplayer.get_unique_id(), " id:", "[Brick]: Tried duplicate joint"))
+		return
+	
 	var joint : Generic6DOFJoint3D = joint_scn.instantiate()
 	add_child(joint, true)
-	# wheels have no z angular limit
 	if self is MotorBrick:
+		# wheels have no z angular limit
 		joint.set("angular_limit_z/enabled", false)
+		# prevents large wheels from clipping through other large bricks
+		joint.set("exclude_nodes_from_collision", false)
 		# find closest joint spot
 		var joint_spot_left : Node3D = $JointSpotLeft
 		var joint_spot_right : Node3D = $JointSpotRight
@@ -738,6 +746,7 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 		else: joint.global_position = joint_spot_right.global_position
 	joint.set_node_b(path_to_brick)
 	joint.set_node_a(self.get_path())
+	joint_path_list.append(path_to_brick.get_name(path_to_brick.get_name_count() - 1))
 
 # Unjoin this brick from its partner.
 @rpc("any_peer", "call_local", "reliable")
@@ -746,6 +755,8 @@ func unjoin() -> void:
 	if !is_multiplayer_authority(): return
 	if indestructible:
 		return
+	
+	joint_path_list = []
 	
 	for j in get_children():
 		if j is Generic6DOFJoint3D:

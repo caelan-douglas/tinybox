@@ -19,8 +19,12 @@ extends VBoxContainer
 @onready var col1 : RichTextLabel = $HBoxContainer/DebugCol1
 @onready var col2 : RichTextLabel = $HBoxContainer/DebugCol2
 
+var raycast : RayCast3D
+
 func _ready() -> void:
 	Global.connect("debug_toggled", _on_debug_toggled)
+	raycast = RayCast3D.new()
+	add_child(raycast)
 
 func _on_debug_toggled(mode : bool) -> void:
 	visible = mode
@@ -62,10 +66,26 @@ func _physics_process(delta : float) -> void:
 			"\n[b]	On object[/b]			", player.standing_on_object)
 		else:
 			col2.text = str("\n[b]No player info available.[/b]")
-		if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
-			var teams : Teams = Global.get_world().get_current_map().get_teams()
-			col2.text += str("\n\n[b]Teams[/b]")
-			for t : Team in teams.get_team_list():
-				var team_name : String = t.name
-				col2.text += str("\n[b]	", team_name, "[/b]")
-				col2.text += str("\n		", teams.get_players_in_team(team_name))
+		
+		# facing obj data from raycast
+		if raycast:
+			var cam : Camera3D = get_viewport().get_camera_3d()
+			raycast.global_position = cam.global_position
+			raycast.target_position = cam.global_position + (cam.basis.z * -1000)
+			
+			if raycast.is_colliding():
+				col2.text += str("\n\n[b]Facing[/b]")
+				if raycast.get_collider() is Brick:
+					var b : Brick = raycast.get_collider() as Brick
+					col2.text += str("\n\n[b]Brick[/b]",
+					"\n[b]	Name[/b]			", b.name)
+					if b is MotorBrick:
+						col2.text += str("\n[b]	Last input[/b]		", b.last_input_time)
+			
+		#if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
+		#	var teams : Teams = Global.get_world().get_current_map().get_teams()
+		#	col2.text += str("\n\n[b]Teams[/b]")
+		#	for t : Team in teams.get_team_list():
+		#		var team_name : String = t.name
+		#		col2.text += str("\n[b]	", team_name, "[/b]")
+		#		col2.text += str("\n		", teams.get_players_in_team(team_name))
