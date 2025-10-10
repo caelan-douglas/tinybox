@@ -101,6 +101,7 @@ visible = false
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 84, -0.03)
+visible = false
 supersampling_factor = 1.0
 interior = true
 max_texture_size = 2048
