@@ -525,6 +525,10 @@ func _ready() -> void:
 	inactivity_timer.connect("timeout", _inactivity_despawn)
 	# set material to spawn material
 	set_material(_material)
+	
+	# Freeze while loading, this is set in peer connected
+	if !multiplayer.is_server():
+		freeze = true
 
 # Spawns this brick in Editor mode.
 @rpc("call_local", "reliable")
@@ -870,4 +874,5 @@ func properties_as_dict() -> Dictionary:
 	var dict : Dictionary = {}
 	for p : String in properties_to_save:
 		dict[p] = get(p)
+	dict["freeze"] = freeze
 	return dict

@@ -331,6 +331,7 @@ func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
 	# add camera
 	var camera_inst : Node3D = CAMERA.instantiate()
 	$World.add_child(camera_inst, true)
+	camera_inst.global_position = Vector3(70, 190, 0)
 	
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 	get_tree().current_scene.get_node("GameCanvas").visible = true
