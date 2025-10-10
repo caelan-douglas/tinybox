@@ -35,6 +35,8 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 @rpc("call_local")
 func spawn_projectile(auth : int, shot_speed := 30) -> void:
 	set_multiplayer_authority(auth)
+	# only execute on yourself
+	if !is_multiplayer_authority(): return
 	
 	player_from = world.get_node(str(auth))
 	
@@ -55,7 +57,7 @@ func spawn_projectile(auth : int, shot_speed := 30) -> void:
 			player_from.seat_occupying.apply_force_rpc.rpc_id(player_from.seat_occupying.get_multiplayer_authority(), direction * (50 * player_from.seat_occupying.vehicle_weight))
 			global_position = player_from.seat_occupying.global_position
 			linear_velocity = direction
-	elif is_multiplayer_authority():
+	else:
 		var addl_power : int = 0
 		# more power when sliding
 		if player_from._state == RigidPlayer.SLIDE || player_from._state == RigidPlayer.SLIDE_BACK:

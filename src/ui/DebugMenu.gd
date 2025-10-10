@@ -78,9 +78,14 @@ func _physics_process(delta : float) -> void:
 				if raycast.get_collider() is Brick:
 					var b : Brick = raycast.get_collider() as Brick
 					col2.text += str("\n\n[b]Brick[/b]",
-					"\n[b]	Name[/b]			", b.name)
+					"\n[b]	Name[/b]			", b.name,
+					"\n[b]	Glued?[/b]		", b.glued,
+					"\n[b]	Frozen?[/b]		", b.freeze)
 					if b is MotorBrick:
 						col2.text += str("\n[b]	Last input[/b]		", b.last_input_time)
+					for j : Node in b.get_children():
+						if j is Generic6DOFJoint3D:
+							col2.text += str("\n[b]	Joint[/b]		", j.name)
 			
 		#if Global.get_world().get_current_map() and Global.get_world().get_current_map().get_teams():
 		#	var teams : Teams = Global.get_world().get_current_map().get_teams()
