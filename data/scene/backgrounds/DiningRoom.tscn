@@ -101,12 +101,9 @@ visible = false
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 84, -0.03)
-quality = 2
 supersampling_factor = 1.0
-bounces = 16
 interior = true
-texel_scale = 4.0
-max_texture_size = 4096
+max_texture_size = 2048
 environment_mode = 0
 environment_custom_sky = SubResource("Sky_6eu71")
 light_data = ExtResource("11_sgwob")
