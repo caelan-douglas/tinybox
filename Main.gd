@@ -43,13 +43,13 @@ var lan_entries := []
 # Last digit is 0 for pre-release and 1 for release
 # ex. 9101 for 9.10; 10060 for 10.6pre; 12111 for 12.11
 #     9 10 1         10 06 0            12 11 1
-var server_version : int = 12111
+var server_version : int = 12120
 
 # Displays on the title screen and game canvas
 #
 # major.minor
 # add 'pre' at end for pre-release
-var display_version := "beta 12.11"
+var display_version := "beta 12.12pre"
 
 @onready var host_button : Button = $MultiplayerMenu/PlayMenu/HostHbox/Host
 @onready var host_public_button : Button = $MultiplayerMenu/HostSettingsMenu/HostPublic
@@ -261,12 +261,9 @@ func _on_host_pressed() -> void:
 		# Disable audio and no camera for dedicated servers
 		AudioServer.set_bus_mute(0, true)
 		UIHandler.show_alert(str("Started with arguments: ", OS.get_cmdline_args()))
-		await get_tree().create_timer(0.3).timeout
 		CommandHandler.submit_command.rpc("Info", "Your dedicated server has started! Type '?' in the command box for a list of commands. Alerts will show in this chat list. Player's chats will also appear here.")
-		await get_tree().create_timer(0.3).timeout
-		CommandHandler.submit_command.rpc("Info", "To stop the server and quit the app type '$end'.")
+		CommandHandler.submit_command.rpc("Info", "To stop the server and quit the app type '$quit'.")
 		if no_display_name:
-			await get_tree().create_timer(0.3).timeout
 			CommandHandler.submit_command.rpc("Alert", "You have no saved display name so the default name 'Server' was used.")
 		# load server world, first check if world exists
 		var lines : Array = Global.get_tbw_lines("server_world", true)

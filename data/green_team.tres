@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_7p6gy")
 name = "Green"
-members = []
 colour = Color(0.384314, 0.635294, 0.321569, 1)
-cash = 700

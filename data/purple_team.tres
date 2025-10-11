@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_ixyue")
 name = "Purple"
-members = []
 colour = Color(0.603922, 0.427451, 0.717647, 1)
-cash = 700
