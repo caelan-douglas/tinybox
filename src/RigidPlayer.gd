@@ -708,6 +708,9 @@ func _ready() -> void:
 			protect_spawn(3.5, false)
 			# update spawns when world is loaded as server
 			Global.get_world().connect("tbw_loaded", _on_tbw_loaded)
+			# keep clients in stasis until they are connected
+			global_position = Vector3(0, world.get_current_map().death_limit_high - 5, 0)
+			freeze = true
 		# only execute on yourself
 		if !is_multiplayer_authority():
 			#freeze = true
@@ -1119,6 +1122,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 		state.set_transform(t)
 		await get_tree().physics_frame
 		teleport_requested = false
+		freeze = false
 		emit_signal("teleported")
 	
 	# handle out of map ( runs outside auth check )
