@@ -66,7 +66,7 @@ func _unhandled_input(event : InputEvent) -> void:
 			line_edit.grab_focus()
 
 func _on_chat_submitted(text : String) -> void:
-	CommandHandler.submit_command.rpc(Global.display_name, text)
+	CommandHandler.submit_command.rpc("", text)
 	line_edit.text = ""
 	# only release focus ingame
 	line_edit.release_focus()

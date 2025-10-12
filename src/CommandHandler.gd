@@ -289,7 +289,14 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 				return
 	else:
 		# no command, just send the chat
-		_send_response(str(display_name), str(text), only_show_to_id)
+		# Chats get display name from ID to help prevent spoofing
+		var sender_display_name : String = "Unknown"
+		var player : Variant = Global.get_world().get_node(str(multiplayer.get_remote_sender_id()))
+		# Get name from ID
+		if player != null:
+			if player is RigidPlayer:
+				sender_display_name = player.display_name
+		_send_response(sender_display_name, str(text), only_show_to_id)
 
 @rpc("call_local", "reliable")
 func _response(sender : String, text : String) -> void:

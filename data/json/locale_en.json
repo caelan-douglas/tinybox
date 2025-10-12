@@ -47,6 +47,7 @@
         "switch_maps": "Switch Maps",
         "switch_maps_button": "Request to load this map",
         "custom_maps": "Custom Maps",
+        "world_browser": "World Browser",
         "world_editor": "Editor",
         "map_vote": "Map Vote",
         "multiplayer_prefs": "Multiplayer Preferences",

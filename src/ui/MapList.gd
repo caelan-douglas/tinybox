@@ -26,7 +26,7 @@ class_name MapList
 @onready var all_lists : Array = [built_in, your_maps, user_uploaded]
 @onready var window : Control = $TabContainer
 
-@onready var search : LineEdit = $"TabContainer/World Browser (Online)/Search"
+@onready var search : LineEdit = $"TabContainer/World Browser (Online)/Header/Search"
 
 @onready var map_list_entry : PackedScene = preload("res://data/scene/ui/MapListEntry.tscn")
 
@@ -144,7 +144,11 @@ func _on_search(what : String) -> void:
 		for c : Control in user_uploaded_list.get_children():
 			c.visible = true
 
+var first_open : bool = true
 func _on_visibility_changed() -> void:
+	if first_open:
+		refresh_user_uploaded()
+		first_open = false
 	# hide menu when parent menu is hidden
 	if is_visible_in_tree() == false:
 		search.text = ""
@@ -237,6 +241,7 @@ func refresh_user_uploaded() -> void:
 	# add info about user uploaded maps
 	var l := Label.new()
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	l.text = JsonHandler.find_entry_in_file("ui/user_maps_info")
 	user_uploaded_list.add_child(l)
 	
@@ -244,6 +249,7 @@ func refresh_user_uploaded() -> void:
 	var l2 := Label.new()
 	l2.name = "_loading"
 	l2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	l2.text = "\n\n\nFetching worlds..."
 	l2.modulate = Color("#b973ff")
 	user_uploaded_list.add_child(l2)
@@ -280,6 +286,7 @@ func _user_maps_request_completed(result : int, response_code : int, headers : P
 	# debug fetch time
 	var l := Label.new()
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	l.text = str("\n\nWorld list fetch took ", Time.get_ticks_msec() - req_time, "ms (from repo ", UserPreferences.database_repo, ").")
 	user_uploaded_list.add_child(l)
 	

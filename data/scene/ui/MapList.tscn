@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4f0w4x3panmu"]
+[gd_scene load_steps=6 format=3 uid="uid://d4f0w4x3panmu"]
 
 [ext_resource type="Script" uid="uid://dkdej1opalm7f" path="res://src/ui/MapList.gd" id="1_c00he"]
+[ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_wf6r3"]
+[ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="3_127uw"]
 
 [sub_resource type="Image" id="Image_htf88"]
 data = {
@@ -40,11 +42,14 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
 tab_alignment = 1
+current_tab = 2
 
 [node name="Built-in" type="VBoxContainer" parent="TabContainer"]
+visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
+metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Built-in"]
 custom_minimum_size = Vector2(2.08165e-12, 150)
@@ -63,6 +68,7 @@ visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
+metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Saved maps"]
 custom_minimum_size = Vector2(2.08165e-12, 150)
@@ -77,13 +83,27 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="World Browser (Online)" type="VBoxContainer" parent="TabContainer"]
-visible = false
-custom_minimum_size = Vector2(308, 2.08165e-12)
+custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
 alignment = 1
+metadata/_tab_index = 2
 
-[node name="Search" type="LineEdit" parent="TabContainer/World Browser (Online)"]
+[node name="Header" type="HBoxContainer" parent="TabContainer/World Browser (Online)"]
 layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="DynamicLabel" type="Label" parent="TabContainer/World Browser (Online)/Header"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_wf6r3")
+theme_override_font_sizes/font_size = 48
+text = "World Browser"
+script = ExtResource("3_127uw")
+json_text = "ui/world_browser"
+
+[node name="Search" type="LineEdit" parent="TabContainer/World Browser (Online)/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "Search by world name..."
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/World Browser (Online)"]
@@ -94,6 +114,7 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="TabContainer/World Browser (Online)/ScrollContainer"]
+[node name="ItemList" type="GridContainer" parent="TabContainer/World Browser (Online)/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+columns = 2

@@ -17,6 +17,7 @@ data = {
 image = SubResource("Image_h57ff")
 
 [node name="MapListEntry" type="HBoxContainer"]
+size_flags_horizontal = 3
 
 [node name="Map" type="Button" parent="."]
 custom_minimum_size = Vector2(300, 200)
@@ -38,8 +39,10 @@ grow_vertical = 2
 theme_override_constants/separation = 12
 
 [node name="Image" type="TextureRect" parent="Map/Split"]
+custom_minimum_size = Vector2(0, 178)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 texture = SubResource("ImageTexture_010ph")
 stretch_mode = 6
 
@@ -104,33 +107,42 @@ theme_override_fonts/font = ExtResource("1_vl26o")
 theme_override_font_sizes/font_size = 21
 text = "Map Name Newline"
 autowrap_mode = 3
+max_lines_visible = 2
 script = ExtResource("1_rxr4i")
 
 [node name="Author" type="Label" parent="Map/Split/Labels"]
 self_modulate = Color(1, 1, 1, 0.509804)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_vl26o")
 autowrap_mode = 3
+text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
 [node name="Date" type="Label" parent="Map/Split/Labels"]
 self_modulate = Color(1, 1, 1, 0.509804)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 autowrap_mode = 3
+text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
 [node name="Downloads" type="Label" parent="Map/Split/Labels"]
 self_modulate = Color(1, 1, 1, 0.509804)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 autowrap_mode = 3
+text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
 [node name="Version" type="Label" parent="Map/Split/Labels"]
 self_modulate = Color(1, 1, 1, 0.509804)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_vertical = 3
 vertical_alignment = 2
 autowrap_mode = 3
+text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
 [node name="Delete" type="Button" parent="."]
