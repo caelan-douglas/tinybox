@@ -30,4 +30,4 @@ func _process(delta : float) -> void:
 	if udp_server.is_connection_available():
 		var peer : PacketPeerUDP = udp_server.take_connection()
 		# Reply w/ player count
-		peer.put_packet(str(Global.get_world().rigidplayer_list.size(), ";", (get_tree().current_scene as Main).display_version).to_utf8_buffer())
+		peer.put_packet(str(Global.get_world().rigidplayer_list.size(), ";", (get_tree().current_scene as Main).server_version).to_utf8_buffer())

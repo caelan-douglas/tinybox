@@ -46,7 +46,7 @@ func update_server_status_label(mode : bool, player_count : String = "0", server
 		join_button.text = "Can't join:\nServer\noffline!"
 		join_button.disabled = true
 	else:
-		var my_version : String = (get_tree().current_scene as Main).display_version
+		var my_version : String = str((get_tree().current_scene as Main).server_version)
 		if player_count == "1":
 			status_label.text = str("Online - ", player_count, " player")
 		else:
@@ -60,7 +60,13 @@ func update_server_status_label(mode : bool, player_count : String = "0", server
 			join_button.text = "Join"
 			join_button.disabled = false
 		status_label.self_modulate = Color("#00f88f")
-	version_label.text = str("Version: ", server_version)
+		
+	# shows on entry
+	var display_version : String = server_version
+	# if the number is a server version (ie. 12010), format
+	if (display_version.is_valid_int()):
+		display_version = Global.format_server_version(server_version)
+	version_label.text = str("Version: ", display_version)
 
 func ping_server(address : String) -> void:
 	var ip := IP.resolve_hostname(address, IP.TYPE_IPV4)
