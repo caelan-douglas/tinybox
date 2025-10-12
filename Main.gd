@@ -333,6 +333,11 @@ func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
 	get_tree().current_scene.get_node("MultiplayerMenu").visible = false
 	get_tree().current_scene.get_node("GameCanvas").visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# Show loading screen for world load
+	# This is hidden once the client's player object is ready
+	Global.get_world().set_loading_canvas_visiblity(true)
+	Global.get_world().set_loading_canvas_text("Connecting to server...")
 
 # Entering the world editor.
 func _on_editor_pressed() -> void:

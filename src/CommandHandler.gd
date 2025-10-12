@@ -263,6 +263,9 @@ func submit_command(display_name : String, text : String, only_show_to_id : int 
 			elif split_text[0] == "$ban":
 				var ban_player : RigidPlayer = Global.get_player_by_name(str(split_text[1]))
 				if ban_player != null:
+					if ban_player.get_multiplayer_authority() == 1:
+						_send_response("Info", "You cannot ban the server or host", id_from)
+						return
 					var main : Main = get_tree().current_scene
 					var player_ip : String = main.enet_peer.get_peer(ban_player.get_multiplayer_authority()).get_remote_address()
 					var player_id : int = ban_player.get_multiplayer_authority()

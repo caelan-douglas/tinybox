@@ -733,6 +733,9 @@ func _ready() -> void:
 		# in case we were not present on client when server sent
 		# protect spawn call
 		_receive_server_protect_spawn(3.5, false)
+		
+		# hide loading screen (set in main on server join)
+		Global.get_world().set_loading_canvas_visiblity(false)
 
 func _on_tbw_loaded() -> void:
 	# set default spawns
