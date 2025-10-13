@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=4 uid="uid://c715f67itwqrf"]
+[gd_scene load_steps=13 format=4 uid="uid://c715f67itwqrf"]
 
 [ext_resource type="Script" uid="uid://civ6tft8ij0vo" path="res://src/SpawnPoint.gd" id="1_nt8o8"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_2quxa"]
 [ext_resource type="AudioStream" uid="uid://cd56h7mjfkum5" path="res://data/audio/checkpoint.ogg" id="3_0oqkx"]
+[ext_resource type="Texture2D" uid="uid://dxrkgfwhvg3w1" path="res://data/textures/checkpoint_finish.png" id="3_xw4ja"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_i6q18"]
 height = 0.1
@@ -71,6 +72,11 @@ shadow_mesh = SubResource("ArrayMesh_eqyg4")
 cull_mode = 2
 albedo_color = Color(0.863601, 0.282704, 0.399715, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7c4m"]
+cull_mode = 2
+albedo_texture = ExtResource("3_xw4ja")
+uv1_scale = Vector3(3, 2, 3)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_inaa5"]
 radius = 0.6
 
@@ -88,6 +94,13 @@ mesh = SubResource("ArrayMesh_vv5d1")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_2quxa")
 surface_material_override/1 = SubResource("StandardMaterial3D_0rb1t")
+
+[node name="FinishFlag" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("ArrayMesh_vv5d1")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_2quxa")
+surface_material_override/1 = SubResource("StandardMaterial3D_y7c4m")
 
 [node name="Area3D" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

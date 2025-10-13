@@ -71,17 +71,6 @@ func _populate_client_gamemode_list(gamemode_names : Array) -> void:
 	# add new gamemodes
 	for gm : String in gamemode_names:
 		selector.add_item(gm)
-		match (gm):
-			"Deathmatch":
-				selector.set_item_tooltip(selector.item_count - 1, "A classic arena Deathmatch mode.\n\nStart with a ball and a bat; if the map has them, you can\ncollect pickups like rockets, bombs and missiles.")
-			"Team Deathmatch":
-				selector.set_item_tooltip(selector.item_count - 1, "A classic arena Deathmatch mode, but with teams.\n\nStart with a ball and a bat; if the map has them, you can\ncollect pickups like rockets, bombs and missiles.")
-			"Manhunt":
-				selector.set_item_tooltip(selector.item_count - 1, "Hide & Seek following the manhunt rules.\n\nStarts with one Seeker; the rest of the players are hiders.\nWhen the seeker hits a hider with their bat, they too become a seeker.\nThe seekers win if all the hiders are found before the time limit.\nThe hiders win if at least one of them lasts till the time limit.")
-			"Home Run", "Team Home Run":
-				selector.set_item_tooltip(selector.item_count - 1, "A variant of the Deathmatch mode.\n\nPlayers are given high knockback bats and tasked\nwith flinging each other away.\n\nBest played on a map with cliffs!")
-			"Balls!!!", "Team Balls!!!":
-				selector.set_item_tooltip(selector.item_count - 1, "A variant of the Deathmatch mode.\n\nYou are given only a bouncyball, but it fires very quickly.\nSpam the left mouse button!")
 	# load default params
 	_on_item_selected(0)
 

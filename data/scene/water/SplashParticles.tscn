@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://x6ityafb1bax"]
+[gd_scene load_steps=12 format=3 uid="uid://x6ityafb1bax"]
 
+[ext_resource type="Texture2D" uid="uid://bqiuxri68qqr2" path="res://data/textures/watercolour.png" id="1_o0wya"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_4tep0"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
@@ -39,26 +40,30 @@ directional_velocity_min = 2.0
 directional_velocity_max = 2.0
 directional_velocity_curve = SubResource("CurveXYZTexture_hd383")
 gravity = Vector3(0, 0, 0)
-scale_min = 0.1
+scale_min = 0.099999994
 scale_max = 0.5
 scale_curve = SubResource("CurveTexture_lssgx")
 color_ramp = SubResource("GradientTexture1D_dnoau")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_28c1r"]
-shading_mode = 0
-albedo_color = Color(0.270588, 0.509804, 0.905882, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2eusy"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(0.69135684, 0.6913568, 0.69135684, 1)
+albedo_texture = ExtResource("1_o0wya")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
-[sub_resource type="SphereMesh" id="SphereMesh_xd8vc"]
-material = SubResource("StandardMaterial3D_28c1r")
-radial_segments = 16
-rings = 8
+[sub_resource type="QuadMesh" id="QuadMesh_sol1x"]
+material = SubResource("StandardMaterial3D_2eusy")
 
 [node name="splash_particles" type="GPUParticles3D"]
 emitting = false
-amount = 32
+amount = 16
 one_shot = true
 explosiveness = 1.0
-fixed_fps = 45
 process_material = SubResource("ParticleProcessMaterial_3o1da")
-draw_pass_1 = SubResource("SphereMesh_xd8vc")
+draw_pass_1 = SubResource("QuadMesh_sol1x")
 script = ExtResource("2_4tep0")

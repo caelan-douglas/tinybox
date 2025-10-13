@@ -154,6 +154,16 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			# pickup type is an int so we can just use selected option as the new prop value
 			type_option_picker.connect("item_selected", update_object_property.bind(prop_name))
 			type_option_picker.selected = prop
+		# checkpoint types
+		elif prop_name == "checkpoint":
+			entry = option_picker.instantiate()
+			entry.get_node("Label").text = "Checkpoint"
+			var chk_option_picker : OptionButton = entry.get_node("Event")
+			for chk_name : String in SpawnPoint.CHECKPOINT_TYPES_AS_STRINGS:
+				chk_option_picker.add_item(chk_name)
+			# brick mat is an int so we can just use selected option as the new prop value
+			chk_option_picker.connect("item_selected", update_object_property.bind(prop_name))
+			chk_option_picker.selected = prop
 		else:
 			entry = adjuster.instantiate()
 			var label : Label = entry.get_node("DynamicLabel")

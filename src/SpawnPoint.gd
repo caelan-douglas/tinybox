@@ -19,8 +19,18 @@ class_name SpawnPoint
 
 @onready var area : Area3D = $Area3D
 @onready var audio : AudioStreamPlayer = $AudioStreamPlayer
+@onready var audio_checkpoint : AudioStreamOggVorbis = preload("res://data/audio/checkpoint.ogg")
+@onready var audio_checkpoint_finish : AudioStreamOggVorbis = preload("res://data/audio/checkpoint_final.ogg")
+
 var team_name : String = "Default"
-var checkpoint : bool = false
+var checkpoint : CheckpointType = CheckpointType.NONE
+
+enum CheckpointType {
+	NONE,
+	CHECKPOINT,
+	FINISH_LINE
+}
+const CHECKPOINT_TYPES_AS_STRINGS : Array[String] = ["None", "Checkpoint", "Finish Line"]
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "team_name", "checkpoint"]
@@ -51,10 +61,19 @@ func set_property(property : StringName, value : Variant) -> void:
 				Global.add_to_graphics_cache(mat)
 			$MeshInstance3D.set_surface_override_material(0, mat)
 		"checkpoint":
-			if value as bool == true:
-				$Flag.visible = true
-			else:
+			# support old checkpoint format
+			if str(value) == "false": value = 0
+			if str(value) == "true": value = 1
+			
+			if value == 0:
 				$Flag.visible = false
+				$FinishFlag.visible = false
+			elif value == 1:
+				$Flag.visible = true
+				$FinishFlag.visible = false
+			elif value == 2:
+				$Flag.visible = false
+				$FinishFlag.visible = true
 			checkpoint = value
 		_:
 			set(property, value)
@@ -63,8 +82,8 @@ func set_property(property : StringName, value : Variant) -> void:
 func _on_area_entered(body : PhysicsBody3D) -> void:
 	if !multiplayer.is_server(): return
 	
-	# if the player enters a checkpoint, set its spawn there
-	if body is RigidPlayer && checkpoint:
+	# if the player enters a checkpoint, set their spawn there
+	if body is RigidPlayer && checkpoint != CheckpointType.NONE:
 		var player : RigidPlayer = body as RigidPlayer
 		if player != null:
 			player.set_spawns.rpc([global_position])
@@ -77,6 +96,11 @@ func play_sound() -> void:
 	# if this go to spawn request is not from the server or run locally, return
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != get_multiplayer_authority() && multiplayer.get_remote_sender_id() != 0:
 		return
+	match (checkpoint):
+		CheckpointType.FINISH_LINE:
+			audio.stream = audio_checkpoint_finish
+		_:
+			audio.stream = audio_checkpoint
 	audio.play()
 
 func occupied() -> bool:

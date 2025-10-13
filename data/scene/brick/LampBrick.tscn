@@ -58,7 +58,7 @@ light_volumetric_fog_energy = 0.0
 distance_fade_enabled = true
 distance_fade_begin = 20.0
 distance_fade_length = 20.0
-omni_range = 35.0
+omni_range = 100.0
 script = ExtResource("4_ol2f4")
 visible_on_awful = false
 
