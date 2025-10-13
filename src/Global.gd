@@ -412,16 +412,6 @@ func set_camera_max_dist(new : float = 40) -> void:
 	if camera is Camera:
 		camera.set_max_dist(new)
 
-func format_server_version(what : String) -> String:
-	var first : String = what.substr(0, 2)
-	var second : String = what.substr(2, 2)
-	var last : String = what.right(1)
-	
-	var suffix : String = ""
-	if last == "0":
-		suffix = "pre"
-	return str("beta ", first, ".", str(int(second)), suffix)
-
 @rpc("any_peer", "call_local", "reliable")
 func server_start_gamemode(idx : int, params : Array, mods : Array) -> void:
 	for gm : Gamemode in get_world().gamemode_list:
@@ -442,3 +432,16 @@ func server_start_gamemode(idx : int, params : Array, mods : Array) -> void:
 func _on_gamemode_ended(idx : int) -> void:
 	if get_world().gamemode_list[idx].is_connected("gamemode_ended", _on_gamemode_ended.bind(idx)):
 		get_world().gamemode_list[idx].disconnect("gamemode_ended", _on_gamemode_ended.bind(idx))
+
+# String formatting helpers
+# TODO: If this gets large enough might be worth seperating into StringEx or something
+
+func format_server_version(what : String) -> String:
+	var first : String = what.substr(0, 2)
+	var second : String = what.substr(2, 2)
+	var last : String = what.right(1)
+	
+	var suffix : String = ""
+	if last == "0":
+		suffix = "pre"
+	return str("beta ", first, ".", str(int(second)), suffix)
