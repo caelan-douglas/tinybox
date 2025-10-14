@@ -89,10 +89,6 @@ func _on_new_world_pressed() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_load_world_pressed(map_selector : MapList, confirm := false) -> void:
-	var editor : Node3D = Global.get_world().get_current_map()
-	if editor is Editor:
-		editor.editor_tool_inventory.set_disabled(false)
-		editor.editor_tool_inventory.get_tools()[0].set_tool_active(true)
 	if confirm:
 		var actions := UIHandler.show_alert_with_actions("Are you sure? Any unsaved changes will be lost.", ["Load world", "Cancel"], true)
 		actions[0].connect("pressed", _load_world.bind(map_selector))
@@ -111,6 +107,11 @@ func _load_world(map_selector : MapList) -> void:
 	Global.get_world().open_tbw(map_selector.selected_lines)
 	# set save field name to loaded world name
 	world_name.text = str(map_selector.selected_name)
+	# wait so that we don't place a brick on the same frame as action click
+	await get_tree().process_frame
+	if editor is Editor:
+		editor.editor_tool_inventory.set_disabled(false)
+		editor.editor_tool_inventory.get_tools()[0].set_tool_active(true)
 
 func toggle_pause_menu() -> void:
 	# only do this in editor mode
