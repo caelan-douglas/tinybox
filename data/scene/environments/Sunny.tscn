@@ -70,6 +70,6 @@ visible_on_awful = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_e3436")
+&"": SubResource("AnimationLibrary_e3436")
 }
 autoplay = "clouds"

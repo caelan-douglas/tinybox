@@ -497,8 +497,6 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 						else:
 							death_message = str(display_name, " was struck by a ball!")
 					CauseOfDeath.OUT_OF_MAP:
-						# shorter wait time for out of map
-						respawn_time.wait_time = 5
 						# if we were last hit by someone's projectile
 						if last_hit && last_hit_by_id != -1:
 							var last_hit_executing_player : RigidPlayer = Global.get_world().get_node_or_null(str(last_hit_by_id))

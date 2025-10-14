@@ -1,4 +1,6 @@
+[objects]
 Environment ; env_sunny
-obj_water ; global_position:(0, 41, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
-obj_cliff_0 ; global_position:(0, 48.5, 0) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1)
-obj_spawnpoint ; global_position:(0, 49.5, 5) ; global_rotation:(0, 0, 0) ; scale:(1, 1, 1) ; team_name:Default
+obj_water ; global_position:(0.0, 41.0, 0.0) ; global_rotation:(0.0, 0.0, 0.0) ; scale:(1.0, 1.0, 1.0) ; water_type:0
+obj_spawnpoint ; global_position:(0.0, 49.5, 5.0) ; global_rotation:(0.0, 0.0, 0.0) ; scale:(1.0, 1.0, 1.0) ; team_name:Default ; checkpoint:0
+[building]
+brick ; global_position:(0.0, 37.5, 5.5) ; global_rotation:(0.0, 0.0, 0.0) ; brick_scale:(37.0, 24.0, 26.0) ; _material:5 ; _colour:(0.3141, 0.5508, 0.3955, 1.0) ; immovable:true ; joinable:false ; indestructible:false
