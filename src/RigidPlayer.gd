@@ -63,6 +63,7 @@ var _state : int = IDLE
 var display_name := ""
 var camera : Camera3D = null
 var jump_force := 2.4
+var high_jump_force := 12
 # when holding jump
 var extra_jump_force := 2.4
 var move_speed : float = 5
@@ -880,6 +881,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					play_jump_particles()
 					# high jump, but only if not holding jump
 					if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+						apply_central_impulse(Vector3.UP * high_jump_force)
 						change_state(HIGH_JUMP)
 					else:
 						apply_central_impulse(Vector3.UP * jump_force)
@@ -902,6 +904,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					play_jump_particles()
 					# high jump, but only if not holding jump
 					if Input.is_action_just_pressed("jump") && !high_jump_time.is_stopped():
+						apply_central_impulse(Vector3.UP * high_jump_force)
 						change_state(HIGH_JUMP)
 					else:
 						apply_central_impulse(Vector3.UP * jump_force)
@@ -1352,8 +1355,6 @@ func enter_state() -> void:
 		HIGH_JUMP:
 			physics_material_override.friction = 0
 			air_time.start()
-			var forward : Vector3 = get_global_transform().basis.z
-			apply_central_impulse(Vector3.UP * 12)
 			animator.set("parameters/TimeSeekHighJump/seek_request", 0.0)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 1.0, 0.1)
