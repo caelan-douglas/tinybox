@@ -360,7 +360,8 @@ func open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 # Only to be run as server or local client
 func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
 	var container := Node3D.new()
-	add_child(container)
+	if return_as_container:
+		add_child(container)
 	
 	var count : int = 0
 	# amount of lines to read in a frame
@@ -544,10 +545,9 @@ func clear_bricks() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func ask_server_to_load_building(name_from : String, lines : Array, b_position : Vector3, use_global_position := false, placement_rotation : Vector3 = Vector3.ZERO) -> void:
 	if !multiplayer.is_server(): return
-	# 10 seconds between loading buildings
 	# buildings are 3 lines or greater
 	if lines.size() > 2:
-		if Time.get_ticks_msec() - last_tbw_load_time < 10000 && Global.get_world().get_current_map() is not Editor:
+		if Time.get_ticks_msec() - last_tbw_load_time < 5000 && Global.get_world().get_current_map() is not Editor:
 			UIHandler.show_alert.rpc_id(multiplayer.get_remote_sender_id(), "Please wait before trying to load another building or world", 5, false, UIHandler.alert_colour_error)
 			return
 	last_tbw_load_time = Time.get_ticks_msec()
@@ -564,6 +564,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 			lines = lines.slice(count_start)
 	
 	var building_group := []
+	building_group.resize(lines.size())
 	var line_split_init : PackedStringArray = lines[0].split(" ; ")
 	if line_split_init.size() < 2:
 		UIHandler.show_alert.rpc("A corrupt or empty building could not be loaded.", 5, false, UIHandler.alert_colour_error)
@@ -571,7 +572,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var offset_pos := Vector3.ZERO
 	# convert global position into 'local' with offset of first brick
 	if !use_global_position:
-		var lowest_pos : Vector3 = Vector3(0, 99999, 0)
+		var lowest_pos : Vector3 = Vector3(0, 131072, 0)
 		# find lowest brick as spawn point
 		for line : String in lines:
 			if line != "":
@@ -608,6 +609,7 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 	var max_proc := 32
 	var cur_proc := 0
 	var total_proc := 0
+	var bg_actual_size := 0
 	print(str("Building: reading lines... ", Time.get_ticks_msec()))
 	for line : String in lines:
 		cur_proc += 1
@@ -627,7 +629,8 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 					container.add_child(b, true)
 				else:
 					add_child(b, true)
-				building_group.append(b)
+				building_group[total_proc - 1] = b
+				bg_actual_size += 1
 				var prop_list := line_split.slice(1)
 				for p : String in prop_list:
 					var property_split := p.split(":")
@@ -642,6 +645,9 @@ func _server_load_building(lines : PackedStringArray, b_position : Vector3, use_
 							property = property - offset_pos + b_position
 						# set the property
 						b.set_property(property_name, property)
+	building_group.resize(bg_actual_size)
+	
+	# placing directly in world
 	if container == null:
 		if placement_rotation != Vector3.ZERO:
 			await get_tree().physics_frame

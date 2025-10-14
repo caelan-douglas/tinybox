@@ -26,7 +26,7 @@ func _on_upload_world_pressed() -> void:
 	if world_name.text == "":
 		UIHandler.show_alert("Please enter a world name above!", 4, false, UIHandler.alert_colour_error)
 	else:
-		var actions := UIHandler.show_alert_with_actions("Upload world to World Browser?\nIt will be made public and available to download for other players.\nOnce uploaded, it can't be changed.", ["Upload world", "Cancel"], false)
+		var actions := UIHandler.show_alert_with_actions("Upload world to World Browser?\nIt will be made public and available to download for other players.\nOnce uploaded, it can't be changed.\n\nThe preview image will be taken from the current camera angle.", ["Upload world", "Cancel"], false)
 		actions[0].connect("pressed", _upload_world)
 
 func _upload_world() -> void:

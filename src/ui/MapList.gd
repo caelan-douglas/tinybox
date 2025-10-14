@@ -41,7 +41,7 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 	
 	var image : Variant = Global.get_tbw_image_from_lines(lines)
 	var tex : ImageTexture
-	if image != null:
+	if image != null && !image.is_empty():
 		image.resize(240, 162)
 		tex = ImageTexture.create_from_image(image as Image)
 	else:
@@ -315,12 +315,10 @@ func refresh() -> void:
 	add_map("Icy Inclines", built_in)
 	add_map("Tunnel Tussle", built_in)
 	add_map("Acid House", built_in)
-	add_map("Castle", built_in)
 	add_map("Warp Spire", built_in)
 	add_map("Quarry Quarrel", built_in)
 	add_map("Perilous Platforms", built_in)
 	add_map("Slapdash Central", built_in)
-	add_map("Steep Swamp", built_in)
 	add_map("Grasslands", built_in)
 	# add user worlds to list
 	for map : String in Global.get_user_tbw_names():

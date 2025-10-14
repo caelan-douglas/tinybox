@@ -146,12 +146,10 @@ func _maps_request_completed(result : int, response_code : int, headers : Packed
 		"Icy Inclines",
 		"Tunnel Tussle",
 		"Acid House",
-		"Castle",
 		"Warp Spire",
 		"Quarry Quarrel",
 		"Perilous Platforms",
-		"Slapdash Central",
-		"Steep Swamp"]
+		"Slapdash Central"]
 	
 	for i in 2:
 		var map_name : String = built_in_maps.pick_random()
