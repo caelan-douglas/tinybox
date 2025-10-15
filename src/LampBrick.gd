@@ -22,7 +22,7 @@ var lamp_range : float = 60
 var lamp_falloff : float = 8
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "lamp_range", "lamp_falloff"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_colour", "immovable", "joinable", "indestructible", "lamp_range", "lamp_falloff"]
 
 func _ready() -> void:
 	super()
@@ -56,9 +56,15 @@ func set_property(property : StringName, value : Variant) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func set_colour(new : Color) -> void:
-	super(new)
+	# don't set colour of lamp brick, just light colour
+	# so super() is skipped here
 	if light != null:
 		light.set("light_color", new)
+
+@rpc("call_local")
+func set_material(new : Brick.BrickMaterial) -> void:
+	# don't change material on lamp bricks
+	pass
 
 @rpc("call_local")
 func set_glued(new : bool, affect_others : bool = true, addl_radius : float = 0) -> void:

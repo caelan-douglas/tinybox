@@ -3,18 +3,17 @@
 [ext_resource type="Script" uid="uid://c8g72ci0okq0j" path="res://src/LampBrick.gd" id="1_1idt1"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_1dqe2"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_q038b"]
-[ext_resource type="PackedScene" uid="uid://ccxi02reit78" path="res://data/models/brick/lamp.blend" id="3_37fvo"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_pq1uh"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_putf8"]
+[ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="5_os211"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1q31d"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_os211"]
 emission_enabled = true
-emission = Color(0.989753, 0.872, 0.561114, 1)
-emission_energy_multiplier = 2.0
+emission = Color(1, 1, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
 size = Vector3(0.9, 0.9, 0.9)
@@ -45,11 +44,10 @@ shape = SubResource("BoxShape3D_b80at")
 [node name="Smoothing" type="Node3D" parent="."]
 script = ExtResource("2_1dqe2")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_37fvo")]
+[node name="model" parent="Smoothing" instance=ExtResource("5_os211")]
 
 [node name="Cube" parent="Smoothing/model" index="0"]
-layers = 8
-surface_material_override/1 = SubResource("StandardMaterial3D_1q31d")
+surface_material_override/0 = SubResource("StandardMaterial3D_os211")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Smoothing"]
 light_color = Color(0.898039, 0.6, 0.47451, 1)
