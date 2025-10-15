@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="3_vxxw6"]
 
 [sub_resource type="Gradient" id="Gradient_yngdy"]
+offsets = PackedFloat32Array(0.004464286, 1)
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_p2o20"]
@@ -23,8 +24,9 @@ ambient_light_sky_contribution = 0.3
 tonemap_mode = 3
 ssao_enabled = true
 ssao_radius = 2.0
-ssao_intensity = 3.0
+ssao_intensity = 1.5
 ssil_enabled = true
+ssil_intensity = 3.0
 glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.589681, 0.627994, 0.658686, 1)

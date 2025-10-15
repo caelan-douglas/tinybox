@@ -1,0 +1,20 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://d26xa7ev6bjbo"]
+
+[ext_resource type="Texture2D" uid="uid://mv2ilkmkkipt" path="res://data/textures/rubber/ex_BaseColor.png" id="1_slgqj"]
+[ext_resource type="Texture2D" uid="uid://dwk3drvti7b5v" path="res://data/textures/rubber/ex_Normal.png" id="2_4bkpo"]
+[ext_resource type="Texture2D" uid="uid://bnns548d3mtpb" path="res://data/textures/rubber/ex_Roughness.png" id="3_7cbdd"]
+
+[resource]
+resource_name = "clay.vincent.hair"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.103743516, 0.10374353, 0.103743516, 1)
+albedo_texture = ExtResource("1_slgqj")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("3_7cbdd")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("2_4bkpo")
+rim_enabled = true
+rim = 0.16
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true

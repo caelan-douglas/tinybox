@@ -1,20 +1,17 @@
 [gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dfsfnl84nbw7c"]
 
-[ext_resource type="Texture2D" uid="uid://dcvo4y6ejsxgr" path="res://data/textures/wood_tex.jpg" id="1_3ec1p"]
-[ext_resource type="Texture2D" uid="uid://ctgjf8684lvi4" path="res://data/textures/wood_tex_normal.jpg" id="2_g4voj"]
-[ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="3_mlrws"]
+[ext_resource type="Texture2D" uid="uid://oidox7oqjbni" path="res://data/textures/wood/ex_BaseColor.png" id="1_ch7nm"]
+[ext_resource type="Texture2D" uid="uid://cif08fv8uhmpo" path="res://data/textures/wood/ex_Normal.png" id="2_ycse2"]
+[ext_resource type="Texture2D" uid="uid://clnyoprp0tudg" path="res://data/textures/wood/ex_Roughness.png" id="3_lge0o"]
 
 [resource]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.375486, 0.38263, 0.429113, 1)
-albedo_texture = ExtResource("1_3ec1p")
-metallic_specular = 0.1
-roughness = 0.45
-roughness_texture = ExtResource("3_mlrws")
+albedo_color = Color(0.28620487, 0.2695906, 0.33904552, 1)
+albedo_texture = ExtResource("1_ch7nm")
+roughness_texture = ExtResource("3_lge0o")
 roughness_texture_channel = 4
 normal_enabled = true
-normal_scale = 0.2
-normal_texture = ExtResource("2_g4voj")
-uv1_scale = Vector3(0.25, 0.25, 0.25)
+normal_texture = ExtResource("2_ycse2")
+uv1_scale = Vector3(0.125, 0.125, 0.125)
 uv1_triplanar = true

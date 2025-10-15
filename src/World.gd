@@ -326,7 +326,7 @@ func open_tbw(lines : Array, reset_camera_and_player : bool = true) -> void:
 	e.start()
 	
 	for p : RigidPlayer in rigidplayer_list:
-		p.protect_spawn(8, false)
+		p.protect_spawn(3.5, false)
 	await get_tree().physics_frame
 	tbw_loading = true
 	clear_world()

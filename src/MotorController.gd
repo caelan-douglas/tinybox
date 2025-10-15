@@ -88,4 +88,10 @@ func update_attached_motors(new : Array[String]) -> void:
 @rpc("any_peer", "call_local", "reliable")
 func update_weight(new : float) -> void:
 	vehicle_weight = new
-	
+
+# reset vehicle weight to 0 if the controller is
+# unjoined
+@rpc("any_peer", "call_local", "reliable")
+func unjoin() -> void:
+	super()
+	vehicle_weight = 0

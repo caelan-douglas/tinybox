@@ -51,9 +51,7 @@ extends Node
 	"env_molten": load("res://data/scene/environments/Molten.tscn"),
 	"env_warp": load("res://data/scene/environments/Warp.tscn"),
 	# BACKGROUNDS
-	"bg_frozen_field": load("res://data/scene/backgrounds/FrozenField.tscn"),
 	"bg_warp": load("res://data/scene/backgrounds/Warp.tscn"),
-	"bg_dining_room": load("res://data/scene/backgrounds/DiningRoom.tscn"),
 	# BRICKS
 	"brick": load("res://data/scene/brick/Brick.tscn"),
 	"brick_half": load("res://data/scene/brick/HalfBrick.tscn"),

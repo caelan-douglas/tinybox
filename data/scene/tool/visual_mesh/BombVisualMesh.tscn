@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=4 uid="uid://tmvf2pb5q4x1"]
+[gd_scene load_steps=13 format=4 uid="uid://tmvf2pb5q4x1"]
 
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="1_qqi4j"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_cvydh"]
-[ext_resource type="Texture2D" uid="uid://d2yj122mqtsxk" path="res://data/textures/sharp_noise_tex.png" id="3_a1yvo"]
+[ext_resource type="Material" uid="uid://d26xa7ev6bjbo" path="res://data/materials/bomb.tres" id="3_uty54"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
 offsets = PackedFloat32Array(0, 0.135965, 0.618421, 1)
@@ -117,19 +117,6 @@ normal_texture = ExtResource("2_cvydh")
 rim_enabled = true
 rim = 0.16
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rbxrf"]
-resource_name = "clay.vincent.hair"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0, 0, 0, 1)
-metallic_texture_channel = 2
-roughness = 0.55
-roughness_texture_channel = 1
-normal_enabled = true
-normal_scale = 0.1
-normal_texture = ExtResource("3_a1yvo")
-rim_enabled = true
-rim = 0.16
-
 [node name="BombToolVisual" type="Node3D"]
 
 [node name="Bomb" type="Node3D" parent="."]
@@ -151,10 +138,4 @@ transform = Transform3D(0.150736, 0.199446, 1.49012e-08, -0.199446, 0.150736, 3.
 mesh = SubResource("ArrayMesh_7n4lf")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
-surface_material_override/1 = SubResource("StandardMaterial3D_rbxrf")
-
-[node name="Cube" type="MeshInstance3D" parent="Bomb/bomb/Cube"]
-mesh = SubResource("ArrayMesh_7n4lf")
-skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
-surface_material_override/1 = SubResource("StandardMaterial3D_rbxrf")
+surface_material_override/1 = ExtResource("3_uty54")

@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://d34ua4bytc5s5"]
+[gd_scene load_steps=13 format=3 uid="uid://d34ua4bytc5s5"]
 
 [ext_resource type="Script" uid="uid://c8g72ci0okq0j" path="res://src/LampBrick.gd" id="1_1idt1"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_1dqe2"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_q038b"]
 [ext_resource type="PackedScene" uid="uid://ccxi02reit78" path="res://data/models/brick/lamp.blend" id="3_37fvo"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_pq1uh"]
-[ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="4_ol2f4"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_putf8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
@@ -49,18 +48,22 @@ script = ExtResource("2_1dqe2")
 [node name="model" parent="Smoothing" instance=ExtResource("3_37fvo")]
 
 [node name="Cube" parent="Smoothing/model" index="0"]
+layers = 8
 surface_material_override/1 = SubResource("StandardMaterial3D_1q31d")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Smoothing"]
 light_color = Color(0.898039, 0.6, 0.47451, 1)
 light_energy = 6.0
 light_volumetric_fog_energy = 0.0
+shadow_enabled = true
+shadow_bias = 0.2
+shadow_normal_bias = 2.0
+shadow_caster_mask = 4294967287
 distance_fade_enabled = true
 distance_fade_begin = 20.0
 distance_fade_length = 20.0
-omni_range = 100.0
-script = ExtResource("4_ol2f4")
-visible_on_awful = false
+omni_range = 60.0
+omni_attenuation = 0.8
 
 [node name="IntersectDetector" type="Area3D" parent="."]
 collision_mask = 3

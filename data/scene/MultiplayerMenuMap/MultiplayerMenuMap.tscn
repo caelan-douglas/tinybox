@@ -1,11 +1,14 @@
-[gd_scene load_steps=40 format=3 uid="uid://da61xyvkih0q"]
+[gd_scene load_steps=43 format=3 uid="uid://da61xyvkih0q"]
 
 [ext_resource type="Script" uid="uid://bdh2ltm6loblx" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
 [ext_resource type="Animation" uid="uid://cpbmua5aa3x2j" path="res://data/animation/main_menu/appearance_in.res" id="5_1xpc5"]
+[ext_resource type="Texture2D" uid="uid://oidox7oqjbni" path="res://data/textures/wood/ex_BaseColor.png" id="5_fo7yy"]
 [ext_resource type="Animation" uid="uid://bv8140eakwmkm" path="res://data/animation/main_menu/appearance_out.res" id="6_eed1v"]
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="6_oxx4f"]
+[ext_resource type="Texture2D" uid="uid://cif08fv8uhmpo" path="res://data/textures/wood/ex_Normal.png" id="6_t4hof"]
 [ext_resource type="AudioStream" uid="uid://c0gcn31iumd17" path="res://data/audio/spotlight.ogg" id="7_2nw57"]
+[ext_resource type="Texture2D" uid="uid://clnyoprp0tudg" path="res://data/textures/wood/ex_Roughness.png" id="7_i7sjw"]
 [ext_resource type="PackedScene" uid="uid://b41armf0g1vux" path="res://data/scene/character/RunParticles.tscn" id="8_gvwsq"]
 [ext_resource type="PackedScene" uid="uid://bh1utiu8ireoo" path="res://data/scene/explosion/Explosion.tscn" id="8_pu6kk"]
 [ext_resource type="PackedScene" uid="uid://bagdsh518cwy5" path="res://data/scene/lifter/LifterParticles.tscn" id="9_2wn0s"]
@@ -73,13 +76,22 @@ volumetric_fog_length = 6.0
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture2D_y3nqn")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kht"]
-cull_mode = 1
-albedo_color = Color(0.235604, 0.359053, 0.323467, 1)
-roughness = 0.55
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lfavo"]
+resource_name = "vincent.jacket"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.42899996, 0.65, 0.4474166, 1)
+albedo_texture = ExtResource("5_fo7yy")
+roughness_texture = ExtResource("7_i7sjw")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.55
+normal_texture = ExtResource("6_t4hof")
+uv1_scale = Vector3(0.125, 0.125, 0.125)
+uv1_triplanar = true
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_gk5ne"]
-material = SubResource("StandardMaterial3D_e1kht")
+material = SubResource("StandardMaterial3D_lfavo")
+flip_faces = true
 radius = 6.382
 height = 85.459
 

@@ -1,0 +1,53 @@
+[gd_scene load_steps=10 format=3 uid="uid://b5a4maffhv3wc"]
+
+[ext_resource type="PackedScene" uid="uid://cynk76edejitn" path="res://data/scene/environments/Sunny.tscn" id="1_wfkri"]
+[ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_wl6nx"]
+[ext_resource type="Material" uid="uid://dxhun2g3o3x2k" path="res://data/materials/wood.tres" id="3_wl6nx"]
+[ext_resource type="Material" uid="uid://dp5ttmwn36mku" path="res://data/materials/grass.tres" id="4_ikqvc"]
+[ext_resource type="Material" uid="uid://dfsfnl84nbw7c" path="res://data/materials/wood_charred.tres" id="4_krljs"]
+[ext_resource type="Material" uid="uid://icymbbpv386g" path="res://data/materials/rubber.tres" id="5_lyocp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ikqvc"]
+material = ExtResource("2_wl6nx")
+size = Vector3(5, 5, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_krljs"]
+material = ExtResource("2_wl6nx")
+
+[sub_resource type="BoxMesh" id="BoxMesh_wl6nx"]
+material = ExtResource("2_wl6nx")
+size = Vector3(50, 5, 30)
+
+[node name="Graphics" type="Node3D"]
+
+[node name="Environment" parent="." instance=ExtResource("1_wfkri")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ikqvc")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 6)
+mesh = SubResource("BoxMesh_krljs")
+surface_material_override/0 = ExtResource("3_wl6nx")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 27)
+mesh = SubResource("BoxMesh_wl6nx")
+surface_material_override/0 = ExtResource("3_wl6nx")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 10, 33)
+material_override = ExtResource("4_krljs")
+mesh = SubResource("BoxMesh_wl6nx")
+surface_material_override/0 = ExtResource("3_wl6nx")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 6, 31)
+material_override = ExtResource("5_lyocp")
+mesh = SubResource("BoxMesh_wl6nx")
+surface_material_override/0 = ExtResource("5_lyocp")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 0, -10)
+mesh = SubResource("BoxMesh_wl6nx")
+surface_material_override/0 = ExtResource("4_ikqvc")

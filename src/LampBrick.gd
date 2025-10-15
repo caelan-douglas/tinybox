@@ -18,6 +18,12 @@ extends Brick
 
 @onready var light : OmniLight3D = $Smoothing/OmniLight3D
 
+var lamp_range : float = 60
+var lamp_falloff : float = 8
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "lamp_range", "lamp_falloff"]
+
 func _ready() -> void:
 	super()
 	Global.connect("graphics_preset_changed", _on_graphics_preset_changed)
@@ -26,11 +32,27 @@ func _ready() -> void:
 func _on_graphics_preset_changed() -> void:
 	match (Global.get_graphics_preset()):
 		Global.GraphicsPresets.COOL:
-			light.distance_fade_begin = 40
+			light.distance_fade_begin = lamp_range * 1.5
+			light.distance_fade_shadow = lamp_range
+			light.shadow_enabled = true
 		Global.GraphicsPresets.BAD:
-			light.distance_fade_begin = 30
+			light.distance_fade_begin = lamp_range
+			light.distance_fade_shadow = lamp_range * 0.75
+			light.shadow_enabled = true
 		Global.GraphicsPresets.AWFUL:
-			light.distance_fade_begin = 20
+			light.distance_fade_begin = lamp_range * 0.5
+			light.shadow_enabled = false
+
+# Set a custom property
+func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
+	if property == "lamp_range":
+		lamp_range = value as float
+		light.omni_range = lamp_range
+		_on_graphics_preset_changed()
+	elif property == "lamp_falloff":
+		lamp_falloff = value as float
+		light.omni_attenuation = clampf(lamp_falloff * 0.1, 0.1, 1)
 
 @rpc("any_peer", "call_local", "reliable")
 func set_colour(new : Color) -> void:

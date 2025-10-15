@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene load_steps=17 format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" uid="uid://fksufrsb1xj3" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
@@ -10,6 +10,15 @@
 [ext_resource type="Script" uid="uid://785f2txc3spu" path="res://src/ui/CreditsMenu.gd" id="8_5c1i6"]
 [ext_resource type="Script" uid="uid://ckfgx3scv7ty3" path="res://src/ui/ServerList.gd" id="8_7bulb"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="8_labno"]
+
+[sub_resource type="Gradient" id="Gradient_t4xug"]
+offsets = PackedFloat32Array(0, 0.281065)
+colors = PackedColorArray(0, 0, 0, 0, 0.118789, 0.104957, 0.187448, 0.745098)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y2rob"]
+gradient = SubResource("Gradient_t4xug")
+width = 128
+height = 1
 
 [sub_resource type="Animation" id="Animation_8ng8c"]
 length = 0.001
@@ -83,6 +92,16 @@ corner_radius_bottom_left = 8
 
 [node name="MultiplayerMenu" type="CanvasLayer"]
 script = ExtResource("1_fgila")
+
+[node name="Gradient" type="TextureRect" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -832.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_y2rob")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -5,9 +5,9 @@
 [ext_resource type="Script" uid="uid://dwxqjqompuoyo" path="res://src/DateVisibility.gd" id="1_tpugs"]
 [ext_resource type="AudioStream" uid="uid://bws3maurg3ruf" path="res://data/audio/bat/bat_1.ogg" id="2_ik4bm"]
 [ext_resource type="AudioStream" uid="uid://cljd50r3t0qyo" path="res://data/audio/deflect.ogg" id="3_qxgff"]
-[ext_resource type="Texture2D" uid="uid://dcvo4y6ejsxgr" path="res://data/textures/wood_tex.jpg" id="5_hi8ii"]
-[ext_resource type="Texture2D" uid="uid://ctgjf8684lvi4" path="res://data/textures/wood_tex_normal.jpg" id="6_m6t0x"]
-[ext_resource type="Texture2D" uid="uid://jqk4airw4uk5" path="res://data/textures/wood_tex_rough.jpg" id="7_q23tx"]
+[ext_resource type="Texture2D" uid="uid://oidox7oqjbni" path="res://data/textures/wood/ex_BaseColor.png" id="5_004up"]
+[ext_resource type="Texture2D" uid="uid://cif08fv8uhmpo" path="res://data/textures/wood/ex_Normal.png" id="6_suypf"]
+[ext_resource type="Texture2D" uid="uid://clnyoprp0tudg" path="res://data/textures/wood/ex_Roughness.png" id="7_rauec"]
 [ext_resource type="PackedScene" uid="uid://dcomphirwhf3x" path="res://data/models/visual_mesh/bat/bat_candycane.blend" id="8_lolj3"]
 
 [sub_resource type="Animation" id="Animation_d7ghb"]
@@ -168,19 +168,16 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_lbbej")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpb8w"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x5vng"]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.621767, 0.478887, 0.446137, 1)
-albedo_texture = ExtResource("5_hi8ii")
-metallic_specular = 0.1
-roughness = 0.45
-roughness_texture = ExtResource("7_q23tx")
+albedo_color = Color(0.7954491, 0.49801147, 0.46187723, 1)
+albedo_texture = ExtResource("5_004up")
+roughness_texture = ExtResource("7_rauec")
 roughness_texture_channel = 4
 normal_enabled = true
-normal_scale = 0.2
-normal_texture = ExtResource("6_m6t0x")
-uv1_offset = Vector3(0, 0.135, 0.695)
+normal_scale = 0.55
+normal_texture = ExtResource("6_suypf")
 
 [sub_resource type="Gradient" id="Gradient_kmice"]
 interpolation_mode = 1
@@ -207,7 +204,7 @@ size = Vector3(1.2, 1.2, 1.4)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_w2yg7")
+&"": SubResource("AnimationLibrary_w2yg7")
 }
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
@@ -225,11 +222,11 @@ bus = &"SFX"
 attenuation_filter_cutoff_hz = 20500.0
 
 [node name="mesh" parent="." instance=ExtResource("1_0ox7v")]
-transform = Transform3D(-0.49839, 2.16649, -1.14364, -2.43546, -0.564325, -0.00769225, -0.26482, 1.11258, 2.22307, 0.0346209, 0.0785559, -0.0275722)
+transform = Transform3D(-0.4983898, 2.1664891, -1.143642, -2.43546, -0.56432474, -0.0076922453, -0.26482022, 1.1125821, 2.2230692, 0.0346209, 0.0785559, -0.0275722)
 
 [node name="bat" parent="mesh" index="0"]
 mesh = SubResource("ArrayMesh_mca60")
-surface_material_override/0 = SubResource("StandardMaterial3D_wpb8w")
+surface_material_override/0 = SubResource("StandardMaterial3D_x5vng")
 script = ExtResource("1_tpugs")
 set_visible_to_what = false
 

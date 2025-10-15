@@ -1,36 +1,30 @@
-[gd_scene load_steps=6 format=3 uid="uid://dp2d68ixposb0"]
+[gd_scene load_steps=7 format=3 uid="uid://dp2d68ixposb0"]
 
 [ext_resource type="PackedScene" uid="uid://bx7a5xreho2sn" path="res://data/models/visual_mesh/missile_launcher/missile_launcher.blend" id="1_r7umc"]
-[ext_resource type="Texture2D" uid="uid://c6h5nejo6jnys" path="res://data/textures/metal_tex.png" id="2_emg6q"]
-[ext_resource type="Texture2D" uid="uid://d2yj122mqtsxk" path="res://data/textures/sharp_noise_tex.png" id="3_00l02"]
+[ext_resource type="Texture2D" uid="uid://bbv5b1s74dxil" path="res://data/textures/metal/ex_BaseColor.png" id="2_6i0cq"]
+[ext_resource type="Texture2D" uid="uid://btwqi03scveq1" path="res://data/textures/metal/ex_Metallic.png" id="3_1dxhe"]
+[ext_resource type="Texture2D" uid="uid://85xfc2lkmxv4" path="res://data/textures/metal/ex_Normal.png" id="4_4kl1o"]
+[ext_resource type="Texture2D" uid="uid://dy4qx3tic3xyr" path="res://data/textures/metal/ex_Roughness.png" id="5_sgg7t"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1rwo"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wlimt"]
 resource_name = "vincent.jacket"
 vertex_color_use_as_albedo = true
-albedo_color = Color(1, 0.384314, 0.368627, 1)
-albedo_texture = ExtResource("2_emg6q")
-metallic = 0.5
+albedo_color = Color(1, 0.4071009, 0.4846111, 1)
+albedo_texture = ExtResource("2_6i0cq")
+metallic = 1.0
 metallic_specular = 1.0
-roughness_texture = ExtResource("2_emg6q")
+metallic_texture = ExtResource("3_1dxhe")
+roughness_texture = ExtResource("5_sgg7t")
 roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("4_4kl1o")
 rim_enabled = true
 rim = 0.3
 rim_tint = 0.8
-uv1_scale = Vector3(2, 2, 1)
-uv1_offset = Vector3(0, -1, 0)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p3ufd"]
-resource_name = "clay.vincent.hair"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.259294, 0.259294, 0.259294, 1)
-metallic_texture_channel = 2
-roughness = 0.55
-roughness_texture_channel = 1
-normal_enabled = true
-normal_scale = 0.1
-normal_texture = ExtResource("3_00l02")
-rim_enabled = true
-rim = 0.16
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+uv1_triplanar = true
 
 [node name="Node3D" type="Node3D"]
 
@@ -38,7 +32,6 @@ rim = 0.16
 transform = Transform3D(0.391658, 0.92009, 0.00624801, -0.0477137, 0.0270909, -0.998494, -0.918873, 0.39077, 0.0545112, 0.0668613, 0.0452328, -0.0399068)
 
 [node name="Cube" parent="missile_launcher" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_f1rwo")
-surface_material_override/1 = SubResource("StandardMaterial3D_p3ufd")
+surface_material_override/0 = SubResource("StandardMaterial3D_wlimt")
 
 [editable path="missile_launcher"]

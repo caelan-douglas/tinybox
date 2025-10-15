@@ -312,6 +312,7 @@ func refresh() -> void:
 	clear()
 	# add built-in worlds
 	add_map("Frozen Field", built_in)
+	add_map("Empty Room", built_in)
 	add_map("Icy Inclines", built_in)
 	add_map("Tunnel Tussle", built_in)
 	add_map("Acid House", built_in)

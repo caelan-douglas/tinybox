@@ -1,11 +1,11 @@
-[gd_scene load_steps=24 format=4 uid="uid://cd3af1twwe58l"]
+[gd_scene load_steps=23 format=4 uid="uid://cd3af1twwe58l"]
 
 [ext_resource type="Script" uid="uid://bp378ryd0vrwa" path="res://src/Bomb.gd" id="1_3qcbp"]
 [ext_resource type="AudioStream" uid="uid://btxcjaqcrlqro" path="res://data/audio/beep/beep.ogg" id="2_xnhk2"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="3_dxvq6"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="3_ky8so"]
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_rloq1"]
-[ext_resource type="Texture2D" uid="uid://d2yj122mqtsxk" path="res://data/textures/sharp_noise_tex.png" id="4_a0734"]
+[ext_resource type="Material" uid="uid://d26xa7ev6bjbo" path="res://data/materials/bomb.tres" id="6_r1dun"]
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="7_7cjlw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nsclt"]
@@ -28,7 +28,6 @@ angular_velocity_min = 61.28
 angular_velocity_max = 61.28
 gravity = Vector3(2.08165e-12, 0.4, 2.08165e-12)
 color_ramp = SubResource("GradientTexture1D_blc3m")
-turbulence_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_clwto"]
 material = ExtResource("3_rloq1")
@@ -215,19 +214,6 @@ normal_texture = ExtResource("3_dxvq6")
 rim_enabled = true
 rim = 0.16
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rbxrf"]
-resource_name = "clay.vincent.hair"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0, 0, 0, 1)
-metallic_texture_channel = 2
-roughness = 0.55
-roughness_texture_channel = 1
-normal_enabled = true
-normal_scale = 0.1
-normal_texture = ExtResource("4_a0734")
-rim_enabled = true
-rim = 0.16
-
 [node name="Bomb" type="RigidBody3D"]
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_nsclt")
@@ -250,7 +236,7 @@ draw_pass_1 = SubResource("PlaneMesh_clwto")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_o2hys")
+&"": SubResource("AnimationLibrary_o2hys")
 }
 autoplay = "bomb_tick"
 
@@ -270,13 +256,7 @@ transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 mesh = SubResource("ArrayMesh_7n4lf")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
-surface_material_override/1 = SubResource("StandardMaterial3D_rbxrf")
-
-[node name="Cube" type="MeshInstance3D" parent="Smoothing/bomb/Cube"]
-mesh = SubResource("ArrayMesh_7n4lf")
-skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
-surface_material_override/1 = SubResource("StandardMaterial3D_rbxrf")
+surface_material_override/1 = ExtResource("6_r1dun")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.9, 0.05)
