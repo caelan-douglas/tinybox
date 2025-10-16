@@ -33,6 +33,7 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_1idt1")
 _brick_spawnable_type = "brick_lamp"
+_colour = Color(1, 1, 1, 1)
 
 [node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_q038b")]
 
@@ -54,8 +55,8 @@ light_color = Color(0.898039, 0.6, 0.47451, 1)
 light_energy = 6.0
 light_volumetric_fog_energy = 0.0
 shadow_enabled = true
-shadow_bias = 0.2
-shadow_normal_bias = 2.0
+shadow_bias = 0.35
+shadow_normal_bias = 3.0
 shadow_caster_mask = 4294967287
 distance_fade_enabled = true
 distance_fade_begin = 20.0

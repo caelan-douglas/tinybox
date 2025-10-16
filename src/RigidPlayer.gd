@@ -1014,7 +1014,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					change_state(AIR)
 			SLIDE:
 				if is_on_ground:
-					if Time.get_ticks_msec() % 2 == 0:
+					if Time.get_ticks_msec() % 8 == 0:
 						play_jump_particles()
 					# jump if pressed or going too slow
 					if (Input.is_action_pressed("jump") && !locked && slide_time.time_left < 0.5) || linear_velocity.length() < 1:
@@ -1032,7 +1032,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					align_character_model_normal(ground_normal)
 			SLIDE_BACK:
 				if is_on_ground:
-					if Time.get_ticks_msec() % 2 == 0:
+					if Time.get_ticks_msec() % 8 == 0:
 						play_jump_particles()
 					# jump if pressed or going too slow
 					if Input.is_action_pressed("jump") && !locked:

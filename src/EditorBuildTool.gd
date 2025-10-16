@@ -619,16 +619,17 @@ func _show_clipboard_preview(lines : Array) -> void:
 		child.set_script(null)
 	#container.reparent(preview_node)
 	await get_tree().physics_frame
-	preview.position = Vector3.ZERO
-	# make all children have preview material and remove collision
-	for child : Node in preview.get_children():
-		remove_item_collision(Global.get_all_children(child) as Array)
-		var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
-		if new_mesh != null:
-			# apply construction material
-			for i in range(new_mesh.get_surface_override_material_count()):
-				new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
-	preview.rotation = last_rotation
+	if preview != null:
+		preview.position = Vector3.ZERO
+		# make all children have preview material and remove collision
+		for child : Node in preview.get_children():
+			remove_item_collision(Global.get_all_children(child) as Array)
+			var new_mesh : MeshInstance3D = find_item_mesh(Global.get_all_children(child) as Array)
+			if new_mesh != null:
+				# apply construction material
+				for i in range(new_mesh.get_surface_override_material_count()):
+					new_mesh.set_surface_override_material(i, load("res://data/materials/editor_placement_material.tres") as Material)
+		preview.rotation = last_rotation
 	
 # Find the closest Vector3 axis to a normalized vector using dot.
 func find_closest_axis(normalized_vector : Vector3) -> Vector3:

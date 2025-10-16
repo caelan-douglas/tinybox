@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b5a4maffhv3wc"]
+[gd_scene load_steps=11 format=3 uid="uid://b5a4maffhv3wc"]
 
 [ext_resource type="PackedScene" uid="uid://cynk76edejitn" path="res://data/scene/environments/Sunny.tscn" id="1_wfkri"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_wl6nx"]
@@ -10,6 +10,10 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ikqvc"]
 material = ExtResource("2_wl6nx")
 size = Vector3(5, 5, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lyocp"]
+material = ExtResource("2_wl6nx")
+size = Vector3(30, 15, 30)
 
 [sub_resource type="BoxMesh" id="BoxMesh_krljs"]
 material = ExtResource("2_wl6nx")
@@ -24,6 +28,10 @@ size = Vector3(50, 5, 30)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_ikqvc")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -52)
+mesh = SubResource("BoxMesh_lyocp")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 6)

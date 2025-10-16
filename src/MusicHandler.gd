@@ -20,8 +20,8 @@ signal music_setting_changed
 signal sfx_setting_changed
 signal ui_setting_changed
 
-var master_setting := 1.0
-var music_setting := 0.6
+var master_setting := 0.8
+var music_setting := 0.7
 var sfx_setting := 1.0
 var ui_setting := 1.0
 var min_db : float = 30
@@ -37,6 +37,9 @@ func _ready() -> void:
 	music_setting = MusicHandler.load_music_setting()
 	sfx_setting = MusicHandler.load_sfx_setting()
 	ui_setting = MusicHandler.load_ui_setting()
+	
+	# debug no prefs file flag
+	if OS.get_cmdline_args().has("--debug_mute"): master_setting = 0
 
 func switch_song(new_song_names : Array, overwrite_song_list := true) -> void:
 	if overwrite_song_list:
@@ -80,7 +83,7 @@ func switch_song(new_song_names : Array, overwrite_song_list := true) -> void:
 				music_animator.play("RESET")
 
 func _physics_process(delta : float) -> void:
-	if !music_player.playing && song_list != [""] && !Global.server_mode():
+	if !music_player.playing && song_list != [""] && !Global.server_mode() && music_setting > 0 && master_setting > 0:
 		# don't play the same song again if there is more than one song
 		var songs_minus_current : Array = song_list.duplicate()
 		if song_list.size() > 1:

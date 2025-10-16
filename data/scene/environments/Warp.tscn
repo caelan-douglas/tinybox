@@ -14,25 +14,26 @@ background_mode = 2
 background_energy_multiplier = 0.3
 sky = SubResource("Sky_r8v3b")
 ambient_light_source = 3
-ambient_light_color = Color(0.380257, 0.00137962, 0.60452, 1)
-ambient_light_sky_contribution = 0.5
-ambient_light_energy = 2.0
+ambient_light_color = Color(0.5174153, 0.48333442, 0.69987804, 1)
+ambient_light_sky_contribution = 0.96
+ambient_light_energy = 8.0
 tonemap_mode = 3
 ssao_enabled = true
 ssao_radius = 2.0
-ssao_intensity = 3.0
+ssao_intensity = 1.5
 ssil_enabled = true
 glow_enabled = true
-fog_light_color = Color(0, 0, 0, 1)
+fog_light_color = Color(0.34349012, 0.21675408, 0.4065533, 1)
 fog_light_energy = 0.47
-fog_density = 0.001
+fog_density = 0.0084
 fog_sky_affect = 0.787
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.01
-volumetric_fog_albedo = Color(0.45098, 0.184314, 0.556863, 1)
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.5060533, 0.36959997, 0.56, 1)
 volumetric_fog_anisotropy = 0.5
 volumetric_fog_length = 100.0
-volumetric_fog_ambient_inject = 0.15
+volumetric_fog_ambient_inject = 1.0
+volumetric_fog_temporal_reprojection_enabled = false
 
 [sub_resource type="Animation" id="Animation_abi5h"]
 length = 0.001
@@ -80,17 +81,17 @@ environment_name = "env_warp"
 environment = SubResource("Environment_vb3eb")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.88421, -0.176261, -0.432556, 0.425345, -0.0788323, 0.901591, -0.193015, -0.981182, 0.00526743, 1.71765, 8.7417, -5.6)
+transform = Transform3D(0.8842097, -0.17626095, -0.4325567, 0.46486714, 0.42232043, 0.7781663, 0.045517012, -0.88914484, 0.4553576, 1.71765, 8.7417, -5.6)
 light_color = Color(0.819608, 0.764706, 0.901961, 1)
-light_energy = 1.5
+light_energy = 0.2
 shadow_enabled = true
 directional_shadow_split_1 = 0.005
 directional_shadow_split_2 = 0.05
 directional_shadow_split_3 = 0.1
-directional_shadow_max_distance = 3000.0
+directional_shadow_max_distance = 500.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_3o2pb")
+&"": SubResource("AnimationLibrary_3o2pb")
 }
 autoplay = "rotate"

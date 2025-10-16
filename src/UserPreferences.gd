@@ -57,6 +57,9 @@ func _on_request_completed(result : int, response_code : int, headers : PackedSt
 
 # Saves a preference to the disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
 func save_pref(key : String, value: Variant, section := "preferences") -> void:
+	# debug no prefs file flag
+	if OS.get_cmdline_args().has("--debug_noprefs"): return
+	
 	var config := ConfigFile.new()
 	# in case the file already exists, load it
 	var err := config.load("user://preferences.txt")
@@ -69,6 +72,9 @@ func save_pref(key : String, value: Variant, section := "preferences") -> void:
 
 # Loads a preference from disk (located in Tinybox/preferences.txt in your operating system's app data folder.)
 func load_pref(key : String, section := "preferences") -> Variant:
+	# debug no prefs file flag
+	if OS.get_cmdline_args().has("--debug_noprefs"): return
+	
 	var config := ConfigFile.new()
 	# Load data from a file.
 	var err := config.load("user://preferences.txt")

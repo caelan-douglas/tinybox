@@ -1,8 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://dv1sisl0rn8iq"]
+[gd_scene load_steps=15 format=3 uid="uid://dv1sisl0rn8iq"]
 
 [ext_resource type="Script" uid="uid://c6r3cayh3lyem" path="res://src/WaterProjectile.gd" id="1_0xm6f"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_o3kjx"]
-[ext_resource type="Texture2D" uid="uid://ctn80v6lggxsv" path="res://data/textures/fire_tex.png" id="3_f0wog"]
+[ext_resource type="Material" uid="uid://5j6h001ay0q5" path="res://data/materials/particles/dust.tres" id="3_cy1cc"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kcslu"]
 friction = 0.2
@@ -54,21 +54,8 @@ scale_max = 0.5
 scale_curve = SubResource("CurveTexture_lssgx")
 color_ramp = SubResource("GradientTexture1D_dnoau")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uv8wb"]
-blend_mode = 1
-shading_mode = 0
-specular_mode = 2
-disable_fog = true
-albedo_color = Color(0.739746, 0.78792, 0.821501, 1)
-albedo_texture = ExtResource("3_f0wog")
-billboard_mode = 3
-billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
 [sub_resource type="QuadMesh" id="QuadMesh_soq25"]
-material = SubResource("StandardMaterial3D_uv8wb")
+material = ExtResource("3_cy1cc")
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_28iu0"]
 properties/0/path = NodePath(".:position")
@@ -81,8 +68,8 @@ properties/1/replication_mode = 2
 [node name="WaterProjectile" type="RigidBody3D"]
 collision_mask = 11
 physics_material_override = SubResource("PhysicsMaterial_kcslu")
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_0xm6f")
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -97,7 +84,6 @@ script = ExtResource("2_o3kjx")
 
 [node name="splash_particles" type="GPUParticles3D" parent="Smoothing/Node3D"]
 amount = 16
-fixed_fps = 24
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_l0gu6")
 draw_pass_1 = SubResource("QuadMesh_soq25")

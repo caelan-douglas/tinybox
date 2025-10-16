@@ -61,9 +61,10 @@ func _on_line_edit_focus_exited() -> void:
 	scroll_box.scroll_vertical = scroll_box.get_v_scroll_bar().max_value
 
 func _unhandled_input(event : InputEvent) -> void:
-	if (event is InputEventKey):
-		if event.pressed and event.keycode == KEY_TAB:
-			line_edit.grab_focus()
+	if is_visible_in_tree():
+		if (event is InputEventKey):
+			if event.pressed and event.keycode == KEY_TAB:
+				line_edit.grab_focus()
 
 func _on_chat_submitted(text : String) -> void:
 	CommandHandler.submit_command.rpc("", text)

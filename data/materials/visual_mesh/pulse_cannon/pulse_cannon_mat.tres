@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://c4et7l2eosu7j"]
+
+[ext_resource type="Texture2D" uid="uid://bdy4d2c2mmmbo" path="res://data/models/visual_mesh/pulse_cannon/textures/pulse_cannon_pulsecannon_BaseColor.png" id="1_4f1w7"]
+[ext_resource type="Texture2D" uid="uid://dvxynxxwxjhcx" path="res://data/models/visual_mesh/pulse_cannon/textures/pulse_cannon_pulsecannon_Metallic.png" id="2_4w183"]
+[ext_resource type="Texture2D" uid="uid://dbow6om2hlgv8" path="res://data/models/visual_mesh/pulse_cannon/textures/pulse_cannon_pulsecannon_Normal.png" id="3_6glpf"]
+[ext_resource type="Texture2D" uid="uid://0mylxni4p2et" path="res://data/models/visual_mesh/pulse_cannon/textures/pulse_cannon_pulsecannon_Roughness.png" id="4_6go4k"]
+
+[resource]
+albedo_texture = ExtResource("1_4f1w7")
+metallic = 1.0
+metallic_texture = ExtResource("2_4w183")
+roughness_texture = ExtResource("4_6go4k")
+normal_enabled = true
+normal_texture = ExtResource("3_6glpf")

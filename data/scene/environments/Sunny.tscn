@@ -24,6 +24,12 @@ ssao_enabled = true
 ssao_radius = 2.0
 ssao_intensity = 3.0
 ssil_enabled = true
+sdfgi_bounce_feedback = 1.5
+sdfgi_cascades = 2
+sdfgi_min_cell_size = 0.78125
+sdfgi_y_scale = 0
+sdfgi_energy = 1.5
+sdfgi_probe_bias = 2.0
 glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.380366, 0.594655, 0.703805, 1)
@@ -64,7 +70,7 @@ environment = SubResource("Environment_oa3a3")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, 0.327924, -0.377447, 0, 0.754893, 0.655848, 0.5, -0.567981, 0.653756, 0, 52.7417, 0)
 shadow_enabled = true
-directional_shadow_max_distance = 1600.0
+directional_shadow_max_distance = 500.0
 script = ExtResource("3_46jeo")
 visible_on_awful = false
 

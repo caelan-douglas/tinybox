@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://dfwrrmi0rna4a"]
+
+[ext_resource type="Texture2D" uid="uid://be4jsm3kidynm" path="res://data/models/visual_mesh/rocket_launcher/launcher_launcher_BaseColor.png" id="1_w3ssf"]
+[ext_resource type="Texture2D" uid="uid://dhvv4o3jmx85r" path="res://data/models/visual_mesh/rocket_launcher/launcher_launcher_Metallic.png" id="2_b5o4k"]
+[ext_resource type="Texture2D" uid="uid://cn0k5l50xmcoc" path="res://data/models/visual_mesh/rocket_launcher/launcher_launcher_Normal.png" id="3_pmkh4"]
+[ext_resource type="Texture2D" uid="uid://crb7obtrubl30" path="res://data/models/visual_mesh/rocket_launcher/launcher_launcher_Roughness.png" id="4_55qa6"]
+
+[resource]
+albedo_texture = ExtResource("1_w3ssf")
+metallic = 1.0
+metallic_texture = ExtResource("2_b5o4k")
+roughness_texture = ExtResource("4_55qa6")
+normal_enabled = true
+normal_scale = 0.6
+normal_texture = ExtResource("3_pmkh4")

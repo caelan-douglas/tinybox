@@ -56,6 +56,6 @@ light_energy = 2.0
 shadow_enabled = true
 shadow_opacity = 0.4
 shadow_blur = 10.0
+directional_shadow_max_distance = 300.0
 script = ExtResource("2_ndbh2")
-visible_on_bad = false
 visible_on_awful = false

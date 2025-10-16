@@ -58,6 +58,7 @@ func set_property(property : StringName, value : Variant) -> void:
 func set_colour(new : Color) -> void:
 	# don't set colour of lamp brick, just light colour
 	# so super() is skipped here
+	_colour = new
 	if light != null:
 		light.set("light_color", new)
 

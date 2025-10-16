@@ -1,6 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2ngpbwaa2ste"]
+[gd_scene load_steps=11 format=3 uid="uid://b2ngpbwaa2ste"]
 
-[ext_resource type="Texture2D" uid="uid://ueteyyevj7r4" path="res://data/textures/jump_particle_tex.png" id="1_7e2ge"]
+[ext_resource type="Material" uid="uid://5j6h001ay0q5" path="res://data/materials/particles/dust.tres" id="1_tnw5w"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_7xus8"]
 
 [sub_resource type="Gradient" id="Gradient_66m8f"]
@@ -40,32 +40,14 @@ directional_velocity_curve = SubResource("CurveXYZTexture_p5ek0")
 gravity = Vector3(0, 0, 0)
 color_ramp = SubResource("GradientTexture1D_dnoau")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlhma"]
-transparency = 3
-alpha_hash_scale = 2.0
-alpha_antialiasing_mode = 0
-blend_mode = 1
-shading_mode = 0
-disable_ambient_light = true
-disable_fog = true
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.447059, 0.447059, 0.447059, 1)
-albedo_texture = ExtResource("1_7e2ge")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_tu3pm"]
-material = SubResource("StandardMaterial3D_dlhma")
-size = Vector2(1, 1)
-orientation = 2
+[sub_resource type="QuadMesh" id="QuadMesh_2y5p1"]
+material = ExtResource("1_tnw5w")
+size = Vector2(0.7, 0.7)
 
 [node name="jump_particles" type="GPUParticles3D"]
 emitting = false
 amount = 3
-one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_ki4pp")
-draw_pass_1 = SubResource("PlaneMesh_tu3pm")
+draw_pass_1 = SubResource("QuadMesh_2y5p1")
 script = ExtResource("2_7xus8")

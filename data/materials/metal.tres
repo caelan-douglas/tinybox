@@ -1,7 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://g6dxqcfscwlp"]
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://g6dxqcfscwlp"]
 
 [ext_resource type="Texture2D" uid="uid://bbv5b1s74dxil" path="res://data/textures/metal/ex_BaseColor.png" id="1_d6iqo"]
-[ext_resource type="Texture2D" uid="uid://btwqi03scveq1" path="res://data/textures/metal/ex_Metallic.png" id="2_jfi1d"]
 [ext_resource type="Texture2D" uid="uid://85xfc2lkmxv4" path="res://data/textures/metal/ex_Normal.png" id="3_sfqn8"]
 [ext_resource type="Texture2D" uid="uid://dy4qx3tic3xyr" path="res://data/textures/metal/ex_Roughness.png" id="4_n5ywl"]
 
@@ -11,7 +10,6 @@ vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_d6iqo")
 metallic = 1.0
 metallic_specular = 1.0
-metallic_texture = ExtResource("2_jfi1d")
 roughness_texture = ExtResource("4_n5ywl")
 roughness_texture_channel = 4
 normal_enabled = true

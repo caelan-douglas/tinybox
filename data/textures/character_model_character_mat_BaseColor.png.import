@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btwqi03scveq1"
-path.s3tc="res://.godot/imported/ex_Metallic.png-ee0420b02ccd20479058af0888ee2e7a.s3tc.ctex"
-path.etc2="res://.godot/imported/ex_Metallic.png-ee0420b02ccd20479058af0888ee2e7a.etc2.ctex"
+uid="uid://dddfewqk3heel"
+path.s3tc="res://.godot/imported/character_model_character_mat_BaseColor.png-cc18650ac2f6745561c329865576e664.s3tc.ctex"
+path.etc2="res://.godot/imported/character_model_character_mat_BaseColor.png-cc18650ac2f6745561c329865576e664.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://data/textures/metal/ex_Metallic.png"
-dest_files=["res://.godot/imported/ex_Metallic.png-ee0420b02ccd20479058af0888ee2e7a.s3tc.ctex", "res://.godot/imported/ex_Metallic.png-ee0420b02ccd20479058af0888ee2e7a.etc2.ctex"]
+source_file="res://data/textures/character_model_character_mat_BaseColor.png"
+dest_files=["res://.godot/imported/character_model_character_mat_BaseColor.png-cc18650ac2f6745561c329865576e664.s3tc.ctex", "res://.godot/imported/character_model_character_mat_BaseColor.png-cc18650ac2f6745561c329865576e664.etc2.ctex"]
 
 [params]
 
