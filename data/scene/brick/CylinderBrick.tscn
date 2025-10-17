@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://cwymj2xlxiri4"]
+[gd_scene load_steps=21 format=4 uid="uid://cwymj2xlxiri4"]
 
 [ext_resource type="Script" uid="uid://fhyh0pqn2gcl" path="res://src/MotorBrick.gd" id="1_ap5pn"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="2_cpgvr"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://dxrim2d3r35up" path="res://data/materials/motor.tres" id="4_absob"]
 [ext_resource type="Texture2D" uid="uid://bx00i685shs7k" path="res://data/textures/ui/circular_arrow.png" id="5_xj1jn"]
 [ext_resource type="Script" uid="uid://ccsij7cj3xcng" path="res://src/DebugVisibility.gd" id="6_mjmfm"]
+[ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="8_jv7m5"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n1hir"]
 
@@ -139,6 +140,14 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_u77mh")
 
 [node name="Fire" parent="." instance=ExtResource("3_fh6f0")]
+
+[node name="MotorTag" type="Sprite3D" parent="."]
+transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
+offset = Vector2(32, -32)
+pixel_size = 0.005
+billboard = 1
+no_depth_test = true
+texture = ExtResource("8_jv7m5")
 
 [node name="DirectionArrow" type="Sprite3D" parent="."]
 transform = Transform3D(1.31134e-07, -1, 4.37114e-08, -1, -1.31134e-07, 4.37114e-08, -4.37114e-08, -4.37114e-08, -1, -0.1, 2.08165e-12, 2.08165e-12)

@@ -23,10 +23,12 @@ var controlling_player : RigidPlayer
 @onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
 
 func _init() -> void:
+	super()
 	_brick_spawnable_type = "brick_motor_seat"
 
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
 	if property == "brick_scale":
 		if value is Vector3:
 			# scale up sit area for seats
@@ -34,7 +36,6 @@ func set_property(property : StringName, value : Variant) -> void:
 			if scale_new != Vector3(1, 1, 1):
 				sit_collider.shape = sit_collider.shape.duplicate()
 				sit_collider.shape.size = scale_new + Vector3(0.1, 0.1, 0.1)
-	super(property, value)
 
 # Lights this brick on fire.
 @rpc("any_peer", "call_local")

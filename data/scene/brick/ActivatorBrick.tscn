@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c2pwwy57eoilm"]
+[gd_scene load_steps=17 format=3 uid="uid://c2pwwy57eoilm"]
 
 [ext_resource type="Script" uid="uid://bcq8qw4imotdm" path="res://src/ActivatorBrick.gd" id="1_w1b6s"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_5j7lv"]
@@ -8,13 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://dv43g17rxqbfe" path="res://data/textures/activator_brick.jpg" id="4_aikdr"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="4_oh56m"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="5_o44xs"]
+[ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="9_d0p3j"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y551j"]
-load_path = "res://.godot/imported/wood_tex_normal.jpg-ff310ac6ae7c28ca80e2da168daa7524.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_us10a"]
 resource_name = "vincent.jacket"
@@ -95,9 +95,17 @@ shape = SubResource("BoxShape3D_w63pj")
 
 [node name="Fire" parent="." instance=ExtResource("4_oh56m")]
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
+[node name="DirectionArrow" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5)
 pixel_size = 0.005
 texture = ExtResource("5_o44xs")
+
+[node name="MotorTag" type="Sprite3D" parent="."]
+transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
+offset = Vector2(32, -32)
+pixel_size = 0.005
+billboard = 1
+no_depth_test = true
+texture = ExtResource("9_d0p3j")
 
 [editable path="Smoothing/model"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dca5npetcw4di"]
+[gd_scene load_steps=14 format=3 uid="uid://dca5npetcw4di"]
 
 [ext_resource type="Script" uid="uid://xhd86lqr174x" path="res://src/MotorSeat.gd" id="1_6w7jr"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_kv3g4"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ccd46fjn2mddy" path="res://data/models/brick/seat.blend" id="3_p5qhp"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="3_xao1q"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="5_sk42i"]
+[ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="7_4inmg"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_keqyi"]
 
@@ -93,6 +94,14 @@ angular_limit_z/softness = 1.0
 angular_limit_z/restitution = 0.05
 
 [node name="Fire" parent="." instance=ExtResource("3_xao1q")]
+
+[node name="MotorTag" type="Sprite3D" parent="."]
+transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
+offset = Vector2(32, -32)
+pixel_size = 0.005
+billboard = 1
+no_depth_test = true
+texture = ExtResource("7_4inmg")
 
 [node name="SitArea" type="Area3D" parent="."]
 collision_mask = 2

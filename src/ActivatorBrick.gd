@@ -41,7 +41,7 @@ func set_colour(new : Color) -> void:
 
 func _init() -> void:
 	_brick_spawnable_type = "brick_activator"
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player", "motor_tag"]
 
 func _ready() -> void:
 	super()
@@ -49,6 +49,26 @@ func _ready() -> void:
 		await Global.get_world().tbw_loaded
 	await get_tree().create_timer(0.5).timeout
 	activate()
+
+@rpc("any_peer", "call_remote", "reliable")
+func sync_properties(props : Dictionary) -> void:
+	super(props)
+	# Don't show indicator to newly joined clients
+	$DirectionArrow.visible = false
+
+func enter_state() -> void:
+	super()
+	
+	match _state:
+		States.BUILD:
+			$DirectionArrow.visible = true
+		_:
+			if Global.get_world().get_current_map() is Editor:
+				var editor : Editor = Global.get_world().get_current_map() as Editor
+				if editor.test_mode:
+					$DirectionArrow.visible = false
+			else:
+				$DirectionArrow.visible = false
 
 func _physics_process(delta : float) -> void:
 	super(delta)

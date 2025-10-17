@@ -21,6 +21,7 @@ var speed : float = 0
 var max_speed : float = 80
 var steer : float = 0
 var flip_motor_side : bool = false
+var motor_tag : MotorController.MotorTag = MotorController.MotorTag.BLUE
 
 var parent_controller : MotorController = null
 var in_water := false
@@ -34,6 +35,18 @@ func set_property(property : StringName, value : Variant) -> void:
 			$Smoothing/MotorMesh.position.z = brick_scale.x * 0.5
 		else:
 			$Smoothing/MotorMesh.position.z = -brick_scale.x * 0.5
+	if property == "motor_tag":
+		if $MotorTag != null:
+			motor_tag = value as int
+			match (motor_tag):
+				MotorController.MotorTag.BLUE:
+					$MotorTag.modulate = Color("2e77ff")
+				MotorController.MotorTag.RED:
+					$MotorTag.modulate = Color("f10036")
+				MotorController.MotorTag.GREEN:
+					$MotorTag.modulate = Color("00996c")
+				MotorController.MotorTag.YELLOW:
+					$MotorTag.modulate = Color("e69f00")
 
 # Set the material of this brick to a different one, 
 # and update any related properties.
@@ -47,7 +60,7 @@ func set_parent_controller(as_path : NodePath) -> void:
 	parent_controller = get_node(as_path)
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "flip_motor_side", "max_speed"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "flip_motor_side", "max_speed", "motor_tag"]
 
 func _ready() -> void:
 	super()
@@ -73,6 +86,7 @@ func sync_properties(props : Dictionary) -> void:
 	super(props)
 	# Don't show indicator to newly joined clients
 	$DirectionArrow.visible = false
+	$MotorTag.visible = false
 
 func enter_state() -> void:
 	super()
@@ -80,13 +94,16 @@ func enter_state() -> void:
 	match _state:
 		States.BUILD:
 			$DirectionArrow.visible = true
+			$MotorTag.visible = true
 		_:
 			if Global.get_world().get_current_map() is Editor:
 				var editor : Editor = Global.get_world().get_current_map() as Editor
 				if editor.test_mode:
 					$DirectionArrow.visible = false
+					$MotorTag.visible = false
 			else:
 				$DirectionArrow.visible = false
+				$MotorTag.visible = false
 
 func _physics_process(delta : float) -> void:
 	super(delta)

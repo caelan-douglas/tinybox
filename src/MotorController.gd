@@ -17,10 +17,37 @@
 extends Brick
 class_name MotorController
 
+enum MotorTag {
+	BLUE,
+	RED,
+	GREEN,
+	YELLOW
+}
+const MOTOR_TAGS_AS_STRINGS : Array[String] = ["Blue", "Red", "Green", "Yellow"]
+
 # The motors attached to this controller, determined by this controller's group.
 var attached_motors := []
 # Vehicle weight determined by weight of all bricks combined.
 var vehicle_weight : float = 0
+var motor_tag : MotorTag = MotorTag.BLUE
+
+func _init() -> void:
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "motor_tag"]
+
+func set_property(property : StringName, value : Variant) -> void:
+	super(property, value)
+	if property == "motor_tag":
+		if $MotorTag != null:
+			motor_tag = value as int
+			match (motor_tag):
+				MotorController.MotorTag.BLUE:
+					$MotorTag.modulate = Color("2e77ff")
+				MotorController.MotorTag.RED:
+					$MotorTag.modulate = Color("f10036")
+				MotorController.MotorTag.GREEN:
+					$MotorTag.modulate = Color("00996c")
+				MotorController.MotorTag.YELLOW:
+					$MotorTag.modulate = Color("e69f00")
 
 # Drives this controller's motors based on given input.
 @rpc("any_peer", "call_local")
@@ -58,10 +85,12 @@ func activate() -> void:
 				b = b as Brick
 				vehicle_weight += b.mass
 				if b is MotorBrick:
-					if !attached_motors.has(b):
-						attached_motors.append(b)
-					# set the motorbricks parent controller to this one
-					b.set_parent_controller(self.get_path())
+					# Only control wheels that have the same tag
+					if b.motor_tag == motor_tag:
+						if !attached_motors.has(b):
+							attached_motors.append(b)
+						# set the motorbricks parent controller to this one
+						b.set_parent_controller(self.get_path())
 	
 	if is_multiplayer_authority():
 		sync_attached_motors()
@@ -69,6 +98,26 @@ func activate() -> void:
 		# unfreeze group so that the body that has
 		# these motors is released.
 		unfreeze_entire_group()
+
+@rpc("any_peer", "call_remote", "reliable")
+func sync_properties(props : Dictionary) -> void:
+	super(props)
+	# Don't show indicator to newly joined clients
+	$MotorTag.visible = false
+
+func enter_state() -> void:
+	super()
+	
+	match _state:
+		States.BUILD:
+			$MotorTag.visible = true
+		_:
+			if Global.get_world().get_current_map() is Editor:
+				var editor : Editor = Global.get_world().get_current_map() as Editor
+				if editor.test_mode:
+					$MotorTag.visible = false
+			else:
+				$MotorTag.visible = false
 
 func sync_attached_motors() -> void:
 	var to_sync : Array[String] = []
