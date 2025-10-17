@@ -41,7 +41,7 @@ func set_colour(new : Color) -> void:
 
 func _init() -> void:
 	_brick_spawnable_type = "brick_activator"
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player", "motor_tag"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible", "acceleration", "steering", "follow_nearby_player", "tag"]
 
 func _ready() -> void:
 	super()

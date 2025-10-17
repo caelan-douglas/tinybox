@@ -17,7 +17,7 @@
 extends Brick
 class_name MotorController
 
-enum MotorTag {
+enum Tag {
 	BLUE,
 	RED,
 	GREEN,
@@ -29,24 +29,24 @@ const MOTOR_TAGS_AS_STRINGS : Array[String] = ["Blue", "Red", "Green", "Yellow"]
 var attached_motors := []
 # Vehicle weight determined by weight of all bricks combined.
 var vehicle_weight : float = 0
-var motor_tag : MotorTag = MotorTag.BLUE
+var tag : Tag = Tag.BLUE
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "motor_tag"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "tag"]
 
 func set_property(property : StringName, value : Variant) -> void:
 	super(property, value)
-	if property == "motor_tag":
+	if property == "tag":
 		if $MotorTag != null:
-			motor_tag = value as int
-			match (motor_tag):
-				MotorController.MotorTag.BLUE:
+			tag = value as int
+			match (tag):
+				MotorController.Tag.BLUE:
 					$MotorTag.modulate = Color("2e77ff")
-				MotorController.MotorTag.RED:
+				MotorController.Tag.RED:
 					$MotorTag.modulate = Color("f10036")
-				MotorController.MotorTag.GREEN:
+				MotorController.Tag.GREEN:
 					$MotorTag.modulate = Color("00996c")
-				MotorController.MotorTag.YELLOW:
+				MotorController.Tag.YELLOW:
 					$MotorTag.modulate = Color("e69f00")
 
 # Drives this controller's motors based on given input.
@@ -86,7 +86,7 @@ func activate() -> void:
 				vehicle_weight += b.mass
 				if b is MotorBrick:
 					# Only control wheels that have the same tag
-					if b.motor_tag == motor_tag:
+					if b.tag == tag:
 						if !attached_motors.has(b):
 							attached_motors.append(b)
 						# set the motorbricks parent controller to this one

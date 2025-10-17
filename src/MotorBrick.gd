@@ -21,7 +21,7 @@ var speed : float = 0
 var max_speed : float = 80
 var steer : float = 0
 var flip_motor_side : bool = false
-var motor_tag : MotorController.MotorTag = MotorController.MotorTag.BLUE
+var tag : MotorController.Tag = MotorController.Tag.BLUE
 
 var parent_controller : MotorController = null
 var in_water := false
@@ -35,17 +35,17 @@ func set_property(property : StringName, value : Variant) -> void:
 			$Smoothing/MotorMesh.position.z = brick_scale.x * 0.5
 		else:
 			$Smoothing/MotorMesh.position.z = -brick_scale.x * 0.5
-	if property == "motor_tag":
+	if property == "tag":
 		if $MotorTag != null:
-			motor_tag = value as int
-			match (motor_tag):
-				MotorController.MotorTag.BLUE:
+			tag = value as int
+			match (tag):
+				MotorController.Tag.BLUE:
 					$MotorTag.modulate = Color("2e77ff")
-				MotorController.MotorTag.RED:
+				MotorController.Tag.RED:
 					$MotorTag.modulate = Color("f10036")
-				MotorController.MotorTag.GREEN:
+				MotorController.Tag.GREEN:
 					$MotorTag.modulate = Color("00996c")
-				MotorController.MotorTag.YELLOW:
+				MotorController.Tag.YELLOW:
 					$MotorTag.modulate = Color("e69f00")
 
 # Set the material of this brick to a different one, 
@@ -60,7 +60,7 @@ func set_parent_controller(as_path : NodePath) -> void:
 	parent_controller = get_node(as_path)
 
 func _init() -> void:
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "flip_motor_side", "max_speed", "motor_tag"]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "_material", "_colour", "immovable", "joinable", "indestructible", "flip_motor_side", "max_speed", "tag"]
 
 func _ready() -> void:
 	super()

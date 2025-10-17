@@ -165,9 +165,9 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			chk_option_picker.connect("item_selected", update_object_property.bind(prop_name))
 			chk_option_picker.selected = prop
 		# motor control tags
-		elif prop_name == "motor_tag":
+		elif prop_name == "tag":
 			entry = option_picker.instantiate()
-			entry.get_node("Label").text = "Motor Tag"
+			entry.get_node("Label").text = "Tag"
 			var mtr_option_picker : OptionButton = entry.get_node("Event")
 			for mtr_name : String in MotorController.MOTOR_TAGS_AS_STRINGS:
 				mtr_option_picker.add_item(mtr_name)
