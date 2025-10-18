@@ -10,30 +10,30 @@
 [sub_resource type="Gradient" id="Gradient_1vmab"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4oe5b"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8qb56"]
 gradient = SubResource("Gradient_1vmab")
 fill_from = Vector2(0, 0.175214)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7auh"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ymxxm"]
 load_path = "res://.godot/imported/clouds.png-6ac5f7927be7e0cb4d37b36860897316.s3tc.ctex"
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_831tl"]
 sky_top_color = Color(0.0591115, 0.127345, 0.219206, 1)
 sky_horizon_color = Color(0.565376, 0.664098, 0.793616, 1)
-sky_cover = SubResource("CompressedTexture2D_i7auh")
+sky_cover = SubResource("CompressedTexture2D_ymxxm")
 sky_cover_modulate = Color(0.288518, 0.288518, 0.288517, 1)
 ground_bottom_color = Color(0.195981, 0.278932, 0.388616, 1)
 ground_horizon_color = Color(0.564706, 0.662745, 0.792157, 1)
 sun_angle_max = 0.0
 
-[sub_resource type="Sky" id="Sky_cam3l"]
+[sub_resource type="Sky" id="Sky_1hs56"]
 sky_material = SubResource("ProceduralSkyMaterial_831tl")
 radiance_size = 1
 
 [sub_resource type="Environment" id="Environment_v6omg"]
 background_mode = 2
 background_energy_multiplier = 0.8
-sky = SubResource("Sky_cam3l")
+sky = SubResource("Sky_1hs56")
 sky_rotation = Vector3(0, 2.34049, 0)
 ambient_light_source = 3
 ambient_light_color = Color(0.0893607, 0.247926, 0.426226, 1)
@@ -50,7 +50,7 @@ fog_sun_scatter = 0.03
 fog_density = 0.004
 fog_sky_affect = 0.8
 adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture2D_4oe5b")
+adjustment_color_correction = SubResource("GradientTexture2D_8qb56")
 
 [sub_resource type="Animation" id="Animation_1hs56"]
 length = 0.001

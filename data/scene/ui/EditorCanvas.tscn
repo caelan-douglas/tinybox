@@ -279,16 +279,11 @@ associated_button = NodePath("../Load")
 [node name="TabContainer" parent="EntryScreen/Panel/Menu/MapList" index="0"]
 current_tab = 1
 
-[node name="Built-in" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="1"]
-visible = false
-metadata/_tab_index = 0
-
 [node name="Saved maps" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="2"]
 visible = true
-metadata/_tab_index = 1
 
 [node name="World Browser (Online)" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="3"]
-metadata/_tab_index = 2
+visible = false
 
 [node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
 layout_mode = 2
@@ -318,8 +313,8 @@ offset_bottom = 219.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
-theme_override_constants/outline_size = 6
 theme_override_constants/line_separation = 5
+theme_override_constants/outline_size = 6
 bbcode_enabled = true
 text = "[color=yellow]Editor Controls[/color]
 
@@ -600,10 +595,10 @@ script = ExtResource("6_aufvl")
 layout_mode = 2
 min_value = 0.5
 max_value = 1.5
-step = 0.5
+step = 0.25
 value = 1.0
 scrollable = false
-tick_count = 3
+tick_count = 5
 ticks_on_borders = true
 
 [node name="DynamicLabel11" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
@@ -734,33 +729,8 @@ layout_mode = 2
 [node name="CheckBox" type="CheckBox" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList/List"]
 layout_mode = 2
 
-[node name="GamemodesWIPMessage" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
-custom_minimum_size = Vector2(908, 2.08165e-12)
-layout_mode = 2
-alignment = 1
-
-[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
-custom_minimum_size = Vector2(2.08165e-12, 70)
-layout_mode = 2
-
-[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
-self_modulate = Color(1, 1, 1, 0.447059)
-custom_minimum_size = Vector2(346, 2.08165e-12)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_fonts/font = ExtResource("6_5yhmg")
-theme_override_font_sizes/font_size = 64
-text = "Modes"
-script = ExtResource("6_aufvl")
-
-[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Sections/GamemodesWIPMessage"]
-layout_mode = 2
-text = "Custom gamemodes are currently work-in-progress."
-horizontal_alignment = 2
-script = ExtResource("6_aufvl")
-
 [node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections"]
-custom_minimum_size = Vector2(2.08165e-12, 70)
+custom_minimum_size = Vector2(908, 70)
 layout_mode = 2
 
 [node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Sections" instance=ExtResource("14_f30l1")]
