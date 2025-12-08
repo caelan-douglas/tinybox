@@ -132,7 +132,8 @@ func hide_pause_menu() -> void:
 	Global.is_paused = false
 	var editor : Node3D = Global.get_world().get_current_map()
 	if editor is Editor:
-		editor.editor_tool_inventory.set_disabled(false)
+		if !editor.test_mode:
+			editor.editor_tool_inventory.set_disabled(false)
 	$PauseMenu.visible = false
 	$Controls.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

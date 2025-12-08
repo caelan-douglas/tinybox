@@ -266,6 +266,8 @@ func enter_test_mode(world_name : String, at_spot : bool = false) -> void:
 	game_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	UIHandler.show_alert("Changes you make in testing mode will not be saved.\nPause to return to the editor.", 10)
+	
+	editor_tool_inventory.set_disabled(true)
 
 func exit_test_mode() -> void:
 	test_mode = false
@@ -291,6 +293,9 @@ func exit_test_mode() -> void:
 		camera.fov = UserPreferences.camera_fov
 	editor_canvas.hide_pause_menu()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	editor_tool_inventory.set_disabled(false)
+	editor_tool_inventory.get_tools()[0].set_tool_active(true)
 
 var brick_selected : Brick = null
 func _process(delta : float) -> void:
