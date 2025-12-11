@@ -1494,6 +1494,12 @@ func enter_state() -> void:
 			set_global_rotation(Vector3.ZERO)
 			linear_velocity = Vector3.ZERO
 			change_state(IDLE)
+			# disable and re enable collider for 1 physics tick to change
+			# state into any that is affected by entering areas (like water)
+			if !collider.disabled:
+				collider.disabled = true
+				await get_tree().physics_frame
+				collider.disabled = false
 		DUMMY:
 			linear_velocity = Vector3.ZERO
 			freeze = true
