@@ -67,7 +67,7 @@ func run() -> void:
 	# set seeker to locked for now
 	for seeker : RigidPlayer in seekers:
 		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.DUMMY)
-		seeker.protect_spawn(15, false)
+		seeker.protect_spawn(16, false)
 	# seeker timer
 	await Event.new(Event.EventType.WAIT_FOR_SECONDS, [15, true, "Seeker(s) released in "]).start()
 	# unlock seeker after countdown
