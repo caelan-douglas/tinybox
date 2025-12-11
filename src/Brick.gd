@@ -794,7 +794,7 @@ func _physics_process(delta : float) -> void:
 	match _state:
 		_:
 			# despawn brick if it falls out of map
-			if global_position.y < -50:
+			if global_position.y < -1024:
 				despawn.rpc()
 
 # State change
