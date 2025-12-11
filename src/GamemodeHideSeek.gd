@@ -21,7 +21,7 @@ var seeker_amt : int = 1
 
 # constructor for deathmatch
 func _init() -> void:
-	gamemode_name = "Manhunt"
+	gamemode_name = "Hide & Seek"
 	gamemode_subtitle = "Seekers chase down the Hiders. If the Seekers hit a Hider with their bat, they become a Seeker."
 
 func start(_params : Array, _mods : Array) -> void:
@@ -67,6 +67,7 @@ func run() -> void:
 	# set seeker to locked for now
 	for seeker : RigidPlayer in seekers:
 		seeker.change_state.rpc_id(seeker.get_multiplayer_authority(), RigidPlayer.DUMMY)
+		seeker.protect_spawn(15, false)
 	# seeker timer
 	await Event.new(Event.EventType.WAIT_FOR_SECONDS, [15, true, "Seeker(s) released in "]).start()
 	# unlock seeker after countdown

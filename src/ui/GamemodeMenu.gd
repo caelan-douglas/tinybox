@@ -100,7 +100,7 @@ func _on_item_selected(index : int) -> void:
 	match (gm):
 			"Deathmatch", "Team Deathmatch":
 				pass
-			"Manhunt":
+			"Hide & Seek":
 				# change number of starting seekers
 				add_param_or_mod_adjuster(true, 1, 1, "# of Seekers", 1, Global.get_world().rigidplayer_list.size() - 1)
 			"Capture", "Team Capture":
