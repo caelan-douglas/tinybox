@@ -108,7 +108,7 @@ size_flags_horizontal = 3
 [node name="Search" type="LineEdit" parent="TabContainer/World Browser (Online)/Header/FilterOptions"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Search by world name, uploader name, or #tag"
+placeholder_text = "Search by world name or uploader name"
 
 [node name="Spacer" type="Control" parent="TabContainer/World Browser (Online)"]
 custom_minimum_size = Vector2(0, 16)

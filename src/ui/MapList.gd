@@ -136,13 +136,21 @@ func _on_search(what : String) -> void:
 	
 	if what != "":
 		for c : Control in user_uploaded_list.get_children():
-			var name_label : Label = c.get_node_or_null("Map/Split/Labels/Title")
-			if name_label != null:
-				if !name_label.text.to_lower().contains(what.to_lower()):
-					c.visible = false
+			c.visible = false
 	else:
 		for c : Control in user_uploaded_list.get_children():
 			c.visible = true
+		return
+	
+	for c : Control in user_uploaded_list.get_children():
+		var name_label : Label = c.get_node_or_null("Map/Split/Labels/Title")
+		var auth_label : Label = c.get_node_or_null("Map/Split/Labels/Author")
+		if name_label != null:
+			if name_label.text.to_lower().contains(what.to_lower()):
+				c.visible = true
+		if auth_label != null:
+			if auth_label.text.to_lower().contains(what.to_lower()):
+				c.visible = true
 
 var first_open : bool = true
 func _on_visibility_changed() -> void:
