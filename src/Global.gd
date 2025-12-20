@@ -278,9 +278,19 @@ func play_kill_sound() -> void:
 func get_user_tbw_names() -> Array:
 	var dir : DirAccess = DirAccess.open("user://world")
 	if dir:
-		return dir.get_files()
+		var files : Array[String] = []
+		for f : String in dir.get_files():
+			files.append("user://world/" + f)
+		files.sort_custom(sort_local_tbw_by_modified_date)
+		var ret : Array[String] = []
+		for f : String in files:
+			ret.append(f.replace("user://world/", ""))
+		return ret
 	else:
 		return []
+
+func sort_local_tbw_by_modified_date(a : String, b : String) -> bool:
+	return FileAccess.get_modified_time(a) > FileAccess.get_modified_time(b)
 
 func get_internal_tbw_names() -> Array:
 	var dir : DirAccess = DirAccess.open("res://data/tbw")
