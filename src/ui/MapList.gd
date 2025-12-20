@@ -331,5 +331,8 @@ func refresh() -> void:
 	add_map("Grasslands", built_in)
 	# add user worlds to list
 	for map : String in Global.get_user_tbw_names():
+		# don't show temp clipboard map
+		if map == "temp.tbw":
+			continue
 		add_map(map.split(".")[0], your_maps, true)
 	# user-uploaded is handled seperately to help with bandwidth
