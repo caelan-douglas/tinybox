@@ -1,5 +1,5 @@
 <br>
-<img align="left" style="padding: 40px" src=title.png width="250px"></p>
+<img style="padding-bottom: 30px" src=title.png width="250px"></p>
 Free and open source sandbox game with online multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
 
 ### Links
@@ -8,6 +8,12 @@ Free and open source sandbox game with online multiplayer, world editor, PvP, an
 [<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=grey">](docs/Hosting%20a%20Server.md)<br>
 [<img alt="Promo video link" height="24px" src="https://img.shields.io/badge/Short%20promo%20video%20(youtube)%20-%20%2F?color=darkred">](https://www.youtube.com/watch?v=_35vkHCguak)<br>
 
+## About
+
+### Screenshots
+<img src=.export_exclude/screenshot_1.png width="800px">
+<img src=.export_exclude/screenshot_3.png width="800px">
+<img src=.export_exclude/screenshot_2.png width="800px">
 
 ### License
 
@@ -23,14 +29,6 @@ Some assets (textures, audio, music, etc.) are under different licensing. These 
 Files with different licenses are denoted in the various `licenses.txt` files located in the respective data folders, which point to the file's source and their license.
 
 The Godot Engine is under its own license, the details of which are noted at https://godotengine.org/license/.
-
-## About
-
-### Screenshots
-<img src=.export_exclude/screenshot_4.png width="800px">
-<img src=.export_exclude/screenshot_1.png width="800px">
-<img src=.export_exclude/screenshot_3.png width="800px">
-<img src=.export_exclude/screenshot_2.png width="800px">
 
 ## Setting up the project for development
 [![Godot](https://img.shields.io/badge/Project%20Godot%20version:-4.5-purple?logo=godotengine&logoColor=white&style=plastic)](https://godotengine.org/)<br>
