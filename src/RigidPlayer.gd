@@ -98,6 +98,8 @@ var external_propulsion := false
 var swim_dash_cooldown : int = 0
 var lateral_velocity := Vector3.ZERO
 var standing_on_object : Node3D = null
+# 1 is finished
+var checkpoint : int = 0
 
 var last_hit_by_id : int = -1
 var last_hit := false
@@ -1774,6 +1776,11 @@ func update_capture_time(new_capture_time : int) -> void:
 	capture_time = new_capture_time
 	_receive_server_capture_time.rpc(new_capture_time)
 	Global.update_player_list_information()
+
+func update_checkpoint(new_checkpoint : int) -> void:
+	if !multiplayer.is_server():
+		return
+	checkpoint = new_checkpoint
 
 # client side
 @rpc("any_peer", "call_local", "reliable")

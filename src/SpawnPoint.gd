@@ -90,6 +90,9 @@ func _on_area_entered(body : PhysicsBody3D) -> void:
 			print(str(player.display_name, " got checkpoint."))
 			UIHandler.show_alert.rpc_id(player.get_multiplayer_authority(), "Checkpoint spawn set!", 3, false, UIHandler.alert_colour_gold)
 			play_sound.rpc_id(player.get_multiplayer_authority())
+			# finish line sets player checkpoint prop to 1
+			if checkpoint == CheckpointType.FINISH_LINE:
+				player.update_checkpoint(1)
 
 @rpc("any_peer", "call_local", "reliable")
 func play_sound() -> void:

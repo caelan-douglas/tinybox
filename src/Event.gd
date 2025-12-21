@@ -56,6 +56,7 @@ func start() -> int:
 		EventType.MOVE_ALL_PLAYERS_TO_SPAWN:
 			var players : Array = Global.get_world().rigidplayer_list
 			for player : RigidPlayer in players:
+				player.set_spawns.rpc(Global.get_world().get_spawnpoint_for_team(player.team))
 				player.protect_spawn()
 				player.go_to_spawn.rpc()
 		EventType.BALANCE_TEAMS:
@@ -73,6 +74,7 @@ func start() -> int:
 				player.update_kills(0)
 				player.update_deaths(0)
 				player.update_capture_time(-1)
+				player.update_checkpoint(0)
 		EventType.END_ACTIVE_GAMEMODE:
 			for gamemode : Gamemode in Global.get_world().gamemode_list:
 				if gamemode.running:

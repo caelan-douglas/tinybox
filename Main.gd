@@ -102,6 +102,13 @@ func _ready() -> void:
 	
 	if display_version.contains("pre"):
 		UIHandler.show_alert("You are using a pre-release build, you may encounter unexpected issues when joining incompatible servers", 8, false, UIHandler.alert_colour_error)
+	
+	# debug tools
+	if OS.get_cmdline_args().has("--debug_host"):
+		_on_host_pressed()
+	if OS.get_cmdline_args().has("--debug_join_local"):
+		await get_tree().create_timer(2).timeout
+		_on_join_pressed("localhost", true)
 
 # quit request
 func _notification(what : int) -> void:

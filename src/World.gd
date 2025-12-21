@@ -466,6 +466,15 @@ func add_all_gamemodes() -> void:
 			has_capture_point = true
 			break
 	
+	var has_finish_line : bool = false
+	# check finishline
+	for obj in get_children():
+		if obj is SpawnPoint:
+			if obj.checkpoint == SpawnPoint.CheckpointType.FINISH_LINE:
+				add_gamemode(GamemodeRace.new(true))
+				has_finish_line = true
+				break
+	
 	# check tdm spawns
 	var first_team_spawn_name := ""
 	for obj in get_children():
@@ -485,6 +494,8 @@ func add_all_gamemodes() -> void:
 					if has_capture_point:
 						# team capture
 						add_gamemode(GamemodeKOTH.new(false))
+					if has_finish_line:
+						add_gamemode(GamemodeRace.new(false))
 					# break out of loop once added
 					break
 
