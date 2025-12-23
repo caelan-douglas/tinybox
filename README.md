@@ -1,21 +1,16 @@
 <br>
 <img style="padding-bottom: 30px" src=title.png width="250px"></p>
-Free and open source sandbox game with online multiplayer, world editor, PvP, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
+<img src=.export_exclude/promo-gif.gif width="500px">
+<br><br>
+Free and open source sandbox game with online multiplayer, world editor, gamemodes, and a physics-based building system you can use to make worlds, contraptions, vehicles and more. Made with Godot 4 using GDScript.<br><br>
 
 ### Links
 [<img alt="Download link" height="24px" src="https://img.shields.io/badge/Download%20the%20latest%20beta%20-%20%2F?color=teal">](https://github.com/caelan-douglas/tinybox/releases/latest)<br><br>
-[<img alt="Contrib guidelines link" height="24px" src="https://img.shields.io/badge/Contributor%20guidelines%20-%20%2F?color=grey">](docs/CONTRIBUTING.md)<br>
-[<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=grey">](docs/Hosting%20a%20Server.md)<br>
+[<img alt="Contrib guidelines link" height="24px" src="https://img.shields.io/badge/Contribute!%20-%20%2F?color=grey">](docs/CONTRIBUTING.md)<br>
+[<img alt="Hosting a server link" height="24px" src="https://img.shields.io/badge/Hosting%20a%20server%20-%20%2F?color=grey">](docs/SERVERS.md)<br>
 [<img alt="Promo video link" height="24px" src="https://img.shields.io/badge/Short%20promo%20video%20(youtube)%20-%20%2F?color=darkred">](https://www.youtube.com/watch?v=_35vkHCguak)<br>
 
-## About
-
-### Screenshots
-<img src=.export_exclude/screenshot_1.png width="800px">
-<img src=.export_exclude/screenshot_3.png width="800px">
-<img src=.export_exclude/screenshot_2.png width="800px">
-
-### License
+## License
 
 Tinybox is free software licensed under the GNU Affero General Public License v3 (GNU AGPLv3), located in [`COPYING.txt`](COPYING.txt).
 
@@ -38,7 +33,7 @@ An additional step you will have to take is linking a Blender 4.4.0+ executable 
 If done correctly, you should be able to see the .blend files in the /data/models directory within the Editor filesystem. On macOS, you will have to link the actual executeable within the Blender.app Contents, not Blender.app binary itself. For example, on my macOS install the path I have set is:
 `/Applications/Blender.app/Contents/MacOS`
 
-If you're working on this (or any multiplayer project) and running Windows, I recommend using the app [`clumsy`](https://github.com/jagt/clumsy), which is very helpful for simulating bad network conditions (latency, dropped packets, throttled connection, etc.) when testing.
+If you're working on this (or any multiplayer project) and running Windows, I recommend using the app [`clumsy`](https://github.com/jagt/clumsy), which is very helpful for simulating bad network conditions (latency, dropped packets, throttled connection, etc.) when testing. On macOS there is a similar terminal utility called [`throttle`](https://www.sitespeed.io/documentation/throttle/).
 
 Tinybox enforces statically typed GDScript - see the static typing guide [`here.`](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/static_typing.html)
 

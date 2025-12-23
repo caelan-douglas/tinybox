@@ -236,6 +236,7 @@ func _physics_process(delta : float) -> void:
 					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
 				else:
 					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
+				reduce_ammo()
 			else:
 				stop_audio = true
 				_end_shot()
