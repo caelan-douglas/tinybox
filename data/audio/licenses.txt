@@ -89,4 +89,8 @@ Attributions for /data/audio:
 	thunder_*.ogg:
 		by Aeonemi; licensed under Creative Commons 0
 		https://freesound.org/people/Aeonemi/sounds/180327/
+	
+	thruster.ogg:
+		by Ultra-Edward; licensed under Creative Commons 0
+		https://freesound.org/people/Ultra-Edward/sounds/814796/
 		

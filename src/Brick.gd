@@ -50,6 +50,8 @@ var sandbox_placement_range : int = 16
 var deglue_radius : float = 2
 # How hard this brick must be hit to be unjoined.
 var unjoin_velocity : float = 40
+# If brick hits something faster than this it will explode.
+var explode_velocity : float = -1
 var health : int = 20
 # variables for syncing with clients in physics_process
 var time_since_moved : float = 0
@@ -236,8 +238,9 @@ func set_property(property : StringName, value : Variant) -> void:
 					var motor_mesh : Node3D = $Smoothing/MotorMesh
 					joint_spot_left.position.z = scale_new.x * 0.5
 					joint_spot_right.position.z = -scale_new.x * 0.5
-					motor_mesh.position.z = scale_new.x * 0.5
-					motor_mesh.scale = Vector3(scale_new.y * 0.8, 0.25, scale_new.y * 0.8)
+					if motor_mesh != null:
+						motor_mesh.position.z = scale_new.x * 0.5
+						motor_mesh.scale = Vector3(scale_new.y * 0.8, 0.25, scale_new.y * 0.8)
 	else:
 		set(property, value)
 
@@ -625,6 +628,29 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 			if $SoundExpiration.is_stopped():
 				play_hit_sound.rpc((-20 + (total_velocity * 2)))
 				$SoundExpiration.start()
+	if explode_velocity > 0:
+		if total_velocity > 11:
+			create_explosion.rpc()
+
+@rpc("authority", "call_local", "reliable")
+func create_explosion() -> void:
+	if indestructible: return
+	
+	var explosion_i : Explosion = SpawnableObjects.explosion.instantiate()
+	get_tree().current_scene.add_child(explosion_i)
+	explosion_i.set_explosion_size(clamp(mass_mult * 4, 1, 150) as float) # base is 4
+	# player_from id is later used in death messages
+	var explosion_owner : int = -1
+	if brick_groups.groups.has(str(group)):
+		for b : Variant in brick_groups.groups[str(group)]:
+			if b != null:
+				if b is MotorSeat:
+					if b.controlling_player != null:
+						explosion_owner = b.controlling_player.get_multiplayer_authority()
+	explosion_i.set_explosion_owner(explosion_owner)
+	explosion_i.global_position = global_position
+	explosion_i.play_sound()
+	despawn.rpc()
 
 # Plays sound when the brick hits something
 # Arg 1: Volume in dB
@@ -685,7 +711,7 @@ func check_joints(specific_body : Node3D = null) -> void:
 				# if the motor detector doesn't have the body, it is
 				# joined on the non-motor side, so join the body to
 				# us as well
-				if self is MotorBrick:
+				if self is MotorBrick && !self is MotorFlyBrick:
 					var motor_pos : Vector3 = $JointSpotLeft.global_position
 					var joint_pos : Vector3 = $JointSpotRight.global_position
 					if self.flip_motor_side:
@@ -724,7 +750,7 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	
 	var joint : Generic6DOFJoint3D = joint_scn.instantiate()
 	add_child(joint, true)
-	if self is MotorBrick:
+	if self is MotorBrick && !self is MotorFlyBrick:
 		# wheels have no z angular limit
 		joint.set("angular_limit_z/enabled", false)
 		# prevents large wheels from clipping through other large bricks

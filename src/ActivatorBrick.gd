@@ -95,7 +95,7 @@ func _physics_process(delta : float) -> void:
 					accel = -1
 				else: accel = 0
 				
-				drive.rpc(accel, (steer * accel))
+				drive.rpc(accel, (steer * accel), accel)
 				
 		else:
-			drive.rpc(acceleration, steering)
+			drive.rpc(acceleration, steering, acceleration)

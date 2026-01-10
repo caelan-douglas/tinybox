@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://c1bn554ua5eur" path="res://data/textures/explosive_brick.jpg" id="1_nl11p"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yucvw"]
-load_path = "res://.godot/imported/wood_tex_normal.jpg-ff310ac6ae7c28ca80e2da168daa7524.s3tc.ctex"
 
 [resource]
 resource_name = "vincent.jacket"

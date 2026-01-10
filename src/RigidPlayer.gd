@@ -1086,7 +1086,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				if seat_occupying is MotorSeat && !locked:
 					var dir_forward : float = Input.get_action_strength("forward") - Input.get_action_strength("back")
 					var dir_steer : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-					seat_occupying.drive.rpc(dir_forward, dir_steer)
+					var dir_forward_alt : float = Input.get_action_strength("arrow_forward") - Input.get_action_strength("arrow_back")
+					seat_occupying.drive.rpc(dir_forward, dir_steer, dir_forward_alt)
 					state.linear_velocity = Vector3.ZERO
 				if Input.is_action_just_pressed("exit_vehicle") && !locked:
 					change_state(EXIT_SEAT)
@@ -1447,7 +1448,7 @@ func enter_state() -> void:
 			_set_can_enter_seat(false)
 			if seat_occupying is MotorSeat:
 				# reset speed
-				seat_occupying.drive.rpc(0, 0)
+				seat_occupying.drive.rpc(0, 0, 0)
 				seat_occupying.set_controlling_player.rpc(-1)
 			set_global_position.call_deferred(Vector3(seat_occupying.global_position.x, seat_occupying.global_position.y + 3, seat_occupying.global_position.z))
 			set_global_rotation(Vector3.ZERO)

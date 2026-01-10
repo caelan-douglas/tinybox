@@ -256,7 +256,7 @@ func _on_item_picked(item_name_internal : String, item_name_display : String = "
 		
 		# set preview-specific parameters ------------
 		# set preview motor side
-		if inst is MotorBrick:
+		if inst is MotorBrick && !inst is MotorFlyBrick:
 			if selected_item_properties.has("flip_motor_side"):
 				inst.set_property("flip_motor_side", selected_item_properties["flip_motor_side"])
 		# set capture point radius and height

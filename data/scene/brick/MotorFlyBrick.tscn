@@ -1,0 +1,168 @@
+[gd_scene load_steps=24 format=3 uid="uid://cwboggu2pb3"]
+
+[ext_resource type="Script" uid="uid://bxfprtkluq8yu" path="res://src/MotorFlyBrick.gd" id="1_w5rag"]
+[ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_madwl"]
+[ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_smvey"]
+[ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="4_qhf8v"]
+[ext_resource type="PackedScene" uid="uid://be3x6c2x5f00p" path="res://data/models/brick/thruster.blend" id="5_5342q"]
+[ext_resource type="Material" uid="uid://bkbhg2toryt0v" path="res://data/materials/thruster_exhaust.tres" id="6_madwl"]
+[ext_resource type="Material" uid="uid://dyn7krtpmqtj8" path="res://data/materials/thruster.tres" id="6_smvey"]
+[ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="7_s4bk4"]
+[ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="8_pg3ut"]
+[ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="8_w5rag"]
+[ext_resource type="AudioStream" uid="uid://d4gyo3nxh133u" path="res://data/audio/thruster.ogg" id="9_qhf8v"]
+[ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="9_smvey"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n1hir"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_smvey"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qhf8v"]
+size = Vector3(0.9, 0.9, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ns6i2"]
+size = Vector3(1.4, 1.4, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bkk4n"]
+size = Vector3(1.3, 1.3, 1.3)
+
+[sub_resource type="Gradient" id="Gradient_qhf8v"]
+offsets = PackedFloat32Array(0, 0.161765, 0.7236842, 0.868996, 1)
+colors = PackedColorArray(0.817465, 0.495502, 0, 0, 0.25850037, 0.45099074, 0.70705736, 1, 1, 0.361569, 0.0962328, 1, 0.281187, 0.281187, 0.281187, 1, 0.099986, 0.099986, 0.099986, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ns6i2"]
+gradient = SubResource("Gradient_qhf8v")
+width = 128
+
+[sub_resource type="Curve" id="Curve_bkk4n"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.49999994, 0.26674306), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s4bk4"]
+width = 64
+curve = SubResource("Curve_bkk4n")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pg3ut"]
+lifetime_randomness = 0.7
+emission_shape_scale = Vector3(0.5, 0.5, 0.5)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, -1, 0)
+spread = 2.0
+initial_velocity_min = 4.0
+initial_velocity_max = 6.0
+angular_velocity_min = 0.43
+angular_velocity_max = 101.84
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_ns6i2")
+emission_curve = SubResource("CurveTexture_s4bk4")
+turbulence_noise_strength = 0.2
+turbulence_noise_scale = 10.0
+turbulence_noise_speed = Vector3(1, 0, 1)
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_moaaq"]
+material = ExtResource("9_smvey")
+size = Vector2(1.5, 1.5)
+orientation = 2
+
+[node name="Brick" type="RigidBody3D"]
+collision_mask = 11
+mass = 10.0
+physics_material_override = SubResource("PhysicsMaterial_n1hir")
+freeze = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_w5rag")
+_brick_spawnable_type = "brick_motor_fly"
+
+[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_madwl")]
+
+[node name="BrickSynchronizer" parent="." instance=ExtResource("3_smvey")]
+delta_interval = 0.044
+
+[node name="collider" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_smvey")
+
+[node name="Smoothing" type="Node3D" parent="."]
+script = ExtResource("4_qhf8v")
+
+[node name="model" parent="Smoothing" instance=ExtResource("5_5342q")]
+
+[node name="Cube" parent="Smoothing/model" index="0"]
+surface_material_override/0 = ExtResource("6_smvey")
+surface_material_override/1 = ExtResource("6_madwl")
+
+[node name="IntersectDetector" type="Area3D" parent="."]
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+shape = SubResource("BoxShape3D_qhf8v")
+
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+collision_layer = 32
+collision_mask = 32
+
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+shape = SubResource("BoxShape3D_ns6i2")
+disabled = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+max_distance = 70.0
+bus = &"SFX"
+
+[node name="SoundExpiration" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="InactivityTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
+
+[node name="JointDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+collision_mask = 3
+
+[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+shape = SubResource("BoxShape3D_bkk4n")
+
+[node name="Fire" parent="." instance=ExtResource("7_s4bk4")]
+
+[node name="ThrusterAudio" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+stream = ExtResource("9_qhf8v")
+volume_db = -80.0
+autoplay = true
+bus = &"SFX"
+emission_angle_enabled = true
+emission_angle_degrees = 80.0
+emission_angle_filter_attenuation_db = -18.0
+doppler_tracking = 2
+
+[node name="ThrusterParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 16
+lifetime = 2.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_pg3ut")
+draw_pass_1 = SubResource("PlaneMesh_moaaq")
+
+[node name="MotorTag" type="Sprite3D" parent="."]
+transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
+offset = Vector2(32, -32)
+pixel_size = 0.005
+billboard = 1
+no_depth_test = true
+texture = ExtResource("8_pg3ut")
+
+[node name="DirectionArrow" type="Sprite3D" parent="."]
+transform = Transform3D(1, 1.31134e-07, -1.0658141e-14, -1.31134e-07, 1, 4.3711378e-08, 2.7048332e-14, -4.3711385e-08, 1, 0, 1, 0)
+flip_h = true
+modulate = Color(0.278431, 0.709804, 0.984314, 0.815686)
+pixel_size = 0.003
+no_depth_test = true
+texture = ExtResource("8_w5rag")
+
+[editable path="Smoothing/model"]

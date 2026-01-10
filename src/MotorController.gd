@@ -51,11 +51,16 @@ func set_property(property : StringName, value : Variant) -> void:
 
 # Drives this controller's motors based on given input.
 @rpc("any_peer", "call_local")
-func drive(input_forward : float, input_steer : float) -> void:
+func drive(input_forward : float, input_steer : float, input_forward_alt : float) -> void:
 	for motor_brick : Variant in attached_motors:
 		if motor_brick != null:
 			if motor_brick is MotorBrick:
-				motor_brick.receive_input(input_forward, input_steer)
+				if motor_brick.control_scheme == MotorBrick.ControlScheme.NORMAL:
+					motor_brick.receive_input(input_forward, input_steer)
+				else:
+					# for thrusters
+					motor_brick.receive_input(input_forward_alt, input_steer)
+					
 		else:
 			attached_motors.erase(motor_brick)
 
@@ -122,7 +127,8 @@ func enter_state() -> void:
 func sync_attached_motors() -> void:
 	var to_sync : Array[String] = []
 	for m : Brick in attached_motors:
-		to_sync.append(str(m.get_path()))
+		if m.is_inside_tree():
+			to_sync.append(str(m.get_path()))
 	update_attached_motors.rpc(to_sync)
 
 @rpc("any_peer", "call_remote", "reliable")

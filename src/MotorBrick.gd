@@ -17,6 +17,12 @@
 extends Brick
 class_name MotorBrick
 
+enum ControlScheme {
+	NORMAL,
+	ALTERNATE
+}
+
+var control_scheme : ControlScheme = ControlScheme.NORMAL
 var speed : float = 0
 var max_speed : float = 80
 var steer : float = 0
@@ -32,9 +38,11 @@ func set_property(property : StringName, value : Variant) -> void:
 	if property == "flip_motor_side":
 		flip_motor_side = value as bool
 		if !flip_motor_side:
-			$Smoothing/MotorMesh.position.z = brick_scale.x * 0.5
+			if $Smoothing/MotorMesh != null:
+				$Smoothing/MotorMesh.position.z = brick_scale.x * 0.5
 		else:
-			$Smoothing/MotorMesh.position.z = -brick_scale.x * 0.5
+			if $Smoothing/MotorMesh != null:
+				$Smoothing/MotorMesh.position.z = -brick_scale.x * 0.5
 	if property == "tag":
 		if $MotorTag != null:
 			tag = value as int
