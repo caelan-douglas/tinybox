@@ -332,6 +332,7 @@ arrow_right={
 3d_physics/layer_3="player_areas"
 3d_physics/layer_4="camera"
 3d_physics/layer_5="extra"
+3d_physics/layer_7="editor_do_not_select_area"
 3d_physics/layer_8="clayball"
 3d_physics/layer_9="editor_selection_area"
 3d_physics/layer_10="water_only_collider"

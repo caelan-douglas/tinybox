@@ -133,6 +133,7 @@ wait_time = 15.0
 one_shot = true
 
 [node name="JointDetector" type="Area3D" parent="."]
+collision_layer = 64
 collision_mask = 3
 
 [node name="collider" type="CollisionShape3D" parent="JointDetector"]

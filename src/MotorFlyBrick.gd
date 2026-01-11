@@ -20,6 +20,7 @@ class_name MotorFlyBrick
 var addl_accel : float = 0
 @onready var thruster_particles : GPUParticles3D = $ThrusterParticles
 @onready var thruster_audio : AudioStreamPlayer3D = $ThrusterAudio
+@onready var thruster_area : Area3D = $ThrusterArea
 
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
@@ -69,6 +70,13 @@ func _physics_process(delta : float) -> void:
 	addl_accel = clampf(_get_airspeed() * 32, 0, 4000)
 	apply_force(basis.y * speed * (max_speed) * mass_mult)
 	thruster_particles.emitting = true if (speed != 0) else false
+	
+	if speed != 0:
+		for n : Node3D in thruster_area.get_overlapping_bodies():
+			if n is RigidPlayer:
+				n.change_state(RigidPlayer.TRIPPED)
+				n.light_fire(-1, 3)
+				n.apply_impulse(-transform.basis.y, Vector3.ZERO)
 	
 func reduce_health(amount : int) -> void:
 	if !is_multiplayer_authority(): return
