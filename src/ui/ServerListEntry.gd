@@ -73,8 +73,6 @@ func ping_server(address : String) -> void:
 	var main : Main = get_tree().current_scene
 	udp.connect_to_host(str(ip), main.SERVER_INFO_PORT)
 	
-	# Try to contact server; first packet
-	udp.put_packet("0".to_utf8_buffer())
 	# First check (show online servers before list is loaded)
 	await get_tree().create_timer(0.5).timeout
 	check_server_status()

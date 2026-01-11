@@ -24,7 +24,7 @@ size = Vector3(0.9, 0.9, 0.9)
 size = Vector3(1.4, 1.4, 1.4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s4bk4"]
-size = Vector3(1, 5, 1)
+size = Vector3(3, 5, 3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bkk4n"]
 size = Vector3(1.3, 1.3, 1.3)
@@ -124,6 +124,7 @@ wait_time = 15.0
 one_shot = true
 
 [node name="ThrusterArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 collision_layer = 64
 collision_mask = 66
 
@@ -155,7 +156,7 @@ doppler_tracking = 2
 [node name="ThrusterParticles" type="GPUParticles3D" parent="."]
 emitting = false
 amount = 32
-lifetime = 1.5999999999999999
+lifetime = 1.6
 randomness = 1.0
 process_material = SubResource("ParticleProcessMaterial_pg3ut")
 draw_pass_1 = SubResource("PlaneMesh_moaaq")

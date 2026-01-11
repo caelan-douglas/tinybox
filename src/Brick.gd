@@ -208,6 +208,9 @@ func set_property(property : StringName, value : Variant) -> void:
 						collider.shape.size = half_scale
 						joint_collider.shape.size = half_scale + Vector3(0.3, 0.3, 0.3)
 						cam_collider.shape.size = scale_new + Vector3(0.4, 0.4, 0.4)
+					if has_node("ThrusterArea"):
+						var thruster_area : Node3D = $ThrusterArea
+						thruster_area.position.y = -scale_new.y * 0.5
 					# Scaling mesh
 					resize_mesh()
 				# wedge

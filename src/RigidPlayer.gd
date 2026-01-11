@@ -1165,8 +1165,12 @@ func entered_seat(path_to_seat : String) -> void:
 			var wheel_list_formatted : String = ""
 			for wheel : Node in seat_occupying.attached_motors:
 				wheel_list_formatted += str(wheel.name, "\n")
-			UIHandler.show_toast(str("Vehicle information:\nVehicle weight:", seat_occupying.vehicle_weight, "\nVehicle wheels:", wheel_list_formatted), 20)
+			UIHandler.show_toast(str("Vehicle information:\nVehicle weight:", seat_occupying.vehicle_weight, "\nVehicle motors:", wheel_list_formatted), 20)
 		UIHandler.show_alert("Press [ Jump ] to stop driving!", 6)
+		for motor : Node in seat_occupying.attached_motors:
+			if motor is MotorFlyBrick:
+				UIHandler.show_alert("Control thrusters with up/down arrow keys!", 6)
+				break
 	# don't enter seat if in special state, tell seat that we could not enter
 	else:
 		var failed_seat : Node3D = get_node(path_to_seat)
