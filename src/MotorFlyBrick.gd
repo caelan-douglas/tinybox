@@ -18,7 +18,7 @@ extends MotorBrick
 class_name MotorFlyBrick
 
 var addl_accel : float = 0
-@onready var thruster_particles : GPUParticles3D = $ThrusterParticles
+@onready var thruster_particles : GPUParticles3D = $ThrusterArea/ThrusterParticles
 @onready var thruster_audio : AudioStreamPlayer3D = $ThrusterAudio
 @onready var thruster_area : Area3D = $ThrusterArea
 

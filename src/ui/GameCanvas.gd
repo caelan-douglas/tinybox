@@ -28,7 +28,8 @@ func hide_pause_menu() -> void:
 	Global.is_paused = false
 	if Global.get_world().get_current_map() is Editor:
 		$TestModePauseMenu.visible = false
-		Global.get_player().locked = false
+		if Global.get_player() != null:
+			Global.get_player().locked = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:
 		$PauseMenu.visible = false
@@ -43,7 +44,8 @@ func show_pause_menu() -> void:
 	if Global.get_world().get_current_map() is Editor:
 		var editor : Editor = Global.get_world().get_current_map()
 		$TestModePauseMenu.visible = true
-		Global.get_player().locked = true
+		if Global.get_player() != null:
+			Global.get_player().locked = true
 		$TestModePauseMenu/Menu/ReturnToEditor.connect("pressed", editor.exit_test_mode)
 	else:
 		$PauseMenu.visible = true

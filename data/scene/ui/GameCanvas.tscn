@@ -267,7 +267,7 @@ expand_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnOverlay"]
 libraries = {
-"": SubResource("AnimationLibrary_ie8a5")
+&"": SubResource("AnimationLibrary_ie8a5")
 }
 
 [node name="StatusBackground" type="TextureRect" parent="."]
@@ -401,7 +401,7 @@ script = ExtResource("6_qxctu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HealthBar"]
 libraries = {
-"": SubResource("AnimationLibrary_7ywci")
+&"": SubResource("AnimationLibrary_7ywci")
 }
 
 [node name="Timer" type="ProgressBar" parent="."]
@@ -441,7 +441,7 @@ horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Timer"]
 libraries = {
-"": SubResource("AnimationLibrary_2e617")
+&"": SubResource("AnimationLibrary_2e617")
 }
 
 [node name="Crosshair" type="TextureRect" parent="."]
@@ -898,7 +898,7 @@ texture_progress = ExtResource("12_2re8m")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ToolOverlay/ChargedTool/Power"]
 libraries = {
-"": SubResource("AnimationLibrary_i8q4t")
+&"": SubResource("AnimationLibrary_i8q4t")
 }
 
 [node name="DynamicLabel" type="Label" parent="ToolOverlay/ChargedTool"]

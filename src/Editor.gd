@@ -254,16 +254,17 @@ func enter_test_mode(world_name : String, at_spot : bool = false) -> void:
 		return
 	test_mode_world_name = world_name
 	
+	editor_canvas.visible = false
+	
 	# load world so that brick groups and joints are generated
 	Global.get_world().load_tbw(str(test_mode_world_name), false, false)
-	while Global.get_world().tbw_loading:
-		await get_tree().process_frame
+	await Global.get_world().tbw_loaded
 	
-	await enable_player(player_spot)
-	editor_canvas.visible = false
 	var game_canvas : CanvasLayer = get_tree().current_scene.get_node("GameCanvas")
 	game_canvas.visible = true
 	game_canvas.hide_pause_menu()
+	
+	await enable_player(player_spot)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	UIHandler.show_alert("Changes you make in testing mode will not be saved.\nPause to return to the editor.", 10)
 	
