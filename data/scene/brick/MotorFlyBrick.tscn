@@ -153,8 +153,10 @@ shape = SubResource("BoxShape3D_bkk4n")
 [node name="ThrusterAudio" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 stream = ExtResource("9_qhf8v")
+attenuation_model = 3
 volume_db = -80.0
 autoplay = true
+max_distance = 100.0
 bus = &"SFX"
 emission_angle_enabled = true
 emission_angle_degrees = 80.0

@@ -178,7 +178,7 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 			entry = adjuster.instantiate()
 			var label : Label = entry.get_node("DynamicLabel")
 			# format string (ex. "target_speed" to "Target speed")
-			label.text = str(formatted_prop_name(prop_name), ": ", prop)
+			label.text = str(formatted_prop_name(prop_name), ": ", prop as int)
 			entry.val = prop as int
 			entry.connect("value_changed", update_object_property.bind(prop_name, false, label))
 	

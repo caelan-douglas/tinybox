@@ -42,7 +42,7 @@ func set_parent_controller(as_path : NodePath) -> void:
 	super(as_path)
 
 func _init() -> void:
-	max_speed = 350
+	max_speed = 400
 	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "joinable", "indestructible", "max_speed", "tag"]
 	control_scheme = ControlScheme.ALTERNATE
 	explode_velocity = 40

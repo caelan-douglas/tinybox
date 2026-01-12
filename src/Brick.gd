@@ -625,15 +625,15 @@ func _on_body_entered(body : PhysicsBody3D) -> void:
 				# stepped on button
 				if body is ButtonBrick:
 					body.stepped.rpc(get_path())
+			if explode_velocity > 0:
+				if total_velocity > 11:
+					create_explosion.rpc()
 	# Play sounds
 	if total_velocity > 7:
 		if !(body is Brick) && !(self is MotorBrick) && (_state != States.BUILD) && (_state != States.DUMMY_BUILD):
 			if $SoundExpiration.is_stopped():
 				play_hit_sound.rpc((-20 + (total_velocity * 2)))
 				$SoundExpiration.start()
-	if explode_velocity > 0:
-		if total_velocity > 11:
-			create_explosion.rpc()
 
 @rpc("authority", "call_local", "reliable")
 func create_explosion() -> void:

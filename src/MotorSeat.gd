@@ -21,6 +21,7 @@ class_name MotorSeat
 var controlling_player : RigidPlayer
 @onready var sit_area : Area3D = $SitArea
 @onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
+var can_sit : bool = true
 
 func _init() -> void:
 	super()
@@ -58,6 +59,10 @@ func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_forc
 	if controlling_player:
 		controlling_player.seat_destroyed.rpc_id(controlling_player.get_multiplayer_authority())
 		controlling_player = null
+		can_sit = false
+		# grace period for player immediately re-entering seat
+		await get_tree().create_timer(0.4).timeout
+		can_sit = true
 
 func _ready() -> void:
 	# Connect the seat area detector.
@@ -66,6 +71,7 @@ func _ready() -> void:
 
 # If something attempts to sit in this
 func _on_sit_entered(body : Node3D) -> void:
+	if !can_sit: return
 	# do not sit in seats being built
 	if _state != States.BUILD && _state != States.DUMMY_BUILD:
 		if body is RigidPlayer:
@@ -95,6 +101,7 @@ func despawn(check_world_groups : bool = true) -> void:
 func sit(player : RigidPlayer) -> void:
 	# only execute for owner of seat
 	if !is_multiplayer_authority(): return
+	if !can_sit: return
 	
 	# set the controlling player for ALL peers
 	set_controlling_player.rpc(player.get_multiplayer_authority())
