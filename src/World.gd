@@ -442,7 +442,7 @@ func parse_tbw(lines : Array, return_as_container : bool = false) -> Node3D:
 							# name is first half
 							var property_name := property_split[0]
 							# don't load scripts
-							if property_name != "script":
+							if property_name != "script" && property_split.size() > 1:
 								# determine type of second half
 								var property : Variant = Global.property_string_to_property(property_name, property_split[1])
 								# set the property
