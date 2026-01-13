@@ -33,6 +33,7 @@ func set_songs(line : String) -> void:
 	else:
 		songs = []
 	_song_line = line
+	MusicHandler.switch_song(songs)
 
 # set fallback values for loading new world before properties are set
 func reset_map_properties() -> void:
@@ -63,7 +64,7 @@ func _ready() -> void:
 	# set song
 	# wait for music / server setting to load if on main menu
 	await get_tree().create_timer(0.2).timeout
-	MusicHandler.switch_song(songs)
+
 	if multiplayer.is_server():
 		multiplayer.peer_connected.connect(_on_peer_connected)
 
