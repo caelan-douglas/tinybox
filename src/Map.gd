@@ -33,6 +33,7 @@ func set_songs(line : String) -> void:
 	else:
 		songs = []
 	_song_line = line
+	MusicHandler.switch_song(songs)
 
 # set fallback values for loading new world before properties are set
 func reset_map_properties() -> void:
