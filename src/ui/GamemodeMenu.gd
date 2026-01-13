@@ -87,7 +87,7 @@ func _on_item_selected(index : int) -> void:
 	# load new params
 	
 	# time limit for all
-	add_param_or_mod_adjuster(true, 0, 10, "Time limit (mins)", 1, 999)
+	add_param_or_mod_adjuster(true, 0, 5, "Time limit (mins)", 1, 999)
 	# player speed and jump modifier
 	add_param_or_mod_adjuster(false, 0, 5, "Player speed", 5, 10)
 	add_param_or_mod_adjuster(false, 2, 1, "Player jump multiplier", 1, 5, true)

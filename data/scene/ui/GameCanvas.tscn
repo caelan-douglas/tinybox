@@ -551,7 +551,7 @@ script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
 
 [node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 24)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
 [node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
@@ -579,6 +579,17 @@ texture = ExtResource("16_lfo80")
 expand_mode = 3
 stretch_mode = 5
 
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+self_modulate = Color(1, 1, 1, 0.447059)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("16_hdnsf")
+theme_override_font_sizes/font_size = 64
+text = "Modes"
+script = ExtResource("6_qxctu")
+
+[node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("15_ies3a")]
+layout_mode = 2
+
 [node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
@@ -601,21 +612,6 @@ layout_mode = 2
 text = "Save a copy"
 script = ExtResource("5_6v07r")
 json_text = "ui/save_copy"
-
-[node name="Spacer11" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
-custom_minimum_size = Vector2(2.08165e-12, 32)
-layout_mode = 2
-
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
-self_modulate = Color(1, 1, 1, 0.447059)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("16_hdnsf")
-theme_override_font_sizes/font_size = 64
-text = "Modes"
-script = ExtResource("6_qxctu")
-
-[node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("15_ies3a")]
-layout_mode = 2
 
 [node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
 custom_minimum_size = Vector2(2.08165e-12, 32)

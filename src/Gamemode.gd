@@ -23,8 +23,8 @@ var mods : Array
 var gamemode_name := "Gamemode"
 var gamemode_subtitle := "A new gamemode has been started!"
 var running := false
-# defaults to 600 seconds or 10 mins
-var time_limit_seconds : int = 600
+# defaults to 300 seconds or 5 mins
+var time_limit_seconds : int = 300
 @onready var game_timer : Timer = Timer.new()
 @onready var timer_ui : GameTimer = get_tree().current_scene.get_node("GameCanvas/Timer") as ProgressBar
 @onready var vote_panel : VotePanel = get_tree().current_scene.get_node("GameCanvas/VotePanel") as VotePanel
