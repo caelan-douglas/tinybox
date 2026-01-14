@@ -35,4 +35,4 @@ func _physics_process(delta : float) -> void:
 						body.sparkle_audio_anim.play("fadein")
 				if body is Bomb || body is ClayBall:
 					force = lift_force * 0.71
-				body.apply_force(Vector3.UP * force)
+				body.apply_force(transform.basis.y * force)

@@ -157,8 +157,13 @@ const CONTROLLED_CAM_DELAY_TIME = 15
 const CONTROLLED_CAM_DELAY_TIME_HELD = 7
 const CONTROLLED_CAM_DELAY_TIME_SHIFT = 3
 var held_key_time := 0
+var held_shift_time := 0.0
 var controlled_cam_delay := Vector3(0, 0, 0)
 var controlled_cam_pos := Vector3(0, 50, 0)
+
+func _shift_camera_speed() -> float:
+	return clampf(CONTROLLED_CAM_DELAY_TIME_SHIFT - (held_shift_time * 0.2), 1, 3)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta : float) -> void:
 	if _camera_mode == CameraMode.CONTROLLED:
@@ -181,7 +186,7 @@ func _process(delta : float) -> void:
 			else:
 				if held_key_time > 6:
 					if Input.is_action_pressed("shift"):
-						controlled_cam_delay.z = CONTROLLED_CAM_DELAY_TIME_SHIFT
+						controlled_cam_delay.z = _shift_camera_speed()
 					else:
 						controlled_cam_delay.z = CONTROLLED_CAM_DELAY_TIME_HELD
 				else:
@@ -195,7 +200,7 @@ func _process(delta : float) -> void:
 			else:
 				if held_key_time > 6:
 					if Input.is_action_pressed("shift"):
-						controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME_SHIFT
+						controlled_cam_delay.x = _shift_camera_speed()
 					else:
 						controlled_cam_delay.x = CONTROLLED_CAM_DELAY_TIME_HELD
 				else:
@@ -205,7 +210,7 @@ func _process(delta : float) -> void:
 			move_vertical = Input.get_action_strength("jump") - Input.get_action_strength("alt")
 			if held_key_time > 6:
 				if Input.is_action_pressed("shift"):
-					controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME_SHIFT
+					controlled_cam_delay.y = _shift_camera_speed()
 				else:
 					controlled_cam_delay.y = CONTROLLED_CAM_DELAY_TIME_HELD
 			else:
@@ -232,6 +237,11 @@ func _process(delta : float) -> void:
 			held_key_time += delta * 400
 		else:
 			held_key_time = 0
+		
+		if Input.is_action_pressed("shift"):
+			held_shift_time += 1 * delta
+		else:
+			held_shift_time = 0
 		
 		# swap camera zoom
 		if Input.is_action_just_pressed("zoom_in") && Input.is_action_pressed("control"):
