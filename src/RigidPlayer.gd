@@ -67,8 +67,10 @@ var high_jump_force := 12
 # when holding jump
 var extra_jump_force := 2.4
 var move_speed : float = 5
-var decel_multiplier := 0.85
-var normal_decel_multiplier := 0.85
+var accel_multiplier := 0.1
+var dot_accel_multiplier := 0.4
+var decel_multiplier := 0.9
+var normal_decel_multiplier := 0.9
 var ice_decel_multiplier := 0.98
 var player_grav := 1.4
 var team := "Default"
@@ -873,6 +875,23 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			if grounded_on_standing_object:
 				standing_on_object_last_pos = global_position
 		
+		if _state == RUN || _state == AIR || _state == HIGH_JUMP:
+			# reactive force if player is trying to move in opposite direction
+			var dot_dir : float = -move_direction.dot(state.linear_velocity.normalized())
+			dot_dir = clampf(dot_dir, 0, 1)
+			
+			state.linear_velocity.x += move_direction.x * move_speed * (accel_multiplier + (dot_accel_multiplier * dot_dir))
+			state.linear_velocity.z += move_direction.z * move_speed * (accel_multiplier + (dot_accel_multiplier * dot_dir))
+			
+			# damp
+			# value is 1.0 - 3.6 / 45
+			# (1.0 - 3.6 / physics_framerate)
+			var damp : float = 0.92
+			if external_propulsion:
+				damp = 0.96
+			state.linear_velocity.x *= damp
+			state.linear_velocity.z *= damp
+		
 		match _state:
 			IDLE:
 				var adj_decel_multiplier := decel_multiplier
@@ -920,8 +939,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				elif is_on_ground and Input.is_action_just_pressed("shift") && !locked && linear_velocity.length() > 1.1:
 					change_state(SLIDE_BACK)
 				elif !locked:
-					state.linear_velocity.x = move_direction.x * move_speed
-					state.linear_velocity.z = move_direction.z * move_speed
 					# Add particle effect if direction immediately changes
 					# only on authority client
 					# 140deg change
@@ -938,9 +955,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					change_state(IDLE)
 			AIR:
 				# avoid setting velocity when being pushed by extinguisher
-				if !external_propulsion:
-					state.linear_velocity.x = move_direction.x * move_speed
-					state.linear_velocity.z = move_direction.z * move_speed
 				air_duration += 1
 				if on_wall_cooldown > 0:
 					on_wall_cooldown -= 1
@@ -966,9 +980,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					change_state(ON_LEDGE)
 			HIGH_JUMP:
 				# avoid setting velocity when being pushed by extinguisher
-				if !external_propulsion:
-					state.linear_velocity.x = move_direction.x * move_speed
-					state.linear_velocity.z = move_direction.z * move_speed
 				air_duration += 1
 				if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
 					change_state(IDLE)
@@ -1046,10 +1057,8 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					if Input.is_action_pressed("jump") && !locked:
 						#apply_central_impulse(Vector3.UP * jump_force)
 						change_state(ROLL)
-					if linear_velocity.length() < 2:
-						air_from_jump = true
-						apply_central_impulse(Vector3.UP * jump_force)
-						change_state(AIR)
+					if linear_velocity.length() < 3.5:
+						change_state(RUN)
 				# somewhat controllable when sliding
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
@@ -1343,6 +1352,8 @@ func enter_state() -> void:
 		if get_tool_inventory() != null:
 			get_tool_inventory().set_disabled(false)
 	
+	linear_damp = 0
+	
 	match _state:
 		IDLE:
 			# re-enable collider
@@ -1394,9 +1405,9 @@ func enter_state() -> void:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
 			slide_time.start()
-			physics_material_override.friction = 0.5
+			physics_material_override.friction = 0.6
 			var forward : Vector3 = get_global_transform().basis.z
-			apply_central_impulse(forward * 6)
+			apply_central_impulse(forward * 8)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE_BACK)
@@ -1484,7 +1495,6 @@ func enter_state() -> void:
 				play_trip_audio.rpc()
 			# reset gravity in case we were swimming
 			gravity_scale = player_grav
-			linear_damp = 0
 			physics_material_override.friction = 1
 			# set camera mode to tracking
 			# remember what camera mode we had
@@ -1524,8 +1534,6 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSwim/blend_amount", 1.0, 0.5)
 			change_state_non_authority.rpc(SWIMMING)
-			# always get propulsed by rockets when swimming
-			external_propulsion = true
 		SWIMMING_IDLE:
 			gravity_scale = 0
 			linear_damp = 0.8
@@ -1534,8 +1542,6 @@ func enter_state() -> void:
 			# TODO: Maybe a little inefficient, merge swimming & swimming idle states with
 			# blended animations somehow
 			change_state_non_authority.rpc(SWIMMING_IDLE)
-			# always get propulsed by rockets when swimming
-			external_propulsion = true
 		SWIMMING_DASH:
 			animator.set("parameters/TimeSeekSwimDash/seek_request", 0.0)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
@@ -1553,7 +1559,6 @@ func enter_state() -> void:
 		EXIT_SWIMMING:
 			drip_animator.play("drip")
 			gravity_scale = player_grav
-			linear_damp = 0
 			change_state_non_authority.rpc(EXIT_SWIMMING)
 			change_state(IDLE)
 		ON_LEDGE:
