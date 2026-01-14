@@ -96,7 +96,6 @@ var invulnerable := true
 var can_enter_seat := true
 var on_fire := false
 var in_air_from_lifter := false
-var external_propulsion := false
 var swim_dash_cooldown : int = 0
 var lateral_velocity := Vector3.ZERO
 var standing_on_object : Node3D = null
@@ -159,6 +158,13 @@ var capture_time : int = -1
 func on_ice() -> bool:
 	if standing_on_object is Brick:
 		if standing_on_object._material == Brick.BrickMaterial.ICE:
+			return true
+	return false
+
+func external_propulsion() -> bool:
+	if get_tool_inventory().get_active_tool() is ShootTool:
+		var st : ShootTool = get_tool_inventory().get_active_tool()
+		if st._shoot_type == ShootTool.ShootType.WATER && st.firing:
 			return true
 	return false
 
@@ -525,7 +531,7 @@ func set_health(new : int, potential_cause_of_death : int = -1, potential_execut
 									1:
 										death_message = str(last_hit_executing_player_name, " knocked ", display_name, " off the map!")
 						else:
-							if external_propulsion:
+							if external_propulsion():
 								match randi() % 3:
 									0:
 										death_message = str(display_name, " is really bad at flying!")
@@ -770,7 +776,7 @@ func _physics_process(delta : float) -> void:
 	elif lifter_particles.emitting:
 		set_lifter_particles.rpc(false)
 	# Set animation blend
-	animator["parameters/BlendRun/blend_amount"] = clamp(linear_velocity.length() / move_speed, 0, 1)
+	animator["parameters/BlendRun/blend_amount"] = clamp(linear_velocity.length() / move_speed * 3, 0, 1)
 	# Set looking direction
 	var hor_linear_velocity := Vector3(linear_velocity.x, 0, linear_velocity.z)
 	if _state != TRIPPED and _state != DEAD and _state != STANDING_UP and _state != ON_LEDGE:
@@ -887,7 +893,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			# value is 1.0 - 3.6 / 45
 			# (1.0 - 3.6 / physics_framerate)
 			var damp : float = 0.92
-			if external_propulsion:
+			if external_propulsion() || in_air_from_lifter:
 				damp = 0.96
 			state.linear_velocity.x *= damp
 			state.linear_velocity.z *= damp
@@ -953,6 +959,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				else:
 					# change to idle when locked
 					change_state(IDLE)
+				animator.set("parameters/RunTimeScale/scale", remap(linear_velocity.length() - 6, 0, 5, 1.35, 2))
 			AIR:
 				# avoid setting velocity when being pushed by extinguisher
 				air_duration += 1
@@ -1058,7 +1065,9 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 						#apply_central_impulse(Vector3.UP * jump_force)
 						change_state(ROLL)
 					if linear_velocity.length() < 3.5:
-						change_state(RUN)
+						air_from_jump = true
+						apply_central_impulse(Vector3.UP * jump_force)
+						change_state(AIR)
 				# somewhat controllable when sliding
 				var dir : Vector3 = -camera.get_global_transform().basis.z
 				dir.y = 0
@@ -1248,14 +1257,6 @@ func change_state(state : int) -> void:
 		$Smoothing/dizzy_stars/AnimationPlayer.stop()
 		rotation = Vector3(0, rotation.y, 0)
 	
-	# reset external propulsion (unless going from slide into jump while extinguishing, to avoid 'hiccup')
-	external_propulsion = false
-	if (_state == SLIDE && state == AIR):
-		if get_tool_inventory().get_active_tool() is ShootTool:
-			var st : ShootTool = get_tool_inventory().get_active_tool()
-			if st._shoot_type == ShootTool.ShootType.WATER && st.firing:
-				external_propulsion = true
-	
 	# set to new state
 	if _state != state:
 		_state = state
@@ -1379,6 +1380,7 @@ func enter_state() -> void:
 		HIGH_JUMP:
 			physics_material_override.friction = 0
 			air_time.start()
+			apply_central_impulse(get_movement_direction() * 4)
 			animator.set("parameters/TimeSeekHighJump/seek_request", 0.0)
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendHighJump/blend_amount", 1.0, 0.1)
