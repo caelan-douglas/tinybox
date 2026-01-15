@@ -1,4 +1,4 @@
-[gd_scene load_steps=115 format=3 uid="uid://dinh2untg6m17"]
+[gd_scene load_steps=121 format=3 uid="uid://dinh2untg6m17"]
 
 [ext_resource type="Script" uid="uid://bvb640yrpmsgh" path="res://src/RigidPlayer.gd" id="1_2xvh3"]
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="2_3ey76"]
@@ -16,9 +16,13 @@
 [ext_resource type="AudioStream" uid="uid://y50qbc1kv2fw" path="res://data/audio/clang_2.ogg" id="15_x7mcp"]
 [ext_resource type="AudioStream" uid="uid://hhw1130fet3a" path="res://data/audio/clang_3.ogg" id="16_srewf"]
 [ext_resource type="AudioStream" uid="uid://cxd4vstyijgoq" path="res://data/audio/bowling.ogg" id="17_6cw34"]
+[ext_resource type="AudioStream" uid="uid://vo5i16xinhdn" path="res://data/audio/player/land_0.ogg" id="17_34m0y"]
 [ext_resource type="AudioStream" uid="uid://bso068q2pvggt" path="res://data/audio/sparkle.ogg" id="17_iikyd"]
 [ext_resource type="Script" uid="uid://ccsij7cj3xcng" path="res://src/DebugVisibility.gd" id="18_4ygmw"]
+[ext_resource type="AudioStream" uid="uid://x7wfkoys0g1b" path="res://data/audio/player/land_1.ogg" id="18_ly48e"]
 [ext_resource type="Texture2D" uid="uid://c3bv8fogwqd3s" path="res://data/textures/bubble.png" id="19_4icmy"]
+[ext_resource type="AudioStream" uid="uid://l43ofm23nqcf" path="res://data/audio/player/slide_0.ogg" id="19_ly48e"]
+[ext_resource type="AudioStream" uid="uid://waf5shap77q0" path="res://data/audio/player/footstep_randomizer/footstep_randomizer_default.tres" id="21_utqtl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ktb66"]
 
@@ -582,6 +586,19 @@ stream_1/stream = ExtResource("14_tuqtl")
 stream_2/stream = ExtResource("15_x7mcp")
 stream_3/stream = ExtResource("16_srewf")
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_utqtl"]
+playback_mode = 1
+random_pitch = 1.1
+streams_count = 2
+stream_0/stream = ExtResource("17_34m0y")
+stream_1/stream = ExtResource("18_ly48e")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_r5isj"]
+playback_mode = 1
+random_pitch = 1.15
+streams_count = 1
+stream_0/stream = ExtResource("19_ly48e")
+
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wpn65"]
 random_pitch = 1.05
 streams_count = 1
@@ -852,7 +869,7 @@ autoplay = "dizzy"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="Smoothing/character_model/character" index="0"]
-bones/0/position = Vector3(0.2925038, 0.73998016, -0.02121473)
+bones/0/position = Vector3(0.30261073, 0.75007164, -0.021003304)
 bones/0/rotation = Quaternion(0.83980185, -0.007795751, 0.5427889, 0.0072306395)
 bones/0/scale = Vector3(1, 1, 1)
 bones/1/position = Vector3(-0.022068018, 0.11403059, 0.018856596)
@@ -872,7 +889,7 @@ bones/7/position = Vector3(-0.04296679, 0.052494, 0.0016853269)
 bones/7/rotation = Quaternion(-0.037223097, 0.23041302, 0.1999931, 0.9515919)
 bones/8/rotation = Quaternion(-0.009855087, -0.0021632714, -0.14778654, 0.98896784)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/position = Vector3(-0.28515965, 0.74161, 0.011544008)
+bones/9/position = Vector3(-0.2951015, 0.74729013, 0.011990396)
 bones/9/rotation = Quaternion(0.57990474, 0.12242909, -0.8041107, 0.046126734)
 bones/9/scale = Vector3(1, 1, 1)
 bones/10/position = Vector3(0.022068005, 0.114030614, 0.018856652)
@@ -903,9 +920,9 @@ bones/22/rotation = Quaternion(-0.10763164, 0.6988672, 0.6988673, 0.10763164)
 bones/23/rotation = Quaternion(-7.3663635e-08, -0.08491149, 0.9963885, -9.751124e-08)
 bones/25/rotation = Quaternion(-0.7071068, 0, 0, 0.7071068)
 bones/26/position = Vector3(0.0040329397, 0.6816635, -0.038673855)
-bones/26/rotation = Quaternion(-0.0036911243, 1.0976265e-07, -1.9759064e-08, 0.9999932)
-bones/27/rotation = Quaternion(-0.012614302, 0.99445164, 0.04878596, -0.09234123)
-bones/28/rotation = Quaternion(0.08932978, -0.09251099, 0.0163711, 0.99156135)
+bones/26/rotation = Quaternion(-0.009144362, 1.0972688e-07, -1.992952e-08, 0.9999583)
+bones/27/rotation = Quaternion(-0.013938105, 0.9936493, 0.06303835, -0.09215804)
+bones/28/rotation = Quaternion(0.096903466, -0.092390835, 0.017066991, 0.9908493)
 bones/29/position = Vector3(-0.07551052, 0.13408639, 0.14141804)
 bones/29/rotation = Quaternion(-0.153046, 0.690346, 0.690346, 0.153046)
 bones/29/scale = Vector3(1, 1, 1)
@@ -923,32 +940,32 @@ bones/34/scale = Vector3(1, 1, 1)
 bones/35/rotation = Quaternion(-9.923083e-09, 0.552558, 0.83347446, -4.1741252e-08)
 bones/35/scale = Vector3(1, 1, 1)
 bones/36/rotation = Quaternion(-1.1859969e-08, -0.034865346, 0.99939203, 2.637445e-09)
-bones/37/rotation = Quaternion(-0.0047341096, -0.0016055125, 0.02563489, 0.99965894)
-bones/38/rotation = Quaternion(-0.009373479, -0.001965154, 0.025609829, 0.99962616)
+bones/37/rotation = Quaternion(-0.0046819835, 0.0005830716, -0.009606391, 0.9999427)
+bones/38/rotation = Quaternion(-0.009323627, 0.00071781856, -0.009597263, 0.99991024)
 bones/39/rotation = Quaternion(1.91317e-10, 0.999786, -0.0206824, -2.95237e-09)
 bones/39/scale = Vector3(0.945, 0.945, 0.945)
-bones/40/rotation = Quaternion(0.48836538, 0.33278826, 0.64786357, -0.48064956)
+bones/40/rotation = Quaternion(0.4836359, 0.34261546, 0.639879, -0.4891481)
 bones/40/scale = Vector3(1, 1, 1)
-bones/41/rotation = Quaternion(-0.4298546, -0.37641594, 0.15259722, 0.806381)
+bones/41/rotation = Quaternion(-0.43591118, -0.37514585, 0.15883537, 0.80250764)
 bones/41/scale = Vector3(1, 1, 1)
-bones/42/rotation = Quaternion(-0.21874774, 0.013704413, -0.083397634, 0.9721145)
-bones/43/rotation = Quaternion(-0.49922842, 0.31559002, 0.6560061, 0.46992555)
+bones/42/rotation = Quaternion(-0.20335568, 0.0137582775, -0.0775295, 0.9759337)
+bones/43/rotation = Quaternion(-0.48823673, 0.32594788, 0.64629006, 0.48753682)
 bones/43/scale = Vector3(1, 1, 1)
-bones/44/rotation = Quaternion(-0.41451705, 0.47550255, -0.28446537, 0.72190887)
-bones/45/rotation = Quaternion(-0.12254516, -0.013974186, 0.046720006, 0.99126416)
-bones/46/rotation = Quaternion(0.989585, -0.008120765, -0.14180262, -0.023401586)
+bones/44/rotation = Quaternion(-0.43690893, 0.4780486, -0.28121898, 0.7081639)
+bones/45/rotation = Quaternion(-0.0747486, -0.014050783, 0.02849776, 0.9966962)
+bones/46/rotation = Quaternion(0.989372, -0.0072160377, -0.14179552, -0.031385712)
 bones/46/scale = Vector3(1.0000006, 0.9999992, 0.9999549)
-bones/47/rotation = Quaternion(-0.16206607, 1.2328094e-05, -0.0125855645, 0.98669964)
+bones/47/rotation = Quaternion(-0.16232568, 1.2323146e-05, -0.012605723, 0.9866568)
 bones/47/scale = Vector3(0.9999996, 0.99999887, 1.0000007)
-bones/48/rotation = Quaternion(0.9792704, 0.09427575, 0.17548525, -0.03669772)
+bones/48/rotation = Quaternion(0.97896254, 0.09318306, 0.17593522, -0.04467907)
 bones/48/scale = Vector3(1.0000002, 1.0000001, 0.9999831)
-bones/49/rotation = Quaternion(-0.04421945, -1.2411301e-05, 0.0034334222, 0.999016)
+bones/49/rotation = Quaternion(-0.04455452, -1.2412871e-05, 0.0034594387, 0.99900097)
 bones/49/scale = Vector3(1, 1, 1)
 bones/50/position = Vector3(-7.982044e-08, 1.1638025, -1.1514385)
 bones/50/rotation = Quaternion(8.42937e-08, 0.7071068, 0.7071068, 8.42937e-08)
 
 [node name="NeckAttachment" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="0"]
-transform = Transform3D(-0.99999887, 0.00013595447, 0.0015232414, -3.7252903e-09, 0.9960408, -0.08889672, -0.0015292913, -0.08889663, -0.9960397, -0.0017381776, 1.2652386, -0.014913822)
+transform = Transform3D(-0.99999887, 0.00013566017, 0.0015243292, 3.4198165e-06, 0.9962589, -0.08641763, -0.0015303195, -0.086417526, -0.9962578, -0.0017386968, 1.2646941, -0.012202349)
 bone_name = "neck"
 bone_idx = 28
 
@@ -962,7 +979,7 @@ process_material = SubResource("ParticleProcessMaterial_nceru")
 draw_pass_1 = SubResource("PlaneMesh_v2b1p")
 
 [node name="hair_baseballcap" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="1"]
-transform = Transform3D(-0.99999887, 0.00013595447, 0.0015232414, -3.7252903e-09, 0.9960408, -0.08889672, -0.0015292913, -0.08889663, -0.9960397, -0.0017381776, 1.2652386, -0.014913822)
+transform = Transform3D(-0.99999887, 0.00013566017, 0.0015243292, 3.4198165e-06, 0.9962589, -0.08641763, -0.0015303195, -0.086417526, -0.9962578, -0.0017386968, 1.2646941, -0.012202349)
 visible = false
 bone_name = "neck"
 bone_idx = 28
@@ -975,7 +992,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
 surface_material_override/1 = SubResource("StandardMaterial3D_g3gh2")
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D" index="2"]
-transform = Transform3D(0.9449989, 6.883644e-05, -0.0014435393, 3.5001593e-09, 0.9439275, 0.045008875, 0.0014451747, -0.045008846, 0.94392633, -0.0017517572, 1.5920817, -0.0060292203)
+transform = Transform3D(0.9449989, 6.851606e-05, -0.0014445548, -3.2317328e-06, 0.94403654, 0.042659618, 0.0014461463, -0.042659573, 0.9440354, -0.0017524132, 1.591514, -0.0025043692)
 
 [node name="hair_short" parent="Smoothing/character_model/character/Skeleton3D/hair_short" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_c5k3x")
@@ -998,7 +1015,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 surface_material_override/0 = SubResource("StandardMaterial3D_alwnf")
 
 [node name="ToolVisual" type="BoneAttachment3D" parent="Smoothing/character_model/character/Skeleton3D" index="8"]
-transform = Transform3D(-0.32316566, 0.21617639, -0.9213206, 0.06781241, -0.9657668, -0.25039127, -0.9439096, -0.14339483, 0.29744333, -0.28515965, 0.74161, 0.011544008)
+transform = Transform3D(-0.32316566, 0.21617639, -0.9213206, 0.06781241, -0.9657668, -0.25039127, -0.9439096, -0.14339483, 0.29744333, -0.2951015, 0.74729013, 0.011990396)
 bone_name = "hand.l"
 bone_idx = 9
 
@@ -1107,11 +1124,30 @@ libraries = {
 stream = SubResource("AudioStreamRandomizer_2jp56")
 bus = &"SFX"
 
+[node name="LandAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_utqtl")
+max_distance = 20.0
+bus = &"SFX"
+
+[node name="SlideAudio" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_r5isj")
+max_distance = 20.0
+bus = &"SFX"
+
 [node name="BowlingAudio" type="AudioStreamPlayer3D" parent="."]
 stream = SubResource("AudioStreamRandomizer_wpn65")
 max_db = 4.996e-16
 pitch_scale = 1.05
 max_distance = 50.0
+bus = &"SFX"
+
+[node name="FootstepAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("21_utqtl")
+volume_db = -6.0
+max_db = 4.996e-16
+pitch_scale = 1.05
+max_distance = 20.0
+max_polyphony = 8
 bus = &"SFX"
 
 [node name="SparkleAudio" type="AudioStreamPlayer" parent="."]

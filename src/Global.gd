@@ -167,7 +167,7 @@ func _ready() -> void:
 	UserPreferences.save_pref("version", get_tree().current_scene.server_version)
 	# fullscreen if not in debug mode
 	if !OS.has_feature("editor") && !OS.get_name() == "macOS" && !Global.server_mode():
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	# if on macOS, go into fullscreen, not exclusive fullscreen (allows access to dock/status bar when hovering top/bottom)
 	elif !OS.has_feature("editor") && OS.get_name() == "macOS" && !Global.server_mode():
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

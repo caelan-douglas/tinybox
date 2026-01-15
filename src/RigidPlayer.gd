@@ -136,6 +136,15 @@ var capture_time : int = -1
 @onready var respawn_time : Timer = $RespawnTime
 @onready var trip_audio : AudioStreamPlayer3D = $TripAudio
 @onready var bowling_audio : AudioStreamPlayer3D = $BowlingAudio
+@onready var land_audio : AudioStreamPlayer3D = $LandAudio
+@onready var slide_audio : AudioStreamPlayer3D = $SlideAudio
+
+@onready var footstep_audio : AudioStreamPlayer3D = $FootstepAudio
+@onready var footstep_randomizer_def : AudioStreamRandomizer = preload("res://data/audio/player/footstep_randomizer/footstep_randomizer_default.tres")
+@onready var footstep_randomizer_con : AudioStreamRandomizer = preload("res://data/audio/player/footstep_randomizer/footstep_randomizer_concrete.tres")
+@onready var footstep_randomizer_grass : AudioStreamRandomizer = preload("res://data/audio/player/footstep_randomizer/footstep_randomizer_grass.tres")
+var current_footstep_material : Brick.BrickMaterial = Brick.BrickMaterial.WOODEN
+
 @onready var sparkle_audio_anim : AnimationPlayer = $SparkleAudio/AnimationPlayer
 @onready var world : World = Global.get_world()
 @onready var animator : AnimationTree = $AnimationTree
@@ -160,6 +169,20 @@ func on_ice() -> bool:
 		if standing_on_object._material == Brick.BrickMaterial.ICE:
 			return true
 	return false
+
+func set_footstep_sound() -> void:
+	if standing_on_object is Brick:
+		if standing_on_object._material == current_footstep_material:
+			return
+		
+		current_footstep_material = standing_on_object._material
+		match current_footstep_material:
+			Brick.BrickMaterial.ICE, Brick.BrickMaterial.PLASTIC, Brick.BrickMaterial.METAL:
+				footstep_audio.stream = footstep_randomizer_con
+			Brick.BrickMaterial.GRASS, Brick.BrickMaterial.RUBBER:
+				footstep_audio.stream = footstep_randomizer_grass
+			_:
+				footstep_audio.stream = footstep_randomizer_def
 
 func external_propulsion() -> bool:
 	if get_tool_inventory().get_active_tool() is ShootTool:
@@ -833,8 +856,10 @@ var air_from_jump := false
 var on_wall_cooldown : int = 0
 var standing_on_object_last_pos : Vector3 = Vector3.ZERO
 var init_velocity := Vector3.ZERO
+var tick : int = 0
 # Manages movement
 func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
+	tick += 1
 	# handle movement
 	if is_multiplayer_authority():
 		# executes on owner only
@@ -960,6 +985,10 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					# change to idle when locked
 					change_state(IDLE)
 				animator.set("parameters/RunTimeScale/scale", remap(linear_velocity.length() - 6, 0, 5, 1.35, 2))
+				if tick % int(1/clampf(state.linear_velocity.length(), 6, 20) * 90) == 0:
+					footstep_audio.play()
+				# set footstep audio based on standing material
+				set_footstep_sound()
 			AIR:
 				# avoid setting velocity when being pushed by extinguisher
 				air_duration += 1
@@ -970,6 +999,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 					if air_from_jump == true:
 						high_jump_time.start()
 					change_state(IDLE)
+					land_audio.play()
 				# when the player holds jump, do a longer jump
 				# extra jump force / air duration to make a more parabolic jump
 				if (Input.is_action_pressed("jump") && !locked && air_duration < 20 && air_duration > 0) || (air_from_jump && air_duration > 0 && air_duration < 5):
@@ -990,6 +1020,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 				air_duration += 1
 				if is_on_ground && air_time.is_stopped() && ledge_time.is_stopped():
 					change_state(IDLE)
+					land_audio.play()
 				# ledge detect
 				if !slide_detect.has_overlapping_bodies() && wall_detect.has_overlapping_bodies() && !ledge_detect.has_overlapping_bodies() && on_wall_cooldown < 1 && forward_ray.is_colliding():
 					change_state(ON_LEDGE)
@@ -1403,6 +1434,7 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlide/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE)
+			slide_audio.play()
 		SLIDE_BACK:
 			# re-enable collider
 			set_player_collider.call_deferred(true)
@@ -1413,6 +1445,7 @@ func enter_state() -> void:
 			var tween : Tween = get_tree().create_tween().set_parallel(true)
 			tween.tween_property(animator, "parameters/BlendSlideBack/blend_amount", 1.0, 0.3)
 			change_state_non_authority.rpc(SLIDE_BACK)
+			slide_audio.play()
 		ROLL:
 			# re-enable collider
 			set_player_collider.call_deferred(true)

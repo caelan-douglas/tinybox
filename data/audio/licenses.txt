@@ -93,4 +93,16 @@ Attributions for /data/audio:
 	thruster.ogg:
 		by Ultra-Edward; licensed under Creative Commons 0
 		https://freesound.org/people/Ultra-Edward/sounds/814796/
+
+	player/land_*.ogg:
+		by LewisEmmott5; licensed under Creative Commons 0
+		https://freesound.org/people/LewisEmmott5/sounds/732173/
+
+	player/slide_0.ogg:
+		by brokenmachinery; licensed under Creative Commons 0
+		https://freesound.org/people/brokenmachinery/sounds/730078/
+
+	player/footstep_*.ogg:
+		by Kenney; licensed under Creative Commons 0
+		https://kenney.nl/assets/impact-sounds
 		

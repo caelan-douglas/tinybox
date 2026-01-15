@@ -1,0 +1,12 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=4 format=3 uid="uid://waf5shap77q0"]
+
+[ext_resource type="AudioStream" uid="uid://bpet10kb5cm34" path="res://data/audio/player/footstep_carpet_000.ogg" id="1_cojnv"]
+[ext_resource type="AudioStream" uid="uid://vvyqvtg3g82j" path="res://data/audio/player/footstep_carpet_003.ogg" id="2_8d3dv"]
+[ext_resource type="AudioStream" uid="uid://bdemfbko4hd2m" path="res://data/audio/player/footstep_carpet_004.ogg" id="3_riivp"]
+
+[resource]
+random_pitch = 1.02
+streams_count = 3
+stream_0/stream = ExtResource("1_cojnv")
+stream_1/stream = ExtResource("2_8d3dv")
+stream_2/stream = ExtResource("3_riivp")
