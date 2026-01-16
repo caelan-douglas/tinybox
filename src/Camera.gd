@@ -27,8 +27,10 @@ enum CameraMode {
 
 # The target that the camera points to and follows.
 var target : Node
+var target_look_ahead : Vector3 = Vector3.ZERO
 var yaw : float = 180
 var pitch : float = -25
+var addl_pitch : float = 0
 var dist : float = 5
 var target_dist : float = 5
 var aim_dist : float = 3
@@ -110,7 +112,7 @@ func move_around_target(vec: Vector2) -> void:
 	# fmod is modulo on floats
 	yaw = fmod((yaw - vec.x * sensitivity * UserPreferences.mouse_sensitivity), 360)
 	pitch = max(min(pitch - vec.y * sensitivity * UserPreferences.mouse_sensitivity, 70), -85)
-	rotation = Vector3(deg_to_rad(pitch), deg_to_rad(yaw), 0)
+	rotation = Vector3(deg_to_rad(pitch + addl_pitch), deg_to_rad(yaw), 0)
 
 func _unhandled_input(event : InputEvent) -> void:
 	if !locked:
@@ -138,7 +140,12 @@ func _control_camera_rotation(delta : float) -> void:
 			dist_diff = lerp(dist_diff, dist_to_hit, 0.3)
 			var new_dist : float = clamp((dist - dist_diff), 1, max_dist) - 0.1
 			position = -new_dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
-			gimbal.global_position = lerp(gimbal.global_position, target.global_position, 16 * delta)
+			var target_pos : Vector3 = target.global_position
+			if _camera_mode == CameraMode.FREE:
+				if target.owner is RigidPlayer:
+					target_look_ahead = lerp(target_look_ahead, target.owner.transform.basis.z * 0.8, 0.01)
+					target_pos += target_look_ahead
+			gimbal.global_position = lerp(gimbal.global_position, target_pos, 16 * delta)
 		else:
 			position = -dist * project_ray_normal(get_viewport().get_visible_rect().size * 0.5)
 			if do_interpolate:
@@ -258,6 +265,15 @@ func _process(delta : float) -> void:
 			target_dist = clamp(target_dist - 2, 3, max_dist)
 		elif Input.is_action_just_pressed("zoom_out") && Input.is_action_pressed("control"):
 			target_dist = clamp(target_dist + 2, 3, max_dist)
+		
+		# slight look down when falling
+		if target != null && _camera_mode == CameraMode.FREE:
+			if target.owner is RigidPlayer:
+				var player : RigidPlayer = target.owner
+				if player.linear_velocity.y < 0 && pitch < 0 && pitch > -85:
+					addl_pitch = lerpf(addl_pitch, player.linear_velocity.y, 0.05)
+				else:
+					addl_pitch = lerpf(addl_pitch, 0, 0.02)
 		
 		# if multithreaded physics, this section FROM HERE
 		# must be moved to physics process
