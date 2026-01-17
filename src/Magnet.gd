@@ -21,13 +21,14 @@ var north_pos : Vector3 = Vector3.ZERO
 var south_pos : Vector3 = Vector3.ZERO
 
 @onready var magnet_area : Area3D = $MagnetDetectRegion
-
+@onready var magnet_area_collision : CollisionShape3D = $MagnetDetectRegion/CollisionShape3D
 # Set a custom property
 func set_property(property : StringName, value : Variant) -> void:
 	super(property, value)
 	# set mass after determing mass mult from size
 	mass = 10 * mass_mult
-
+	if magnet_area_collision.shape is SphereShape3D:
+		magnet_area_collision.shape.radius = 7*mass_mult
 # Set the material of this brick to a different one, 
 # and update any related properties.
 @rpc("call_local")
@@ -70,8 +71,8 @@ func _physics_process(delta : float) -> void:
 	for other_magnet in magnet_area_others:
 		#var a: string = other_magnet.w
 		print(other_magnet.name)
-		if "magnet" not in other_magnet.name or other_magnet == self:
-			return
+		if other_magnet is not Magnet or other_magnet == self:
+			continue
 			
 		north_pos = transform.basis.y * (brick_scale.y+1)/2 #up vector relative to brick * 
 		south_pos = - transform.basis.y * (brick_scale.y-1)/2
@@ -88,13 +89,13 @@ func _physics_process(delta : float) -> void:
 		var force_magnitude3 : float = clampf(1 / ccc, 0.001, 1)
 		var force_magnitude4 : float = clampf(1 / ddd, 0.001, 1)
 		
-		var northA_northB : Vector3 = 1000* force_magnitude1 * (other_magnet.north_pos - north_pos)
-		var northA_southB : Vector3 = 1000* force_magnitude2 * (other_magnet.north_pos - south_pos)
-		var southA_northB : Vector3 = 1000* force_magnitude3 * (other_magnet.south_pos - north_pos)
-		var southA_southB : Vector3 = 1000* force_magnitude4 * (other_magnet.south_pos - south_pos)
+		var northA_northB : Vector3 = mass_mult * 100* force_magnitude1 * (other_magnet.north_pos - north_pos)
+		var northA_southB : Vector3 = mass_mult * 100* force_magnitude2 * (other_magnet.north_pos - south_pos)
+		var southA_northB : Vector3 = mass_mult * 100* force_magnitude3 * (other_magnet.south_pos - north_pos)
+		var southA_southB : Vector3 = mass_mult* 100* force_magnitude4 * (other_magnet.south_pos - south_pos)
 		
 		apply_force(northA_northB, north_pos)
-		#apply_force(northA_southB, north_pos)
+		apply_force(northA_southB, north_pos)
 		apply_force(southA_northB, south_pos)
-		#apply_force(southA_southB, south_pos)
+		apply_force(southA_southB, south_pos)
 	
