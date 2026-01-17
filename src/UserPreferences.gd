@@ -27,7 +27,7 @@ var database_repo : String = "https://tinybox-worlds.caelan-douglas.workers.dev/
 		if value == "":
 			database_repo = DEFAULT_DATABASE_REPO
 var mouse_sensitivity : float = 1.0
-var camera_fov : float = 55.0
+var camera_fov : float = 62.5
 var show_chats_above_players : bool = true
 
 func _ready() -> void:

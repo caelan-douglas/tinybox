@@ -271,7 +271,7 @@ func _process(delta : float) -> void:
 			if target.owner is RigidPlayer:
 				var player : RigidPlayer = target.owner
 				if player.linear_velocity.y < 0 && pitch < 0 && pitch > -85:
-					addl_pitch = lerpf(addl_pitch, player.linear_velocity.y, 0.05)
+					addl_pitch = lerpf(addl_pitch, clampf(player.linear_velocity.y, -20, 0), 0.05)
 				else:
 					addl_pitch = lerpf(addl_pitch, 0, 0.02)
 		

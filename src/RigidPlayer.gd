@@ -913,7 +913,6 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 			# reactive force if player is trying to move in opposite direction
 			var dot_dir : float = -move_direction.dot(state.linear_velocity.normalized())
 			dot_dir = clampf(dot_dir, 0, 1)
-			#var extra_accel : float = clampf(remap(state.linear_velocity.length(), 0, 3, 2, 1), 1, 2)
 			var total_accel : float = move_speed * (accel_multiplier + (dot_accel_multiplier * dot_dir))
 			state.linear_velocity.x += move_direction.x * total_accel
 			state.linear_velocity.z += move_direction.z * total_accel

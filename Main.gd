@@ -282,7 +282,7 @@ func _on_host_pressed() -> void:
 	else:
 		get_tree().current_scene.get_node("GameCanvas").visible = true
 		# remove ".tbw"
-		world.load_tbw.call_deferred("Frozen Field")
+		world.load_tbw.call_deferred("tutorial")
 	# add camera
 	var camera_inst : Node3D = CAMERA.instantiate()
 	world.add_child(camera_inst, true)
