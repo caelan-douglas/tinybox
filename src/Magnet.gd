@@ -41,12 +41,9 @@ func set_colour(new : Color) -> void:
 	# don't change colour
 	pass
 
- #-> |_| ->
-
-
 func _init() -> void:
 	_brick_spawnable_type = "brick_magnet"
-	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "indestructible",]
+	properties_to_save = ["global_position", "global_rotation", "brick_scale", "immovable", "joinable", "indestructible",]
 
 func _ready() -> void:
 	super()
@@ -61,7 +58,6 @@ func enter_state() -> void:
 	super()
 
 func _on_sleeping_state_changed() -> void:
-	# If we are sleeping, and we are NOT glued, and we are NOT in a group (eg. lone brick)
 	pass
 		
 func _physics_process(delta : float) -> void:
