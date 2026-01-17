@@ -50,7 +50,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	super()
-	self.name = "magnet"
 	await get_tree().create_timer(0.5).timeout
 	unfreeze_entire_group()
 
@@ -66,33 +65,28 @@ func _on_sleeping_state_changed() -> void:
 	pass
 		
 func _physics_process(delta : float) -> void:
-	#super(delta)
 	var magnet_area_others : = magnet_area.get_overlapping_bodies()
 	for other_magnet in magnet_area_others:
-		#var a: string = other_magnet.w
-		print(other_magnet.name)
 		if other_magnet is not Magnet or other_magnet == self:
 			continue
 			
-		north_pos = transform.basis.y * (brick_scale.y+1)/2 #up vector relative to brick * 
-		south_pos = - transform.basis.y * (brick_scale.y-1)/2
+		north_pos = transform.basis.y * (brick_scale.y)/2
+		south_pos = - transform.basis.y * (brick_scale.y)/2
 		
-		var distance : float = (other_magnet.global_position - global_position).length()
+		var nn_dot : float = other_magnet.north_pos.dot(north_pos)
+		var ns_dot : float = other_magnet.north_pos.dot(south_pos)
+		var sn_dot : float = other_magnet.south_pos.dot(north_pos)
+		var ss_dot : float = other_magnet.south_pos.dot(south_pos)
 		
-		var aaa : float = other_magnet.north_pos.dot(north_pos)
-		var bbb : float = other_magnet.north_pos.dot(south_pos)
-		var ccc : float = other_magnet.south_pos.dot(north_pos)
-		var ddd : float = other_magnet.south_pos.dot(south_pos)
+		var force_magnitude1 : float = clampf(1 / nn_dot, 0.001, 1)
+		var force_magnitude2 : float = clampf(1 / ns_dot, 0.001, 1)
+		var force_magnitude3 : float = clampf(1 / sn_dot, 0.001, 1)
+		var force_magnitude4 : float = clampf(1 / ss_dot, 0.001, 1)
 		
-		var force_magnitude1 : float = clampf(1 / aaa, 0.001, 1)
-		var force_magnitude2 : float = clampf(1 / bbb, 0.001, 1)
-		var force_magnitude3 : float = clampf(1 / ccc, 0.001, 1)
-		var force_magnitude4 : float = clampf(1 / ddd, 0.001, 1)
-		
-		var northA_northB : Vector3 = mass_mult * 100* force_magnitude1 * (other_magnet.north_pos - north_pos)
-		var northA_southB : Vector3 = mass_mult * 100* force_magnitude2 * (other_magnet.north_pos - south_pos)
-		var southA_northB : Vector3 = mass_mult * 100* force_magnitude3 * (other_magnet.south_pos - north_pos)
-		var southA_southB : Vector3 = mass_mult* 100* force_magnitude4 * (other_magnet.south_pos - south_pos)
+		var northA_northB : Vector3 = mass_mult * 100 * force_magnitude1 * (other_magnet.north_pos - north_pos)
+		var northA_southB : Vector3 = mass_mult * 100 * force_magnitude2 * (other_magnet.north_pos - south_pos)
+		var southA_northB : Vector3 = mass_mult * 100 * force_magnitude3 * (other_magnet.south_pos - north_pos)
+		var southA_southB : Vector3 = mass_mult * 100 * force_magnitude4 * (other_magnet.south_pos - south_pos)
 		
 		apply_force(northA_northB, north_pos)
 		apply_force(northA_southB, north_pos)
