@@ -27,7 +27,7 @@ script = ExtResource("2_alcqr")
 [node name="MultiplayerMenuMap" parent="World/Map" instance=ExtResource("3_lya7f")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World"]
-_spawnable_scenes = PackedStringArray("uid://dinh2untg6m17", "uid://ky2h7r63y8gy", "uid://dq4jgcqroudj7", "uid://cd3af1twwe58l", "uid://gd6l0n3l7l38", "uid://dv1sisl0rn8iq", "uid://bjkvftq5sd13")
+_spawnable_scenes = PackedStringArray("uid://dinh2untg6m17", "uid://ky2h7r63y8gy", "uid://dq4jgcqroudj7", "uid://cd3af1twwe58l", "uid://gd6l0n3l7l38", "uid://dv1sisl0rn8iq", "uid://bjkvftq5sd13", "uid://bqur8gq477tgn")
 spawn_path = NodePath("..")
 
 [node name="MultiplayerObjSpawner" type="MultiplayerSpawner" parent="World"]

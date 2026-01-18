@@ -222,7 +222,7 @@ func _physics_process(delta : float) -> void:
 					# Reduce ammo for self (client).
 					reduce_ammo()
 				else:
-					if $FuseAudio:
+					if has_node("FuseAudio"):
 						if !$FuseAudio.playing:
 							$FuseAudio.play()
 					if charged_shot_amt < charged_shot_amt_max:

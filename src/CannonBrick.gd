@@ -93,7 +93,7 @@ func _physics_process(delta : float) -> void:
 		if global_position.distance_to(target) > 15:
 			return
 		
-		model_mesh.rotation.y = lerp_angle(model_mesh.rotation.y, atan2((global_position - target).x, (global_position - target).z), 0.035)
+		model_mesh.rotation.y = lerp_angle(model_mesh.rotation.y, atan2((global_position - target).x, (global_position - target).z) - rotation.y, 0.035)
 		
 		if automatic:
 			if tick % 60 == 0:
