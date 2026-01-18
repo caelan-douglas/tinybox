@@ -23,19 +23,17 @@ var explosion_size : float = 1.5
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super()
+	if !is_multiplayer_authority(): return
+	
 	await get_tree().create_timer(despawn_time).timeout
-	if player_from != null:
-		explode(Vector3.ZERO, player_from.get_multiplayer_authority())
-	else:
-		explode(Vector3.ZERO, -1)
+	explode.rpc(Vector3.ZERO)
 
 @rpc("any_peer", "call_local")
 func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_force : float = 4) -> void:
 	var explosion_i : Explosion = SpawnableObjects.explosion.instantiate()
 	get_tree().current_scene.add_child(explosion_i)
 	explosion_i.set_explosion_size(explosion_size)
-	# player_from id is later used in death messages
-	explosion_i.set_explosion_owner(from_whom)
+	explosion_i.set_explosion_owner(get_multiplayer_authority())
 	explosion_i.global_position = global_position
 	explosion_i.play_sound()
 	queue_free()
@@ -43,10 +41,7 @@ func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_forc
 func _on_body_entered(body : Node3D) -> void:
 	super(body)
 	if body is RigidPlayer:
-		if player_from != null:
-			explode(Vector3.ZERO, player_from.get_multiplayer_authority())
-		else:
-			explode(Vector3.ZERO, -1)
+		explode(Vector3.ZERO)
 	audio.volume_db = -15 + linear_velocity.length()
 	clamp(audio.volume_db, -50, 0)
 	audio.play()

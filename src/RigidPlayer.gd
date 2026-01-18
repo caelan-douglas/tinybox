@@ -397,6 +397,12 @@ func _receive_server_health(new : int, potential_executor_id : int = -1) -> void
 			health_bar.self_modulate = Color("#61a48f")
 	else:
 		health = new
+	
+	# tired face on low health
+	if health < 5:
+		animator.set("parameters/BlendFaceTired/blend_amount", 1.0)
+	else:
+		animator.set("parameters/BlendFaceTired/blend_amount", 0.0)
 
 @rpc("any_peer", "call_local", "reliable")
 func _receive_server_max_health(new : int) -> void:

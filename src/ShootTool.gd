@@ -138,7 +138,7 @@ func increase_ammo() -> void:
 # Arg 1: The id to spawn this projectile for.
 # Arg 2: The shot speed of this projectile.
 @rpc("call_local")
-func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootType) -> void:
+func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootType, charge_time : float = 0) -> void:
 	# minigame costs
 	var cost : int = 1
 	var can_afford := true
@@ -164,7 +164,7 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 			ShootType.FIRECRACKER:
 				p = firecracker.instantiate()
 				p.explosion_size = explosion_size
-				p.despawn_time = 2 - ((charged_shot_amt * 1.2)/45)
+				p.despawn_time = 2 - ((charge_time * 1.2)/45)
 			_:
 				p = ball.instantiate()
 		if p != null:
@@ -233,7 +233,7 @@ func _physics_process(delta : float) -> void:
 						time_held_max += 1
 						if time_held_max > 12:
 							if _shoot_type == ShootType.FIRECRACKER:
-								explode(tool_player_owner.get_multiplayer_authority())
+								explode.rpc(tool_player_owner.get_multiplayer_authority())
 								_end_shot()
 						power_meter_anim.play("power_max")
 			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !tool_player_owner.locked:
@@ -249,9 +249,9 @@ func _physics_process(delta : float) -> void:
 					audio.play()
 				
 				if !multiplayer.is_server():
-					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
+					spawn_projectile.rpc_id(1, multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type, charged_shot_amt)
 				else:
-					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
+					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type, charged_shot_amt)
 				reduce_ammo()
 				if $FuseAudio:
 					$FuseAudio.stop()
