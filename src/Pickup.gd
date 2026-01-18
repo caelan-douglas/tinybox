@@ -29,10 +29,11 @@ enum PickupType {
 	MEDKIT,
 	PULSECANNON,
 	BAT,
-	BOUNCYBALL
+	BOUNCYBALL,
+	FIRECRACKER
 }
 
-const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrower", "Extinguisher", "Missiles", "Medkit", "Pulse Cannon", "Bat", "Bouncyball"]
+const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrower", "Extinguisher", "Missiles", "Medkit", "Pulse Cannon", "Bat", "Bouncyball", "Firecracker"]
 
 @export var type : PickupType = PickupType.ROCKET
 @export var ammo : int = 2
@@ -42,6 +43,7 @@ const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrowe
 @onready var respawn_timer : Timer = $RespawnTimer
 @onready var label : Label3D = $Label3D
 
+# TODO: should just automatically support all pickup types
 @onready var rocket_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/RocketLauncherVisualMesh.tscn")
 @onready var bomb_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/BombVisualMesh.tscn")
 @onready var flamethrower_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FlamethrowerVisualMesh.tscn")
@@ -51,6 +53,7 @@ const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrowe
 @onready var pulse_cannon_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/PulseCannonVisualMesh.tscn")
 @onready var bat_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/BatVisualMesh.tscn")
 @onready var bouncyball_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/ClayBallToolVisual.tscn")
+@onready var firecracker_mesh : PackedScene = preload("res://data/scene/tool/visual_mesh/FirecrackerToolVisual.tscn")
 
 @onready var rocket_tool : PackedScene = preload("res://data/scene/tool/RocketTool.tscn")
 @onready var missile_tool : PackedScene = preload("res://data/scene/tool/MissileTool.tscn")
@@ -60,6 +63,7 @@ const PICKUP_TYPES_AS_STRINGS : Array[String] = ["Rockets", "Bomb", "Flamethrowe
 @onready var pulse_cannon_tool : PackedScene = preload("res://data/scene/tool/PulseCannonTool.tscn")
 @onready var bat_tool : PackedScene = preload("res://data/scene/tool/BatTool.tscn")
 @onready var bouncyball_tool : PackedScene = preload("res://data/scene/tool/BouncyballTool.tscn")
+@onready var firecracker_tool : PackedScene = preload("res://data/scene/tool/FirecrackerTool.tscn")
 
 func _init() -> void:
 	properties_to_save = ["global_position", "global_rotation", "scale", "type", "ammo", "respawn_time"]
@@ -85,6 +89,7 @@ func set_mesh() -> void:
 	for c : Node in $MeshParent.get_children():
 		c.queue_free()
 	match(type):
+		# TODO: should just automatically support all pickup types
 		PickupType.ROCKET:
 			var mesh_i : Node3D = rocket_mesh.instantiate()
 			$MeshParent.add_child(mesh_i)
@@ -112,6 +117,9 @@ func set_mesh() -> void:
 		PickupType.BOUNCYBALL:
 			var mesh_i : Node3D = bouncyball_mesh.instantiate()
 			$MeshParent.add_child(mesh_i)
+		PickupType.FIRECRACKER:
+			var mesh_i : Node3D = firecracker_mesh.instantiate()
+			$MeshParent.add_child(mesh_i)
 
 func _on_body_entered(body : Node3D) -> void:
 	if body is RigidPlayer && pickup_available:
@@ -135,6 +143,7 @@ func _take_pickup(body : RigidPlayer) -> void:
 		var result : Tool = null
 		var tool_idx : ToolInventory.ToolIdx = ToolInventory.ToolIdx.RocketTool
 		match(type):
+			# TODO: should just automatically support all pickup types
 			PickupType.ROCKET:
 				# if we already have it, just add ammo
 				result = tool_inv.has_tool_by_name("RocketTool")
@@ -165,6 +174,9 @@ func _take_pickup(body : RigidPlayer) -> void:
 			PickupType.BOUNCYBALL:
 				result = tool_inv.has_tool_by_name("BouncyballTool")
 				tool_idx = ToolInventory.ToolIdx.Bouncyball
+			PickupType.FIRECRACKER:
+				result = tool_inv.has_tool_by_name("FirecrackerTool")
+				tool_idx = ToolInventory.ToolIdx.FirecrackerTool
 		if type != PickupType.MEDKIT:
 			if result && type != PickupType.BAT:
 				# don't add to infinite ammo

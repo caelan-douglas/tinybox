@@ -105,4 +105,12 @@ Attributions for /data/audio:
 	player/footstep_*.ogg:
 		by Kenney; licensed under Creative Commons 0
 		https://kenney.nl/assets/impact-sounds
+
+	explosion/fuse.ogg:
+		by j1987; licensed under Creative Commons 0
+		https://freesound.org/people/j1987/sounds/140715/
+
+	explosion/explode_small.ogg:
+		by karisigurd4; licensed under Creative Commons 0
+		https://freesound.org/people/karisigurd4/sounds/555132/
 		

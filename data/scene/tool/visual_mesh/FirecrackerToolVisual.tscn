@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhijsh5bcjg16"]
+
+[ext_resource type="PackedScene" uid="uid://btxgdt67po7bb" path="res://data/models/firecracker/firecracker.blend" id="1_hv7nc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fyudn"]
+albedo_color = Color(0.6474614, 0.33018962, 0.34090978, 1)
+
+[node name="FirecrackerToolVisual" type="Node3D"]
+transform = Transform3D(0.999999, 1.16415e-09, 3.43425e-09, 1.16415e-09, 0.999999, 1.49012e-08, -2.32805e-07, 1.30385e-08, 1, 0.0558512, 0.0951465, -0.140799)
+
+[node name="firecracker" parent="." instance=ExtResource("1_hv7nc")]
+transform = Transform3D(-4.3711335e-08, 0.99999994, -2.4584347e-07, -0.99999994, -4.3711385e-08, -2.1976648e-07, -2.1976649e-07, 2.4584347e-07, 1, 0, 0, 0)
+
+[node name="firecracker" parent="firecracker" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_fyudn")
+
+[editable path="firecracker"]

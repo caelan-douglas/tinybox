@@ -32,7 +32,8 @@ enum ToolIdx {
 	Flamethrower,
 	Missile,
 	Paintbrush,
-	PulseCannon
+	PulseCannon,
+	FirecrackerTool
 }
 
 var all_tools : Array[PackedScene] = [preload("res://data/scene/tool/BuildTool.tscn"),\
@@ -44,7 +45,8 @@ preload("res://data/scene/tool/BombTool.tscn"),\
 preload("res://data/scene/tool/FlamethrowerTool.tscn"),\
 preload("res://data/scene/tool/MissileTool.tscn"),\
 preload("res://data/scene/tool/PaintbrushTool.tscn"),
-preload("res://data/scene/tool/PulseCannonTool.tscn")]
+preload("res://data/scene/tool/PulseCannonTool.tscn"),
+preload("res://data/scene/tool/FirecrackerTool.tscn")]
 
 # for setting up the tool client synchronizer
 var all_tools_paths : Array[String] = ["res://data/scene/tool/BuildTool.tscn",\
@@ -56,7 +58,8 @@ var all_tools_paths : Array[String] = ["res://data/scene/tool/BuildTool.tscn",\
 "res://data/scene/tool/FlamethrowerTool.tscn",\
 "res://data/scene/tool/MissileTool.tscn",\
 "res://data/scene/tool/PaintbrushTool.tscn",
-"res://data/scene/tool/PulseCannonTool.tscn"]
+"res://data/scene/tool/PulseCannonTool.tscn",
+"res://data/scene/tool/FirecrackerTool.tscn"]
 
 var hold_timer := 0
 
@@ -210,7 +213,7 @@ func give_all_tools() -> void:
 	if multiplayer.get_remote_sender_id() != 1 && multiplayer.get_remote_sender_id() != 0 && multiplayer.get_remote_sender_id() != get_multiplayer_authority():
 		return
 	for at : String in ToolIdx:
-		if at != "PulseCannon":
+		if at != "PulseCannon" && at != "Paintbrush":
 			# index of enum
 			add_tool(ToolIdx[at] as ToolIdx)
 	resize_ui()

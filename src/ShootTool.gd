@@ -24,7 +24,8 @@ enum ShootType {
 	BOMB,
 	WATER,
 	FIRE,
-	MISSILE
+	MISSILE,
+	FIRECRACKER
 }
 
 @export var tool_name : String = "Shoot Tool"
@@ -53,6 +54,7 @@ var ui_progress : ProgressBar = null
 @onready var bomb : PackedScene = preload("res://data/scene/bomb/Bomb.tscn")
 @onready var water : PackedScene = preload("res://data/scene/water/WaterProjectile.tscn")
 @onready var fire : PackedScene = preload("res://data/scene/fire/FireProjectile.tscn")
+@onready var firecracker : PackedScene = preload("res://data/scene/firecracker/Firecracker.tscn")
 # for showing cost in minigame
 @onready var floaty_text : PackedScene = preload("res://data/scene/ui/FloatyText.tscn")
 
@@ -159,6 +161,10 @@ func spawn_projectile(id : int, shot_speed_rpc : float, shoot_type_rpc : ShootTy
 				p = rocket.instantiate()
 				p.guided = true
 				p.explosion_size = explosion_size
+			ShootType.FIRECRACKER:
+				p = firecracker.instantiate()
+				p.explosion_size = explosion_size
+				p.despawn_time = 2 - ((charged_shot_amt * 1.2)/45)
 			_:
 				p = ball.instantiate()
 		if p != null:
@@ -185,6 +191,7 @@ func _set_tool_audio_playing(mode : bool) -> void:
 		false:
 			audio_anim.play("fadeout")
 
+var time_held_max : int = 0
 func _physics_process(delta : float) -> void:
 	# only execute on yourself
 	if !is_multiplayer_authority(): return
@@ -215,15 +222,24 @@ func _physics_process(delta : float) -> void:
 					# Reduce ammo for self (client).
 					reduce_ammo()
 				else:
+					if $FuseAudio:
+						if !$FuseAudio.playing:
+							$FuseAudio.play()
 					if charged_shot_amt < charged_shot_amt_max:
 						charged_shot_amt += 1
 						power_meter.value = charged_shot_amt
 						# just increased above
-						if charged_shot_amt >= charged_shot_amt_max:
-							power_meter_anim.play("power_max")
+					if charged_shot_amt >= charged_shot_amt_max:
+						time_held_max += 1
+						if time_held_max > 12:
+							if _shoot_type == ShootType.FIRECRACKER:
+								explode(tool_player_owner.get_multiplayer_authority())
+								_end_shot()
+						power_meter_anim.play("power_max")
 			elif Input.is_action_just_released("click") && charged_shot && charged_shot_amt > 0 && !tool_player_owner.locked:
 				# Limit the speed at which we can fire.
 				shot_cooldown_counter = shot_cooldown
+				time_held_max = 0
 				
 				if (audio != null && audio_anim != null):
 					if !audio.playing || audio_anim.is_playing():
@@ -237,6 +253,8 @@ func _physics_process(delta : float) -> void:
 				else:
 					spawn_projectile(multiplayer.get_unique_id(), shot_speed * (1 + (1.25 * (charged_shot_amt/charged_shot_amt_max))), _shoot_type)
 				reduce_ammo()
+				if $FuseAudio:
+					$FuseAudio.stop()
 			else:
 				stop_audio = true
 				_end_shot()
@@ -272,10 +290,12 @@ func _physics_process(delta : float) -> void:
 
 func _end_shot() -> void:
 	charged_shot_amt = 0
-	if power_meter != null:
-		power_meter.value = 0
-		if power_meter_anim != null:
-			power_meter_anim.play("RESET")
+	time_held_max = 0
+	if get_tool_active():
+		if power_meter != null:
+			power_meter.value = 0
+			if power_meter_anim != null:
+				power_meter_anim.play("RESET")
 
 var power_meter : TextureProgressBar = null
 var power_meter_anim : AnimationPlayer = null

@@ -115,7 +115,7 @@ func on_large_hit(body : Node3D) -> void:
 	if !is_multiplayer_authority(): return
 	
 	# Deflects rockets, bombs, balls, and other players.
-	if (body is Rocket || body is Bomb || body is ClayBall) && deflect_time < 1 && is_hitting:
+	if (body is Rocket || body is Bomb || body is Throwable) && deflect_time < 1 && is_hitting:
 		if visual_mesh_instance != null:
 			var deflect : AudioStreamPlayer3D = visual_mesh_instance.get_node_or_null("DeflectAudio")
 			deflect_time = 40

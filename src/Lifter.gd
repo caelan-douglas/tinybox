@@ -24,7 +24,7 @@ func _init() -> void:
 
 func _physics_process(delta : float) -> void:
 	for body in area.get_overlapping_bodies():
-		if body is RigidPlayer || body is Brick || body is Bomb || body is ClayBall:
+		if body is RigidPlayer || body is Brick || body is Bomb || body is Throwable:
 			if body.get_multiplayer_authority() == multiplayer.get_unique_id():
 				var force : float = 160
 				if body is RigidPlayer:
@@ -33,6 +33,6 @@ func _physics_process(delta : float) -> void:
 						body.in_air_from_lifter = true
 						# will only run on auth
 						body.sparkle_audio_anim.play("fadein")
-				if body is Bomb || body is ClayBall:
+				if body is Bomb || body is Throwable:
 					force = lift_force * 0.71
 				body.apply_force(transform.basis.y * force)

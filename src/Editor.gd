@@ -274,7 +274,7 @@ func exit_test_mode() -> void:
 	test_mode = false
 	# delete all bombs, rockets, etc in the world
 	for obj in Global.get_world().get_children():
-		if obj is Bomb || obj is Rocket || obj is ClayBall:
+		if obj is Bomb || obj is Rocket || obj is Throwable:
 			obj.queue_free()
 	# don't reset player and cameras
 	Global.get_world().load_tbw(str(test_mode_world_name), false, false)

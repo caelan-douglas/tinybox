@@ -26,9 +26,12 @@ class_name Explosion
 	preload("res://data/audio/explosion/explode_0.ogg"),
 	preload("res://data/audio/explosion/explode_1.ogg"),
 ]
+@onready var small_sounds : Array[AudioStream] = [
+	preload("res://data/audio/explosion/explode_small.ogg")
+]
 
 var by_whom : int = 1
-var explosion_size : int = 1
+var explosion_size : float = 1
 
 func set_explosion_size(new : float) -> void:
 	explosion_size = new
@@ -72,7 +75,10 @@ func play_sound() -> void:
 		audio.max_distance = 5000
 		audio.play()
 	else:
-		audio.stream = general_sounds[randi() % general_sounds.size()]
+		if explosion_size > 1.95:
+			audio.stream = general_sounds[randi() % general_sounds.size()]
+		else:
+			audio.stream = small_sounds[randi() % small_sounds.size()]
 		audio.max_distance = 200
 		audio.volume_db -= db_lower
 		audio.play()
