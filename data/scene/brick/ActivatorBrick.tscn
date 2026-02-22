@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c2pwwy57eoilm"]
+[gd_scene format=3 uid="uid://c2pwwy57eoilm"]
 
 [ext_resource type="Script" uid="uid://bcq8qw4imotdm" path="res://src/ActivatorBrick.gd" id="1_w1b6s"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_5j7lv"]
@@ -34,7 +34,7 @@ size = Vector3(1.4, 1.4, 1.4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_w63pj"]
 size = Vector3(1.3, 1.3, 1.3)
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=1141915114]
 collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
@@ -44,63 +44,63 @@ max_contacts_reported = 1
 script = ExtResource("1_w1b6s")
 _brick_spawnable_type = "brick_activator"
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_5j7lv")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=1846137879 instance=ExtResource("2_5j7lv")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("3_d0p3j")]
+[node name="BrickSynchronizer" parent="." unique_id=1973345736 instance=ExtResource("3_d0p3j")]
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=2042471520]
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=738163287]
 script = ExtResource("2_rvino")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_0ykmc")]
+[node name="model" parent="Smoothing" unique_id=139865635 instance=ExtResource("3_0ykmc")]
 
 [node name="Cube" parent="Smoothing/model" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_us10a")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=2090784396]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=155953893]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=1268157897]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=1717570435]
 shape = SubResource("BoxShape3D_mtstk")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2003080965]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=880391486]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=1408941978]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=1041139060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=1061429698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_w63pj")
 
-[node name="Fire" parent="." instance=ExtResource("4_oh56m")]
+[node name="Fire" parent="." unique_id=1450229584 instance=ExtResource("4_oh56m")]
 
-[node name="DirectionArrow" type="Sprite3D" parent="."]
+[node name="DirectionArrow" type="Sprite3D" parent="." unique_id=778659063]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.5)
 pixel_size = 0.005
 texture = ExtResource("5_o44xs")
 
-[node name="MotorTag" type="Sprite3D" parent="."]
+[node name="MotorTag" type="Sprite3D" parent="." unique_id=873640966]
 transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
 offset = Vector2(32, -32)
 pixel_size = 0.005

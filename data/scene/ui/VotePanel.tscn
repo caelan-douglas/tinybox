@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://p3qpu0ujxkis"]
+[gd_scene format=3 uid="uid://p3qpu0ujxkis"]
 
 [ext_resource type="Script" uid="uid://dko2jflkn5qtx" path="res://data/scene/ui/VotePanel.gd" id="1_r7ixh"]
 [ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="2_aa6de"]
 [ext_resource type="PackedScene" uid="uid://cq8as1ma0gr7k" path="res://data/scene/ui/vote/VoteListEntry.tscn" id="3_1sg75"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="4_vlxba"]
 
-[node name="VotePanel" type="PanelContainer"]
+[node name="VotePanel" type="PanelContainer" unique_id=1858415819]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -19,51 +19,51 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_r7ixh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1379802185]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=45102873]
 layout_mode = 2
 theme_override_constants/separation = 48
 alignment = 1
 
-[node name="DynamicLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="DynamicLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1495269735]
 layout_mode = 2
 text = "Vote for the next map"
 horizontal_alignment = 1
 script = ExtResource("2_aa6de")
 
-[node name="Timer" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Timer" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=567334290]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_vlxba")
 text = "15s"
 horizontal_alignment = 1
 script = ExtResource("2_aa6de")
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=618515394]
 layout_mode = 2
 columns = 3
 
-[node name="Opt1" parent="VBoxContainer/GridContainer" instance=ExtResource("3_1sg75")]
+[node name="Opt1" parent="VBoxContainer/GridContainer" unique_id=426293776 instance=ExtResource("3_1sg75")]
 layout_mode = 2
 
-[node name="Opt2" parent="VBoxContainer/GridContainer" instance=ExtResource("3_1sg75")]
+[node name="Opt2" parent="VBoxContainer/GridContainer" unique_id=938382563 instance=ExtResource("3_1sg75")]
 layout_mode = 2
 
-[node name="Opt3" parent="VBoxContainer/GridContainer" instance=ExtResource("3_1sg75")]
+[node name="Opt3" parent="VBoxContainer/GridContainer" unique_id=1521893892 instance=ExtResource("3_1sg75")]
 layout_mode = 2
 
-[node name="Opt4" parent="VBoxContainer/GridContainer" instance=ExtResource("3_1sg75")]
+[node name="Opt4" parent="VBoxContainer/GridContainer" unique_id=333293886 instance=ExtResource("3_1sg75")]
 layout_mode = 2
 
-[node name="Replay" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="Replay" type="Button" parent="VBoxContainer/GridContainer" unique_id=1705978609]
 self_modulate = Color(0, 3.524, 0.66, 1)
 custom_minimum_size = Vector2(300, 135)
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
 
-[node name="Split" type="HBoxContainer" parent="VBoxContainer/GridContainer/Replay"]
+[node name="Split" type="HBoxContainer" parent="VBoxContainer/GridContainer/Replay" unique_id=560425410]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -76,11 +76,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Labels" type="VBoxContainer" parent="VBoxContainer/GridContainer/Replay/Split"]
+[node name="Labels" type="VBoxContainer" parent="VBoxContainer/GridContainer/Replay/Split" unique_id=1436280420]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer/GridContainer/Replay/Split/Labels"]
+[node name="Title" type="Label" parent="VBoxContainer/GridContainer/Replay/Split/Labels" unique_id=612300505]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/line_spacing = -4
@@ -92,7 +92,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("2_aa6de")
 
-[node name="VoteCount" type="Label" parent="VBoxContainer/GridContainer/Replay/Split/Labels"]
+[node name="VoteCount" type="Label" parent="VBoxContainer/GridContainer/Replay/Split/Labels" unique_id=1806070025]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/line_spacing = -4
@@ -101,14 +101,14 @@ horizontal_alignment = 2
 autowrap_mode = 3
 script = ExtResource("2_aa6de")
 
-[node name="Sandbox" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="Sandbox" type="Button" parent="VBoxContainer/GridContainer" unique_id=901914559]
 self_modulate = Color(2, 4, 4, 1)
 custom_minimum_size = Vector2(300, 135)
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
 
-[node name="Split" type="HBoxContainer" parent="VBoxContainer/GridContainer/Sandbox"]
+[node name="Split" type="HBoxContainer" parent="VBoxContainer/GridContainer/Sandbox" unique_id=206461678]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -121,11 +121,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Labels" type="VBoxContainer" parent="VBoxContainer/GridContainer/Sandbox/Split"]
+[node name="Labels" type="VBoxContainer" parent="VBoxContainer/GridContainer/Sandbox/Split" unique_id=1411312504]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer/GridContainer/Sandbox/Split/Labels"]
+[node name="Title" type="Label" parent="VBoxContainer/GridContainer/Sandbox/Split/Labels" unique_id=186051777]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/line_spacing = -4
@@ -137,7 +137,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 script = ExtResource("2_aa6de")
 
-[node name="VoteCount" type="Label" parent="VBoxContainer/GridContainer/Sandbox/Split/Labels"]
+[node name="VoteCount" type="Label" parent="VBoxContainer/GridContainer/Sandbox/Split/Labels" unique_id=166051010]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/line_spacing = -4

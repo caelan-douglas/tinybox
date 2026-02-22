@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://duvfkls14fi4w"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://duvfkls14fi4w"]
 
 [ext_resource type="Texture2D" uid="uid://hgy7e87fwekg" path="res://data/models/tree/textures/leaf.png" id="1_vsxl8"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c018ya3k3q2en"]
+[gd_scene format=3 uid="uid://c018ya3k3q2en"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_l5xax"]
 [ext_resource type="Script" uid="uid://blqy65oftju7r" path="res://src/GraphicsVisibility.gd" id="2_ndbh2"]
@@ -48,14 +48,14 @@ fog_sky_affect = 0.8
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture2D_mjugo")
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=1009467699]
 script = ExtResource("1_l5xax")
 environment_name = "env_night"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1448822415]
 environment = SubResource("Environment_j3kv6")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1352236169]
 transform = Transform3D(-0.965926, -1.13133e-08, -0.258819, -0.258819, 4.2222e-08, 0.965926, -4.80746e-16, 1, -4.37114e-08, 0, 52.7417, 0)
 light_color = Color(0.287663, 0.411759, 0.518215, 1)
 light_energy = 2.0

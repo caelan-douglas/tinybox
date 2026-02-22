@@ -1,4 +1,4 @@
-[gd_resource type="AudioStreamRandomizer" load_steps=5 format=3 uid="uid://cekjmmrbwf5w4"]
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://cekjmmrbwf5w4"]
 
 [ext_resource type="AudioStream" uid="uid://ddvyos04gdefd" path="res://data/audio/player/footstep_grass_000.ogg" id="1_6owac"]
 [ext_resource type="AudioStream" uid="uid://bnh2lwhci3s48" path="res://data/audio/player/footstep_grass_001.ogg" id="2_1dxpx"]

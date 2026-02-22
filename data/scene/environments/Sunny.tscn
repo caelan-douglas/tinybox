@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cynk76edejitn"]
+[gd_scene format=3 uid="uid://cynk76edejitn"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_5f5qj"]
 [ext_resource type="Sky" uid="uid://qbldbv6nh5ve" path="res://data/materials/skybox/cloudy_skybox.tres" id="2_6j0tc"]
@@ -61,21 +61,19 @@ _data = {
 &"clouds": ExtResource("4_w1qvq")
 }
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=594593146]
 script = ExtResource("1_5f5qj")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=564678147]
 environment = SubResource("Environment_oa3a3")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2007032407]
 transform = Transform3D(0.866025, 0.327924, -0.377447, 0, 0.754893, 0.655848, 0.5, -0.567981, 0.653756, 0, 52.7417, 0)
 shadow_enabled = true
 directional_shadow_max_distance = 500.0
 script = ExtResource("3_46jeo")
 visible_on_awful = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_e3436")
-}
-autoplay = "clouds"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1359654722]
+libraries/ = SubResource("AnimationLibrary_e3436")
+autoplay = &"clouds"

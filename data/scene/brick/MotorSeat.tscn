@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dca5npetcw4di"]
+[gd_scene format=3 uid="uid://dca5npetcw4di"]
 
 [ext_resource type="Script" uid="uid://xhd86lqr174x" path="res://src/MotorSeat.gd" id="1_6w7jr"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_kv3g4"]
@@ -24,7 +24,7 @@ size = Vector3(1.3, 1.3, 1.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_3enek"]
 size = Vector3(1.1, 1.1, 1.1)
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=761508120]
 collision_mask = 11
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_keqyi")
@@ -36,53 +36,53 @@ max_contacts_reported = 1
 script = ExtResource("1_6w7jr")
 _brick_spawnable_type = "brick_motor_seat"
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_lm60b")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=1764070247 instance=ExtResource("2_lm60b")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("5_sk42i")]
+[node name="BrickSynchronizer" parent="." unique_id=1701043764 instance=ExtResource("5_sk42i")]
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=1874867691]
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=1677548073]
 script = ExtResource("2_kv3g4")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_p5qhp")]
+[node name="model" parent="Smoothing" unique_id=918386281 instance=ExtResource("3_p5qhp")]
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=1725112308]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=360290619]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=914995227]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=1605573777]
 shape = SubResource("BoxShape3D_mtstk")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2068830295]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=474875880]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=298777597]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=429947109]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=842187635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_w63pj")
 
-[node name="Joint" type="Generic6DOFJoint3D" parent="."]
+[node name="Joint" type="Generic6DOFJoint3D" parent="." unique_id=1240983141]
 linear_limit_x/softness = 1.5
 linear_limit_y/softness = 1.5
 linear_limit_z/softness = 1.5
@@ -93,9 +93,9 @@ angular_limit_y/restitution = 0.05
 angular_limit_z/softness = 1.0
 angular_limit_z/restitution = 0.05
 
-[node name="Fire" parent="." instance=ExtResource("3_xao1q")]
+[node name="Fire" parent="." unique_id=126174787 instance=ExtResource("3_xao1q")]
 
-[node name="MotorTag" type="Sprite3D" parent="."]
+[node name="MotorTag" type="Sprite3D" parent="." unique_id=1590268566]
 transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
 offset = Vector2(32, -32)
 pixel_size = 0.005
@@ -103,8 +103,8 @@ billboard = 1
 no_depth_test = true
 texture = ExtResource("7_4inmg")
 
-[node name="SitArea" type="Area3D" parent="."]
+[node name="SitArea" type="Area3D" parent="." unique_id=1862347996]
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SitArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SitArea" unique_id=756279143]
 shape = SubResource("BoxShape3D_3enek")

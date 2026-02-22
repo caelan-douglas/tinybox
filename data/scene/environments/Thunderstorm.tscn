@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://g1mk776jaq5h"]
+[gd_scene format=3 uid="uid://g1mk776jaq5h"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_0let5"]
 [ext_resource type="PackedScene" uid="uid://xe60ohkjtn13" path="res://data/scene/rain/RainParticles.tscn" id="2_8qb56"]
@@ -90,16 +90,16 @@ _data = {
 &"lightning": SubResource("Animation_ymxxm")
 }
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=989380254]
 script = ExtResource("1_0let5")
 environment_name = "env_thunderstorm"
 
-[node name="RainParticles" parent="." instance=ExtResource("2_8qb56")]
+[node name="RainParticles" parent="." unique_id=408867306 instance=ExtResource("2_8qb56")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=606502232]
 environment = SubResource("Environment_v6omg")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=399604159]
 transform = Transform3D(0.631909, 0.490828, -0.599816, 0.772846, -0.340823, 0.535303, 0.0583105, -0.801828, -0.594703, 0, 11.7417, 0)
 light_color = Color(0.822766, 0.880588, 0.907908, 1)
 light_energy = 0.65
@@ -109,17 +109,15 @@ directional_shadow_max_distance = 350.0
 script = ExtResource("4_ymxxm")
 visible_on_awful = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=469336935]
 root_node = NodePath("../WorldEnvironment")
-libraries = {
-&"": SubResource("AnimationLibrary_2j35j")
-}
+libraries/ = SubResource("AnimationLibrary_2j35j")
 
-[node name="Thunder" type="Node" parent="." node_paths=PackedStringArray("lightning_animator")]
+[node name="Thunder" type="Node" parent="." unique_id=878523142 node_paths=PackedStringArray("lightning_animator")]
 script = ExtResource("5_2j35j")
 lightning_animator = NodePath("../AnimationPlayer")
 
-[node name="ThunderAudio" type="AudioStreamPlayer3D" parent="Thunder"]
+[node name="ThunderAudio" type="AudioStreamPlayer3D" parent="Thunder" unique_id=1381958173]
 stream = ExtResource("6_ymxxm")
 attenuation_model = 3
 volume_db = 6.0
@@ -128,7 +126,7 @@ max_db = 6.0
 max_distance = 4000.0
 bus = &"SFX"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1928180918]
 stream = ExtResource("7_1hs56")
 volume_db = -8.0
 autoplay = true

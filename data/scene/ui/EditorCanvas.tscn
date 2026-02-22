@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b4heya8wtwyuo"]
+[gd_scene format=3 uid="uid://b4heya8wtwyuo"]
 
 [ext_resource type="Script" uid="uid://bxryb3slo76ng" path="res://src/ui/EditorCanvas.gd" id="1_4dmeu"]
 [ext_resource type="PackedScene" uid="uid://b8fewbxafd5xt" path="res://data/scene/ui/PropertyEditor.tscn" id="2_1yhnn"]
@@ -118,10 +118,10 @@ gradient = SubResource("Gradient_22hil")
 width = 128
 height = 1
 
-[node name="EditorCanvas" type="CanvasLayer"]
+[node name="EditorCanvas" type="CanvasLayer" unique_id=1360211709]
 script = ExtResource("1_4dmeu")
 
-[node name="ToolList" type="HBoxContainer" parent="."]
+[node name="ToolList" type="HBoxContainer" parent="." unique_id=947449671]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -132,7 +132,7 @@ offset_bottom = 8.0
 grow_horizontal = 2
 theme_override_constants/separation = 2
 
-[node name="TogglePlayerVisual" type="Button" parent="."]
+[node name="TogglePlayerVisual" type="Button" parent="." unique_id=1894023664]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -144,7 +144,7 @@ grow_horizontal = 2
 text = "Toggle player scale helper"
 script = ExtResource("15_32mo6")
 
-[node name="SelectModeOffset" type="Control" parent="."]
+[node name="SelectModeOffset" type="Control" parent="." unique_id=2077778009]
 layout_mode = 3
 anchors_preset = 12
 anchor_top = 1.0
@@ -153,7 +153,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="SelectModeUI" type="TextureRect" parent="SelectModeOffset"]
+[node name="SelectModeUI" type="TextureRect" parent="SelectModeOffset" unique_id=210138234]
 visible = false
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 1
@@ -165,7 +165,7 @@ texture = ExtResource("3_kascy")
 expand_mode = 2
 stretch_mode = 1
 
-[node name="DynamicLabel" type="Label" parent="SelectModeOffset/SelectModeUI"]
+[node name="DynamicLabel" type="Label" parent="SelectModeOffset/SelectModeUI" unique_id=291933101]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -186,12 +186,10 @@ text = "Select Mode Active"
 script = ExtResource("6_aufvl")
 metadata/_custom_type_script = "uid://c6ou7173i57do"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SelectModeOffset/SelectModeUI"]
-libraries = {
-&"": SubResource("AnimationLibrary_kbj0m")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SelectModeOffset/SelectModeUI" unique_id=1210197759]
+libraries/ = SubResource("AnimationLibrary_kbj0m")
 
-[node name="TextureRect" type="ColorRect" parent="SelectModeOffset/SelectModeUI"]
+[node name="TextureRect" type="ColorRect" parent="SelectModeOffset/SelectModeUI" unique_id=384356523]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -201,7 +199,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.279528, 0.204099, 0.102366, 1)
 
-[node name="LeftPanel" type="VBoxContainer" parent="."]
+[node name="LeftPanel" type="VBoxContainer" parent="." unique_id=1540406309]
 custom_minimum_size = Vector2(360, 2.08165e-12)
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -212,14 +210,14 @@ offset_bottom = -16.0
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="PropertyEditor" parent="LeftPanel" instance=ExtResource("2_1yhnn")]
+[node name="PropertyEditor" parent="LeftPanel" unique_id=1563034383 instance=ExtResource("2_1yhnn")]
 layout_mode = 2
 
-[node name="ItemChooser" parent="LeftPanel" instance=ExtResource("5_noy30")]
+[node name="ItemChooser" parent="LeftPanel" unique_id=1945498702 instance=ExtResource("5_noy30")]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="EntryScreen" type="Control" parent="."]
+[node name="EntryScreen" type="Control" parent="." unique_id=1654167266]
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -228,7 +226,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="EntryScreen"]
+[node name="Panel" type="PanelContainer" parent="EntryScreen" unique_id=1361247017]
 self_modulate = Color(0, 1.6, 0.8, 1)
 custom_minimum_size = Vector2(320, 400)
 layout_mode = 1
@@ -245,12 +243,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_gqbks")
 
-[node name="Menu" type="VBoxContainer" parent="EntryScreen/Panel"]
+[node name="Menu" type="VBoxContainer" parent="EntryScreen/Panel" unique_id=475319371]
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="EntryScreen/Panel/Menu"]
+[node name="Title" type="Label" parent="EntryScreen/Panel/Menu" unique_id=563351177]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
 theme_override_constants/outline_size = 6
@@ -258,21 +256,21 @@ text = "Welcome to the World Editor"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/welcome"
 
-[node name="Spacer" type="Control" parent="EntryScreen/Panel/Menu"]
+[node name="Spacer" type="Control" parent="EntryScreen/Panel/Menu" unique_id=108461091]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="EntryScreen/Panel/Menu"]
+[node name="DynamicLabel2" type="Label" parent="EntryScreen/Panel/Menu" unique_id=1538912073]
 layout_mode = 2
 text = "Choose to load an existing world, or press \"New world\" to start with the default template."
 autowrap_mode = 2
 script = ExtResource("6_aufvl")
 
-[node name="Spacer2" type="Control" parent="EntryScreen/Panel/Menu"]
+[node name="Spacer2" type="Control" parent="EntryScreen/Panel/Menu" unique_id=2105245608]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="MapList" parent="EntryScreen/Panel/Menu" node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
+[node name="MapList" parent="EntryScreen/Panel/Menu" unique_id=602564806 node_paths=PackedStringArray("associated_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
 associated_button = NodePath("../Load")
 
@@ -285,21 +283,21 @@ visible = true
 [node name="World Browser (Online)" parent="EntryScreen/Panel/Menu/MapList/TabContainer" index="3"]
 visible = false
 
-[node name="Load" type="Button" parent="EntryScreen/Panel/Menu"]
+[node name="Load" type="Button" parent="EntryScreen/Panel/Menu" unique_id=75796759]
 layout_mode = 2
 text = "Load existing world"
 script = ExtResource("15_32mo6")
 
-[node name="Spacer3" type="Control" parent="EntryScreen/Panel/Menu"]
+[node name="Spacer3" type="Control" parent="EntryScreen/Panel/Menu" unique_id=1714449286]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="New" type="Button" parent="EntryScreen/Panel/Menu"]
+[node name="New" type="Button" parent="EntryScreen/Panel/Menu" unique_id=2093995008]
 layout_mode = 2
 text = "New world"
 script = ExtResource("15_32mo6")
 
-[node name="Controls" type="RichTextLabel" parent="."]
+[node name="Controls" type="RichTextLabel" parent="." unique_id=1114191271]
 clip_contents = false
 anchors_preset = 6
 anchor_left = 1.0
@@ -340,7 +338,7 @@ autowrap_mode = 0
 tab_size = 7
 shortcut_keys_enabled = false
 
-[node name="VersionLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="." unique_id=1591267324]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -362,7 +360,7 @@ script = ExtResource("6_aufvl")
 json_text = "Tinybox %version%"
 raw_format = true
 
-[node name="RealTime" type="Label" parent="."]
+[node name="RealTime" type="Label" parent="." unique_id=1848515031]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -382,7 +380,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("8_t5c8k")
 
-[node name="Coordinates" type="Label" parent="."]
+[node name="Coordinates" type="Label" parent="." unique_id=1511527593]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -398,7 +396,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("6_aufvl")
 
-[node name="PauseMenu" type="Control" parent="."]
+[node name="PauseMenu" type="Control" parent="." unique_id=1219805549]
 visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
@@ -408,7 +406,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Gradient" type="TextureRect" parent="PauseMenu"]
+[node name="Gradient" type="TextureRect" parent="PauseMenu" unique_id=740912205]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -419,7 +417,7 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_mw3a6")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu" unique_id=110280148]
 clip_contents = false
 custom_minimum_size = Vector2(908, 2.08165e-12)
 layout_mode = 1
@@ -435,17 +433,17 @@ grow_horizontal = 0
 grow_vertical = 2
 follow_focus = true
 
-[node name="Sections" type="VBoxContainer" parent="PauseMenu/ScrollContainer"]
+[node name="Sections" type="VBoxContainer" parent="PauseMenu/ScrollContainer" unique_id=306762404]
 layout_mode = 2
 script = ExtResource("6_i5rxj")
 
-[node name="Editor" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+[node name="Editor" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections" unique_id=779007524]
 custom_minimum_size = Vector2(346, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 8
 alignment = 1
 
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=917082924]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_5yhmg")
@@ -453,61 +451,61 @@ theme_override_font_sizes/font_size = 64
 text = "Editor"
 script = ExtResource("6_aufvl")
 
-[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=52915427]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Sections/Editor" instance=ExtResource("12_nulw5")]
+[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=190992203 instance=ExtResource("12_nulw5")]
 self_modulate = Color(0.917678, 0.110667, 5.12117e-07, 1)
 layout_mode = 2
 text = "Leave Editor"
 editor_leave_text = true
 
-[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1727533743]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1530552000]
 layout_mode = 2
 text = "Save world"
 script = ExtResource("6_aufvl")
 
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1234278967]
 layout_mode = 2
 placeholder_text = "World name..."
 
-[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1295114854]
 layout_mode = 2
 text = "Save world"
 script = ExtResource("15_32mo6")
 json_text = "ui/save_world"
 
-[node name="TestWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="TestWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=201102031]
 self_modulate = Color(1, 2.702, 1, 1)
 layout_mode = 2
 text = "Save & test world"
 script = ExtResource("15_32mo6")
 json_text = "ui/save_and_test"
 
-[node name="TestWorldAtSpot" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="TestWorldAtSpot" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=211245726]
 self_modulate = Color(1, 2.702, 1.8, 1)
 layout_mode = 2
 text = "Save & test world at this spot"
 script = ExtResource("15_32mo6")
 json_text = "ui/save_and_test_at_spot"
 
-[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=232472871]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="UploadWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("world_name")]
+[node name="UploadWorld" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=161337158 node_paths=PackedStringArray("world_name")]
 self_modulate = Color(1, 0.541, 1.8, 1)
 layout_mode = 2
 text = "Save & upload world to Browser"
 script = ExtResource("12_whfwp")
 world_name = NodePath("../SaveWorldName")
 
-[node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1857165457]
 modulate = Color(1, 1, 1, 0.588235)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -515,31 +513,31 @@ autowrap_mode = 3
 script = ExtResource("6_aufvl")
 json_text = "ui/upload_world_tip"
 
-[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1930360768]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1501375151]
 layout_mode = 2
 text = "Load world"
 script = ExtResource("6_aufvl")
 
-[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("12_qtwve")]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=571655267 node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("12_qtwve")]
 layout_mode = 2
 associated_button = NodePath("../Load")
 report_button = NodePath("../Report")
 
-[node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Load" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1594934311]
 layout_mode = 2
 text = "Load world"
 script = ExtResource("15_32mo6")
 json_text = "ui/load_world"
 
-[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=409969414]
 custom_minimum_size = Vector2(2.08165e-12, 24)
 layout_mode = 2
 
-[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=2039661890]
 visible = false
 modulate = Color(1, 0.541, 1.8, 1)
 custom_minimum_size = Vector2(45, 2.08165e-12)
@@ -549,7 +547,7 @@ text = "Report this map"
 icon_alignment = 1
 script = ExtResource("15_32mo6")
 
-[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Sections/Editor/Report"]
+[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Sections/Editor/Report" unique_id=370723003]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -564,17 +562,17 @@ texture = ExtResource("12_dihgv")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor"]
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/Editor" unique_id=1200169514]
 custom_minimum_size = Vector2(2.08165e-12, 70)
 layout_mode = 2
 
-[node name="World Properties" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections"]
+[node name="World Properties" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections" unique_id=1981860752]
 custom_minimum_size = Vector2(346, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 8
 alignment = 1
 
-[node name="DynamicLabel6" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel6" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1821955150]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_5yhmg")
@@ -582,16 +580,16 @@ theme_override_font_sizes/font_size = 64
 text = "World"
 script = ExtResource("6_aufvl")
 
-[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=576450275]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel10" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel10" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=144025086]
 layout_mode = 2
 text = "Gravity scale"
 script = ExtResource("6_aufvl")
 
-[node name="GravScale" type="HSlider" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="GravScale" type="HSlider" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1567673921]
 layout_mode = 2
 min_value = 0.5
 max_value = 1.5
@@ -601,145 +599,145 @@ scrollable = false
 tick_count = 5
 ticks_on_borders = true
 
-[node name="DynamicLabel11" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel11" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1361021997]
 layout_mode = 2
 text = "0.5x                         1x                        1.5x"
 script = ExtResource("6_aufvl")
 
-[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer4" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=784278419]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel8" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel8" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1726325206]
 layout_mode = 2
 text = "Lower death limit"
 script = ExtResource("6_aufvl")
 
-[node name="DeathLimitLow" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+[node name="DeathLimitLow" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1598104690 instance=ExtResource("5_umgt3")]
 layout_mode = 2
 
-[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow" index="2"]
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitLow" index="2" unique_id=770014242]
 text = "20"
 
-[node name="DynamicLabel9" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel9" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1379039185]
 layout_mode = 2
 text = "Higher death limit"
 script = ExtResource("6_aufvl")
 
-[node name="DeathLimitHigh" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+[node name="DeathLimitHigh" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1595337430 instance=ExtResource("5_umgt3")]
 layout_mode = 2
 
-[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh" index="2"]
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/DeathLimitHigh" index="2" unique_id=770014242]
 text = "20"
 
-[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=481957758]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel12" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel12" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1677617996]
 layout_mode = 2
 text = "Sandbox respawn time"
 script = ExtResource("6_aufvl")
 
-[node name="RespawnTime" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+[node name="RespawnTime" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=2046993345 instance=ExtResource("5_umgt3")]
 layout_mode = 2
 
-[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/RespawnTime" index="2"]
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/RespawnTime" index="2" unique_id=770014242]
 text = "5"
 
-[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1334497432]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1196035846]
 layout_mode = 2
 text = "Water"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/water"
 
-[node name="Water" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Water" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1421629165]
 layout_mode = 2
 text = "Toggle water"
 script = ExtResource("15_32mo6")
 
-[node name="WaterHeightAdjuster" parent="PauseMenu/ScrollContainer/Sections/World Properties" instance=ExtResource("5_umgt3")]
+[node name="WaterHeightAdjuster" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1805249305 instance=ExtResource("5_umgt3")]
 layout_mode = 2
 
-[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster" index="2"]
+[node name="DynamicLabel" parent="PauseMenu/ScrollContainer/Sections/World Properties/WaterHeightAdjuster" index="2" unique_id=770014242]
 text = "Water height: 42"
 
-[node name="DynamicLabel5" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel5" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=766345111]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.513726)
 text = "Water type"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/water_type"
 
-[node name="WaterType" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="WaterType" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1316699424]
 layout_mode = 2
 text = "Water"
 script = ExtResource("15_32mo6")
 
-[node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer2" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1443085238]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1651317992]
 layout_mode = 2
 text = "Environment"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/environment"
 
-[node name="Environment" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Environment" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=922626113]
 layout_mode = 2
 text = "Sunny"
 script = ExtResource("15_32mo6")
 
-[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer3" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=1755991018]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel4" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=12804159]
 layout_mode = 2
 text = "Background"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/background"
 
-[node name="Background" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Background" type="Button" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=530116247]
 layout_mode = 2
 text = "(none)"
 script = ExtResource("15_32mo6")
 
-[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="Spacer5" type="Control" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=683119248]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="DynamicLabel7" type="Label" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=38938026]
 layout_mode = 2
 text = "Songs"
 script = ExtResource("6_aufvl")
 json_text = "ui/editor/songs"
 
-[node name="SongList" type="PanelContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties"]
+[node name="SongList" type="PanelContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties" unique_id=546430122]
 layout_mode = 2
 
-[node name="List" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList"]
+[node name="List" type="VBoxContainer" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList" unique_id=1200928284]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList/List"]
+[node name="CheckBox" type="CheckBox" parent="PauseMenu/ScrollContainer/Sections/World Properties/SongList/List" unique_id=255036437]
 layout_mode = 2
 
-[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections"]
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Sections" unique_id=1218216159]
 custom_minimum_size = Vector2(908, 70)
 layout_mode = 2
 
-[node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Sections" instance=ExtResource("14_f30l1")]
+[node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Sections" unique_id=952743971 instance=ExtResource("14_f30l1")]
 custom_minimum_size = Vector2(346, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 8
 show_save_button = false
 
-[node name="OptionsButton" type="Button" parent="."]
+[node name="OptionsButton" type="Button" parent="." unique_id=450170702]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

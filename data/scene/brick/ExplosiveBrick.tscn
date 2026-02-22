@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bde1qvp4v6opt"]
+[gd_scene format=3 uid="uid://bde1qvp4v6opt"]
 
 [ext_resource type="Script" uid="uid://3mley7js4amj" path="res://src/ExplosiveBrick.gd" id="1_sbvri"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_2nqpl"]
@@ -21,7 +21,7 @@ size = Vector3(1.4, 1.4, 1.4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_w63pj"]
 size = Vector3(1.3, 1.3, 1.3)
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=521254338]
 collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
@@ -31,55 +31,55 @@ max_contacts_reported = 1
 script = ExtResource("1_sbvri")
 _brick_spawnable_type = "brick_explosive"
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_18dtu")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=1848918688 instance=ExtResource("2_18dtu")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("3_ph5fx")]
+[node name="BrickSynchronizer" parent="." unique_id=1581594596 instance=ExtResource("3_ph5fx")]
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=1073276904]
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=754048295]
 script = ExtResource("2_2nqpl")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_njokc")]
+[node name="model" parent="Smoothing" unique_id=303627057 instance=ExtResource("3_njokc")]
 
-[node name="Cube" parent="Smoothing/model" index="0"]
+[node name="Cube" parent="Smoothing/model" index="0" unique_id=1941203451]
 surface_material_override/0 = ExtResource("4_24yt8")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=385021882]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=1585340766]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=42790293]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=460371950]
 shape = SubResource("BoxShape3D_mtstk")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1324396545]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=1628242943]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=480704544]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=841648222]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=36678087]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_w63pj")
 
-[node name="Fire" parent="." instance=ExtResource("4_f1rrm")]
+[node name="Fire" parent="." unique_id=1295818667 instance=ExtResource("4_f1rrm")]
 
 [editable path="Smoothing/model"]

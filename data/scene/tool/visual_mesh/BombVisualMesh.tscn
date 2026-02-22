@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://tmvf2pb5q4x1"]
+[gd_scene format=4 uid="uid://tmvf2pb5q4x1"]
 
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="1_qqi4j"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_cvydh"]
@@ -117,12 +117,12 @@ normal_texture = ExtResource("2_cvydh")
 rim_enabled = true
 rim = 0.16
 
-[node name="BombToolVisual" type="Node3D"]
+[node name="BombToolVisual" type="Node3D" unique_id=345100677]
 
-[node name="Bomb" type="Node3D" parent="."]
+[node name="Bomb" type="Node3D" parent="." unique_id=1584842744]
 transform = Transform3D(0.415339, 0.323574, -0.287737, -0.0238309, 0.415185, 0.432496, 0.432348, -0.28796, 0.300257, -0.0776271, 0.0688911, -0.130443)
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="Bomb"]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Bomb" unique_id=188367183]
 transform = Transform3D(1, -1.49012e-07, -1.49012e-07, 5.96046e-08, 1, -1.56462e-07, -2.68221e-07, 7.45058e-09, 1, 0.477306, 0.783024, -0.0266928)
 amount = 48
 lifetime = 2.5
@@ -131,11 +131,10 @@ fixed_fps = 13
 process_material = SubResource("ParticleProcessMaterial_t7hvn")
 draw_pass_1 = SubResource("PlaneMesh_clwto")
 
-[node name="bomb" type="Node3D" parent="Bomb"]
+[node name="bomb" type="Node3D" parent="Bomb" unique_id=810807484]
 transform = Transform3D(0.150736, 0.199446, 1.49012e-08, -0.199446, 0.150736, 3.72529e-09, -1.86265e-08, -1.11759e-08, 0.25, 0.104597, 0.280347, -0.0493677)
 
-[node name="Cube" type="MeshInstance3D" parent="Bomb/bomb"]
+[node name="Cube" type="MeshInstance3D" parent="Bomb/bomb" unique_id=164233660]
 mesh = SubResource("ArrayMesh_7n4lf")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
 surface_material_override/1 = ExtResource("3_uty54")

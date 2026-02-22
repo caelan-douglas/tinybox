@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://t8ujxmero2bt"]
+[gd_scene format=3 uid="uid://t8ujxmero2bt"]
 
 [ext_resource type="Script" uid="uid://7kmu3frakj1b" path="res://src/CapturePoint.gd" id="1_bhrvc"]
 [ext_resource type="AudioStream" uid="uid://diffqxt3veixw" path="res://data/audio/capture/capture.ogg" id="2_tro2i"]
@@ -23,38 +23,38 @@ albedo_color = Color(0.78, 0.643, 0.416, 0.3)
 height = 6.0
 radius = 8.0
 
-[node name="CapturePoint" type="Node3D"]
+[node name="CapturePoint" type="Node3D" unique_id=35321273]
 script = ExtResource("1_bhrvc")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=950400111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
 mesh = SubResource("CylinderMesh_ix0xn")
 skeleton = NodePath("../Area/CollisionShape3D")
 surface_material_override/0 = SubResource("StandardMaterial3D_u1gd7")
 
-[node name="Label3D" type="Label3D" parent="Mesh"]
+[node name="Label3D" type="Label3D" parent="Mesh" unique_id=99384448]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08165e-12, 2, -2.08165e-12)
 pixel_size = 0.001
 billboard = 1
 fixed_size = true
 text = "Capture Point"
 
-[node name="Area" type="Area3D" parent="."]
+[node name="Area" type="Area3D" parent="." unique_id=543662810]
 collision_layer = 32
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area" unique_id=636887060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 3, 2.08165e-12)
 shape = SubResource("CylinderShape3D_dayl2")
 
-[node name="Capture" type="AudioStreamPlayer" parent="."]
+[node name="Capture" type="AudioStreamPlayer" parent="." unique_id=344991111]
 stream = ExtResource("2_tro2i")
 bus = &"UI"
 
-[node name="Lost" type="AudioStreamPlayer" parent="."]
+[node name="Lost" type="AudioStreamPlayer" parent="." unique_id=475135717]
 stream = ExtResource("3_0py6e")
 bus = &"UI"
 
-[node name="Contested" type="AudioStreamPlayer" parent="."]
+[node name="Contested" type="AudioStreamPlayer" parent="." unique_id=1119694374]
 stream = ExtResource("4_af6hn")
 bus = &"UI"

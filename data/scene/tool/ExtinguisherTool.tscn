@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://k38mpvqdmjjo"]
+[gd_scene format=3 uid="uid://k38mpvqdmjjo"]
 
 [ext_resource type="Script" uid="uid://5mi6s03dbpql" path="res://src/ShootTool.gd" id="1_lnwkt"]
 [ext_resource type="AudioStream" uid="uid://b6rmf8ndmltg3" path="res://data/audio/extinguisher/extinguisher.ogg" id="2_bmthb"]
@@ -69,7 +69,7 @@ _data = {
 &"fadeout": SubResource("Animation_uslbx")
 }
 
-[node name="ExtinguisherTool" type="Node3D"]
+[node name="ExtinguisherTool" type="Node3D" unique_id=107191226]
 script = ExtResource("1_lnwkt")
 tool_name = "Extngshr"
 _shoot_type = 4
@@ -80,13 +80,11 @@ restore_ammo = true
 max_ammo_restore = 999
 visual_mesh_name = "FireExtinguisherVisualMesh"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=769538357]
 stream = SubResource("AudioStreamRandomizer_7fsnj")
 volume_db = -10.0
 max_distance = 40.0
 bus = &"SFX"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_xdt0q")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=800370483]
+libraries/ = SubResource("AnimationLibrary_xdt0q")

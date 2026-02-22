@@ -1,6 +1,4 @@
-[gd_resource type="Environment" load_steps=6 format=3 uid="uid://bquh7sgklsbgg"]
-
-[ext_resource type="Texture2D" uid="uid://cy77ommfmmk5k" path="res://data/textures/sky/kloppenheim_03_puresky_4k.hdr" id="1_b8wx4"]
+[gd_resource type="Environment" format=3 uid="uid://bquh7sgklsbgg"]
 
 [sub_resource type="Gradient" id="Gradient_ckbve"]
 colors = PackedColorArray(0.00789951, 0.0159511, 0.0552812, 1, 1, 1.05, 1.1, 1)
@@ -10,7 +8,6 @@ gradient = SubResource("Gradient_ckbve")
 fill_from = Vector2(0, 0.175214)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jhq5o"]
-panorama = ExtResource("1_b8wx4")
 
 [sub_resource type="Sky" id="Sky_wh8fr"]
 sky_material = SubResource("PanoramaSkyMaterial_jhq5o")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b41armf0g1vux"]
+[gd_scene format=3 uid="uid://b41armf0g1vux"]
 
 [ext_resource type="Material" uid="uid://5j6h001ay0q5" path="res://data/materials/particles/dust.tres" id="1_ali5f"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_2oayn"]
@@ -45,7 +45,7 @@ material = ExtResource("1_ali5f")
 size = Vector2(0.5, 0.5)
 orientation = 2
 
-[node name="run_particles" type="GPUParticles3D"]
+[node name="run_particles" type="GPUParticles3D" unique_id=1218864388]
 emitting = false
 amount = 3
 one_shot = true

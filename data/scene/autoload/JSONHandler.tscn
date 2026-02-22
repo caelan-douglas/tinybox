@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1ueot6dtqe03"]
+[gd_scene format=3 uid="uid://c1ueot6dtqe03"]
 
 [ext_resource type="Script" uid="uid://c81snxrwgg0me" path="res://src/JSONHandler.gd" id="1_fdqd8"]
 
-[node name="JSONHandler" type="Node"]
+[node name="JSONHandler" type="Node" unique_id=1725718407]
 script = ExtResource("1_fdqd8")

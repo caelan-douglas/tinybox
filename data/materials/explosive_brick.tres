@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dokmq4mxw3vng"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dokmq4mxw3vng"]
 
 [ext_resource type="Texture2D" uid="uid://c1bn554ua5eur" path="res://data/textures/explosive_brick.jpg" id="1_nl11p"]
 

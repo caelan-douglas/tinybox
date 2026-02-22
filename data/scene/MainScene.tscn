@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bhj43my7js408"]
+[gd_scene format=3 uid="uid://bhj43my7js408"]
 
 [ext_resource type="Script" uid="uid://cbn1b5ermac7n" path="res://Main.gd" id="1_jgbvu"]
 [ext_resource type="Script" uid="uid://c2cxxa471svcm" path="res://src/InfoServer.gd" id="2_3hubp"]
@@ -12,47 +12,47 @@
 [ext_resource type="Script" uid="uid://dafapgvrl3pds" path="res://src/ui/AnimatedPanelContainer.gd" id="9_macom"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="10_km8j6"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=682728159]
 script = ExtResource("1_jgbvu")
 
-[node name="UDPServer" type="Node" parent="."]
+[node name="UDPServer" type="Node" parent="." unique_id=893890365]
 process_mode = 3
 script = ExtResource("2_3hubp")
 
-[node name="World" type="Node3D" parent="."]
+[node name="World" type="Node3D" parent="." unique_id=2026373896]
 script = ExtResource("2_alcqr")
 
-[node name="Map" type="Node3D" parent="World"]
+[node name="Map" type="Node3D" parent="World" unique_id=1063581315]
 
-[node name="MultiplayerMenuMap" parent="World/Map" instance=ExtResource("3_lya7f")]
+[node name="MultiplayerMenuMap" parent="World/Map" unique_id=1976751211 instance=ExtResource("3_lya7f")]
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World"]
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="World" unique_id=1482525995]
 _spawnable_scenes = PackedStringArray("uid://dinh2untg6m17", "uid://ky2h7r63y8gy", "uid://dq4jgcqroudj7", "uid://cd3af1twwe58l", "uid://gd6l0n3l7l38", "uid://dv1sisl0rn8iq", "uid://bjkvftq5sd13", "uid://bqur8gq477tgn")
 spawn_path = NodePath("..")
 
-[node name="MultiplayerObjSpawner" type="MultiplayerSpawner" parent="World"]
+[node name="MultiplayerObjSpawner" type="MultiplayerSpawner" parent="World" unique_id=1713688537]
 spawn_path = NodePath("..")
 
-[node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World"]
+[node name="MultiplayerMapSpawner" type="MultiplayerSpawner" parent="World" unique_id=1192134648]
 _spawnable_scenes = PackedStringArray("uid://cpc0y6dffts5n")
 spawn_path = NodePath("../Map")
 spawn_limit = 1
 
-[node name="BrickGroups" type="Node" parent="World"]
+[node name="BrickGroups" type="Node" parent="World" unique_id=779179626]
 script = ExtResource("4_nsdny")
 
-[node name="GameCanvas" parent="." instance=ExtResource("5_ki5at")]
+[node name="GameCanvas" parent="." unique_id=691916347 instance=ExtResource("5_ki5at")]
 visible = false
 
-[node name="MultiplayerMenu" parent="." instance=ExtResource("5_ti6c5")]
+[node name="MultiplayerMenu" parent="." unique_id=264385289 instance=ExtResource("5_ti6c5")]
 
-[node name="EditorCanvas" parent="." instance=ExtResource("7_c1osm")]
+[node name="EditorCanvas" parent="." unique_id=827786059 instance=ExtResource("7_c1osm")]
 visible = false
 
-[node name="LoadingCanvas" type="CanvasLayer" parent="."]
+[node name="LoadingCanvas" type="CanvasLayer" parent="." unique_id=1333010981]
 visible = false
 
-[node name="Panel" type="PanelContainer" parent="LoadingCanvas"]
+[node name="Panel" type="PanelContainer" parent="LoadingCanvas" unique_id=2040516828]
 self_modulate = Color(0.862745, 0, 0.807843, 1)
 custom_minimum_size = Vector2(400, 80)
 anchors_preset = 8
@@ -69,14 +69,14 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_macom")
 
-[node name="Label" type="Label" parent="LoadingCanvas/Panel"]
+[node name="Label" type="Label" parent="LoadingCanvas/Panel" unique_id=1061794053]
 layout_mode = 2
 text = "Loading file...     Bricks: 0"
 horizontal_alignment = 1
 
-[node name="DebugCanvas" type="CanvasLayer" parent="."]
+[node name="DebugCanvas" type="CanvasLayer" parent="." unique_id=1126281410]
 
-[node name="DebugMenu" type="VBoxContainer" parent="DebugCanvas"]
+[node name="DebugMenu" type="VBoxContainer" parent="DebugCanvas" unique_id=1074748939]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,7 +93,7 @@ mouse_filter = 2
 theme_override_constants/separation = 8
 script = ExtResource("8_cc4qc")
 
-[node name="Label" type="Label" parent="DebugCanvas/DebugMenu"]
+[node name="Label" type="Label" parent="DebugCanvas/DebugMenu" unique_id=1434564726]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.643137)
@@ -101,12 +101,12 @@ theme_override_constants/outline_size = 6
 text = "(Press [ ` ] to hide/show debug information)"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DebugCanvas/DebugMenu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="DebugCanvas/DebugMenu" unique_id=596559442]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="DebugCol1" type="RichTextLabel" parent="DebugCanvas/DebugMenu/HBoxContainer"]
+[node name="DebugCol1" type="RichTextLabel" parent="DebugCanvas/DebugMenu/HBoxContainer" unique_id=905735377]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 13
@@ -122,7 +122,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 2
 
-[node name="DebugCol2" type="RichTextLabel" parent="DebugCanvas/DebugMenu/HBoxContainer"]
+[node name="DebugCol2" type="RichTextLabel" parent="DebugCanvas/DebugMenu/HBoxContainer" unique_id=337507531]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 13

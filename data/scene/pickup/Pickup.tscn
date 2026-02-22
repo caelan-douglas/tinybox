@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://3fiodktyscht"]
+[gd_scene format=3 uid="uid://3fiodktyscht"]
 
 [ext_resource type="Texture2D" uid="uid://bj7ihpi18ashl" path="res://data/textures/glow.png" id="1_gmim4"]
 [ext_resource type="Script" uid="uid://bgdw2fkg88nrb" path="res://src/Pickup.gd" id="1_obmro"]
@@ -62,46 +62,44 @@ _data = {
 &"rotate": SubResource("Animation_3kpen")
 }
 
-[node name="Pickup" type="Node3D"]
+[node name="Pickup" type="Node3D" unique_id=638842828]
 script = ExtResource("1_obmro")
 tbw_object_type = "obj_pickup"
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1617140558]
 collision_layer = 33
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1309194284]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("SphereShape3D_3to75")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1454674594]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 mesh = SubResource("CylinderMesh_drh1x")
 surface_material_override/0 = SubResource("StandardMaterial3D_k04l7")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1495082425]
 root_node = NodePath("../MeshParent")
-libraries = {
-"": SubResource("AnimationLibrary_airdm")
-}
-autoplay = "rotate"
+libraries/ = SubResource("AnimationLibrary_airdm")
+autoplay = &"rotate"
 
-[node name="MeshParent" type="Node3D" parent="."]
-transform = Transform3D(0.258816, -0.965927, 0, 0.965927, 0.258816, 0, 0, 0, 1, 0, 0.5, 0)
+[node name="MeshParent" type="Node3D" parent="." unique_id=1504300480]
+transform = Transform3D(0.25881615, -0.965927, 0, 0.965927, 0.25881615, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=947347632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 1
 modulate = Color(1, 0.67451, 0.396078, 1)
 text = "Shots: "
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1398921489]
 stream = ExtResource("3_ah04k")
 volume_db = 6.0
 max_db = 6.0
 max_distance = 20.0
 bus = &"SFX"
 
-[node name="RespawnTimer" type="Timer" parent="."]
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1523028195]
 wait_time = 10.0
 one_shot = true

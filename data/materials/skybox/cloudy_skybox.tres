@@ -1,4 +1,4 @@
-[gd_resource type="Sky" load_steps=3 format=3 uid="uid://qbldbv6nh5ve"]
+[gd_resource type="Sky" format=3 uid="uid://qbldbv6nh5ve"]
 
 [ext_resource type="Texture2D" uid="uid://cj1otog15h7v2" path="res://data/textures/sky/clouds.png" id="1_23bfk"]
 

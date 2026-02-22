@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://baiu57k2676um"]
+[gd_scene format=3 uid="uid://baiu57k2676um"]
 
 [ext_resource type="Script" uid="uid://b0s4a76sls8o5" path="res://src/Lifter.gd" id="1_kkssy"]
 [ext_resource type="PackedScene" uid="uid://bagdsh518cwy5" path="res://data/scene/lifter/LifterParticles.tscn" id="2_ho4e0"]
@@ -9,22 +9,22 @@
 height = 12.0
 radius = 1.2
 
-[node name="Lifter" type="Node3D"]
+[node name="Lifter" type="Node3D" unique_id=1764101450]
 script = ExtResource("1_kkssy")
 tbw_object_type = "obj_lifter"
 
-[node name="Particles" parent="." instance=ExtResource("2_ho4e0")]
+[node name="Particles" parent="." unique_id=1918374724 instance=ExtResource("2_ho4e0")]
 local_coords = true
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=155020454]
 collision_layer = 32
 collision_mask = 131
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1394329285]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
 shape = SubResource("CylinderShape3D_5qe2b")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=692598594]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
 stream = ExtResource("4_eks58")
 volume_db = -10.0
@@ -35,7 +35,7 @@ max_distance = 17.0
 panning_strength = 1.4
 bus = &"SFX"
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1745224891]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = false
 light_color = Color(0.898039, 0.6, 0.47451, 1)

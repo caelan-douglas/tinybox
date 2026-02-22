@@ -1,12 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cuby2ah84p07d"]
+[gd_scene format=3 uid="uid://cuby2ah84p07d"]
 
 [ext_resource type="PackedScene" uid="uid://bp5p6tytrnqu3" path="res://data/models/visual_mesh/rocket_launcher/launcher.blend" id="1_7dnap"]
 [ext_resource type="PackedScene" uid="uid://c5akyec0qxnpa" path="res://data/models/rocket_launcher/rocket.blend" id="2_bdp3s"]
 [ext_resource type="Material" uid="uid://dfwrrmi0rna4a" path="res://data/materials/visual_mesh/rocket_launcher/rocket_launcher_mat.tres" id="2_gx81r"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=238600460]
 
-[node name="launcher" parent="." instance=ExtResource("1_7dnap")]
+[node name="launcher" parent="." unique_id=1731295405 instance=ExtResource("1_7dnap")]
 transform = Transform3D(0.39165792, 0.9200878, 0.0062479926, -0.047713652, 0.027090851, -0.998491, -0.918872, 0.39076936, 0.054511104, 0.08087884, -0.09114813, -0.026850235)
 
 [node name="launcher2" parent="launcher" index="0"]
@@ -15,7 +15,7 @@ surface_material_override/0 = ExtResource("2_gx81r")
 [node name="sight" parent="launcher" index="1"]
 visible = false
 
-[node name="rocket" parent="launcher" instance=ExtResource("2_bdp3s")]
+[node name="rocket" parent="launcher" unique_id=458548189 instance=ExtResource("2_bdp3s")]
 transform = Transform3D(0.69999987, 0, -4.0978193e-08, -2.9802322e-08, 0.6999998, 8.381903e-09, 4.8428774e-08, -6.519258e-09, 0.6999998, -0.0024409369, 0.10217842, -1.6184297)
 
 [editable path="launcher"]

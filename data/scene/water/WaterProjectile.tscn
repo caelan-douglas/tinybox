@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dv1sisl0rn8iq"]
+[gd_scene format=3 uid="uid://dv1sisl0rn8iq"]
 
 [ext_resource type="Script" uid="uid://c6r3cayh3lyem" path="res://src/WaterProjectile.gd" id="1_0xm6f"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_o3kjx"]
@@ -65,30 +65,30 @@ properties/1/path = NodePath(".:linear_velocity")
 properties/1/spawn = true
 properties/1/replication_mode = 2
 
-[node name="WaterProjectile" type="RigidBody3D"]
+[node name="WaterProjectile" type="RigidBody3D" unique_id=753396440]
 collision_mask = 11
 physics_material_override = SubResource("PhysicsMaterial_kcslu")
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_0xm6f")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=857842836]
 
-[node name="collider" type="CollisionShape3D" parent="Area3D"]
+[node name="collider" type="CollisionShape3D" parent="Area3D" unique_id=2073190875]
 shape = SubResource("SphereShape3D_bvw4g")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=796139085]
 script = ExtResource("2_o3kjx")
 
-[node name="Node3D" type="Node3D" parent="Smoothing"]
+[node name="Node3D" type="Node3D" parent="Smoothing" unique_id=1798972060]
 
-[node name="splash_particles" type="GPUParticles3D" parent="Smoothing/Node3D"]
+[node name="splash_particles" type="GPUParticles3D" parent="Smoothing/Node3D" unique_id=1211393377]
 amount = 16
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_l0gu6")
 draw_pass_1 = SubResource("QuadMesh_soq25")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=347842501]
 replication_interval = 0.04
 delta_interval = 0.04
 replication_config = SubResource("SceneReplicationConfig_28iu0")

@@ -1,10 +1,7 @@
-[gd_resource type="Resource" script_class="Team" load_steps=2 format=3 uid="uid://qabpabfggsdp"]
+[gd_resource type="Resource" script_class="Team" format=3 uid="uid://qabpabfggsdp"]
 
 [ext_resource type="Script" uid="uid://1tkht6mwmgxu" path="res://src/Team.gd" id="1_iov8e"]
 
 [resource]
 script = ExtResource("1_iov8e")
-name = "Default"
-members = []
 colour = Color(0.0509804, 0.109804, 0.168627, 1)
-cash = 700

@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://wlyrwmvp6onh"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://wlyrwmvp6onh"]
 
 [ext_resource type="Texture2D" uid="uid://cr6tutv8k53uc" path="res://data/textures/Snow010A_2K-JPG_Color.jpg" id="1_r2vxt"]
 [ext_resource type="Texture2D" uid="uid://nutkalnwu184" path="res://data/textures/Snow010A_2K-JPG_Roughness.jpg" id="2_bixfm"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dnjrw3cumbife"]
+[gd_scene format=3 uid="uid://dnjrw3cumbife"]
 
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="1_recen"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_mf6nb"]
@@ -49,7 +49,7 @@ distance_fade_max_distance = 120.0
 [sub_resource type="QuadMesh" id="QuadMesh_2qxob"]
 material = SubResource("StandardMaterial3D_h4is5")
 
-[node name="TeleportParticles" type="GPUParticles3D"]
+[node name="TeleportParticles" type="GPUParticles3D" unique_id=423490325]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.259364, 0)
 extra_cull_margin = 128.0
 emitting = false

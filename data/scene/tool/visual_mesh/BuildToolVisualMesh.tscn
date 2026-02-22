@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://coelgovu43p42"]
+[gd_scene format=4 uid="uid://coelgovu43p42"]
 
 [ext_resource type="PackedScene" uid="uid://bo2kwvoky7lcg" path="res://data/models/visual_mesh/buildtool/hammer.blend" id="1_a8i84"]
 [ext_resource type="Material" uid="uid://dxhun2g3o3x2k" path="res://data/materials/wood.tres" id="2_my506"]
@@ -62,12 +62,12 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ovk80")
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1910647512]
 
-[node name="hammer" parent="." instance=ExtResource("1_a8i84")]
+[node name="hammer" parent="." unique_id=107329042 instance=ExtResource("1_a8i84")]
 transform = Transform3D(-0.00255559, 0.290462, 0.075, 0.0200962, 0.075, -0.289778, -0.299315, 0.00255554, -0.0200962, -0.0317974, 0.0804799, -0.0516177)
 
-[node name="Cylinder" parent="hammer" index="0"]
+[node name="Cylinder" parent="hammer" index="0" unique_id=1176601024]
 mesh = SubResource("ArrayMesh_bv18a")
 surface_material_override/0 = ExtResource("2_my506")
 surface_material_override/1 = ExtResource("3_5kgq4")

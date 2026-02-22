@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://xe60ohkjtn13"]
+[gd_scene format=3 uid="uid://xe60ohkjtn13"]
 
 [ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_yah8f"]
 
@@ -48,7 +48,7 @@ distance_fade_max_distance = 1.0
 material = SubResource("StandardMaterial3D_xdk4e")
 size = Vector2(0.02, 0.1)
 
-[node name="RainParticles" type="GPUParticles3D"]
+[node name="RainParticles" type="GPUParticles3D" unique_id=1895988060]
 extra_cull_margin = 128.0
 amount = 256
 lifetime = 2.0

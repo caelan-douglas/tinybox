@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://rpvksak4qq3p"]
+[gd_scene format=3 uid="uid://rpvksak4qq3p"]
 
 [ext_resource type="PackedScene" uid="uid://bs3fcqnicobxh" path="res://data/models/medkit/medkit.blend" id="1_wyfyp"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_87dpg"]
@@ -20,9 +20,9 @@ rim = 0.16
 clearcoat_enabled = true
 clearcoat_roughness = 0.17
 
-[node name="Medkit" type="Node3D"]
+[node name="Medkit" type="Node3D" unique_id=1582092656]
 
-[node name="medkit" parent="." instance=ExtResource("1_wyfyp")]
+[node name="medkit" parent="." unique_id=1180701844 instance=ExtResource("1_wyfyp")]
 
 [node name="Medkit" parent="medkit" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_vvpqk")

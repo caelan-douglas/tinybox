@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://d3owcticknpbn"]
+[gd_scene format=3 uid="uid://d3owcticknpbn"]
 
 [ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="1_00vsm"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_lyflj"]
@@ -137,12 +137,12 @@ _data = {
 &"preview": SubResource("Animation_vi55k")
 }
 
-[node name="PersistentScene" type="Node"]
+[node name="PersistentScene" type="Node" unique_id=1394343828]
 
-[node name="AlertCanvas" type="CanvasLayer" parent="."]
+[node name="AlertCanvas" type="CanvasLayer" parent="." unique_id=1449052579]
 layer = 10
 
-[node name="Alerts" type="VBoxContainer" parent="AlertCanvas"]
+[node name="Alerts" type="VBoxContainer" parent="AlertCanvas" unique_id=1690216658]
 anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
@@ -156,7 +156,7 @@ grow_vertical = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="Toasts" type="VBoxContainer" parent="AlertCanvas"]
+[node name="Toasts" type="VBoxContainer" parent="AlertCanvas" unique_id=940185078]
 anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.689
@@ -170,9 +170,9 @@ grow_vertical = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="PersistentCanvas" type="CanvasLayer" parent="."]
+[node name="PersistentCanvas" type="CanvasLayer" parent="." unique_id=1026754213]
 
-[node name="Fade" type="ColorRect" parent="PersistentCanvas"]
+[node name="Fade" type="ColorRect" parent="PersistentCanvas" unique_id=1490616531]
 visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -183,7 +183,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="ScaleTooltip" type="Label" parent="PersistentCanvas"]
+[node name="ScaleTooltip" type="Label" parent="PersistentCanvas" unique_id=1965544829]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -199,7 +199,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0.552941)
 theme_override_constants/outline_size = 5
 script = ExtResource("1_00vsm")
 
-[node name="Preview" type="Control" parent="PersistentCanvas"]
+[node name="Preview" type="Control" parent="PersistentCanvas" unique_id=1658033659]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -208,7 +208,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="PersistentCanvas/Preview"]
+[node name="ColorRect" type="ColorRect" parent="PersistentCanvas/Preview" unique_id=1336150856]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -220,7 +220,7 @@ grow_horizontal = 2
 rotation = -0.107718
 color = Color(0, 0, 0, 1)
 
-[node name="BottomBar" type="Control" parent="PersistentCanvas/Preview"]
+[node name="BottomBar" type="Control" parent="PersistentCanvas/Preview" unique_id=1589510319]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -229,7 +229,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ColorRect2" type="ColorRect" parent="PersistentCanvas/Preview/BottomBar"]
+[node name="ColorRect2" type="ColorRect" parent="PersistentCanvas/Preview/BottomBar" unique_id=241089660]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -244,7 +244,7 @@ grow_vertical = 0
 rotation = -0.107718
 color = Color(0, 0, 0, 1)
 
-[node name="SubtitleAnchor" type="Control" parent="PersistentCanvas/Preview"]
+[node name="SubtitleAnchor" type="Control" parent="PersistentCanvas/Preview" unique_id=2078409924]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -254,7 +254,7 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Subtitle" type="Label" parent="PersistentCanvas/Preview/SubtitleAnchor"]
+[node name="Subtitle" type="Label" parent="PersistentCanvas/Preview/SubtitleAnchor" unique_id=449391404]
 modulate = Color(0.871937, 0.771583, 0.69262, 1)
 layout_mode = 1
 anchors_preset = 1
@@ -267,8 +267,8 @@ offset_bottom = 858.0
 grow_horizontal = 0
 pivot_offset = Vector2(762, 2.08165e-12)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 16
 theme_override_constants/line_spacing = -15
+theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 36
 text = "Gamemode subtitle probably even longer wow it can even have two lines"
 horizontal_alignment = 2
@@ -276,15 +276,15 @@ autowrap_mode = 2
 clip_text = true
 script = ExtResource("1_00vsm")
 
-[node name="Title" type="Label" parent="PersistentCanvas/Preview"]
+[node name="Title" type="Label" parent="PersistentCanvas/Preview" unique_id=123011199]
 layout_mode = 1
 offset_left = 36.0
 offset_top = -182.0
 offset_right = 1078.0
 offset_bottom = -27.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 32
 theme_override_constants/line_spacing = -35
+theme_override_constants/outline_size = 32
 theme_override_fonts/font = ExtResource("2_lyflj")
 theme_override_font_sizes/font_size = 72
 text = "Gamemode Name VERY LONG"
@@ -292,7 +292,5 @@ autowrap_mode = 2
 uppercase = true
 script = ExtResource("1_00vsm")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PersistentCanvas/Preview"]
-libraries = {
-"": SubResource("AnimationLibrary_r3wi6")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PersistentCanvas/Preview" unique_id=637110466]
+libraries/ = SubResource("AnimationLibrary_r3wi6")

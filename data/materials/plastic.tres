@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dx6o5j0siyyq"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dx6o5j0siyyq"]
 
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="1_bhkns"]
 

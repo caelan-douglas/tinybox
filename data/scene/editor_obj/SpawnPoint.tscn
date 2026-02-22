@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://c715f67itwqrf"]
+[gd_scene format=4 uid="uid://c715f67itwqrf"]
 
 [ext_resource type="Script" uid="uid://civ6tft8ij0vo" path="res://src/SpawnPoint.gd" id="1_nt8o8"]
 [ext_resource type="Material" uid="uid://g6dxqcfscwlp" path="res://data/materials/metal.tres" id="2_2quxa"]
@@ -80,37 +80,35 @@ uv1_scale = Vector3(3, 2, 3)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_inaa5"]
 radius = 0.6
 
-[node name="SpawnPoint" type="StaticBody3D"]
+[node name="SpawnPoint" type="StaticBody3D" unique_id=933735385]
 script = ExtResource("1_nt8o8")
 tbw_object_type = "obj_spawnpoint"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1568275256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
 mesh = SubResource("CylinderMesh_i6q18")
 
-[node name="Flag" type="MeshInstance3D" parent="."]
+[node name="Flag" type="MeshInstance3D" parent="." unique_id=1927926928]
 visible = false
 mesh = SubResource("ArrayMesh_vv5d1")
-skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_2quxa")
 surface_material_override/1 = SubResource("StandardMaterial3D_0rb1t")
 
-[node name="FinishFlag" type="MeshInstance3D" parent="."]
+[node name="FinishFlag" type="MeshInstance3D" parent="." unique_id=886190642]
 visible = false
 mesh = SubResource("ArrayMesh_vv5d1")
-skeleton = NodePath("")
 surface_material_override/0 = ExtResource("2_2quxa")
 surface_material_override/1 = SubResource("StandardMaterial3D_y7c4m")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=913020815]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 256
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1502212963]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_inaa5")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1431540545]
 stream = ExtResource("3_0oqkx")
 bus = &"SFX"

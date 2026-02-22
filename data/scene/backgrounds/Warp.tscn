@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cguh5xbg61fg7"]
+[gd_scene format=4 uid="uid://cguh5xbg61fg7"]
 
 [ext_resource type="Script" uid="uid://cew6k87fglhlf" path="res://src/TBWObject.gd" id="1_a1ff3"]
 [ext_resource type="Texture2D" uid="uid://dp114evnflrwe" path="res://data/textures/atmosphere.png" id="1_oyopx"]
@@ -159,38 +159,34 @@ _data = {
 &"rotate": SubResource("Animation_nfs0d")
 }
 
-[node name="bg_warp" type="MultiMeshInstance3D"]
+[node name="bg_warp" type="MultiMeshInstance3D" unique_id=1680326931]
 cast_shadow = 0
 multimesh = SubResource("MultiMesh_014kd")
 script = ExtResource("1_a1ff3")
 tbw_object_type = "bg_warp"
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=2009027185]
 transform = Transform3D(1710, 0.000320435, 6.86646e-05, 0.000396729, 1710, -0.000427246, -0.000404358, 0.00134277, 1710, -1.14441e-05, 3.00004, -1139)
 material_override = SubResource("StandardMaterial3D_bqgam")
 mesh = SubResource("QuadMesh_d3pcm")
 
-[node name="Earth2" type="MeshInstance3D" parent="."]
+[node name="Earth2" type="MeshInstance3D" parent="." unique_id=1521669086]
 transform = Transform3D(446.214, 15.1398, 56.25, 39.1936, 243.439, -376.432, -43.0946, 378.164, 240.072, 5.82077e-11, 3, -1089)
 cast_shadow = 0
 mesh = SubResource("ArrayMesh_ytxcl")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_m64d7")
 
-[node name="SkysphereDepth2" type="MeshInstance3D" parent="."]
+[node name="SkysphereDepth2" type="MeshInstance3D" parent="." unique_id=1990678021]
 transform = Transform3D(900, 0, 0, 0, 900, 0, 0, 0, 900, 0, 0, 0)
 visible = false
 mesh = SubResource("ArrayMesh_05spt")
-skeleton = NodePath("")
 
-[node name="Star2" type="MeshInstance3D" parent="."]
+[node name="Star2" type="MeshInstance3D" parent="." unique_id=1814948002]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 visible = false
 cast_shadow = 0
 mesh = SubResource("SphereMesh_17ikj")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_co6yw")
-}
-autoplay = "rotate"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1924681087]
+libraries/ = SubResource("AnimationLibrary_co6yw")
+autoplay = &"rotate"

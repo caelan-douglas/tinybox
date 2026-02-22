@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4f0w4x3panmu"]
+[gd_scene format=3 uid="uid://d4f0w4x3panmu"]
 
 [ext_resource type="Script" uid="uid://dkdej1opalm7f" path="res://src/ui/MapList.gd" id="1_c00he"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_wf6r3"]
@@ -16,7 +16,7 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_1s30u"]
 image = SubResource("Image_wf6r3")
 
-[node name="MapList" type="Button"]
+[node name="MapList" type="Button" unique_id=169712203]
 custom_minimum_size = Vector2(2.08165e-12, 70)
 offset_right = 151.0
 offset_bottom = 38.0
@@ -25,7 +25,7 @@ icon = SubResource("ImageTexture_1s30u")
 text_overrun_behavior = 3
 script = ExtResource("1_c00he")
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="." unique_id=811993762]
 top_level = true
 z_index = 32
 custom_minimum_size = Vector2(600, 536)
@@ -44,14 +44,14 @@ mouse_filter = 0
 tab_alignment = 1
 current_tab = 2
 
-[node name="Built-in" type="VBoxContainer" parent="TabContainer"]
+[node name="Built-in" type="VBoxContainer" parent="TabContainer" unique_id=1476921062]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Built-in"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Built-in" unique_id=1221786944]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -59,18 +59,18 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="TabContainer/Built-in/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="TabContainer/Built-in/ScrollContainer" unique_id=1584394948]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Saved maps" type="VBoxContainer" parent="TabContainer"]
+[node name="Saved maps" type="VBoxContainer" parent="TabContainer" unique_id=354577690]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Saved maps"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Saved maps" unique_id=1964403736]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -78,21 +78,21 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="TabContainer/Saved maps/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="TabContainer/Saved maps/ScrollContainer" unique_id=705023140]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="World Browser (Online)" type="VBoxContainer" parent="TabContainer"]
+[node name="World Browser (Online)" type="VBoxContainer" parent="TabContainer" unique_id=1718488330]
 custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 2
 
-[node name="Header" type="HBoxContainer" parent="TabContainer/World Browser (Online)"]
+[node name="Header" type="HBoxContainer" parent="TabContainer/World Browser (Online)" unique_id=978589654]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="DynamicLabel" type="Label" parent="TabContainer/World Browser (Online)/Header"]
+[node name="DynamicLabel" type="Label" parent="TabContainer/World Browser (Online)/Header" unique_id=1935708778]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_wf6r3")
@@ -101,20 +101,20 @@ text = "World Browser"
 script = ExtResource("3_127uw")
 json_text = "ui/world_browser"
 
-[node name="FilterOptions" type="HBoxContainer" parent="TabContainer/World Browser (Online)/Header"]
+[node name="FilterOptions" type="HBoxContainer" parent="TabContainer/World Browser (Online)/Header" unique_id=457359106]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Search" type="LineEdit" parent="TabContainer/World Browser (Online)/Header/FilterOptions"]
+[node name="Search" type="LineEdit" parent="TabContainer/World Browser (Online)/Header/FilterOptions" unique_id=1760819473]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search by world name or uploader name"
 
-[node name="Spacer" type="Control" parent="TabContainer/World Browser (Online)"]
+[node name="Spacer" type="Control" parent="TabContainer/World Browser (Online)" unique_id=1030411422]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/World Browser (Online)"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/World Browser (Online)" unique_id=1866463925]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -122,7 +122,7 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="GridContainer" parent="TabContainer/World Browser (Online)/ScrollContainer"]
+[node name="ItemList" type="GridContainer" parent="TabContainer/World Browser (Online)/ScrollContainer" unique_id=1289175660]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2

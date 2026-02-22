@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://bad2ir20f17hp"]
+[gd_scene format=4 uid="uid://bad2ir20f17hp"]
 
 [ext_resource type="PackedScene" uid="uid://dvma38j4deff1" path="res://data/models/visual_mesh/bat/bat.blend" id="1_0ox7v"]
 [ext_resource type="AudioStream" uid="uid://dk8g4hiv8ims5" path="res://data/audio/bat/bat_0.ogg" id="1_e1vdc"]
@@ -200,28 +200,26 @@ size = Vector3(0.4, 0.8, 0.4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2ebpc"]
 size = Vector3(1.2, 1.2, 1.4)
 
-[node name="BatVisualMesh" type="Node3D"]
+[node name="BatVisualMesh" type="Node3D" unique_id=1457938919]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_w2yg7")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1315596325]
+libraries/ = SubResource("AnimationLibrary_w2yg7")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=265553420]
 stream = SubResource("AudioStreamRandomizer_p01rw")
 volume_db = -2.0
 max_db = -2.0
 max_distance = 25.0
 bus = &"SFX"
 
-[node name="DeflectAudio" type="AudioStreamPlayer3D" parent="."]
+[node name="DeflectAudio" type="AudioStreamPlayer3D" parent="." unique_id=411805297]
 stream = SubResource("AudioStreamRandomizer_t6e4v")
 max_db = -2.0
 max_distance = 40.0
 bus = &"SFX"
 attenuation_filter_cutoff_hz = 20500.0
 
-[node name="mesh" parent="." instance=ExtResource("1_0ox7v")]
+[node name="mesh" parent="." unique_id=1617164919 instance=ExtResource("1_0ox7v")]
 transform = Transform3D(-0.4983898, 2.1664891, -1.143642, -2.43546, -0.56432474, -0.0076922453, -0.26482022, 1.1125821, 2.2230692, 0.0346209, 0.0785559, -0.0275722)
 
 [node name="bat" parent="mesh" index="0"]
@@ -230,7 +228,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_x5vng")
 script = ExtResource("1_tpugs")
 set_visible_to_what = false
 
-[node name="bat_candycane" parent="mesh" instance=ExtResource("8_lolj3")]
+[node name="bat_candycane" parent="mesh" unique_id=1298529147 instance=ExtResource("8_lolj3")]
 transform = Transform3D(1, -0.000799786, 0.000311657, 0.000799606, 1, 0.000487466, -0.000312061, -0.000487208, 0.999999, 0.00628848, -3.02217e-05, -0.00374311)
 visible = false
 script = ExtResource("1_tpugs")
@@ -239,19 +237,19 @@ script = ExtResource("1_tpugs")
 transform = Transform3D(1, -8.15617e-09, 3.33122e-08, 1.45241e-10, 1, 1.55566e-08, 4.2437e-08, -2.16226e-08, 1, -0.00265361, 0.208408, -0.0151646)
 surface_material_override/0 = SubResource("StandardMaterial3D_dp2ar")
 
-[node name="HitArea" type="Area3D" parent="mesh"]
+[node name="HitArea" type="Area3D" parent="mesh" unique_id=924428559]
 collision_mask = 3
 monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="mesh/HitArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="mesh/HitArea" unique_id=1789710487]
 transform = Transform3D(1, 1.11759e-08, 0, 1.11759e-08, 1, -2.98023e-08, 1.49012e-08, -2.98023e-08, 1, -2.23517e-08, 0.248845, -1.86265e-08)
 shape = SubResource("BoxShape3D_v1ufs")
 
-[node name="LargeHitArea" type="Area3D" parent="mesh"]
+[node name="LargeHitArea" type="Area3D" parent="mesh" unique_id=126748438]
 transform = Transform3D(1, 1.11759e-08, 7.45058e-09, 1.11759e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_mask = 131
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="mesh/LargeHitArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="mesh/LargeHitArea" unique_id=467014480]
 transform = Transform3D(1, 1.47751e-08, 1.66368e-07, 9.8156e-07, 0.999999, 3.25531e-08, 1.22603e-07, 7.17789e-07, 1, 2.08165e-12, 0.199, 2.08165e-12)
 shape = SubResource("BoxShape3D_2ebpc")
 

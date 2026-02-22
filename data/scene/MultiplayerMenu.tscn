@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c5aeyr5rirpm4"]
+[gd_scene format=3 uid="uid://c5aeyr5rirpm4"]
 
 [ext_resource type="Script" uid="uid://fksufrsb1xj3" path="res://src/MultiplayerMenu.gd" id="1_fgila"]
 [ext_resource type="Texture2D" uid="uid://4biuoel48umc" path="res://title.png" id="2_5iqxy"]
@@ -90,10 +90,10 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="MultiplayerMenu" type="CanvasLayer"]
+[node name="MultiplayerMenu" type="CanvasLayer" unique_id=1320958365]
 script = ExtResource("1_fgila")
 
-[node name="Gradient" type="TextureRect" parent="."]
+[node name="Gradient" type="TextureRect" parent="." unique_id=1612046609]
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
@@ -103,13 +103,11 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_y2rob")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_s1exg")
-}
-autoplay = "load_in"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=927782655]
+libraries/ = SubResource("AnimationLibrary_s1exg")
+autoplay = &"load_in"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1348883818]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -117,7 +115,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="DisplayName" type="LineEdit" parent="."]
+[node name="DisplayName" type="LineEdit" parent="." unique_id=1168499263]
 anchors_preset = -1
 anchor_left = 0.282
 anchor_top = 0.233
@@ -134,7 +132,7 @@ max_length = 35
 caret_blink = true
 caret_blink_interval = 0.5
 
-[node name="DynamicLabel" type="Label" parent="DisplayName"]
+[node name="DynamicLabel" type="Label" parent="DisplayName" unique_id=732821990]
 modulate = Color(1, 1, 1, 0.368627)
 layout_mode = 0
 offset_top = -24.0
@@ -143,7 +141,7 @@ offset_bottom = -2.0
 text = "Display Name"
 script = ExtResource("3_yuqno")
 
-[node name="MainMenu" type="VBoxContainer" parent="."]
+[node name="MainMenu" type="VBoxContainer" parent="." unique_id=1787314130]
 custom_minimum_size = Vector2(308, 0)
 anchors_preset = 6
 anchor_left = 1.0
@@ -158,13 +156,13 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_ylpqp")
 
-[node name="Title" type="TextureRect" parent="MainMenu"]
+[node name="Title" type="TextureRect" parent="MainMenu" unique_id=1715532857]
 layout_mode = 2
 texture = ExtResource("2_5iqxy")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="DynamicLabel" type="Label" parent="MainMenu"]
+[node name="DynamicLabel" type="Label" parent="MainMenu" unique_id=55825906]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
 text = "beta"
@@ -173,7 +171,7 @@ script = ExtResource("3_yuqno")
 json_text = "%version%"
 raw_format = true
 
-[node name="Update" type="Button" parent="MainMenu"]
+[node name="Update" type="Button" parent="MainMenu" unique_id=68918225]
 visible = false
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -181,11 +179,11 @@ size_flags_horizontal = 3
 text = "Update available! beta 00.00"
 script = ExtResource("5_awynh")
 
-[node name="Spacer" type="Control" parent="MainMenu"]
+[node name="Spacer" type="Control" parent="MainMenu" unique_id=1458844530]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Play" type="Button" parent="MainMenu"]
+[node name="Play" type="Button" parent="MainMenu" unique_id=1820347378]
 self_modulate = Color(0.761, 1.622, 1, 1)
 custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
@@ -195,7 +193,7 @@ script = ExtResource("2_o48rt")
 json_text = "ui/play"
 grab_initial_focus = true
 
-[node name="Editor" type="Button" parent="MainMenu"]
+[node name="Editor" type="Button" parent="MainMenu" unique_id=1726917361]
 self_modulate = Color(1, 2.162, 2.162, 1)
 custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
@@ -205,43 +203,43 @@ text = "Editor"
 script = ExtResource("2_o48rt")
 json_text = "ui/world_editor"
 
-[node name="Spacer2" type="Control" parent="MainMenu"]
+[node name="Spacer2" type="Control" parent="MainMenu" unique_id=920214736]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Settings" type="Button" parent="MainMenu"]
+[node name="Settings" type="Button" parent="MainMenu" unique_id=270808107]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
 text = "Settings"
 script = ExtResource("2_o48rt")
 json_text = "ui/settings"
 
-[node name="Appearance" type="Button" parent="MainMenu"]
+[node name="Appearance" type="Button" parent="MainMenu" unique_id=1734923056]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
 text = "Player Appearance..."
 script = ExtResource("2_o48rt")
 json_text = "ui/appearance_button"
 
-[node name="Tutorial" type="Button" parent="MainMenu"]
+[node name="Tutorial" type="Button" parent="MainMenu" unique_id=354240030]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
 text = "Tutorial"
 script = ExtResource("2_o48rt")
 json_text = "ui/tutorial"
 
-[node name="Credits" type="Button" parent="MainMenu"]
+[node name="Credits" type="Button" parent="MainMenu" unique_id=1415875218]
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
 text = "Contributors"
 script = ExtResource("2_o48rt")
 json_text = "ui/contributors"
 
-[node name="Spacer3" type="Control" parent="MainMenu"]
+[node name="Spacer3" type="Control" parent="MainMenu" unique_id=2104564615]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Quit" type="Button" parent="MainMenu"]
+[node name="Quit" type="Button" parent="MainMenu" unique_id=2053978619]
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
@@ -249,7 +247,7 @@ text = "Quit"
 script = ExtResource("2_o48rt")
 json_text = "ui/quit"
 
-[node name="PlayMenu" type="VBoxContainer" parent="."]
+[node name="PlayMenu" type="VBoxContainer" parent="." unique_id=1854159461]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 anchors_preset = -1
@@ -265,7 +263,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_ylpqp")
 
-[node name="DynamicLabel" type="Label" parent="PlayMenu"]
+[node name="DynamicLabel" type="Label" parent="PlayMenu" unique_id=743496232]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -275,7 +273,7 @@ text = "Servers
 script = ExtResource("3_yuqno")
 json_text = "ui/servers"
 
-[node name="Back" type="Button" parent="PlayMenu"]
+[node name="Back" type="Button" parent="PlayMenu" unique_id=2095095054]
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -284,32 +282,32 @@ script = ExtResource("2_o48rt")
 json_text = "ui/back"
 grab_initial_focus = true
 
-[node name="Spacer" type="Control" parent="PlayMenu"]
+[node name="Spacer" type="Control" parent="PlayMenu" unique_id=1764123854]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="ServerList" type="PanelContainer" parent="PlayMenu"]
+[node name="ServerList" type="PanelContainer" parent="PlayMenu" unique_id=119713553]
 custom_minimum_size = Vector2(420, 2.08165e-12)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("8_7bulb")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PlayMenu/ServerList"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PlayMenu/ServerList" unique_id=1424909740]
 custom_minimum_size = Vector2(2.08165e-12, 200)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="List" type="VBoxContainer" parent="PlayMenu/ServerList/ScrollContainer"]
+[node name="List" type="VBoxContainer" parent="PlayMenu/ServerList/ScrollContainer" unique_id=1432638367]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Spacer4" type="Control" parent="PlayMenu"]
+[node name="Spacer4" type="Control" parent="PlayMenu" unique_id=825861661]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PlayMenu"]
+[node name="DynamicLabel2" type="Label" parent="PlayMenu" unique_id=1402855126]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -318,10 +316,10 @@ text = "Direct"
 script = ExtResource("3_yuqno")
 json_text = "ui/direct"
 
-[node name="HostHbox" type="HBoxContainer" parent="PlayMenu"]
+[node name="HostHbox" type="HBoxContainer" parent="PlayMenu" unique_id=1533260403]
 layout_mode = 2
 
-[node name="Host" type="Button" parent="PlayMenu/HostHbox"]
+[node name="Host" type="Button" parent="PlayMenu/HostHbox" unique_id=1526897133]
 self_modulate = Color(0.761, 1.622, 1, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -330,17 +328,17 @@ text = "Host direct"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_direct"
 
-[node name="Edit" type="Button" parent="PlayMenu/HostHbox"]
+[node name="Edit" type="Button" parent="PlayMenu/HostHbox" unique_id=1120020028]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
 text = "+"
 script = ExtResource("2_o48rt")
 
-[node name="JoinHbox" type="HBoxContainer" parent="PlayMenu"]
+[node name="JoinHbox" type="HBoxContainer" parent="PlayMenu" unique_id=1648085429]
 layout_mode = 2
 
-[node name="Address" type="LineEdit" parent="PlayMenu/JoinHbox"]
+[node name="Address" type="LineEdit" parent="PlayMenu/JoinHbox" unique_id=1858379611]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.15
@@ -348,7 +346,7 @@ placeholder_text = "direct join address"
 caret_blink = true
 caret_blink_interval = 0.5
 
-[node name="Join" type="Button" parent="PlayMenu/JoinHbox"]
+[node name="Join" type="Button" parent="PlayMenu/JoinHbox" unique_id=2119021813]
 self_modulate = Color(0.761, 1.081, 1.081, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -357,11 +355,11 @@ text = "Join direct"
 script = ExtResource("2_o48rt")
 json_text = "ui/join_direct"
 
-[node name="Spacer5" type="Control" parent="PlayMenu"]
+[node name="Spacer5" type="Control" parent="PlayMenu" unique_id=855722260]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="DynamicLabel3" type="Label" parent="PlayMenu"]
+[node name="DynamicLabel3" type="Label" parent="PlayMenu" unique_id=1996416629]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -370,18 +368,18 @@ text = "LAN"
 script = ExtResource("3_yuqno")
 json_text = "ui/lan"
 
-[node name="LANPanelContainer" type="VBoxContainer" parent="PlayMenu"]
+[node name="LANPanelContainer" type="VBoxContainer" parent="PlayMenu" unique_id=1676925641]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="PlayMenu/LANPanelContainer"]
+[node name="Label" type="Label" parent="PlayMenu/LANPanelContainer" unique_id=737102620]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Searching for LAN servers..."
 script = ExtResource("3_yuqno")
 
-[node name="HostSettingsMenu" type="VBoxContainer" parent="."]
+[node name="HostSettingsMenu" type="VBoxContainer" parent="." unique_id=728689912]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 anchors_preset = 6
@@ -397,7 +395,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_ylpqp")
 
-[node name="DynamicLabel" type="Label" parent="HostSettingsMenu"]
+[node name="DynamicLabel" type="Label" parent="HostSettingsMenu" unique_id=625243682]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -406,11 +404,11 @@ text = "Host"
 script = ExtResource("3_yuqno")
 json_text = "ui/host"
 
-[node name="Spacer" type="Control" parent="HostSettingsMenu"]
+[node name="Spacer" type="Control" parent="HostSettingsMenu" unique_id=1550959133]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="HostPublic" type="Button" parent="HostSettingsMenu"]
+[node name="HostPublic" type="Button" parent="HostSettingsMenu" unique_id=12037633]
 layout_mode = 2
 tooltip_text = "Attempt to use uPnP to automatically port forward, allowing others to join using your public IP.
 If this doesn't work, your router likely has uPnP disabled (or does not support it)."
@@ -419,11 +417,11 @@ text = "UPNP setting"
 script = ExtResource("2_o48rt")
 json_text = "ui/host_public_settings/off"
 
-[node name="Spacer5" type="Control" parent="HostSettingsMenu"]
+[node name="Spacer5" type="Control" parent="HostSettingsMenu" unique_id=425780885]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Back" type="Button" parent="HostSettingsMenu"]
+[node name="Back" type="Button" parent="HostSettingsMenu" unique_id=1784751470]
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -432,7 +430,7 @@ script = ExtResource("2_o48rt")
 json_text = "ui/back"
 grab_initial_focus = true
 
-[node name="AppearanceMenu" type="VBoxContainer" parent="."]
+[node name="AppearanceMenu" type="VBoxContainer" parent="." unique_id=72760740]
 visible = false
 anchors_preset = 6
 anchor_left = 1.0
@@ -447,7 +445,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("2_ylpqp")
 
-[node name="DynamicLabel2" type="Label" parent="AppearanceMenu"]
+[node name="DynamicLabel2" type="Label" parent="AppearanceMenu" unique_id=1390802803]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -456,11 +454,11 @@ text = "Appearance"
 script = ExtResource("3_yuqno")
 json_text = "ui/appearance"
 
-[node name="Spacer" type="Control" parent="AppearanceMenu"]
+[node name="Spacer" type="Control" parent="AppearanceMenu" unique_id=1102235017]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Back" type="Button" parent="AppearanceMenu"]
+[node name="Back" type="Button" parent="AppearanceMenu" unique_id=285798557]
 modulate = Color(1, 0.529412, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -469,25 +467,25 @@ script = ExtResource("2_o48rt")
 json_text = "ui/save"
 grab_initial_focus = true
 
-[node name="Spacer5" type="Control" parent="AppearanceMenu"]
+[node name="Spacer5" type="Control" parent="AppearanceMenu" unique_id=1824401130]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="HairPanel" type="PanelContainer" parent="AppearanceMenu"]
+[node name="HairPanel" type="PanelContainer" parent="AppearanceMenu" unique_id=1186688598]
 custom_minimum_size = Vector2(2.08165e-12, 140)
 layout_mode = 2
 
-[node name="HairPanelContainer" type="VBoxContainer" parent="AppearanceMenu/HairPanel"]
+[node name="HairPanelContainer" type="VBoxContainer" parent="AppearanceMenu/HairPanel" unique_id=1457578082]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+[node name="Label2" type="Label" parent="AppearanceMenu/HairPanel/HairPanelContainer" unique_id=2144898726]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Hair"
 script = ExtResource("3_yuqno")
 
-[node name="Picker" type="OptionButton" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+[node name="Picker" type="OptionButton" parent="AppearanceMenu/HairPanel/HairPanelContainer" unique_id=680547544]
 layout_mode = 2
 selected = 0
 item_count = 4
@@ -500,33 +498,33 @@ popup/item_2/id = 2
 popup/item_3/text = "Baseball Cap"
 popup/item_3/id = 3
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/HairPanel/HairPanelContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/HairPanel/HairPanelContainer" unique_id=203622706]
 layout_mode = 2
 text = "..."
 edit_alpha = false
 
-[node name="Spacer2" type="Control" parent="AppearanceMenu"]
+[node name="Spacer2" type="Control" parent="AppearanceMenu" unique_id=932858369]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="ShirtPanel" type="PanelContainer" parent="AppearanceMenu"]
+[node name="ShirtPanel" type="PanelContainer" parent="AppearanceMenu" unique_id=1262153898]
 custom_minimum_size = Vector2(2.08165e-12, 180)
 layout_mode = 2
 
-[node name="ShirtPanelContainer" type="VBoxContainer" parent="AppearanceMenu/ShirtPanel"]
+[node name="ShirtPanelContainer" type="VBoxContainer" parent="AppearanceMenu/ShirtPanel" unique_id=198090216]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+[node name="Label2" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=60884786]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Shirt"
 script = ExtResource("3_yuqno")
 
-[node name="TypeBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+[node name="TypeBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=1640592194]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer"]
+[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer" unique_id=450493306]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_stretch_ratio = 0.5
@@ -534,7 +532,7 @@ theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Type"
 script = ExtResource("3_yuqno")
 
-[node name="TypePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer"]
+[node name="TypePicker" type="OptionButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TypeBoxContainer" unique_id=2113401595]
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
@@ -544,10 +542,10 @@ popup/item_0/id = 0
 popup/item_1/text = "Jacket"
 popup/item_1/id = 1
 
-[node name="TextureBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+[node name="TextureBoxContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=1218019104]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
+[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer" unique_id=2014725832]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_stretch_ratio = 0.5
@@ -555,24 +553,24 @@ theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Design"
 script = ExtResource("3_yuqno")
 
-[node name="UploadButton" type="Button" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer"]
+[node name="UploadButton" type="Button" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureBoxContainer" unique_id=987903042]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Upload image..."
 script = ExtResource("2_o48rt")
 json_text = "ui/upload_image"
 
-[node name="TextureResetContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+[node name="TextureResetContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=822635037]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureResetContainer"]
+[node name="Label3" type="Label" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureResetContainer" unique_id=1070739453]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_stretch_ratio = 0.5
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 script = ExtResource("3_yuqno")
 
-[node name="ResetButton" type="Button" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureResetContainer"]
+[node name="ResetButton" type="Button" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer/TextureResetContainer" unique_id=940939568]
 self_modulate = Color(1, 0.282353, 0.282353, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -580,60 +578,60 @@ text = "Reset image"
 script = ExtResource("2_o48rt")
 json_text = "ui/reset_image"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=1885470675]
 layout_mode = 2
 text = "..."
 color = Color(1, 1, 1, 1)
 edit_alpha = false
 
-[node name="Spacer3" type="Control" parent="AppearanceMenu"]
+[node name="Spacer3" type="Control" parent="AppearanceMenu" unique_id=69217874]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="PantsPanel" type="PanelContainer" parent="AppearanceMenu"]
+[node name="PantsPanel" type="PanelContainer" parent="AppearanceMenu" unique_id=455578799]
 custom_minimum_size = Vector2(2.08165e-12, 100)
 layout_mode = 2
 
-[node name="PantsPanelContainer" type="VBoxContainer" parent="AppearanceMenu/PantsPanel"]
+[node name="PantsPanelContainer" type="VBoxContainer" parent="AppearanceMenu/PantsPanel" unique_id=1648545151]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="AppearanceMenu/PantsPanel/PantsPanelContainer"]
+[node name="Label2" type="Label" parent="AppearanceMenu/PantsPanel/PantsPanelContainer" unique_id=1355477844]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Pants"
 script = ExtResource("3_yuqno")
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/PantsPanel/PantsPanelContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/PantsPanel/PantsPanelContainer" unique_id=1827553627]
 layout_mode = 2
 text = "..."
 edit_alpha = false
 
-[node name="Spacer4" type="Control" parent="AppearanceMenu"]
+[node name="Spacer4" type="Control" parent="AppearanceMenu" unique_id=1973325897]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="SkinPanel" type="PanelContainer" parent="AppearanceMenu"]
+[node name="SkinPanel" type="PanelContainer" parent="AppearanceMenu" unique_id=935494786]
 custom_minimum_size = Vector2(2.08165e-12, 100)
 layout_mode = 2
 
-[node name="SkinPanelContainer" type="VBoxContainer" parent="AppearanceMenu/SkinPanel"]
+[node name="SkinPanelContainer" type="VBoxContainer" parent="AppearanceMenu/SkinPanel" unique_id=1361166561]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="AppearanceMenu/SkinPanel/SkinPanelContainer"]
+[node name="Label2" type="Label" parent="AppearanceMenu/SkinPanel/SkinPanelContainer" unique_id=333119387]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Skin"
 script = ExtResource("3_yuqno")
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/SkinPanel/SkinPanelContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/SkinPanel/SkinPanelContainer" unique_id=484384954]
 layout_mode = 2
 text = "..."
 color = Color(1, 1, 1, 1)
 edit_alpha = false
 
-[node name="CreditsMenu" type="VBoxContainer" parent="."]
+[node name="CreditsMenu" type="VBoxContainer" parent="." unique_id=1003672709]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 anchors_preset = 6
@@ -649,7 +647,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("8_5c1i6")
 
-[node name="DynamicLabel" type="Label" parent="CreditsMenu"]
+[node name="DynamicLabel" type="Label" parent="CreditsMenu" unique_id=2140461776]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
@@ -658,18 +656,18 @@ text = "Contributors"
 script = ExtResource("3_yuqno")
 json_text = "ui/contributors"
 
-[node name="Spacer" type="Control" parent="CreditsMenu"]
+[node name="Spacer" type="Control" parent="CreditsMenu" unique_id=1234572059]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="List" type="VBoxContainer" parent="CreditsMenu"]
+[node name="List" type="VBoxContainer" parent="CreditsMenu" unique_id=1921616921]
 layout_mode = 2
 
-[node name="Spacer2" type="Control" parent="CreditsMenu"]
+[node name="Spacer2" type="Control" parent="CreditsMenu" unique_id=575359046]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Back" type="Button" parent="CreditsMenu"]
+[node name="Back" type="Button" parent="CreditsMenu" unique_id=494822377]
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
@@ -678,7 +676,7 @@ script = ExtResource("2_o48rt")
 json_text = "ui/back"
 grab_initial_focus = true
 
-[node name="SettingsScroll" type="ScrollContainer" parent="."]
+[node name="SettingsScroll" type="ScrollContainer" parent="." unique_id=96491477]
 visible = false
 clip_contents = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
@@ -695,10 +693,10 @@ grow_horizontal = 0
 grow_vertical = 2
 follow_focus = true
 
-[node name="SettingsMenu" parent="SettingsScroll" instance=ExtResource("6_j7jhb")]
+[node name="SettingsMenu" parent="SettingsScroll" unique_id=1430765174 instance=ExtResource("6_j7jhb")]
 layout_mode = 2
 
-[node name="Attributions" type="Label" parent="."]
+[node name="Attributions" type="Label" parent="." unique_id=543656498]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

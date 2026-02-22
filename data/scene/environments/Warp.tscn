@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3jp8ipg5rvsf"]
+[gd_scene format=3 uid="uid://b3jp8ipg5rvsf"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_j4ojj"]
 [ext_resource type="Texture2D" uid="uid://bpnamvebkkr7n" path="res://data/textures/sky/warpsky.png" id="2_mjwdf"]
@@ -73,14 +73,14 @@ _data = {
 &"rotate": SubResource("Animation_7pl3r")
 }
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=1466015468]
 script = ExtResource("1_j4ojj")
 environment_name = "env_warp"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=654247349]
 environment = SubResource("Environment_vb3eb")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1931903078]
 transform = Transform3D(0.8842097, -0.17626095, -0.4325567, 0.46486714, 0.42232043, 0.7781663, 0.045517012, -0.88914484, 0.4553576, 1.71765, 8.7417, -5.6)
 light_color = Color(0.819608, 0.764706, 0.901961, 1)
 light_energy = 0.2
@@ -90,8 +90,6 @@ directional_shadow_split_2 = 0.05
 directional_shadow_split_3 = 0.1
 directional_shadow_max_distance = 500.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3o2pb")
-}
-autoplay = "rotate"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=472856637]
+libraries/ = SubResource("AnimationLibrary_3o2pb")
+autoplay = &"rotate"

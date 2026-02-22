@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8fewbxafd5xt"]
+[gd_scene format=3 uid="uid://b8fewbxafd5xt"]
 
 [ext_resource type="Script" uid="uid://bl730lmulm0x8" path="res://src/ui/PropertyEditor.gd" id="1_lg4wx"]
 [ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="1_ykjux"]
 [ext_resource type="Script" uid="uid://dwy5qfsib3g3m" path="res://src/ui/DynamicButton.gd" id="3_obx5f"]
 
-[node name="PropertyEditor" type="PanelContainer"]
+[node name="PropertyEditor" type="PanelContainer" unique_id=1462320481]
 custom_minimum_size = Vector2(320, 400)
 anchors_preset = 4
 anchor_top = 0.5
@@ -16,10 +16,10 @@ offset_bottom = 200.0
 grow_vertical = 2
 script = ExtResource("1_lg4wx")
 
-[node name="Panel" type="VBoxContainer" parent="."]
+[node name="Panel" type="VBoxContainer" parent="." unique_id=1225368573]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Panel"]
+[node name="Title" type="Label" parent="Panel" unique_id=1599467079]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
 theme_override_constants/outline_size = 6
@@ -27,7 +27,7 @@ text = "Property Editor"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/property_editor"
 
-[node name="Editing" type="Label" parent="Panel"]
+[node name="Editing" type="Label" parent="Panel" unique_id=1335473628]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.641414, 0.350621, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.658824)
@@ -36,19 +36,19 @@ text = "Editing hovered object:"
 script = ExtResource("1_ykjux")
 json_text = "ui/editor/editing_hovered"
 
-[node name="Menu" type="VBoxContainer" parent="Panel"]
+[node name="Menu" type="VBoxContainer" parent="Panel" unique_id=974977611]
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 
-[node name="DynamicLabel" type="Label" parent="Panel/Menu"]
+[node name="DynamicLabel" type="Label" parent="Panel/Menu" unique_id=1115297954]
 layout_mode = 2
 text = "Adjustable object properties
 will appear here."
 script = ExtResource("1_ykjux")
 
-[node name="Copy" type="Button" parent="Panel"]
+[node name="Copy" type="Button" parent="Panel" unique_id=286548447]
 layout_mode = 2
 text = "Copy properties to active tool"
 script = ExtResource("3_obx5f")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxb1urtfd3en"]
+[gd_scene format=3 uid="uid://cxb1urtfd3en"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mxi6k"]
 properties/0/path = NodePath(".:freeze")
@@ -14,6 +14,6 @@ properties/3/path = NodePath(".:global_transform")
 properties/3/spawn = true
 properties/3/replication_mode = 2
 
-[node name="BrickSynchronizer" type="MultiplayerSynchronizer"]
+[node name="BrickSynchronizer" type="MultiplayerSynchronizer" unique_id=1083930288]
 delta_interval = 1.0
 replication_config = SubResource("SceneReplicationConfig_mxi6k")

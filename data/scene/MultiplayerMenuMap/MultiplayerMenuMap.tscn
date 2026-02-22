@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://da61xyvkih0q"]
+[gd_scene format=3 uid="uid://da61xyvkih0q"]
 
 [ext_resource type="Script" uid="uid://bdh2ltm6loblx" path="res://src/Map.gd" id="1_uutk4"]
 [ext_resource type="PackedScene" uid="uid://dinh2untg6m17" path="res://data/scene/character/RigidPlayer.tscn" id="2_pa7kw"]
@@ -249,26 +249,26 @@ _data = {
 &"appearance_out": ExtResource("6_eed1v")
 }
 
-[node name="MultiplayerMenuMap" type="Node3D"]
+[node name="MultiplayerMenuMap" type="Node3D" unique_id=951972240]
 script = ExtResource("1_uutk4")
 songs = ["mus1"]
 
-[node name="RigidPlayer" parent="." instance=ExtResource("2_pa7kw")]
+[node name="RigidPlayer" parent="." unique_id=1166799985 instance=ExtResource("2_pa7kw")]
 transform = Transform3D(0.9221871, 5.5806426e-09, 0.38674265, -9.079136e-09, 1, 7.219336e-09, -0.38674265, -1.0168878e-08, 0.9221871, -0.905372, -1.52259, -2.68341)
 spawn_as_dummy = true
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=261230124]
 transform = Transform3D(1, 0, 0, 0, 0.994252, 0.107062, 0, -0.107062, 0.994252, 0.0848877, -0.0551209, 1.36643)
 attributes = SubResource("CameraAttributesPractical_v6w6k")
 fov = 35.0
 
-[node name="Teams" type="Node" parent="."]
+[node name="Teams" type="Node" parent="." unique_id=1631290632]
 script = ExtResource("9_ykrt6")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1159469745]
 environment = SubResource("Environment_buwk3")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1257634452]
 transform = Transform3D(0.586745, -0.516408, 0.62374, -0.120871, 0.705786, 0.698038, -0.8007, -0.484963, 0.351697, 0, 0, 0)
 light_color = Color(0.677523, 0.539286, 0.471757, 1)
 light_energy = 3.0
@@ -278,7 +278,7 @@ directional_shadow_max_distance = 63.5
 script = ExtResource("6_oxx4f")
 visible_on_awful = false
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=1321400864]
 transform = Transform3D(0.342807, 0.154125, -0.926676, 0.535724, -0.842394, 0.0580744, -0.771676, -0.516351, -0.371347, 0, 0, 0)
 light_color = Color(0.66729, 0.519686, 0.596753, 1)
 light_energy = 2.0
@@ -287,16 +287,14 @@ directional_shadow_max_distance = 12.3
 script = ExtResource("6_oxx4f")
 visible_on_awful = false
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=282525077]
 transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 4.79804, -1.63165)
 mesh = SubResource("CapsuleMesh_gk5ne")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_kgx20")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2078336824]
+libraries/ = SubResource("AnimationLibrary_kgx20")
 
-[node name="AppearanceLight" type="SpotLight3D" parent="."]
+[node name="AppearanceLight" type="SpotLight3D" parent="." unique_id=2084166680]
 transform = Transform3D(0.97303, -0.0542225, -0.224215, 0.205391, 0.64611, 0.73509, 0.105009, -0.761316, 0.639821, -1.25889, 2.61603, 0.345815)
 visible = false
 light_energy = 0.0
@@ -305,89 +303,89 @@ spot_range = 50.0
 spot_angle = 15.0
 spot_angle_attenuation = 0.148651
 
-[node name="AppearanceLight2" type="OmniLight3D" parent="."]
+[node name="AppearanceLight2" type="OmniLight3D" parent="." unique_id=911367292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.334476, 0.308241, -4.16382)
 visible = false
 light_color = Color(0.947246, 0.837649, 0.808637, 1)
 light_energy = 0.0
 light_specular = 0.0
 
-[node name="AppearanceLight3" type="OmniLight3D" parent="."]
+[node name="AppearanceLight3" type="OmniLight3D" parent="." unique_id=79081640]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21915, 0.308241, -0.239671)
 visible = false
 light_color = Color(0.857099, 0.61032, 0.54578, 1)
 light_energy = 0.0
 light_specular = 0.0
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=149029628]
 stream = ExtResource("7_2nw57")
 volume_db = -12.0
 bus = &"SFX"
 
-[node name="MainMenuFestivities" type="Node" parent="."]
+[node name="MainMenuFestivities" type="Node" parent="." unique_id=1207658042]
 
-[node name="SnowParticles" parent="MainMenuFestivities" instance=ExtResource("11_27r6r")]
+[node name="SnowParticles" parent="MainMenuFestivities" unique_id=208723391 instance=ExtResource("11_27r6r")]
 visible = false
 script = ExtResource("9_qsm76")
 special_date = 0
 set_visible_to_what = true
 
-[node name="ShaderPrecomp" type="Node" parent="."]
+[node name="ShaderPrecomp" type="Node" parent="." unique_id=1666914251]
 
-[node name="run_particles" parent="ShaderPrecomp" instance=ExtResource("8_gvwsq")]
+[node name="run_particles" parent="ShaderPrecomp" unique_id=1625143538 instance=ExtResource("8_gvwsq")]
 visible = false
 
-[node name="Particles" parent="ShaderPrecomp" instance=ExtResource("9_2wn0s")]
+[node name="Particles" parent="ShaderPrecomp" unique_id=1969141883 instance=ExtResource("9_2wn0s")]
 visible = false
 
-[node name="RainParticles" parent="ShaderPrecomp" instance=ExtResource("10_qsm76")]
-visible = false
-script = null
-
-[node name="SnowParticles" parent="ShaderPrecomp" instance=ExtResource("11_27r6r")]
+[node name="RainParticles" parent="ShaderPrecomp" unique_id=2124779581 instance=ExtResource("10_qsm76")]
 visible = false
 script = null
 
-[node name="splash_particles" parent="ShaderPrecomp" instance=ExtResource("12_fo7yy")]
+[node name="SnowParticles" parent="ShaderPrecomp" unique_id=916518192 instance=ExtResource("11_27r6r")]
+visible = false
+script = null
+
+[node name="splash_particles" parent="ShaderPrecomp" unique_id=1760426874 instance=ExtResource("12_fo7yy")]
 visible = false
 
-[node name="Explosion" parent="ShaderPrecomp" instance=ExtResource("8_pu6kk")]
+[node name="Explosion" parent="ShaderPrecomp" unique_id=1953257843 instance=ExtResource("8_pu6kk")]
 visible = false
 
-[node name="jump_particles" parent="ShaderPrecomp" instance=ExtResource("9_h0u7c")]
+[node name="jump_particles" parent="ShaderPrecomp" unique_id=1121107250 instance=ExtResource("9_h0u7c")]
 visible = false
 
-[node name="Fire" parent="ShaderPrecomp" instance=ExtResource("10_gwa83")]
+[node name="Fire" parent="ShaderPrecomp" unique_id=581181189 instance=ExtResource("10_gwa83")]
 visible = false
 
-[node name="FireProjectile" parent="ShaderPrecomp" instance=ExtResource("11_gvwsq")]
+[node name="FireProjectile" parent="ShaderPrecomp" unique_id=281614004 instance=ExtResource("11_gvwsq")]
 visible = false
 
-[node name="WaterProjectile" parent="ShaderPrecomp" instance=ExtResource("12_2wn0s")]
+[node name="WaterProjectile" parent="ShaderPrecomp" unique_id=1862581345 instance=ExtResource("12_2wn0s")]
 visible = false
 
-[node name="ClayBall" parent="ShaderPrecomp" instance=ExtResource("13_qsm76")]
+[node name="ClayBall" parent="ShaderPrecomp" unique_id=413803839 instance=ExtResource("13_qsm76")]
 visible = false
 
-[node name="ToolPrecomp" type="Node3D" parent="ShaderPrecomp"]
+[node name="ToolPrecomp" type="Node3D" parent="ShaderPrecomp" unique_id=1715854607]
 visible = false
 
-[node name="BatVisualMesh" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("14_wdbmj")]
+[node name="BatVisualMesh" parent="ShaderPrecomp/ToolPrecomp" unique_id=307741066 instance=ExtResource("14_wdbmj")]
 
-[node name="BombToolVisual" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("15_d0aok")]
+[node name="BombToolVisual" parent="ShaderPrecomp/ToolPrecomp" unique_id=120206736 instance=ExtResource("15_d0aok")]
 
-[node name="Node3D" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("16_pu6kk")]
+[node name="Node3D" parent="ShaderPrecomp/ToolPrecomp" unique_id=1558908309 instance=ExtResource("16_pu6kk")]
 
-[node name="Node3D2" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("17_h0u7c")]
+[node name="Node3D2" parent="ShaderPrecomp/ToolPrecomp" unique_id=311596916 instance=ExtResource("17_h0u7c")]
 
-[node name="Node3D3" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("18_gwa83")]
+[node name="Node3D3" parent="ShaderPrecomp/ToolPrecomp" unique_id=2002387116 instance=ExtResource("18_gwa83")]
 
-[node name="Medkit" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("19_gvwsq")]
+[node name="Medkit" parent="ShaderPrecomp/ToolPrecomp" unique_id=2118133510 instance=ExtResource("19_gvwsq")]
 
-[node name="Node3D4" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("20_2wn0s")]
+[node name="Node3D4" parent="ShaderPrecomp/ToolPrecomp" unique_id=1921967770 instance=ExtResource("20_2wn0s")]
 
-[node name="Node3D5" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("21_qsm76")]
+[node name="Node3D5" parent="ShaderPrecomp/ToolPrecomp" unique_id=1080133071 instance=ExtResource("21_qsm76")]
 
-[node name="Node3D6" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("22_27r6r")]
+[node name="Node3D6" parent="ShaderPrecomp/ToolPrecomp" unique_id=1726800508 instance=ExtResource("22_27r6r")]
 
-[node name="Node3D7" parent="ShaderPrecomp/ToolPrecomp" instance=ExtResource("23_fo7yy")]
+[node name="Node3D7" parent="ShaderPrecomp/ToolPrecomp" unique_id=167403317 instance=ExtResource("23_fo7yy")]

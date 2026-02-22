@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dq4jgcqroudj7"]
+[gd_scene format=3 uid="uid://dq4jgcqroudj7"]
 
 [ext_resource type="Script" uid="uid://cqlk27wwsdain" path="res://src/Rocket.gd" id="1_a6qbv"]
 [ext_resource type="AudioStream" uid="uid://vtp8j8bjaigv" path="res://data/audio/beep/missile_beep.ogg" id="3_12qq6"]
@@ -54,7 +54,7 @@ material = ExtResource("3_fog8y")
 size = Vector2(0.6, 0.6)
 orientation = 2
 
-[node name="Rocket" type="RigidBody3D"]
+[node name="Rocket" type="RigidBody3D" unique_id=1337723792]
 collision_mask = 9
 mass = 10.0
 gravity_scale = 0.0
@@ -63,21 +63,21 @@ max_contacts_reported = 1
 linear_damp = 0.001
 script = ExtResource("1_a6qbv")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=287464216]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.133673)
 shape = SubResource("CapsuleShape3D_b7orn")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=726368163]
 replication_config = SubResource("SceneReplicationConfig_7b3fl")
 
-[node name="MissileBeep" type="AudioStreamPlayer3D" parent="."]
+[node name="MissileBeep" type="AudioStreamPlayer3D" parent="." unique_id=1284633825]
 stream = ExtResource("3_12qq6")
 max_db = 0.0
 max_distance = 80.0
 panning_strength = 2.0
 bus = &"SFX"
 
-[node name="FireTrail" type="GPUParticles3D" parent="."]
+[node name="FireTrail" type="GPUParticles3D" parent="." unique_id=473179136]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.3757683)
 amount = 96
 lifetime = 3.0
@@ -86,11 +86,11 @@ fixed_fps = 13
 process_material = SubResource("ParticleProcessMaterial_y5g3m")
 draw_pass_1 = SubResource("PlaneMesh_82njc")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=964845968]
 script = ExtResource("4_x22qc")
 
-[node name="rocket" parent="Smoothing" instance=ExtResource("5_yjb81")]
+[node name="rocket" parent="Smoothing" unique_id=565662297 instance=ExtResource("5_yjb81")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.60149443)
 
-[node name="target" type="Marker3D" parent="Smoothing"]
+[node name="target" type="Marker3D" parent="Smoothing" unique_id=153608273]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

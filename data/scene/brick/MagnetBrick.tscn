@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b1mlvdq0w6wg8"]
+[gd_scene format=3 uid="uid://b1mlvdq0w6wg8"]
 
 [ext_resource type="Script" uid="uid://ceht2qv573iya" path="res://src/Magnet.gd" id="1_84ui1"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_n4i8w"]
@@ -33,7 +33,7 @@ size = Vector3(1.3, 1.3, 1.3)
 [sub_resource type="SphereShape3D" id="SphereShape3D_84ui1"]
 radius = 7.0
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=1216819389]
 collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
@@ -42,61 +42,61 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_84ui1")
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_n4i8w")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=139918266 instance=ExtResource("2_n4i8w")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("3_71mis")]
+[node name="BrickSynchronizer" parent="." unique_id=1571224571 instance=ExtResource("3_71mis")]
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=108825519]
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=2017444834]
 script = ExtResource("4_n6itd")
 
-[node name="model" parent="Smoothing" instance=ExtResource("5_mamab")]
+[node name="model" parent="Smoothing" unique_id=1962104379 instance=ExtResource("5_mamab")]
 
-[node name="Cube" parent="Smoothing/model" index="0"]
+[node name="Cube" parent="Smoothing/model" index="0" unique_id=1941203451]
 surface_material_override/0 = SubResource("StandardMaterial3D_clbhc")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=1568824093]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=6032765]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=1683445645]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=873453098]
 shape = SubResource("BoxShape3D_mtstk")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=276643083]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=355344464]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=1325177160]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=479706787]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=1957155441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_w63pj")
 
-[node name="Fire" parent="." instance=ExtResource("7_fjj5h")]
+[node name="Fire" parent="." unique_id=1240812186 instance=ExtResource("7_fjj5h")]
 
-[node name="MagnetDetectRegion" type="Area3D" parent="."]
+[node name="MagnetDetectRegion" type="Area3D" parent="." unique_id=915150465]
 collision_layer = 64
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MagnetDetectRegion"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MagnetDetectRegion" unique_id=1463673215]
 shape = SubResource("SphereShape3D_84ui1")
 
 [editable path="Smoothing/model"]

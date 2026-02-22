@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjhwg6c4kxm5n"]
+[gd_scene format=3 uid="uid://bjhwg6c4kxm5n"]
 
 [ext_resource type="Script" uid="uid://cujihbwshm5bi" path="res://src/CameraPreviewPoint.gd" id="1_k8gqa"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="2_vsu3r"]
@@ -16,27 +16,27 @@ material = SubResource("StandardMaterial3D_oqs4l")
 radial_segments = 16
 rings = 8
 
-[node name="CameraPreviewPoint" type="Node3D"]
+[node name="CameraPreviewPoint" type="Node3D" unique_id=555395604]
 script = ExtResource("1_k8gqa")
 tbw_object_type = "obj_camera_preview_point"
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1836592099]
 collision_layer = 256
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=986600481]
 shape = SubResource("SphereShape3D_lopqb")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1273794492]
 mesh = SubResource("SphereMesh_yyi4s")
 
-[node name="Label3D" type="Label3D" parent="Mesh"]
+[node name="Label3D" type="Label3D" parent="Mesh" unique_id=499260441]
 billboard = 1
 alpha_cut = 1
 text = "Camera
 Preview Point"
 
-[node name="Sprite3D" type="Sprite3D" parent="Mesh"]
+[node name="Sprite3D" type="Sprite3D" parent="Mesh" unique_id=1634840964]
 transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 2.08165e-12, 0.01, -0.7)
 pixel_size = 0.003
 alpha_cut = 1

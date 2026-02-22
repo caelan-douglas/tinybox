@@ -15,12 +15,16 @@ config/version="13.2"
 run/main_scene="res://data/scene/MainScene.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Tinybox"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 config/icon="uid://ccl1h2rnq8f85"
 config/windows_native_icon="res://icon.ico"
 boot_splash/windows_native_icon="res://icon.ico"
+
+[audio]
+
+buses/default_bus_layout="uid://cgyril6i8s84l"
 
 [autoload]
 

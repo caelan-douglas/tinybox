@@ -1,35 +1,35 @@
-[gd_scene load_steps=2 format=3 uid="uid://brro43168s8jp"]
+[gd_scene format=3 uid="uid://brro43168s8jp"]
 
 [ext_resource type="Script" uid="uid://c48uaabe7ge0f" path="res://src/ui/ChatEntry.gd" id="1_5lv54"]
 
-[node name="ChatEntry" type="MarginContainer"]
+[node name="ChatEntry" type="MarginContainer" unique_id=2084219079]
 custom_minimum_size = Vector2(0, 27)
 offset_right = 300.0
 offset_bottom = 78.0
 script = ExtResource("1_5lv54")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1379003690]
 layout_mode = 2
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=1329255808]
 layout_mode = 2
 theme_override_constants/margin_left = 13
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Margin"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin" unique_id=473371294]
 layout_mode = 2
 theme_override_constants/separation = 13
 
-[node name="PlayerLabel" type="Label" parent="Margin/HBoxContainer"]
+[node name="PlayerLabel" type="Label" parent="Margin/HBoxContainer" unique_id=1010417032]
 custom_minimum_size = Vector2(112, 2.08165e-12)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.871717, 0.663142, 0.334449, 1)
 text = "Playername"
 autowrap_mode = 2
 
-[node name="ChatLabel" type="Label" parent="Margin/HBoxContainer"]
+[node name="ChatLabel" type="Label" parent="Margin/HBoxContainer" unique_id=759359427]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "here is a whole bunch of chat text that most likely will not fit inside the chat box so its good for testing"

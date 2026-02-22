@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdeq6bmhjenve"]
+[gd_scene format=3 uid="uid://bdeq6bmhjenve"]
 
 [ext_resource type="Material" uid="uid://b5lyiq31bpwyd" path="res://data/materials/clouds_billboard.tres" id="1_wh2v2"]
 [ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_xvpb0"]
@@ -23,7 +23,7 @@ color_ramp = SubResource("GradientTexture1D_86dsd")
 [sub_resource type="QuadMesh" id="1"]
 material = ExtResource("1_wh2v2")
 
-[node name="Clouds" type="GPUParticles3D"]
+[node name="Clouds" type="GPUParticles3D" unique_id=1217965002]
 extra_cull_margin = 128.0
 amount = 70
 lifetime = 20.0

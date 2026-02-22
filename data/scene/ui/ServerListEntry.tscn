@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cq27bbbvpdotl"]
+[gd_scene format=3 uid="uid://cq27bbbvpdotl"]
 
 [ext_resource type="Script" uid="uid://d2d1s24pgboiq" path="res://src/ui/ServerListEntry.gd" id="1_cokx7"]
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_d0cnq"]
@@ -11,25 +11,25 @@ grow_begin = 16.0
 grow_end = 0.0
 thickness = 2
 
-[node name="ServerListEntry" type="PanelContainer"]
+[node name="ServerListEntry" type="PanelContainer" unique_id=1328848363]
 self_modulate = Color(0.918991, 0.734199, 0.698769, 1)
 custom_minimum_size = Vector2(380, 2.08165e-12)
 offset_right = 340.0
 offset_bottom = 74.0
 script = ExtResource("1_cokx7")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1306354967]
 custom_minimum_size = Vector2(2.08165e-12, 35)
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="ServerInfo" type="VBoxContainer" parent="HBox"]
+[node name="ServerInfo" type="VBoxContainer" parent="HBox" unique_id=1098683097]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Name" type="Label" parent="HBox/ServerInfo"]
+[node name="Name" type="Label" parent="HBox/ServerInfo" unique_id=1271666833]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -8
@@ -39,7 +39,7 @@ text = "Official Testing Server"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Status" type="Label" parent="HBox/ServerInfo"]
+[node name="Status" type="Label" parent="HBox/ServerInfo" unique_id=1440134084]
 self_modulate = Color(0.355314, 0.355314, 0.355314, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -48,19 +48,19 @@ text = "Checking status..."
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Spacer3" type="Control" parent="HBox/ServerInfo"]
+[node name="Spacer3" type="Control" parent="HBox/ServerInfo" unique_id=814102711]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="HBox/ServerInfo"]
+[node name="Panel" type="Panel" parent="HBox/ServerInfo" unique_id=785025394]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxLine_84fmv")
 
-[node name="Spacer2" type="Control" parent="HBox/ServerInfo"]
+[node name="Spacer2" type="Control" parent="HBox/ServerInfo" unique_id=874255031]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
-[node name="Address" type="Label" parent="HBox/ServerInfo"]
+[node name="Address" type="Label" parent="HBox/ServerInfo" unique_id=704345923]
 self_modulate = Color(1, 12.973, 33.513, 0.481)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -69,7 +69,7 @@ text = "address.whatever.com"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Hosts" type="Label" parent="HBox/ServerInfo"]
+[node name="Hosts" type="Label" parent="HBox/ServerInfo" unique_id=714165163]
 modulate = Color(0, 0.698729, 0.64734, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -78,7 +78,7 @@ text = "Server Hosts"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Version" type="Label" parent="HBox/ServerInfo"]
+[node name="Version" type="Label" parent="HBox/ServerInfo" unique_id=49225997]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -8
@@ -86,7 +86,7 @@ text = "Server Version"
 autowrap_mode = 2
 script = ExtResource("2_ftirw")
 
-[node name="Join" type="Button" parent="HBox"]
+[node name="Join" type="Button" parent="HBox" unique_id=1475092126]
 self_modulate = Color(4.325, 2.703, 3.784, 1)
 custom_minimum_size = Vector2(114, 2.08165e-12)
 layout_mode = 2

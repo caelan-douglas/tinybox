@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://olgsooqp86jp"]
+[gd_scene format=3 uid="uid://olgsooqp86jp"]
 
 [ext_resource type="Script" uid="uid://5mi6s03dbpql" path="res://src/ShootTool.gd" id="1_uto6e"]
 [ext_resource type="AudioStream" uid="uid://bkx03ih4f427o" path="res://data/audio/throw.ogg" id="2_ybukl"]
@@ -14,7 +14,7 @@ random_pitch = 1.05
 streams_count = 1
 stream_0/stream = ExtResource("3_c2d8f")
 
-[node name="FirecrackerTool" type="Node3D"]
+[node name="FirecrackerTool" type="Node3D" unique_id=587311662]
 script = ExtResource("1_uto6e")
 tool_name = "Firecracker"
 _shoot_type = 7
@@ -27,13 +27,13 @@ fire_sound = true
 visual_mesh_name = "FirecrackerToolVisual"
 lock_camera_to_aim = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=822734882]
 stream = SubResource("AudioStreamRandomizer_4h8al")
 max_db = 4.996e-16
 max_distance = 15.0
 bus = &"SFX"
 
-[node name="FuseAudio" type="AudioStreamPlayer3D" parent="."]
+[node name="FuseAudio" type="AudioStreamPlayer3D" parent="." unique_id=1219346570]
 stream = SubResource("AudioStreamRandomizer_ia60q")
 max_db = 4.996e-16
 max_distance = 15.0

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://dm3jibndc5tmf"]
 
-[node name="ColourPicker" type="HBoxContainer"]
+[node name="ColourPicker" type="HBoxContainer" unique_id=650422630]
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1233529801]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Colour"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="." unique_id=1664764077]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "..."

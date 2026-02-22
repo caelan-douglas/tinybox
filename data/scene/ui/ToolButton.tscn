@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bf7qurmijub4y"]
 
-[node name="ToolButton" type="Button"]
+[node name="ToolButton" type="Button" unique_id=1216106209]
 custom_minimum_size = Vector2(160, 32)
 offset_right = 160.0
 offset_bottom = 38.0
@@ -10,7 +10,7 @@ toggle_mode = true
 text = "texttexttext"
 clip_text = true
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1430999420]
 self_modulate = Color(0.3, 2.1, 0.6, 1)
 show_behind_parent = true
 layout_mode = 1
@@ -22,7 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 show_percentage = false
 
-[node name="NumberLabel" type="Label" parent="."]
+[node name="NumberLabel" type="Label" parent="." unique_id=765405924]
 layout_mode = 0
 offset_left = 8.0
 offset_top = -14.0
@@ -32,7 +32,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.25098)
 theme_override_font_sizes/font_size = 53
 text = "1"
 
-[node name="Subtitle" type="Label" parent="."]
+[node name="Subtitle" type="Label" parent="." unique_id=1299025860]
 visible = false
 self_modulate = Color(1, 1, 1, 0.576471)
 layout_mode = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://fm6lgsauxibh"]
+[gd_scene format=3 uid="uid://fm6lgsauxibh"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_kavvl"]
 [ext_resource type="PackedScene" uid="uid://c7u565kah5317" path="res://data/scene/snow/SnowParticles.tscn" id="2_5ipcy"]
@@ -36,18 +36,18 @@ fog_sky_affect = 0.8
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture2D_p2o20")
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=1438305268]
 script = ExtResource("1_kavvl")
 environment_name = "env_snowy"
 
-[node name="SnowParticles" parent="." instance=ExtResource("2_5ipcy")]
+[node name="SnowParticles" parent="." unique_id=835413411 instance=ExtResource("2_5ipcy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 53.1094, -1.18)
 visible_on_awful = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1343283206]
 environment = SubResource("Environment_00u0a")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=3047863]
 transform = Transform3D(0.866025, 0.327925, -0.377446, 0.433013, -0.114439, 0.894094, 0.250001, -0.937747, -0.241103, 0, 52.7417, 0)
 shadow_enabled = true
 shadow_blur = 3.5

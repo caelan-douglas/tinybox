@@ -1,4 +1,4 @@
-[gd_resource type="AudioStreamRandomizer" load_steps=6 format=3 uid="uid://dx0cyjjxa1t73"]
+[gd_resource type="AudioStreamRandomizer" format=3 uid="uid://dx0cyjjxa1t73"]
 
 [ext_resource type="AudioStream" uid="uid://dvmcgbpe2ohrf" path="res://data/audio/player/footstep_wood_000.ogg" id="1_asyvk"]
 [ext_resource type="AudioStream" uid="uid://dxj4ygrpemyhw" path="res://data/audio/player/footstep_wood_001.ogg" id="2_0ic3d"]

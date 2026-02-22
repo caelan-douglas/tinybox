@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cq8as1ma0gr7k"]
+[gd_scene format=3 uid="uid://cq8as1ma0gr7k"]
 
 [ext_resource type="FontVariation" uid="uid://ckx3gh6vh6t5e" path="res://data/theme_elements/bold_font_variation.tres" id="2_idvlt"]
 [ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="3_l8y2a"]
@@ -15,12 +15,12 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_tr3ru"]
 image = SubResource("Image_loy8j")
 
-[node name="Map" type="Button"]
+[node name="Map" type="Button" unique_id=780703958]
 custom_minimum_size = Vector2(300, 135)
 size_flags_horizontal = 3
 expand_icon = true
 
-[node name="Split" type="HBoxContainer" parent="."]
+[node name="Split" type="HBoxContainer" parent="." unique_id=595228604]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,18 +33,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Image" type="TextureRect" parent="Split"]
+[node name="Image" type="TextureRect" parent="Split" unique_id=1209268240]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = SubResource("ImageTexture_tr3ru")
 expand_mode = 5
 stretch_mode = 6
 
-[node name="Labels" type="VBoxContainer" parent="Split"]
+[node name="Labels" type="VBoxContainer" parent="Split" unique_id=352735968]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="Split/Labels"]
+[node name="Title" type="Label" parent="Split/Labels" unique_id=1127070184]
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_fonts/font = ExtResource("2_idvlt")
@@ -53,14 +53,14 @@ text = "Map Name Newline"
 autowrap_mode = 3
 script = ExtResource("3_l8y2a")
 
-[node name="Author" type="Label" parent="Split/Labels"]
+[node name="Author" type="Label" parent="Split/Labels" unique_id=2059824584]
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 text = "Author"
 autowrap_mode = 3
 script = ExtResource("3_l8y2a")
 
-[node name="VoteCount" type="Label" parent="Split/Labels"]
+[node name="VoteCount" type="Label" parent="Split/Labels" unique_id=1351008118]
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_constants/line_spacing = -4

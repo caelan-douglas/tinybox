@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4pf0l65ojqcw"]
+[gd_scene format=3 uid="uid://c4pf0l65ojqcw"]
 
 [ext_resource type="Script" uid="uid://b3k3hfrltcidu" path="res://src/ui/SettingsMenu.gd" id="1_khwxh"]
 [ext_resource type="Script" uid="uid://dwy5qfsib3g3m" path="res://src/ui/DynamicButton.gd" id="2_qejdm"]
@@ -13,13 +13,13 @@ grow_begin = 16.0
 grow_end = 16.0
 thickness = 2
 
-[node name="SettingsMenu" type="VBoxContainer"]
+[node name="SettingsMenu" type="VBoxContainer" unique_id=1607677859]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 offset_right = 308.0
 offset_bottom = 1252.0
 script = ExtResource("1_khwxh")
 
-[node name="DynamicLabel" type="Label" parent="."]
+[node name="DynamicLabel" type="Label" parent="." unique_id=1338703057]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_stvgj")
@@ -28,28 +28,28 @@ text = "Settings"
 script = ExtResource("3_r1aba")
 json_text = "ui/settings"
 
-[node name="Spacer" type="Control" parent="."]
+[node name="Spacer" type="Control" parent="." unique_id=1086019081]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="SaveButton" type="Button" parent="."]
+[node name="SaveButton" type="Button" parent="." unique_id=1640012298]
 layout_mode = 2
 text = "Save"
 script = ExtResource("2_qejdm")
 json_text = "ui/save"
 grab_initial_focus = true
 
-[node name="Spacer10" type="Control" parent="."]
+[node name="Spacer10" type="Control" parent="." unique_id=771001080]
 custom_minimum_size = Vector2(2.08165e-12, 24)
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="."]
+[node name="Label3" type="Label" parent="." unique_id=303352135]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Mouse Sensitivity (0.2x - 3.0x)"
 script = ExtResource("3_r1aba")
 
-[node name="MouseSensitivity" type="HSlider" parent="."]
+[node name="MouseSensitivity" type="HSlider" parent="." unique_id=1490048519]
 layout_mode = 2
 min_value = 0.2
 max_value = 3.0
@@ -59,17 +59,17 @@ scrollable = false
 tick_count = 15
 ticks_on_borders = true
 
-[node name="Spacer8" type="Control" parent="."]
+[node name="Spacer8" type="Control" parent="." unique_id=1293006883]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="."]
+[node name="Label4" type="Label" parent="." unique_id=1195117708]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Camera Field of View"
 script = ExtResource("3_r1aba")
 
-[node name="FOV" type="HSlider" parent="."]
+[node name="FOV" type="HSlider" parent="." unique_id=2016472754]
 layout_mode = 2
 min_value = 55.0
 max_value = 80.0
@@ -77,62 +77,62 @@ step = 2.5
 value = 55.0
 scrollable = false
 
-[node name="Spacer13" type="Control" parent="."]
+[node name="Spacer13" type="Control" parent="." unique_id=290843894]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="."]
+[node name="Label5" type="Label" parent="." unique_id=2096979654]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "World Database Repository
 (leave blank for default)"
 script = ExtResource("3_r1aba")
 
-[node name="DatabaseRepo" type="LineEdit" parent="."]
+[node name="DatabaseRepo" type="LineEdit" parent="." unique_id=254912576]
 layout_mode = 2
 text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
 placeholder_text = "https://tinybox-worlds.caelan-douglas.workers.dev/"
 max_length = 512
 
-[node name="Spacer12" type="Control" parent="."]
+[node name="Spacer12" type="Control" parent="." unique_id=1784568209]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="PlayerChats" type="CheckBox" parent="."]
+[node name="PlayerChats" type="CheckBox" parent="." unique_id=184374726]
 layout_mode = 2
 button_pressed = true
 text = "Show chats above players"
 
-[node name="Spacer14" type="Control" parent="."]
+[node name="Spacer14" type="Control" parent="." unique_id=1213404352]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="Graphics" type="Button" parent="."]
+[node name="Graphics" type="Button" parent="." unique_id=598605963]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Graffix: COOL"
 script = ExtResource("2_qejdm")
 
-[node name="Spacer11" type="Control" parent="."]
+[node name="Spacer11" type="Control" parent="." unique_id=318394763]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="VolumePanel" type="PanelContainer" parent="."]
+[node name="VolumePanel" type="PanelContainer" parent="." unique_id=2145756306]
 custom_minimum_size = Vector2(2.08165e-12, 240)
 layout_mode = 2
 
-[node name="VolumePanelContainer" type="VBoxContainer" parent="VolumePanel"]
+[node name="VolumePanelContainer" type="VBoxContainer" parent="VolumePanel" unique_id=1595739675]
 layout_mode = 2
 alignment = 1
 
-[node name="Label3" type="Label" parent="VolumePanel/VolumePanelContainer"]
+[node name="Label3" type="Label" parent="VolumePanel/VolumePanelContainer" unique_id=965460100]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Master Volume"
 script = ExtResource("3_r1aba")
 json_text = "ui/master_volume"
 
-[node name="MasterVol" type="HSlider" parent="VolumePanel/VolumePanelContainer"]
+[node name="MasterVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1233027854]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -140,26 +140,26 @@ value = 1.0
 script = ExtResource("4_mugbr")
 bus = null
 
-[node name="Spacer11" type="Control" parent="VolumePanel/VolumePanelContainer"]
+[node name="Spacer11" type="Control" parent="VolumePanel/VolumePanelContainer" unique_id=545022662]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VolumePanel/VolumePanelContainer"]
+[node name="Panel" type="Panel" parent="VolumePanel/VolumePanelContainer" unique_id=234934331]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxLine_exarq")
 
-[node name="Spacer12" type="Control" parent="VolumePanel/VolumePanelContainer"]
+[node name="Spacer12" type="Control" parent="VolumePanel/VolumePanelContainer" unique_id=420069234]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="VolumePanel/VolumePanelContainer"]
+[node name="Label4" type="Label" parent="VolumePanel/VolumePanelContainer" unique_id=920352310]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Music Volume"
 script = ExtResource("3_r1aba")
 json_text = "ui/music_volume"
 
-[node name="MusicVol" type="HSlider" parent="VolumePanel/VolumePanelContainer"]
+[node name="MusicVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1452152749]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -167,18 +167,18 @@ value = 1.0
 script = ExtResource("4_mugbr")
 bus = 1
 
-[node name="Spacer9" type="Control" parent="VolumePanel/VolumePanelContainer"]
+[node name="Spacer9" type="Control" parent="VolumePanel/VolumePanelContainer" unique_id=1299977569]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="VolumePanel/VolumePanelContainer"]
+[node name="Label5" type="Label" parent="VolumePanel/VolumePanelContainer" unique_id=530049909]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "SFX Volume"
 script = ExtResource("3_r1aba")
 json_text = "ui/sfx_volume"
 
-[node name="SFXVol" type="HSlider" parent="VolumePanel/VolumePanelContainer"]
+[node name="SFXVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1936633955]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -186,18 +186,18 @@ value = 1.0
 script = ExtResource("4_mugbr")
 bus = 2
 
-[node name="Spacer10" type="Control" parent="VolumePanel/VolumePanelContainer"]
+[node name="Spacer10" type="Control" parent="VolumePanel/VolumePanelContainer" unique_id=2094215161]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Label6" type="Label" parent="VolumePanel/VolumePanelContainer"]
+[node name="Label6" type="Label" parent="VolumePanel/VolumePanelContainer" unique_id=944752470]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Interface Volume"
 script = ExtResource("3_r1aba")
 json_text = "ui/ui_volume"
 
-[node name="SFXVol2" type="HSlider" parent="VolumePanel/VolumePanelContainer"]
+[node name="SFXVol2" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=237838645]
 layout_mode = 2
 max_value = 1.0
 step = 0.1
@@ -205,11 +205,11 @@ value = 1.0
 script = ExtResource("4_mugbr")
 bus = 3
 
-[node name="Spacer9" type="Control" parent="."]
+[node name="Spacer9" type="Control" parent="." unique_id=1118438027]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="."]
+[node name="DynamicLabel2" type="Label" parent="." unique_id=1787960758]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_stvgj")
@@ -218,16 +218,16 @@ text = "Keybinds"
 script = ExtResource("3_r1aba")
 json_text = "ui/keybinds"
 
-[node name="Keybinds" type="VBoxContainer" parent="."]
+[node name="Keybinds" type="VBoxContainer" parent="." unique_id=1117271052]
 custom_minimum_size = Vector2(308, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="Spacer" type="Control" parent="Keybinds"]
+[node name="Spacer" type="Control" parent="Keybinds" unique_id=2133513788]
 custom_minimum_size = Vector2(2.08165e-12, 8)
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="Keybinds"]
+[node name="Label3" type="Label" parent="Keybinds" unique_id=1566488254]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -237,47 +237,47 @@ Custom keybinds allow you to set a key that always applies to a given tool."
 autowrap_mode = 2
 script = ExtResource("3_r1aba")
 
-[node name="Spacer2" type="Control" parent="Keybinds"]
+[node name="Spacer2" type="Control" parent="Keybinds" unique_id=43935076]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="DefaultsButton" type="Button" parent="Keybinds"]
+[node name="DefaultsButton" type="Button" parent="Keybinds" unique_id=332225286]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Enable Custom Keybinds"
 script = ExtResource("2_qejdm")
 
-[node name="Spacer4" type="Control" parent="Keybinds"]
+[node name="Spacer4" type="Control" parent="Keybinds" unique_id=61658702]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="KeybindContainerBuildTool" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerBuildTool" type="HBoxContainer" parent="Keybinds" unique_id=458321570]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerBuildTool"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerBuildTool" unique_id=1046899216]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Build Tool"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBuildTool"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBuildTool" unique_id=538418108]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
 script = ExtResource("5_es3m5")
 
-[node name="KeybindContainerBouncyball" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerBouncyball" type="HBoxContainer" parent="Keybinds" unique_id=1661828856]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerBouncyball"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerBouncyball" unique_id=1823692953]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Bouncyball"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBouncyball"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBouncyball" unique_id=1839379269]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -285,17 +285,17 @@ script = ExtResource("5_es3m5")
 default_key = 50
 keybind_for_what = "BouncyballTool"
 
-[node name="KeybindContainerBat" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerBat" type="HBoxContainer" parent="Keybinds" unique_id=1329596933]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerBat"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerBat" unique_id=1403377668]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Bat"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBat"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBat" unique_id=1538726069]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -303,17 +303,17 @@ script = ExtResource("5_es3m5")
 default_key = 51
 keybind_for_what = "BatTool"
 
-[node name="KeybindContainerExtinguisher" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerExtinguisher" type="HBoxContainer" parent="Keybinds" unique_id=628398101]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerExtinguisher"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerExtinguisher" unique_id=1529347803]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Extinguisher"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerExtinguisher"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerExtinguisher" unique_id=1644356944]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -321,17 +321,17 @@ script = ExtResource("5_es3m5")
 default_key = 52
 keybind_for_what = "ExtinguisherTool"
 
-[node name="KeybindContainerRocket" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerRocket" type="HBoxContainer" parent="Keybinds" unique_id=939038190]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerRocket"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerRocket" unique_id=1499459773]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Rocket"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerRocket"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerRocket" unique_id=719302952]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -339,17 +339,17 @@ script = ExtResource("5_es3m5")
 default_key = 53
 keybind_for_what = "RocketTool"
 
-[node name="KeybindContainerBomb" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerBomb" type="HBoxContainer" parent="Keybinds" unique_id=685701803]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerBomb"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerBomb" unique_id=168624922]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Bomb"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBomb"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerBomb" unique_id=1462353391]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -357,17 +357,17 @@ script = ExtResource("5_es3m5")
 default_key = 54
 keybind_for_what = "BombTool"
 
-[node name="KeybindContainerFlamethrower" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerFlamethrower" type="HBoxContainer" parent="Keybinds" unique_id=1973409774]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerFlamethrower"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerFlamethrower" unique_id=283988931]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Flamethrower"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerFlamethrower"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerFlamethrower" unique_id=338030946]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -375,17 +375,17 @@ script = ExtResource("5_es3m5")
 default_key = 55
 keybind_for_what = "FlamethrowerTool"
 
-[node name="KeybindContainerMissile" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerMissile" type="HBoxContainer" parent="Keybinds" unique_id=626551667]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerMissile"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerMissile" unique_id=1755741883]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Missiles"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerMissile"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerMissile" unique_id=5975547]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -393,17 +393,17 @@ script = ExtResource("5_es3m5")
 default_key = 56
 keybind_for_what = "MissileTool"
 
-[node name="KeybindContainerPaintbrush" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerPaintbrush" type="HBoxContainer" parent="Keybinds" unique_id=283711948]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerPaintbrush"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerPaintbrush" unique_id=558058214]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Paintbrush"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerPaintbrush"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerPaintbrush" unique_id=1652364665]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -411,17 +411,17 @@ script = ExtResource("5_es3m5")
 default_key = 57
 keybind_for_what = "PaintbrushTool"
 
-[node name="KeybindContainerPulseCannon" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerPulseCannon" type="HBoxContainer" parent="Keybinds" unique_id=1027309124]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerPulseCannon"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerPulseCannon" unique_id=1304775511]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Pulse Cannon"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerPulseCannon"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerPulseCannon" unique_id=216878265]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -429,17 +429,17 @@ script = ExtResource("5_es3m5")
 default_key = 48
 keybind_for_what = "PulseCannonTool"
 
-[node name="KeybindContainerFirecracker" type="HBoxContainer" parent="Keybinds"]
+[node name="KeybindContainerFirecracker" type="HBoxContainer" parent="Keybinds" unique_id=568811745]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Keybinds/KeybindContainerFirecracker"]
+[node name="Label" type="Label" parent="Keybinds/KeybindContainerFirecracker" unique_id=740363913]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.611765, 0.611765, 0.811765, 1)
 text = "Firecracker"
 script = ExtResource("3_r1aba")
 
-[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerFirecracker"]
+[node name="TypePicker" type="Button" parent="Keybinds/KeybindContainerFirecracker" unique_id=2109528789]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1"
@@ -447,6 +447,6 @@ script = ExtResource("5_es3m5")
 default_key = 71
 keybind_for_what = "FirecrackerTool"
 
-[node name="Spacer2" type="Control" parent="."]
+[node name="Spacer2" type="Control" parent="." unique_id=2070164310]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2

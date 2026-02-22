@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bot4om7nsyg2l"]
+[gd_scene format=3 uid="uid://bot4om7nsyg2l"]
 
 [ext_resource type="Script" uid="uid://rn6uvemrfq4f" path="res://src/ui/GameCanvas.gd" id="1_5vqc6"]
 [ext_resource type="Script" uid="uid://k6u63vehcuoa" path="res://src/Ping.gd" id="2_884d4"]
@@ -251,10 +251,10 @@ shader_parameter/height = 3.0
 shader_parameter/frequency = 20.0
 shader_parameter/speed = 3.0
 
-[node name="GameCanvas" type="CanvasLayer"]
+[node name="GameCanvas" type="CanvasLayer" unique_id=1149359311]
 script = ExtResource("1_5vqc6")
 
-[node name="RespawnOverlay" type="TextureRect" parent="."]
+[node name="RespawnOverlay" type="TextureRect" parent="." unique_id=755491401]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -265,12 +265,10 @@ mouse_filter = 2
 texture = ExtResource("2_im5qw")
 expand_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnOverlay"]
-libraries = {
-&"": SubResource("AnimationLibrary_ie8a5")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RespawnOverlay" unique_id=2010784164]
+libraries/ = SubResource("AnimationLibrary_ie8a5")
 
-[node name="StatusBackground" type="TextureRect" parent="."]
+[node name="StatusBackground" type="TextureRect" parent="." unique_id=1514005540]
 custom_minimum_size = Vector2(2.08165e-12, 25)
 anchors_preset = 12
 anchor_top = 1.0
@@ -281,7 +279,7 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = SubResource("GradientTexture2D_a1rsd")
 
-[node name="StatusBar" type="HBoxContainer" parent="."]
+[node name="StatusBar" type="HBoxContainer" parent="." unique_id=1098705178]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -295,7 +293,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 20
 
-[node name="RealTime" type="Label" parent="StatusBar"]
+[node name="RealTime" type="Label" parent="StatusBar" unique_id=313827881]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
@@ -305,7 +303,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("10_0plxg")
 
-[node name="Ping" type="Label" parent="StatusBar"]
+[node name="Ping" type="Label" parent="StatusBar" unique_id=747119198]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
@@ -315,7 +313,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("2_884d4")
 
-[node name="ServerHealth" type="Label" parent="StatusBar"]
+[node name="ServerHealth" type="Label" parent="StatusBar" unique_id=201771934]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
@@ -325,7 +323,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("5_pxnxr")
 
-[node name="Frames" type="Label" parent="StatusBar"]
+[node name="Frames" type="Label" parent="StatusBar" unique_id=202677744]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
@@ -335,7 +333,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("10_x8dyc")
 
-[node name="VersionLabel" type="Label" parent="StatusBar"]
+[node name="VersionLabel" type="Label" parent="StatusBar" unique_id=1445436013]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
@@ -347,26 +345,26 @@ script = ExtResource("6_qxctu")
 json_text = "Tinybox %version%"
 raw_format = true
 
-[node name="Chat" parent="." instance=ExtResource("3_en7sr")]
+[node name="Chat" parent="." unique_id=535446528 instance=ExtResource("3_en7sr")]
 modulate = Color(1, 1, 1, 0.831373)
 offset_top = -449.0
 offset_bottom = -2.0
 
-[node name="ToolList" type="HBoxContainer" parent="."]
+[node name="ToolList" type="HBoxContainer" parent="." unique_id=198772813]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 251.0
 offset_bottom = 8.0
 theme_override_constants/separation = 2
 
-[node name="PlayerList" parent="." instance=ExtResource("4_yb62t")]
+[node name="PlayerList" parent="." unique_id=1293257959 instance=ExtResource("4_yb62t")]
 offset_left = -224.0
 offset_top = 49.0
 offset_right = -8.0
 offset_bottom = -37.0
 show_team_names = false
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=119040200]
 self_modulate = Color(0.380392, 0.643137, 0.560784, 1)
 anchors_preset = 1
 anchor_left = 1.0
@@ -382,7 +380,7 @@ step = 1.0
 value = 20.0
 show_percentage = false
 
-[node name="Label" type="Label" parent="HealthBar"]
+[node name="Label" type="Label" parent="HealthBar" unique_id=684633422]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -399,12 +397,10 @@ text = "Health: 20"
 horizontal_alignment = 1
 script = ExtResource("6_qxctu")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthBar"]
-libraries = {
-&"": SubResource("AnimationLibrary_7ywci")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthBar" unique_id=1334222594]
+libraries/ = SubResource("AnimationLibrary_7ywci")
 
-[node name="Timer" type="ProgressBar" parent="."]
+[node name="Timer" type="ProgressBar" parent="." unique_id=1588638823]
 visible = false
 self_modulate = Color(0.676198, 0.437283, 0.350525, 1)
 custom_minimum_size = Vector2(300, 32)
@@ -423,7 +419,7 @@ value = 20.0
 show_percentage = false
 script = ExtResource("10_aw20e")
 
-[node name="Label" type="Label" parent="Timer"]
+[node name="Label" type="Label" parent="Timer" unique_id=1847327618]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -439,12 +435,10 @@ grow_vertical = 2
 text = "Gamemode Name - 00:00"
 horizontal_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Timer"]
-libraries = {
-&"": SubResource("AnimationLibrary_2e617")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Timer" unique_id=577052882]
+libraries/ = SubResource("AnimationLibrary_2e617")
 
-[node name="Crosshair" type="TextureRect" parent="."]
+[node name="Crosshair" type="TextureRect" parent="." unique_id=80573689]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -456,7 +450,7 @@ texture = ExtResource("7_6t1fc")
 expand_mode = 4
 stretch_mode = 3
 
-[node name="PauseMenu" type="Control" parent="."]
+[node name="PauseMenu" type="Control" parent="." unique_id=444550390]
 visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
@@ -466,7 +460,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Gradient" type="TextureRect" parent="PauseMenu"]
+[node name="Gradient" type="TextureRect" parent="PauseMenu" unique_id=530186525]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -477,7 +471,7 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_fmpot")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenu" unique_id=366681918]
 clip_contents = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 1
@@ -493,11 +487,11 @@ grow_horizontal = 0
 grow_vertical = 2
 follow_focus = true
 
-[node name="Pause" type="VBoxContainer" parent="PauseMenu/ScrollContainer"]
+[node name="Pause" type="VBoxContainer" parent="PauseMenu/ScrollContainer" unique_id=395667952]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 
-[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="DynamicLabel" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=815501796]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("16_hdnsf")
@@ -506,28 +500,28 @@ text = "Paused"
 script = ExtResource("6_qxctu")
 json_text = "ui/paused"
 
-[node name="Tip" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Tip" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=502787457]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.662745)
 theme_override_constants/outline_size = 8
 text = "Tip: (uninitialized)"
 autowrap_mode = 3
 
-[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=1602281893]
 custom_minimum_size = Vector2(2.08165e-12, 16)
 layout_mode = 2
 
-[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("3_5o4ik")]
+[node name="LeaveButton" parent="PauseMenu/ScrollContainer/Pause" unique_id=1280922429 instance=ExtResource("3_5o4ik")]
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 80)
 layout_mode = 2
 grab_initial_focus = true
 
-[node name="Spacer9" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer9" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=82372541]
 custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Label" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=216490089]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 0
@@ -535,26 +529,26 @@ text = "Maps"
 script = ExtResource("6_qxctu")
 json_text = "ui/switch_maps"
 
-[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=1827354606]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="MapList" parent="PauseMenu/ScrollContainer/Pause" node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("14_l2isx")]
+[node name="MapList" parent="PauseMenu/ScrollContainer/Pause" unique_id=1194950020 node_paths=PackedStringArray("associated_button", "report_button") instance=ExtResource("14_l2isx")]
 layout_mode = 2
 associated_button = NodePath("../ChangeMap")
 report_button = NodePath("../Report")
 
-[node name="ChangeMap" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="ChangeMap" type="Button" parent="PauseMenu/ScrollContainer/Pause" unique_id=1546983598]
 layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
 json_text = "ui/switch_maps_button"
 
-[node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=1127818837]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Report" type="Button" parent="PauseMenu/ScrollContainer/Pause" unique_id=691681763]
 visible = false
 modulate = Color(1, 0.541, 1.8, 1)
 custom_minimum_size = Vector2(45, 2.08165e-12)
@@ -564,7 +558,7 @@ text = "Report this map"
 icon_alignment = 1
 script = ExtResource("5_6v07r")
 
-[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Pause/Report"]
+[node name="TextureRect" type="TextureRect" parent="PauseMenu/ScrollContainer/Pause/Report" unique_id=179689765]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -579,7 +573,7 @@ texture = ExtResource("16_lfo80")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="DynamicLabel3" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=1976241316]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("16_hdnsf")
@@ -587,41 +581,41 @@ theme_override_font_sizes/font_size = 64
 text = "Modes"
 script = ExtResource("6_qxctu")
 
-[node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("15_ies3a")]
+[node name="GamemodeMenu" parent="PauseMenu/ScrollContainer/Pause" unique_id=404037556 instance=ExtResource("15_ies3a")]
 layout_mode = 2
 
-[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer8" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=712360927]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="DynamicLabel2" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=350340207]
 layout_mode = 2
 text = "Save a copy of this world"
 script = ExtResource("6_qxctu")
 
-[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer7" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=53019685]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="SaveWorldName" type="LineEdit" parent="PauseMenu/ScrollContainer/Pause" unique_id=1112218674]
 layout_mode = 2
 placeholder_text = "World name..."
 
-[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="SaveWorld" type="Button" parent="PauseMenu/ScrollContainer/Pause" unique_id=1479186506]
 layout_mode = 2
 text = "Save a copy"
 script = ExtResource("5_6v07r")
 json_text = "ui/save_copy"
 
-[node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause"]
+[node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=2082809180]
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 
-[node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Pause" instance=ExtResource("20_eusui")]
+[node name="SettingsMenu" parent="PauseMenu/ScrollContainer/Pause" unique_id=1004112355 instance=ExtResource("20_eusui")]
 layout_mode = 2
 show_save_button = false
 
-[node name="ToolOverlay" type="Control" parent="."]
+[node name="ToolOverlay" type="Control" parent="." unique_id=680887792]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -631,7 +625,7 @@ grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="BuildTool" type="Control" parent="ToolOverlay"]
+[node name="BuildTool" type="Control" parent="ToolOverlay" unique_id=1592409550]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -641,7 +635,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Controls" type="RichTextLabel" parent="ToolOverlay/BuildTool"]
+[node name="Controls" type="RichTextLabel" parent="ToolOverlay/BuildTool" unique_id=574849549]
 clip_contents = false
 layout_mode = 1
 offset_left = 392.0
@@ -675,7 +669,7 @@ autowrap_mode = 0
 tab_size = 7
 shortcut_keys_enabled = false
 
-[node name="LeftPanel" type="VBoxContainer" parent="ToolOverlay/BuildTool"]
+[node name="LeftPanel" type="VBoxContainer" parent="ToolOverlay/BuildTool" unique_id=1248832600]
 custom_minimum_size = Vector2(360, 2.08165e-12)
 layout_mode = 1
 anchors_preset = 9
@@ -687,15 +681,15 @@ offset_bottom = -32.0
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="PropertyEditor" parent="ToolOverlay/BuildTool/LeftPanel" instance=ExtResource("4_vh0qg")]
+[node name="PropertyEditor" parent="ToolOverlay/BuildTool/LeftPanel" unique_id=1750433892 instance=ExtResource("4_vh0qg")]
 layout_mode = 2
 
-[node name="ItemChooser" parent="ToolOverlay/BuildTool/LeftPanel" instance=ExtResource("5_kk2ox")]
+[node name="ItemChooser" parent="ToolOverlay/BuildTool/LeftPanel" unique_id=1460361217 instance=ExtResource("5_kk2ox")]
 layout_mode = 2
 size_flags_vertical = 3
 editor_mode = false
 
-[node name="PaintbrushTool" type="VBoxContainer" parent="ToolOverlay"]
+[node name="PaintbrushTool" type="VBoxContainer" parent="ToolOverlay" unique_id=552864568]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -710,7 +704,7 @@ offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Controls" type="Label" parent="ToolOverlay/PaintbrushTool"]
+[node name="Controls" type="Label" parent="ToolOverlay/PaintbrushTool" unique_id=1233410112]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
 theme_override_constants/outline_size = 6
@@ -719,15 +713,15 @@ vertical_alignment = 1
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/paintbrush"
 
-[node name="Spacer2" type="Control" parent="ToolOverlay/PaintbrushTool"]
+[node name="Spacer2" type="Control" parent="ToolOverlay/PaintbrushTool" unique_id=900261757]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="SelectedColour" type="ColorRect" parent="ToolOverlay/PaintbrushTool"]
+[node name="SelectedColour" type="ColorRect" parent="ToolOverlay/PaintbrushTool" unique_id=690974185]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 
-[node name="MissileTool" type="Control" parent="ToolOverlay"]
+[node name="MissileTool" type="Control" parent="ToolOverlay" unique_id=937237685]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -737,7 +731,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MissileTimer" type="TextureProgressBar" parent="ToolOverlay/MissileTool"]
+[node name="MissileTimer" type="TextureProgressBar" parent="ToolOverlay/MissileTool" unique_id=1086368438]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -758,7 +752,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("13_jaf8i")
 texture_progress = ExtResource("12_2re8m")
 
-[node name="DynamicLabel" type="Label" parent="ToolOverlay/MissileTool"]
+[node name="DynamicLabel" type="Label" parent="ToolOverlay/MissileTool" unique_id=957008662]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -778,7 +772,7 @@ uppercase = true
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/missile/time"
 
-[node name="MissileDistance" type="TextureProgressBar" parent="ToolOverlay/MissileTool"]
+[node name="MissileDistance" type="TextureProgressBar" parent="ToolOverlay/MissileTool" unique_id=219003024]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -797,7 +791,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("15_kkx1g")
 texture_progress = ExtResource("14_yidfq")
 
-[node name="DynamicLabel2" type="Label" parent="ToolOverlay/MissileTool"]
+[node name="DynamicLabel2" type="Label" parent="ToolOverlay/MissileTool" unique_id=399103155]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -818,7 +812,7 @@ uppercase = true
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/missile/distance"
 
-[node name="DynamicLabel3" type="Label" parent="ToolOverlay/MissileTool"]
+[node name="DynamicLabel3" type="Label" parent="ToolOverlay/MissileTool" unique_id=1799658979]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -839,7 +833,7 @@ uppercase = true
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/missile/near"
 
-[node name="DynamicLabel4" type="Label" parent="ToolOverlay/MissileTool"]
+[node name="DynamicLabel4" type="Label" parent="ToolOverlay/MissileTool" unique_id=1184733443]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -860,7 +854,7 @@ uppercase = true
 script = ExtResource("6_qxctu")
 json_text = "ui/tool_overlay/missile/far"
 
-[node name="ChargedTool" type="Control" parent="ToolOverlay"]
+[node name="ChargedTool" type="Control" parent="ToolOverlay" unique_id=1312130820]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -870,7 +864,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Power" type="TextureProgressBar" parent="ToolOverlay/ChargedTool"]
+[node name="Power" type="TextureProgressBar" parent="ToolOverlay/ChargedTool" unique_id=1094933826]
 modulate = Color(1, 1, 1, 0.643137)
 layout_mode = 1
 anchors_preset = 8
@@ -892,12 +886,10 @@ nine_patch_stretch = true
 texture_under = ExtResource("13_jaf8i")
 texture_progress = ExtResource("12_2re8m")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ToolOverlay/ChargedTool/Power"]
-libraries = {
-&"": SubResource("AnimationLibrary_i8q4t")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ToolOverlay/ChargedTool/Power" unique_id=734576887]
+libraries/ = SubResource("AnimationLibrary_i8q4t")
 
-[node name="DynamicLabel" type="Label" parent="ToolOverlay/ChargedTool"]
+[node name="DynamicLabel" type="Label" parent="ToolOverlay/ChargedTool" unique_id=502032731]
 modulate = Color(1, 1, 1, 0.631373)
 layout_mode = 1
 anchors_preset = 8
@@ -918,7 +910,7 @@ horizontal_alignment = 2
 uppercase = true
 script = ExtResource("6_qxctu")
 
-[node name="TestModePauseMenu" type="Control" parent="."]
+[node name="TestModePauseMenu" type="Control" parent="." unique_id=1296693803]
 visible = false
 custom_minimum_size = Vector2(540, 540)
 layout_mode = 3
@@ -928,7 +920,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Gradient" type="TextureRect" parent="TestModePauseMenu"]
+[node name="Gradient" type="TextureRect" parent="TestModePauseMenu" unique_id=1669183292]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -939,7 +931,7 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_fmpot")
 
-[node name="Menu" type="VBoxContainer" parent="TestModePauseMenu"]
+[node name="Menu" type="VBoxContainer" parent="TestModePauseMenu" unique_id=1152068001]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 1
 anchors_preset = 6
@@ -955,7 +947,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("15_0571l")
 
-[node name="DynamicLabel" type="Label" parent="TestModePauseMenu/Menu"]
+[node name="DynamicLabel" type="Label" parent="TestModePauseMenu/Menu" unique_id=61738754]
 self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("16_hdnsf")
@@ -964,19 +956,19 @@ text = "Paused"
 script = ExtResource("6_qxctu")
 json_text = "ui/paused"
 
-[node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu"]
+[node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu" unique_id=513103484]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="ReturnToEditor" parent="TestModePauseMenu/Menu" instance=ExtResource("3_5o4ik")]
+[node name="ReturnToEditor" parent="TestModePauseMenu/Menu" unique_id=983320904 instance=ExtResource("3_5o4ik")]
 layout_mode = 2
 text = "Return to editor"
 script = null
 
-[node name="VotePanel" parent="." instance=ExtResource("12_g8epv")]
+[node name="VotePanel" parent="." unique_id=1974935729 instance=ExtResource("12_g8epv")]
 visible = false
 
-[node name="WinLabel" type="Label" parent="."]
+[node name="WinLabel" type="Label" parent="." unique_id=1115473222]
 visible = false
 material = SubResource("ShaderMaterial_pv5k6")
 anchors_preset = 5

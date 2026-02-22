@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bqur8gq477tgn"]
+[gd_scene format=3 uid="uid://bqur8gq477tgn"]
 
 [ext_resource type="Script" uid="uid://b330vt461cbni" path="res://src/Firecracker.gd" id="1_k7gxn"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="2_otlhq"]
@@ -56,7 +56,7 @@ material = ExtResource("5_dyfyw")
 size = Vector2(0.3, 0.3)
 orientation = 2
 
-[node name="Firecracker" type="RigidBody3D"]
+[node name="Firecracker" type="RigidBody3D" unique_id=869329775]
 collision_layer = 128
 collision_mask = 139
 physics_material_override = SubResource("PhysicsMaterial_kcslu")
@@ -66,37 +66,37 @@ max_contacts_reported = 1
 angular_velocity = Vector3(18.849556, 0, 18.849556)
 script = ExtResource("1_k7gxn")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1658040728]
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=379968315]
 shape = SubResource("SphereShape3D_45sso")
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=2145709874]
 shape = SubResource("SphereShape3D_bvw4g")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=1603343786]
 script = ExtResource("2_otlhq")
 
-[node name="firecracker" parent="Smoothing" instance=ExtResource("3_ac603")]
+[node name="firecracker" parent="Smoothing" unique_id=38412504 instance=ExtResource("3_ac603")]
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
 
 [node name="firecracker" parent="Smoothing/firecracker" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_dyfyw")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1505763434]
 replication_interval = 0.04
 delta_interval = 0.04
 replication_config = SubResource("SceneReplicationConfig_28iu0")
 
-[node name="HitAudio" type="AudioStreamPlayer3D" parent="."]
+[node name="HitAudio" type="AudioStreamPlayer3D" parent="." unique_id=579103273]
 stream = SubResource("AudioStreamRandomizer_m8h2p")
 volume_db = 3.0
 max_distance = 60.0
 max_polyphony = 4
 bus = &"SFX"
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=920485614]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40267053, 0)
 amount = 32
 lifetime = 0.6

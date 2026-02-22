@@ -40,8 +40,8 @@ func explode(explosion_position : Vector3, from_whom : int = -1, _explosion_forc
 
 func _on_body_entered(body : Node3D) -> void:
 	super(body)
-	if body is RigidPlayer:
-		explode(Vector3.ZERO)
+	#if body is RigidPlayer:
+	#	explode(Vector3.ZERO)
 	audio.volume_db = -15 + linear_velocity.length()
 	clamp(audio.volume_db, -50, 0)
 	audio.play()

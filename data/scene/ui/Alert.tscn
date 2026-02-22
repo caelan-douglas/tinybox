@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://brjdiht6xtg3e"]
+[gd_scene format=3 uid="uid://brjdiht6xtg3e"]
 
 [ext_resource type="Script" uid="uid://bgom7r43skc6t" path="res://src/ui/Alert.gd" id="1_ucase"]
 [ext_resource type="AnimationLibrary" uid="uid://htgaatcuovr2" path="res://data/animation/ui_alert/alert_anim_library.res" id="2_s56u3"]
 
-[node name="Alert" type="PanelContainer"]
+[node name="Alert" type="PanelContainer" unique_id=1453566869]
 custom_minimum_size = Vector2(496, 70)
 anchors_preset = 8
 anchor_left = 0.5
@@ -21,22 +21,20 @@ pivot_offset = Vector2(248, 25)
 mouse_filter = 2
 script = ExtResource("1_ucase")
 
-[node name="Content" type="Label" parent="."]
+[node name="Content" type="Label" parent="." unique_id=539472389]
 layout_mode = 2
 text = "Alert text..."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Duplicate" type="Label" parent="."]
+[node name="Duplicate" type="Label" parent="." unique_id=1789581195]
 modulate = Color(0.80001, 0.657949, 0.454563, 1)
 layout_mode = 2
 horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": ExtResource("2_s56u3")
-}
-autoplay = "show"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=236594962]
+libraries/ = ExtResource("2_s56u3")
+autoplay = &"show"

@@ -1,5 +1,5 @@
 [gd_scene format=3 uid="uid://cr4led0sdhtx7"]
 
-[node name="BrickMultiplayerSpawner" type="MultiplayerSpawner"]
+[node name="BrickMultiplayerSpawner" type="MultiplayerSpawner" unique_id=464612930]
 _spawnable_scenes = PackedStringArray("uid://bhil8lbbf6ucm")
 spawn_path = NodePath("..")

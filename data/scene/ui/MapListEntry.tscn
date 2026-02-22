@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxsak37qk67t7"]
+[gd_scene format=3 uid="uid://bxsak37qk67t7"]
 
 [ext_resource type="Texture2D" uid="uid://dwerewxnwjifj" path="res://data/textures/ui/panel.png" id="1_2f6v8"]
 [ext_resource type="Script" uid="uid://c6ou7173i57do" path="res://src/ui/DynamicLabel.gd" id="1_rxr4i"]
@@ -16,16 +16,16 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_010ph"]
 image = SubResource("Image_h57ff")
 
-[node name="MapListEntry" type="HBoxContainer"]
+[node name="MapListEntry" type="HBoxContainer" unique_id=439385118]
 size_flags_horizontal = 3
 
-[node name="Map" type="Button" parent="."]
+[node name="Map" type="Button" parent="." unique_id=670043198]
 custom_minimum_size = Vector2(300, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
 
-[node name="Split" type="HBoxContainer" parent="Map"]
+[node name="Split" type="HBoxContainer" parent="Map" unique_id=33572232]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,7 +38,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="Image" type="TextureRect" parent="Map/Split"]
+[node name="Image" type="TextureRect" parent="Map/Split" unique_id=1258341237]
 custom_minimum_size = Vector2(0, 178)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -46,11 +46,11 @@ size_flags_vertical = 4
 texture = SubResource("ImageTexture_010ph")
 stretch_mode = 6
 
-[node name="Labels" type="VBoxContainer" parent="Map/Split"]
+[node name="Labels" type="VBoxContainer" parent="Map/Split" unique_id=202984350]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FeaturedTag" type="NinePatchRect" parent="Map/Split/Labels"]
+[node name="FeaturedTag" type="NinePatchRect" parent="Map/Split/Labels" unique_id=2085967566]
 visible = false
 modulate = Color(4.325, 2.703, 1, 1)
 custom_minimum_size = Vector2(2.08165e-12, 20)
@@ -60,7 +60,7 @@ region_rect = Rect2(12, 19, 100, 91)
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="Label" type="Label" parent="Map/Split/Labels/FeaturedTag"]
+[node name="Label" type="Label" parent="Map/Split/Labels/FeaturedTag" unique_id=1790981737]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -75,7 +75,7 @@ theme_override_font_sizes/font_size = 14
 text = "FEATURED"
 vertical_alignment = 1
 
-[node name="NewTag" type="NinePatchRect" parent="Map/Split/Labels"]
+[node name="NewTag" type="NinePatchRect" parent="Map/Split/Labels" unique_id=310699292]
 visible = false
 modulate = Color(2.702, 2.703, 5.405, 1)
 custom_minimum_size = Vector2(2.08165e-12, 20)
@@ -85,7 +85,7 @@ region_rect = Rect2(12, 19, 100, 91)
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[node name="Label" type="Label" parent="Map/Split/Labels/NewTag"]
+[node name="Label" type="Label" parent="Map/Split/Labels/NewTag" unique_id=985688813]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -100,7 +100,7 @@ theme_override_font_sizes/font_size = 14
 text = "NEW"
 vertical_alignment = 1
 
-[node name="Title" type="Label" parent="Map/Split/Labels"]
+[node name="Title" type="Label" parent="Map/Split/Labels" unique_id=67493969]
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_fonts/font = ExtResource("1_vl26o")
@@ -110,7 +110,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 script = ExtResource("1_rxr4i")
 
-[node name="Author" type="Label" parent="Map/Split/Labels"]
+[node name="Author" type="Label" parent="Map/Split/Labels" unique_id=1266333677]
 self_modulate = Color(1, 1, 1, 0.509804)
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
@@ -119,7 +119,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
-[node name="Date" type="Label" parent="Map/Split/Labels"]
+[node name="Date" type="Label" parent="Map/Split/Labels" unique_id=1425290084]
 self_modulate = Color(1, 1, 1, 0.509804)
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
@@ -127,7 +127,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
-[node name="Downloads" type="Label" parent="Map/Split/Labels"]
+[node name="Downloads" type="Label" parent="Map/Split/Labels" unique_id=1302264046]
 self_modulate = Color(1, 1, 1, 0.509804)
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
@@ -135,7 +135,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
-[node name="Version" type="Label" parent="Map/Split/Labels"]
+[node name="Version" type="Label" parent="Map/Split/Labels" unique_id=1613190262]
 self_modulate = Color(1, 1, 1, 0.509804)
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
@@ -145,7 +145,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 script = ExtResource("1_rxr4i")
 
-[node name="Delete" type="Button" parent="."]
+[node name="Delete" type="Button" parent="." unique_id=1981223856]
 visible = false
 modulate = Color(7.568, 0, 0, 1)
 layout_mode = 2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://cd3af1twwe58l"]
+[gd_scene format=4 uid="uid://cd3af1twwe58l"]
 
 [ext_resource type="Script" uid="uid://bp378ryd0vrwa" path="res://src/Bomb.gd" id="1_3qcbp"]
 [ext_resource type="AudioStream" uid="uid://btxcjaqcrlqro" path="res://data/audio/beep/beep.ogg" id="2_xnhk2"]
@@ -214,18 +214,18 @@ normal_texture = ExtResource("3_dxvq6")
 rim_enabled = true
 rim = 0.16
 
-[node name="Bomb" type="RigidBody3D"]
+[node name="Bomb" type="RigidBody3D" unique_id=184781352]
 collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_nsclt")
 script = ExtResource("1_3qcbp")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1185469001]
 stream = ExtResource("2_xnhk2")
 max_db = 0.0
 max_distance = 40.0
 bus = &"SFX"
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=630362253]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.219798, 0.828208, -0.0113131)
 amount = 48
 lifetime = 2.5
@@ -234,31 +234,28 @@ fixed_fps = 13
 process_material = SubResource("ParticleProcessMaterial_ptir8")
 draw_pass_1 = SubResource("PlaneMesh_clwto")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_o2hys")
-}
-autoplay = "bomb_tick"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=699042118]
+libraries/ = SubResource("AnimationLibrary_o2hys")
+autoplay = &"bomb_tick"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=536129559]
 replication_config = SubResource("SceneReplicationConfig_dr4i6")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=467379053]
 shape = SubResource("SphereShape3D_ld0tl")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=1468031862]
 script = ExtResource("3_ky8so")
 
-[node name="bomb" type="Node3D" parent="Smoothing"]
+[node name="bomb" type="Node3D" parent="Smoothing" unique_id=526371993]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
 
-[node name="Cube" type="MeshInstance3D" parent="Smoothing/bomb"]
+[node name="Cube" type="MeshInstance3D" parent="Smoothing/bomb" unique_id=1218428982]
 mesh = SubResource("ArrayMesh_7n4lf")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_mhgyi")
 surface_material_override/1 = ExtResource("6_r1dun")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1359042912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.9, 0.05)
 visible = false
 light_color = Color(0.898039, 0.6, 0.47451, 1)

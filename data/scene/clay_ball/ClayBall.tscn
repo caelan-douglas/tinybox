@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ky2h7r63y8gy"]
+[gd_scene format=3 uid="uid://ky2h7r63y8gy"]
 
 [ext_resource type="Script" uid="uid://b4iypd4txttgx" path="res://src/ClayBall.gd" id="1_6whcq"]
 [ext_resource type="Texture2D" uid="uid://cjywi58fiejc2" path="res://data/models/character/textures/fp1-normal.png" id="2_0dw7p"]
@@ -50,28 +50,28 @@ random_pitch = 1.2
 streams_count = 1
 stream_0/stream = ExtResource("5_200ox")
 
-[node name="ClayBall" type="RigidBody3D"]
+[node name="ClayBall" type="RigidBody3D" unique_id=493400875]
 collision_layer = 128
 collision_mask = 139
 physics_material_override = SubResource("PhysicsMaterial_kcslu")
 continuous_cd = true
-max_contacts_reported = 1
 contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_6whcq")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1537204764]
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=350962640]
 shape = SubResource("SphereShape3D_45sso")
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=1009753113]
 shape = SubResource("SphereShape3D_bvw4g")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=418604495]
 script = ExtResource("2_5txvd")
 
-[node name="present" parent="Smoothing" instance=ExtResource("3_wt68o")]
+[node name="present" parent="Smoothing" unique_id=542856661 instance=ExtResource("3_wt68o")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 visible = false
 script = ExtResource("2_xkwcy")
@@ -80,19 +80,19 @@ script = ExtResource("2_xkwcy")
 surface_material_override/0 = SubResource("StandardMaterial3D_vqnc1")
 surface_material_override/1 = SubResource("StandardMaterial3D_1p2au")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Smoothing"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Smoothing" unique_id=690428958]
 mesh = SubResource("SphereMesh_hof2s")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_vqnc1")
 script = ExtResource("2_xkwcy")
 set_visible_to_what = false
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1459110124]
 replication_interval = 0.04
 delta_interval = 0.04
 replication_config = SubResource("SceneReplicationConfig_28iu0")
 
-[node name="SpringAudio" type="AudioStreamPlayer3D" parent="."]
+[node name="SpringAudio" type="AudioStreamPlayer3D" parent="." unique_id=226836508]
 stream = SubResource("AudioStreamRandomizer_jf210")
 max_distance = 60.0
 max_polyphony = 4

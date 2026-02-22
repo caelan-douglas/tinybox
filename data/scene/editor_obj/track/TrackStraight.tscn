@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://odm6rplmf74d"]
+[gd_scene format=4 uid="uid://odm6rplmf74d"]
 
 [ext_resource type="Script" uid="uid://cew6k87fglhlf" path="res://src/TBWObject.gd" id="1_0ur23"]
 [ext_resource type="Texture2D" uid="uid://ikfa8wlpg1cg" path="res://data/models/track/textures/track.png" id="2_leygg"]
@@ -47,16 +47,15 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_qdrjv")
 
-[node name="TrackStraight" type="StaticBody3D"]
+[node name="TrackStraight" type="StaticBody3D" unique_id=599560112]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 script = ExtResource("1_0ur23")
 tbw_object_type = "obj_track_straight"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=318242089]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.5, 0)
 shape = SubResource("BoxShape3D_4dnk5")
 
-[node name="StraightPiece2" type="MeshInstance3D" parent="."]
+[node name="StraightPiece2" type="MeshInstance3D" parent="." unique_id=1742077602]
 mesh = SubResource("ArrayMesh_sl8ik")
-skeleton = NodePath("")
 surface_material_override/0 = ExtResource("3_3h174")

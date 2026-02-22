@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://bm7tqwgeasnr1"]
 
-[node name="TDMTeam" type="ProgressBar"]
+[node name="TDMTeam" type="ProgressBar" unique_id=2067781251]
 self_modulate = Color(0.584314, 0.298039, 0.745098, 1)
 custom_minimum_size = Vector2(300, 25)
 max_value = 15.0
 step = 1.0
 show_percentage = false
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1915447435]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

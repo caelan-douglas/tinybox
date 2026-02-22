@@ -1,4 +1,4 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://qaem8tptsp6l"]
+[gd_resource type="FontVariation" format=3 uid="uid://qaem8tptsp6l"]
 
 [ext_resource type="FontFile" uid="uid://dbo1qqcd7oxkn" path="res://data/font/Nunito/Nunito-VariableFont_wght.ttf" id="1_qm22t"]
 

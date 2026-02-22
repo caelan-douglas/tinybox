@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://1mdeppfhe4p6"]
+[gd_scene format=4 uid="uid://1mdeppfhe4p6"]
 
 [ext_resource type="Script" uid="uid://cg7fox8367q44" path="res://src/EditorBuildTool.gd" id="1_f2x06"]
 [ext_resource type="AudioStream" uid="uid://btqo5m6d0rhqc" path="res://data/audio/invalid.ogg" id="3_roj3x"]
@@ -56,39 +56,38 @@ emission = Color(0.276499, 0.636238, 0.407413, 1)
 rim_enabled = true
 rim_tint = 1.0
 
-[node name="BuildTool" type="Node3D"]
+[node name="BuildTool" type="Node3D" unique_id=1298727476]
 top_level = true
 script = ExtResource("1_f2x06")
 visual_mesh_name = "BuildToolVisualMesh"
 
-[node name="InvalidAudio" type="AudioStreamPlayer" parent="."]
+[node name="InvalidAudio" type="AudioStreamPlayer" parent="." unique_id=653716060]
 stream = ExtResource("3_roj3x")
 volume_db = -3.0
 bus = &"SFX"
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=60278021]
 replication_config = SubResource("SceneReplicationConfig_fc2vy")
 
-[node name="SelectArea" type="Area3D" parent="."]
+[node name="SelectArea" type="Area3D" parent="." unique_id=1086903520]
 top_level = true
 visible = false
 collision_layer = 16
 collision_mask = 291
 
-[node name="build_collider" type="CollisionShape3D" parent="SelectArea"]
+[node name="build_collider" type="CollisionShape3D" parent="SelectArea" unique_id=1893224861]
 shape = SubResource("SphereShape3D_sflaf")
 
-[node name="grab_collider" type="CollisionShape3D" parent="SelectArea"]
+[node name="grab_collider" type="CollisionShape3D" parent="SelectArea" unique_id=1322281862]
 shape = SubResource("BoxShape3D_hkusu")
 disabled = true
 
-[node name="Selector" type="MeshInstance3D" parent="SelectArea"]
+[node name="Selector" type="MeshInstance3D" parent="SelectArea" unique_id=2036912702]
 transform = Transform3D(1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0)
 mesh = SubResource("ArrayMesh_sx4v2")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_tmgg5")
 
-[node name="NameLabel" type="Label3D" parent="SelectArea"]
+[node name="NameLabel" type="Label3D" parent="SelectArea" unique_id=241649865]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 pixel_size = 0.0008
 billboard = 1

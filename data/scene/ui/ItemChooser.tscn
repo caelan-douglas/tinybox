@@ -1,21 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://ku7hponrkcnk"]
+[gd_scene format=3 uid="uid://ku7hponrkcnk"]
 
 [ext_resource type="Script" uid="uid://c1fsmdshwj812" path="res://src/ui/ItemChooser.gd" id="1_p7u7r"]
 
-[node name="ItemChooser" type="TabContainer"]
+[node name="ItemChooser" type="TabContainer" unique_id=651012460]
 offset_right = 356.0
 offset_bottom = 202.0
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("1_p7u7r")
 
-[node name="Bricks & Objects" type="VBoxContainer" parent="."]
+[node name="Bricks & Objects" type="VBoxContainer" parent="." unique_id=1576413605]
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Bricks & Objects"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Bricks & Objects" unique_id=1181104724]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -23,18 +23,18 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="Bricks & Objects/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="Bricks & Objects/ScrollContainer" unique_id=268491322]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Saved Stuff" type="VBoxContainer" parent="."]
+[node name="Saved Stuff" type="VBoxContainer" parent="." unique_id=1906786805]
 visible = false
 custom_minimum_size = Vector2(308, 2.08165e-12)
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Saved Stuff"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Saved Stuff" unique_id=2143068552]
 custom_minimum_size = Vector2(2.08165e-12, 150)
 layout_mode = 2
 size_flags_vertical = 3
@@ -42,6 +42,6 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="ItemList" type="VBoxContainer" parent="Saved Stuff/ScrollContainer"]
+[node name="ItemList" type="VBoxContainer" parent="Saved Stuff/ScrollContainer" unique_id=2008742731]
 layout_mode = 2
 size_flags_horizontal = 3

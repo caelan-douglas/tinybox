@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqxeue22qwmrn"]
+[gd_scene format=3 uid="uid://dqxeue22qwmrn"]
 
 [ext_resource type="Texture2D" uid="uid://jpb788n8uj3i" path="res://data/textures/ui/crown.png" id="1_vbkcx"]
 [ext_resource type="Texture2D" uid="uid://bejiqw1x2idqs" path="res://data/textures/ui/you.png" id="2_il5sq"]
@@ -15,44 +15,44 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 corner_detail = 4
 
-[node name="PlayerListEntry" type="PanelContainer"]
+[node name="PlayerListEntry" type="PanelContainer" unique_id=616988120]
 self_modulate = Color(0.470588, 0.45098, 1, 1)
 custom_minimum_size = Vector2(0, 27)
 offset_right = 210.0
 offset_bottom = 27.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gynkv")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=916973874]
 layout_mode = 2
 
-[node name="Crown" type="TextureRect" parent="HBoxContainer"]
+[node name="Crown" type="TextureRect" parent="HBoxContainer" unique_id=918002245]
 visible = false
 layout_mode = 2
 texture = ExtResource("1_vbkcx")
 expand_mode = 3
 stretch_mode = 4
 
-[node name="You" type="TextureRect" parent="HBoxContainer"]
+[node name="You" type="TextureRect" parent="HBoxContainer" unique_id=1506316315]
 visible = false
 layout_mode = 2
 texture = ExtResource("2_il5sq")
 expand_mode = 3
 stretch_mode = 4
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1218834618]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Playername"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Team" type="Label" parent="HBoxContainer"]
+[node name="Team" type="Label" parent="HBoxContainer" unique_id=696387841]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.415686)
 text = "Purple"
 horizontal_alignment = 2
 
-[node name="CaptureTime" type="Label" parent="HBoxContainer"]
+[node name="CaptureTime" type="Label" parent="HBoxContainer" unique_id=824402240]
 visible = false
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
@@ -62,7 +62,7 @@ theme_override_constants/outline_size = 3
 text = "0"
 horizontal_alignment = 2
 
-[node name="K" type="Label" parent="HBoxContainer"]
+[node name="K" type="Label" parent="HBoxContainer" unique_id=1997391986]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.65098, 0.564706, 0.321569, 1)
@@ -71,7 +71,7 @@ theme_override_constants/outline_size = 3
 text = "0"
 horizontal_alignment = 2
 
-[node name="D" type="Label" parent="HBoxContainer"]
+[node name="D" type="Label" parent="HBoxContainer" unique_id=191025]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.658824, 0.239216, 0.372549, 1)

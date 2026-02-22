@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bh1utiu8ireoo"]
+[gd_scene format=3 uid="uid://bh1utiu8ireoo"]
 
 [ext_resource type="Script" uid="uid://x5faqqei0yhv" path="res://src/Explosion.gd" id="1_bvuci"]
 [ext_resource type="Material" uid="uid://lk8khdg1bwya" path="res://data/materials/fire/fire_material.tres" id="3_nruka"]
@@ -45,10 +45,10 @@ orientation = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_2jr2f"]
 radius = 2.0
 
-[node name="Explosion" type="Node3D"]
+[node name="Explosion" type="Node3D" unique_id=1944862449]
 script = ExtResource("1_bvuci")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=283349576]
 emitting = false
 amount = 40
 lifetime = 10.0
@@ -60,14 +60,14 @@ draw_passes = 2
 draw_pass_1 = SubResource("PlaneMesh_8vyer")
 draw_pass_2 = null
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1793593933]
 attenuation_model = 3
 max_distance = 1000.0
 panning_strength = 2.5
 bus = &"SFX"
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=81030506]
 collision_mask = 131
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=812726019]
 shape = SubResource("SphereShape3D_2jr2f")

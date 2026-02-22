@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dofj1u51fgb3n"]
+[gd_scene format=3 uid="uid://dofj1u51fgb3n"]
 
 [ext_resource type="Script" uid="uid://4cf8hw4refam" path="res://src/PulseCannonTool.gd" id="1_17p35"]
 [ext_resource type="AudioStream" uid="uid://bt1qfstyhshdi" path="res://data/audio/laser.ogg" id="2_hl60i"]
@@ -106,11 +106,11 @@ subdivide_depth = 50
 frequency = 0.0019
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m23ss"]
-seamless = true
-seamless_blend_skirt = 1.0
-as_normal_map = true
-color_ramp = SubResource("Gradient_lnlve")
 noise = SubResource("FastNoiseLite_ma1rf")
+color_ramp = SubResource("Gradient_lnlve")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_3aaam"]
 
@@ -118,19 +118,19 @@ noise = SubResource("FastNoiseLite_ma1rf")
 frequency = 0.0011
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sadk0"]
-seamless = true
-seamless_blend_skirt = 1.0
-as_normal_map = true
-color_ramp = SubResource("Gradient_3aaam")
 noise = SubResource("FastNoiseLite_y5tne")
+color_ramp = SubResource("Gradient_3aaam")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
 
 [sub_resource type="Gradient" id="Gradient_sxj1p"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_2s700"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v1d1h"]
-color_ramp = SubResource("Gradient_sxj1p")
 noise = SubResource("FastNoiseLite_2s700")
+color_ramp = SubResource("Gradient_sxj1p")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ehhbm"]
 render_priority = 10
@@ -157,12 +157,12 @@ shader_parameter/near = 1.0
 shader_parameter/far = 100.0
 shader_parameter/edge_color = Color(1, 1, 1, 1)
 
-[node name="PulseCannonTool" type="Node3D"]
+[node name="PulseCannonTool" type="Node3D" unique_id=843738487]
 script = ExtResource("1_17p35")
 visual_mesh_name = "PulseCannonVisualMesh"
 lock_camera_to_aim = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=2068941655]
 stream = ExtResource("2_hl60i")
 volume_db = -13.0
 unit_size = 120.0
@@ -170,29 +170,26 @@ max_db = -1.5
 max_distance = 200.0
 bus = &"SFX"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_xdt0q")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2011426401]
+libraries/ = SubResource("AnimationLibrary_xdt0q")
 
-[node name="BeamArea" type="Area3D" parent="."]
+[node name="BeamArea" type="Area3D" parent="." unique_id=1372700036]
 top_level = true
 collision_layer = 0
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BeamArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BeamArea" unique_id=1420141503]
 shape = SubResource("BoxShape3D_0kucd")
 disabled = true
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=632375014]
 top_level = true
 script = ExtResource("3_jmyfu")
 
-[node name="BeamMesh" type="Node3D" parent="Smoothing"]
+[node name="BeamMesh" type="Node3D" parent="Smoothing" unique_id=265150463]
 visible = false
 
-[node name="BeamMeshI" type="MeshInstance3D" parent="Smoothing/BeamMesh"]
+[node name="BeamMeshI" type="MeshInstance3D" parent="Smoothing/BeamMesh" unique_id=726002375]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.125, 2.08165e-12)
 mesh = SubResource("BoxMesh_2pdr2")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_ehhbm")

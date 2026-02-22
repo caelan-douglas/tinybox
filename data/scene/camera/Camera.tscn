@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://227kic5617ga"]
+[gd_scene format=3 uid="uid://227kic5617ga"]
 
 [ext_resource type="Script" uid="uid://cdv86jmsfl5ql" path="res://src/Camera.gd" id="1"]
 [ext_resource type="Animation" uid="uid://2t1dvsdwkiht" path="res://data/animation/camera/intro.res" id="2_c4qs1"]
@@ -146,35 +146,35 @@ _data = {
 &"move_to_right_side": SubResource("Animation_kd2k8")
 }
 
-[node name="CameraGimbal" type="Node3D"]
+[node name="CameraGimbal" type="Node3D" unique_id=1650014042]
 transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 0, 2, 4)
 
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 2, 4)
+[node name="Camera" type="Camera3D" parent="." unique_id=17254768]
+transform = Transform3D(1, 0, 0, 0, 0.98480797, 0.1736483, 0, -0.1736483, 0.98480797, 0, 2, 4)
 attributes = SubResource("CameraAttributesPractical_m42ml")
 fov = 55.0
 near = 0.1
 script = ExtResource("1")
 
-[node name="WaterOverlay" type="MeshInstance3D" parent="Camera"]
+[node name="WaterOverlay" type="MeshInstance3D" parent="Camera" unique_id=544372715]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.314685)
 visible = false
 mesh = SubResource("PlaneMesh_jfe4s")
 
-[node name="IntersectionArea" type="Area3D" parent="Camera"]
+[node name="IntersectionArea" type="Area3D" parent="Camera" unique_id=44658200]
 collision_layer = 8
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/IntersectionArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/IntersectionArea" unique_id=824635273]
 shape = SubResource("SphereShape3D_da3n1")
 
-[node name="WaterArea" type="Area3D" parent="Camera"]
+[node name="WaterArea" type="Area3D" parent="Camera" unique_id=1675221422]
 collision_layer = 512
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/WaterArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera/WaterArea" unique_id=2121589420]
 shape = SubResource("SphereShape3D_4cukj")
 
-[node name="SpeedTrails" type="GPUParticles3D" parent="Camera"]
+[node name="SpeedTrails" type="GPUParticles3D" parent="Camera" unique_id=1276131826]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 cast_shadow = 0
 emitting = false
@@ -186,8 +186,6 @@ trail_lifetime = 0.8
 process_material = SubResource("ParticleProcessMaterial_q6ur4")
 draw_pass_1 = SubResource("RibbonTrailMesh_dpfye")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=213590979]
 root_node = NodePath("../Camera")
-libraries = {
-"": SubResource("AnimationLibrary_vcqc4")
-}
+libraries/ = SubResource("AnimationLibrary_vcqc4")

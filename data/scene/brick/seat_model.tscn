@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bfdard88ejdsw"]
+[gd_scene format=3 uid="uid://bfdard88ejdsw"]
 
 [ext_resource type="PackedScene" uid="uid://ccd46fjn2mddy" path="res://data/models/brick/seat.blend" id="1_aelbu"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="1_prft2"]
@@ -8,21 +8,21 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
 size = Vector3(0.9, 0.9, 0.9)
 
-[node name="mesh" type="CollisionShape3D"]
+[node name="mesh" type="CollisionShape3D" unique_id=491992573]
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=538728558]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=1931120424]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=1231033920]
 script = ExtResource("1_prft2")
 
-[node name="model" parent="Smoothing" instance=ExtResource("1_aelbu")]
+[node name="model" parent="Smoothing" unique_id=2087755726 instance=ExtResource("1_aelbu")]
 
-[node name="VehicleOwnerLabel" type="Label3D" parent="Smoothing"]
+[node name="VehicleOwnerLabel" type="Label3D" parent="Smoothing" unique_id=460920039]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
 billboard = 1
 modulate = Color(1, 0.843137, 0.4, 1)

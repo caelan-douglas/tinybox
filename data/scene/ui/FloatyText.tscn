@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dv48wiw65w5d"]
+[gd_scene format=3 uid="uid://dv48wiw65w5d"]
 
 [ext_resource type="Script" uid="uid://cdufl8xp2txs3" path="res://src/ui/FloatyText.gd" id="1_qevpb"]
 
@@ -87,10 +87,10 @@ _data = {
 &"floaty": SubResource("Animation_v3dr5")
 }
 
-[node name="FloatyText" type="Node3D"]
+[node name="FloatyText" type="Node3D" unique_id=837739676]
 script = ExtResource("1_qevpb")
 
-[node name="Label" type="Label3D" parent="."]
+[node name="Label" type="Label3D" parent="." unique_id=368227965]
 pixel_size = 0.0007
 billboard = 1
 no_depth_test = true
@@ -100,7 +100,5 @@ outline_modulate = Color(0.0980392, 0.0352941, 0.0431373, 1)
 text = "Cost"
 outline_size = 6
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Label"]
-libraries = {
-"": SubResource("AnimationLibrary_o7ov2")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Label" unique_id=1148327125]
+libraries/ = SubResource("AnimationLibrary_o7ov2")

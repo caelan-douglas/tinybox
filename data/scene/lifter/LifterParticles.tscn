@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bagdsh518cwy5"]
+[gd_scene format=3 uid="uid://bagdsh518cwy5"]
 
 [ext_resource type="Texture2D" uid="uid://tcl3tcc402us" path="res://data/textures/lifter_star.png" id="1_vdctm"]
 
@@ -39,7 +39,7 @@ distance_fade_max_distance = 120.0
 [sub_resource type="QuadMesh" id="QuadMesh_4t1m1"]
 material = SubResource("StandardMaterial3D_h4is5")
 
-[node name="Particles" type="GPUParticles3D"]
+[node name="Particles" type="GPUParticles3D" unique_id=428824136]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.286579, 0)
 extra_cull_margin = 128.0
 amount = 64

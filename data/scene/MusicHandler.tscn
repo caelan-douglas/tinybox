@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://y722t65cacix"]
+[gd_scene format=3 uid="uid://y722t65cacix"]
 
 [ext_resource type="AudioStream" uid="uid://bmuhj2148tvfn" path="res://data/audio/music/mus1.ogg" id="1_gqqnu"]
 [ext_resource type="Script" uid="uid://cuo41gt4r0k61" path="res://src/MusicHandler.gd" id="1_qgeqv"]
@@ -57,17 +57,15 @@ _data = {
 &"song_fade_out": SubResource("Animation_3fl2v")
 }
 
-[node name="MusicHandler" type="Node"]
+[node name="MusicHandler" type="Node" unique_id=937987513]
 script = ExtResource("1_qgeqv")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=68142946]
 stream = ExtResource("1_gqqnu")
 bus = &"Music"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="AudioStreamPlayer"]
-libraries = {
-"": SubResource("AnimationLibrary_1qkk6")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AudioStreamPlayer" unique_id=1221070658]
+libraries/ = SubResource("AnimationLibrary_1qkk6")
 
-[node name="SongTimer" type="Timer" parent="."]
+[node name="SongTimer" type="Timer" parent="." unique_id=1686377058]
 one_shot = true

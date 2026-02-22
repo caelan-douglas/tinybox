@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://x6ityafb1bax"]
+[gd_scene format=3 uid="uid://x6ityafb1bax"]
 
 [ext_resource type="Texture2D" uid="uid://bqiuxri68qqr2" path="res://data/textures/watercolour.png" id="1_o0wya"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_4tep0"]
@@ -59,7 +59,7 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_sol1x"]
 material = SubResource("StandardMaterial3D_2eusy")
 
-[node name="splash_particles" type="GPUParticles3D"]
+[node name="splash_particles" type="GPUParticles3D" unique_id=2034903063]
 emitting = false
 amount = 16
 one_shot = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://eyv2kk27quaf"]
+[gd_scene format=3 uid="uid://eyv2kk27quaf"]
 
 [ext_resource type="Script" uid="uid://dosbysveu474u" path="res://src/TBWEnvrionment.gd" id="1_0mx85"]
 [ext_resource type="Texture2D" uid="uid://cj1otog15h7v2" path="res://data/textures/sky/clouds.png" id="2_7urxt"]
@@ -68,14 +68,14 @@ _data = {
 &"clouds": ExtResource("4_ebaor")
 }
 
-[node name="Environment" type="Node"]
+[node name="Environment" type="Node" unique_id=1597471878]
 script = ExtResource("1_0mx85")
 environment_name = "env_sunset"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1030812564]
 environment = SubResource("Environment_oe2ii")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=625334577]
 transform = Transform3D(-0.306186, -0.312798, 0.899115, -0.25, 0.937747, 0.241102, -0.918559, -0.150957, -0.365324, 0, 52.7417, 0)
 light_color = Color(0.717911, 0.5223, 0.428367, 1)
 light_energy = 2.0
@@ -84,8 +84,6 @@ directional_shadow_max_distance = 1600.0
 script = ExtResource("3_tll4i")
 visible_on_awful = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_e3436")
-}
-autoplay = "clouds"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=858269717]
+libraries/ = SubResource("AnimationLibrary_e3436")
+autoplay = &"clouds"

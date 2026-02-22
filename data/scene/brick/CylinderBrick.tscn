@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cwymj2xlxiri4"]
+[gd_scene format=4 uid="uid://cwymj2xlxiri4"]
 
 [ext_resource type="Script" uid="uid://fhyh0pqn2gcl" path="res://src/MotorBrick.gd" id="1_ap5pn"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="2_cpgvr"]
@@ -73,7 +73,7 @@ height = 0.5
 radial_segments = 4
 rings = 1
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=2079408995]
 collision_mask = 11
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_n1hir")
@@ -83,66 +83,65 @@ max_contacts_reported = 1
 script = ExtResource("1_ap5pn")
 _brick_spawnable_type = "brick_cylinder"
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_v0nme")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=1596759832 instance=ExtResource("2_v0nme")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("2_cpgvr")]
+[node name="BrickSynchronizer" parent="." unique_id=1889615372 instance=ExtResource("2_cpgvr")]
 delta_interval = 0.044
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=146836605]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_8ustn")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=2067046283]
 script = ExtResource("2_xgxvc")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_wv0jl")]
+[node name="model" parent="Smoothing" unique_id=64689867 instance=ExtResource("3_wv0jl")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 
-[node name="MotorMesh" type="MeshInstance3D" parent="Smoothing"]
+[node name="MotorMesh" type="MeshInstance3D" parent="Smoothing" unique_id=1952544903]
 transform = Transform3D(0.8, 0, 0, 0, -1.09278e-08, -0.8, 0, 0.25, -3.49691e-08, 2.08165e-12, 2.08165e-12, 0.5)
 mesh = SubResource("ArrayMesh_eream")
-skeleton = NodePath("")
 surface_material_override/0 = ExtResource("4_absob")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=1605328912]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=1096341522]
 shape = SubResource("CylinderShape3D_d54ge")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=61199064]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=582214830]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.029172, 0)
 shape = SubResource("CylinderShape3D_ro085")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1880813737]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=976364738]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=1112899369]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=1890891157]
 collision_layer = 64
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=806508143]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_u77mh")
 
-[node name="Fire" parent="." instance=ExtResource("3_fh6f0")]
+[node name="Fire" parent="." unique_id=1519552305 instance=ExtResource("3_fh6f0")]
 
-[node name="MotorTag" type="Sprite3D" parent="."]
+[node name="MotorTag" type="Sprite3D" parent="." unique_id=1518454662]
 transform = Transform3D(1, -1.9106863e-15, -8.742279e-08, -1.9106863e-15, 1, -8.7422805e-08, 8.742279e-08, 8.7422805e-08, 1, -0.10000002, 0.1, 4.37114e-09)
 offset = Vector2(32, -32)
 pixel_size = 0.005
@@ -150,7 +149,7 @@ billboard = 1
 no_depth_test = true
 texture = ExtResource("8_jv7m5")
 
-[node name="DirectionArrow" type="Sprite3D" parent="."]
+[node name="DirectionArrow" type="Sprite3D" parent="." unique_id=1883815935]
 transform = Transform3D(1.31134e-07, -1, 4.37114e-08, -1, -1.31134e-07, 4.37114e-08, -4.37114e-08, -4.37114e-08, -1, -0.1, 2.08165e-12, 2.08165e-12)
 flip_h = true
 modulate = Color(0.278431, 0.709804, 0.984314, 0.815686)
@@ -158,18 +157,18 @@ pixel_size = 0.003
 no_depth_test = true
 texture = ExtResource("5_xj1jn")
 
-[node name="JointSpotLeft" type="Node3D" parent="."]
+[node name="JointSpotLeft" type="Node3D" parent="." unique_id=1311209845]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotLeft"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotLeft" unique_id=1297113590]
 visible = false
 mesh = SubResource("SphereMesh_oj212")
 script = ExtResource("6_mjmfm")
 
-[node name="JointSpotRight" type="Node3D" parent="."]
+[node name="JointSpotRight" type="Node3D" parent="." unique_id=148765967]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotRight"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JointSpotRight" unique_id=605904495]
 visible = false
 mesh = SubResource("SphereMesh_oj212")
 skeleton = NodePath("../../JointSpotLeft")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d2gxhhq25bxkk"]
+[gd_scene format=3 uid="uid://d2gxhhq25bxkk"]
 
 [ext_resource type="Script" uid="uid://c2qs4hgme811n" path="res://src/ButtonBrick.gd" id="1_je5ca"]
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_hd5s1"]
@@ -28,7 +28,7 @@ size = Vector3(1.4, 1.4, 1.4)
 [sub_resource type="BoxShape3D" id="BoxShape3D_w63pj"]
 size = Vector3(1.3, 1.3, 1.3)
 
-[node name="Brick" type="RigidBody3D"]
+[node name="Brick" type="RigidBody3D" unique_id=1820614172]
 collision_mask = 3
 mass = 10.0
 physics_material_override = SubResource("PhysicsMaterial_osnen")
@@ -38,59 +38,59 @@ max_contacts_reported = 1
 script = ExtResource("1_je5ca")
 _brick_spawnable_type = "brick_button"
 
-[node name="BrickMultiplayerSpawner" parent="." instance=ExtResource("2_hd5s1")]
+[node name="BrickMultiplayerSpawner" parent="." unique_id=1139686059 instance=ExtResource("2_hd5s1")]
 
-[node name="BrickSynchronizer" parent="." instance=ExtResource("3_i3glu")]
+[node name="BrickSynchronizer" parent="." unique_id=877663129 instance=ExtResource("3_i3glu")]
 
-[node name="collider" type="CollisionShape3D" parent="."]
+[node name="collider" type="CollisionShape3D" parent="." unique_id=198189344]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 shape = SubResource("BoxShape3D_b80at")
 
-[node name="Smoothing" type="Node3D" parent="."]
+[node name="Smoothing" type="Node3D" parent="." unique_id=1134574058]
 script = ExtResource("2_sgx5r")
 
-[node name="model" parent="Smoothing" instance=ExtResource("3_ol8rk")]
+[node name="model" parent="Smoothing" unique_id=721405043 instance=ExtResource("3_ol8rk")]
 
-[node name="Cube" parent="Smoothing/model" index="0"]
+[node name="Cube" parent="Smoothing/model" index="0" unique_id=1035202953]
 surface_material_override/1 = SubResource("StandardMaterial3D_y7eer")
 
-[node name="IntersectDetector" type="Area3D" parent="."]
+[node name="IntersectDetector" type="Area3D" parent="." unique_id=44177947]
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="IntersectDetector"]
+[node name="collider" type="CollisionShape3D" parent="IntersectDetector" unique_id=1101648263]
 shape = SubResource("BoxShape3D_d6iny")
 
-[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="."]
+[node name="CameraMousePosInterceptor" type="StaticBody3D" parent="." unique_id=430718449]
 collision_layer = 32
 collision_mask = 32
 
-[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor"]
+[node name="collider" type="CollisionShape3D" parent="CameraMousePosInterceptor" unique_id=1330233807]
 shape = SubResource("BoxShape3D_mtstk")
 disabled = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1414075510]
 max_distance = 70.0
 bus = &"SFX"
 
-[node name="SoundExpiration" type="Timer" parent="."]
+[node name="SoundExpiration" type="Timer" parent="." unique_id=146459973]
 wait_time = 0.2
 one_shot = true
 
-[node name="InactivityTimer" type="Timer" parent="."]
+[node name="InactivityTimer" type="Timer" parent="." unique_id=1748419493]
 wait_time = 15.0
 one_shot = true
 
-[node name="JointDetector" type="Area3D" parent="."]
+[node name="JointDetector" type="Area3D" parent="." unique_id=702662331]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 collision_mask = 3
 
-[node name="collider" type="CollisionShape3D" parent="JointDetector"]
+[node name="collider" type="CollisionShape3D" parent="JointDetector" unique_id=2006796902]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 shape = SubResource("BoxShape3D_w63pj")
 
-[node name="Fire" parent="." instance=ExtResource("4_jm0y6")]
+[node name="Fire" parent="." unique_id=479906825 instance=ExtResource("4_jm0y6")]
 
-[node name="ButtonAudio" type="AudioStreamPlayer3D" parent="."]
+[node name="ButtonAudio" type="AudioStreamPlayer3D" parent="." unique_id=1717280459]
 stream = ExtResource("5_wtscq")
 max_distance = 70.0
 

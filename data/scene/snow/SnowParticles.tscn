@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c7u565kah5317"]
+[gd_scene format=3 uid="uid://c7u565kah5317"]
 
 [ext_resource type="Texture2D" uid="uid://c6juqn73t8ejc" path="res://data/textures/snowflake.png" id="1_tk1uy"]
 [ext_resource type="Script" uid="uid://cw8d28qo2mw6q" path="res://src/CameraParticles.gd" id="2_gcq1m"]
@@ -43,7 +43,7 @@ distance_fade_max_distance = 1.0
 material = SubResource("StandardMaterial3D_fvcte")
 size = Vector2(0.06, 0.06)
 
-[node name="SnowParticles" type="GPUParticles3D"]
+[node name="SnowParticles" type="GPUParticles3D" unique_id=349439449]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25937, -6)
 extra_cull_margin = 128.0
 amount = 512

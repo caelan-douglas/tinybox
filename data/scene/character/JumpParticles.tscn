@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2ngpbwaa2ste"]
+[gd_scene format=3 uid="uid://b2ngpbwaa2ste"]
 
 [ext_resource type="Material" uid="uid://5j6h001ay0q5" path="res://data/materials/particles/dust.tres" id="1_tnw5w"]
 [ext_resource type="Script" uid="uid://tv1iesast4dt" path="res://src/ExpireAfterTime.gd" id="2_7xus8"]
@@ -44,7 +44,7 @@ color_ramp = SubResource("GradientTexture1D_dnoau")
 material = ExtResource("1_tnw5w")
 size = Vector2(0.7, 0.7)
 
-[node name="jump_particles" type="GPUParticles3D"]
+[node name="jump_particles" type="GPUParticles3D" unique_id=1630843597]
 emitting = false
 amount = 3
 explosiveness = 1.0
