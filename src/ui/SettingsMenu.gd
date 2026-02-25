@@ -43,11 +43,11 @@ func _ready() -> void:
 	var current_preset : int = Global.load_graphics_preset()
 	match current_preset:
 		0:
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/cool")
+			graphics_button.text = "ui_graphics_high"
 		1:
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/bad")
+			graphics_button.text = "ui_graphics_medium"
 		2:
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/awful")
+			graphics_button.text = "ui_graphics_low"
 
 func _on_visiblity_changed(mode : bool) -> void:
 	if mode == true:
@@ -108,17 +108,18 @@ func _on_player_chats_toggled(mode : bool) -> void:
 # Toggles the graphics presets via Global and saves the setting.
 func toggle_graphics_presets() -> void:
 	var current_preset : int = Global.get_graphics_preset()
+	# TODO: cleanup
 	match current_preset:
 		0:
 			# set to BAD as we pressed button on COOL
 			Global.set_graphics_preset(Global.GraphicsPresets.BAD)
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/bad")
+			graphics_button.text = "ui_graphics_medium"
 		1:
 			# set to AWFUL
 			Global.set_graphics_preset(Global.GraphicsPresets.AWFUL)
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/awful")
+			graphics_button.text = "ui_graphics_low"
 		2:
 			# set to COOL
 			Global.set_graphics_preset(Global.GraphicsPresets.COOL)
-			graphics_button.text = JsonHandler.find_entry_in_file("ui/graphics_settings/cool")
+			graphics_button.text = "ui_graphics_high"
 	UserPreferences.save_pref("graphics_preset", Global.get_graphics_preset())

@@ -329,6 +329,10 @@ arrow_right={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://data/locale/locale.en.translation", "res://data/locale/locale.fr.translation")
+
 [layer_names]
 
 3d_physics/layer_1="all"

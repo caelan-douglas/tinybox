@@ -87,7 +87,8 @@ func _physics_process(delta : float) -> void:
 		if dist < nearest_dist:
 			nearest = player
 			nearest_dist = dist
-	target = nearest.global_position
+	if nearest != null:
+		target = nearest.global_position
 	
 	if target != null:
 		if global_position.distance_to(target) > 15:

@@ -24,9 +24,8 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_stvgj")
 theme_override_font_sizes/font_size = 64
-text = "Settings"
+text = "ui_settings"
 script = ExtResource("3_r1aba")
-json_text = "ui/settings"
 
 [node name="Spacer" type="Control" parent="." unique_id=1086019081]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -34,9 +33,8 @@ layout_mode = 2
 
 [node name="SaveButton" type="Button" parent="." unique_id=1640012298]
 layout_mode = 2
-text = "Save"
+text = "ui_save"
 script = ExtResource("2_qejdm")
-json_text = "ui/save"
 grab_initial_focus = true
 
 [node name="Spacer10" type="Control" parent="." unique_id=771001080]
@@ -130,7 +128,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Master Volume"
 script = ExtResource("3_r1aba")
-json_text = "ui/master_volume"
 
 [node name="MasterVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1233027854]
 layout_mode = 2
@@ -157,7 +154,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Music Volume"
 script = ExtResource("3_r1aba")
-json_text = "ui/music_volume"
 
 [node name="MusicVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1452152749]
 layout_mode = 2
@@ -176,7 +172,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "SFX Volume"
 script = ExtResource("3_r1aba")
-json_text = "ui/sfx_volume"
 
 [node name="SFXVol" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=1936633955]
 layout_mode = 2
@@ -195,7 +190,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Interface Volume"
 script = ExtResource("3_r1aba")
-json_text = "ui/ui_volume"
 
 [node name="SFXVol2" type="HSlider" parent="VolumePanel/VolumePanelContainer" unique_id=237838645]
 layout_mode = 2
@@ -216,7 +210,6 @@ theme_override_fonts/font = ExtResource("2_stvgj")
 theme_override_font_sizes/font_size = 64
 text = "Keybinds"
 script = ExtResource("3_r1aba")
-json_text = "ui/keybinds"
 
 [node name="Keybinds" type="VBoxContainer" parent="." unique_id=1117271052]
 custom_minimum_size = Vector2(308, 0)

@@ -69,8 +69,8 @@ func _ready() -> void:
 		var item_button : Button = item_chooser_button.instantiate()
 		# node name is internal name
 		item_button.name = item
-		item_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", item))
-		item_button.tooltip_text = JsonHandler.find_entry_in_file(str("tbw_objects/tooltips/", item))
+		item_button.text = str("tbw_", item)
+		item_button.tooltip_text = str("tbw_tooltip_", item)
 		if editor_mode:
 			# remove brick icon for non bricks
 			if item.begins_with("obj_camera"):

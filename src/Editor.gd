@@ -64,11 +64,11 @@ func _on_tbw_loaded() -> void:
 	# Update environment text
 	var env : Node = get_environment()
 	if env != null:
-		editor_canvas.env_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", env.environment_name))
+		editor_canvas.env_button.text = str("tbw_", env.environment_name)
 	# Update background text
 	var bg : TBWObject = get_background()
 	if bg != null:
-		editor_canvas.bg_button.text = JsonHandler.find_entry_in_file(str("tbw_objects/", bg.tbw_object_type))
+		editor_canvas.bg_button.text = str("tbw_", bg.tbw_object_type)
 	# Update song list
 	var song_list : VBoxContainer = editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/SongList/List")
 	for old_entry : Node in song_list.get_children():
@@ -76,7 +76,7 @@ func _on_tbw_loaded() -> void:
 	for song : String in MusicHandler.ALL_SONGS_LIST:
 		var check := CheckBox.new()
 		# display name
-		check.text = str(JsonHandler.find_entry_in_file(str("songs/", song)))
+		check.text = str("song_", song)
 		# internal name, ex. mus1 mus2
 		check.name = song
 		# if loaded map has the song, check it
@@ -177,7 +177,7 @@ func switch_environment() -> void:
 	
 	Global.get_world().add_child(new_env, true)
 	current_env_name = new_env.environment_name
-	editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Environment").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_env_name))
+	editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Environment").text = str("tbw_", current_env_name)
 
 func switch_background() -> void:
 	var bg : TBWObject = null
@@ -208,7 +208,7 @@ func switch_background() -> void:
 	if new_bg != null:
 		Global.get_world().add_child(new_bg, true)
 		current_bg_name = new_bg.tbw_object_type
-		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = JsonHandler.find_entry_in_file(str("tbw_objects/", current_bg_name))
+		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = str("tbw_", current_bg_name)
 	else:
 		current_bg_name = "(none)"
 		editor_canvas.get_node("PauseMenu/ScrollContainer/Sections/World Properties/Background").text = "(none)"

@@ -68,9 +68,9 @@ func show_grab_actions(grabbed : Array, from_tool : EditorBuildTool) -> void:
 
 func _on_copy_pressed() -> void:
 	copied_properties = selected_item_properties
-	copy_button.text = JsonHandler.find_entry_in_file("ui/editor/copied")
+	copy_button.text = "editor_copied"
 	await get_tree().create_timer(1).timeout
-	copy_button.text = JsonHandler.find_entry_in_file("ui/editor/copy_properties")
+	copy_button.text = "editor_copy_properties"
 
 # Lists an object's properties
 func list_object_properties(instance : Node, _properties_from_tool : Node) -> Dictionary:
@@ -127,11 +127,11 @@ func add_object_property_entry(prop_name : String, prop : Variant) -> void:
 		entry.connect("toggled", update_object_property.bind(prop_name))
 		# special tooltips for some properties
 		if prop_name == "immovable":
-			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/immovable")
+			entry.tooltip_text = "editor_tooltip_immovable"
 		elif prop_name == "joinable":
-			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/joinable")
+			entry.tooltip_text = "editor_tooltip_joinable"
 		elif prop_name == "indestructible":
-			entry.tooltip_text = JsonHandler.find_entry_in_file("property_tooltips/indestructible")
+			entry.tooltip_text = "editor_tooltip_indestructible"
 	
 	# Add adjuster for floats and ints
 	if prop is float || prop is int:

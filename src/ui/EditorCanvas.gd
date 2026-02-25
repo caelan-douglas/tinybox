@@ -137,7 +137,7 @@ func hide_pause_menu() -> void:
 	$PauseMenu.visible = false
 	$Controls.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button")
+	options_button.text = "editor_options"
 
 func show_pause_menu() -> void:
 	Global.is_paused = true
@@ -147,7 +147,7 @@ func show_pause_menu() -> void:
 	$PauseMenu.visible = true
 	$Controls.visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	options_button.text = JsonHandler.find_entry_in_file("ui/editor/options_button_hide")
+	options_button.text = "editor_options_hide"
 
 func _on_save_world_pressed() -> void:
 	if world_name.text == "":

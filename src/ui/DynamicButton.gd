@@ -17,7 +17,6 @@
 extends Button
 class_name DynamicButton
 
-@export var json_text : String = ""
 @export var grab_initial_focus := false
 @onready var audio := AudioStreamPlayer.new()
 @onready var audio_click := AudioStreamPlayer.new()
@@ -33,13 +32,12 @@ func _ready() -> void:
 	audio_click.bus = "UI"
 	add_child(audio_click)
 	
-	set_text_to_json(json_text)
 	if is_visible_in_tree() && grab_initial_focus:
 		grab_focus()
 	connect("visibility_changed", _on_visibility_changed)
 	
 	# green save buttons
-	if json_text == "ui/save":
+	if text == "ui_save":
 		self_modulate = Color(1, 3.2, 1, 1)
 	
 	connect("mouse_entered", _on_mouse_entered)
@@ -73,8 +71,3 @@ func play_audio_hover() -> void:
 
 func play_audio_click() -> void:
 	audio_click.play()
-
-func set_text_to_json(json : String) -> void:
-	json_text = json
-	if json_text != "":
-		text = JsonHandler.find_entry_in_file(json_text)

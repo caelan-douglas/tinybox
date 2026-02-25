@@ -138,7 +138,7 @@ layout_mode = 0
 offset_top = -24.0
 offset_right = 157.0
 offset_bottom = -2.0
-text = "Display Name"
+text = "ui_display_name"
 script = ExtResource("3_yuqno")
 
 [node name="MainMenu" type="VBoxContainer" parent="." unique_id=1787314130]
@@ -165,10 +165,9 @@ stretch_mode = 5
 [node name="DynamicLabel" type="Label" parent="MainMenu" unique_id=55825906]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
-text = "beta"
+text = "%version%"
 horizontal_alignment = 2
 script = ExtResource("3_yuqno")
-json_text = "%version%"
 raw_format = true
 
 [node name="Update" type="Button" parent="MainMenu" unique_id=68918225]
@@ -188,9 +187,8 @@ self_modulate = Color(0.761, 1.622, 1, 1)
 custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Play"
+text = "ui_play"
 script = ExtResource("2_o48rt")
-json_text = "ui/play"
 grab_initial_focus = true
 
 [node name="Editor" type="Button" parent="MainMenu" unique_id=1726917361]
@@ -199,9 +197,8 @@ custom_minimum_size = Vector2(2.08165e-12, 120)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
-text = "Editor"
+text = "ui_world_editor"
 script = ExtResource("2_o48rt")
-json_text = "ui/world_editor"
 
 [node name="Spacer2" type="Control" parent="MainMenu" unique_id=920214736]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -210,30 +207,26 @@ layout_mode = 2
 [node name="Settings" type="Button" parent="MainMenu" unique_id=270808107]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Settings"
+text = "ui_preferences"
 script = ExtResource("2_o48rt")
-json_text = "ui/settings"
 
 [node name="Appearance" type="Button" parent="MainMenu" unique_id=1734923056]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Player Appearance..."
+text = "ui_appearance"
 script = ExtResource("2_o48rt")
-json_text = "ui/appearance_button"
 
 [node name="Tutorial" type="Button" parent="MainMenu" unique_id=354240030]
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Tutorial"
+text = "ui_tutorial"
 script = ExtResource("2_o48rt")
-json_text = "ui/tutorial"
 
 [node name="Credits" type="Button" parent="MainMenu" unique_id=1415875218]
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
-text = "Contributors"
+text = "ui_contributors"
 script = ExtResource("2_o48rt")
-json_text = "ui/contributors"
 
 [node name="Spacer3" type="Control" parent="MainMenu" unique_id=2104564615]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -243,9 +236,8 @@ layout_mode = 2
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 60)
 layout_mode = 2
-text = "Quit"
+text = "ui_quit"
 script = ExtResource("2_o48rt")
-json_text = "ui/quit"
 
 [node name="PlayMenu" type="VBoxContainer" parent="." unique_id=1854159461]
 visible = false
@@ -268,18 +260,15 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 64
-text = "Servers
-"
+text = "ui_servers"
 script = ExtResource("3_yuqno")
-json_text = "ui/servers"
 
 [node name="Back" type="Button" parent="PlayMenu" unique_id=2095095054]
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
-text = "Back"
+text = "ui_back"
 script = ExtResource("2_o48rt")
-json_text = "ui/back"
 grab_initial_focus = true
 
 [node name="Spacer" type="Control" parent="PlayMenu" unique_id=1764123854]
@@ -312,9 +301,8 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 32
-text = "Direct"
+text = "ui_direct_server"
 script = ExtResource("3_yuqno")
-json_text = "ui/direct"
 
 [node name="HostHbox" type="HBoxContainer" parent="PlayMenu" unique_id=1533260403]
 layout_mode = 2
@@ -326,7 +314,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Host direct"
 script = ExtResource("2_o48rt")
-json_text = "ui/host_direct"
 
 [node name="Edit" type="Button" parent="PlayMenu/HostHbox" unique_id=1120020028]
 layout_mode = 2
@@ -353,7 +340,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Join direct"
 script = ExtResource("2_o48rt")
-json_text = "ui/join_direct"
 
 [node name="Spacer5" type="Control" parent="PlayMenu" unique_id=855722260]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -366,7 +352,6 @@ theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 32
 text = "LAN"
 script = ExtResource("3_yuqno")
-json_text = "ui/lan"
 
 [node name="LANPanelContainer" type="VBoxContainer" parent="PlayMenu" unique_id=1676925641]
 custom_minimum_size = Vector2(2.08165e-12, 30)
@@ -400,9 +385,8 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 64
-text = "Host"
+text = "ui_host"
 script = ExtResource("3_yuqno")
-json_text = "ui/host"
 
 [node name="Spacer" type="Control" parent="HostSettingsMenu" unique_id=1550959133]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -415,7 +399,6 @@ If this doesn't work, your router likely has uPnP disabled (or does not support 
 toggle_mode = true
 text = "UPNP setting"
 script = ExtResource("2_o48rt")
-json_text = "ui/host_public_settings/off"
 
 [node name="Spacer5" type="Control" parent="HostSettingsMenu" unique_id=425780885]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -425,9 +408,8 @@ layout_mode = 2
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
-text = "Back"
+text = "ui_back"
 script = ExtResource("2_o48rt")
-json_text = "ui/back"
 grab_initial_focus = true
 
 [node name="AppearanceMenu" type="VBoxContainer" parent="." unique_id=72760740]
@@ -450,9 +432,8 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 32
-text = "Appearance"
+text = "ui_appearance"
 script = ExtResource("3_yuqno")
-json_text = "ui/appearance"
 
 [node name="Spacer" type="Control" parent="AppearanceMenu" unique_id=1102235017]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -462,9 +443,8 @@ layout_mode = 2
 modulate = Color(1, 0.529412, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "<<< Back"
+text = "ui_back"
 script = ExtResource("2_o48rt")
-json_text = "ui/save"
 grab_initial_focus = true
 
 [node name="Spacer5" type="Control" parent="AppearanceMenu" unique_id=1824401130]
@@ -558,7 +538,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Upload image..."
 script = ExtResource("2_o48rt")
-json_text = "ui/upload_image"
 
 [node name="TextureResetContainer" type="HBoxContainer" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=822635037]
 layout_mode = 2
@@ -576,7 +555,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Reset image"
 script = ExtResource("2_o48rt")
-json_text = "ui/reset_image"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="AppearanceMenu/ShirtPanel/ShirtPanelContainer" unique_id=1885470675]
 layout_mode = 2
@@ -652,9 +630,8 @@ self_modulate = Color(1, 1, 1, 0.447059)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_labno")
 theme_override_font_sizes/font_size = 48
-text = "Contributors"
+text = "ui_contributors"
 script = ExtResource("3_yuqno")
-json_text = "ui/contributors"
 
 [node name="Spacer" type="Control" parent="CreditsMenu" unique_id=1234572059]
 custom_minimum_size = Vector2(2.08165e-12, 16)
@@ -671,9 +648,8 @@ layout_mode = 2
 self_modulate = Color(1, 0.529412, 0, 1)
 custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
-text = "Back"
+text = "ui_back"
 script = ExtResource("2_o48rt")
-json_text = "ui/back"
 grab_initial_focus = true
 
 [node name="SettingsScroll" type="ScrollContainer" parent="." unique_id=96491477]
@@ -712,7 +688,6 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.584314)
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 15
-text = "..."
+text = "ui_attributions"
 horizontal_alignment = 1
 script = ExtResource("3_yuqno")
-json_text = "attributions"

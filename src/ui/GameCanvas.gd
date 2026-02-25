@@ -53,7 +53,7 @@ func show_pause_menu() -> void:
 			Global.get_player().locked = true
 		# show tip on pause screen
 		var tipnum : int = randi() % NUM_OF_TIPS
-		pause_tip_text.text = JsonHandler.find_entry_in_file(str("tip/", tipnum))
+		pause_tip_text.text = str("ui_tip_", tipnum)
 
 func _process(delta : float) -> void:
 	if Input.is_action_just_pressed("pause") && visible:

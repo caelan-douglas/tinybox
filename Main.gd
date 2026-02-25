@@ -319,7 +319,7 @@ func _on_join_pressed(address : Variant = null, is_from_list := false) -> void:
 		Global.display_name = get_display_name_from_field()
 	
 	# Change button text to notify user we are joining.
-	join_button.text = JsonHandler.find_entry_in_file("ui/join_clicked")
+	join_button.text = "ui_joining"
 	
 	# Create the client.
 	enet_peer.create_client(str(address), PORT)

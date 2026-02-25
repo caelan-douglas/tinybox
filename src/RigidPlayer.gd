@@ -389,7 +389,7 @@ func _receive_server_health(new : int, potential_executor_id : int = -1) -> void
 		
 		# set visual health
 		health_bar.value = get_health()
-		health_bar_text.text = str(JsonHandler.find_entry_in_file("ui/health"), ": ", get_health())
+		health_bar_text.text = str(tr("ui_health"), ": ", get_health())
 		# low health colour
 		if health_bar.value < 5:
 			health_bar.self_modulate = Color("#ff4848")

@@ -338,11 +338,10 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.643137)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.384314)
 theme_override_constants/outline_size = 4
-text = "Tinybox beta 00.0.0"
+text = "%version%"
 horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("6_qxctu")
-json_text = "Tinybox %version%"
 raw_format = true
 
 [node name="Chat" parent="." unique_id=535446528 instance=ExtResource("3_en7sr")]
@@ -498,7 +497,6 @@ theme_override_fonts/font = ExtResource("16_hdnsf")
 theme_override_font_sizes/font_size = 64
 text = "Paused"
 script = ExtResource("6_qxctu")
-json_text = "ui/paused"
 
 [node name="Tip" type="Label" parent="PauseMenu/ScrollContainer/Pause" unique_id=502787457]
 layout_mode = 2
@@ -527,7 +525,6 @@ size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 0
 text = "Maps"
 script = ExtResource("6_qxctu")
-json_text = "ui/switch_maps"
 
 [node name="Spacer6" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=1827354606]
 custom_minimum_size = Vector2(0, 8)
@@ -542,7 +539,6 @@ report_button = NodePath("../Report")
 layout_mode = 2
 text = "Request to load this map"
 script = ExtResource("5_6v07r")
-json_text = "ui/switch_maps_button"
 
 [node name="Spacer10" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=1127818837]
 custom_minimum_size = Vector2(0, 32)
@@ -605,7 +601,6 @@ placeholder_text = "World name..."
 layout_mode = 2
 text = "Save a copy"
 script = ExtResource("5_6v07r")
-json_text = "ui/save_copy"
 
 [node name="Spacer12" type="Control" parent="PauseMenu/ScrollContainer/Pause" unique_id=2082809180]
 custom_minimum_size = Vector2(2.08165e-12, 32)
@@ -711,7 +706,6 @@ theme_override_constants/outline_size = 6
 text = "..."
 vertical_alignment = 1
 script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/paintbrush"
 
 [node name="Spacer2" type="Control" parent="ToolOverlay/PaintbrushTool" unique_id=900261757]
 custom_minimum_size = Vector2(0, 32)
@@ -770,7 +764,6 @@ theme_override_constants/outline_size = 8
 text = "MISSILE TIME REMAINING"
 uppercase = true
 script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/missile/time"
 
 [node name="MissileDistance" type="TextureProgressBar" parent="ToolOverlay/MissileTool" unique_id=219003024]
 layout_mode = 1
@@ -810,7 +803,6 @@ text = "NEAREST PLAYER DISTANCE"
 horizontal_alignment = 2
 uppercase = true
 script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/missile/distance"
 
 [node name="DynamicLabel3" type="Label" parent="ToolOverlay/MissileTool" unique_id=1799658979]
 layout_mode = 1
@@ -831,7 +823,6 @@ text = "NEAR"
 horizontal_alignment = 1
 uppercase = true
 script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/missile/near"
 
 [node name="DynamicLabel4" type="Label" parent="ToolOverlay/MissileTool" unique_id=1184733443]
 layout_mode = 1
@@ -852,7 +843,6 @@ text = "FAR"
 horizontal_alignment = 1
 uppercase = true
 script = ExtResource("6_qxctu")
-json_text = "ui/tool_overlay/missile/far"
 
 [node name="ChargedTool" type="Control" parent="ToolOverlay" unique_id=1312130820]
 visible = false
@@ -954,7 +944,6 @@ theme_override_fonts/font = ExtResource("16_hdnsf")
 theme_override_font_sizes/font_size = 64
 text = "Paused"
 script = ExtResource("6_qxctu")
-json_text = "ui/paused"
 
 [node name="Spacer2" type="Control" parent="TestModePauseMenu/Menu" unique_id=513103484]
 custom_minimum_size = Vector2(0, 30)
