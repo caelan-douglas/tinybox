@@ -703,7 +703,7 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.14902)
 theme_override_constants/outline_size = 6
-text = "..."
+text = "ui_tool_overlay_paintbrush"
 vertical_alignment = 1
 script = ExtResource("6_qxctu")
 
