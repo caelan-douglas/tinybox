@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-extends AnimatedPanelContainer
+extends AnimatedControl
 class_name VotePanel
 signal voting_ended
 

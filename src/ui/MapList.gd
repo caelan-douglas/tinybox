@@ -27,13 +27,28 @@ class_name MapList
 @onready var all_lists : Array = [built_in, your_maps, user_uploaded]
 @onready var window : Control = $TabContainer
 
-@onready var search : LineEdit = $"TabContainer/World Browser (Online)/Header/FilterOptions/Search"
+@onready var search : LineEdit = $"TabContainer/World Browser (Online)/FilterOptions/Search"
+@onready var sort : CustomOptionButton = $"TabContainer/World Browser (Online)/FilterOptions/Sort"
 
 @onready var map_list_entry : PackedScene = preload("res://data/scene/ui/MapListEntry.tscn")
 
 var selected_name : String = ""
 var selected_lines : Array = []
 var _map_downloaded : bool = false
+
+func _ready() -> void:
+	super()
+	connect("pressed", _on_pressed)
+	if !is_connected("visibility_changed", _on_visibility_changed):
+		connect("visibility_changed", _on_visibility_changed)
+	search.connect("text_changed", _on_search)
+	sort.connect("item_selected", _on_sort)
+	window.connect("tab_changed", _on_tab_changed)
+	refresh()
+	
+	var def_lines := Global.get_tbw_lines("Frozen Field")
+	var def_image : Image = Global.get_tbw_image_from_lines(def_lines)
+	_on_map_selected("Frozen Field", def_lines, def_image)
 
 func add_map(file_name : String, list : Control, can_delete : bool = false, lines : Array = [], id : int = -1) -> void:
 	if lines.is_empty():
@@ -42,7 +57,6 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 	var image : Variant = Global.get_tbw_image_from_lines(lines)
 	var tex : ImageTexture
 	if image != null && !image.is_empty():
-		image.resize(240, 162)
 		tex = ImageTexture.create_from_image(image as Image)
 	else:
 		image = load("res://data/textures/tbw_placeholder.jpg")
@@ -51,14 +65,14 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 	var entry_is_featured : bool = false
 	var entry : Control = map_list_entry.instantiate()
 	var entry_map_button : Button = entry.get_node("Map")
-	var entry_img : TextureRect = entry.get_node("Map/Split/Image")
-	var entry_featured : Control = entry.get_node("Map/Split/Labels/FeaturedTag")
-	var entry_new : Control = entry.get_node("Map/Split/Labels/NewTag")
-	var entry_title : Label = entry.get_node("Map/Split/Labels/Title")
-	var entry_auth : Label = entry.get_node("Map/Split/Labels/Author")
-	var entry_date : Label = entry.get_node("Map/Split/Labels/Date")
-	var entry_downloads : Label = entry.get_node("Map/Split/Labels/Downloads")
-	var entry_ver : Label = entry.get_node("Map/Split/Labels/Version")
+	var entry_img : TextureRect = entry.get_node("Map/Split/ImageMask/Image")
+	var entry_featured : Control = entry.get_node("Map/Split/Margin/Labels/Tags/FeaturedTag")
+	var entry_new : Control = entry.get_node("Map/Split/Margin/Labels/Tags/NewTag")
+	var entry_title : Label = entry.get_node("Map/Split/Margin/Labels/Title")
+	var entry_auth : Label = entry.get_node("Map/Split/Margin/Labels/AuthorDate/Author")
+	var entry_date : Label = entry.get_node("Map/Split/Margin/Labels/AuthorDate/Date")
+	var entry_downloads : Label = entry.get_node("Map/Split/Margin/Labels/Downloads")
+	var entry_ver : Label = entry.get_node("Map/Split/Margin/Labels/Version")
 	# set title
 	entry_title.text = file_name
 	# parse lines to set auth and version
@@ -88,8 +102,8 @@ func add_map(file_name : String, list : Control, can_delete : bool = false, line
 		entry_delete_button.visible = true
 		entry_delete_button.connect("pressed", _on_delete_pressed.bind(file_name))
 	list.get_node("ScrollContainer/ItemList").add_child(entry)
-	# move featured worlds to top
-	if entry_is_featured:
+	# move featured worlds to top (if sorting by recent)
+	if entry_is_featured && _last_sort_id == 0:
 		list.get_node("ScrollContainer/ItemList").move_child(entry, 1)
 	entry_map_button.connect("pressed", _on_map_selected.bind(file_name, lines, image, id))
 
@@ -117,19 +131,6 @@ func _send_report(id : int) -> void:
 	if report_button != null:
 		report_button.disabled = true
 
-func _ready() -> void:
-	super()
-	connect("pressed", _on_pressed)
-	if !is_connected("visibility_changed", _on_visibility_changed):
-		connect("visibility_changed", _on_visibility_changed)
-	search.connect("text_changed", _on_search)
-	window.connect("tab_changed", _on_tab_changed)
-	refresh()
-	
-	var def_lines := Global.get_tbw_lines("Frozen Field")
-	var def_image : Image = Global.get_tbw_image_from_lines(def_lines)
-	_on_map_selected("Frozen Field", def_lines, def_image)
-
 func _on_search(what : String) -> void:
 	if user_uploaded_list == null:
 		return
@@ -151,6 +152,14 @@ func _on_search(what : String) -> void:
 		if auth_label != null:
 			if auth_label.text.to_lower().contains(what.to_lower()):
 				c.visible = true
+
+var _last_sort_id : int = 0
+func _on_sort(id : int) -> void:
+	if id == _last_sort_id:
+		return
+	
+	_last_sort_id = id
+	refresh_user_uploaded()
 
 var first_open : bool = true
 func _on_visibility_changed() -> void:
@@ -259,8 +268,13 @@ func refresh_user_uploaded() -> void:
 	add_child(req)
 	req.request_completed.connect(self._user_maps_request_completed)
 
+	var sort_param : String = ""
+	match(sort.get_selected_id()):
+		1:
+			sort_param = "?sort=popular"
+
 							# REST API on my website that hosts tinybox world files.
-	var error := req.request(str(UserPreferences.database_repo))
+	var error := req.request(str(UserPreferences.database_repo + sort_param))
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 
