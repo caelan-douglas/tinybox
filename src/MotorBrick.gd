@@ -15,6 +15,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extends Brick
+# TODO: Should make base 'ControlledBrick' for anything that a seat/activator
+# can control
 class_name MotorBrick
 
 enum ControlScheme {

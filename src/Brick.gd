@@ -714,7 +714,7 @@ func check_joints(specific_body : Node3D = null) -> void:
 				# if the motor detector doesn't have the body, it is
 				# joined on the non-motor side, so join the body to
 				# us as well
-				if self is MotorBrick && !self is MotorFlyBrick:
+				if self is MotorBrick && !self is MotorFlyBrick && !self is CannonBrick:
 					var motor_pos : Vector3 = $JointSpotLeft.global_position
 					var joint_pos : Vector3 = $JointSpotRight.global_position
 					if self.flip_motor_side:
@@ -753,7 +753,7 @@ func join(path_to_brick : NodePath, set_group : String = "") -> void:
 	
 	var joint : Generic6DOFJoint3D = joint_scn.instantiate()
 	add_child(joint, true)
-	if self is MotorBrick && !self is MotorFlyBrick:
+	if self is MotorBrick && !self is MotorFlyBrick && !self is CannonBrick:
 		# wheels have no z angular limit
 		joint.set("angular_limit_z/enabled", false)
 		# prevents large wheels from clipping through other large bricks

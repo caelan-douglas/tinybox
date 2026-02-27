@@ -95,7 +95,7 @@ func activate() -> void:
 						if !attached_motors.has(b):
 							attached_motors.append(b)
 						# set the motorbricks parent controller to this one
-						b.set_parent_controller(self.get_path())
+						b.set_parent_controller.rpc(self.get_path())
 	
 	if is_multiplayer_authority():
 		sync_attached_motors()

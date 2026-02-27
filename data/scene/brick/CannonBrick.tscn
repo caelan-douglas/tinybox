@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cr4led0sdhtx7" path="res://data/scene/brick/BrickMultiplayerSpawner.tscn" id="2_on6gd"]
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_l4lf7"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="4_vnoo3"]
-[ext_resource type="PackedScene" uid="uid://bqu6sfv6my8qw" path="res://data/models/brick/brick.blend" id="5_wcmmw"]
-[ext_resource type="Texture2D" uid="uid://dv43g17rxqbfe" path="res://data/textures/activator_brick.jpg" id="6_n25bi"]
+[ext_resource type="PackedScene" uid="uid://beaw1fekuj4wb" path="res://data/models/brick/cannon.blend" id="5_05fto"]
+[ext_resource type="Material" uid="uid://dyn7krtpmqtj8" path="res://data/materials/thruster.tres" id="6_on6gd"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="7_jdb4i"]
 [ext_resource type="Texture2D" uid="uid://bi4u5qglesu6r" path="res://data/textures/dir_arrow_tex.png" id="8_okwnq"]
 [ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="9_3hady"]
@@ -13,17 +13,6 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_osnen"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b80at"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_y551j"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_us10a"]
-resource_name = "vincent.jacket"
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("6_n25bi")
-roughness_texture_channel = 4
-normal_texture = SubResource("CompressedTexture2D_y551j")
-uv1_offset = Vector3(0.5, 0.5, 0.5)
-uv1_triplanar = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6iny"]
 size = Vector3(0.9, 0.9, 0.9)
@@ -53,10 +42,13 @@ shape = SubResource("BoxShape3D_b80at")
 [node name="Smoothing" type="Node3D" parent="." unique_id=2145449508]
 script = ExtResource("4_vnoo3")
 
-[node name="model" parent="Smoothing" unique_id=1372806140 instance=ExtResource("5_wcmmw")]
+[node name="model" parent="Smoothing" unique_id=1804633852 instance=ExtResource("5_05fto")]
 
-[node name="Cube" parent="Smoothing/model" index="0" unique_id=1941203451]
-surface_material_override/0 = SubResource("StandardMaterial3D_us10a")
+[node name="Cube" parent="Smoothing/model" index="0" unique_id=1081469453]
+surface_material_override/0 = ExtResource("6_on6gd")
+
+[node name="Cannon" parent="Smoothing/model" index="1" unique_id=582546637]
+surface_material_override/0 = ExtResource("6_on6gd")
 
 [node name="IntersectDetector" type="Area3D" parent="." unique_id=744416897]
 collision_mask = 3

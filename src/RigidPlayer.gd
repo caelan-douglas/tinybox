@@ -836,6 +836,8 @@ func _physics_process(delta : float) -> void:
 			global_rotation = seat_occupying.global_rotation
 			translate_object_local(Vector3(0, -0.7, 0))
 			rotate_object_local(Vector3.UP, deg_to_rad(180))
+			# used for some objects that seats control
+			seat_occupying.set_driver_look_direction.rpc(camera.global_transform.basis.z)
 	
 var idle_time : int = 0
 var idle_max : int = 300

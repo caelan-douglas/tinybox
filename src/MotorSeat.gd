@@ -22,6 +22,7 @@ var controlling_player : RigidPlayer
 @onready var sit_area : Area3D = $SitArea
 @onready var sit_collider: CollisionShape3D = $SitArea/CollisionShape3D
 var can_sit : bool = true
+var driver_look_direction : Vector3 = Vector3.ZERO
 
 func _init() -> void:
 	super()
@@ -37,6 +38,10 @@ func set_property(property : StringName, value : Variant) -> void:
 			if scale_new != Vector3(1, 1, 1):
 				sit_collider.shape = sit_collider.shape.duplicate()
 				sit_collider.shape.size = scale_new + Vector3(0.1, 0.1, 0.1)
+
+@rpc("any_peer", "call_local", "reliable")
+func set_driver_look_direction(new_dir : Vector3) -> void:
+	driver_look_direction = new_dir
 
 # Lights this brick on fire.
 @rpc("any_peer", "call_local")
@@ -111,3 +116,11 @@ func sit(player : RigidPlayer) -> void:
 
 func _physics_process(delta : float) -> void:
 	super(delta)
+	if controlling_player == null: return
+	
+	if controlling_player.is_multiplayer_authority():
+		if Input.is_action_just_pressed("click"):
+			for motor_brick : Variant in attached_motors:
+				if motor_brick == null: return
+				if motor_brick is CannonBrick:
+					motor_brick.fire_cannon.rpc()
