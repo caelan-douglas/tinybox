@@ -51,6 +51,12 @@ func set_colour(new : Color) -> void:
 func receive_input(input_forward : float, input_steer : float) -> void:
 	pass
 
+@rpc("any_peer", "call_local", "reliable")
+func unjoin() -> void:
+	super()
+					# INT_MAX
+	last_fire_time = (1 << 63) - 1
+
 @rpc("any_peer", "call_local")
 func set_parent_controller(as_path : NodePath) -> void:
 	super(as_path)
