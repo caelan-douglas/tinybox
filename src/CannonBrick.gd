@@ -106,7 +106,6 @@ func _physics_process(delta : float) -> void:
 		if nearest != null:
 			target = nearest.global_position
 	else:
-		print(parent_controller)
 		if parent_controller == null: return
 		if parent_controller is not MotorSeat: return
 		# non-automatic cannons point in look direction of driver
@@ -124,15 +123,16 @@ func _physics_process(delta : float) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func fire_cannon() -> void:
+	if Time.get_ticks_msec() - last_fire_time < (cooldown * 100): return
+	# apply recoil force when firing
+	apply_impulse(cannon_mesh.global_transform.basis.z * force * 2)
+	last_fire_time = Time.get_ticks_msec()
+	
 	# only server spawns projectiles
 	if !multiplayer.is_server(): return
-	if Time.get_ticks_msec() - last_fire_time < (cooldown * 100): return
 	
-	last_fire_time = Time.get_ticks_msec()
 	var p := firecracker.instantiate()
 	p.despawn_time = 2
 	Global.get_world().add_child(p, true)
 	p.linear_velocity = -cannon_mesh.global_transform.basis.z * force
 	p.global_position = global_position - cannon_mesh.global_transform.basis.z
-	# apply recoil force when firing
-	apply_impulse(cannon_mesh.global_transform.basis.z * force * 2)
