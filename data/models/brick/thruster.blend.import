@@ -37,7 +37,15 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"thruster_exhaust": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://data/materials/thruster_exhaust.tres",
+"use_external/path": "uid://bkbhg2toryt0v"
+}
+}
+}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

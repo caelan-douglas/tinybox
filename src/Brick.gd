@@ -127,7 +127,6 @@ var tool_from : Tool
 var just_spawned_from_tool : bool = true
 
 func resize_mesh() -> void:
-	var mesh_verticies : Array = model_mesh.mesh.surface_get_arrays(0)
 	var new_mesh := ArrayMesh.new()
 	var add_mesh_to_cache := true
 	# mesh cache
@@ -136,33 +135,34 @@ func resize_mesh() -> void:
 			if cached_mesh[1] == _brick_spawnable_type:
 				new_mesh = cached_mesh[2]
 				add_mesh_to_cache = false
+	# We have to make the mesh
 	if add_mesh_to_cache:
-		# We have to make the mesh
 		# scale mesh but keep bevels
-		new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_verticies)
+		# Must be done for each surface
 		var mdt := MeshDataTool.new()
-		mdt.create_from_surface(new_mesh, 0)
-		for i in range(mdt.get_vertex_count()):
-			var vertex := mdt.get_vertex(i)
-			# move, instead of scaling, beveled edges to correct points
-			if vertex.y > 0:
-				vertex.y += (brick_scale.y - 1) * 0.5
-			if vertex.y < 0:
-				vertex.y -= (brick_scale.y - 1) * 0.5
-			
-			if vertex.x > 0:
-				vertex.x += (brick_scale.x - 1) * 0.5
-			if vertex.x < 0:
-				vertex.x -= (brick_scale.x - 1) * 0.5
-			
-			if vertex.z > 0:
-				vertex.z += (brick_scale.z - 1) * 0.5
-			if vertex.z < 0:
-				vertex.z -= (brick_scale.z - 1) * 0.5
-			# Save the mesh change
-			mdt.set_vertex(i, vertex)
-		new_mesh.clear_surfaces()
-		mdt.commit_to_surface(new_mesh)
+		for s : int in range(model_mesh.mesh.get_surface_count()):
+			mdt.clear()
+			mdt.create_from_surface(model_mesh.mesh as ArrayMesh, s)
+			for i in range(mdt.get_vertex_count()):
+				var vertex := mdt.get_vertex(i)
+				# move, instead of scaling, beveled edges to correct points
+				if vertex.y > 0:
+					vertex.y += (brick_scale.y - 1) * 0.5
+				if vertex.y < 0:
+					vertex.y -= (brick_scale.y - 1) * 0.5
+				
+				if vertex.x > 0:
+					vertex.x += (brick_scale.x - 1) * 0.5
+				if vertex.x < 0:
+					vertex.x -= (brick_scale.x - 1) * 0.5
+				
+				if vertex.z > 0:
+					vertex.z += (brick_scale.z - 1) * 0.5
+				if vertex.z < 0:
+					vertex.z -= (brick_scale.z - 1) * 0.5
+				# Save the mesh change
+				mdt.set_vertex(i, vertex)
+			mdt.commit_to_surface(new_mesh)
 		Global.add_to_mesh_cache([brick_scale, _brick_spawnable_type, new_mesh])
 	model_mesh.mesh = new_mesh
 

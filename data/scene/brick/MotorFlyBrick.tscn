@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://cxb1urtfd3en" path="res://data/scene/brick/BrickSynchronizer.tscn" id="3_smvey"]
 [ext_resource type="Script" uid="uid://bffar80lcasfa" path="res://addons/smoothing/smoothing.gd" id="4_qhf8v"]
 [ext_resource type="PackedScene" uid="uid://be3x6c2x5f00p" path="res://data/models/brick/thruster.blend" id="5_5342q"]
-[ext_resource type="Material" uid="uid://bkbhg2toryt0v" path="res://data/materials/thruster_exhaust.tres" id="6_madwl"]
 [ext_resource type="Material" uid="uid://dyn7krtpmqtj8" path="res://data/materials/thruster.tres" id="6_smvey"]
 [ext_resource type="PackedScene" uid="uid://dwfrmjgcn6sg3" path="res://data/scene/fire/Fire.tscn" id="7_s4bk4"]
 [ext_resource type="Texture2D" uid="uid://bavau027f2wbs" path="res://data/textures/ui/tag.png" id="8_pg3ut"]
@@ -91,11 +90,10 @@ shape = SubResource("BoxShape3D_smvey")
 [node name="Smoothing" type="Node3D" parent="." unique_id=484455370]
 script = ExtResource("4_qhf8v")
 
-[node name="model" parent="Smoothing" unique_id=2085166394 instance=ExtResource("5_5342q")]
+[node name="model" parent="Smoothing" unique_id=1844193778 instance=ExtResource("5_5342q")]
 
-[node name="Cube" parent="Smoothing/model" index="0" unique_id=1782080245]
+[node name="Cube" parent="Smoothing/model" index="0" unique_id=1379735554]
 surface_material_override/0 = ExtResource("6_smvey")
-surface_material_override/1 = ExtResource("6_madwl")
 
 [node name="IntersectDetector" type="Area3D" parent="." unique_id=612768008]
 collision_mask = 3
