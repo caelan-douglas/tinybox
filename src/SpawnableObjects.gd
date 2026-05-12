@@ -63,7 +63,8 @@ extends Node
 	"brick_wedge": load("res://data/scene/brick/WedgeBrick.tscn"),
 	"brick_explosive": load("res://data/scene/brick/ExplosiveBrick.tscn"),
 	"brick_activator": load("res://data/scene/brick/ActivatorBrick.tscn"),
-	"brick_magnet": load("res://data/scene/brick/MagnetBrick.tscn"),
+	# temporarily disabled for beta 14.0 release
+	# "brick_magnet": load("res://data/scene/brick/MagnetBrick.tscn"),
 	"brick_cannon": load("res://data/scene/brick/CannonBrick.tscn"),
 }
 
