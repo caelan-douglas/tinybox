@@ -141,4 +141,4 @@ func fire_cannon() -> void:
 	p.despawn_time = 2
 	Global.get_world().add_child(p, true)
 	p.linear_velocity = -cannon_mesh.global_transform.basis.z * force
-	p.global_position = global_position - cannon_mesh.global_transform.basis.z
+	p.global_position = global_position - (cannon_mesh.global_transform.basis.z * 1.4)
